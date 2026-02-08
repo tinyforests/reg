@@ -4,76 +4,88 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Registered Ecological Gardens — Gardener & Son</title>
-  <meta name="description" content="A registry for gardens treated as living infrastructure — measurable, place-based, and designed to improve over time." />
+  <meta name="description" content="A registry for place-based gardens that are designed, recorded, and improved over time — with ecological outcomes that can be seen, shared, and eventually valued." />
+
+  <!-- Optional (recommended): Gardener & Son-ish typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg: #0f1210;
-      --bg2:#0b0e0c;
-      --ink:#e9eadf;
-      --muted:#b9bcae;
-      --sub:#cfd3c1;
-      --line: rgba(233,234,223,.16);
-      --glass: rgba(15,18,16,.52);
-      --glass2: rgba(15,18,16,.28);
-      --accent:#cfd3c1;
-      --accent2:#9bb08f;
-      --shadow: 0 20px 60px rgba(0,0,0,.42);
-      --radius: 18px;
+      /* Gardener & Son: warm paper + ink + moss */
+      --paper: #f3efe6;          /* nostalgic beige */
+      --paper2:#efe9dd;
+      --ink:   #1e1f1c;          /* near-black */
+      --muted: rgba(30,31,28,.70);
+      --line:  rgba(30,31,28,.14);
+      --glass: rgba(243,239,230,.82);
+      --glass2:rgba(243,239,230,.62);
+
+      --moss:  #3e5a46;          /* deep green */
+      --sage:  #7f9a83;          /* softer green */
+      --clay:  #b88c6a;          /* terracotta hint */
+      --shadow: 0 18px 50px rgba(0,0,0,.12);
+      --radius: 20px;
       --max: 1120px;
-      --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, "Garamond", serif;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+
+      --serif: "Abril Fatface", ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, "Garamond", serif;
+      --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
 
     *{ box-sizing: border-box; }
-    html,body{ height:100%; margin:0; background: radial-gradient(1200px 900px at 20% -10%, rgba(155,176,143,.18), transparent 60%),
-                                       radial-gradient(900px 700px at 110% 10%, rgba(207,211,193,.12), transparent 55%),
-                                       linear-gradient(180deg, var(--bg), var(--bg2));
-              color: var(--ink); font-family: var(--sans); }
+    html,body{
+      height:100%;
+      margin:0;
+      background:
+        radial-gradient(900px 600px at 20% 0%, rgba(127,154,131,.12), transparent 60%),
+        radial-gradient(900px 700px at 95% 10%, rgba(184,140,106,.10), transparent 55%),
+        linear-gradient(180deg, var(--paper), var(--paper2));
+      color: var(--ink);
+      font-family: var(--sans);
+    }
     a{ color: inherit; text-decoration: none; }
     button{ font: inherit; }
 
-    /* Subtle film grain */
+    /* Paper grain (subtle) */
     .grain:before{
       content:"";
       pointer-events:none;
       position:fixed; inset:0;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity:.18;
-      transform: translateZ(0);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+      opacity:.35;
     }
 
     /* Sticky header */
     header{
       position:fixed; top:0; left:0; right:0; z-index:20;
       display:flex; justify-content:center;
-      padding:14px 16px;
-      background: linear-gradient(180deg, rgba(15,18,16,.72), rgba(15,18,16,0));
+      padding:16px 16px;
+      background: linear-gradient(180deg, rgba(243,239,230,.92), rgba(243,239,230,0));
       backdrop-filter: blur(10px);
     }
     .nav{
-      width: min(var(--max), 100%);
+      width:min(var(--max), 100%);
       display:flex; align-items:center; justify-content:space-between;
       border: 1px solid var(--line);
-      background: rgba(15,18,16,.45);
+      background: rgba(243,239,230,.86);
       border-radius: 999px;
       padding: 10px 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
     }
-    .brand{
-      display:flex; gap:10px; align-items:center;
-      padding: 6px 10px;
-    }
+    .brand{ display:flex; gap:10px; align-items:center; padding: 6px 10px; }
     .dot{
       width:10px; height:10px; border-radius:50%;
-      background: linear-gradient(180deg, var(--accent2), var(--accent));
-      box-shadow: 0 0 0 4px rgba(155,176,143,.12);
+      background: radial-gradient(circle at 30% 30%, var(--sage), var(--moss));
+      box-shadow: 0 0 0 4px rgba(127,154,131,.12);
     }
     .brand strong{
       font-family: var(--serif);
       letter-spacing:.2px;
-      font-weight: 700;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.05;
     }
     .brand span{
       display:block;
@@ -82,36 +94,33 @@
       margin-top:2px;
     }
     .links{
-      display:flex; gap: 14px; align-items:center;
+      display:flex; gap: 10px; align-items:center;
       padding: 0 10px;
     }
     .links a{
       font-size: 13px;
-      color: var(--sub);
-      opacity:.9;
+      color: rgba(30,31,28,.82);
       padding: 8px 10px;
       border-radius: 999px;
     }
-    .links a:hover{ background: rgba(233,234,223,.06); }
-    .cta{
-      display:flex; gap:10px; align-items:center;
-      padding-right: 6px;
-    }
+    .links a:hover{ background: rgba(30,31,28,.05); }
+
+    .cta{ display:flex; gap:10px; align-items:center; padding-right: 6px; }
     .btn{
       border: 1px solid var(--line);
-      background: rgba(233,234,223,.06);
+      background: rgba(30,31,28,.03);
       color: var(--ink);
       padding: 10px 14px;
       border-radius: 999px;
       cursor:pointer;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease;
       font-size: 13px;
       white-space: nowrap;
     }
-    .btn:hover{ transform: translateY(-1px); background: rgba(233,234,223,.10); border-color: rgba(233,234,223,.24); }
+    .btn:hover{ transform: translateY(-1px); background: rgba(30,31,28,.06); border-color: rgba(30,31,28,.22); }
     .btn.primary{
-      border-color: rgba(155,176,143,.42);
-      background: linear-gradient(180deg, rgba(155,176,143,.24), rgba(233,234,223,.06));
+      border-color: rgba(62,90,70,.45);
+      background: linear-gradient(180deg, rgba(127,154,131,.20), rgba(30,31,28,.03));
     }
 
     /* Sections */
@@ -140,46 +149,54 @@
       background-size: cover;
       background-position: center;
       transform: translate3d(0,0,0) scale(1.05);
-      filter: saturate(.9) contrast(1.02) brightness(.85);
-      opacity:.55;
+      filter: saturate(.88) contrast(.98) brightness(1.05);
+      opacity:.22; /* paper-watermark vibe */
     }
     .veil{
       position:absolute; inset:0;
       z-index:1;
-      background: radial-gradient(900px 700px at 35% 35%, rgba(15,18,16,.40), rgba(15,18,16,.92)),
-                  linear-gradient(180deg, rgba(15,18,16,.40), rgba(15,18,16,.96));
+      background:
+        radial-gradient(900px 700px at 35% 35%, rgba(243,239,230,.55), rgba(243,239,230,.92)),
+        linear-gradient(180deg, rgba(243,239,230,.35), rgba(243,239,230,.92));
     }
 
     .kicker{
-      color: var(--muted);
-      letter-spacing:.14em;
+      color: rgba(30,31,28,.68);
+      letter-spacing:.18em;
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: 11px;
     }
+
     h1,h2{
       font-family: var(--serif);
       margin: 0;
-      line-height: 1.05;
+      line-height: 1.06;
       letter-spacing: .2px;
+      font-weight: 400;
     }
-    h1{ font-size: clamp(40px, 6vw, 74px); }
-    h2{ font-size: clamp(30px, 4.2vw, 52px); }
+    h1{ font-size: clamp(44px, 6.2vw, 82px); }
+    h2{ font-size: clamp(32px, 4.4vw, 58px); }
+
     p{
       margin:0;
-      color: var(--sub);
+      color: rgba(30,31,28,.86);
       font-size: 16px;
-      line-height: 1.65;
-      max-width: 64ch;
+      line-height: 1.75;
+      max-width: 66ch;
     }
-    .lead{ font-size: 18px; color: rgba(233,234,223,.92); }
+    .lead{
+      font-size: 18px;
+      color: rgba(30,31,28,.92);
+    }
 
     .panel{
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, var(--glass), rgba(15,18,16,.24));
+      background: linear-gradient(180deg, var(--glass), rgba(243,239,230,.62));
       border-radius: var(--radius);
       padding: 22px;
       box-shadow: var(--shadow);
     }
+
     .grid{
       display:grid;
       grid-template-columns: repeat(12, 1fr);
@@ -194,8 +211,8 @@
     .bullets{
       margin: 12px 0 0;
       padding-left: 18px;
-      color: var(--sub);
-      line-height: 1.7;
+      color: rgba(30,31,28,.82);
+      line-height: 1.8;
     }
     .bullets li{ margin: 6px 0; }
 
@@ -207,38 +224,52 @@
     }
     .card{
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, var(--glass2), rgba(15,18,16,.18));
+      background: rgba(243,239,230,.65);
       border-radius: 16px;
       padding: 16px;
     }
-    .card strong{ display:block; font-family: var(--serif); font-size: 18px; margin-bottom: 6px; }
-    .card span{ color: var(--muted); font-size: 13px; line-height: 1.5; display:block; }
+    .card strong{
+      display:block;
+      font-family: var(--serif);
+      font-size: 18px;
+      margin-bottom: 6px;
+      font-weight: 400;
+    }
+    .card span{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      display:block;
+    }
 
     .mini{
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.6;
+      line-height: 1.7;
+    }
+
+    .cue{
+      display:inline-flex; gap:10px; align-items:center;
+      margin-top: 18px;
+      color: rgba(30,31,28,.70);
+      font-size: 13px;
+      user-select:none;
+    }
+    .cue .line{
+      width: 34px; height: 1px; background: rgba(30,31,28,.22);
     }
 
     .footer{
       padding: 60px 18px 80px;
       display:flex; justify-content:center;
-      border-top: 1px solid rgba(233,234,223,.10);
-      background: rgba(0,0,0,.15);
+      border-top: 1px solid rgba(30,31,28,.12);
+      background: rgba(30,31,28,.02);
     }
     .footer .wrap{ gap: 10px; }
-    .footer a{ text-decoration: underline; text-underline-offset: 3px; color: rgba(233,234,223,.88); }
-
-    /* Scroll cue */
-    .cue{
-      display:inline-flex; gap:10px; align-items:center;
-      margin-top: 18px;
-      color: rgba(233,234,223,.72);
-      font-size: 13px;
-      user-select:none;
-    }
-    .cue .line{
-      width: 34px; height: 1px; background: rgba(233,234,223,.28);
+    .footer a{
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      color: rgba(30,31,28,.86);
     }
 
     /* Responsive */
@@ -261,7 +292,7 @@
 <body class="grain">
   <header>
     <div class="nav" role="navigation" aria-label="Primary">
-      <a class="brand" href="#top">
+      <a class="brand" href="#top" aria-label="Back to top">
         <span class="dot" aria-hidden="true"></span>
         <div>
           <strong>Registered Ecological Gardens</strong>
@@ -272,7 +303,7 @@
       <nav class="links" aria-label="Sections">
         <a href="#what">What it is</a>
         <a href="#how">How it works</a>
-        <a href="#proof">What gets measured</a>
+        <a href="#signals">Signals</a>
         <a href="#future">Future value</a>
         <a href="#register">Register</a>
       </nav>
@@ -290,18 +321,18 @@
     <section data-parallax="0.22">
       <div class="bg" aria-hidden="true"
         style="background-image:
-          radial-gradient(700px 520px at 20% 18%, rgba(155,176,143,.25), transparent 60%),
-          radial-gradient(620px 520px at 85% 30%, rgba(207,211,193,.18), transparent 55%),
-          url('https://images.unsplash.com/photo-1459664018906-085c36f472af?auto=format&fit=crop&w=2400&q=70');">
+          radial-gradient(700px 520px at 20% 18%, rgba(127,154,131,.20), transparent 60%),
+          radial-gradient(620px 520px at 85% 30%, rgba(184,140,106,.12), transparent 55%),
+          url('https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=2400&q=70');">
       </div>
       <div class="veil" aria-hidden="true"></div>
 
       <div class="wrap">
         <div class="kicker">Gardens • Objects • Stories</div>
-        <h1>Gardens as living infrastructure.</h1>
+        <h1>Where gardens become legible.</h1>
         <p class="lead">
           A registry for place-based gardens that are designed, recorded, and improved over time —
-          with ecological outcomes that can be seen, shared, and eventually valued.
+          with outcomes that can be seen, shared, and eventually valued.
         </p>
 
         <div class="grid" style="margin-top: 12px;">
@@ -314,12 +345,12 @@
           </div>
 
           <div class="panel col-5">
-            <div class="mini"><strong style="font-family:var(--serif); font-size:18px;">What registration unlocks</strong></div>
+            <div class="mini"><strong style="font-family:var(--serif); font-size:18px; font-weight:400;">What registration unlocks</strong></div>
             <ul class="bullets">
-              <li>A permanent garden record (baseline + changes)</li>
+              <li>A permanent record (baseline + changes)</li>
               <li>Clarity: what exists, what it’s becoming</li>
               <li>Optional privacy for sensitive details</li>
-              <li>A future pathway to Yield (incentives)</li>
+              <li>A pathway to incentives (Yield)</li>
             </ul>
           </div>
         </div>
@@ -330,7 +361,7 @@
     <section id="what" data-parallax="0.18">
       <div class="bg" aria-hidden="true"
         style="background-image:
-          radial-gradient(900px 700px at 30% 30%, rgba(207,211,193,.16), transparent 60%),
+          radial-gradient(900px 700px at 30% 30%, rgba(127,154,131,.14), transparent 60%),
           url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=2400&q=70');">
       </div>
       <div class="veil" aria-hidden="true"></div>
@@ -343,7 +374,7 @@
           <div class="panel col-6">
             <p>
               This registry isn’t a gallery of pretty gardens (though it will be beautiful).
-              It’s a **recording system**: a baseline snapshot + ongoing improvements.
+              It’s a <strong>recording system</strong>: a baseline snapshot + ongoing improvements.
             </p>
             <ul class="bullets">
               <li>Designed to be simple, not scientific theatre</li>
@@ -360,7 +391,7 @@
             <div class="cards">
               <div class="card">
                 <strong>Public page</strong>
-                <span>A shareable profile: photos, story, broad metrics.</span>
+                <span>A shareable profile: photos, story, broad signals.</span>
               </div>
               <div class="card">
                 <strong>Private layer</strong>
@@ -381,7 +412,7 @@
     <section id="how" data-parallax="0.14">
       <div class="bg" aria-hidden="true"
         style="background-image:
-          radial-gradient(900px 700px at 70% 20%, rgba(155,176,143,.16), transparent 60%),
+          radial-gradient(900px 700px at 70% 20%, rgba(184,140,106,.12), transparent 60%),
           url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=70');">
       </div>
       <div class="veil" aria-hidden="true"></div>
@@ -392,19 +423,19 @@
 
         <div class="grid" style="margin-top: 12px;">
           <div class="panel col-4">
-            <strong style="font-family:var(--serif); font-size:18px;">1) Register</strong>
+            <strong style="font-family:var(--serif); font-size:18px; font-weight:400;">1) Register</strong>
             <p class="mini" style="margin-top:6px;">
               Create a profile and choose privacy settings. Add a few photos and basic context.
             </p>
           </div>
           <div class="panel col-4">
-            <strong style="font-family:var(--serif); font-size:18px;">2) Baseline</strong>
+            <strong style="font-family:var(--serif); font-size:18px; font-weight:400;">2) Baseline</strong>
             <p class="mini" style="margin-top:6px;">
-              Record what’s there: structure, canopy, habitat features, water, planting intent.
+              Record what’s there: structure, canopy, habitat features, water logic.
             </p>
           </div>
           <div class="panel col-4">
-            <strong style="font-family:var(--serif); font-size:18px;">3) Improve</strong>
+            <strong style="font-family:var(--serif); font-size:18px; font-weight:400;">3) Improve</strong>
             <p class="mini" style="margin-top:6px;">
               Small actions compound. Track upgrades and see the garden lift over time.
             </p>
@@ -413,30 +444,30 @@
           <div class="panel col-12">
             <p>
               For Gardener & Son, this becomes a map of real, functioning gardens —
-              a living index of the inner-urban ecological restoration already underway.
+              a living index of inner-urban ecological restoration already underway.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- WHAT GETS MEASURED -->
-    <section id="proof" data-parallax="0.10">
+    <!-- SIGNALS -->
+    <section id="signals" data-parallax="0.10">
       <div class="bg" aria-hidden="true"
         style="background-image:
-          radial-gradient(900px 700px at 35% 25%, rgba(207,211,193,.14), transparent 60%),
+          radial-gradient(900px 700px at 35% 25%, rgba(127,154,131,.12), transparent 60%),
           url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2400&q=70');">
       </div>
       <div class="veil" aria-hidden="true"></div>
 
       <div class="wrap">
-        <div class="kicker">What gets measured</div>
+        <div class="kicker">Signals</div>
         <h2>Simple signals. Honest baselines. Visible improvement.</h2>
 
         <div class="grid" style="margin-top: 12px;">
           <div class="panel col-7">
             <p>
-              Measurement stays practical — the goal is not bureaucracy, it’s **direction**.
+              Measurement stays practical — the goal is not bureaucracy, it’s direction.
               A garden should know where it is, and what “better” means.
             </p>
             <ul class="bullets">
@@ -447,12 +478,12 @@
               <li>Water logic (runoff, infiltration, passive irrigation patterns)</li>
             </ul>
             <p class="mini" style="margin-top: 10px;">
-              (These are placeholders — swap for the exact v1 signals used in REG.)
+              Replace these with the exact REG v1 signals when locked.
             </p>
           </div>
 
           <div class="panel col-5">
-            <strong style="font-family:var(--serif); font-size:18px;">Proof is a trail</strong>
+            <strong style="font-family:var(--serif); font-size:18px; font-weight:400;">Proof is a trail</strong>
             <p class="mini" style="margin-top:6px;">
               Every update is a timestamped entry: photos, notes, and changes.
               Over time, the garden becomes legible — to owners, communities, and partners.
@@ -483,8 +514,8 @@
     <section id="future" data-parallax="0.08">
       <div class="bg" aria-hidden="true"
         style="background-image:
-          radial-gradient(900px 700px at 70% 35%, rgba(155,176,143,.14), transparent 60%),
-          url('https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=2400&q=70');">
+          radial-gradient(900px 700px at 70% 35%, rgba(184,140,106,.10), transparent 60%),
+          url('https://images.unsplash.com/photo-1459664018906-085c36f472af?auto=format&fit=crop&w=2400&q=70');">
       </div>
       <div class="veil" aria-hidden="true"></div>
 
@@ -506,7 +537,7 @@
           </div>
 
           <div class="panel col-6">
-            <strong style="font-family:var(--serif); font-size:18px;">Yield (coming layer)</strong>
+            <strong style="font-family:var(--serif); font-size:18px; font-weight:400;">Yield (coming layer)</strong>
             <p class="mini" style="margin-top:6px;">
               Yield is the incentives layer: funding + rewards for verified ecological uplift.
               The registry provides the baseline, the change log, and the audit trail.
@@ -516,7 +547,7 @@
               <a class="btn primary" href="#" id="btnYield">Explore Yield</a>
             </div>
             <p class="mini" style="margin-top:10px;">
-              Set <code>btnYield</code> to the Yield marketing URL when ready.
+              Set <code>URLS.yield</code> to the Yield marketing URL when ready.
             </p>
           </div>
         </div>
@@ -528,7 +559,7 @@
     <section id="register" data-parallax="0.06">
       <div class="bg" aria-hidden="true"
         style="background-image:
-          radial-gradient(900px 700px at 45% 25%, rgba(207,211,193,.14), transparent 60%),
+          radial-gradient(900px 700px at 45% 25%, rgba(127,154,131,.12), transparent 60%),
           url('https://images.unsplash.com/photo-1444392061186-0e23080c6125?auto=format&fit=crop&w=2400&q=70');">
       </div>
       <div class="veil" aria-hidden="true"></div>
@@ -556,14 +587,14 @@
           </div>
 
           <div class="panel col-5">
-            <strong style="font-family:var(--serif); font-size:18px;">Privacy options</strong>
+            <strong style="font-family:var(--serif); font-size:18px; font-weight:400;">Privacy options</strong>
             <ul class="bullets">
-              <li>Public: story + photos + broad metrics</li>
+              <li>Public: story + photos + broad signals</li>
               <li>Private: address + detailed notes + raw data</li>
               <li>Owner controls what shows</li>
             </ul>
             <p class="mini" style="margin-top:10px;">
-              (Match this to the actual REG auth model once final.)
+              Align this to the actual REG auth model once final.
             </p>
           </div>
         </div>
@@ -573,7 +604,7 @@
     <div class="footer">
       <div class="wrap">
         <div class="mini">© <span id="yr"></span> Gardener & Son — Registered Ecological Gardens</div>
-        <div class="mini">On Wurundjeri Woi Wurrung Country (update per page as needed).</div>
+        <div class="mini">On Wurundjeri Woi Wurrung Country.</div>
         <div class="mini">
           <a href="#top">Back to top</a>
           &nbsp;·&nbsp;
@@ -589,14 +620,14 @@
     // CONFIG — set these URLs
     // -------------------------------
     const URLS = {
-      register: "https://registeredecologicalgardens.org/register",  // <-- change
+      register: "https://registeredecologicalgardens.org/register",     // <-- change
       sample:   "https://registeredecologicalgardens.org/REG-VIC-SH-001.html", // <-- change
-      yield:    "https://yield.gardenerandson.com", // <-- change
-      contact:  "mailto:hello@gardenerandson.com"   // <-- change
+      yield:    "https://yield.gardenerandson.com",                     // <-- change
+      contact:  "mailto:hello@gardenerandson.com"                       // <-- change
     };
 
     // -------------------------------
-    // Basic wiring
+    // Wiring
     // -------------------------------
     document.getElementById("yr").textContent = new Date().getFullYear();
 
@@ -604,6 +635,7 @@
 
     document.getElementById("btnRegister").addEventListener("click", () => go(URLS.register));
     document.getElementById("btnRegister2").addEventListener("click", () => go(URLS.register));
+
     document.getElementById("btnSample").addEventListener("click", (e) => { e.preventDefault(); go(URLS.sample); });
     document.getElementById("btnYield").addEventListener("click", (e) => { e.preventDefault(); go(URLS.yield); });
     document.getElementById("btnContact").addEventListener("click", (e) => { e.preventDefault(); go(URLS.contact); });
@@ -618,20 +650,22 @@
     const sections = Array.from(document.querySelectorAll("section[data-parallax]"));
 
     function onScroll(){
-      const y = window.scrollY || 0;
       for(const s of sections){
         const speed = parseFloat(s.getAttribute("data-parallax")) || 0.1;
         const bg = s.querySelector(".bg");
         if(!bg) continue;
+
         const rect = s.getBoundingClientRect();
         const mid = rect.top + rect.height/2;
         const offset = (mid - window.innerHeight/2) * speed * -0.18;
+
         bg.style.transform = `translate3d(0, ${offset}px, 0) scale(1.05)`;
       }
     }
 
     if(!prefersReduced){
-      window.addEventListener("scroll", () => requestAnimationFrame(onScroll), { passive: true });
+      const tick = () => requestAnimationFrame(onScroll);
+      window.addEventListener("scroll", tick, { passive: true });
       onScroll();
     }
   </script>
