@@ -156,6 +156,11 @@
       overflow-y: auto;
     }
 
+    /* All sections except hero get much less top padding */
+    .screen:not(#top) {
+      padding-top: 60px;
+    }
+
     /* prevent anchors being hidden behind fixed nav */
     [id]{ scroll-margin-top: calc(var(--navh) + 20px); }
 
@@ -167,6 +172,9 @@
         padding-bottom: 40px;
         padding-left: 1rem;
         padding-right: 1rem;
+      }
+      .screen:not(#top) {
+        padding-top: 80px;
       }
       .screen > div {
         max-height: calc(100svh - var(--navh) - 80px);
