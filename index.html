@@ -43,7 +43,9 @@
       --muted: rgba(61,69,53,.72);
       --hair: rgba(61,69,53,.10);
       --wash: rgba(61,69,53,.05);
-      --navh: 84px; /* desktop-ish */
+
+      /* sticky nav height token */
+      --navh: 84px;
     }
     html.dark{
       --bg: #3d4535;
@@ -60,7 +62,7 @@
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
-    /* FULL-SCREEN SECTIONS (Yield-like) */
+    /* FULL-SCREEN + SNAP (Yield-like), WITH STICKY NAV */
     html, body { height: 100%; }
     main { scroll-snap-type: y mandatory; }
 
@@ -68,26 +70,30 @@
       min-height: 100svh;
       scroll-snap-align: start;
       scroll-snap-stop: always;
-      display: flex;
-      align-items: center;               /* vertical centring like Yield */
-      padding-top: calc(var(--navh) + 10px);
+
+      /* keep content visible beneath sticky nav */
+      padding-top: calc(var(--navh) + 12px);
       padding-bottom: 18px;
+
+      /* Yield-ish calm layout */
+      display: flex;
+      align-items: center;
     }
 
-    /* anchor jumps: avoid sticky nav overlap */
+    /* prevent anchors being hidden behind sticky nav */
     [id]{ scroll-margin-top: calc(var(--navh) + 12px); }
 
-    /* mobile nav is taller because it stacks */
+    /* mobile: nav becomes taller because it stacks */
     @media (max-width: 768px){
       :root{ --navh: 124px; }
       .screen{
-        padding-top: calc(var(--navh) + 8px);
+        padding-top: calc(var(--navh) + 10px);
         padding-bottom: 14px;
-        align-items: flex-start;         /* on small screens, top-align feels better */
+        align-items: flex-start;
       }
     }
 
-    /* Respect reduced motion */
+    /* reduce motion accessibility */
     @media (prefers-reduced-motion: reduce){
       html { scroll-behavior: auto; }
       main { scroll-snap-type: none; }
@@ -113,8 +119,8 @@
     };
   </script>
 
-  <!-- Navigation -->
-  <nav class="sticky top-0 backdrop-blur"
+  <!-- Navigation (STICKY) -->
+  <nav class="sticky top-0 z-50 backdrop-blur"
        style="background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom:1px solid var(--hair);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
@@ -513,18 +519,7 @@
     </section>
   </main>
 
-  <!-- Footer (not a snap panel; optional) -->
-  <footer class="border-t border-gardener-green/10 py-12">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="mt-12 pt-6 border-t border-gardener-green/10 text-xs opacity-40">
-        <p>© <span id="year"></span> Gardener & Son. Designing ecological infrastructure.</p>
-      </div>
-    </div>
-  </footer>
-
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
