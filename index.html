@@ -135,35 +135,25 @@
 
     .screen{
       min-height: 100svh;
-      max-height: 100svh; /* Prevent overflow */
       scroll-snap-align: start;
       
-      /* Center content vertically and horizontally */
+      /* Simple flexbox centering */
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       
-      /* Account for fixed nav - reduced padding for better centering */
-      padding-top: calc(var(--navh) - 10px);
-      padding-bottom: 20px;
+      /* Just enough padding to clear the fixed nav */
+      padding-top: var(--navh);
+      padding-bottom: 40px;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
-      
-      /* Allow internal scrolling if absolutely necessary */
-      overflow-y: auto;
     }
 
-    /* Create vertical centering effect without interfering with scroll */
+    /* Content wrapper - no special positioning needed */
     .screen > div {
       width: 100%;
-      max-height: calc(100svh - var(--navh) - 10px);
+      max-height: calc(100svh - var(--navh) - 80px);
       overflow-y: auto;
-    }
-
-    /* All sections except hero get reduced top padding for better centering */
-    .screen:not(#top) {
-      padding-top: calc(var(--navh) - 40px);
     }
 
     /* prevent anchors being hidden behind fixed nav */
@@ -173,17 +163,13 @@
     @media (max-width: 768px){
       :root{ --navh: 120px; }
       .screen{
-        padding-top: calc(var(--navh) - 20px);
-        padding-bottom: 16px;
+        padding-top: var(--navh);
+        padding-bottom: 40px;
         padding-left: 1rem;
         padding-right: 1rem;
-        justify-content: flex-start; /* Top-align on mobile for better scroll */
-      }
-      .screen:not(#top) {
-        padding-top: calc(var(--navh) - 40px);
       }
       .screen > div {
-        max-height: calc(100svh - var(--navh));
+        max-height: calc(100svh - var(--navh) - 80px);
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
@@ -343,12 +329,12 @@
     <!-- About -->
     <section id="about" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
-        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-6 leading-tight">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-5 leading-tight">
           A registry that keeps gardens honest.
         </h2>
 
-        <div class="grid md:grid-cols-2 gap-8 md:gap-10">
-          <div class="space-y-4 text-base leading-relaxed">
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+          <div class="space-y-3 text-base leading-relaxed">
             <p>
               Gardens can be beautiful and still be ecologically thin. This registry is designed to make the difference legible:
               what exists, what's missing, and what is improving.
@@ -358,7 +344,7 @@
             </p>
           </div>
 
-          <div class="space-y-4 text-base leading-relaxed">
+          <div class="space-y-3 text-base leading-relaxed">
             <p>
               Private land is one of the largest land classes in cities. When it stays disconnected, ecological value stays invisible.
             </p>
@@ -381,7 +367,7 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 md:gap-6">
-          <article class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
+          <article class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 1</div>
             <h3 class="font-medium mb-2">Register</h3>
             <p class="text-sm leading-relaxed opacity-70">
@@ -389,7 +375,7 @@
             </p>
           </article>
 
-          <article class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
+          <article class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 2</div>
             <h3 class="font-medium mb-2">Baseline</h3>
             <p class="text-sm leading-relaxed opacity-70">
@@ -397,7 +383,7 @@
             </p>
           </article>
 
-          <article class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
+          <article class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 3</div>
             <h3 class="font-medium mb-2">Improve</h3>
             <p class="text-sm leading-relaxed opacity-70">
@@ -413,16 +399,16 @@
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">Signals (v1)</h2>
 
-        <p class="text-sm md:text-base leading-relaxed mb-6">
+        <p class="text-sm md:text-base leading-relaxed mb-5">
           Measurement stays practical — the goal is not scientific theatre. A garden should know where it is, and what "better" means.
           These are intentionally simple signals that can be refined later.
         </p>
 
-        <div id="signalsList" class="space-y-4 text-sm">
+        <div id="signalsList" class="space-y-3 text-sm">
           <!-- Signals rendered from config -->
         </div>
 
-        <p class="text-xs opacity-50 mt-6">
+        <p class="text-xs opacity-50 mt-5">
           Note: Signals evolve with the registry. Early versions stay simple; depth arrives through iteration and steward feedback.
         </p>
       </div>
@@ -431,10 +417,10 @@
     <!-- Privacy -->
     <section id="privacy" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
-        <div class="grid md:grid-cols-2 gap-8 md:gap-10 items-start">
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-start">
           <div>
             <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4">Privacy</h2>
-            <div class="space-y-4 text-sm md:text-base leading-relaxed opacity-90">
+            <div class="space-y-3 text-sm md:text-base leading-relaxed opacity-90">
               <p>
                 The public page shows what's needed for meaning and trust: story, images, broad signals, and improvement.
                 Address-level data and sensitive notes stay private unless explicitly enabled.
@@ -445,22 +431,22 @@
             </div>
           </div>
 
-          <div class="space-y-4">
-            <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
+          <div class="space-y-3">
+            <div class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Public</div>
               <div class="font-medium mb-2">Curated profile</div>
               <p class="text-sm leading-relaxed opacity-70">
                 Photos, story, broad signals, and an improvement timeline.
               </p>
             </div>
-            <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
+            <div class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Private</div>
               <div class="font-medium mb-2">Sensitive layer</div>
               <p class="text-sm leading-relaxed opacity-70">
                 Address, detailed notes, raw records, and anything the steward chooses not to publish.
               </p>
             </div>
-            <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
+            <div class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Control</div>
               <div class="font-medium mb-2">Owner governed</div>
               <p class="text-sm leading-relaxed opacity-70">
@@ -522,7 +508,7 @@
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">The Registry Layer</h2>
 
-        <div class="space-y-4 text-sm md:text-base leading-relaxed mb-6">
+        <div class="space-y-3 text-sm md:text-base leading-relaxed mb-5">
           <p>
             Individual gardens matter — but systemic change requires infrastructure around them.
             The registry layer creates the baseline record and change trail that incentives can later sit on top of.
@@ -532,7 +518,7 @@
           </p>
         </div>
 
-        <div class="space-y-4 text-sm">
+        <div class="space-y-3 text-sm">
           <div class="border-l-accent pl-5">
             <h3 class="font-medium mb-1.5">Baseline + change log</h3>
             <p class="leading-relaxed opacity-70">The minimum viable audit trail for ecological uplift.</p>
@@ -584,12 +570,12 @@
           <div class="space-y-4">
             <div class="text-sm uppercase tracking-wide opacity-60">Next steps</div>
 
-            <a href="#example" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
+            <a href="#example" class="card-hover block border border-subtle bg-subtle p-4 rounded-sm">
               <div class="font-medium mb-1">See the format</div>
               <div class="text-sm opacity-70">View an example registered garden page.</div>
             </a>
 
-            <a href="#signals" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
+            <a href="#signals" class="card-hover block border border-subtle bg-subtle p-4 rounded-sm">
               <div class="font-medium mb-1">Understand the signals</div>
               <div class="text-sm opacity-70">What gets recorded and improved over time.</div>
             </a>
@@ -627,12 +613,12 @@
           <div class="space-y-4">
             <div class="text-sm uppercase tracking-wide opacity-60">Related</div>
 
-            <a href="#" id="btnStudio" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
+            <a href="#" id="btnStudio" class="card-hover block border border-subtle bg-subtle p-4 rounded-sm">
               <div class="font-medium mb-1">Back to Gardener &amp; Son</div>
               <div class="text-sm opacity-70">Studio page and system overview.</div>
             </a>
 
-            <a href="#" id="btnRegister2" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
+            <a href="#" id="btnRegister2" class="card-hover block border border-subtle bg-subtle p-4 rounded-sm">
               <div class="font-medium mb-1">Register a garden</div>
               <div class="text-sm opacity-70">Open the registration flow.</div>
             </a>
