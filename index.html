@@ -63,23 +63,6 @@
 
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
-
-    /* A subtle “wabi grain” without images */
-    .grain{
-      position: relative;
-    }
-    .grain:before{
-      content:"";
-      position:absolute;
-      inset:-40px;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 20% 10%, var(--wash), transparent 60%),
-        radial-gradient(circle at 80% 30%, var(--wash), transparent 55%),
-        radial-gradient(circle at 40% 90%, var(--wash), transparent 60%);
-      opacity: .9;
-      filter: blur(0px);
-    }
   </style>
 </head>
 
@@ -130,8 +113,8 @@
   </nav>
 
   <main id="content">
-    <!-- HERO (wabi / editorial / calm) -->
-    <section id="top" class="max-w-7xl mx-auto px-6 pt-14 md:pt-28 pb-14 md:pb-20 grain">
+    <!-- HERO (flat) -->
+    <section id="top" class="max-w-7xl mx-auto px-6 pt-14 md:pt-28 pb-14 md:pb-20">
       <div class="relative">
         <div class="max-w-4xl">
           <div class="text-xs tracking-[0.22em] uppercase muted mb-6">
@@ -165,7 +148,6 @@
             </a>
           </div>
 
-          <!-- Quiet credibility line (no boxes) -->
           <div class="mt-10 text-sm muted flex flex-wrap gap-x-4 gap-y-2">
             <span>Measured (practical signals)</span>
             <span aria-hidden="true">·</span>
@@ -177,7 +159,6 @@
           </div>
         </div>
 
-        <!-- A single hairline to anchor the fold -->
         <div class="mt-14" style="border-top:1px solid var(--hair);"></div>
       </div>
     </section>
@@ -380,7 +361,7 @@
       </div>
     </section>
 
-    <!-- The System (REG positioning inside the stack) -->
+    <!-- The System -->
     <section id="system" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">The Registry Layer</h2>
 
