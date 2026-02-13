@@ -154,11 +154,16 @@
       overflow-y: auto;
     }
 
-    /* Inner content wrapper gets constrained height */
+    /* Create vertical centering effect without interfering with scroll */
     .screen > div {
       width: 100%;
       max-height: calc(100svh - var(--navh) - 10px);
       overflow-y: auto;
+    }
+
+    /* All sections except hero get reduced top padding for better centering */
+    .screen:not(#top) {
+      padding-top: calc(var(--navh) - 40px);
     }
 
     /* prevent anchors being hidden behind fixed nav */
@@ -173,6 +178,9 @@
         padding-left: 1rem;
         padding-right: 1rem;
         justify-content: flex-start; /* Top-align on mobile for better scroll */
+      }
+      .screen:not(#top) {
+        padding-top: calc(var(--navh) - 40px);
       }
       .screen > div {
         max-height: calc(100svh - var(--navh));
