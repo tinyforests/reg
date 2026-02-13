@@ -59,6 +59,67 @@
     .muted{ color: var(--muted); }
     .wash{ background: var(--wash); }
 
+    /* Enhanced borders for better visibility in both modes */
+    .border-subtle {
+      border-color: rgba(61, 69, 53, 0.12);
+    }
+    html.dark .border-subtle {
+      border-color: rgba(255, 240, 220, 0.18);
+    }
+
+    .border-subtle-strong {
+      border-color: rgba(61, 69, 53, 0.15);
+    }
+    html.dark .border-subtle-strong {
+      border-color: rgba(255, 240, 220, 0.25);
+    }
+
+    .bg-subtle {
+      background: rgba(61, 69, 53, 0.05);
+    }
+    html.dark .bg-subtle {
+      background: rgba(255, 240, 220, 0.08);
+    }
+
+    /* Button borders */
+    .btn-border {
+      border: 1px solid rgba(61, 69, 53, 0.25);
+    }
+    html.dark .btn-border {
+      border: 1px solid rgba(255, 240, 220, 0.35);
+    }
+
+    /* Button hover states */
+    .btn-border:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+
+    /* Nav border */
+    .nav-border {
+      border-bottom: 1px solid rgba(61, 69, 53, 0.10);
+    }
+    html.dark .nav-border {
+      border-bottom: 1px solid rgba(255, 240, 220, 0.15);
+    }
+
+    /* Divider lines */
+    .divider-line {
+      border-top: 1px solid rgba(61, 69, 53, 0.10);
+    }
+    html.dark .divider-line {
+      border-top: 1px solid rgba(255, 240, 220, 0.15);
+    }
+
+    /* Left accent borders for lists */
+    .border-l-accent {
+      border-left: 2px solid rgba(61, 69, 53, 0.20);
+    }
+    html.dark .border-l-accent {
+      border-left: 2px solid rgba(255, 240, 220, 0.30);
+    }
+
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
@@ -83,8 +144,8 @@
       align-items: center;
       justify-content: center;
       
-      /* Account for fixed nav */
-      padding-top: var(--navh);
+      /* Account for fixed nav - reduced padding for better centering */
+      padding-top: calc(var(--navh) - 10px);
       padding-bottom: 20px;
       padding-left: 1.5rem;
       padding-right: 1.5rem;
@@ -96,7 +157,7 @@
     /* Inner content wrapper gets constrained height */
     .screen > div {
       width: 100%;
-      max-height: calc(100svh - var(--navh) - 40px);
+      max-height: calc(100svh - var(--navh) - 10px);
       overflow-y: auto;
     }
 
@@ -107,14 +168,14 @@
     @media (max-width: 768px){
       :root{ --navh: 120px; }
       .screen{
-        padding-top: var(--navh);
+        padding-top: calc(var(--navh) - 20px);
         padding-bottom: 16px;
         padding-left: 1rem;
         padding-right: 1rem;
         justify-content: flex-start; /* Top-align on mobile for better scroll */
       }
       .screen > div {
-        max-height: calc(100svh - var(--navh) - 32px);
+        max-height: calc(100svh - var(--navh));
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
@@ -198,8 +259,8 @@
   </script>
 
   <!-- Navigation (FIXED) -->
-  <nav class="backdrop-blur"
-       style="background: color-mix(in srgb, var(--bg) 92%, transparent); border-bottom:1px solid var(--hair);">
+  <nav class="backdrop-blur nav-border"
+       style="background: color-mix(in srgb, var(--bg) 92%, transparent);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
         <a href="#top" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Gardener & Son</a>
@@ -249,8 +310,7 @@
             </a>
 
             <a id="btnExample" href="#example"
-               class="inline-block text-sm px-5 py-2.5 transition-opacity hover:opacity-70"
-               style="border:1px solid var(--hair);">
+               class="inline-block text-sm px-5 py-2.5 btn-border transition-all rounded-sm">
               See an example
             </a>
 
@@ -267,7 +327,7 @@
             <span>Baseline → change</span>
           </div>
 
-          <div class="mt-6" style="border-top:1px solid var(--hair);"></div>
+          <div class="mt-6 divider-line"></div>
         </div>
       </div>
     </section>
@@ -313,7 +373,7 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 md:gap-6">
-          <article class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+          <article class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 1</div>
             <h3 class="font-medium mb-2">Register</h3>
             <p class="text-sm leading-relaxed opacity-70">
@@ -321,7 +381,7 @@
             </p>
           </article>
 
-          <article class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+          <article class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 2</div>
             <h3 class="font-medium mb-2">Baseline</h3>
             <p class="text-sm leading-relaxed opacity-70">
@@ -329,7 +389,7 @@
             </p>
           </article>
 
-          <article class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+          <article class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 3</div>
             <h3 class="font-medium mb-2">Improve</h3>
             <p class="text-sm leading-relaxed opacity-70">
@@ -378,21 +438,21 @@
           </div>
 
           <div class="space-y-4">
-            <div class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+            <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Public</div>
               <div class="font-medium mb-2">Curated profile</div>
               <p class="text-sm leading-relaxed opacity-70">
                 Photos, story, broad signals, and an improvement timeline.
               </p>
             </div>
-            <div class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+            <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Private</div>
               <div class="font-medium mb-2">Sensitive layer</div>
               <p class="text-sm leading-relaxed opacity-70">
                 Address, detailed notes, raw records, and anything the steward chooses not to publish.
               </p>
             </div>
-            <div class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+            <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Control</div>
               <div class="font-medium mb-2">Owner governed</div>
               <p class="text-sm leading-relaxed opacity-70">
@@ -415,8 +475,8 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 md:gap-6">
-          <a href="#" id="exampleCard" class="card-hover block border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
-            <div class="aspect-[4/3] bg-gardener-green/10 mb-4 rounded-sm"></div>
+          <a href="#" id="exampleCard" class="card-hover block border border-subtle-strong bg-subtle p-5 rounded-sm">
+            <div class="aspect-[4/3] bg-subtle border border-subtle mb-4 rounded-sm"></div>
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Registered Garden</div>
             <div class="font-medium mb-2">REG-VIC-SH-001</div>
             <p class="text-sm leading-relaxed opacity-70">
@@ -424,7 +484,7 @@
             </p>
           </a>
 
-          <div class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+          <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">What you'll see</div>
             <div class="font-medium mb-2">Public page</div>
             <p class="text-sm leading-relaxed opacity-70">
@@ -432,7 +492,7 @@
             </p>
           </div>
 
-          <div class="card-hover border border-gardener-green/10 bg-gardener-green/5 p-5 rounded-sm">
+          <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">What stays private</div>
             <div class="font-medium mb-2">Sensitive details</div>
             <p class="text-sm leading-relaxed opacity-70">
@@ -442,7 +502,7 @@
         </div>
 
         <div class="mt-5">
-          <a href="#" id="btnExample2" class="inline-block text-sm border border-gardener-green px-6 py-2.5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors rounded-sm">
+          <a href="#" id="btnExample2" class="inline-block text-sm btn-border px-6 py-2.5 transition-all rounded-sm">
             Open the example garden
           </a>
         </div>
@@ -465,24 +525,24 @@
         </div>
 
         <div class="space-y-4 text-sm">
-          <div class="border-l-2 border-gardener-green/20 pl-5">
+          <div class="border-l-accent pl-5">
             <h3 class="font-medium mb-1.5">Baseline + change log</h3>
             <p class="leading-relaxed opacity-70">The minimum viable audit trail for ecological uplift.</p>
           </div>
 
-          <div class="border-l-2 border-gardener-green/20 pl-5">
+          <div class="border-l-accent pl-5">
             <h3 class="font-medium mb-1.5">Optional verification</h3>
             <p class="leading-relaxed opacity-70">Lightweight pathways for partner review where needed.</p>
           </div>
 
-          <div class="border-l-2 border-gardener-green/20 pl-5">
+          <div class="border-l-accent pl-5">
             <h3 class="font-medium mb-1.5">Yield (incentives)</h3>
             <p class="leading-relaxed opacity-70">Mechanisms that reward stewardship once outcomes are legible.</p>
           </div>
         </div>
 
         <div class="mt-5">
-          <a href="#" id="btnYield2" class="inline-block text-sm border border-gardener-green px-6 py-2.5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors rounded-sm">
+          <a href="#" id="btnYield2" class="inline-block text-sm btn-border px-6 py-2.5 transition-all rounded-sm">
             Explore Yield
           </a>
         </div>
@@ -501,7 +561,7 @@
         <div class="grid md:grid-cols-2 gap-6 md:gap-8">
           <div class="space-y-4 text-sm md:text-base leading-relaxed">
             <div class="text-sm uppercase tracking-wide opacity-60">Register a garden</div>
-            <a href="#" id="btnRegister" class="inline-block border border-gardener-green px-6 py-2.5 text-sm hover:bg-gardener-green hover:text-nostalgic-beige transition-colors rounded-sm">
+            <a href="#" id="btnRegister" class="inline-block btn-border px-6 py-2.5 text-sm transition-all rounded-sm">
               Open registration
             </a>
 
@@ -516,12 +576,12 @@
           <div class="space-y-4">
             <div class="text-sm uppercase tracking-wide opacity-60">Next steps</div>
 
-            <a href="#example" class="card-hover block border border-gardener-green/30 bg-gardener-green/5 p-5 rounded-sm">
+            <a href="#example" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
               <div class="font-medium mb-1">See the format</div>
               <div class="text-sm opacity-70">View an example registered garden page.</div>
             </a>
 
-            <a href="#signals" class="card-hover block border border-gardener-green/30 bg-gardener-green/5 p-5 rounded-sm">
+            <a href="#signals" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
               <div class="font-medium mb-1">Understand the signals</div>
               <div class="text-sm opacity-70">What gets recorded and improved over time.</div>
             </a>
@@ -542,7 +602,7 @@
         <div class="grid md:grid-cols-2 gap-6 md:gap-8">
           <div class="space-y-4 text-sm md:text-base leading-relaxed">
             <div class="text-sm uppercase tracking-wide opacity-60">Email</div>
-            <a href="#" id="btnEmail" class="inline-block border border-gardener-green px-6 py-2.5 text-sm hover:bg-gardener-green hover:text-nostalgic-beige transition-colors rounded-sm">
+            <a href="#" id="btnEmail" class="inline-block btn-border px-6 py-2.5 text-sm transition-all rounded-sm">
               hello@gardenerandson.com.au
             </a>
 
@@ -559,12 +619,12 @@
           <div class="space-y-4">
             <div class="text-sm uppercase tracking-wide opacity-60">Related</div>
 
-            <a href="#" id="btnStudio" class="card-hover block border border-gardener-green/30 bg-gardener-green/5 p-5 rounded-sm">
+            <a href="#" id="btnStudio" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
               <div class="font-medium mb-1">Back to Gardener &amp; Son</div>
               <div class="text-sm opacity-70">Studio page and system overview.</div>
             </a>
 
-            <a href="#" id="btnRegister2" class="card-hover block border border-gardener-green/30 bg-gardener-green/5 p-5 rounded-sm">
+            <a href="#" id="btnRegister2" class="card-hover block border border-subtle bg-subtle p-5 rounded-sm">
               <div class="font-medium mb-1">Register a garden</div>
               <div class="text-sm opacity-70">Open the registration flow.</div>
             </a>
@@ -580,7 +640,7 @@
     const signals = window.REGSITE?.signals || [];
     
     signalsList.innerHTML = signals.map(signal => `
-      <div class="border-l-2 border-gardener-green/20 pl-5">
+      <div class="border-l-accent pl-5">
         <h3 class="font-medium mb-1.5">${signal.title}</h3>
         <p class="leading-relaxed opacity-70">${signal.description}</p>
       </div>
