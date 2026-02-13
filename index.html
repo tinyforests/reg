@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registered Ecological Gardens — Gardener & Son</title>
+  <title>Ecological Registry — Gardener & Son</title>
 
-  <meta name="description" content="Registered Ecological Gardens is the registry layer for ecological gardens: baseline records, change over time, and pathways to verification and incentives — designed so private land can function as connected ecological infrastructure." />
+  <meta name="description" content="The Ecological Registry turns private gardens into recognised ecological assets. We measure, verify and register biodiversity, cooling, habitat and ecological uplift in urban land — starting with your backyard." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,15 +41,19 @@
       --bg: #fff0dc;          /* nostalgic-beige */
       --fg: #3d4535;          /* gardener-green */
       --muted: rgba(61,69,53,.72);
-      --hair: rgba(61,69,53,.16);
-      --wash: rgba(61,69,53,.06);
+
+      /* match Tailwind-ish /10 and /5 */
+      --hair: rgba(61,69,53,.10);
+      --wash: rgba(61,69,53,.05);
     }
     html.dark{
       --bg: #3d4535;
       --fg: #fff0dc;
       --muted: rgba(255,240,220,.78);
-      --hair: rgba(255,240,220,.18);
-      --wash: rgba(255,240,220,.08);
+
+      /* match the same “weight” in dark mode */
+      --hair: rgba(255,240,220,.10);
+      --wash: rgba(255,240,220,.06);
     }
 
     body{ background: var(--bg); color: var(--fg); }
@@ -97,13 +101,13 @@
     };
   </script>
 
-  <!-- Navigation (original structure + theme toggle) -->
+  <!-- Navigation -->
   <nav class="border-b border-gardener-green/10 sticky top-0 bg-nostalgic-beige/90 backdrop-blur"
        style="background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom:1px solid var(--hair);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
         <a href="#top" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Gardener & Son</a>
-        <span class="text-xs tracking-[0.18em] uppercase muted">Registered Ecological Gardens</span>
+        <span class="text-xs tracking-[0.18em] uppercase muted">Ecological Registry</span>
       </div>
 
       <div class="flex flex-wrap items-center gap-6 md:gap-8 text-sm">
@@ -126,7 +130,7 @@
   </nav>
 
   <main id="content">
-    <!-- Hero (FROM WABI VERSION) -->
+    <!-- HERO (wabi / editorial / calm) -->
     <section id="top" class="max-w-7xl mx-auto px-6 pt-14 md:pt-28 pb-14 md:pb-20 grain">
       <div class="relative">
         <div class="max-w-4xl">
@@ -161,6 +165,7 @@
             </a>
           </div>
 
+          <!-- Quiet credibility line (no boxes) -->
           <div class="mt-10 text-sm muted flex flex-wrap gap-x-4 gap-y-2">
             <span>Measured (practical signals)</span>
             <span aria-hidden="true">·</span>
@@ -172,11 +177,12 @@
           </div>
         </div>
 
+        <!-- A single hairline to anchor the fold -->
         <div class="mt-14" style="border-top:1px solid var(--hair);"></div>
       </div>
     </section>
 
-    <!-- About (ORIGINAL) -->
+    <!-- About -->
     <section id="about" class="max-w-4xl mx-auto px-6 py-16 md:py-20 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-10 leading-tight">
         A registry that keeps gardens honest.
@@ -204,7 +210,7 @@
       </div>
     </section>
 
-    <!-- How it works (ORIGINAL) -->
+    <!-- How it works -->
     <section id="how" class="border-t border-gardener-green/10 py-16 md:py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-12">
@@ -242,7 +248,7 @@
       </div>
     </section>
 
-    <!-- Signals (ORIGINAL) -->
+    <!-- Signals -->
     <section id="signals" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Signals (v1)</h2>
 
@@ -285,7 +291,7 @@
       </p>
     </section>
 
-    <!-- Privacy (ORIGINAL) -->
+    <!-- Privacy -->
     <section id="privacy" class="border-t border-gardener-green/10 py-16 md:py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
@@ -329,7 +335,7 @@
       </div>
     </section>
 
-    <!-- Example (ORIGINAL) -->
+    <!-- Example -->
     <section id="example" class="border-t border-gardener-green/10 py-16 md:py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-12">
@@ -374,7 +380,7 @@
       </div>
     </section>
 
-    <!-- The System (ORIGINAL) -->
+    <!-- The System (REG positioning inside the stack) -->
     <section id="system" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">The Registry Layer</h2>
 
@@ -412,7 +418,7 @@
       </div>
     </section>
 
-    <!-- Register (ORIGINAL) -->
+    <!-- Register -->
     <section id="register" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Register</h2>
 
@@ -451,7 +457,7 @@
       </div>
     </section>
 
-    <!-- Contact (ORIGINAL) -->
+    <!-- Contact -->
     <section id="contact" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Contact</h2>
 
@@ -493,7 +499,7 @@
     </section>
   </main>
 
-  <!-- Footer (ORIGINAL) -->
+  <!-- Footer -->
   <footer class="border-t border-gardener-green/10 py-12">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-sm">
@@ -525,7 +531,7 @@
         <div>
           <div class="font-medium mb-3">Systems</div>
           <div class="space-y-2 text-xs">
-            <a href="#" id="footerRegister" class="block hover:opacity-60 transition-opacity">Registered Ecological Gardens</a>
+            <a href="#" id="footerRegister" class="block hover:opacity-60 transition-opacity">Ecological Registry</a>
             <a href="https://findmyecologicalgarden.com" class="block hover:opacity-60 transition-opacity">Find My Ecological Garden</a>
             <a href="https://findmyevc.com" class="block hover:opacity-60 transition-opacity">Find My EVC</a>
             <a href="#" id="footerYield" class="block hover:opacity-60 transition-opacity">YIELD</a>
@@ -543,7 +549,7 @@
     // Set current year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Smooth scroll for anchor links (works with scroll-smooth too)
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
         const href = this.getAttribute("href");
@@ -577,6 +583,7 @@
     setHref("footerYield", cfg.yieldUrl || "#system");
 
     setHref("btnEmail", mailto);
+
     setHref("btnStudio", cfg.studioUrl || "#top");
 
     setHref("footerRegister", "#top");
