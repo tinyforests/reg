@@ -36,33 +36,62 @@
     body { font-family: "IBM Plex Sans", sans-serif; }
     h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
 
-    /* Theme tokens (flip these for light/dark) */
+    /* Theme tokens */
     :root{
-      --bg: #fff0dc;          /* nostalgic-beige */
-      --fg: #3d4535;          /* gardener-green */
+      --bg: #fff0dc;
+      --fg: #3d4535;
       --muted: rgba(61,69,53,.72);
-
-      /* match Tailwind-ish /10 and /5 */
       --hair: rgba(61,69,53,.10);
       --wash: rgba(61,69,53,.05);
+      --navh: 84px; /* desktop-ish */
     }
     html.dark{
       --bg: #3d4535;
       --fg: #fff0dc;
       --muted: rgba(255,240,220,.78);
-
-      /* match the same “weight” in dark mode */
       --hair: rgba(255,240,220,.10);
       --wash: rgba(255,240,220,.06);
     }
 
     body{ background: var(--bg); color: var(--fg); }
-    .hairline{ border-color: var(--hair); }
     .muted{ color: var(--muted); }
     .wash{ background: var(--wash); }
 
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
+
+    /* FULL-SCREEN SECTIONS (Yield-like) */
+    html, body { height: 100%; }
+    main { scroll-snap-type: y mandatory; }
+
+    .screen{
+      min-height: 100svh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;               /* vertical centring like Yield */
+      padding-top: calc(var(--navh) + 10px);
+      padding-bottom: 18px;
+    }
+
+    /* anchor jumps: avoid sticky nav overlap */
+    [id]{ scroll-margin-top: calc(var(--navh) + 12px); }
+
+    /* mobile nav is taller because it stacks */
+    @media (max-width: 768px){
+      :root{ --navh: 124px; }
+      .screen{
+        padding-top: calc(var(--navh) + 8px);
+        padding-bottom: 14px;
+        align-items: flex-start;         /* on small screens, top-align feels better */
+      }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html { scroll-behavior: auto; }
+      main { scroll-snap-type: none; }
+    }
   </style>
 </head>
 
@@ -85,7 +114,7 @@
   </script>
 
   <!-- Navigation -->
-  <nav class="border-b border-gardener-green/10 sticky top-0 bg-nostalgic-beige/90 backdrop-blur"
+  <nav class="sticky top-0 backdrop-blur"
        style="background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom:1px solid var(--hair);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
@@ -102,7 +131,6 @@
         <a href="#register" class="hover:opacity-60 transition-opacity">Register</a>
         <a href="#contact" class="hover:opacity-60 transition-opacity">Contact</a>
 
-        <!-- Theme toggle -->
         <button id="themeToggle"
           class="text-xs tracking-[0.18em] uppercase hover:opacity-70 transition-opacity"
           style="border-left:1px solid var(--hair); padding-left:14px;">
@@ -113,9 +141,9 @@
   </nav>
 
   <main id="content">
-    <!-- HERO (flat + tighter so it fits nicely on one screen) -->
-    <section id="top" class="max-w-7xl mx-auto px-6 pt-10 md:pt-16 pb-10 md:pb-14">
-      <div class="relative">
+    <!-- HERO -->
+    <section id="top" class="screen">
+      <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="max-w-4xl">
           <div class="text-[11px] md:text-xs tracking-[0.22em] uppercase muted mb-4">
             A public registry for private land
@@ -125,7 +153,7 @@
             Turn private gardens into recognised ecological assets.
           </h1>
 
-          <p class="text-lg md:text-xl leading-relaxed mt-5 font-light muted">
+          <p class="text-lg md:text-xl leading-relaxed mt-5 font-light muted max-w-3xl">
             Measure, verify and register biodiversity, cooling, habitat and ecological uplift — starting with your backyard.
           </p>
 
@@ -149,59 +177,58 @@
           </div>
 
           <div class="mt-7 text-sm muted flex flex-wrap gap-x-3 gap-y-2">
-            <span>Measured</span>
-            <span aria-hidden="true">·</span>
-            <span>Verified</span>
-            <span aria-hidden="true">·</span>
-            <span>Privacy-first</span>
-            <span aria-hidden="true">·</span>
+            <span>Measured</span><span aria-hidden="true">·</span>
+            <span>Verified</span><span aria-hidden="true">·</span>
+            <span>Privacy-first</span><span aria-hidden="true">·</span>
             <span>Baseline → change</span>
           </div>
-        </div>
 
-        <div class="mt-10" style="border-top:1px solid var(--hair);"></div>
+          <div class="mt-10" style="border-top:1px solid var(--hair);"></div>
+        </div>
       </div>
     </section>
 
     <!-- About -->
-    <section id="about" class="max-w-4xl mx-auto px-6 py-16 md:py-20 border-t border-gardener-green/10">
-      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-10 leading-tight">
-        A registry that keeps gardens honest.
-      </h2>
+    <section id="about" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">
+          A registry that keeps gardens honest.
+        </h2>
 
-      <div class="grid md:grid-cols-2 gap-12 md:gap-16">
-        <div class="space-y-5 text-base leading-relaxed">
-          <p>
-            Gardens can be beautiful and still be ecologically thin. This registry is designed to make the difference legible:
-            what exists, what’s missing, and what is improving.
-          </p>
-          <p>
-            The core is simple: create a baseline, then record change over time — upgrades that compound across seasons.
-          </p>
-        </div>
+        <div class="grid md:grid-cols-2 gap-10 md:gap-14">
+          <div class="space-y-5 text-base leading-relaxed">
+            <p>
+              Gardens can be beautiful and still be ecologically thin. This registry is designed to make the difference legible:
+              what exists, what’s missing, and what is improving.
+            </p>
+            <p>
+              The core is simple: create a baseline, then record change over time — upgrades that compound across seasons.
+            </p>
+          </div>
 
-        <div class="space-y-5 text-base leading-relaxed">
-          <p>
-            Private land is one of the largest land classes in cities. When it stays disconnected, ecological value stays invisible.
-          </p>
-          <p>
-            When it becomes legible — recorded and connected — stewardship can be recognised, supported, and repeated.
-          </p>
+          <div class="space-y-5 text-base leading-relaxed">
+            <p>
+              Private land is one of the largest land classes in cities. When it stays disconnected, ecological value stays invisible.
+            </p>
+            <p>
+              When it becomes legible — recorded and connected — stewardship can be recognised, supported, and repeated.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- How it works -->
-    <section id="how" class="border-t border-gardener-green/10 py-16 md:py-20">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-12">
+    <section id="how" class="screen">
+      <div class="max-w-7xl mx-auto px-6 w-full">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-10">
           <h2 class="font-serif text-4xl md:text-5xl">How it works</h2>
           <p class="max-w-xl text-base leading-relaxed opacity-80">
             A light process designed for long horizons — gardens take years.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 gap-6 md:gap-8">
           <article class="border border-gardener-green/10 bg-gardener-green/5 p-6">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 1</div>
             <h3 class="font-medium mb-2">Register</h3>
@@ -230,55 +257,55 @@
     </section>
 
     <!-- Signals -->
-    <section id="signals" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
-      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Signals (v1)</h2>
+    <section id="signals" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-6 leading-tight">Signals (v1)</h2>
 
-      <div class="space-y-6 text-base leading-relaxed mb-14">
-        <p>
+        <p class="text-base leading-relaxed mb-10">
           Measurement stays practical — the goal is not scientific theatre. A garden should know where it is, and what “better” means.
           These are intentionally simple signals that can be refined later.
         </p>
+
+        <div class="space-y-6 text-sm">
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Structure</h3>
+            <p class="leading-relaxed opacity-70">Canopy / midstorey / groundlayer presence and continuity.</p>
+          </div>
+
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Habitat features</h3>
+            <p class="leading-relaxed opacity-70">Logs, rocks, litter, water, nesting opportunities, refuge.</p>
+          </div>
+
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Soil cover</h3>
+            <p class="leading-relaxed opacity-70">Mulch, leaf litter, living groundcover, permeability, compacted zones.</p>
+          </div>
+
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Water logic</h3>
+            <p class="leading-relaxed opacity-70">Runoff, infiltration, passive irrigation patterns, retention points.</p>
+          </div>
+
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Planting intent</h3>
+            <p class="leading-relaxed opacity-70">Place-based emphasis where relevant; exotics where they serve the whole.</p>
+          </div>
+        </div>
+
+        <p class="text-xs opacity-50 mt-10">
+          Note: Replace with the final REG signal list once locked.
+        </p>
       </div>
-
-      <div class="space-y-8 text-sm">
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Structure</h3>
-          <p class="leading-relaxed opacity-70">Canopy / midstorey / groundlayer presence and continuity.</p>
-        </div>
-
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Habitat features</h3>
-          <p class="leading-relaxed opacity-70">Logs, rocks, litter, water, nesting opportunities, refuge.</p>
-        </div>
-
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Soil cover</h3>
-          <p class="leading-relaxed opacity-70">Mulch, leaf litter, living groundcover, permeability, compacted zones.</p>
-        </div>
-
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Water logic</h3>
-          <p class="leading-relaxed opacity-70">Runoff, infiltration, passive irrigation patterns, retention points.</p>
-        </div>
-
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Planting intent</h3>
-          <p class="leading-relaxed opacity-70">Place-based emphasis where relevant; exotics where they serve the whole.</p>
-        </div>
-      </div>
-
-      <p class="text-xs opacity-50 mt-12">
-        Note: Replace with the final REG signal list once locked.
-      </p>
     </section>
 
     <!-- Privacy -->
-    <section id="privacy" class="border-t border-gardener-green/10 py-16 md:py-20">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+    <section id="privacy" class="screen">
+      <div class="max-w-7xl mx-auto px-6 w-full">
+        <div class="grid md:grid-cols-2 gap-10 md:gap-14 items-start">
           <div>
-            <h2 class="font-serif text-4xl md:text-5xl mb-8">Privacy</h2>
-            <div class="space-y-6 text-base leading-relaxed opacity-90">
+            <h2 class="font-serif text-4xl md:text-5xl mb-6">Privacy</h2>
+            <div class="space-y-5 text-base leading-relaxed opacity-90">
               <p>
                 The public page shows what’s needed for meaning and trust: story, images, broad signals, and improvement.
                 Address-level data and sensitive notes stay private unless explicitly enabled.
@@ -289,7 +316,7 @@
             </div>
           </div>
 
-          <div class="space-y-6">
+          <div class="space-y-5">
             <div class="border border-gardener-green/10 bg-gardener-green/5 p-6">
               <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Public</div>
               <div class="font-medium mb-2">Curated profile</div>
@@ -317,16 +344,16 @@
     </section>
 
     <!-- Example -->
-    <section id="example" class="border-t border-gardener-green/10 py-16 md:py-20">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-12">
+    <section id="example" class="screen">
+      <div class="max-w-7xl mx-auto px-6 w-full">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-10">
           <h2 class="font-serif text-4xl md:text-5xl">Example garden</h2>
           <p class="max-w-xl text-base leading-relaxed opacity-80">
             A single page that shows the pattern: profile + baseline + changes over time.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 gap-6 md:gap-8">
           <a href="#" id="exampleCard" class="block border border-gardener-green/10 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
             <div class="aspect-[4/3] bg-gardener-green/10 mb-5"></div>
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Registered Garden</div>
@@ -353,7 +380,7 @@
           </div>
         </div>
 
-        <div class="mt-10">
+        <div class="mt-8">
           <a href="#" id="btnExample2" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
             Open the example garden
           </a>
@@ -361,165 +388,134 @@
       </div>
     </section>
 
-    <!-- The System -->
-    <section id="system" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
-      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">The Registry Layer</h2>
+    <!-- System -->
+    <section id="system" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-6 leading-tight">The Registry Layer</h2>
 
-      <div class="space-y-6 text-base leading-relaxed mb-14">
-        <p>
-          Individual gardens matter — but systemic change requires infrastructure around them.
-          The registry layer creates the baseline record and change trail that incentives can later sit on top of.
-        </p>
-        <p>
-          When gardens can be trusted, they can be supported: stewardship with proof, and restoration that can scale.
-        </p>
-      </div>
-
-      <div class="space-y-8 text-sm">
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Baseline + change log</h3>
-          <p class="leading-relaxed opacity-70">The minimum viable audit trail for ecological uplift.</p>
+        <div class="space-y-5 text-base leading-relaxed mb-10">
+          <p>
+            Individual gardens matter — but systemic change requires infrastructure around them.
+            The registry layer creates the baseline record and change trail that incentives can later sit on top of.
+          </p>
+          <p>
+            When gardens can be trusted, they can be supported: stewardship with proof, and restoration that can scale.
+          </p>
         </div>
 
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Optional verification</h3>
-          <p class="leading-relaxed opacity-70">Lightweight pathways for partner review where needed.</p>
+        <div class="space-y-6 text-sm">
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Baseline + change log</h3>
+            <p class="leading-relaxed opacity-70">The minimum viable audit trail for ecological uplift.</p>
+          </div>
+
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Optional verification</h3>
+            <p class="leading-relaxed opacity-70">Lightweight pathways for partner review where needed.</p>
+          </div>
+
+          <div class="border-l-2 border-gardener-green/20 pl-6">
+            <h3 class="font-medium mb-2">Yield (incentives)</h3>
+            <p class="leading-relaxed opacity-70">Mechanisms that reward stewardship once outcomes are legible.</p>
+          </div>
         </div>
 
-        <div class="border-l-2 border-gardener-green/20 pl-6">
-          <h3 class="font-medium mb-2">Yield (incentives)</h3>
-          <p class="leading-relaxed opacity-70">Mechanisms that reward stewardship once outcomes are legible.</p>
+        <div class="mt-8">
+          <a href="#" id="btnYield2" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+            Explore Yield
+          </a>
         </div>
-      </div>
-
-      <div class="mt-10">
-        <a href="#" id="btnYield2" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
-          Explore Yield
-        </a>
       </div>
     </section>
 
     <!-- Register -->
-    <section id="register" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
-      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Register</h2>
+    <section id="register" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-6 leading-tight">Register</h2>
 
-      <p class="text-lg leading-relaxed mb-10">
-        Start light. Add truth. Improve over time. A garden becomes legible one entry at a time.
-      </p>
+        <p class="text-lg leading-relaxed mb-8">
+          Start light. Add truth. Improve over time. A garden becomes legible one entry at a time.
+        </p>
 
-      <div class="grid md:grid-cols-2 gap-10">
-        <div class="space-y-4 text-base leading-relaxed">
-          <div class="text-sm uppercase tracking-wide opacity-60">Register a garden</div>
-          <a href="#" id="btnRegister" class="inline-block border border-gardener-green px-6 py-3 text-sm hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
-            Open registration
-          </a>
+        <div class="grid md:grid-cols-2 gap-8 md:gap-10">
+          <div class="space-y-4 text-base leading-relaxed">
+            <div class="text-sm uppercase tracking-wide opacity-60">Register a garden</div>
+            <a href="#" id="btnRegister" class="inline-block border border-gardener-green px-6 py-3 text-sm hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+              Open registration
+            </a>
 
-          <div class="pt-6">
-            <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Prefer a guided start?</div>
-            <p class="opacity-80">
-              A short call can define baseline signals, privacy settings, and the first improvement pathway.
-            </p>
+            <div class="pt-4">
+              <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Prefer a guided start?</div>
+              <p class="opacity-80">
+                A short call can define baseline signals, privacy settings, and the first improvement pathway.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="space-y-4">
-          <div class="text-sm uppercase tracking-wide opacity-60">Next steps</div>
+          <div class="space-y-4">
+            <div class="text-sm uppercase tracking-wide opacity-60">Next steps</div>
 
-          <a href="#example" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
-            <div class="font-medium mb-1">See the format</div>
-            <div class="text-sm opacity-70">View an example registered garden page.</div>
-          </a>
+            <a href="#example" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
+              <div class="font-medium mb-1">See the format</div>
+              <div class="text-sm opacity-70">View an example registered garden page.</div>
+            </a>
 
-          <a href="#signals" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
-            <div class="font-medium mb-1">Understand the signals</div>
-            <div class="text-sm opacity-70">What gets recorded and improved over time.</div>
-          </a>
+            <a href="#signals" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
+              <div class="font-medium mb-1">Understand the signals</div>
+              <div class="text-sm opacity-70">What gets recorded and improved over time.</div>
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Contact -->
-    <section id="contact" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
-      <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Contact</h2>
+    <section id="contact" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-6 leading-tight">Contact</h2>
 
-      <p class="text-lg leading-relaxed mb-10">
-        For registered gardens, neighbourhood pilots, or partner conversations — reach out.
-      </p>
+        <p class="text-lg leading-relaxed mb-8">
+          For registered gardens, neighbourhood pilots, or partner conversations — reach out.
+        </p>
 
-      <div class="grid md:grid-cols-2 gap-10">
-        <div class="space-y-4 text-base leading-relaxed">
-          <div class="text-sm uppercase tracking-wide opacity-60">Email</div>
-          <a href="#" id="btnEmail" class="inline-block border border-gardener-green px-6 py-3 text-sm hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
-            hello@gardenerandson.com.au
-          </a>
+        <div class="grid md:grid-cols-2 gap-8 md:gap-10">
+          <div class="space-y-4 text-base leading-relaxed">
+            <div class="text-sm uppercase tracking-wide opacity-60">Email</div>
+            <a href="#" id="btnEmail" class="inline-block border border-gardener-green px-6 py-3 text-sm hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+              hello@gardenerandson.com.au
+            </a>
 
-          <div class="pt-6">
-            <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Studio</div>
-            <p class="opacity-80">
-              2 Churchill Street<br />
-              Mont Albert 3127<br />
-              Victoria, Australia
-            </p>
+            <div class="pt-4">
+              <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Studio</div>
+              <p class="opacity-80">
+                2 Churchill Street<br />
+                Mont Albert 3127<br />
+                Victoria, Australia
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="space-y-4">
-          <div class="text-sm uppercase tracking-wide opacity-60">Related</div>
+          <div class="space-y-4">
+            <div class="text-sm uppercase tracking-wide opacity-60">Related</div>
 
-          <a href="#" id="btnStudio" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
-            <div class="font-medium mb-1">Back to Gardener &amp; Son</div>
-            <div class="text-sm opacity-70">Studio page and system overview.</div>
-          </a>
+            <a href="#" id="btnStudio" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
+              <div class="font-medium mb-1">Back to Gardener &amp; Son</div>
+              <div class="text-sm opacity-70">Studio page and system overview.</div>
+            </a>
 
-          <a href="#" id="btnRegister2" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
-            <div class="font-medium mb-1">Register a garden</div>
-            <div class="text-sm opacity-70">Open the registration flow.</div>
-          </a>
+            <a href="#" id="btnRegister2" class="block border border-gardener-green/30 bg-gardener-green/5 p-6 hover:bg-gardener-green/10 transition-colors">
+              <div class="font-medium mb-1">Register a garden</div>
+              <div class="text-sm opacity-70">Open the registration flow.</div>
+            </a>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (not a snap panel; optional) -->
   <footer class="border-t border-gardener-green/10 py-12">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-sm">
-        <div class="col-span-2 md:col-span-1">
-          <div class="font-serif text-lg mb-4">Gardener & Son</div>
-          <p class="text-xs leading-relaxed opacity-60">
-            Ecological design studio<br />
-            Melbourne
-          </p>
-        </div>
-
-        <div>
-          <div class="font-medium mb-3">Studio</div>
-          <div class="space-y-2 text-xs opacity-60">
-            <p>2 Churchill Street</p>
-            <p>Mont Albert 3127</p>
-            <p>Victoria, Australia</p>
-          </div>
-        </div>
-
-        <div>
-          <div class="font-medium mb-3">Connect</div>
-          <div class="space-y-2 text-xs">
-            <a href="#contact" class="block hover:opacity-60 transition-opacity">Contact</a>
-            <a href="#top" class="block hover:opacity-60 transition-opacity">Top</a>
-          </div>
-        </div>
-
-        <div>
-          <div class="font-medium mb-3">Systems</div>
-          <div class="space-y-2 text-xs">
-            <a href="#" id="footerRegister" class="block hover:opacity-60 transition-opacity">Ecological Registry</a>
-            <a href="https://findmyecologicalgarden.com" class="block hover:opacity-60 transition-opacity">Find My Ecological Garden</a>
-            <a href="https://findmyevc.com" class="block hover:opacity-60 transition-opacity">Find My EVC</a>
-            <a href="#" id="footerYield" class="block hover:opacity-60 transition-opacity">YIELD</a>
-          </div>
-        </div>
-      </div>
-
       <div class="mt-12 pt-6 border-t border-gardener-green/10 text-xs opacity-40">
         <p>© <span id="year"></span> Gardener & Son. Designing ecological infrastructure.</p>
       </div>
@@ -527,7 +523,6 @@
   </footer>
 
   <script>
-    // Set current year
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // Smooth scroll for anchor links
@@ -537,7 +532,7 @@
         const target = document.querySelector(href);
         if (!target) return;
         e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth" });
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
 
@@ -561,15 +556,11 @@
 
     setHref("btnYield", cfg.yieldUrl || "#system");
     setHref("btnYield2", cfg.yieldUrl || "#system");
-    setHref("footerYield", cfg.yieldUrl || "#system");
 
     setHref("btnEmail", mailto);
-
     setHref("btnStudio", cfg.studioUrl || "#top");
 
-    setHref("footerRegister", "#top");
-
-    // Theme: default to OS preference, allow manual toggle, persist
+    // Theme
     const root = document.documentElement;
     const btn = document.getElementById("themeToggle");
 
