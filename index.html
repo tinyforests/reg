@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,13 +35,54 @@
     * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     body { font-family: "IBM Plex Sans", sans-serif; }
     h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
+
+    /* Theme tokens (flip these for light/dark) */
+    :root{
+      --bg: #fff0dc;          /* nostalgic-beige */
+      --fg: #3d4535;          /* gardener-green */
+      --muted: rgba(61,69,53,.72);
+      --hair: rgba(61,69,53,.16);
+      --wash: rgba(61,69,53,.06);
+    }
+    html.dark{
+      --bg: #3d4535;
+      --fg: #fff0dc;
+      --muted: rgba(255,240,220,.78);
+      --hair: rgba(255,240,220,.18);
+      --wash: rgba(255,240,220,.08);
+    }
+
+    body{ background: var(--bg); color: var(--fg); }
+    .hairline{ border-color: var(--hair); }
+    .muted{ color: var(--muted); }
+    .wash{ background: var(--wash); }
+
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
+    html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
+
+    /* A subtle “wabi grain” without images */
+    .grain{
+      position: relative;
+    }
+    .grain:before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 20% 10%, var(--wash), transparent 60%),
+        radial-gradient(circle at 80% 30%, var(--wash), transparent 55%),
+        radial-gradient(circle at 40% 90%, var(--wash), transparent 60%);
+      opacity: .9;
+      filter: blur(0px);
+    }
   </style>
 </head>
 
-<body class="bg-nostalgic-beige text-gardener-green">
+<body>
   <!-- Skip link -->
-  <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-nostalgic-beige border border-gardener-green px-4 py-2 text-sm">
+  <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 px-4 py-2 text-sm"
+     style="background:var(--bg); border:1px solid var(--hair);">
     Skip to content
   </a>
 
@@ -56,12 +97,16 @@
     };
   </script>
 
-  <!-- Navigation -->
-  <nav class="border-b border-gardener-green/10 sticky top-0 bg-nostalgic-beige/90 backdrop-blur">
+  <!-- Navigation (original structure + theme toggle) -->
+  <nav class="border-b border-gardener-green/10 sticky top-0 bg-nostalgic-beige/90 backdrop-blur"
+       style="background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom:1px solid var(--hair);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <a href="#top" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Gardener & Son</a>
+      <div class="flex items-center gap-3">
+        <a href="#top" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Gardener & Son</a>
+        <span class="text-xs tracking-[0.18em] uppercase muted">Registered Ecological Gardens</span>
+      </div>
 
-      <div class="flex flex-wrap gap-6 md:gap-8 text-sm">
+      <div class="flex flex-wrap items-center gap-6 md:gap-8 text-sm">
         <a href="#about" class="hover:opacity-60 transition-opacity">About</a>
         <a href="#how" class="hover:opacity-60 transition-opacity">How it works</a>
         <a href="#signals" class="hover:opacity-60 transition-opacity">Signals</a>
@@ -69,71 +114,69 @@
         <a href="#example" class="hover:opacity-60 transition-opacity">Example</a>
         <a href="#register" class="hover:opacity-60 transition-opacity">Register</a>
         <a href="#contact" class="hover:opacity-60 transition-opacity">Contact</a>
+
+        <!-- Theme toggle -->
+        <button id="themeToggle"
+          class="text-xs tracking-[0.18em] uppercase hover:opacity-70 transition-opacity"
+          style="border-left:1px solid var(--hair); padding-left:14px;">
+          Dark
+        </button>
       </div>
     </div>
   </nav>
 
   <main id="content">
-    <!-- Hero (UPDATED ONLY) -->
-    <section id="top" class="max-w-7xl mx-auto px-6 pt-14 md:pt-24 pb-12 md:pb-16">
-      <div class="grid lg:grid-cols-12 gap-10 items-start">
-        <!-- Left -->
-        <div class="lg:col-span-7">
-          <div class="text-xs uppercase tracking-wide opacity-60 mb-4">
-            Registered Ecological Gardens
+    <!-- Hero (FROM WABI VERSION) -->
+    <section id="top" class="max-w-7xl mx-auto px-6 pt-14 md:pt-28 pb-14 md:pb-20 grain">
+      <div class="relative">
+        <div class="max-w-4xl">
+          <div class="text-xs tracking-[0.22em] uppercase muted mb-6">
+            A public registry for private land
           </div>
 
-          <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-8">
+          <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-[0.95] tracking-tight">
             The Ecological Registry turns private gardens into recognised ecological assets.
           </h1>
 
-          <p class="text-xl md:text-2xl leading-relaxed max-w-3xl mt-8 font-light">
+          <p class="text-xl md:text-2xl leading-relaxed mt-8 font-light muted">
             We measure, verify and register biodiversity, cooling, habitat and ecological uplift in urban land — starting with your backyard.
           </p>
 
-          <div class="flex flex-col sm:flex-row gap-4 mt-10">
-            <a id="btnRegisterTop" href="#register" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-center">
-              Register a garden
+          <div class="mt-10 flex flex-col sm:flex-row gap-4">
+            <a id="btnRegisterTop" href="#register"
+               class="inline-block text-sm px-6 py-3 transition-opacity hover:opacity-70"
+               style="background:var(--fg); color:var(--bg);">
+              Register your garden
             </a>
-            <a id="btnExample" href="#example" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-center">
-              View an example garden
+
+            <a id="btnExample" href="#example"
+               class="inline-block text-sm px-6 py-3 transition-opacity hover:opacity-70"
+               style="border:1px solid var(--hair);">
+              See an example
             </a>
-            <a id="btnContactTop" href="#contact" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-center">
-              Start a conversation
+
+            <a id="btnYield" href="#system"
+               class="inline-block text-sm px-6 py-3 transition-opacity hover:opacity-70 muted">
+              How rewards could work →
             </a>
+          </div>
+
+          <div class="mt-10 text-sm muted flex flex-wrap gap-x-4 gap-y-2">
+            <span>Measured (practical signals)</span>
+            <span aria-hidden="true">·</span>
+            <span>Verified (optional pathways)</span>
+            <span aria-hidden="true">·</span>
+            <span>Privacy-first (steward controlled)</span>
+            <span aria-hidden="true">·</span>
+            <span>Baseline → change over time</span>
           </div>
         </div>
 
-        <!-- Right (panels keep your existing language) -->
-        <div class="lg:col-span-5 space-y-4">
-          <div class="border border-gardener-green/10 bg-gardener-green/5 p-6">
-            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Measured</div>
-            <div class="font-medium mb-2">Practical signals</div>
-            <p class="text-sm leading-relaxed opacity-70">
-              Structure, habitat features, soil cover, water logic, and planting intent — recorded as a baseline, then improved over time.
-            </p>
-          </div>
-
-          <div class="border border-gardener-green/10 bg-gardener-green/5 p-6">
-            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Verified</div>
-            <div class="font-medium mb-2">Proof when it matters</div>
-            <p class="text-sm leading-relaxed opacity-70">
-              Optional verification pathways for partners, councils, and incentive layers — without turning gardens into paperwork.
-            </p>
-          </div>
-
-          <div class="border border-gardener-green/10 bg-gardener-green/5 p-6">
-            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Privacy</div>
-            <div class="font-medium mb-2">Steward controlled</div>
-            <p class="text-sm leading-relaxed opacity-70">
-              Public pages show meaning and progress. Address-level data and sensitive notes stay private unless enabled.
-            </p>
-          </div>
-        </div>
+        <div class="mt-14" style="border-top:1px solid var(--hair);"></div>
       </div>
     </section>
 
-    <!-- About -->
+    <!-- About (ORIGINAL) -->
     <section id="about" class="max-w-4xl mx-auto px-6 py-16 md:py-20 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-10 leading-tight">
         A registry that keeps gardens honest.
@@ -161,7 +204,7 @@
       </div>
     </section>
 
-    <!-- How it works -->
+    <!-- How it works (ORIGINAL) -->
     <section id="how" class="border-t border-gardener-green/10 py-16 md:py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-12">
@@ -199,7 +242,7 @@
       </div>
     </section>
 
-    <!-- Signals -->
+    <!-- Signals (ORIGINAL) -->
     <section id="signals" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Signals (v1)</h2>
 
@@ -242,7 +285,7 @@
       </p>
     </section>
 
-    <!-- Privacy -->
+    <!-- Privacy (ORIGINAL) -->
     <section id="privacy" class="border-t border-gardener-green/10 py-16 md:py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
@@ -286,7 +329,7 @@
       </div>
     </section>
 
-    <!-- Example -->
+    <!-- Example (ORIGINAL) -->
     <section id="example" class="border-t border-gardener-green/10 py-16 md:py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-12">
@@ -324,14 +367,14 @@
         </div>
 
         <div class="mt-10">
-          <a href="#" id="btnExample" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+          <a href="#" id="btnExample2" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
             Open the example garden
           </a>
         </div>
       </div>
     </section>
 
-    <!-- The System (REG positioning inside the stack) -->
+    <!-- The System (ORIGINAL) -->
     <section id="system" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">The Registry Layer</h2>
 
@@ -363,13 +406,13 @@
       </div>
 
       <div class="mt-10">
-        <a href="#" id="btnYield" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+        <a href="#" id="btnYield2" class="inline-block text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
           Explore Yield
         </a>
       </div>
     </section>
 
-    <!-- Register -->
+    <!-- Register (ORIGINAL) -->
     <section id="register" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Register</h2>
 
@@ -408,7 +451,7 @@
       </div>
     </section>
 
-    <!-- Contact -->
+    <!-- Contact (ORIGINAL) -->
     <section id="contact" class="max-w-4xl mx-auto px-6 py-20 md:py-28 border-t border-gardener-green/10">
       <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-8 leading-tight">Contact</h2>
 
@@ -450,7 +493,7 @@
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (ORIGINAL) -->
   <footer class="border-t border-gardener-green/10 py-12">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-sm">
@@ -500,7 +543,7 @@
     // Set current year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Smooth scroll for anchor links
+    // Smooth scroll for anchor links (works with scroll-smooth too)
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
         const href = this.getAttribute("href");
@@ -526,16 +569,41 @@
     setHref("btnRegister2", cfg.registerUrl || "#register");
 
     setHref("btnExample", cfg.exampleUrl || "#example");
+    setHref("btnExample2", cfg.exampleUrl || "#example");
     setHref("exampleCard", cfg.exampleUrl || "#example");
 
     setHref("btnYield", cfg.yieldUrl || "#system");
+    setHref("btnYield2", cfg.yieldUrl || "#system");
     setHref("footerYield", cfg.yieldUrl || "#system");
 
     setHref("btnEmail", mailto);
-
     setHref("btnStudio", cfg.studioUrl || "#top");
 
     setHref("footerRegister", "#top");
+
+    // Theme: default to OS preference, allow manual toggle, persist
+    const root = document.documentElement;
+    const btn = document.getElementById("themeToggle");
+
+    const applyTheme = (mode) => {
+      const isDark = mode === "dark";
+      root.classList.toggle("dark", isDark);
+      if (btn) btn.textContent = isDark ? "Light" : "Dark";
+      try { localStorage.setItem("reg_theme", mode); } catch(e){}
+    };
+
+    const stored = (() => { try { return localStorage.getItem("reg_theme"); } catch(e){ return null; }})();
+    if (stored === "dark" || stored === "light") {
+      applyTheme(stored);
+    } else {
+      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      applyTheme(prefersDark ? "dark" : "light");
+    }
+
+    btn && btn.addEventListener("click", () => {
+      const nowDark = root.classList.contains("dark");
+      applyTheme(nowDark ? "light" : "dark");
+    });
   </script>
 </body>
 </html>
