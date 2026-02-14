@@ -151,15 +151,10 @@
       width: 100%;
     }
 
-    /* Non-hero sections: minimal top padding, more bottom for balance */
+    /* Non-hero sections: just enough top padding to clear nav, large bottom for optical centering */
     .screen:not(#top) {
-      padding-top: 0;
-      padding-bottom: calc(var(--navh) + 80px);
-    }
-
-    /* Ensure content clears the fixed nav in non-hero sections */
-    .screen:not(#top) > div {
-      margin-top: var(--navh);
+      padding-top: calc(var(--navh) + 20px);
+      padding-bottom: 160px;
     }
 
     /* prevent anchors being hidden behind fixed nav */
@@ -172,11 +167,8 @@
         padding: var(--navh) 1rem var(--navh) 1rem;
       }
       .screen:not(#top) {
-        padding-top: 0;
-        padding-bottom: calc(var(--navh) + 120px);
-      }
-      .screen:not(#top) > div {
-        margin-top: var(--navh);
+        padding-top: calc(var(--navh) + 30px);
+        padding-bottom: 210px;
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
