@@ -137,34 +137,18 @@
       min-height: 100svh;
       scroll-snap-align: start;
       
-      /* Simple flexbox centering */
+      /* Yield-style centering: flexbox with balanced padding */
       display: flex;
       align-items: center;
       justify-content: center;
       
-      /* Just enough padding to clear the fixed nav */
-      padding-top: var(--navh);
-      padding-bottom: 40px;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+      /* Balanced padding for visual centering */
+      padding: var(--navh) 1.5rem var(--navh) 1.5rem;
     }
 
-    /* Content wrapper - no special positioning needed */
+    /* Content wrapper - no scroll, no max-height */
     .screen > div {
       width: 100%;
-      max-height: calc(100svh - var(--navh) - 80px);
-      overflow-y: auto;
-    }
-
-    /* All sections except hero get minimal top padding for better vertical centering */
-    .screen:not(#top) {
-      padding-top: 0;
-      padding-bottom: 80px;
-    }
-
-    /* Add margin to clear nav in non-hero sections */
-    .screen:not(#top) > div {
-      margin-top: var(--navh);
     }
 
     /* prevent anchors being hidden behind fixed nav */
@@ -174,20 +158,7 @@
     @media (max-width: 768px){
       :root{ --navh: 120px; }
       .screen{
-        padding-top: var(--navh);
-        padding-bottom: 40px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-      .screen:not(#top) {
-        padding-top: 0;
-        padding-bottom: 80px;
-      }
-      .screen:not(#top) > div {
-        margin-top: var(--navh);
-      }
-      .screen > div {
-        max-height: calc(100svh - var(--navh) - 80px);
+        padding: var(--navh) 1rem var(--navh) 1rem;
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
