@@ -136,11 +136,13 @@
     
     main { 
       scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better nav behavior */
+      scroll-padding-top: var(--navh); /* Offset snap position by nav height */
     }
 
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
+      scroll-snap-stop: always;
       
       /* Yield-style centering: flexbox with balanced padding */
       display: flex;
