@@ -135,22 +135,24 @@
     }
     
     main { 
-      scroll-snap-type: y proximity; /* Proximity for smoother behavior with fixed nav */
+      scroll-snap-type: y proximity;
+      scroll-padding-top: var(--navh); /* Offset snap position by nav height */
     }
 
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
-      scroll-snap-stop: always;
-      scroll-margin-top: calc(var(--navh) + 1px); /* Offset by nav height + 1px to ensure clearance */
       
       /* Yield-style centering: flexbox with balanced padding */
       display: flex;
       align-items: center;
       justify-content: center;
       
-      /* Balanced padding for visual centering */
-      padding: var(--navh) 1.5rem var(--navh) 1.5rem;
+      /* Ensure top padding clears the fixed nav for all sections */
+      padding-top: calc(var(--navh) + 20px);
+      padding-bottom: var(--navh);
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
 
     /* Content wrapper - no scroll, no max-height */
@@ -158,21 +160,24 @@
       width: 100%;
     }
 
-    /* Non-hero sections: minimal top padding, much larger bottom for aggressive upward shift */
+    /* Non-hero sections: push content up more aggressively while still clearing nav */
     .screen:not(#top) {
       padding-top: calc(var(--navh) + 10px);
-      padding-bottom: 200px;
+      padding-bottom: 220px;
     }
 
     /* mobile: nav becomes taller because it stacks */
     @media (max-width: 768px){
       :root{ --navh: 120px; }
       .screen{
-        padding: var(--navh) 1rem var(--navh) 1rem;
+        padding-top: calc(var(--navh) + 20px);
+        padding-bottom: var(--navh);
+        padding-left: 1rem;
+        padding-right: 1rem;
       }
       .screen:not(#top) {
         padding-top: calc(var(--navh) + 20px);
-        padding-bottom: 240px;
+        padding-bottom: 260px;
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
