@@ -59,6 +59,11 @@
     .muted{ color: var(--muted); }
     .wash{ background: var(--wash); }
 
+    /* Alternating section backgrounds for visual rhythm */
+    .screen:nth-child(even) {
+      background: var(--wash);
+    }
+
     /* Enhanced borders for better visibility in both modes */
     .border-subtle {
       border-color: rgba(61, 69, 53, 0.12);
@@ -151,10 +156,10 @@
       width: 100%;
     }
 
-    /* Non-hero sections: just enough top padding to clear nav, large bottom for optical centering */
+    /* Non-hero sections: minimal top padding, much larger bottom for aggressive upward shift */
     .screen:not(#top) {
-      padding-top: calc(var(--navh) + 20px);
-      padding-bottom: 160px;
+      padding-top: calc(var(--navh) + 10px);
+      padding-bottom: 200px;
     }
 
     /* prevent anchors being hidden behind fixed nav */
@@ -167,8 +172,8 @@
         padding: var(--navh) 1rem var(--navh) 1rem;
       }
       .screen:not(#top) {
-        padding-top: calc(var(--navh) + 30px);
-        padding-bottom: 210px;
+        padding-top: calc(var(--navh) + 20px);
+        padding-bottom: 240px;
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
@@ -328,11 +333,11 @@
     <!-- About -->
     <section id="about" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
-        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-5 leading-tight">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
           A registry that keeps gardens honest.
         </h2>
 
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div class="grid md:grid-cols-2 gap-5 md:gap-7">
           <div class="space-y-3 text-base leading-relaxed">
             <p>
               Gardens can be beautiful and still be ecologically thin. This registry is designed to make the difference legible:
@@ -358,14 +363,14 @@
     <!-- How it works -->
     <section id="how" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
-        <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-6">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-3 mb-5">
           <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl">How it works</h2>
           <p class="max-w-xl text-sm md:text-base leading-relaxed opacity-80">
             A light process designed for long horizons — gardens take years.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-4 md:gap-6">
+        <div class="grid md:grid-cols-3 gap-3 md:gap-5">
           <article class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 1</div>
             <h3 class="font-medium mb-2">Register</h3>
@@ -396,9 +401,9 @@
     <!-- Signals -->
     <section id="signals" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
-        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">Signals (v1)</h2>
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Signals (v1)</h2>
 
-        <p class="text-sm md:text-base leading-relaxed mb-5">
+        <p class="text-sm md:text-base leading-relaxed mb-4">
           Measurement stays practical — the goal is not scientific theatre. A garden should know where it is, and what "better" means.
           These are intentionally simple signals that can be refined later.
         </p>
@@ -407,7 +412,7 @@
           <!-- Signals rendered from config -->
         </div>
 
-        <p class="text-xs opacity-50 mt-5">
+        <p class="text-xs opacity-50 mt-4">
           Note: Signals evolve with the registry. Early versions stay simple; depth arrives through iteration and steward feedback.
         </p>
       </div>
@@ -416,9 +421,9 @@
     <!-- Privacy -->
     <section id="privacy" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-start">
+        <div class="grid md:grid-cols-2 gap-5 md:gap-7 items-start">
           <div>
-            <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4">Privacy</h2>
+            <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3">Privacy</h2>
             <div class="space-y-3 text-sm md:text-base leading-relaxed opacity-90">
               <p>
                 The public page shows what's needed for meaning and trust: story, images, broad signals, and improvement.
@@ -460,14 +465,14 @@
     <!-- Example -->
     <section id="example" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
-        <div class="flex flex-col md:flex-row justify-between md:items-end gap-4 mb-6">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-3 mb-5">
           <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl">Example garden</h2>
           <p class="max-w-xl text-sm md:text-base leading-relaxed opacity-80">
             A single page that shows the pattern: profile + baseline + changes over time.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-4 md:gap-6">
+        <div class="grid md:grid-cols-3 gap-3 md:gap-5">
           <a href="#" id="exampleCard" class="card-hover block border border-subtle-strong bg-subtle p-5 rounded-sm">
             <div class="aspect-[4/3] bg-subtle border border-subtle mb-4 rounded-sm"></div>
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Registered Garden</div>
@@ -494,7 +499,7 @@
           </div>
         </div>
 
-        <div class="mt-5">
+        <div class="mt-4">
           <a href="#" id="btnExample2" class="inline-block text-sm btn-border px-6 py-2.5 transition-all rounded-sm">
             Open the example garden
           </a>
@@ -505,9 +510,9 @@
     <!-- System -->
     <section id="system" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
-        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">The Registry Layer</h2>
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">The Registry Layer</h2>
 
-        <div class="space-y-3 text-sm md:text-base leading-relaxed mb-5">
+        <div class="space-y-3 text-sm md:text-base leading-relaxed mb-4">
           <p>
             Individual gardens matter — but systemic change requires infrastructure around them.
             The registry layer creates the baseline record and change trail that incentives can later sit on top of.
@@ -534,7 +539,7 @@
           </div>
         </div>
 
-        <div class="mt-5">
+        <div class="mt-4">
           <a href="#" id="btnYield2" class="inline-block text-sm btn-border px-6 py-2.5 transition-all rounded-sm">
             Explore Yield
           </a>
@@ -545,13 +550,13 @@
     <!-- Register -->
     <section id="register" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
-        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">Register</h2>
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Register</h2>
 
-        <p class="text-base md:text-lg leading-relaxed mb-6">
+        <p class="text-base md:text-lg leading-relaxed mb-5">
           Start light. Add truth. Improve over time. A garden becomes legible one entry at a time.
         </p>
 
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div class="grid md:grid-cols-2 gap-5 md:gap-7">
           <div class="space-y-4 text-sm md:text-base leading-relaxed">
             <div class="text-sm uppercase tracking-wide opacity-60">Register a garden</div>
             <a href="#" id="btnRegister" class="inline-block btn-border px-6 py-2.5 text-sm transition-all rounded-sm">
@@ -586,13 +591,13 @@
     <!-- Contact -->
     <section id="contact" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
-        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">Contact</h2>
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Contact</h2>
 
-        <p class="text-base md:text-lg leading-relaxed mb-6">
+        <p class="text-base md:text-lg leading-relaxed mb-5">
           For registered gardens, neighbourhood pilots, or partner conversations — reach out.
         </p>
 
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div class="grid md:grid-cols-2 gap-5 md:gap-7">
           <div class="space-y-4 text-sm md:text-base leading-relaxed">
             <div class="text-sm uppercase tracking-wide opacity-60">Email</div>
             <a href="#" id="btnEmail" class="inline-block btn-border px-6 py-2.5 text-sm transition-all rounded-sm">
