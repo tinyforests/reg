@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ecological Registry — Gardener & Son</title>
 
-  <meta name="description" content="The Ecological Registry turns private gardens into recognised ecological assets. We measure, verify and register biodiversity, cooling, habitat and ecological uplift in urban land — starting with your backyard." />
+  <meta name="description" content="Collectively, gardens form one of the largest untapped ecological assets in our cities. Ecological Registry provides the structure that allows private gardens to become measurable, trusted contributors to urban biodiversity." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -125,6 +125,66 @@
       border-left: 2px solid rgba(255, 240, 220, 0.30);
     }
 
+    /* Active nav link indicator */
+    nav a.nav-link {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+    nav a.nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--fg);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    nav a.nav-link.active::after {
+      transform: scaleX(1);
+    }
+
+    /* Gardener & Son badge - bottom left corner */
+    .gs-badge {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 50;
+      background: var(--bg);
+      border: 1px solid rgba(61, 69, 53, 0.15);
+      border-radius: 2px;
+      padding: 8px 12px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      transition: all 0.2s ease;
+      color: var(--fg);
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .gs-badge:hover {
+      opacity: 1;
+      border-color: rgba(61, 69, 53, 0.25);
+    }
+    html.dark .gs-badge {
+      border-color: rgba(255, 240, 220, 0.15);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    html.dark .gs-badge:hover {
+      border-color: rgba(255, 240, 220, 0.35);
+    }
+    @media (max-width: 768px) {
+      .gs-badge {
+        bottom: 16px;
+        left: 16px;
+        font-size: 9px;
+        padding: 6px 10px;
+      }
+    }
+
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
@@ -225,6 +285,11 @@
     Skip to content
   </a>
 
+  <!-- Gardener & Son Badge -->
+  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">
+    Gardener & Son
+  </a>
+
   <!-- CONFIG (edit these) -->
   <script>
     window.REGSITE = {
@@ -232,7 +297,7 @@
       exampleUrl:  "https://tinyforests.github.io/Ecological-Registry/reg/REG-VIC-SH-001.html",
       contactEmail:"hello@gardenerandson.com.au",
       yieldUrl:    "https://yield.gardenerandson.com",
-      studioUrl:   "https://tinyforests.github.io/gardenerandson/#",
+      studioUrl:   "https://www.gardenerandson.com",
       
       // Signals can be updated here
       signals: [
@@ -265,18 +330,17 @@
        style="background: var(--bg);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
-        <a href="#top" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Gardener & Son</a>
-        <span class="text-xs tracking-[0.18em] uppercase muted">Ecological Registry</span>
+        <a href="#top" class="text-xs tracking-[0.18em] uppercase hover:opacity-70 transition-opacity">Ecological Registry</a>
       </div>
 
       <div class="flex flex-wrap items-center gap-6 md:gap-8 text-sm">
-        <a href="#about" class="hover:opacity-60 transition-opacity">About</a>
-        <a href="#how" class="hover:opacity-60 transition-opacity">How it works</a>
-        <a href="#signals" class="hover:opacity-60 transition-opacity">Signals</a>
-        <a href="#privacy" class="hover:opacity-60 transition-opacity">Privacy</a>
-        <a href="#example" class="hover:opacity-60 transition-opacity">Example</a>
-        <a href="#register" class="hover:opacity-60 transition-opacity">Register</a>
-        <a href="#contact" class="hover:opacity-60 transition-opacity">Contact</a>
+        <a href="#about" class="nav-link hover:opacity-60 transition-opacity">About</a>
+        <a href="#how" class="nav-link hover:opacity-60 transition-opacity">How it works</a>
+        <a href="#signals" class="nav-link hover:opacity-60 transition-opacity">Signals</a>
+        <a href="#privacy" class="nav-link hover:opacity-60 transition-opacity">Privacy</a>
+        <a href="#example" class="nav-link hover:opacity-60 transition-opacity">Example</a>
+        <a href="#register" class="nav-link hover:opacity-60 transition-opacity">Register</a>
+        <a href="#contact" class="nav-link hover:opacity-60 transition-opacity">Contact</a>
 
         <button id="themeToggle"
           class="text-xs tracking-[0.18em] uppercase hover:opacity-70 transition-opacity"
@@ -301,7 +365,7 @@
           </h1>
 
           <p class="text-base md:text-lg leading-relaxed mt-4 font-light muted max-w-3xl">
-            Measure, verify and register biodiversity, cooling, habitat and ecological uplift — starting with your backyard.
+            Collectively, gardens form one of the largest untapped ecological assets in our cities. Ecological Registry provides the structure that allows private gardens to become measurable, trusted contributors to urban biodiversity.
           </p>
 
           <div class="mt-5 flex flex-col sm:flex-row gap-2.5">
@@ -706,6 +770,42 @@
       const nowDark = root.classList.contains("dark");
       applyTheme(nowDark ? "light" : "dark");
     });
+
+    // Track active section for nav highlighting
+    const sections = document.querySelectorAll('.screen');
+    const navLinks = document.querySelectorAll('nav a.nav-link');
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-100px 0px -60% 0px', // Trigger when section is near top
+      threshold: 0
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          
+          // Remove active class from all nav links
+          navLinks.forEach(link => link.classList.remove('active'));
+          
+          // Add active class to current section's nav link
+          const activeLink = document.querySelector(`nav a.nav-link[href="#${id}"]`);
+          if (activeLink) {
+            activeLink.classList.add('active');
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(section => observer.observe(section));
+
+    // Set initial active state (first nav section is About)
+    const firstNavLink = navLinks[0];
+    if (firstNavLink) {
+      firstNavLink.classList.add('active');
+    }
   </script>
 </body>
 </html>
