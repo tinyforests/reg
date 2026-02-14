@@ -135,14 +135,14 @@
     }
     
     main { 
-      scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better nav behavior */
-      scroll-padding-top: var(--navh); /* Offset snap position by nav height */
+      scroll-snap-type: y proximity; /* Proximity for smoother behavior with fixed nav */
     }
 
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
       scroll-snap-stop: always;
+      scroll-margin-top: calc(var(--navh) + 1px); /* Offset by nav height + 1px to ensure clearance */
       
       /* Yield-style centering: flexbox with balanced padding */
       display: flex;
@@ -163,9 +163,6 @@
       padding-top: calc(var(--navh) + 10px);
       padding-bottom: 200px;
     }
-
-    /* prevent anchors being hidden behind fixed nav */
-    [id]{ scroll-margin-top: calc(var(--navh) + 20px); }
 
     /* mobile: nav becomes taller because it stacks */
     @media (max-width: 768px){
@@ -260,7 +257,7 @@
 
   <!-- Navigation (FIXED) -->
   <nav class="backdrop-blur nav-border"
-       style="background: color-mix(in srgb, var(--bg) 92%, transparent);">
+       style="background: var(--bg);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
         <a href="#top" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Gardener & Son</a>
