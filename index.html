@@ -151,6 +151,12 @@
       width: 100%;
     }
 
+    /* Non-hero sections: less top padding, more bottom for balance */
+    .screen:not(#top) {
+      padding-top: 40px;
+      padding-bottom: calc(var(--navh) + 40px);
+    }
+
     /* prevent anchors being hidden behind fixed nav */
     [id]{ scroll-margin-top: calc(var(--navh) + 20px); }
 
@@ -159,6 +165,10 @@
       :root{ --navh: 120px; }
       .screen{
         padding: var(--navh) 1rem var(--navh) 1rem;
+      }
+      .screen:not(#top) {
+        padding-top: 60px;
+        padding-bottom: calc(var(--navh) + 60px);
       }
       /* Tighter line-height for hero on mobile */
       .hero-title {
