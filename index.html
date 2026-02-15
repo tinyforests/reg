@@ -189,12 +189,12 @@
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
     /* FULL-SCREEN + SNAP (Yield-like), WITH FIXED NAV */
-    html, body {
-      height: 100%;
+    html, body { 
+      height: 100%; 
       scroll-behavior: smooth;
     }
-
-    main {
+    
+    main { 
       scroll-snap-type: y proximity;
       scroll-padding-top: var(--navh); /* Offset snap position by nav height */
     }
@@ -202,12 +202,12 @@
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
-
+      
       /* Yield-style centering: flexbox with balanced padding */
       display: flex;
       align-items: center;
       justify-content: center;
-
+      
       /* Ensure top padding clears the fixed nav for all sections */
       padding-top: calc(var(--navh) + 20px);
       padding-bottom: var(--navh);
@@ -298,7 +298,7 @@
       contactEmail:"hello@gardenerandson.com.au",
       yieldUrl:    "https://yield.gardenerandson.com",
       studioUrl:   "https://www.gardenerandson.com",
-
+      
       // Signals can be updated here
       signals: [
         {
@@ -335,6 +335,7 @@
 
       <div class="flex flex-wrap items-center gap-6 md:gap-8 text-sm">
         <a href="#about" class="nav-link hover:opacity-60 transition-opacity">About</a>
+        <a href="#imagine" class="nav-link hover:opacity-60 transition-opacity">Imagine</a>
         <a href="#how" class="nav-link hover:opacity-60 transition-opacity">How it works</a>
         <a href="#signals" class="nav-link hover:opacity-60 transition-opacity">Signals</a>
         <a href="#privacy" class="nav-link hover:opacity-60 transition-opacity">Privacy</a>
@@ -399,76 +400,78 @@
     </section>
 
     <!-- About -->
-<section id="about" class="screen">
-  <div class="max-w-4xl mx-auto px-6 w-full">
-    <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
-      Most urban gardens contribute little to biodiversity.
-    </h2>
+    <section id="about" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
+          Most urban gardens contribute little to biodiversity.
+        </h2>
 
-    <div class="grid md:grid-cols-2 gap-5 md:gap-7">
-      <div class="space-y-3 text-base leading-relaxed">
-        <p>
-          Most gardens are passive spaces. They are walked past, maintained out of habit, and rarely considered for their
-          ecological potential.
-        </p>
-        <p>
-          Modern life keeps many of us indoors — in offices, on screens, in cars. Our relationship with land has become distant.
-          Gardens often remain decorative backdrops rather than living systems.
-        </p>
+        <div class="grid md:grid-cols-2 gap-5 md:gap-7">
+          <div class="space-y-3 text-base leading-relaxed font-light">
+            <p>
+              Most gardens are passive spaces. They are walked past, maintained out of habit, and rarely considered for their
+              ecological potential.
+            </p>
+            <p>
+              Modern life keeps many of us indoors — in offices, on screens, in cars. Our relationship with land has become distant.
+              Gardens often remain decorative backdrops rather than living systems.
+            </p>
+          </div>
+
+          <div class="space-y-3 text-base leading-relaxed font-light">
+            <p>
+              Most urban gardens contribute very little measurable habitat, biodiversity, or ecological structure within fragmented
+              urban ecosystems. This is not a failure of care — it is the outcome of patterns we inherited.
+            </p>
+            <p>
+              Ecological Registry provides the structure to establish a baseline, then record change over time — so stewardship becomes
+              visible, trusted, and able to compound across seasons.
+            </p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="space-y-3 text-base leading-relaxed">
-        <p>
-          Most urban gardens contribute very little measurable habitat, biodiversity, or ecological structure within fragmented
-          urban ecosystems. This is not a failure of care — it is the outcome of patterns we inherited.
-        </p>
-        <p>
-          Ecological Registry provides the structure to establish a baseline, then record change over time — so stewardship becomes
-          visible, trusted, and able to compound across seasons.
-        </p>
+    <!-- Imagine -->
+    <section id="imagine" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
+          Imagine having a garden that does more than look good.
+        </h2>
+
+        <div class="space-y-3 text-sm md:text-base leading-relaxed font-light max-w-2xl">
+          <p>
+            A garden that builds living soil over time.
+          </p>
+          <p>
+            That supports pollinators through every season.
+          </p>
+          <p>
+            That provides layered habitat for birds, insects, and native species.
+          </p>
+          <p>
+            That contributes to urban cooling and water retention.
+          </p>
+          <p>
+            That connects to nearby parkland and remnant vegetation.
+          </p>
+          <p>
+            That becomes more ecologically functional with each passing year.
+          </p>
+
+          <p class="pt-3 muted text-xs md:text-sm">
+            A garden that creates a more natural environment — contributing quietly to something larger than itself.
+          </p>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-    
-<!-- Imagine -->
-<section id="imagine" class="screen">
-  <div class="max-w-4xl mx-auto px-6 w-full text-center">
-    <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-6 leading-tight">
-      Imagine having a garden that does more than look good.
-    </h2>
-
-    <div class="space-y-4 text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
-      <p>
-        A garden that improves soil over time.
-      </p>
-      <p>
-        That supports layered habitat.
-      </p>
-      <p>
-        That connects to nearby parkland and remnant vegetation.
-      </p>
-      <p>
-        That becomes more ecologically functional with each season.
-      </p>
-
-      <p class="pt-2">
-        Contributing to urban biodiversity beyond its fence line.
-      </p>
-
-      <p class="pt-4 muted">
-        A garden that contributes — quietly — to something larger than itself.
-      </p>
-    </div>
-  </div>
-</section>
+    </section>
 
     <!-- How it works -->
     <section id="how" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="flex flex-col md:flex-row justify-between md:items-end gap-3 mb-5">
           <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl">How it works</h2>
-          <p class="max-w-xl text-sm md:text-base leading-relaxed opacity-80">
+          <p class="max-w-xl text-sm md:text-base leading-relaxed font-light opacity-80">
             A light process designed for long horizons — gardens take years.
           </p>
         </div>
@@ -506,7 +509,7 @@
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Signals (v1)</h2>
 
-        <p class="text-sm md:text-base leading-relaxed mb-4">
+        <p class="text-sm md:text-base leading-relaxed font-light mb-4">
           Measurement stays practical — the goal is not scientific theatre. A garden should know where it is, and what "better" means.
           These are intentionally simple signals that can be refined later.
         </p>
@@ -527,7 +530,7 @@
         <div class="grid md:grid-cols-2 gap-5 md:gap-7 items-start">
           <div>
             <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3">Privacy</h2>
-            <div class="space-y-3 text-sm md:text-base leading-relaxed opacity-90">
+            <div class="space-y-3 text-sm md:text-base leading-relaxed font-light opacity-90">
               <p>
                 The public page shows what's needed for meaning and trust: story, images, broad signals, and improvement.
                 Address-level data and sensitive notes stay private unless explicitly enabled.
@@ -570,7 +573,7 @@
       <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="flex flex-col md:flex-row justify-between md:items-end gap-3 mb-5">
           <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl">Example garden</h2>
-          <p class="max-w-xl text-sm md:text-base leading-relaxed opacity-80">
+          <p class="max-w-xl text-sm md:text-base leading-relaxed font-light opacity-80">
             A single page that shows the pattern: profile + baseline + changes over time.
           </p>
         </div>
@@ -615,7 +618,7 @@
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">The Registry Layer</h2>
 
-        <div class="space-y-3 text-sm md:text-base leading-relaxed mb-4">
+        <div class="space-y-3 text-sm md:text-base leading-relaxed font-light mb-4">
           <p>
             Individual gardens matter — but systemic change requires infrastructure around them.
             The registry layer creates the baseline record and change trail that incentives can later sit on top of.
@@ -655,12 +658,12 @@
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Register</h2>
 
-        <p class="text-base md:text-lg leading-relaxed mb-5">
+        <p class="text-base md:text-lg leading-relaxed font-light mb-5">
           Start light. Add truth. Improve over time. A garden becomes legible one entry at a time.
         </p>
 
         <div class="grid md:grid-cols-2 gap-5 md:gap-7">
-          <div class="space-y-4 text-sm md:text-base leading-relaxed">
+          <div class="space-y-4 text-sm md:text-base leading-relaxed font-light">
             <div class="text-sm uppercase tracking-wide opacity-60">Register a garden</div>
             <a href="#" id="btnRegister" class="inline-block btn-border px-6 py-2.5 text-sm transition-all rounded-sm">
               Open registration
@@ -668,7 +671,7 @@
 
             <div class="pt-4">
               <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Prefer a guided start?</div>
-              <p class="opacity-80">
+              <p class="opacity-80 font-light">
                 A short call can define baseline signals, privacy settings, and the first improvement pathway.
               </p>
             </div>
@@ -696,12 +699,12 @@
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Contact</h2>
 
-        <p class="text-base md:text-lg leading-relaxed mb-5">
+        <p class="text-base md:text-lg leading-relaxed font-light mb-5">
           For registered gardens, neighbourhood pilots, or partner conversations — reach out.
         </p>
 
         <div class="grid md:grid-cols-2 gap-5 md:gap-7">
-          <div class="space-y-4 text-sm md:text-base leading-relaxed">
+          <div class="space-y-4 text-sm md:text-base leading-relaxed font-light">
             <div class="text-sm uppercase tracking-wide opacity-60">Email</div>
             <a href="#" id="btnEmail" class="inline-block btn-border px-6 py-2.5 text-sm transition-all rounded-sm">
               hello@gardenerandson.com.au
@@ -709,7 +712,7 @@
 
             <div class="pt-4">
               <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Studio</div>
-              <p class="opacity-80">
+              <p class="opacity-80 font-light">
                 2 Churchill Street<br />
                 Mont Albert 3127<br />
                 Victoria, Australia
@@ -739,7 +742,7 @@
     // Render signals from config
     const signalsList = document.getElementById('signalsList');
     const signals = window.REGSITE?.signals || [];
-
+    
     signalsList.innerHTML = signals.map(signal => `
       <div class="border-l-accent pl-5">
         <h3 class="font-medium mb-1.5">${signal.title}</h3>
@@ -809,7 +812,7 @@
     // Track active section for nav highlighting
     const sections = document.querySelectorAll('.screen');
     const navLinks = document.querySelectorAll('nav a.nav-link');
-
+    
     const observerOptions = {
       root: null,
       rootMargin: '-100px 0px -60% 0px', // Trigger when section is near top
@@ -820,10 +823,10 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-
+          
           // Remove active class from all nav links
           navLinks.forEach(link => link.classList.remove('active'));
-
+          
           // Add active class to current section's nav link
           const activeLink = document.querySelector(`nav a.nav-link[href="#${id}"]`);
           if (activeLink) {
