@@ -189,12 +189,12 @@
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
     /* FULL-SCREEN + SNAP (Yield-like), WITH FIXED NAV */
-    html, body { 
-      height: 100%; 
+    html, body {
+      height: 100%;
       scroll-behavior: smooth;
     }
-    
-    main { 
+
+    main {
       scroll-snap-type: y proximity;
       scroll-padding-top: var(--navh); /* Offset snap position by nav height */
     }
@@ -202,12 +202,12 @@
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
-      
+
       /* Yield-style centering: flexbox with balanced padding */
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       /* Ensure top padding clears the fixed nav for all sections */
       padding-top: calc(var(--navh) + 20px);
       padding-bottom: var(--navh);
@@ -298,7 +298,7 @@
       contactEmail:"hello@gardenerandson.com.au",
       yieldUrl:    "https://yield.gardenerandson.com",
       studioUrl:   "https://www.gardenerandson.com",
-      
+
       // Signals can be updated here
       signals: [
         {
@@ -361,7 +361,7 @@
           </div>
 
           <h1 class="hero-title font-serif text-3xl md:text-5xl lg:text-6xl leading-[0.98] tracking-tight">
-            Turn private gardens into recognised ecological assets.
+            Recognise private gardens as ecological assets.
           </h1>
 
           <p class="text-base md:text-lg leading-relaxed mt-4 font-light muted max-w-3xl">
@@ -402,26 +402,29 @@
     <section id="about" class="screen">
       <div class="max-w-4xl mx-auto px-6 w-full">
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
-          A registry that keeps gardens honest.
+          A registry that makes ecological care legible.
         </h2>
 
         <div class="grid md:grid-cols-2 gap-5 md:gap-7">
           <div class="space-y-3 text-base leading-relaxed">
             <p>
-              Gardens can be beautiful and still be ecologically thin. This registry is designed to make the difference legible:
-              what exists, what's missing, and what is improving.
+              Most gardens are passive spaces. They are walked past, maintained out of habit, and rarely considered for their
+              ecological potential.
             </p>
             <p>
-              The core is simple: create a baseline, then record change over time — upgrades that compound across seasons.
+              Modern life keeps many of us indoors — in offices, on screens, in cars. Our relationship with land has become distant.
+              Gardens often remain decorative backdrops rather than living systems.
             </p>
           </div>
 
           <div class="space-y-3 text-base leading-relaxed">
             <p>
-              Private land is one of the largest land classes in cities. When it stays disconnected, ecological value stays invisible.
+              Most urban gardens contribute very little measurable habitat, biodiversity, or ecological structure within fragmented
+              urban ecosystems. This is not a failure of care — it is the outcome of patterns we inherited.
             </p>
             <p>
-              When it becomes legible — recorded and connected — stewardship can be recognised, supported, and repeated.
+              Ecological Registry provides the structure to establish a baseline, then record change over time — so stewardship becomes
+              visible, trusted, and able to compound across seasons.
             </p>
           </div>
         </div>
@@ -704,7 +707,7 @@
     // Render signals from config
     const signalsList = document.getElementById('signalsList');
     const signals = window.REGSITE?.signals || [];
-    
+
     signalsList.innerHTML = signals.map(signal => `
       <div class="border-l-accent pl-5">
         <h3 class="font-medium mb-1.5">${signal.title}</h3>
@@ -774,7 +777,7 @@
     // Track active section for nav highlighting
     const sections = document.querySelectorAll('.screen');
     const navLinks = document.querySelectorAll('nav a.nav-link');
-    
+
     const observerOptions = {
       root: null,
       rootMargin: '-100px 0px -60% 0px', // Trigger when section is near top
@@ -785,10 +788,10 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-          
+
           // Remove active class from all nav links
           navLinks.forEach(link => link.classList.remove('active'));
-          
+
           // Add active class to current section's nav link
           const activeLink = document.querySelector(`nav a.nav-link[href="#${id}"]`);
           if (activeLink) {
