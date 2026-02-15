@@ -185,6 +185,55 @@
       }
     }
 
+    /* Next section indicator */
+    .next-section {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--fg);
+      z-index: 10;
+    }
+    .next-section:hover {
+      opacity: 1;
+    }
+    .next-section-arrow {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .next-section-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-3px); }
+    }
+    @media (max-width: 768px) {
+      .next-section {
+        bottom: 30px;
+      }
+      .next-section-arrow {
+        font-size: 18px;
+      }
+      .next-section-label {
+        font-size: 9px;
+      }
+    }
+    /* Hide next section indicator on last section */
+    .screen:last-of-type .next-section {
+      display: none;
+    }
+
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
@@ -397,6 +446,12 @@
           <div class="mt-6 divider-line"></div>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#about" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">About</span>
+      </a>
     </section>
 
     <!-- About -->
@@ -429,6 +484,12 @@
           </div>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#function" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Function</span>
+      </a>
     </section>
 
     <!-- Function -->
@@ -451,6 +512,12 @@
           </p>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#how" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">How it works</span>
+      </a>
     </section>
 
     <!-- How it works -->
@@ -489,6 +556,12 @@
           </article>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#signals" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Signals</span>
+      </a>
     </section>
 
     <!-- Signals -->
@@ -509,6 +582,12 @@
           Note: Signals evolve with the registry. Early versions stay simple; depth arrives through iteration and steward feedback.
         </p>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#privacy" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Privacy</span>
+      </a>
     </section>
 
     <!-- Privacy -->
@@ -553,6 +632,12 @@
           </div>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#example" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Example</span>
+      </a>
     </section>
 
     <!-- Example -->
@@ -598,6 +683,12 @@
           </a>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#system" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">System</span>
+      </a>
     </section>
 
     <!-- System -->
@@ -638,6 +729,12 @@
           </a>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#register" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Register</span>
+      </a>
     </section>
 
     <!-- Register -->
@@ -679,6 +776,12 @@
           </div>
         </div>
       </div>
+      
+      <!-- Next section indicator -->
+      <a href="#contact" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Contact</span>
+      </a>
     </section>
 
     <!-- Contact -->
