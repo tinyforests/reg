@@ -1,0 +1,241 @@
+<!-- arundel-profile.html  |  Ecological Registry — Arundel Profile -->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry — Arundel</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+          },
+          colors: {
+            gsGreen: "#0E3B2E",
+            gsBeige: "#F3EBDD",
+            gsInk: "#10221B",
+            gsMist: "#E7DDCF",
+            gsLine: "rgba(14,59,46,0.18)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .hairline { border-color: rgba(14,59,46,0.18); }
+    .chip { border: 1px solid rgba(14,59,46,0.18); }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,59,46,0.18); }
+  </style>
+</head>
+
+<body class="bg-gsBeige text-gsInk font-sans">
+
+<!-- Header -->
+<header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gsGreen text-gsBeige grid place-items-center font-semibold">ER</div>
+      <div>
+        <div class="text-sm font-medium tracking-wide text-gsGreen">Ecological Registry</div>
+        <div class="text-xs opacity-80">Garden Profile</div>
+      </div>
+    </div>
+
+    <div class="flex gap-2">
+      <a href="arundel-reports.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">
+        View Reports
+      </a>
+      <button class="bg-gsGreen text-gsBeige px-3 py-1.5 rounded-lg text-sm hover:opacity-90 focus-ring">
+        Register Update
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+
+<!-- HERO -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+  <div class="lg:col-span-8 bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Arundel</h1>
+
+        <div class="mt-2 flex flex-wrap gap-2 text-sm">
+          <span class="chip px-2.5 py-1 rounded-full">Ecological Forest Garden</span>
+          <span class="chip px-2.5 py-1 rounded-full">Active / Developing</span>
+          <span class="chip px-2.5 py-1 rounded-full">Surrey Hills, VIC</span>
+        </div>
+
+        <p class="mt-4 text-sm leading-relaxed opacity-90">
+          A contour-led ecological garden designed to mature over years.
+          Indigenous layering, soil reactivation, moisture gradients,
+          and reciprocal connectivity with South Surrey Park.
+        </p>
+      </div>
+
+      <!-- Score -->
+      <div class="text-right">
+        <div class="w-20 h-20 rounded-2xl bg-gsGreen text-gsBeige grid place-items-center text-3xl font-semibold">
+          68
+        </div>
+        <div class="mt-2 text-sm font-medium text-gsGreen">Ecological Function</div>
+        <div class="text-xs opacity-80">Rating: Strong</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Facts -->
+  <aside class="lg:col-span-4 bg-gsBeige border hairline rounded-2xl p-6">
+    <div class="text-sm font-semibold text-gsGreen">Quick Facts</div>
+    <dl class="mt-4 space-y-3 text-sm">
+      <div class="flex justify-between"><dt class="opacity-70">Primary EVC</dt><dd class="font-medium">Grassy Woodland (175)</dd></div>
+      <div class="flex justify-between"><dt class="opacity-70">Bioregion</dt><dd class="font-medium">Victorian Volcanic Plain</dd></div>
+      <div class="flex justify-between"><dt class="opacity-70">Stewards</dt><dd class="font-medium">Andrew & Elizabeth</dd></div>
+      <div class="flex justify-between"><dt class="opacity-70">Registered</dt><dd class="font-medium">Feb 2026</dd></div>
+    </dl>
+  </aside>
+</section>
+
+<!-- BADGES -->
+<section class="mt-10 bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
+  <div class="flex items-center justify-between">
+    <h2 class="text-lg font-semibold text-gsGreen">Badges</h2>
+    <span class="text-xs opacity-70">Signals of ecological function</span>
+  </div>
+
+  <div class="mt-4 flex flex-wrap gap-2 text-sm">
+    <span class="chip px-3 py-2 rounded-xl">🐸 Amphibian Active</span>
+    <span class="chip px-3 py-2 rounded-xl">🌳 Corridor Node</span>
+    <span class="chip px-3 py-2 rounded-xl opacity-60">🌧 Water Sensitive Site (pending)</span>
+    <span class="chip px-3 py-2 rounded-xl opacity-60">🍂 Soil Regenerating (pending)</span>
+  </div>
+</section>
+
+<!-- SCORE BREAKDOWN -->
+<section class="mt-10 bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
+  <h2 class="text-lg font-semibold text-gsGreen">Score Breakdown</h2>
+
+  <div class="mt-6 space-y-4 text-sm">
+    <div>
+      <div class="flex justify-between"><span>Biodiversity Structure (30%)</span><span>72%</span></div>
+      <div class="h-2.5 mt-2 bg-gsMist rounded-full overflow-hidden">
+        <div class="h-full bg-gsGreen" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-between"><span>Soil Biology & Health (20%)</span><span>64%</span></div>
+      <div class="h-2.5 mt-2 bg-gsMist rounded-full overflow-hidden">
+        <div class="h-full bg-gsGreen" style="width:64%"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-between"><span>Water Function (20%)</span><span>62%</span></div>
+      <div class="h-2.5 mt-2 bg-gsMist rounded-full overflow-hidden">
+        <div class="h-full bg-gsGreen" style="width:62%"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-between"><span>Habitat Complexity (20%)</span><span>70%</span></div>
+      <div class="h-2.5 mt-2 bg-gsMist rounded-full overflow-hidden">
+        <div class="h-full bg-gsGreen" style="width:70%"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex justify-between"><span>Connectivity (10%)</span><span>78%</span></div>
+      <div class="h-2.5 mt-2 bg-gsMist rounded-full overflow-hidden">
+        <div class="h-full bg-gsGreen" style="width:78%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REPORT PREVIEW -->
+<section class="mt-10 bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
+  <div class="flex justify-between items-center">
+    <h2 class="text-lg font-semibold text-gsGreen">Recent Reports</h2>
+    <a href="arundel-reports.html" class="chip px-3 py-2 rounded-xl text-sm hover:bg-gsMist">
+      View All
+    </a>
+  </div>
+
+  <div class="mt-6 space-y-4 text-sm">
+
+    <div class="chip rounded-xl p-4">
+      <a href="arundel-report-001.html" class="font-semibold hover:underline">
+        #001 — Amphibian presence
+      </a>
+      <div class="text-xs opacity-70 mt-1">Verified • Feb 2026</div>
+      <div class="mt-2 text-xs opacity-80">
+        Badge: Amphibian Active • Habitat +2 • Soil +1 • Water +1
+      </div>
+    </div>
+
+    <div class="chip rounded-xl p-4">
+      <a href="arundel-report-005.html" class="font-semibold hover:underline">
+        #005 — Swales & water habitat excavation
+      </a>
+      <div class="text-xs opacity-70 mt-1">Draft</div>
+      <div class="mt-2 text-xs opacity-80">
+        Likely to verify Water Sensitive Site once rainfall documented.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TRAJECTORY -->
+<section class="mt-10 bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
+  <h2 class="text-lg font-semibold text-gsGreen">Trajectory</h2>
+
+  <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+    <div class="chip rounded-xl p-4">
+      <div class="text-xs opacity-70">Baseline</div>
+      <div class="text-xl font-semibold text-gsGreen">52%</div>
+      <div class="text-xs opacity-70 mt-1">Initial assessment</div>
+    </div>
+
+    <div class="chip rounded-xl p-4">
+      <div class="text-xs opacity-70">Current</div>
+      <div class="text-xl font-semibold text-gsGreen">68%</div>
+      <div class="text-xs opacity-70 mt-1">Post contouring + habitat works</div>
+    </div>
+
+    <div class="chip rounded-xl p-4">
+      <div class="text-xs opacity-70">Target (3 yrs)</div>
+      <div class="text-xl font-semibold text-gsGreen">82%</div>
+      <div class="text-xs opacity-70 mt-1">Water + soil consolidation</div>
+    </div>
+  </div>
+
+  <div class="mt-6 text-xs opacity-75">
+    The Registry measures direction, not perfection. Improvement is the signal.
+  </div>
+</section>
+
+<footer class="mt-12 pb-10 text-xs opacity-70">
+  <div class="border-t hairline pt-6 flex justify-between">
+    <div>© Ecological Registry — Gardener & Son</div>
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="hover:opacity-100">Top</a>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>
