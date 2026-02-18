@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry — Field Report #005</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+          },
+          colors: {
+            gsGreen: "#0E3B2E",
+            gsBeige: "#F3EBDD",
+            gsInk: "#10221B",
+            gsMist: "#E7DDCF",
+            gsLine: "rgba(14,59,46,0.18)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .hairline { border-color: rgba(14,59,46,0.18); }
+    .chip { border: 1px solid rgba(14,59,46,0.18); }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,59,46,0.18); }
+  </style>
+</head>
+
+<body class="bg-gsBeige text-gsInk font-sans">
+  <header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gsGreen text-gsBeige grid place-items-center font-semibold">ER</div>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide text-gsGreen">Ecological Registry</div>
+          <div class="text-xs opacity-80">Field Report</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="arundel-reports.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">← Back to Reports</a>
+        <a href="arundel.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">Arundel Profile</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8">
+        <div class="bg-gsBeige border hairline rounded-2xl p-5 md:p-7">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Report #005</h1>
+              <div class="mt-2 text-sm opacity-85"><span class="font-medium">Arundel</span> • Surrey Hills, VIC</div>
+
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Swales</span>
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Water habitat</span>
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Infiltration</span>
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Amphibians</span>
+              </div>
+
+              <h2 class="mt-5 text-lg font-semibold text-gsGreen">Excavation for swales and water habitat</h2>
+              <p class="mt-2 text-sm leading-relaxed opacity-90">
+                Swales and/or shallow basins excavated and formed to slow runoff, increase infiltration,
+                and create seasonal water habitat potential within the garden matrix.
+              </p>
+            </div>
+
+            <div class="shrink-0 text-right">
+              <div class="inline-flex flex-col items-end gap-2">
+                <span class="chip px-3 py-1.5 rounded-full text-xs bg-gsBeige">Draft</span>
+                <div class="text-xs opacity-80">Date: <span class="font-medium">TBD</span></div>
+                <div class="text-xs opacity-80">Observer: <span class="font-medium">Gardener &amp; Son</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div class="chip rounded-xl p-3">
+              <div class="text-xs opacity-70">Design principle</div>
+              <div class="font-medium">Seasonal water, not permanent pond</div>
+            </div>
+            <div class="chip rounded-xl p-3">
+              <div class="text-xs opacity-70">Risk control</div>
+              <div class="font-medium">No mosquito traps</div>
+              <div class="text-xs opacity-70 mt-1">Shallow, drains / infiltrates</div>
+            </div>
+            <div class="chip rounded-xl p-3">
+              <div class="text-xs opacity-70">Habitat intent</div>
+              <div class="font-medium">Moisture refuge + breeding potential</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 bg-gsBeige border hairline rounded-2xl p-5 md:p-7">
+          <h3 class="text-lg font-semibold text-gsGreen">Observation</h3>
+          <p class="mt-3 text-sm leading-relaxed opacity-90">
+            (Describe the swales: length, depth, position on contour, overflow direction, where water enters/exits.)
+          </p>
+
+          <h3 class="mt-6 text-lg font-semibold text-gsGreen">Why this matters</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Swales convert episodic runoff into stored soil moisture.</li>
+            <li>• Seasonal wetting supports fungi, invertebrates, and amphibian refuge.</li>
+            <li>• Habitat diversity increases when wet/dry cycles are designed (not accidental).</li>
+          </ul>
+
+          <h3 class="mt-6 text-lg font-semibold text-gsGreen">Verification plan</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Photograph during rain event (inflow, pooling, overflow).</li>
+            <li>• Record infiltration time (hours to drain).</li>
+            <li>• Note any amphibian activity after rainfall.</li>
+          </ul>
+
+          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
+            This report becomes “verified” when a rainfall behaviour photo-set is attached.
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="bg-gsBeige border hairline rounded-2xl p-5">
+          <div class="text-sm font-semibold text-gsGreen">Badge Impact</div>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="chip rounded-2xl p-4 opacity-80">
+              <div class="font-medium">🌧 Water Sensitive Site</div>
+              <div class="text-xs opacity-70 mt-1">Likely awarded once verified by rainfall behaviour</div>
+            </div>
+            <div class="chip rounded-2xl p-4 opacity-80">
+              <div class="font-medium">🐸 Amphibian Active</div>
+              <div class="text-xs opacity-70 mt-1">Strengthened (adds habitat mechanism)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gsBeige border hairline rounded-2xl p-5">
+          <div class="text-sm font-semibold text-gsGreen">Score Impacts (placeholders)</div>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Water Function</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+4</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Habitat Complexity</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+2</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Soil Biology &amp; Health</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+1</span></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
