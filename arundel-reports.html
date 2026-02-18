@@ -1,10 +1,11 @@
-<!-- arundel-reports.html  |  Ecological Registry — Arundel Field Reports (Events + Logs) -->
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ecological Registry — Arundel Reports</title>
+
+  <meta name="description" content="Arundel field reports — Events and Logs in the Ecological Registry." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,282 +20,371 @@
         extend: {
           fontFamily: {
             serif: ['"Abril Fatface"', "serif"],
-            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+            sans: ['"IBM Plex Sans"', "sans-serif"],
           },
           colors: {
-            gsGreen: "#3d4535",
-            gsBeige: "#fff0dc",
-            gsInk: "#2f3529",
-            gsMist: "rgba(61,69,53,0.08)",
-            gsLine: "rgba(61,69,53,0.18)"
-          }
-        }
-      }
-    }
+            "gardener-green": "#3d4535",
+            "nostalgic-beige": "#fff0dc",
+          },
+        },
+      },
+    };
   </script>
 
   <style>
-    .hairline { border-color: rgba(61,69,53,0.18); }
-    .chip { border: 1px solid rgba(61,69,53,0.18); }
-    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(61,69,53,0.18); }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { font-family: "IBM Plex Sans", sans-serif; }
+    h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
+
+    :root {
+      --section-primary-bg: #3d4535;
+      --section-primary-text: #fff0dc;
+      --section-secondary-bg: #fff0dc;
+      --section-secondary-text: #3d4535;
+    }
+
+    body.light-mode {
+      --section-primary-bg: #fff0dc;
+      --section-primary-text: #3d4535;
+      --section-secondary-bg: #3d4535;
+      --section-secondary-text: #fff0dc;
+    }
+
+    body {
+      background-color: var(--section-primary-bg);
+      color: var(--section-primary-text);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .section-primary { background-color: var(--section-primary-bg); color: var(--section-primary-text); }
+    .section-secondary { background-color: var(--section-secondary-bg); color: var(--section-secondary-text); }
+
+    .section-primary .border-gardener-green\/10 { border-color: rgba(255, 240, 220, 0.10) !important; }
+    .section-secondary .border-gardener-green\/10 { border-color: rgba(61, 69, 53, 0.10) !important; }
+
+    .section-primary .border-gardener-green\/20 { border-color: rgba(255, 240, 220, 0.20) !important; }
+    .section-secondary .border-gardener-green\/20 { border-color: rgba(61, 69, 53, 0.20) !important; }
+
+    .section-primary .bg-gardener-green\/5,
+    .section-primary .bg-gardener-green\/10 { background-color: rgba(255, 240, 220, 0.05) !important; }
+
+    .section-secondary .bg-gardener-green\/5,
+    .section-secondary .bg-gardener-green\/10 { background-color: rgba(61, 69, 53, 0.05) !important; }
+
+    .section-primary a.border-gardener-green:hover,
+    .section-primary button.border-gardener-green:hover {
+      background-color: var(--section-primary-text) !important;
+      color: var(--section-primary-bg) !important;
+    }
+
+    .section-secondary a.border-gardener-green:hover,
+    .section-secondary button.border-gardener-green:hover {
+      background-color: var(--section-secondary-text) !important;
+      color: var(--section-secondary-bg) !important;
+    }
+
+    .section-primary a.border-gardener-green,
+    .section-primary button.border-gardener-green {
+      border-color: var(--section-primary-text) !important;
+      color: var(--section-primary-text) !important;
+    }
+
+    .section-secondary a.border-gardener-green,
+    .section-secondary button.border-gardener-green {
+      border-color: var(--section-secondary-text) !important;
+      color: var(--section-secondary-text) !important;
+    }
+
+    :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
+    .no-round, .no-round * { border-radius: 0 !important; }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--section-primary-text);
+      background: var(--section-primary-bg);
+      color: var(--section-primary-text);
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: opacity 0.25s ease;
+      z-index: 1000;
+    }
+    .theme-toggle:hover { opacity: 0.7; }
+
+    nav a.active { border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid currentColor;
+      padding: 0.35rem 0.6rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
   </style>
 </head>
 
-<body class="bg-gsBeige text-gsInk font-sans">
+<body class="no-round">
+  <!-- Theme toggle -->
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+    <span id="theme-text">LIGHT</span>
+  </button>
 
-  <!-- Header (Green bg, Beige text) -->
-  <header class="sticky top-0 z-40 bg-gsGreen text-gsBeige border-b" style="border-color: rgba(255,240,220,0.22);">
-    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gsBeige text-gsGreen grid place-items-center font-semibold">ER</div>
-        <div class="leading-tight">
-          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
-          <div class="text-xs opacity-85">Arundel • Field Reports</div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <a href="arundel.html"
-           class="px-3 py-1.5 rounded-lg text-sm border hover:opacity-90 focus-ring"
-           style="border-color: rgba(255,240,220,0.28);">
-          ← Back to Arundel
-        </a>
-        <a href="#how"
-           class="bg-gsBeige text-gsGreen px-3 py-1.5 rounded-lg text-sm hover:opacity-95 focus-ring">
-          How this works
-        </a>
+  <!-- Navigation -->
+  <nav class="border-b sticky top-0 backdrop-blur section-primary" style="border-color: rgba(255, 240, 220, 0.2);">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <a href="arundel.html" class="font-serif text-xl tracking-tight hover:opacity-70 transition-opacity">Ecological Registry</a>
+      <div class="flex flex-wrap gap-6 md:gap-8 text-sm">
+        <a href="arundel.html" class="hover:opacity-60 transition-opacity">Arundel Profile</a>
+        <a href="#events" class="hover:opacity-60 transition-opacity">Events</a>
+        <a href="#logs" class="hover:opacity-60 transition-opacity">Logs</a>
+        <a href="#how" class="hover:opacity-60 transition-opacity">How it works</a>
       </div>
     </div>
-  </header>
+  </nav>
 
-  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+  <main>
+    <!-- Header -->
+    <section class="section-primary border-b border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-6 py-14 md:py-16">
+        <h1 class="font-serif text-5xl md:text-6xl leading-[1.03] tracking-tight mb-8">
+          Arundel — Reports
+        </h1>
 
-    <!-- Intro (Beige bg, Green text) -->
-    <section class="bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
-      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-        <div>
-          <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Arundel — Reports</h1>
-          <p class="mt-2 text-sm opacity-90 leading-relaxed">
-            Reports are time-stamped field signals.
-            <span class="font-medium text-gsGreen">Events</span> are single-date changes or verification moments.
-            <span class="font-medium text-gsGreen">Logs</span> are multi-date operational work with session entries.
+        <div class="flex flex-wrap gap-3 mb-8">
+          <span class="stamp">Events</span>
+          <span class="stamp">Logs</span>
+          <span class="stamp">Manual mode (dynamic-ready)</span>
+        </div>
+
+        <p class="text-lg md:text-xl leading-relaxed max-w-3xl font-light opacity-95">
+          Reports are time-stamped field signals. Events mark distinct change or verification moments.
+          Logs collect repeated work across multiple sessions.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-10">
+          <a href="arundel.html" class="inline-block text-sm border border-gardener-green px-6 py-3 transition-colors text-center">
+            Back to profile
+          </a>
+          <a href="#how" class="inline-block text-sm border border-gardener-green px-6 py-3 transition-colors text-center">
+            Reporting standard
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Events -->
+    <section id="events" class="section-secondary border-b border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-6 py-16">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-10">
+          <h2 class="font-serif text-4xl md:text-5xl">Events</h2>
+          <p class="max-w-xl text-base leading-relaxed opacity-80">
+            Single-date changes or verification moments that can move badges and score.
           </p>
-          <div class="mt-4 flex flex-wrap gap-2 text-sm">
-            <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Events</span>
-            <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Logs</span>
-            <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Manual mode (dynamic-ready)</span>
-          </div>
         </div>
 
-        <div class="shrink-0 grid grid-cols-2 gap-3">
-          <div class="chip rounded-2xl p-4">
-            <div class="text-xs opacity-70">Events</div>
-            <div class="text-2xl font-semibold text-gsGreen leading-none mt-1">3</div>
-            <div class="text-xs opacity-70 mt-2">Single-date</div>
-          </div>
-          <div class="chip rounded-2xl p-4">
-            <div class="text-xs opacity-70">Logs</div>
-            <div class="text-2xl font-semibold text-gsGreen leading-none mt-1">2</div>
-            <div class="text-xs opacity-70 mt-2">Multi-date</div>
+        <div class="grid lg:grid-cols-2 gap-8">
+          <a href="arundel-report-001.html" class="block border border-gardener-green/10 bg-gardener-green/5 p-8 hover:bg-gardener-green/10 transition-colors">
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Report #001 • Verified • 18 Feb 2026</div>
+            <div class="font-medium mb-2">Amphibian presence (burrowing frog)</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Bioindicator signal logged during hand weeding. Guides refuge protection and corridor-node modelling.
+            </p>
+            <div class="mt-5 text-xs opacity-60 uppercase tracking-wide">
+              Badge: Amphibian Active • Pillars: Habitat / Soil / Water / Connectivity
+            </div>
+          </a>
+
+          <a href="arundel-report-004.html" class="block border border-gardener-green/10 bg-gardener-green/5 p-8 hover:bg-gardener-green/10 transition-colors">
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Report #004 • Draft • Date TBD</div>
+            <div class="font-medium mb-2">Ground contouring and forming</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Micro-topography shaped to slow, spread, and sink water while creating legible movement lines.
+            </p>
+            <div class="mt-5 text-xs opacity-60 uppercase tracking-wide">
+              Supports: Water Sensitive Site
+            </div>
+          </a>
+
+          <a href="arundel-report-005.html" class="block border border-gardener-green/10 bg-gardener-green/5 p-8 hover:bg-gardener-green/10 transition-colors">
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Report #005 • Draft • Date TBD</div>
+            <div class="font-medium mb-2">Excavation for swales and water habitat</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Swales/basins formed to convert runoff into stored soil moisture and seasonal habitat potential.
+            </p>
+            <div class="mt-5 text-xs opacity-60 uppercase tracking-wide">
+              Next: Rain event verification (Report #006)
+            </div>
+          </a>
+
+          <div class="border border-gardener-green/10 bg-gardener-green/5 p-8">
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Planned</div>
+            <div class="font-medium mb-2">Report #006 — Swale verification rain event</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Photos + infiltration time + overflow behaviour. This is the verification moment for Water Sensitive Site.
+            </p>
+            <div class="mt-5">
+              <a href="#" class="inline-block text-sm border border-gardener-green px-6 py-3 transition-colors">
+                Create template later
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8 space-y-6">
-
-        <!-- EVENTS -->
-        <div class="bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gsGreen">Events</h2>
-            <span class="text-xs opacity-70">Single-date changes / verification</span>
-          </div>
-
-          <div class="mt-5 space-y-4 text-sm">
-            <article class="chip rounded-2xl p-4 bg-gsBeige">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="arundel-report-001.html" class="font-semibold text-gsGreen hover:underline">
-                    Report #001 — Amphibian presence (burrowing frog)
-                  </a>
-                  <div class="text-xs opacity-70 mt-1">18 Feb 2026 • Lower slope refuge zone • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">Verified</span>
-              </div>
-
-              <p class="mt-3 leading-relaxed opacity-90">
-                Burrowing frog discovered during hand weeding. Logged as a bioindicator signal and used to guide refuge-node protection
-                and corridor-node modelling.
-              </p>
-
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <span class="chip px-2 py-1 rounded-full">🐸 Amphibians</span>
-                <span class="chip px-2 py-1 rounded-full">Soil moisture</span>
-                <span class="chip px-2 py-1 rounded-full">Connectivity</span>
-              </div>
-
-              <div class="mt-3 pt-3 border-t hairline text-xs opacity-80">
-                Badge impact: <span class="font-medium text-gsGreen">Amphibian Active</span> • Score deltas: Habitat +2 • Soil +1 • Water +1 • Connectivity +1
-              </div>
-            </article>
-
-            <article class="chip rounded-2xl p-4 bg-gsBeige">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="arundel-report-004.html" class="font-semibold text-gsGreen hover:underline">
-                    Report #004 — Ground contouring and forming
-                  </a>
-                  <div class="text-xs opacity-70 mt-1">Date: TBD • Micro-topography shaping • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">Draft</span>
-              </div>
-
-              <p class="mt-3 leading-relaxed opacity-90">
-                Ground shaped to slow, spread, and sink water while creating legible movement lines and habitat pockets without terracing.
-              </p>
-
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <span class="chip px-2 py-1 rounded-full">Contours</span>
-                <span class="chip px-2 py-1 rounded-full">Hydrology</span>
-                <span class="chip px-2 py-1 rounded-full">Moisture gradient</span>
-              </div>
-            </article>
-
-            <article class="chip rounded-2xl p-4 bg-gsBeige">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="arundel-report-005.html" class="font-semibold text-gsGreen hover:underline">
-                    Report #005 — Excavation for swales and water habitat
-                  </a>
-                  <div class="text-xs opacity-70 mt-1">Date: TBD • Swales / basins • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">Draft</span>
-              </div>
-
-              <p class="mt-3 leading-relaxed opacity-90">
-                Swales and/or shallow basins formed to convert runoff into stored soil moisture and seasonal habitat potential,
-                with a rainfall verification plan.
-              </p>
-
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <span class="chip px-2 py-1 rounded-full">Swales</span>
-                <span class="chip px-2 py-1 rounded-full">Infiltration</span>
-                <span class="chip px-2 py-1 rounded-full">Amphibians</span>
-              </div>
-            </article>
-          </div>
-
-          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-            Next planned Event: <span class="font-medium text-gsGreen">Report #006 — Swale verification rain event</span> (photos + infiltration time) → verifies Water Sensitive Site.
-          </div>
+    <!-- Logs -->
+    <section id="logs" class="section-primary border-b border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-6 py-16">
+        <div class="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-10">
+          <h2 class="font-serif text-4xl md:text-5xl">Logs</h2>
+          <p class="max-w-xl text-base leading-relaxed opacity-80">
+            Multi-date operational work. Add sessions over time without creating a new page for every visit.
+          </p>
         </div>
 
-        <!-- LOGS -->
-        <div class="bg-gsBeige border hairline rounded-2xl p-6 md:p-8">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gsGreen">Logs</h2>
-            <span class="text-xs opacity-70">Multi-date operational work</span>
+        <div class="grid lg:grid-cols-2 gap-8">
+          <a href="arundel-report-002.html" class="block border border-gardener-green/20 bg-gardener-green/5 p-8 hover:bg-gardener-green/10 transition-colors">
+            <div class="text-xs uppercase tracking-wide opacity-70 mb-2">Report #002 • Log • In progress</div>
+            <div class="font-medium mb-2">Weed removal (multi-date)</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Progressive removal across sessions. Prioritises minimal disturbance, litter retention, and chemical avoidance.
+            </p>
+            <div class="mt-5 text-xs opacity-70 uppercase tracking-wide">
+              Session-based timeline inside report
+            </div>
+          </a>
+
+          <a href="arundel-report-003.html" class="block border border-gardener-green/20 bg-gardener-green/5 p-8 hover:bg-gardener-green/10 transition-colors">
+            <div class="text-xs uppercase tracking-wide opacity-70 mb-2">Report #003 • Log • In progress</div>
+            <div class="font-medium mb-2">Sub-base / crushed rock pathmaking (multi-date)</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Sub-base installed with permeability and runoff behaviour treated as ecological variables, not afterthoughts.
+            </p>
+            <div class="mt-5 text-xs opacity-70 uppercase tracking-wide">
+              Track machine use, compaction, and edge treatment
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="section-secondary border-b border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-6 py-16">
+        <h2 class="font-serif text-4xl md:text-5xl mb-10">Reporting Standard</h2>
+
+        <div class="grid lg:grid-cols-2 gap-10">
+          <div class="space-y-5 text-base leading-relaxed max-w-2xl">
+            <p>
+              Each report should read like field evidence — what happened, why it matters, what changed,
+              and what proof exists. The goal is clarity and credibility.
+            </p>
+            <p>
+              Events are single-date and should be used when something materially shifts ecological function,
+              or when verification occurs (rain behaviour, soil tests, species sightings).
+            </p>
           </div>
 
-          <div class="mt-5 space-y-4 text-sm">
-            <article class="chip rounded-2xl p-4 bg-gsBeige">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="arundel-report-002.html" class="font-semibold text-gsGreen hover:underline">
-                    Report #002 — Weed removal (multi-date)
-                  </a>
-                  <div class="text-xs opacity-70 mt-1">Date range: TBD • Multiple zones • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">In progress</span>
-              </div>
-
-              <p class="mt-3 leading-relaxed opacity-90">
-                Progressive removal of competitive weeds across multiple sessions, prioritising minimal disturbance,
-                litter retention, and chemical avoidance.
-              </p>
-
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <span class="chip px-2 py-1 rounded-full">Weeds</span>
-                <span class="chip px-2 py-1 rounded-full">Soil surface</span>
-                <span class="chip px-2 py-1 rounded-full">Disturbance control</span>
-              </div>
-            </article>
-
-            <article class="chip rounded-2xl p-4 bg-gsBeige">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="arundel-report-003.html" class="font-semibold text-gsGreen hover:underline">
-                    Report #003 — Sub-base / crushed rock pathmaking (multi-date)
-                  </a>
-                  <div class="text-xs opacity-70 mt-1">Date range: TBD • Mini loader use • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">In progress</span>
-              </div>
-
-              <p class="mt-3 leading-relaxed opacity-90">
-                Sub-base and crushed rock installed with compaction and runoff behaviour treated as ecological variables,
-                not construction afterthoughts.
-              </p>
-
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <span class="chip px-2 py-1 rounded-full">Paths</span>
-                <span class="chip px-2 py-1 rounded-full">Mini loader</span>
-                <span class="chip px-2 py-1 rounded-full">Water function</span>
-              </div>
-            </article>
-          </div>
-
-          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-            Logs are designed to be updated repeatedly. Each new visit becomes a new session entry inside the same report.
+          <div class="border border-gardener-green/10 bg-gardener-green/5 p-8">
+            <div class="text-xs uppercase tracking-wide opacity-70 mb-4">Include</div>
+            <ul class="space-y-2 text-sm opacity-80">
+              <li>• What happened</li>
+              <li>• Why it matters</li>
+              <li>• What changed</li>
+              <li>• Evidence (photo/test)</li>
+              <li>• Badge + pillar impacts</li>
+              <li>• Next action / verification step</li>
+            </ul>
           </div>
         </div>
       </div>
-
-      <!-- Right rail -->
-      <aside class="lg:col-span-4 space-y-6">
-        <div id="how" class="bg-gsBeige border hairline rounded-2xl p-6">
-          <div class="text-sm font-semibold text-gsGreen">How this works</div>
-          <div class="mt-4 space-y-3 text-sm opacity-90">
-            <div class="chip rounded-2xl p-4">
-              <div class="font-medium text-gsGreen">Events</div>
-              <div class="text-xs opacity-70 mt-1">Single-date changes or verification moments</div>
-            </div>
-            <div class="chip rounded-2xl p-4">
-              <div class="font-medium text-gsGreen">Logs</div>
-              <div class="text-xs opacity-70 mt-1">Multi-date operational work with session timeline</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-gsGreen text-gsBeige rounded-2xl p-6">
-          <div class="text-sm font-semibold">Field Standard</div>
-          <ul class="mt-3 space-y-2 text-sm opacity-90">
-            <li>• What happened</li>
-            <li>• Why it matters</li>
-            <li>• What changed</li>
-            <li>• Evidence (photo/test)</li>
-            <li>• Badge + pillar impacts</li>
-          </ul>
-        </div>
-
-        <div class="bg-gsBeige border hairline rounded-2xl p-6">
-          <div class="text-sm font-semibold text-gsGreen">Link from Arundel profile</div>
-          <pre class="mt-3 p-3 rounded-xl text-xs overflow-auto" style="background: rgba(61,69,53,0.08);"><code>&lt;a href="arundel-reports.html"
-   class="chip px-3 py-2 rounded-xl text-sm"&gt;
-  View all reports
-&lt;/a&gt;</code></pre>
-        </div>
-      </aside>
     </section>
 
-    <footer class="mt-12 pb-10 text-xs text-gsGreen/80">
-      <div class="border-t hairline pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>© Ecological Registry — Gardener &amp; Son</div>
-        <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="hover:opacity-100">Top</a>
+    <!-- Footer -->
+    <footer class="section-primary border-t border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="flex flex-col md:flex-row justify-between gap-6 text-sm">
+          <div class="opacity-80">
+            © <span id="year"></span> Gardener &amp; Son — Ecological Registry
+          </div>
+          <div class="flex flex-wrap gap-6">
+            <a href="arundel.html" class="hover:opacity-60 transition-opacity">Arundel Profile</a>
+            <a href="#events" class="hover:opacity-60 transition-opacity">Events</a>
+            <a href="#logs" class="hover:opacity-60 transition-opacity">Logs</a>
+            <a href="#how" class="hover:opacity-60 transition-opacity">Standard</a>
+          </div>
+        </div>
       </div>
     </footer>
-
   </main>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeText = document.getElementById('theme-text');
+    const body = document.body;
+
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') {
+      body.classList.add('light-mode');
+      themeText.textContent = 'DARK';
+    } else {
+      body.classList.remove('light-mode');
+      themeText.textContent = 'LIGHT';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('light-mode');
+      if (body.classList.contains('light-mode')) {
+        themeText.textContent = 'DARK';
+        localStorage.setItem('theme', 'light');
+      } else {
+        themeText.textContent = 'LIGHT';
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // Active menu tracking
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    function updateActiveMenu() {
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        if (window.scrollY >= top - 140) current = section.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveMenu);
+    window.addEventListener('load', updateActiveMenu);
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (e) {
+        const href = this.getAttribute("href");
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+  </script>
 </body>
 </html>
