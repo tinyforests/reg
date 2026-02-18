@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry — Field Report #002</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+          },
+          colors: {
+            gsGreen: "#0E3B2E",
+            gsBeige: "#F3EBDD",
+            gsInk: "#10221B",
+            gsMist: "#E7DDCF",
+            gsLine: "rgba(14,59,46,0.18)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .hairline { border-color: rgba(14,59,46,0.18); }
+    .chip { border: 1px solid rgba(14,59,46,0.18); }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,59,46,0.18); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body class="bg-gsBeige text-gsInk font-sans">
+  <header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gsGreen text-gsBeige grid place-items-center font-semibold">ER</div>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide text-gsGreen">Ecological Registry</div>
+          <div class="text-xs opacity-80">Field Report</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="arundel-reports.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">
+          ← Back to Reports
+        </a>
+        <a href="arundel.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">
+          Arundel Profile
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+    <section class="hidden" aria-hidden="true">
+      <!--
+      REPORT DATA (MANUAL):
+      Garden: Arundel
+      Report ID: 002
+      Title: Weed removal (multi-date)
+      Date range: (set below)
+      Observer: Gardener & Son
+      Verification: in-progress (convert to verified if you attach photos)
+      Tags: weeds, soil_surface, disturbance, habitat_protection
+      Badge impact: (optional) chemical_free, soil_regenerating (supports)
+      Pillar impacts: Soil +, Habitat + (if litter retained), Biodiversity + (if natives released)
+      -->
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8">
+        <div class="bg-gsBeige border hairline rounded-2xl p-5 md:p-7">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Report #002</h1>
+              <div class="mt-2 text-sm opacity-85">
+                <span class="font-medium">Arundel</span> • Surrey Hills, VIC
+              </div>
+
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Weeds</span>
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Soil surface</span>
+                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Disturbance control</span>
+              </div>
+
+              <h2 class="mt-5 text-lg font-semibold text-gsGreen">Weed removal (multi-date)</h2>
+              <p class="mt-2 text-sm leading-relaxed opacity-90">
+                Progressive removal of competitive weeds across multiple sessions, prioritising low disturbance
+                and protection of soil structure, litter, and emerging indigenous recruitment.
+              </p>
+            </div>
+
+            <div class="shrink-0 text-right">
+              <div class="inline-flex flex-col items-end gap-2">
+                <span class="chip px-3 py-1.5 rounded-full text-xs bg-gsBeige">In progress</span>
+                <div class="text-xs opacity-80">Date range: <span class="font-medium">TBD</span></div>
+                <div class="text-xs opacity-80">Observer: <span class="font-medium">Gardener &amp; Son</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-date sessions -->
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div class="chip rounded-xl p-3">
+              <div class="text-xs opacity-70">Session log</div>
+              <div class="font-medium">Multiple dates</div>
+              <div class="text-xs opacity-70 mt-1">Add each visit + notes below</div>
+            </div>
+            <div class="chip rounded-xl p-3">
+              <div class="text-xs opacity-70">Method</div>
+              <div class="font-medium">Hand removal / minimal soil disruption</div>
+              <div class="text-xs opacity-70 mt-1">Avoid chemical inputs</div>
+            </div>
+          </div>
+
+          <div class="mt-6 bg-gsMist rounded-2xl p-4">
+            <div class="text-sm font-semibold text-gsGreen">Session Timeline (edit)</div>
+            <ul class="mt-3 space-y-2 text-sm opacity-90">
+              <li class="flex items-start justify-between gap-4">
+                <span>• <span class="font-medium">Session 1</span> — (date)</span>
+                <span class="opacity-75">Area: (zone)</span>
+              </li>
+              <li class="text-sm opacity-90">Notes: (what was removed, what was protected, what was left in place)</li>
+
+              <li class="pt-2 border-t hairline"></li>
+
+              <li class="flex items-start justify-between gap-4">
+                <span>• <span class="font-medium">Session 2</span> — (date)</span>
+                <span class="opacity-75">Area: (zone)</span>
+              </li>
+              <li class="text-sm opacity-90">Notes: (as above)</li>
+
+              <li class="pt-2 border-t hairline"></li>
+
+              <li class="flex items-start justify-between gap-4">
+                <span>• <span class="font-medium">Session 3</span> — (date)</span>
+                <span class="opacity-75">Area: (zone)</span>
+              </li>
+              <li class="text-sm opacity-90">Notes: (as above)</li>
+            </ul>
+            <div class="mt-3 text-xs opacity-70">Tip: keep notes short and repeatable (what / why / what changed).</div>
+          </div>
+        </div>
+
+        <div class="mt-6 bg-gsBeige border hairline rounded-2xl p-5 md:p-7">
+          <h3 class="text-lg font-semibold text-gsGreen">Why this matters</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Weed pressure reduction releases indigenous structure to establish.</li>
+            <li>• Low disturbance maintains soil aggregates and fungal networks.</li>
+            <li>• Chemical avoidance reduces risk to amphibians and invertebrates.</li>
+            <li>• Litter retention preserves microclimate and moisture buffering.</li>
+          </ul>
+
+          <h3 class="mt-6 text-lg font-semibold text-gsGreen">Immediate response</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Prioritise hand removal in refuge zones (avoid compaction).</li>
+            <li>• Retain leaf litter bands where possible.</li>
+            <li>• Spot-mark any recruitment and exclude from disturbance.</li>
+          </ul>
+
+          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
+            Future: each session can become its own “micro-report” or remain grouped as a multi-date operational log.
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="bg-gsBeige border hairline rounded-2xl p-5">
+          <div class="text-sm font-semibold text-gsGreen">Badge Impact</div>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="chip rounded-2xl p-4 opacity-80">
+              <div class="font-medium">🍂 Soil Regenerating</div>
+              <div class="text-xs opacity-70 mt-1">Supported (if litter retained + amendments logged)</div>
+            </div>
+            <div class="chip rounded-2xl p-4 opacity-80">
+              <div class="font-medium">🧪 Chemical-Free Management</div>
+              <div class="text-xs opacity-70 mt-1">Supported (if documented as standard)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gsBeige border hairline rounded-2xl p-5">
+          <div class="text-sm font-semibold text-gsGreen">Score Impacts (placeholders)</div>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Soil Biology &amp; Health</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+1</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Biodiversity Structure</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+1</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Habitat Complexity</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+1</span></div>
+          </div>
+          <div class="mt-4 text-xs opacity-70">Adjust deltas once you’ve logged the sessions + evidence.</div>
+        </div>
+
+        <div class="bg-gsBeige border hairline rounded-2xl p-5">
+          <div class="text-sm font-semibold text-gsGreen">Report Schema (Future)</div>
+          <pre class="mt-3 p-3 rounded-xl bg-gsMist text-xs mono overflow-auto"><code>{
+  "garden_id": "arundel",
+  "report_id": "002",
+  "date_range": ["2026-02-__","2026-__-__"],
+  "title": "Weed removal (multi-date)",
+  "sessions": [
+    {"date":"2026-__-__","zone":"__","notes":"__"},
+    {"date":"2026-__-__","zone":"__","notes":"__"}
+  ],
+  "verification": "in_progress",
+  "tags": ["weeds","soil_surface","disturbance_control"],
+  "pillar_deltas": {"soil_biology":1,"biodiversity_structure":1,"habitat_complexity":1}
+}</code></pre>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
