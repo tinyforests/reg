@@ -78,12 +78,59 @@
         <button class="chip px-3 py-1.5 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
           Share
         </button>
-        <button class="bg-gsGreen text-gsBeige px-3 py-1.5 text-sm hover:opacity-90 focus-ring" title="Placeholder action">
-          Register Update
-        </button>
+        <a href="https://portal.ecologicalregistry.org" class="bg-gsGreen text-gsBeige px-3 py-1.5 text-sm hover:opacity-90 focus-ring" title="Owner / steward portal (placeholder)">
+          Steward Login
+        </a>
       </div>
     </div>
   </header>
+
+  <!-- Registry Status Strip (public-facing) -->
+  <section class="border-b hairline bg-gsBeige">
+    <div class="mx-auto max-w-6xl px-4 py-2.5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+
+        <!-- Left: status + verification -->
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          <span class="chip px-2 py-1 bg-gsBeige">
+            Registry Status: <span class="font-medium">Active / Developing</span>
+          </span>
+
+          <span class="opacity-60">•</span>
+
+          <span class="chip px-2 py-1 bg-gsBeige">
+            Last verified: <span class="font-medium">18 Feb 2026</span>
+          </span>
+
+          <span class="opacity-60">•</span>
+
+          <span class="chip px-2 py-1 bg-gsBeige">
+            Next review: <span class="font-medium">Aug 2026</span>
+          </span>
+
+          <span class="opacity-60">•</span>
+
+          <span class="chip px-2 py-1 bg-gsBeige">
+            Visibility: <span class="font-medium">Public (address masked)</span>
+          </span>
+        </div>
+
+        <!-- Right: acquisition + steward path -->
+        <div class="flex flex-wrap items-center gap-2">
+          <a href="#reports" class="chip px-3 py-1.5 text-xs hover:bg-gsMist focus-ring">
+            Read Updates
+          </a>
+          <a href="#follow" class="chip px-3 py-1.5 text-xs hover:bg-gsMist focus-ring">
+            Follow Garden
+          </a>
+          <a href="https://portal.ecologicalregistry.org" class="bg-gsGreen text-gsBeige px-3 py-1.5 text-xs hover:opacity-90 focus-ring">
+            Steward Login
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
   <!-- Content -->
   <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
@@ -96,15 +143,17 @@
       PROFILE DATA (MANUAL):
       Name: Arundel
       Suburb: Surrey Hills, VIC
-      Steward(s): Andrew & Elizabeth (example)
+      Steward(s): Andrew & Elizabeth
       Studio: Gardener & Son
-      Primary EVC: Grassy Woodland (EVC 175) (example)
+      Primary EVC: Grassy Woodland (EVC 175)
       Status: Active / Developing
       Score: 68
       Rating label: “Strong”
       Badges: Amphibian Active, Habitat Builder, Indigenous Dominant, Corridor Node
       Registry ID: ER-VIC-SH-ARU-0001
       Last verified: 18 Feb 2026
+      Next review: Aug 2026
+      Visibility: Public (address masked)
       -->
     </section>
 
@@ -162,9 +211,14 @@
 
           <!-- Mini action row -->
           <div class="mt-6 flex flex-wrap gap-2">
-            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Follow Garden</button>
-            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">View Map</button>
-            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Download Snapshot (PDF)</button>
+            <a href="#follow" class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Follow Garden</a>
+            <a href="#reports" class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">View Updates</a>
+            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
+              View Map
+            </button>
+            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
+              Download Snapshot (PDF)
+            </button>
           </div>
         </div>
 
@@ -254,12 +308,12 @@
             Arundel behaves like a micro-corridor node rather than an isolated garden.
           </p>
           <div class="mt-4 flex gap-2">
-            <button class="bg-gsBeige text-gsGreen px-3 py-2 text-sm hover:opacity-95 focus-ring">
+            <button class="bg-gsBeige text-gsGreen px-3 py-2 text-sm hover:opacity-95 focus-ring" title="Placeholder action">
               See Connectivity
             </button>
-            <button class="border border-gsBeige/30 px-3 py-2 text-sm hover:bg-gsBeige/10 focus-ring">
+            <a href="#reports" class="border border-gsBeige/30 px-3 py-2 text-sm hover:bg-gsBeige/10 focus-ring">
               Add Report
-            </button>
+            </a>
           </div>
         </div>
       </aside>
@@ -490,7 +544,7 @@
           <div class="bg-gsBeige border hairline p-5">
             <div class="text-sm font-semibold text-gsGreen">Attachments</div>
             <div class="mt-3 text-sm opacity-80">No attachments linked (static mode).</div>
-            <button class="mt-4 chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">
+            <button class="mt-4 chip px-3 py-2 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
               Add Attachment
             </button>
           </div>
@@ -550,6 +604,39 @@
       </div>
     </section>
 
+    <!-- Follow (Acquisition) -->
+    <section id="follow" class="mt-10 bg-gsBeige border hairline p-5 md:p-7">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-xl font-semibold text-gsGreen">Follow updates</h2>
+        <div class="text-xs opacity-70">Email notifications • low frequency</div>
+      </div>
+
+      <form class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-3" action="#" method="post">
+        <div class="md:col-span-5">
+          <label class="text-xs opacity-70" for="email">Email</label>
+          <input id="email" name="email" type="email" required
+            class="mt-1 w-full border hairline bg-gsBeige px-3 py-2 text-sm focus-ring" />
+        </div>
+
+        <div class="md:col-span-4">
+          <label class="text-xs opacity-70" for="postcode">Postcode (optional)</label>
+          <input id="postcode" name="postcode" type="text" maxlength="4"
+            class="mt-1 w-full border hairline bg-gsBeige px-3 py-2 text-sm focus-ring" />
+        </div>
+
+        <div class="md:col-span-3 flex items-end">
+          <button type="submit"
+            class="w-full bg-gsGreen text-gsBeige px-3 py-2 text-sm hover:opacity-90 focus-ring">
+            Follow Arundel
+          </button>
+        </div>
+
+        <p class="md:col-span-12 text-xs opacity-70 mt-1">
+          Address is never collected here. Steward access occurs only through the portal.
+        </p>
+      </form>
+    </section>
+
     <!-- Footer -->
     <footer class="mt-12 pb-10 text-xs opacity-70">
       <div class="border-t hairline pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
@@ -560,6 +647,8 @@
           <a href="#reports" class="hover:opacity-100">Reports</a>
           <span class="opacity-40">•</span>
           <a href="#badges" class="hover:opacity-100">Badges</a>
+          <span class="opacity-40">•</span>
+          <a href="#follow" class="hover:opacity-100">Follow</a>
         </div>
       </div>
     </footer>
