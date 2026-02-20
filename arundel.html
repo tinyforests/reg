@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ecological Registry — Arundel</title>
 
-  <meta name="description" content="Ecological Registry profile for Arundel — score, badges, field reports, and trajectory." />
+  <meta name="description" content="Ecological Registry public profile for Arundel — score, signals, field notes, and trajectory (address-masked)." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,6 +42,12 @@
 
     /* No rounded edges anywhere */
     * { border-radius: 0 !important; }
+
+    /* Print hygiene (optional) */
+    @media print {
+      header, .no-print { display: none !important; }
+      body { background: #fff !important; }
+    }
   </style>
 </head>
 
@@ -50,11 +56,13 @@
   <header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-[260px]">
-        <div class="w-9 h-9 bg-gsGreen text-gsBeige grid place-items-center font-semibold">ER</div>
+        <a href="/" class="w-9 h-9 bg-gsGreen text-gsBeige grid place-items-center font-semibold focus-ring" aria-label="Ecological Registry home">
+          ER
+        </a>
         <div class="leading-tight">
           <div class="text-sm font-medium tracking-wide text-gsGreen">Ecological Registry</div>
           <div class="text-xs opacity-80">
-            Arundel • Profile
+            Public profile
             <span class="opacity-40">•</span>
             <span class="font-medium">ER-VIC-SH-ARU-0001</span>
           </div>
@@ -63,101 +71,84 @@
 
       <nav class="hidden md:flex items-center gap-2 text-sm">
         <a href="#overview" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Overview</a>
-        <a href="#score" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Score</a>
-        <a href="#badges" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Badges</a>
-        <a href="#reports" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Field Reports</a>
+        <a href="#signals" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Signals</a>
+        <a href="#notes" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Field Notes</a>
         <a href="#trajectory" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Trajectory</a>
+        <a href="#score" class="px-3 py-1.5 hover:bg-gsMist focus-ring">Score</a>
       </nav>
 
-      <div class="flex items-center gap-2">
-        <div class="hidden lg:block text-xs opacity-70 text-right mr-2">
-          <div>Last verified: <span class="font-medium">18 Feb 2026</span></div>
-          <div>Status: <span class="font-medium">Active / Developing</span></div>
+      <div class="flex items-center gap-2 no-print">
+        <a href="#register" class="chip px-3 py-1.5 text-sm hover:bg-gsMist focus-ring" title="Expression of interest">
+          Register interest
+        </a>
+        <button class="bg-gsGreen text-gsBeige px-3 py-1.5 text-sm hover:opacity-90 focus-ring" title="Placeholder action">
+          Steward login
+        </button>
+      </div>
+    </div>
+
+    <!-- Registry Status Strip (under header) -->
+    <div class="border-t hairline bg-gsBeige">
+      <div class="mx-auto max-w-6xl px-4 py-2.5 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="chip px-2.5 py-1 bg-gsBeige">
+            Status: <span class="font-medium">Active / Developing</span>
+          </span>
+          <span class="chip px-2.5 py-1 bg-gsBeige">
+            Visibility: <span class="font-medium">Public (address masked)</span>
+          </span>
+          <span class="chip px-2.5 py-1 bg-gsBeige">
+            Verification: <span class="font-medium">Site visit + dated notes</span>
+          </span>
+          <span class="chip px-2.5 py-1 bg-gsBeige">
+            Last verified: <span class="font-medium">18 Feb 2026</span>
+          </span>
+          <span class="chip px-2.5 py-1 bg-gsBeige">
+            Next review: <span class="font-medium">Aug 2026</span>
+          </span>
         </div>
 
-        <button class="chip px-3 py-1.5 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
-          Share
-        </button>
-        <a href="https://portal.ecologicalregistry.org" class="bg-gsGreen text-gsBeige px-3 py-1.5 text-sm hover:opacity-90 focus-ring" title="Owner / steward portal (placeholder)">
-          Steward Login
-        </a>
+        <div class="flex flex-wrap items-center gap-2 justify-between md:justify-end">
+          <span class="chip px-2.5 py-1 bg-gsBeige">
+            Ecological Function: <span class="font-medium">68%</span>
+          </span>
+          <button class="chip px-2.5 py-1 hover:bg-gsMist focus-ring" title="Placeholder action">
+            Download snapshot (PDF)
+          </button>
+          <button class="chip px-2.5 py-1 hover:bg-gsMist focus-ring" title="Placeholder action">
+            Share
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- Registry Status Strip (public-facing) -->
-  <section class="border-b hairline bg-gsBeige">
-    <div class="mx-auto max-w-6xl px-4 py-2.5">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-
-        <!-- Left: status + verification -->
-        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span class="chip px-2 py-1 bg-gsBeige">
-            Registry Status: <span class="font-medium">Active / Developing</span>
-          </span>
-
-          <span class="opacity-60">•</span>
-
-          <span class="chip px-2 py-1 bg-gsBeige">
-            Last verified: <span class="font-medium">18 Feb 2026</span>
-          </span>
-
-          <span class="opacity-60">•</span>
-
-          <span class="chip px-2 py-1 bg-gsBeige">
-            Next review: <span class="font-medium">Aug 2026</span>
-          </span>
-
-          <span class="opacity-60">•</span>
-
-          <span class="chip px-2 py-1 bg-gsBeige">
-            Visibility: <span class="font-medium">Public (address masked)</span>
-          </span>
-        </div>
-
-        <!-- Right: acquisition + steward path -->
-        <div class="flex flex-wrap items-center gap-2">
-          <a href="#reports" class="chip px-3 py-1.5 text-xs hover:bg-gsMist focus-ring">
-            Read Updates
-          </a>
-          <a href="#follow" class="chip px-3 py-1.5 text-xs hover:bg-gsMist focus-ring">
-            Follow Garden
-          </a>
-          <a href="https://portal.ecologicalregistry.org" class="bg-gsGreen text-gsBeige px-3 py-1.5 text-xs hover:opacity-90 focus-ring">
-            Steward Login
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- Content -->
   <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+
     <!-- =========================
-      MANUAL PROFILE DATA (edit these)
-      In future, this becomes dynamic.
+      PUBLIC PROFILE DATA (manual)
+      - No street address
+      - No GPS
+      - No owner contacts
     ========================== -->
     <section class="hidden" aria-hidden="true">
       <!--
-      PROFILE DATA (MANUAL):
+      PROFILE DATA (PUBLIC):
       Name: Arundel
       Suburb: Surrey Hills, VIC
-      Steward(s): Andrew & Elizabeth
-      Studio: Gardener & Son
-      Primary EVC: Grassy Woodland (EVC 175)
+      Registry ID: ER-VIC-SH-ARU-0001
       Status: Active / Developing
       Score: 68
-      Rating label: “Strong”
-      Badges: Amphibian Active, Habitat Builder, Indigenous Dominant, Corridor Node
-      Registry ID: ER-VIC-SH-ARU-0001
+      Rating label: Strong
+      Primary EVC: Grassy Woodland (EVC 175) (working)
+      Method: Contour-led ecological forest garden
       Last verified: 18 Feb 2026
-      Next review: Aug 2026
       Visibility: Public (address masked)
       -->
     </section>
 
-    <!-- Hero / Venue card -->
+    <!-- Overview -->
     <section id="overview" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <!-- Left: main card -->
       <div class="lg:col-span-8">
@@ -165,10 +156,12 @@
           <div class="flex items-start justify-between gap-4">
             <div>
               <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Arundel</h1>
+
               <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
-                <span class="chip px-2.5 py-1 bg-gsBeige">Ecological Forest Garden</span>
+                <span class="chip px-2.5 py-1 bg-gsBeige">Ecological forest garden</span>
                 <span class="chip px-2.5 py-1 bg-gsBeige">Active / Developing</span>
                 <span class="chip px-2.5 py-1 bg-gsBeige">Surrey Hills, VIC</span>
+                <span class="chip px-2.5 py-1 bg-gsBeige">Address masked</span>
               </div>
 
               <div class="mt-4 text-sm leading-relaxed opacity-90">
@@ -184,16 +177,21 @@
                 </div>
                 <div class="chip p-3">
                   <div class="text-xs opacity-70">Bioregion</div>
-                  <div class="font-medium">Victorian Volcanic Plain</div>
+                  <div class="font-medium">Working set</div>
                 </div>
                 <div class="chip p-3">
-                  <div class="text-xs opacity-70">Stewards</div>
-                  <div class="font-medium">Andrew &amp; Elizabeth</div>
+                  <div class="text-xs opacity-70">Steward type</div>
+                  <div class="font-medium">Private residential</div>
                 </div>
                 <div class="chip p-3">
                   <div class="text-xs opacity-70">Registered</div>
                   <div class="font-medium">18 Feb 2026</div>
                 </div>
+              </div>
+
+              <!-- Credibility strip -->
+              <div class="mt-5 border-t hairline pt-4 text-xs opacity-75 leading-relaxed">
+                Public pages never publish street addresses or GPS. Evidence is referenced through dated field notes and verification events.
               </div>
             </div>
 
@@ -210,26 +208,65 @@
           </div>
 
           <!-- Mini action row -->
-          <div class="mt-6 flex flex-wrap gap-2">
-            <a href="#follow" class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Follow Garden</a>
-            <a href="#reports" class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">View Updates</a>
-            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
-              View Map
-            </button>
-            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
-              Download Snapshot (PDF)
-            </button>
+          <div class="mt-6 flex flex-wrap gap-2 no-print">
+            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">View map (masked)</button>
+            <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Download snapshot (PDF)</button>
+            <a href="#register" class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Register interest</a>
           </div>
         </div>
 
-        <!-- Notes feed -->
-        <div class="mt-6 bg-gsBeige border hairline p-5 md:p-7">
+        <!-- Signals / what makes this garden count -->
+        <div id="signals" class="mt-6 bg-gsBeige border hairline p-5 md:p-7">
           <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gsGreen">Recent Notes</h2>
-            <span class="text-xs opacity-70">Recorded entries • manual mode</span>
+            <h2 class="text-lg font-semibold text-gsGreen">Signals</h2>
+            <span class="text-xs opacity-70">Public view • threshold-based</span>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span class="chip px-3 py-2 text-sm bg-gsBeige">🐸 Amphibian Active</span>
+            <span class="chip px-3 py-2 text-sm bg-gsBeige">🪵 Habitat Builder</span>
+            <span class="chip px-3 py-2 text-sm bg-gsBeige">🌾 Indigenous Dominant</span>
+            <span class="chip px-3 py-2 text-sm bg-gsBeige">🌳 Corridor Node</span>
+
+            <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🌧 Water Sensitive Site (pending)</span>
+            <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🍂 Soil Regenerating (pending)</span>
+            <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🌼 Pollinator Supportive (pending)</span>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="chip p-4">
+              <div class="text-sm font-semibold text-gsGreen">🐸 Amphibian Active</div>
+              <div class="text-xs opacity-70 mt-1">Threshold: verified presence + refuge structure</div>
+              <p class="mt-2 text-sm opacity-90 leading-relaxed">
+                Awarded when amphibian presence is verified (dated observation) and habitat readiness is demonstrated
+                (friable soil refuge, moisture gradient, cover).
+              </p>
+            </div>
+
+            <div class="chip p-4">
+              <div class="text-sm font-semibold text-gsGreen">🌳 Corridor Node</div>
+              <div class="text-xs opacity-70 mt-1">Threshold: proximity + functional habitat</div>
+              <p class="mt-2 text-sm opacity-90 leading-relaxed">
+                Awarded when site lies near green space and contains layered habitat capable of supporting movement and refuge,
+                not merely ornamental planting.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
+            Signals are civic metadata: earned through thresholds and verified over time.
+          </div>
+        </div>
+
+        <!-- Field Notes -->
+        <div id="notes" class="mt-6 bg-gsBeige border hairline p-5 md:p-7">
+          <div class="flex items-center justify-between gap-3">
+            <h2 class="text-lg font-semibold text-gsGreen">Field Notes</h2>
+            <span class="text-xs opacity-70">Dated notes • public-safe</span>
           </div>
 
           <div class="mt-4 space-y-4">
+            <!-- Note 1 -->
             <article class="chip p-4">
               <div class="flex items-start justify-between gap-3">
                 <div>
@@ -239,11 +276,16 @@
                 <span class="chip px-2 py-1 text-xs bg-gsBeige">Verified</span>
               </div>
               <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions.
-                Tagged for corridor-node modelling.
+                Presence indicates moist subsurface refuge and low-toxicity conditions. Logged as a corridor-node signal.
               </p>
+              <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                <span class="chip px-2 py-1">Tag: Amphibians</span>
+                <span class="chip px-2 py-1">Tag: Soil moisture</span>
+                <span class="chip px-2 py-1">Tag: Connectivity</span>
+              </div>
             </article>
 
+            <!-- Note 2 -->
             <article class="chip p-4">
               <div class="flex items-start justify-between gap-3">
                 <div>
@@ -253,10 +295,37 @@
                 <span class="chip px-2 py-1 text-xs bg-gsBeige">Installed</span>
               </div>
               <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Logs partially embedded to retain moisture and create cool refuges; rock pockets left ungrouted for
-                invertebrate and amphibian movement.
+                Logs partially embedded to retain moisture and create cool refuges; rock pockets left ungrouted for invertebrate movement.
               </p>
+              <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                <span class="chip px-2 py-1">Tag: Habitat logs</span>
+                <span class="chip px-2 py-1">Tag: Refugia</span>
+              </div>
             </article>
+
+            <!-- Note 3 (transparent theatre: clearly marked as draft) -->
+            <article class="chip p-4 opacity-85">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm font-medium">🧪 Soil intervention log (mulch + inoculation)</div>
+                  <div class="text-xs opacity-70 mt-1">Draft • Public-safe placeholder</div>
+                </div>
+                <span class="chip px-2 py-1 text-xs bg-gsBeige">Draft</span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed opacity-90">
+                Placeholder for dated, evidence-backed soil work: mulch depth zoning, biology support, and infiltration observations.
+                (Draft entries are published only as placeholders until verified on-site.)
+              </p>
+              <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                <span class="chip px-2 py-1">Tag: Soil</span>
+                <span class="chip px-2 py-1">Tag: Mulch</span>
+                <span class="chip px-2 py-1">Tag: Biology</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
+            Public notes are address-agnostic and exclude private attachments. Private notes (photos, exact locations, GPS) are steward-only.
           </div>
         </div>
       </div>
@@ -266,14 +335,14 @@
         <!-- Map placeholder -->
         <div class="bg-gsBeige border hairline overflow-hidden">
           <div class="p-4 flex items-center justify-between">
-            <div class="text-sm font-semibold text-gsGreen">Site Map</div>
-            <span class="text-xs opacity-70">Static placeholder</span>
+            <div class="text-sm font-semibold text-gsGreen">Map</div>
+            <span class="text-xs opacity-70">Masked</span>
           </div>
           <div class="h-56 bg-gsMist grid place-items-center text-sm opacity-80">
-            Map panel (future Leaflet / pins)
+            Masked map panel (future)
           </div>
           <div class="p-4 text-xs opacity-75 leading-relaxed">
-            Future: pins for refuge nodes, moisture basins, habitat logs, transects, and field report locations.
+            Public map shows coarse suburb context only. Node pins and exact geometry are steward-only.
           </div>
         </div>
 
@@ -283,7 +352,7 @@
           <dl class="mt-4 space-y-3 text-sm">
             <div class="flex items-center justify-between gap-4">
               <dt class="opacity-75">Adjacency</dt>
-              <dd class="font-medium text-right">South Surrey Park edge</dd>
+              <dd class="font-medium text-right">Park edge (nearby)</dd>
             </div>
             <div class="flex items-center justify-between gap-4">
               <dt class="opacity-75">Hydrology</dt>
@@ -294,26 +363,40 @@
               <dd class="font-medium text-right">Miyawaki-style layering</dd>
             </div>
             <div class="flex items-center justify-between gap-4">
-              <dt class="opacity-75">Chemistry</dt>
-              <dd class="font-medium text-right">Low-input / avoid toxins</dd>
+              <dt class="opacity-75">Inputs</dt>
+              <dd class="font-medium text-right">Low-tox / low-input</dd>
             </div>
           </dl>
         </div>
 
-        <!-- Callout -->
+        <!-- Corridor callout -->
         <div class="bg-gsGreen text-gsBeige p-5">
           <div class="text-sm font-semibold">Corridor Node Potential</div>
           <p class="mt-2 text-sm opacity-90 leading-relaxed">
-            Proximity to green space activates connectivity weighting. With amphibian activity confirmed,
+            Proximity to green space increases connectivity weighting. With amphibian activity confirmed,
             Arundel behaves like a micro-corridor node rather than an isolated garden.
           </p>
-          <div class="mt-4 flex gap-2">
-            <button class="bg-gsBeige text-gsGreen px-3 py-2 text-sm hover:opacity-95 focus-ring" title="Placeholder action">
-              See Connectivity
+          <div class="mt-4 flex gap-2 no-print">
+            <button class="bg-gsBeige text-gsGreen px-3 py-2 text-sm hover:opacity-95 focus-ring">
+              See connectivity (public)
             </button>
-            <a href="#reports" class="border border-gsBeige/30 px-3 py-2 text-sm hover:bg-gsBeige/10 focus-ring">
-              Add Report
-            </a>
+            <button class="border border-gsBeige/30 px-3 py-2 text-sm hover:bg-gsBeige/10 focus-ring">
+              Steward update
+            </button>
+          </div>
+        </div>
+
+        <!-- Registry integrity block -->
+        <div class="bg-gsBeige border hairline p-5">
+          <div class="text-sm font-semibold text-gsGreen">Registry Integrity</div>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Address never published</li>
+            <li>• Dated notes required for signals</li>
+            <li>• Verification via site visit</li>
+            <li>• Annual review cadence</li>
+          </ul>
+          <div class="mt-4 text-xs opacity-70">
+            This page is designed for longevity: stable identifiers, calm presentation, and traceable updates.
           </div>
         </div>
       </aside>
@@ -323,7 +406,7 @@
     <section id="score" class="mt-10">
       <div class="flex items-end justify-between gap-4">
         <h2 class="text-2xl font-semibold text-gsGreen">Score</h2>
-        <div class="text-xs opacity-70">Pillars are stable • weighting adjustable later</div>
+        <div class="text-xs opacity-70">Pillars are stable • weights adjustable later</div>
       </div>
 
       <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -342,7 +425,7 @@
               <div class="h-full bg-gsGreen" style="width:68%"></div>
             </div>
             <div class="mt-2 text-xs opacity-70">
-              Interpretation: strong functioning structure with clear headroom for water + soil consolidation.
+              Interpretation: strong structure with clear headroom for water + soil consolidation.
             </div>
           </div>
 
@@ -399,7 +482,7 @@
           </div>
 
           <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-            Future: each pillar expands into sub-metrics + evidence links (photos, transects, soil tests, field reports).
+            Future: each pillar expands into sub-metrics + evidence links (photos, transects, soil tests, dated field notes).
           </div>
         </div>
 
@@ -421,132 +504,16 @@
               </li>
             </ul>
             <div class="mt-4 text-xs opacity-70">
-              Baseline can be set as the first verified field report date.
+              Baseline can be pinned to first verified field note set.
             </div>
           </div>
 
           <div class="bg-gsBeige border hairline p-5">
             <div class="text-sm font-semibold text-gsGreen">Scoring Notes</div>
             <p class="mt-3 text-sm leading-relaxed opacity-90">
-              Scoring prioritises repeatability: each increment should be backed by evidence and time-stamped changes.
-              Badges are awarded only when thresholds are met and verified.
+              Scoring prioritises repeatability: each increment should be backed by dated evidence and verified changes.
+              Signals are awarded only when thresholds are met.
             </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Badges -->
-    <section id="badges" class="mt-10">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold text-gsGreen">Badges</h2>
-        <div class="text-xs opacity-70">Signals, not vibes • each has thresholds</div>
-      </div>
-
-      <div class="mt-4 bg-gsBeige border hairline p-5 md:p-7">
-        <div class="flex flex-wrap gap-2">
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🐸 Amphibian Active</span>
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🪵 Habitat Builder</span>
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🌾 Indigenous Dominant</span>
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🌳 Corridor Node</span>
-
-          <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🌧 Water Sensitive Site (pending)</span>
-          <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🍂 Soil Regenerating (pending)</span>
-          <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🌼 Pollinator Supportive (pending)</span>
-        </div>
-
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="chip p-4">
-            <div class="text-sm font-semibold text-gsGreen">🐸 Amphibian Active</div>
-            <div class="text-xs opacity-70 mt-1">Threshold: verified presence + refuge structure</div>
-            <p class="mt-2 text-sm opacity-90 leading-relaxed">
-              Awarded when amphibian presence is verified (photo + date) and habitat readiness is demonstrated
-              (friable soil refuge, moisture gradient, cover).
-            </p>
-          </div>
-
-          <div class="chip p-4">
-            <div class="text-sm font-semibold text-gsGreen">🌳 Corridor Node</div>
-            <div class="text-xs opacity-70 mt-1">Threshold: proximity + functional habitat</div>
-            <p class="mt-2 text-sm opacity-90 leading-relaxed">
-              Awarded when site lies within a set distance to green space and contains layered habitat capable of
-              supporting movement and refuge, not merely ornamental planting.
-            </p>
-          </div>
-        </div>
-
-        <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-          Future: badges become filterable + comparable across suburbs to reveal emerging corridors.
-        </div>
-      </div>
-    </section>
-
-    <!-- Field Reports -->
-    <section id="reports" class="mt-10">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold text-gsGreen">Field Reports</h2>
-        <div class="text-xs opacity-70">Future: add photos, GPS, attachments</div>
-      </div>
-
-      <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-8 bg-gsBeige border hairline p-5 md:p-7">
-          <div class="space-y-4">
-            <article class="chip p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="text-sm font-semibold">Report #001 — Amphibian presence</div>
-                  <div class="text-xs opacity-70 mt-1">18 Feb 2026 • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="chip px-2 py-1 text-xs bg-gsBeige">Verified</span>
-              </div>
-              <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Burrowing frog discovered during hand weeding in lower slope soil. Indicates subsurface moisture retention,
-                intact soil structure, and invertebrate availability. Marked as refuge node candidate.
-              </p>
-              <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                <span class="chip px-2 py-1">Tag: Amphibians</span>
-                <span class="chip px-2 py-1">Tag: Soil moisture</span>
-                <span class="chip px-2 py-1">Tag: Connectivity</span>
-              </div>
-            </article>
-
-            <article class="chip p-4 opacity-80">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="text-sm font-semibold">Report #002 — Soil &amp; mulch treatment</div>
-                  <div class="text-xs opacity-70 mt-1">TBD • draft placeholder</div>
-                </div>
-                <span class="chip px-2 py-1 text-xs bg-gsBeige">Draft</span>
-              </div>
-              <p class="mt-3 text-sm leading-relaxed">
-                Placeholder: compost/mineral additions, mulch depth zones, mycorrhizal dip, infiltration observations.
-              </p>
-            </article>
-          </div>
-        </div>
-
-        <div class="lg:col-span-4 space-y-6">
-          <div class="bg-gsBeige border hairline p-5">
-            <div class="text-sm font-semibold text-gsGreen">Report Template</div>
-            <ul class="mt-4 space-y-2 text-sm opacity-90">
-              <li>• Date + observer</li>
-              <li>• Location on site</li>
-              <li>• Evidence (photo / note)</li>
-              <li>• Signal (what it implies)</li>
-              <li>• Action (what changed)</li>
-              <li>• Score impact (pillar)</li>
-            </ul>
-            <div class="mt-4 text-xs opacity-70">
-              This becomes the schema for future dynamic ingestion.
-            </div>
-          </div>
-
-          <div class="bg-gsBeige border hairline p-5">
-            <div class="text-sm font-semibold text-gsGreen">Attachments</div>
-            <div class="mt-3 text-sm opacity-80">No attachments linked (static mode).</div>
-            <button class="mt-4 chip px-3 py-2 text-sm hover:bg-gsMist focus-ring" title="Placeholder action">
-              Add Attachment
-            </button>
           </div>
         </div>
       </div>
@@ -556,7 +523,7 @@
     <section id="trajectory" class="mt-10">
       <div class="flex items-end justify-between gap-4">
         <h2 class="text-2xl font-semibold text-gsGreen">Trajectory</h2>
-        <div class="text-xs opacity-70">Shows change over time (the heart of the Registry)</div>
+        <div class="text-xs opacity-70">Change over time (the heart of the Registry)</div>
       </div>
 
       <div class="mt-4 bg-gsBeige border hairline p-5 md:p-7">
@@ -565,22 +532,22 @@
             <div class="text-sm font-semibold text-gsGreen">Milestones</div>
             <ol class="mt-4 space-y-3">
               <li class="chip p-4">
-                <div class="text-sm font-medium">Baseline established</div>
-                <div class="text-xs opacity-70 mt-1">Feb 2026 • Baseline score recorded</div>
+                <div class="text-sm font-medium">Registered + first verification</div>
+                <div class="text-xs opacity-70 mt-1">18 Feb 2026 • Status set to Active / Developing</div>
               </li>
               <li class="chip p-4">
-                <div class="text-sm font-medium">Habitat refuge nodes designated</div>
-                <div class="text-xs opacity-70 mt-1">Mar 2026 • 3 nodes mapped</div>
+                <div class="text-sm font-medium">Habitat refuge elements installed</div>
+                <div class="text-xs opacity-70 mt-1">Feb 2026 • Logs + voids recorded</div>
               </li>
-              <li class="chip p-4 opacity-80">
-                <div class="text-sm font-medium">Seasonal moisture basin shaped</div>
+              <li class="chip p-4 opacity-85">
+                <div class="text-sm font-medium">Seasonal water feature shaping</div>
                 <div class="text-xs opacity-70 mt-1">Planned • Autumn 2026</div>
               </li>
             </ol>
           </div>
 
           <div class="lg:col-span-5">
-            <div class="text-sm font-semibold text-gsGreen">Next Upgrades</div>
+            <div class="text-sm font-semibold text-gsGreen">Next upgrades</div>
             <div class="mt-4 space-y-3 text-sm">
               <div class="chip p-4">
                 <div class="font-medium">🌧 Water Sensitive Site</div>
@@ -588,7 +555,7 @@
               </div>
               <div class="chip p-4">
                 <div class="font-medium">🍂 Soil Regenerating</div>
-                <div class="text-xs opacity-70 mt-1">Define mulch depth zones + log soil biology interventions</div>
+                <div class="text-xs opacity-70 mt-1">Define mulch depth zones + log soil interventions</div>
               </div>
               <div class="chip p-4">
                 <div class="font-medium">🌼 Pollinator Supportive</div>
@@ -599,56 +566,57 @@
         </div>
 
         <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-          Future: this section becomes a time-series with score deltas, evidence links, and a “what changed” narrative.
+          Future: trajectory becomes a time-series with score deltas, verification stamps, and a concise “what changed” record.
         </div>
       </div>
     </section>
 
-    <!-- Follow (Acquisition) -->
-    <section id="follow" class="mt-10 bg-gsBeige border hairline p-5 md:p-7">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-xl font-semibold text-gsGreen">Follow updates</h2>
-        <div class="text-xs opacity-70">Email notifications • low frequency</div>
-      </div>
-
-      <form class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-3" action="#" method="post">
-        <div class="md:col-span-5">
-          <label class="text-xs opacity-70" for="email">Email</label>
-          <input id="email" name="email" type="email" required
-            class="mt-1 w-full border hairline bg-gsBeige px-3 py-2 text-sm focus-ring" />
-        </div>
-
-        <div class="md:col-span-4">
-          <label class="text-xs opacity-70" for="postcode">Postcode (optional)</label>
-          <input id="postcode" name="postcode" type="text" maxlength="4"
-            class="mt-1 w-full border hairline bg-gsBeige px-3 py-2 text-sm focus-ring" />
-        </div>
-
-        <div class="md:col-span-3 flex items-end">
-          <button type="submit"
-            class="w-full bg-gsGreen text-gsBeige px-3 py-2 text-sm hover:opacity-90 focus-ring">
-            Follow Arundel
-          </button>
-        </div>
-
-        <p class="md:col-span-12 text-xs opacity-70 mt-1">
-          Address is never collected here. Steward access occurs only through the portal.
+    <!-- Register interest (lightweight theatre; no backend yet) -->
+    <section id="register" class="mt-10 bg-gsGreen text-gsBeige border hairline p-6 md:p-8">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-semibold">Register interest</h2>
+        <p class="mt-2 text-sm opacity-90 leading-relaxed">
+          The Ecological Registry is in active development. Register to be notified when participation opens.
+          No commitment required.
         </p>
-      </form>
+
+        <form class="mt-5 grid grid-cols-1 md:grid-cols-12 gap-3" action="#" method="post">
+          <div class="md:col-span-7">
+            <label class="block text-xs opacity-90 mb-1" for="email">Email</label>
+            <input id="email" name="email" type="email" required
+              class="w-full bg-gsBeige text-gsInk border hairline px-3 py-2 focus-ring"
+              placeholder="name@email.com" />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs opacity-90 mb-1" for="postcode">Postcode (optional)</label>
+            <input id="postcode" name="postcode" type="text" maxlength="4"
+              class="w-full bg-gsBeige text-gsInk border hairline px-3 py-2 focus-ring"
+              placeholder="3127" />
+          </div>
+          <div class="md:col-span-2 flex items-end">
+            <button type="submit"
+              class="w-full bg-gsBeige text-gsGreen border border-gsBeige px-3 py-2 text-sm hover:opacity-95 focus-ring">
+              Submit
+            </button>
+          </div>
+        </form>
+
+        <div class="mt-4 text-xs opacity-80">
+          Privacy: street addresses are not collected on public pages. Address and consent are handled through steward onboarding.
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer class="mt-12 pb-10 text-xs opacity-70">
       <div class="border-t hairline pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>© Ecological Registry — Gardener &amp; Son</div>
+        <div>© Ecological Registry — Gardener &amp; Son • ecologicalregistry.org</div>
         <div class="flex gap-3">
           <a href="#overview" class="hover:opacity-100">Top</a>
           <span class="opacity-40">•</span>
-          <a href="#reports" class="hover:opacity-100">Reports</a>
+          <a href="#notes" class="hover:opacity-100">Field Notes</a>
           <span class="opacity-40">•</span>
-          <a href="#badges" class="hover:opacity-100">Badges</a>
-          <span class="opacity-40">•</span>
-          <a href="#follow" class="hover:opacity-100">Follow</a>
+          <a href="#score" class="hover:opacity-100">Score</a>
         </div>
       </div>
     </footer>
