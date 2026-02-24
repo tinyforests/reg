@@ -36,15 +36,12 @@
     body { font-family: "IBM Plex Sans", sans-serif; }
     h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
 
-    /* Theme tokens */
     :root{
       --bg: #fff0dc;
       --fg: #3d4535;
       --muted: rgba(61,69,53,.72);
       --hair: rgba(61,69,53,.10);
       --wash: rgba(61,69,53,.05);
-
-      /* fixed nav height token */
       --navh: 80px;
     }
     html.dark{
@@ -60,39 +57,21 @@
     .wash{ background: var(--wash); }
 
     /* Alternating section backgrounds for visual rhythm */
-    .screen:nth-child(even) {
-      background: var(--wash);
-    }
+    .screen:nth-child(even) { background: var(--wash); }
 
     /* Enhanced borders for better visibility in both modes */
-    .border-subtle {
-      border-color: rgba(61, 69, 53, 0.12);
-    }
-    html.dark .border-subtle {
-      border-color: rgba(255, 240, 220, 0.18);
-    }
+    .border-subtle { border-color: rgba(61, 69, 53, 0.12); }
+    html.dark .border-subtle { border-color: rgba(255, 240, 220, 0.18); }
 
-    .border-subtle-strong {
-      border-color: rgba(61, 69, 53, 0.15);
-    }
-    html.dark .border-subtle-strong {
-      border-color: rgba(255, 240, 220, 0.25);
-    }
+    .border-subtle-strong { border-color: rgba(61, 69, 53, 0.15); }
+    html.dark .border-subtle-strong { border-color: rgba(255, 240, 220, 0.25); }
 
-    .bg-subtle {
-      background: rgba(61, 69, 53, 0.05);
-    }
-    html.dark .bg-subtle {
-      background: rgba(255, 240, 220, 0.08);
-    }
+    .bg-subtle { background: rgba(61, 69, 53, 0.05); }
+    html.dark .bg-subtle { background: rgba(255, 240, 220, 0.08); }
 
     /* Button borders */
-    .btn-border {
-      border: 1px solid rgba(61, 69, 53, 0.25);
-    }
-    html.dark .btn-border {
-      border: 1px solid rgba(255, 240, 220, 0.35);
-    }
+    .btn-border { border: 1px solid rgba(61, 69, 53, 0.25); }
+    html.dark .btn-border { border: 1px solid rgba(255, 240, 220, 0.35); }
 
     /* Button hover states */
     .btn-border:hover {
@@ -102,28 +81,12 @@
     }
 
     /* Nav border */
-    .nav-border {
-      border-bottom: 1px solid rgba(61, 69, 53, 0.10);
-    }
-    html.dark .nav-border {
-      border-bottom: 1px solid rgba(255, 240, 220, 0.15);
-    }
-
-    /* Divider lines */
-    .divider-line {
-      border-top: 1px solid rgba(61, 69, 53, 0.10);
-    }
-    html.dark .divider-line {
-      border-top: 1px solid rgba(255, 240, 220, 0.15);
-    }
+    .nav-border { border-bottom: 1px solid rgba(61, 69, 53, 0.10); }
+    html.dark .nav-border { border-bottom: 1px solid rgba(255, 240, 220, 0.15); }
 
     /* Left accent borders for lists */
-    .border-l-accent {
-      border-left: 2px solid rgba(61, 69, 53, 0.20);
-    }
-    html.dark .border-l-accent {
-      border-left: 2px solid rgba(255, 240, 220, 0.30);
-    }
+    .border-l-accent { border-left: 2px solid rgba(61, 69, 53, 0.20); }
+    html.dark .border-l-accent { border-left: 2px solid rgba(255, 240, 220, 0.30); }
 
     /* Active nav link indicator */
     nav a.nav-link {
@@ -142,9 +105,7 @@
       transform: scaleX(0);
       transition: transform 0.3s ease;
     }
-    nav a.nav-link.active::after {
-      transform: scaleX(1);
-    }
+    nav a.nav-link.active::after { transform: scaleX(1); }
 
     /* Powered by badge - bottom right corner */
     .gs-badge {
@@ -166,24 +127,14 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       line-height: 1.2;
     }
-    .gs-badge:hover {
-      opacity: 1;
-      border-color: rgba(61, 69, 53, 0.25);
-    }
+    .gs-badge:hover { opacity: 1; border-color: rgba(61, 69, 53, 0.25); }
     html.dark .gs-badge {
       border-color: rgba(255, 240, 220, 0.15);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
-    html.dark .gs-badge:hover {
-      border-color: rgba(255, 240, 220, 0.35);
-    }
+    html.dark .gs-badge:hover { border-color: rgba(255, 240, 220, 0.35); }
     @media (max-width: 768px) {
-      .gs-badge {
-        bottom: 16px;
-        right: 16px;
-        font-size: 9px;
-        padding: 6px 10px;
-      }
+      .gs-badge { bottom: 16px; right: 16px; font-size: 9px; padding: 6px 10px; }
     }
 
     /* Next section indicator */
@@ -313,7 +264,6 @@
   <!-- CONFIG (edit these) -->
   <script>
     window.REGSITE = {
-      // v1: keep these simple and editable
       registerUrl: "#register",
       exampleUrl:  "https://ecologicalregistry.org/reg/REG-VIC-SH-001.html",
       contactEmail:"hello@gardenerandson.com.au",
@@ -388,7 +338,7 @@
 
             <a id="btnYield" href="#system"
                class="inline-block text-sm px-5 py-2.5 transition-opacity hover:opacity-70 muted">
-              How rewards could work →
+              Registry layer →
             </a>
           </div>
 
@@ -516,7 +466,7 @@
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 4</div>
             <h3 class="font-medium mb-2">Verification</h3>
             <p class="text-sm leading-relaxed opacity-70">
-              Verified gardens carry a trusted mark for partners, pilots, and future incentive pathways.
+              Verified gardens carry a trusted mark for partners, pilots, and incentives.
             </p>
           </article>
         </div>
@@ -699,7 +649,7 @@
         <div class="space-y-3 text-sm md:text-base leading-relaxed font-light mb-4">
           <p>
             Individual gardens matter — but systemic change requires infrastructure around them.
-            The registry layer creates the baseline record and change trail that incentives can later sit on top of.
+            The registry layer creates the baseline record and change trail that incentives can sit on top of.
           </p>
           <p>
             When gardens can be trusted, they can be supported: stewardship with proof, and restoration that can scale.
@@ -709,7 +659,7 @@
         <div class="space-y-3 text-sm">
           <div class="border-l-accent pl-5">
             <h3 class="font-medium mb-1.5">Baseline + change log</h3>
-            <p class="leading-relaxed opacity-70">The minimum viable audit trail for ecological uplift.</p>
+            <p class="leading-relaxed opacity-70">A minimal audit trail for ecological uplift.</p>
           </div>
 
           <div class="border-l-accent pl-5">
@@ -719,7 +669,7 @@
 
           <div class="border-l-accent pl-5">
             <h3 class="font-medium mb-1.5">Yield (incentives)</h3>
-            <p class="leading-relaxed opacity-70">Mechanisms that reward stewardship once outcomes are legible.</p>
+            <p class="leading-relaxed opacity-70">A related layer for recognition and stewardship incentives.</p>
           </div>
         </div>
 
@@ -799,12 +749,25 @@
             </a>
 
             <div class="pt-4">
-              <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Studio</div>
+              <div class="text-sm uppercase tracking-wide opacity-60 mb-2">Studios</div>
               <p class="opacity-80 font-light">
                 2 Churchill Street<br />
                 Mont Albert 3127<br />
                 Victoria, Australia
               </p>
+
+              <div class="mt-4"></div>
+
+              <p class="opacity-80 font-light">
+                140 Auburn Road<br />
+                Hawthorn 3122<br />
+                Victoria, Australia
+              </p>
+            </div>
+
+            <!-- Established marker -->
+            <div class="mt-10 text-xs opacity-50 tracking-wide uppercase">
+              Established 2026 · Melbourne, Australia
             </div>
           </div>
 
@@ -867,7 +830,7 @@
     setHref("btnExample2", cfg.exampleUrl || "#example");
     setHref("exampleCard", cfg.exampleUrl || "#example");
 
-    setHref("btnYield", cfg.yieldUrl || "#system");
+    setHref("btnYield", "#system");
     setHref("btnYield2", cfg.yieldUrl || "#system");
 
     setHref("btnEmail", mailto);
