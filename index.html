@@ -107,7 +107,7 @@
     }
     nav a.nav-link.active::after { transform: scaleX(1); }
 
-    /* Powered by badge - bottom right corner */
+    /* Powered by badge */
     .gs-badge {
       position: fixed;
       bottom: 24px;
@@ -178,23 +178,16 @@
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
-    /* FULL-SCREEN + SNAP (Yield-like), WITH FIXED NAV */
     html, body { height: 100%; scroll-behavior: smooth; }
-
-    main {
-      scroll-snap-type: y proximity;
-      scroll-padding-top: var(--navh);
-    }
+    main { scroll-snap-type: y proximity; scroll-padding-top: var(--navh); }
 
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
       position: relative;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
       padding-top: calc(var(--navh) + 20px);
       padding-bottom: var(--navh);
       padding-left: 1.5rem;
@@ -250,22 +243,20 @@
 </head>
 
 <body>
-  <!-- Skip link -->
   <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 px-4 py-2 text-sm z-[200]"
      style="background:var(--bg); border:1px solid var(--hair);">
     Skip to content
   </a>
 
-  <!-- Powered by Badge -->
   <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer" aria-label="Powered by Gardener & Son">
     Powered by<br/>Gardener & Son
   </a>
 
-  <!-- CONFIG (edit these) -->
+  <!-- CONFIG -->
   <script>
     window.REGSITE = {
       registerUrl: "#register",
-      exampleUrl:  "https://ecologicalregistry.org/reg/REG-VIC-SH-001.html",
+      exampleUrl:  "https://tinyforests.github.io/reg/REG-VIC-SH-001.html",
       contactEmail:"hello@gardenerandson.com.au",
       yieldUrl:    "https://tinyforests.github.io/yield/",
       studioUrl:   "https://www.gardenerandson.com",
@@ -280,7 +271,7 @@
     };
   </script>
 
-  <!-- Navigation (FIXED) -->
+  <!-- Navigation -->
   <nav class="backdrop-blur nav-border" style="background: var(--bg);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
@@ -398,7 +389,7 @@
     <section id="function" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="grid md:grid-cols-2 gap-5 md:gap-7 items-center">
-          <div class="aspect-[4/3] bg-subtle border border-subtle-strong rounded-sm" aria-hidden="true"></div>
+          <div class="aspect-[4/3] bg-subtle border border-subtle-strong rounded-sm"></div>
 
           <div>
             <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
@@ -603,11 +594,11 @@
 
         <div class="grid md:grid-cols-3 gap-3 md:gap-5">
           <a href="#" id="exampleCard" class="card-hover block border border-subtle-strong bg-subtle p-5 rounded-sm">
-            <div class="aspect-[4/3] bg-subtle border border-subtle mb-4 rounded-sm" aria-hidden="true"></div>
+            <div class="aspect-[4/3] bg-subtle border border-subtle mb-4 rounded-sm"></div>
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Registered Garden</div>
             <div class="font-medium mb-2">REG-VIC-SH-001</div>
             <p class="text-sm leading-relaxed opacity-70">
-              View a sample public profile page with baseline and improvement trail.
+              View a public profile page with status, verification, score, badges, and dated field notes.
             </p>
           </a>
 
@@ -765,7 +756,6 @@
               </p>
             </div>
 
-            <!-- Established marker -->
             <div class="mt-10 text-xs opacity-50 tracking-wide uppercase">
               Established 2026 · Melbourne, Australia
             </div>
@@ -790,10 +780,9 @@
   </main>
 
   <script>
-    // Render signals from config
+    // Render signals
     const signalsList = document.getElementById('signalsList');
     const signals = window.REGSITE?.signals || [];
-
     signalsList.innerHTML = signals.map(signal => `
       <div class="border-l-accent pl-5">
         <h3 class="font-medium mb-1.5">${signal.title}</h3>
@@ -812,7 +801,7 @@
       });
     });
 
-    // Wire external links from CONFIG
+    // Wire external links
     const cfg = window.REGSITE || {};
     const mailto = `mailto:${cfg.contactEmail || "hello@gardenerandson.com.au"}`;
 
@@ -826,11 +815,11 @@
     setHref("btnRegister", cfg.registerUrl || "#register");
     setHref("btnRegister2", cfg.registerUrl || "#register");
 
+    // ✅ Example garden points to REG-VIC-SH-001
     setHref("btnExample", cfg.exampleUrl || "#example");
     setHref("btnExample2", cfg.exampleUrl || "#example");
     setHref("exampleCard", cfg.exampleUrl || "#example");
 
-    setHref("btnYield", "#system");
     setHref("btnYield2", cfg.yieldUrl || "#system");
 
     setHref("btnEmail", mailto);
@@ -860,7 +849,7 @@
       applyTheme(nowDark ? "light" : "dark");
     });
 
-    // Track active section for nav highlighting
+    // Active section highlighting
     const sections = document.querySelectorAll('.screen');
     const navLinks = document.querySelectorAll('nav a.nav-link');
 
@@ -884,7 +873,6 @@
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     sections.forEach(section => observer.observe(section));
 
-    // Initial active state
     const firstNavLink = navLinks[0];
     if (firstNavLink) firstNavLink.classList.add('active');
   </script>
