@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry — Gardener & Son</title>
+  <title>Ecological Registry</title>
 
   <meta name="description" content="Collectively, gardens form one of the largest untapped ecological assets in our cities. Ecological Registry provides the structure that allows private gardens to become measurable, trusted contributors to urban biodiversity." />
 
@@ -146,7 +146,7 @@
       transform: scaleX(1);
     }
 
-    /* Gardener & Son badge - bottom right corner */
+    /* Powered by badge - bottom right corner */
     .gs-badge {
       position: fixed;
       bottom: 24px;
@@ -159,11 +159,12 @@
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      opacity: 0.6;
+      opacity: 0.65;
       transition: all 0.2s ease;
       color: var(--fg);
       text-decoration: none;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      line-height: 1.2;
     }
     .gs-badge:hover {
       opacity: 1;
@@ -199,9 +200,7 @@
       color: var(--fg);
       z-index: 10;
     }
-    .next-section:hover {
-      opacity: 1;
-    }
+    .next-section:hover { opacity: 1; }
     .next-section-arrow {
       font-size: 20px;
       display: block;
@@ -219,64 +218,45 @@
       50% { opacity: 1; transform: translateY(-3px); }
     }
     @media (max-width: 768px) {
-      .next-section {
-        bottom: 60px;
-      }
-      .next-section-arrow {
-        font-size: 18px;
-      }
-      .next-section-label {
-        font-size: 9px;
-      }
+      .next-section { bottom: 60px; }
+      .next-section-arrow { font-size: 18px; }
+      .next-section-label { font-size: 9px; }
     }
-    /* Hide next section indicator on last section */
-    .screen:last-of-type .next-section {
-      display: none;
-    }
+    .screen:last-of-type .next-section { display: none; }
 
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
     html.dark :focus-visible { outline: 2px solid rgba(255, 240, 220, 0.55); }
 
     /* FULL-SCREEN + SNAP (Yield-like), WITH FIXED NAV */
-    html, body { 
-      height: 100%; 
-      scroll-behavior: smooth;
-    }
-    
-    main { 
+    html, body { height: 100%; scroll-behavior: smooth; }
+
+    main {
       scroll-snap-type: y proximity;
-      scroll-padding-top: var(--navh); /* Offset snap position by nav height */
+      scroll-padding-top: var(--navh);
     }
 
     .screen{
       min-height: 100svh;
       scroll-snap-align: start;
-      position: relative; /* For absolute positioned next-section indicators */
-      
-      /* Yield-style centering: flexbox with balanced padding */
+      position: relative;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      
-      /* Ensure top padding clears the fixed nav for all sections */
+
       padding-top: calc(var(--navh) + 20px);
       padding-bottom: var(--navh);
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
 
-    /* Content wrapper - no scroll, no max-height */
-    .screen > div {
-      width: 100%;
-    }
+    .screen > div { width: 100%; }
 
-    /* Non-hero sections: push content up more aggressively while still clearing nav */
     .screen:not(#top) {
       padding-top: calc(var(--navh) + 10px);
       padding-bottom: 220px;
     }
 
-    /* mobile: nav becomes taller because it stacks */
     @media (max-width: 768px){
       :root{ --navh: 120px; }
       .screen{
@@ -289,42 +269,32 @@
         padding-top: calc(var(--navh) + 20px);
         padding-bottom: 260px;
       }
-      /* Tighter line-height for hero on mobile */
-      .hero-title {
-        line-height: 0.92;
-      }
-      /* Reduce heading sizes on mobile to fit better */
+      .hero-title { line-height: 0.92; }
       h1 { font-size: 2.5rem; }
       h2 { font-size: 2rem; }
     }
 
-    /* Fixed nav stays on top always */
     nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      will-change: transform; /* Performance hint */
+      will-change: transform;
     }
 
-    /* reduce motion accessibility */
     @media (prefers-reduced-motion: reduce){
       html { scroll-behavior: auto !important; }
       main { scroll-snap-type: none; }
+      .next-section-arrow { animation: none; }
     }
 
-    /* Subtle hover enhancement for cards */
-    .card-hover {
-      transition: all 0.2s ease;
-    }
+    .card-hover { transition: all 0.2s ease; }
     .card-hover:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(61, 69, 53, 0.08);
     }
-    html.dark .card-hover:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
+    html.dark .card-hover:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
   </style>
 </head>
 
@@ -335,49 +305,33 @@
     Skip to content
   </a>
 
-  <!-- Gardener & Son Badge -->
-  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">
-    Gardener & Son
+  <!-- Powered by Badge -->
+  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer" aria-label="Powered by Gardener & Son">
+    Powered by<br/>Gardener & Son
   </a>
 
   <!-- CONFIG (edit these) -->
   <script>
     window.REGSITE = {
-      registerUrl: "https://registeredecologicalgardens.org/register",
-      exampleUrl:  "https://tinyforests.github.io/Ecological-Registry/reg/REG-VIC-SH-001.html",
+      // v1: keep these simple and editable
+      registerUrl: "#register",
+      exampleUrl:  "https://ecologicalregistry.org/reg/REG-VIC-SH-001.html",
       contactEmail:"hello@gardenerandson.com.au",
-      yieldUrl:    "https://yield.gardenerandson.com",
+      yieldUrl:    "https://tinyforests.github.io/yield/",
       studioUrl:   "https://www.gardenerandson.com",
-      
-      // Signals can be updated here
+
       signals: [
-        {
-          title: "Structure",
-          description: "Canopy / midstorey / groundlayer presence and continuity."
-        },
-        {
-          title: "Habitat features",
-          description: "Logs, rocks, litter, water, nesting opportunities, refuge."
-        },
-        {
-          title: "Soil cover",
-          description: "Mulch, leaf litter, living groundcover, permeability, compacted zones."
-        },
-        {
-          title: "Water logic",
-          description: "Runoff, infiltration, passive irrigation patterns, retention points."
-        },
-        {
-          title: "Planting intent",
-          description: "Place-based emphasis where relevant; exotics where they serve the whole."
-        }
+        { title: "Structure",        description: "Canopy / midstorey / groundlayer presence and continuity." },
+        { title: "Habitat features", description: "Logs, rocks, litter, water, nesting opportunities, refuge." },
+        { title: "Soil cover",       description: "Mulch, leaf litter, living groundcover, permeability, compacted zones." },
+        { title: "Water logic",      description: "Runoff, infiltration, passive irrigation patterns, retention points." },
+        { title: "Planting intent",  description: "Place-based emphasis where relevant; exotics where they serve the whole." }
       ]
     };
   </script>
 
   <!-- Navigation (FIXED) -->
-  <nav class="backdrop-blur nav-border"
-       style="background: var(--bg);">
+  <nav class="backdrop-blur nav-border" style="background: var(--bg);">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex items-center gap-3">
         <a href="#top" class="text-xs tracking-[0.18em] uppercase hover:opacity-70 transition-opacity">Ecological Registry</a>
@@ -389,6 +343,7 @@
         <a href="#how" class="nav-link hover:opacity-60 transition-opacity">How it works</a>
         <a href="#signals" class="nav-link hover:opacity-60 transition-opacity">Signals</a>
         <a href="#privacy" class="nav-link hover:opacity-60 transition-opacity">Privacy</a>
+        <a href="#governance" class="nav-link hover:opacity-60 transition-opacity">Governance</a>
         <a href="#example" class="nav-link hover:opacity-60 transition-opacity">Example</a>
         <a href="#register" class="nav-link hover:opacity-60 transition-opacity">Register</a>
         <a href="#contact" class="nav-link hover:opacity-60 transition-opacity">Contact</a>
@@ -408,7 +363,7 @@
       <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="max-w-4xl">
           <div class="text-[11px] md:text-xs tracking-[0.22em] uppercase muted mb-4">
-            A public registry for private land
+            A civic verification layer for private land
           </div>
 
           <h1 class="hero-title font-serif text-3xl md:text-5xl lg:text-6xl leading-[0.98] tracking-tight">
@@ -445,8 +400,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#about" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">About</span>
@@ -483,8 +437,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#function" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">Function</span>
@@ -495,10 +448,8 @@
     <section id="function" class="screen">
       <div class="max-w-7xl mx-auto px-6 w-full">
         <div class="grid md:grid-cols-2 gap-5 md:gap-7 items-center">
-          <!-- Image placeholder -->
-          <div class="aspect-[4/3] bg-subtle border border-subtle-strong rounded-sm"></div>
-          
-          <!-- Text content -->
+          <div class="aspect-[4/3] bg-subtle border border-subtle-strong rounded-sm" aria-hidden="true"></div>
+
           <div>
             <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-4 leading-tight">
               A garden can function ecologically.
@@ -519,8 +470,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#how" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">How it works</span>
@@ -550,7 +500,7 @@
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 2</div>
             <h3 class="font-medium mb-2">Baseline</h3>
             <p class="text-sm leading-relaxed opacity-70">
-              Record what's there: structure, habitat features, soil cover, and water logic. Keep it practical.
+              Record what’s there: structure, habitat features, soil cover, and water logic. Keep it practical.
             </p>
           </article>
 
@@ -564,15 +514,14 @@
 
           <article class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Step 4</div>
-            <h3 class="font-medium mb-2">Rewards</h3>
+            <h3 class="font-medium mb-2">Verification</h3>
             <p class="text-sm leading-relaxed opacity-70">
-              Verified gardens become eligible for incentives and recognition as measurable ecological contributors.
+              Verified gardens carry a trusted mark for partners, pilots, and future incentive pathways.
             </p>
           </article>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#signals" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">Signals</span>
@@ -585,20 +534,17 @@
         <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Signals (v1)</h2>
 
         <p class="text-sm md:text-base leading-relaxed font-light mb-4">
-          Measurement stays practical — the goal is not scientific theatre. A garden should know where it is, and what "better" means.
+          Measurement stays practical — the goal is not scientific theatre. A garden should know where it is, and what “better” means.
           These are intentionally simple signals that can be refined later.
         </p>
 
-        <div id="signalsList" class="space-y-3 text-sm">
-          <!-- Signals rendered from config -->
-        </div>
+        <div id="signalsList" class="space-y-3 text-sm"></div>
 
         <p class="text-xs opacity-50 mt-4">
           Note: Signals evolve with the registry. Early versions stay simple; depth arrives through iteration and steward feedback.
         </p>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#privacy" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">Privacy</span>
@@ -613,7 +559,7 @@
             <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3">Privacy</h2>
             <div class="space-y-3 text-sm md:text-base leading-relaxed font-light opacity-90">
               <p>
-                The public page shows what's needed for meaning and trust: story, images, broad signals, and improvement.
+                The public page shows what’s needed for meaning and trust: story, images, broad signals, and improvement.
                 Address-level data and sensitive notes stay private unless explicitly enabled.
               </p>
               <p>
@@ -647,8 +593,48 @@
           </div>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
+      <a href="#governance" class="next-section">
+        <span class="next-section-arrow">↓</span>
+        <span class="next-section-label">Governance</span>
+      </a>
+    </section>
+
+    <!-- Governance -->
+    <section id="governance" class="screen">
+      <div class="max-w-4xl mx-auto px-6 w-full">
+        <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl mb-3 leading-tight">Governance</h2>
+
+        <div class="space-y-3 text-sm md:text-base leading-relaxed font-light">
+          <p>
+            Ecological Registry operates as an independent verification framework for ecological gardens.
+          </p>
+          <p>
+            Assessments and verification pathways are designed to be lightweight, transparent, and repeatable — prioritising clear evidence over complexity.
+          </p>
+          <p>
+            Gardener &amp; Son is the founding implementation partner, responsible for early field work, documentation standards, and initial registry operations.
+          </p>
+        </div>
+
+        <div class="mt-5 grid md:grid-cols-2 gap-3">
+          <div class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Principle</div>
+            <div class="font-medium mb-2">Transparency</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              Scoring is explainable. Change is timestamped. Evidence is visible.
+            </p>
+          </div>
+          <div class="card-hover border border-subtle-strong bg-subtle p-4 rounded-sm">
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Principle</div>
+            <div class="font-medium mb-2">Repeatability</div>
+            <p class="text-sm leading-relaxed opacity-70">
+              A consistent baseline method, designed to evolve without breaking trust.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <a href="#example" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">Example</span>
@@ -667,7 +653,7 @@
 
         <div class="grid md:grid-cols-3 gap-3 md:gap-5">
           <a href="#" id="exampleCard" class="card-hover block border border-subtle-strong bg-subtle p-5 rounded-sm">
-            <div class="aspect-[4/3] bg-subtle border border-subtle mb-4 rounded-sm"></div>
+            <div class="aspect-[4/3] bg-subtle border border-subtle mb-4 rounded-sm" aria-hidden="true"></div>
             <div class="text-xs uppercase tracking-wide opacity-60 mb-2">Registered Garden</div>
             <div class="font-medium mb-2">REG-VIC-SH-001</div>
             <p class="text-sm leading-relaxed opacity-70">
@@ -676,7 +662,7 @@
           </a>
 
           <div class="card-hover border border-subtle-strong bg-subtle p-5 rounded-sm">
-            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">What you'll see</div>
+            <div class="text-xs uppercase tracking-wide opacity-60 mb-2">What you’ll see</div>
             <div class="font-medium mb-2">Public page</div>
             <p class="text-sm leading-relaxed opacity-70">
               A calm profile: images, story, broad signals, and a change log that reads like a garden diary.
@@ -698,8 +684,7 @@
           </a>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#system" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">System</span>
@@ -744,8 +729,7 @@
           </a>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#register" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">Register</span>
@@ -791,8 +775,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- Next section indicator -->
+
       <a href="#contact" class="next-section">
         <span class="next-section-arrow">↓</span>
         <span class="next-section-label">Contact</span>
@@ -847,7 +830,7 @@
     // Render signals from config
     const signalsList = document.getElementById('signalsList');
     const signals = window.REGSITE?.signals || [];
-    
+
     signalsList.innerHTML = signals.map(signal => `
       <div class="border-l-accent pl-5">
         <h3 class="font-medium mb-1.5">${signal.title}</h3>
@@ -917,10 +900,10 @@
     // Track active section for nav highlighting
     const sections = document.querySelectorAll('.screen');
     const navLinks = document.querySelectorAll('nav a.nav-link');
-    
+
     const observerOptions = {
       root: null,
-      rootMargin: '-100px 0px -60% 0px', // Trigger when section is near top
+      rootMargin: '-100px 0px -60% 0px',
       threshold: 0
     };
 
@@ -928,15 +911,9 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-          
-          // Remove active class from all nav links
           navLinks.forEach(link => link.classList.remove('active'));
-          
-          // Add active class to current section's nav link
           const activeLink = document.querySelector(`nav a.nav-link[href="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add('active');
-          }
+          if (activeLink) activeLink.classList.add('active');
         }
       });
     };
@@ -944,11 +921,9 @@
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     sections.forEach(section => observer.observe(section));
 
-    // Set initial active state (first nav section is About)
+    // Initial active state
     const firstNavLink = navLinks[0];
-    if (firstNavLink) {
-      firstNavLink.classList.add('active');
-    }
+    if (firstNavLink) firstNavLink.classList.add('active');
   </script>
 </body>
 </html>
