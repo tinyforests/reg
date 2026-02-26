@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry — Private Gardens as Ecological Infrastructure</title>
+
+  <meta name="description" content="Ecological Registry provides structure, verification, and recognition for private gardens contributing to biodiversity." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "sans-serif"],
+          },
+          colors: {
+            gsGreen: "#3d4535",
+            gsBeige: "#fff0dc",
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { border-radius:0 !important; }
+    body { background:#fff0dc; color:#3d4535; font-family:"IBM Plex Sans",sans-serif; }
+    .hairline { border-color:rgba(61,69,53,.15); }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+<!-- Header -->
+<header class="border-b hairline">
+  <div class="max-w-6xl mx-auto px-6 py-6 flex justify-between items-center">
+    <div>
+      <div class="text-xs tracking-widest uppercase opacity-60">Ecological Registry</div>
+      <h1 class="font-serif text-3xl mt-1">Private Gardens as Ecological Infrastructure</h1>
+    </div>
+
+    <a href="/gardens/REG-VIC-SH-001/"
+       class="border hairline px-5 py-2 text-sm hover:bg-gsGreen hover:text-gsBeige transition">
+       View Example Garden
+    </a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="max-w-6xl mx-auto px-6 py-20 text-center">
+  <h2 class="font-serif text-5xl leading-tight max-w-4xl mx-auto">
+    Most urban gardens contribute little to biodiversity.
+  </h2>
+
+  <p class="mt-8 text-lg max-w-2xl mx-auto leading-relaxed opacity-80">
+    The Ecological Registry exists to change that.
+    We establish baseline function, verify improvements, and recognise gardens
+    that move from decoration to ecological contribution.
+  </p>
+
+  <div class="mt-10 flex justify-center gap-4">
+    <a href="/gardens/REG-VIC-SH-001/"
+       class="bg-gsGreen text-gsBeige px-6 py-3 text-sm hover:opacity-90 transition">
+       Explore Registered Garden
+    </a>
+
+    <a href="#how"
+       class="border hairline px-6 py-3 text-sm hover:bg-gsGreen hover:text-gsBeige transition">
+       How It Works
+    </a>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section id="how" class="max-w-6xl mx-auto px-6 py-20 border-t hairline">
+  <div class="grid md:grid-cols-3 gap-12 text-center">
+
+    <div>
+      <h3 class="font-serif text-2xl mb-4">1. Baseline</h3>
+      <p class="text-sm opacity-80 leading-relaxed">
+        A garden is assessed across structural diversity, indigenous ratio,
+        soil health, habitat, water function and connectivity.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="font-serif text-2xl mb-4">2. Verification</h3>
+      <p class="text-sm opacity-80 leading-relaxed">
+        Dated field notes and photo documentation create a transparent record
+        of ecological function over time.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="font-serif text-2xl mb-4">3. Recognition</h3>
+      <p class="text-sm opacity-80 leading-relaxed">
+        Gardens earn badges and measurable scores — creating trust,
+        comparability and long-term ecological value.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="mt-auto border-t hairline">
+  <div class="max-w-6xl mx-auto px-6 py-8 text-xs opacity-70 flex justify-between">
+    <div>© Ecological Registry — Gardener & Son</div>
+    <div>140 Auburn Road, Hawthorn 3122</div>
+  </div>
+</footer>
+
+</body>
+</html>
