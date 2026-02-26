@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Field Note 001 — REG-VIC-SH-001</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        serif: ['"Abril Fatface"', "serif"],
+        sans: ['"IBM Plex Sans"', "sans-serif"],
+      },
+      colors: {
+        green: "#3d4535",
+        beige: "#fff0dc",
+      }
+    }
+  }
+}
+</script>
+
+<style>
+* { border-radius: 0 !important; }
+body { background:#fff0dc; color:#3d4535; font-family:"IBM Plex Sans",sans-serif; }
+.hairline { border-color: rgba(61,69,53,.15); }
+.dropzone { border:1px dashed rgba(61,69,53,.4); background:rgba(61,69,53,.05); }
+.dropzone.drag { background:rgba(61,69,53,.1); }
+</style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- Header -->
+<header class="border-b hairline bg-beige">
+  <div class="max-w-5xl mx-auto px-6 py-6 flex justify-between items-center">
+    <div>
+      <div class="text-xs tracking-widest uppercase opacity-60">Ecological Registry</div>
+      <h1 class="font-serif text-3xl mt-1">Field Note 001</h1>
+      <div class="text-sm opacity-70 mt-1">REG-VIC-SH-001</div>
+    </div>
+
+    <a href="/gardens/REG-VIC-SH-001/" class="text-sm border hairline px-4 py-2 hover:bg-green hover:text-beige transition">
+      ← Back to Profile
+    </a>
+  </div>
+</header>
+
+<!-- Meta -->
+<section class="max-w-5xl mx-auto px-6 py-8">
+  <div class="grid md:grid-cols-3 gap-6 text-sm">
+
+    <div>
+      <div class="uppercase tracking-wide opacity-60 text-xs">Date</div>
+      <div class="mt-1 font-medium">18 Feb 2026</div>
+    </div>
+
+    <div>
+      <div class="uppercase tracking-wide opacity-60 text-xs">Observer</div>
+      <div class="mt-1 font-medium">Gardener & Son</div>
+    </div>
+
+    <div>
+      <div class="uppercase tracking-wide opacity-60 text-xs">Status</div>
+      <div class="mt-1 font-medium">Verified</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Report -->
+<section class="max-w-5xl mx-auto px-6 pb-12">
+
+  <h2 class="font-serif text-2xl mb-4">Amphibian Presence</h2>
+
+  <div class="space-y-4 text-base leading-relaxed font-light">
+    <p>
+      Burrowing frog discovered during hand weeding in lower slope soil.
+      Presence indicates moisture retention, refuge capacity and biological activity.
+    </p>
+
+    <p>
+      Soil integrity appears intact. Leaf litter layer functioning.
+      No compaction observed in immediate zone.
+    </p>
+
+    <p>
+      Action: maintain mulch cover and refuge continuity.
+    </p>
+  </div>
+
+</section>
+
+<!-- Photos -->
+<section class="max-w-5xl mx-auto px-6 pb-12">
+
+  <h2 class="font-serif text-2xl mb-6">Photo Evidence</h2>
+
+  <div id="photoGrid" class="grid md:grid-cols-2 gap-6">
+
+    <!-- Replace with generated HTML from helper -->
+
+    <figure>
+      <img src="/gardens/REG-VIC-SH-001/images/001.jpg"
+           class="w-full aspect-[4/3] object-cover"
+           loading="lazy">
+      <figcaption class="text-xs mt-2 opacity-70">Caption</figcaption>
+    </figure>
+
+  </div>
+
+</section>
+
+<!-- Image Helper -->
+<section class="max-w-5xl mx-auto px-6 pb-20">
+
+  <h2 class="font-serif text-2xl mb-4">Image Helper</h2>
+
+  <div id="drop" class="dropzone p-6">
+    <div class="text-sm">Drag images here or
+      <label class="underline cursor-pointer">
+        browse
+        <input id="fileInput" type="file" multiple accept="image/*" class="hidden">
+      </label>
+    </div>
+  </div>
+
+  <div class="mt-8 grid md:grid-cols-2 gap-8">
+
+    <div>
+      <h3 class="font-medium mb-2">Rename Files To:</h3>
+      <ul id="renameList" class="text-sm space-y-1"></ul>
+    </div>
+
+    <div>
+      <h3 class="font-medium mb-2">Paste This Into Photo Section:</h3>
+      <pre id="htmlOut" class="text-xs bg-gray-100 p-4 overflow-x-auto"></pre>
+      <button id="copyBtn" class="mt-4 border hairline px-4 py-2 text-sm hover:bg-green hover:text-beige transition">
+        Copy HTML
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+const drop = document.getElementById("drop");
+const input = document.getElementById("fileInput");
+const renameList = document.getElementById("renameList");
+const htmlOut = document.getElementById("htmlOut");
+const copyBtn = document.getElementById("copyBtn");
+
+function pad(n){ return String(n).padStart(3,"0"); }
+
+function build(files){
+  renameList.innerHTML = "";
+  const htmlBlocks = [];
+
+  files.forEach((file,i)=>{
+    const name = pad(i+1) + ".jpg";
+    const li = document.createElement("li");
+    li.textContent = file.name + " → " + name;
+    renameList.appendChild(li);
+
+    htmlBlocks.push(
+`<figure>
+  <img src="/gardens/REG-VIC-SH-001/images/${name}"
+       class="w-full aspect-[4/3] object-cover"
+       loading="lazy">
+  <figcaption class="text-xs mt-2 opacity-70">Caption</figcaption>
+</figure>`
+    );
+  });
+
+  htmlOut.textContent = htmlBlocks.join("\n\n");
+}
+
+drop.addEventListener("dragover", e=>{
+  e.preventDefault();
+  drop.classList.add("drag");
+});
+
+drop.addEventListener("dragleave", ()=>{
+  drop.classList.remove("drag");
+});
+
+drop.addEventListener("drop", e=>{
+  e.preventDefault();
+  drop.classList.remove("drag");
+  build([...e.dataTransfer.files]);
+});
+
+input.addEventListener("change", ()=>{
+  build([...input.files]);
+});
+
+copyBtn.addEventListener("click", ()=>{
+  navigator.clipboard.writeText(htmlOut.textContent);
+  copyBtn.textContent = "Copied";
+  setTimeout(()=> copyBtn.textContent="Copy HTML",1000);
+});
+</script>
+
+</body>
+</html>
