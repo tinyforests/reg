@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry — Field Note #005</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+          },
+          colors: {
+            gsGreen: "#3d4535",
+            gsBeige: "#fff0dc",
+            gsInk: "#2f3529",
+            gsMist: "rgba(61,69,53,0.08)",
+            gsLine: "rgba(61,69,53,0.18)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; border-radius: 0 !important; }
+    body { font-family: "IBM Plex Sans", sans-serif; }
+    h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
+
+    :root{
+      --bg: #3d4535;
+      --fg: #fff0dc;
+      --muted: rgba(255,240,220,.78);
+      --hair: rgba(255,240,220,.10);
+      --wash: rgba(255,240,220,.06);
+      --navh: 80px;
+    }
+
+    html.light{
+      --bg: #fff0dc;
+      --fg: #3d4535;
+      --muted: rgba(61,69,53,.72);
+      --hair: rgba(61,69,53,.10);
+      --wash: rgba(61,69,53,.05);
+    }
+
+    body{
+      background: var(--bg);
+      color: var(--fg);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .muted{ color: var(--muted); }
+    .wash{ background: var(--wash); }
+
+    .hairline { border-color: var(--hair); }
+    .chip { border: 1px solid var(--hair); }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px var(--hair); }
+
+    .nav-border { border-bottom: 1px solid var(--hair); }
+
+    .border-subtle { border-color: var(--hair); }
+    .border-subtle-strong { border-color: var(--hair); }
+    .bg-subtle { background: var(--wash); }
+
+    .btn-border { border: 1px solid var(--hair); }
+    .btn-border:hover {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+
+    :focus-visible { outline: 2px solid rgba(255,240,220,0.55); outline-offset: 3px; }
+    html.light :focus-visible { outline: 2px solid rgba(61,69,53,0.55); }
+
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    }
+    html.light .card-hover:hover { box-shadow: 0 4px 12px rgba(61,69,53,0.08); }
+
+    .gs-badge {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 50;
+      background: var(--bg);
+      border: 1px solid var(--hair);
+      padding: 8px 12px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      transition: all 0.2s ease;
+      color: var(--fg);
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      line-height: 1.2;
+    }
+    .gs-badge:hover { opacity: 1; }
+
+    .theme-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 50;
+      background: var(--bg);
+      border: 1px solid var(--hair);
+      padding: 8px 12px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      transition: all 0.2s ease;
+      color: var(--fg);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      line-height: 1.2;
+    }
+    .theme-toggle:hover { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .gs-badge {
+        bottom: 16px;
+        right: 16px;
+        font-size: 9px;
+        padding: 6px 10px;
+      }
+      .theme-toggle {
+        bottom: 16px;
+        left: 16px;
+        font-size: 9px;
+        padding: 6px 10px;
+      }
+      :root{ --navh: 120px; }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer" aria-label="Powered by Gardener & Son">
+    Powered by<br/>Gardener & Son
+  </a>
+
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+    Light
+  </button>
+
+  <header class="sticky top-0 z-40 backdrop-blur nav-border" style="background: var(--bg);">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="../../../index.html" class="w-9 h-9 bg-gsBeige text-gsGreen grid place-items-center font-semibold hover:opacity-90 transition-opacity" aria-label="Back to home">ER</a>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-80">Field Note</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="all.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle focus-ring">← Back to Field Notes</a>
+        <a href="../index.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle focus-ring">Arundel Profile</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8">
+        <div class="border border-subtle-strong bg-subtle p-5 md:p-7">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1 class="font-serif text-3xl md:text-4xl leading-tight">Field Note #005</h1>
+              <div class="mt-2 text-sm opacity-85"><span class="font-medium">Arundel</span> • Surrey Hills, VIC</div>
+
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+                <span class="chip px-2.5 py-1 bg-transparent">Swales</span>
+                <span class="chip px-2.5 py-1 bg-transparent">Water habitat</span>
+                <span class="chip px-2.5 py-1 bg-transparent">Infiltration</span>
+                <span class="chip px-2.5 py-1 bg-transparent">Amphibians</span>
+              </div>
+
+              <h2 class="mt-5 text-lg font-semibold">Excavation for swales and water habitat</h2>
+              <p class="mt-2 text-sm leading-relaxed opacity-90">
+                Swales and/or shallow basins excavated and formed to slow runoff, increase infiltration,
+                and create seasonal water habitat potential within the garden matrix.
+              </p>
+            </div>
+
+            <div class="shrink-0 text-right">
+              <div class="inline-flex flex-col items-end gap-2">
+                <span class="chip px-3 py-1.5 text-xs bg-transparent">Draft</span>
+                <div class="text-xs opacity-80">Date: <span class="font-medium">TBD</span></div>
+                <div class="text-xs opacity-80">Observer: <span class="font-medium">Gardener &amp; Son</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Design principle</div>
+              <div class="font-medium">Seasonal water, not permanent pond</div>
+            </div>
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Risk control</div>
+              <div class="font-medium">No mosquito traps</div>
+              <div class="text-xs opacity-70 mt-1">Shallow, drains / infiltrates</div>
+            </div>
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Habitat intent</div>
+              <div class="font-medium">Moisture refuge + breeding potential</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 border border-subtle-strong bg-subtle p-5 md:p-7">
+          <h3 class="text-lg font-semibold">Observation</h3>
+          <p class="mt-3 text-sm leading-relaxed opacity-90">
+            (Describe the swales: length, depth, position on contour, overflow direction, where water enters/exits.)
+          </p>
+
+          <h3 class="mt-6 text-lg font-semibold">Why this matters</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Swales convert episodic runoff into stored soil moisture.</li>
+            <li>• Seasonal wetting supports fungi, invertebrates, and amphibian refuge.</li>
+            <li>• Habitat diversity increases when wet/dry cycles are designed (not accidental).</li>
+          </ul>
+
+          <h3 class="mt-6 text-lg font-semibold">Verification plan</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>• Photograph during rain event (inflow, pooling, overflow).</li>
+            <li>• Record infiltration time (hours to drain).</li>
+            <li>• Note any amphibian activity after rainfall.</li>
+          </ul>
+
+          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
+            This report becomes “verified” when a rainfall behaviour photo-set is attached.
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="border border-subtle-strong bg-subtle p-5">
+          <div class="text-sm font-semibold">Badge Impact</div>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="chip p-4 opacity-80">
+              <div class="font-medium">🌧 Water Sensitive Site</div>
+              <div class="text-xs opacity-70 mt-1">Likely awarded once verified by rainfall behaviour</div>
+            </div>
+            <div class="chip p-4 opacity-80">
+              <div class="font-medium">🐸 Amphibian Active</div>
+              <div class="text-xs opacity-70 mt-1">Strengthened (adds habitat mechanism)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border border-subtle-strong bg-subtle p-5">
+          <div class="text-sm font-semibold">Score Impacts (placeholders)</div>
+          <div class="mt-4 space-y-3 text-sm">
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Water Function</span><span class="chip px-2 py-1 text-xs bg-transparent">+4</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Habitat Complexity</span><span class="chip px-2 py-1 text-xs bg-transparent">+2</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Soil Biology &amp; Health</span><span class="chip px-2 py-1 text-xs bg-transparent">+1</span></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const btn = document.getElementById("theme-toggle");
+
+    function setMode(mode){
+      if(mode === "light"){
+        root.classList.add("light");
+        btn.textContent = "Dark";
+        localStorage.setItem("reg_mode", "light");
+      } else {
+        root.classList.remove("light");
+        btn.textContent = "Light";
+        localStorage.setItem("reg_mode", "dark");
+      }
+    }
+
+    const saved = localStorage.getItem("reg_mode");
+    if(saved === "light"){
+      setMode("light");
+    } else {
+      setMode("dark");
+    }
+
+    btn.onclick = () => {
+      if(root.classList.contains("light")){
+        setMode("dark");
+      } else {
+        setMode("light");
+      }
+    };
+  </script>
+</body>
+</html>
