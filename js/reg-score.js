@@ -50,14 +50,14 @@ function scoreEcologicalRegistry(record) {
     (i.monitoring_photos_uploaded ? 2 : 0);
 
   const verificationMap = {
-    self_registered: { score: 5, label: 'Self Registered' },
-    photo_verified: { score: 8, label: 'Photo Verified' },
-    site_visit: { score: 12, label: 'Site Visit Verified' },
-    gardener_and_son_verified: { score: 15, label: 'Gardener & Son Verified' }
+    self_registered: { score: 5, label: "Self Registered" },
+    photo_verified: { score: 8, label: "Photo Verified" },
+    site_visit: { score: 12, label: "Site Visit Verified" },
+    gardener_and_son_verified: { score: 15, label: "Gardener & Son Verified" }
   };
 
   const verificationData =
-    verificationMap[record.verification_level] || { score: 0, label: 'Unverified' };
+    verificationMap[record.verification_level] || { score: 0, label: "Unverified" };
 
   const verification = verificationData.score;
 
@@ -71,12 +71,12 @@ function scoreEcologicalRegistry(record) {
     stewardshipActions +
     verification;
 
-  let level = 'Basic Garden';
-  if (total >= 91) level = 'Urban Biodiversity Node';
-  else if (total >= 81) level = 'High Habitat Garden';
-  else if (total >= 61) level = 'Registered Ecological Garden';
-  else if (total >= 41) level = 'Ecological Garden';
-  else if (total >= 21) level = 'Habitat Garden';
+  let level = "Basic Garden";
+  if (total >= 91) level = "Urban Biodiversity Node";
+  else if (total >= 81) level = "High Habitat Garden";
+  else if (total >= 61) level = "Registered Ecological Garden";
+  else if (total >= 41) level = "Ecological Garden";
+  else if (total >= 21) level = "Habitat Garden";
 
   const badges = [];
   const habitatLayers = [
@@ -94,27 +94,33 @@ function scoreEcologicalRegistry(record) {
     i.mycorrhiza_or_regen_methods
   ].filter(Boolean).length;
 
-  if (habitatLayers >= 3) badges.push('Habitat Builder');
-  if (i.flowering_succession && i.pollinator_support) badges.push('Pollinator Garden');
-  if (i.canopy_present) badges.push('Canopy Restorer');
-  if (i.permeable_surfaces && (i.swale_or_infiltration || i.pond_or_wet_area || i.passive_irrigation)) badges.push('Water Sensitive');
-  if ((i.indigenous_percent || 0) >= 70) badges.push('Indigenous 70+');
-  if (soilCount >= 4) badges.push('Soil Regenerator');
-  if (i.near_park_or_remnant && i.pollinator_support && i.bird_habitat && i.registered_in_network) badges.push('Stepping Stone Garden');
-  if (['site_visit', 'gardener_and_son_verified'].includes(record.verification_level)) badges.push('Verified Garden');
-  if (total >= 80) badges.push('Wildlife Node');
+  if (habitatLayers >= 3) badges.push("Habitat Builder");
+  if (i.flowering_succession && i.pollinator_support) badges.push("Pollinator Garden");
+  if (i.canopy_present) badges.push("Canopy Restorer");
+  if (i.permeable_surfaces && (i.swale_or_infiltration || i.pond_or_wet_area || i.passive_irrigation)) {
+    badges.push("Water Sensitive");
+  }
+  if ((i.indigenous_percent || 0) >= 70) badges.push("Indigenous 70+");
+  if (soilCount >= 4) badges.push("Soil Regenerator");
+  if (i.near_park_or_remnant && i.pollinator_support && i.bird_habitat && i.registered_in_network) {
+    badges.push("Stepping Stone Garden");
+  }
+  if (["site_visit", "gardener_and_son_verified"].includes(record.verification_level)) {
+    badges.push("Verified Garden");
+  }
+  if (total >= 80) badges.push("Wildlife Node");
 
   const recommendations = [];
-  if (!i.canopy_present) recommendations.push({ action: 'Add a canopy tree', points: 3 });
-  if (!i.rainwater_use) recommendations.push({ action: 'Add rainwater capture or reuse', points: 2 });
+  if (!i.canopy_present) recommendations.push({ action: "Add a canopy tree", points: 3 });
+  if (!i.rainwater_use) recommendations.push({ action: "Add rainwater capture or reuse", points: 2 });
   if ((i.indigenous_percent || 0) < 70) {
     recommendations.push({
-      action: 'Increase indigenous planting to 70%+',
+      action: "Increase indigenous planting to 70%+",
       points: (i.indigenous_percent || 0) >= 50 ? 3 : 5
     });
   }
-  if (!i.pond_or_wet_area) recommendations.push({ action: 'Add a pond or wet habitat', points: 2 });
-  if (!i.monitoring_photos_uploaded) recommendations.push({ action: 'Upload monitoring photos', points: 2 });
+  if (!i.pond_or_wet_area) recommendations.push({ action: "Add a pond or wet habitat", points: 2 });
+  if (!i.monitoring_photos_uploaded) recommendations.push({ action: "Upload monitoring photos", points: 2 });
 
   recommendations.sort((a, b) => b.points - a.points);
 
@@ -123,14 +129,14 @@ function scoreEcologicalRegistry(record) {
     level,
     verificationLabel: verificationData.label,
     categories: [
-      { label: 'Habitat Structure', score: habitatStructure, max: 15 },
-      { label: 'Plant Diversity', score: plantDiversity, max: 15 },
-      { label: 'Indigenous %', score: indigenousPercent, max: 10 },
-      { label: 'Water & Hydrology', score: waterHydrology, max: 10 },
-      { label: 'Soil & Regeneration', score: soilRegeneration, max: 10 },
-      { label: 'Connectivity', score: connectivity, max: 15 },
-      { label: 'Stewardship Actions', score: stewardshipActions, max: 10 },
-      { label: 'Verification', score: verification, max: 15 }
+      { label: "Habitat Structure", score: habitatStructure, max: 15 },
+      { label: "Plant Diversity", score: plantDiversity, max: 15 },
+      { label: "Indigenous %", score: indigenousPercent, max: 10 },
+      { label: "Water & Hydrology", score: waterHydrology, max: 10 },
+      { label: "Soil & Regeneration", score: soilRegeneration, max: 10 },
+      { label: "Connectivity", score: connectivity, max: 15 },
+      { label: "Stewardship Actions", score: stewardshipActions, max: 10 },
+      { label: "Verification", score: verification, max: 15 }
     ],
     badges,
     recommendations
