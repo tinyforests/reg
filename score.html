@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,13 +10,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             regGreen: '#3d4535',
             regBeige: '#fff0dc',
             regLine: '#d7ccb9',
-            regSoft: '#f7ead6'
+            regSoft: '#f7ead6',
+            regDarkPanel: '#485141',
+            regDarkLine: 'rgba(255,240,220,0.18)'
           },
           fontFamily: {
             serif: ['Abril Fatface', 'serif'],
@@ -35,24 +38,34 @@
     }
   </style>
 </head>
-<body class="bg-regBeige text-regGreen font-sans antialiased">
+<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
   <main class="min-h-screen px-6 py-10 md:px-10 lg:px-16">
     <section class="mx-auto max-w-6xl">
-      <div class="mb-8 border-b border-regLine pb-6">
-        <p class="mb-3 text-xs uppercase tracking-[0.28em]">Ecological Registry</p>
-        <h1 class="font-serif text-4xl leading-none md:text-6xl">Score Panel</h1>
+      <div class="mb-8 flex flex-col gap-5 border-b border-regLine pb-6 dark:border-regDarkLine md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="mb-3 text-xs uppercase tracking-[0.28em]">Ecological Registry</p>
+          <h1 class="font-serif text-4xl leading-none md:text-6xl">Score Panel</h1>
+        </div>
+
+        <button
+          id="themeToggle"
+          type="button"
+          class="inline-flex items-center justify-center border border-regLine px-4 py-2 text-xs uppercase tracking-[0.22em] transition hover:opacity-80 dark:border-regDarkLine"
+        >
+          Toggle light / dark
+        </button>
       </div>
 
       <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <section class="border border-regLine bg-white shadow-card">
-          <div class="border-b border-regLine px-6 py-5 md:px-8 md:py-6">
+        <section class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
+          <div class="border-b border-regLine px-6 py-5 dark:border-regDarkLine md:px-8 md:py-6">
             <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <p class="mb-2 text-xs uppercase tracking-[0.28em]">Registered Garden</p>
                 <h2 id="gardenName" class="font-serif text-3xl leading-none md:text-5xl">Arundel</h2>
-                <p id="gardenMeta" class="mt-3 text-sm text-regGreen/75">Surrey Hills · Assessed 15 March 2026 · Score v1</p>
+                <p id="gardenMeta" class="mt-3 text-sm text-regGreen/75 dark:text-regBeige/75">Surrey Hills · Assessed 15 March 2026 · Score v1</p>
               </div>
-              <div class="border border-regLine bg-regSoft px-4 py-3 text-left md:min-w-[210px]">
+              <div class="border border-regLine bg-regSoft px-4 py-3 text-left dark:border-regDarkLine dark:bg-regGreen md:min-w-[210px]">
                 <p class="text-xs uppercase tracking-[0.28em]">Verification</p>
                 <p id="verificationLabel" class="mt-2 text-lg font-medium">Gardener &amp; Son Verified</p>
               </div>
@@ -60,13 +73,13 @@
           </div>
 
           <div class="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-            <div class="border-b border-regLine px-6 py-6 lg:border-b-0 lg:border-r md:px-8 md:py-8">
+            <div class="border-b border-regLine px-6 py-6 dark:border-regDarkLine lg:border-b-0 lg:border-r md:px-8 md:py-8">
               <p class="text-xs uppercase tracking-[0.28em]">Current Ecological Score</p>
               <div class="mt-4 flex items-end gap-3">
                 <div id="scoreValue" class="font-serif text-7xl leading-none md:text-8xl">84</div>
                 <div class="pb-2 text-lg">/ 100</div>
               </div>
-              <div class="mt-5 h-px w-full bg-regLine"></div>
+              <div class="mt-5 h-px w-full bg-regLine dark:bg-regDarkLine"></div>
               <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <p class="text-xs uppercase tracking-[0.22em]">Level</p>
@@ -77,9 +90,9 @@
                   <p id="badgeCount" class="mt-2 text-lg font-medium">6 unlocked</p>
                 </div>
               </div>
-              <div class="mt-6 border border-regLine bg-regSoft p-4">
+              <div class="mt-6 border border-regLine bg-regSoft p-4 dark:border-regDarkLine dark:bg-regGreen">
                 <p class="text-xs uppercase tracking-[0.22em]">Progress note</p>
-                <p id="progressNote" class="mt-2 text-sm leading-relaxed text-regGreen/85">
+                <p id="progressNote" class="mt-2 text-sm leading-relaxed text-regGreen/85 dark:text-regBeige/85">
                   This garden is functioning as a strong stepping-stone habitat with layered planting, soil regeneration, and network value.
                 </p>
               </div>
@@ -88,7 +101,7 @@
             <div class="px-6 py-6 md:px-8 md:py-8">
               <div class="flex items-center justify-between">
                 <h3 class="font-serif text-2xl">Category Breakdown</h3>
-                <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70">Live from inputs</p>
+                <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70 dark:text-regBeige/70">Live from inputs</p>
               </div>
               <div id="categoryList" class="mt-6 space-y-5"></div>
             </div>
@@ -96,23 +109,23 @@
         </section>
 
         <aside class="space-y-6">
-          <section class="border border-regLine bg-white px-6 py-6 shadow-card md:px-8">
+          <section class="border border-regLine bg-white px-6 py-6 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige md:px-8">
             <div class="flex items-center justify-between gap-4">
               <h3 class="font-serif text-2xl">Badges</h3>
-              <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70">Identity layer</p>
+              <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70 dark:text-regBeige/70">Identity layer</p>
             </div>
             <div id="badgeList" class="mt-5 flex flex-wrap gap-3"></div>
           </section>
 
-          <section class="border border-regLine bg-white px-6 py-6 shadow-card md:px-8">
+          <section class="border border-regLine bg-white px-6 py-6 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige md:px-8">
             <div class="flex items-center justify-between gap-4">
               <h3 class="font-serif text-2xl">Next Upgrades</h3>
-              <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70">Fastest gains</p>
+              <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70 dark:text-regBeige/70">Fastest gains</p>
             </div>
             <div id="recommendationList" class="mt-5 space-y-3"></div>
           </section>
 
-          <section class="border border-regLine bg-regGreen px-6 py-6 text-regBeige shadow-card md:px-8">
+          <section class="border border-regLine bg-regGreen px-6 py-6 text-regBeige shadow-card dark:border-regDarkLine md:px-8">
             <p class="text-xs uppercase tracking-[0.24em] text-regBeige/70">Why this matters</p>
             <p class="mt-3 font-serif text-2xl leading-tight">A score turns ecology into something visible, improvable, and culturally legible.</p>
             <p class="mt-4 text-sm leading-relaxed text-regBeige/85">
@@ -125,6 +138,13 @@
   </main>
 
   <script>
+    const savedTheme = localStorage.getItem('reg-theme');
+    if (savedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+
     const gardenRecord = {
       garden_id: 'ER-VIC-SH-ARU-0001',
       garden_name: 'Arundel',
@@ -229,7 +249,15 @@
       const verificationData = verificationMap[record.verification_level] || { score: 0, label: 'Unverified' };
       const verification = verificationData.score;
 
-      const total = habitatStructure + plantDiversity + indigenousPercent + waterHydrology + soilRegeneration + connectivity + stewardshipActions + verification;
+      const total =
+        habitatStructure +
+        plantDiversity +
+        indigenousPercent +
+        waterHydrology +
+        soilRegeneration +
+        connectivity +
+        stewardshipActions +
+        verification;
 
       let level = 'Basic Garden';
       if (total >= 91) level = 'Urban Biodiversity Node';
@@ -239,8 +267,20 @@
       else if (total >= 21) level = 'Habitat Garden';
 
       const badges = [];
-      const habitatLayers = [i.ground_layer_present, i.shrub_layer_present, i.subcanopy_present, i.canopy_present].filter(Boolean).length;
-      const soilCount = [i.organic_matter_or_mulch, i.no_synthetic_chemicals, i.compost_or_bioinputs, i.soil_improvement_works, i.mycorrhiza_or_regen_methods].filter(Boolean).length;
+      const habitatLayers = [
+        i.ground_layer_present,
+        i.shrub_layer_present,
+        i.subcanopy_present,
+        i.canopy_present
+      ].filter(Boolean).length;
+
+      const soilCount = [
+        i.organic_matter_or_mulch,
+        i.no_synthetic_chemicals,
+        i.compost_or_bioinputs,
+        i.soil_improvement_works,
+        i.mycorrhiza_or_regen_methods
+      ].filter(Boolean).length;
 
       if (habitatLayers >= 3) badges.push('Habitat Builder');
       if (i.flowering_succession && i.pollinator_support) badges.push('Pollinator Garden');
@@ -255,7 +295,12 @@
       const recommendations = [];
       if (!i.canopy_present) recommendations.push({ action: 'Add a canopy tree', points: 3 });
       if (!i.rainwater_use) recommendations.push({ action: 'Add rainwater capture or reuse', points: 2 });
-      if ((i.indigenous_percent || 0) < 70) recommendations.push({ action: 'Increase indigenous planting to 70%+', points: (i.indigenous_percent || 0) >= 50 ? 3 : 5 });
+      if ((i.indigenous_percent || 0) < 70) {
+        recommendations.push({
+          action: 'Increase indigenous planting to 70%+',
+          points: (i.indigenous_percent || 0) >= 50 ? 3 : 5
+        });
+      }
       if (!i.pond_or_wet_area) recommendations.push({ action: 'Add a pond or wet habitat', points: 2 });
       if (!i.monitoring_photos_uploaded) recommendations.push({ action: 'Upload monitoring photos', points: 2 });
 
@@ -308,8 +353,8 @@
               <span class="font-medium">${category.label}</span>
               <span>${category.score} / ${category.max}</span>
             </div>
-            <div class="h-2 w-full bg-regSoft">
-              <div class="metric-bar-fill h-2 bg-regGreen" style="width:${width}"></div>
+            <div class="h-2 w-full bg-regSoft dark:bg-regBeige/15">
+              <div class="metric-bar-fill h-2 bg-regGreen dark:bg-regBeige" style="width:${width}"></div>
             </div>
           </div>
         `;
@@ -317,24 +362,30 @@
 
       const badgeList = document.getElementById('badgeList');
       badgeList.innerHTML = result.badges.map(badge => `
-        <span class="border border-regLine bg-regSoft px-3 py-2 text-sm">
+        <span class="border border-regLine bg-regSoft px-3 py-2 text-sm dark:border-regDarkLine dark:bg-regGreen">
           ${badge}
         </span>
       `).join('');
 
       const recommendationList = document.getElementById('recommendationList');
       recommendationList.innerHTML = result.recommendations.slice(0, 4).map(item => `
-        <div class="border border-regLine p-4">
+        <div class="border border-regLine p-4 dark:border-regDarkLine">
           <div class="flex items-start justify-between gap-4">
             <div>
               <p class="text-sm font-medium">${item.action}</p>
-              <p class="mt-1 text-xs uppercase tracking-[0.18em] text-regGreen/65">Potential gain</p>
+              <p class="mt-1 text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">Potential gain</p>
             </div>
             <div class="font-serif text-2xl leading-none">+${item.points}</div>
           </div>
         </div>
       `).join('');
     }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('reg-theme', isDark ? 'dark' : 'light');
+    });
 
     renderScorePanel(gardenRecord);
   </script>
