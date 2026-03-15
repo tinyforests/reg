@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REG Score Panel UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            regGreen: '#3d4535',
+            regBeige: '#fff0dc',
+            regLine: '#d7ccb9',
+            regSoft: '#f7ead6'
+          },
+          fontFamily: {
+            serif: ['Abril Fatface', 'serif'],
+            sans: ['IBM Plex Sans', 'sans-serif']
+          },
+          boxShadow: {
+            card: '0 18px 50px rgba(32, 33, 28, 0.08)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .metric-bar-fill {
+      transition: width 700ms ease;
+    }
+  </style>
+</head>
+<body class="bg-regBeige text-regGreen font-sans antialiased">
+  <main class="min-h-screen px-6 py-10 md:px-10 lg:px-16">
+    <section class="mx-auto max-w-6xl">
+      <div class="mb-8 border-b border-regLine pb-6">
+        <p class="mb-3 text-xs uppercase tracking-[0.28em]">Ecological Registry</p>
+        <h1 class="font-serif text-4xl leading-none md:text-6xl">Score Panel</h1>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <section class="border border-regLine bg-white shadow-card">
+          <div class="border-b border-regLine px-6 py-5 md:px-8 md:py-6">
+            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p class="mb-2 text-xs uppercase tracking-[0.28em]">Registered Garden</p>
+                <h2 id="gardenName" class="font-serif text-3xl leading-none md:text-5xl">Arundel</h2>
+                <p id="gardenMeta" class="mt-3 text-sm text-regGreen/75">Surrey Hills · Assessed 15 March 2026 · Score v1</p>
+              </div>
+              <div class="border border-regLine bg-regSoft px-4 py-3 text-left md:min-w-[210px]">
+                <p class="text-xs uppercase tracking-[0.28em]">Verification</p>
+                <p id="verificationLabel" class="mt-2 text-lg font-medium">Gardener &amp; Son Verified</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="border-b border-regLine px-6 py-6 lg:border-b-0 lg:border-r md:px-8 md:py-8">
+              <p class="text-xs uppercase tracking-[0.28em]">Current Ecological Score</p>
+              <div class="mt-4 flex items-end gap-3">
+                <div id="scoreValue" class="font-serif text-7xl leading-none md:text-8xl">84</div>
+                <div class="pb-2 text-lg">/ 100</div>
+              </div>
+              <div class="mt-5 h-px w-full bg-regLine"></div>
+              <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.22em]">Level</p>
+                  <p id="scoreLevel" class="mt-2 text-lg font-medium">High Habitat Garden</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-[0.22em]">Badges</p>
+                  <p id="badgeCount" class="mt-2 text-lg font-medium">6 unlocked</p>
+                </div>
+              </div>
+              <div class="mt-6 border border-regLine bg-regSoft p-4">
+                <p class="text-xs uppercase tracking-[0.22em]">Progress note</p>
+                <p id="progressNote" class="mt-2 text-sm leading-relaxed text-regGreen/85">
+                  This garden is functioning as a strong stepping-stone habitat with layered planting, soil regeneration, and network value.
+                </p>
+              </div>
+            </div>
+
+            <div class="px-6 py-6 md:px-8 md:py-8">
+              <div class="flex items-center justify-between">
+                <h3 class="font-serif text-2xl">Category Breakdown</h3>
+                <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70">Live from inputs</p>
+              </div>
+              <div id="categoryList" class="mt-6 space-y-5"></div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="space-y-6">
+          <section class="border border-regLine bg-white px-6 py-6 shadow-card md:px-8">
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="font-serif text-2xl">Badges</h3>
+              <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70">Identity layer</p>
+            </div>
+            <div id="badgeList" class="mt-5 flex flex-wrap gap-3"></div>
+          </section>
+
+          <section class="border border-regLine bg-white px-6 py-6 shadow-card md:px-8">
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="font-serif text-2xl">Next Upgrades</h3>
+              <p class="text-xs uppercase tracking-[0.22em] text-regGreen/70">Fastest gains</p>
+            </div>
+            <div id="recommendationList" class="mt-5 space-y-3"></div>
+          </section>
+
+          <section class="border border-regLine bg-regGreen px-6 py-6 text-regBeige shadow-card md:px-8">
+            <p class="text-xs uppercase tracking-[0.24em] text-regBeige/70">Why this matters</p>
+            <p class="mt-3 font-serif text-2xl leading-tight">A score turns ecology into something visible, improvable, and culturally legible.</p>
+            <p class="mt-4 text-sm leading-relaxed text-regBeige/85">
+              This garden can now be understood not only as a private landscape, but as a measurable ecological asset within a wider urban network.
+            </p>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const gardenRecord = {
+      garden_id: 'ER-VIC-SH-ARU-0001',
+      garden_name: 'Arundel',
+      suburb: 'Surrey Hills',
+      verification_level: 'gardener_and_son_verified',
+      assessment_date: '15 March 2026',
+      score_version: 'v1',
+      inputs: {
+        ground_layer_present: true,
+        shrub_layer_present: true,
+        subcanopy_present: true,
+        canopy_present: true,
+        habitat_logs: true,
+        rocks: true,
+        pond: false,
+        mulch_present: true,
+        species_count: 34,
+        flowering_succession: true,
+        mixed_growth_forms: true,
+        indigenous_percent: 62,
+        permeable_surfaces: true,
+        rainwater_use: false,
+        swale_or_infiltration: true,
+        pond_or_wet_area: false,
+        passive_irrigation: true,
+        organic_matter_or_mulch: true,
+        no_synthetic_chemicals: true,
+        compost_or_bioinputs: true,
+        soil_improvement_works: true,
+        mycorrhiza_or_regen_methods: true,
+        near_park_or_remnant: true,
+        visible_native_planting_to_street: true,
+        pollinator_support: true,
+        bird_habitat: true,
+        registered_in_network: true,
+        registered_garden: true,
+        annual_update_complete: true,
+        field_report_complete: true,
+        habitat_additions_recorded: true,
+        monitoring_photos_uploaded: true
+      }
+    };
+
+    function scoreEcologicalRegistry(record) {
+      const i = record.inputs || {};
+
+      const habitatStructure =
+        (i.ground_layer_present ? 3 : 0) +
+        (i.shrub_layer_present ? 3 : 0) +
+        (i.subcanopy_present ? 3 : 0) +
+        (i.canopy_present ? 3 : 0) +
+        ((i.habitat_logs || i.rocks || i.pond || i.mulch_present) ? 3 : 0);
+
+      const plantDiversity =
+        ((i.species_count || 0) >= 10 ? 3 : 0) +
+        ((i.species_count || 0) >= 20 ? 3 : 0) +
+        ((i.species_count || 0) >= 40 ? 3 : 0) +
+        (i.flowering_succession ? 3 : 0) +
+        (i.mixed_growth_forms ? 3 : 0);
+
+      let indigenousPercent = 0;
+      if ((i.indigenous_percent || 0) >= 70) indigenousPercent = 10;
+      else if ((i.indigenous_percent || 0) >= 50) indigenousPercent = 7;
+      else if ((i.indigenous_percent || 0) >= 30) indigenousPercent = 5;
+      else if ((i.indigenous_percent || 0) >= 10) indigenousPercent = 3;
+
+      const waterHydrology =
+        (i.permeable_surfaces ? 2 : 0) +
+        (i.rainwater_use ? 2 : 0) +
+        (i.swale_or_infiltration ? 2 : 0) +
+        (i.pond_or_wet_area ? 2 : 0) +
+        (i.passive_irrigation ? 2 : 0);
+
+      const soilRegeneration =
+        (i.organic_matter_or_mulch ? 2 : 0) +
+        (i.no_synthetic_chemicals ? 2 : 0) +
+        (i.compost_or_bioinputs ? 2 : 0) +
+        (i.soil_improvement_works ? 2 : 0) +
+        (i.mycorrhiza_or_regen_methods ? 2 : 0);
+
+      const connectivity =
+        (i.near_park_or_remnant ? 3 : 0) +
+        (i.visible_native_planting_to_street ? 3 : 0) +
+        (i.pollinator_support ? 3 : 0) +
+        (i.bird_habitat ? 3 : 0) +
+        (i.registered_in_network ? 3 : 0);
+
+      const stewardshipActions =
+        (i.registered_garden ? 2 : 0) +
+        (i.annual_update_complete ? 2 : 0) +
+        (i.field_report_complete ? 2 : 0) +
+        (i.habitat_additions_recorded ? 2 : 0) +
+        (i.monitoring_photos_uploaded ? 2 : 0);
+
+      const verificationMap = {
+        self_registered: { score: 5, label: 'Self Registered' },
+        photo_verified: { score: 8, label: 'Photo Verified' },
+        site_visit: { score: 12, label: 'Site Visit Verified' },
+        gardener_and_son_verified: { score: 15, label: 'Gardener & Son Verified' }
+      };
+
+      const verificationData = verificationMap[record.verification_level] || { score: 0, label: 'Unverified' };
+      const verification = verificationData.score;
+
+      const total = habitatStructure + plantDiversity + indigenousPercent + waterHydrology + soilRegeneration + connectivity + stewardshipActions + verification;
+
+      let level = 'Basic Garden';
+      if (total >= 91) level = 'Urban Biodiversity Node';
+      else if (total >= 81) level = 'High Habitat Garden';
+      else if (total >= 61) level = 'Registered Ecological Garden';
+      else if (total >= 41) level = 'Ecological Garden';
+      else if (total >= 21) level = 'Habitat Garden';
+
+      const badges = [];
+      const habitatLayers = [i.ground_layer_present, i.shrub_layer_present, i.subcanopy_present, i.canopy_present].filter(Boolean).length;
+      const soilCount = [i.organic_matter_or_mulch, i.no_synthetic_chemicals, i.compost_or_bioinputs, i.soil_improvement_works, i.mycorrhiza_or_regen_methods].filter(Boolean).length;
+
+      if (habitatLayers >= 3) badges.push('Habitat Builder');
+      if (i.flowering_succession && i.pollinator_support) badges.push('Pollinator Garden');
+      if (i.canopy_present) badges.push('Canopy Restorer');
+      if (i.permeable_surfaces && (i.swale_or_infiltration || i.pond_or_wet_area || i.passive_irrigation)) badges.push('Water Sensitive');
+      if ((i.indigenous_percent || 0) >= 70) badges.push('Indigenous 70+');
+      if (soilCount >= 4) badges.push('Soil Regenerator');
+      if (i.near_park_or_remnant && i.pollinator_support && i.bird_habitat && i.registered_in_network) badges.push('Stepping Stone Garden');
+      if (['site_visit', 'gardener_and_son_verified'].includes(record.verification_level)) badges.push('Verified Garden');
+      if (total >= 80) badges.push('Wildlife Node');
+
+      const recommendations = [];
+      if (!i.canopy_present) recommendations.push({ action: 'Add a canopy tree', points: 3 });
+      if (!i.rainwater_use) recommendations.push({ action: 'Add rainwater capture or reuse', points: 2 });
+      if ((i.indigenous_percent || 0) < 70) recommendations.push({ action: 'Increase indigenous planting to 70%+', points: (i.indigenous_percent || 0) >= 50 ? 3 : 5 });
+      if (!i.pond_or_wet_area) recommendations.push({ action: 'Add a pond or wet habitat', points: 2 });
+      if (!i.monitoring_photos_uploaded) recommendations.push({ action: 'Upload monitoring photos', points: 2 });
+
+      recommendations.sort((a, b) => b.points - a.points);
+
+      return {
+        total,
+        level,
+        verificationLabel: verificationData.label,
+        categories: [
+          { label: 'Habitat Structure', score: habitatStructure, max: 15 },
+          { label: 'Plant Diversity', score: plantDiversity, max: 15 },
+          { label: 'Indigenous %', score: indigenousPercent, max: 10 },
+          { label: 'Water & Hydrology', score: waterHydrology, max: 10 },
+          { label: 'Soil & Regeneration', score: soilRegeneration, max: 10 },
+          { label: 'Connectivity', score: connectivity, max: 15 },
+          { label: 'Stewardship Actions', score: stewardshipActions, max: 10 },
+          { label: 'Verification', score: verification, max: 15 }
+        ],
+        badges,
+        recommendations
+      };
+    }
+
+    function renderScorePanel(record) {
+      const result = scoreEcologicalRegistry(record);
+
+      document.getElementById('gardenName').textContent = record.garden_name;
+      document.getElementById('gardenMeta').textContent = `${record.suburb} · Assessed ${record.assessment_date} · Score ${record.score_version}`;
+      document.getElementById('verificationLabel').textContent = result.verificationLabel;
+      document.getElementById('scoreValue').textContent = result.total;
+      document.getElementById('scoreLevel').textContent = result.level;
+      document.getElementById('badgeCount').textContent = `${result.badges.length} unlocked`;
+
+      const progressNote = document.getElementById('progressNote');
+      if (result.total >= 81) {
+        progressNote.textContent = 'This garden is operating as a high-functioning ecological landscape with strong habitat layering, verified stewardship, and clear network value.';
+      } else if (result.total >= 61) {
+        progressNote.textContent = 'This garden is now clearly legible as a registered ecological asset, with further gains available through water systems and species uplift.';
+      } else {
+        progressNote.textContent = 'This garden has meaningful ecological foundations and can be strengthened further through additional habitat layers, verification, and stewardship actions.';
+      }
+
+      const categoryList = document.getElementById('categoryList');
+      categoryList.innerHTML = result.categories.map(category => {
+        const width = `${(category.score / category.max) * 100}%`;
+        return `
+          <div>
+            <div class="mb-2 flex items-center justify-between gap-4 text-sm">
+              <span class="font-medium">${category.label}</span>
+              <span>${category.score} / ${category.max}</span>
+            </div>
+            <div class="h-2 w-full bg-regSoft">
+              <div class="metric-bar-fill h-2 bg-regGreen" style="width:${width}"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const badgeList = document.getElementById('badgeList');
+      badgeList.innerHTML = result.badges.map(badge => `
+        <span class="border border-regLine bg-regSoft px-3 py-2 text-sm">
+          ${badge}
+        </span>
+      `).join('');
+
+      const recommendationList = document.getElementById('recommendationList');
+      recommendationList.innerHTML = result.recommendations.slice(0, 4).map(item => `
+        <div class="border border-regLine p-4">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-sm font-medium">${item.action}</p>
+              <p class="mt-1 text-xs uppercase tracking-[0.18em] text-regGreen/65">Potential gain</p>
+            </div>
+            <div class="font-serif text-2xl leading-none">+${item.points}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    renderScorePanel(gardenRecord);
+  </script>
+</body>
+</html>
