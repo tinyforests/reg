@@ -1,308 +1,138 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry — Field Note #005</title>
+function scoreEcologicalRegistry(record) {
+  const i = record.inputs || {};
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  const habitatStructure =
+    (i.ground_layer_present ? 3 : 0) +
+    (i.shrub_layer_present ? 3 : 0) +
+    (i.subcanopy_present ? 3 : 0) +
+    (i.canopy_present ? 3 : 0) +
+    ((i.habitat_logs || i.rocks || i.pond || i.mulch_present) ? 3 : 0);
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Abril Fatface"', "serif"],
-            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
-          },
-          colors: {
-            gsGreen: "#3d4535",
-            gsBeige: "#fff0dc",
-            gsInk: "#2f3529",
-            gsMist: "rgba(61,69,53,0.08)",
-            gsLine: "rgba(61,69,53,0.18)"
-          }
-        }
-      }
-    }
-  </script>
+  const plantDiversity =
+    ((i.species_count || 0) >= 10 ? 3 : 0) +
+    ((i.species_count || 0) >= 20 ? 3 : 0) +
+    ((i.species_count || 0) >= 40 ? 3 : 0) +
+    (i.flowering_succession ? 3 : 0) +
+    (i.mixed_growth_forms ? 3 : 0);
 
-  <style>
-    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; border-radius: 0 !important; }
-    body { font-family: "IBM Plex Sans", sans-serif; }
-    h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
+  let indigenousPercent = 0;
+  if ((i.indigenous_percent || 0) >= 70) indigenousPercent = 10;
+  else if ((i.indigenous_percent || 0) >= 50) indigenousPercent = 7;
+  else if ((i.indigenous_percent || 0) >= 30) indigenousPercent = 5;
+  else if ((i.indigenous_percent || 0) >= 10) indigenousPercent = 3;
 
-    :root{
-      --bg: #3d4535;
-      --fg: #fff0dc;
-      --muted: rgba(255,240,220,.78);
-      --hair: rgba(255,240,220,.10);
-      --wash: rgba(255,240,220,.06);
-      --navh: 80px;
-    }
+  const waterHydrology =
+    (i.permeable_surfaces ? 2 : 0) +
+    (i.rainwater_use ? 2 : 0) +
+    (i.swale_or_infiltration ? 2 : 0) +
+    (i.pond_or_wet_area ? 2 : 0) +
+    (i.passive_irrigation ? 2 : 0);
 
-    html.light{
-      --bg: #fff0dc;
-      --fg: #3d4535;
-      --muted: rgba(61,69,53,.72);
-      --hair: rgba(61,69,53,.10);
-      --wash: rgba(61,69,53,.05);
-    }
+  const soilRegeneration =
+    (i.organic_matter_or_mulch ? 2 : 0) +
+    (i.no_synthetic_chemicals ? 2 : 0) +
+    (i.compost_or_bioinputs ? 2 : 0) +
+    (i.soil_improvement_works ? 2 : 0) +
+    (i.mycorrhiza_or_regen_methods ? 2 : 0);
 
-    body{
-      background: var(--bg);
-      color: var(--fg);
-      transition: background-color 0.25s ease, color 0.25s ease;
-    }
+  const connectivity =
+    (i.near_park_or_remnant ? 3 : 0) +
+    (i.visible_native_planting_to_street ? 3 : 0) +
+    (i.pollinator_support ? 3 : 0) +
+    (i.bird_habitat ? 3 : 0) +
+    (i.registered_in_network ? 3 : 0);
 
-    .muted{ color: var(--muted); }
-    .wash{ background: var(--wash); }
+  const stewardshipActions =
+    (i.registered_garden ? 2 : 0) +
+    (i.annual_update_complete ? 2 : 0) +
+    (i.field_report_complete ? 2 : 0) +
+    (i.habitat_additions_recorded ? 2 : 0) +
+    (i.monitoring_photos_uploaded ? 2 : 0);
 
-    .hairline { border-color: var(--hair); }
-    .chip { border: 1px solid var(--hair); }
-    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px var(--hair); }
+  const verificationMap = {
+    self_registered: { score: 5, label: 'Self Registered' },
+    photo_verified: { score: 8, label: 'Photo Verified' },
+    site_visit: { score: 12, label: 'Site Visit Verified' },
+    gardener_and_son_verified: { score: 15, label: 'Gardener & Son Verified' }
+  };
 
-    .nav-border { border-bottom: 1px solid var(--hair); }
+  const verificationData =
+    verificationMap[record.verification_level] || { score: 0, label: 'Unverified' };
 
-    .border-subtle { border-color: var(--hair); }
-    .border-subtle-strong { border-color: var(--hair); }
-    .bg-subtle { background: var(--wash); }
+  const verification = verificationData.score;
 
-    .btn-border { border: 1px solid var(--hair); }
-    .btn-border:hover {
-      background: var(--fg);
-      color: var(--bg);
-      border-color: var(--fg);
-    }
+  const total =
+    habitatStructure +
+    plantDiversity +
+    indigenousPercent +
+    waterHydrology +
+    soilRegeneration +
+    connectivity +
+    stewardshipActions +
+    verification;
 
-    :focus-visible { outline: 2px solid rgba(255,240,220,0.55); outline-offset: 3px; }
-    html.light :focus-visible { outline: 2px solid rgba(61,69,53,0.55); }
+  let level = 'Basic Garden';
+  if (total >= 91) level = 'Urban Biodiversity Node';
+  else if (total >= 81) level = 'High Habitat Garden';
+  else if (total >= 61) level = 'Registered Ecological Garden';
+  else if (total >= 41) level = 'Ecological Garden';
+  else if (total >= 21) level = 'Habitat Garden';
 
-    .card-hover { transition: all 0.2s ease; }
-    .card-hover:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-    }
-    html.light .card-hover:hover { box-shadow: 0 4px 12px rgba(61,69,53,0.08); }
+  const badges = [];
+  const habitatLayers = [
+    i.ground_layer_present,
+    i.shrub_layer_present,
+    i.subcanopy_present,
+    i.canopy_present
+  ].filter(Boolean).length;
 
-    .gs-badge {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 50;
-      background: var(--bg);
-      border: 1px solid var(--hair);
-      padding: 8px 12px;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.65;
-      transition: all 0.2s ease;
-      color: var(--fg);
-      text-decoration: none;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-      line-height: 1.2;
-    }
-    .gs-badge:hover { opacity: 1; }
+  const soilCount = [
+    i.organic_matter_or_mulch,
+    i.no_synthetic_chemicals,
+    i.compost_or_bioinputs,
+    i.soil_improvement_works,
+    i.mycorrhiza_or_regen_methods
+  ].filter(Boolean).length;
 
-    .theme-toggle {
-      position: fixed;
-      bottom: 24px;
-      left: 24px;
-      z-index: 50;
-      background: var(--bg);
-      border: 1px solid var(--hair);
-      padding: 8px 12px;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.65;
-      transition: all 0.2s ease;
-      color: var(--fg);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-      line-height: 1.2;
-    }
-    .theme-toggle:hover { opacity: 1; }
+  if (habitatLayers >= 3) badges.push('Habitat Builder');
+  if (i.flowering_succession && i.pollinator_support) badges.push('Pollinator Garden');
+  if (i.canopy_present) badges.push('Canopy Restorer');
+  if (i.permeable_surfaces && (i.swale_or_infiltration || i.pond_or_wet_area || i.passive_irrigation)) badges.push('Water Sensitive');
+  if ((i.indigenous_percent || 0) >= 70) badges.push('Indigenous 70+');
+  if (soilCount >= 4) badges.push('Soil Regenerator');
+  if (i.near_park_or_remnant && i.pollinator_support && i.bird_habitat && i.registered_in_network) badges.push('Stepping Stone Garden');
+  if (['site_visit', 'gardener_and_son_verified'].includes(record.verification_level)) badges.push('Verified Garden');
+  if (total >= 80) badges.push('Wildlife Node');
 
-    @media (max-width: 768px) {
-      .gs-badge {
-        bottom: 16px;
-        right: 16px;
-        font-size: 9px;
-        padding: 6px 10px;
-      }
-      .theme-toggle {
-        bottom: 16px;
-        left: 16px;
-        font-size: 9px;
-        padding: 6px 10px;
-      }
-      :root{ --navh: 120px; }
-    }
-  </style>
-</head>
+  const recommendations = [];
+  if (!i.canopy_present) recommendations.push({ action: 'Add a canopy tree', points: 3 });
+  if (!i.rainwater_use) recommendations.push({ action: 'Add rainwater capture or reuse', points: 2 });
+  if ((i.indigenous_percent || 0) < 70) {
+    recommendations.push({
+      action: 'Increase indigenous planting to 70%+',
+      points: (i.indigenous_percent || 0) >= 50 ? 3 : 5
+    });
+  }
+  if (!i.pond_or_wet_area) recommendations.push({ action: 'Add a pond or wet habitat', points: 2 });
+  if (!i.monitoring_photos_uploaded) recommendations.push({ action: 'Upload monitoring photos', points: 2 });
 
-<body>
-  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer" aria-label="Powered by Gardener & Son">
-    Powered by<br/>Gardener & Son
-  </a>
+  recommendations.sort((a, b) => b.points - a.points);
 
-  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-    Light
-  </button>
-
-  <header class="sticky top-0 z-40 backdrop-blur nav-border" style="background: var(--bg);">
-    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <a href="../../../index.html" class="w-9 h-9 bg-gsBeige text-gsGreen grid place-items-center font-semibold hover:opacity-90 transition-opacity" aria-label="Back to home">ER</a>
-        <div class="leading-tight">
-          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
-          <div class="text-xs opacity-80">Field Note</div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <a href="all.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle focus-ring">← Back to Field Notes</a>
-        <a href="../index.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle focus-ring">Arundel Profile</a>
-      </div>
-    </div>
-  </header>
-
-  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8">
-        <div class="border border-subtle-strong bg-subtle p-5 md:p-7">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h1 class="font-serif text-3xl md:text-4xl leading-tight">Field Note #005</h1>
-              <div class="mt-2 text-sm opacity-85"><span class="font-medium">Arundel</span> • Surrey Hills, VIC</div>
-
-              <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
-                <span class="chip px-2.5 py-1 bg-transparent">Swales</span>
-                <span class="chip px-2.5 py-1 bg-transparent">Water habitat</span>
-                <span class="chip px-2.5 py-1 bg-transparent">Infiltration</span>
-                <span class="chip px-2.5 py-1 bg-transparent">Amphibians</span>
-              </div>
-
-              <h2 class="mt-5 text-lg font-semibold">Excavation for swales and water habitat</h2>
-              <p class="mt-2 text-sm leading-relaxed opacity-90">
-                Swales and/or shallow basins excavated and formed to slow runoff, increase infiltration,
-                and create seasonal water habitat potential within the garden matrix.
-              </p>
-            </div>
-
-            <div class="shrink-0 text-right">
-              <div class="inline-flex flex-col items-end gap-2">
-                <span class="chip px-3 py-1.5 text-xs bg-transparent">Draft</span>
-                <div class="text-xs opacity-80">Date: <span class="font-medium">TBD</span></div>
-                <div class="text-xs opacity-80">Observer: <span class="font-medium">Gardener &amp; Son</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-            <div class="chip p-3">
-              <div class="text-xs opacity-70">Design principle</div>
-              <div class="font-medium">Seasonal water, not permanent pond</div>
-            </div>
-            <div class="chip p-3">
-              <div class="text-xs opacity-70">Risk control</div>
-              <div class="font-medium">No mosquito traps</div>
-              <div class="text-xs opacity-70 mt-1">Shallow, drains / infiltrates</div>
-            </div>
-            <div class="chip p-3">
-              <div class="text-xs opacity-70">Habitat intent</div>
-              <div class="font-medium">Moisture refuge + breeding potential</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6 border border-subtle-strong bg-subtle p-5 md:p-7">
-          <h3 class="text-lg font-semibold">Observation</h3>
-          <p class="mt-3 text-sm leading-relaxed opacity-90">
-            (Describe the swales: length, depth, position on contour, overflow direction, where water enters/exits.)
-          </p>
-
-          <h3 class="mt-6 text-lg font-semibold">Why this matters</h3>
-          <ul class="mt-3 space-y-2 text-sm opacity-90">
-            <li>• Swales convert episodic runoff into stored soil moisture.</li>
-            <li>• Seasonal wetting supports fungi, invertebrates, and amphibian refuge.</li>
-            <li>• Habitat diversity increases when wet/dry cycles are designed (not accidental).</li>
-          </ul>
-
-          <h3 class="mt-6 text-lg font-semibold">Verification plan</h3>
-          <ul class="mt-3 space-y-2 text-sm opacity-90">
-            <li>• Photograph during rain event (inflow, pooling, overflow).</li>
-            <li>• Record infiltration time (hours to drain).</li>
-            <li>• Note any amphibian activity after rainfall.</li>
-          </ul>
-
-          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-            This report becomes “verified” when a rainfall behaviour photo-set is attached.
-          </div>
-        </div>
-      </div>
-
-      <aside class="lg:col-span-4 space-y-6">
-        <div class="border border-subtle-strong bg-subtle p-5">
-          <div class="text-sm font-semibold">Badge Impact</div>
-          <div class="mt-4 space-y-3 text-sm">
-            <div class="chip p-4 opacity-80">
-              <div class="font-medium">🌧 Water Sensitive Site</div>
-              <div class="text-xs opacity-70 mt-1">Likely awarded once verified by rainfall behaviour</div>
-            </div>
-            <div class="chip p-4 opacity-80">
-              <div class="font-medium">🐸 Amphibian Active</div>
-              <div class="text-xs opacity-70 mt-1">Strengthened (adds habitat mechanism)</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="border border-subtle-strong bg-subtle p-5">
-          <div class="text-sm font-semibold">Score Impacts (placeholders)</div>
-          <div class="mt-4 space-y-3 text-sm">
-            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Water Function</span><span class="chip px-2 py-1 text-xs bg-transparent">+4</span></div>
-            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Habitat Complexity</span><span class="chip px-2 py-1 text-xs bg-transparent">+2</span></div>
-            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Soil Biology &amp; Health</span><span class="chip px-2 py-1 text-xs bg-transparent">+1</span></div>
-          </div>
-        </div>
-      </aside>
-    </section>
-  </main>
-
-  <script>
-    const root = document.documentElement;
-    const btn = document.getElementById("theme-toggle");
-
-    function setMode(mode){
-      if(mode === "light"){
-        root.classList.add("light");
-        btn.textContent = "Dark";
-        localStorage.setItem("reg_mode", "light");
-      } else {
-        root.classList.remove("light");
-        btn.textContent = "Light";
-        localStorage.setItem("reg_mode", "dark");
-      }
-    }
-
-    const saved = localStorage.getItem("reg_mode");
-    if(saved === "light"){
-      setMode("light");
-    } else {
-      setMode("dark");
-    }
-
-    btn.onclick = () => {
-      if(root.classList.contains("light")){
-        setMode("dark");
-      } else {
-        setMode("light");
-      }
-    };
-  </script>
-</body>
-</html>
+  return {
+    total,
+    level,
+    verificationLabel: verificationData.label,
+    categories: [
+      { label: 'Habitat Structure', score: habitatStructure, max: 15 },
+      { label: 'Plant Diversity', score: plantDiversity, max: 15 },
+      { label: 'Indigenous %', score: indigenousPercent, max: 10 },
+      { label: 'Water & Hydrology', score: waterHydrology, max: 10 },
+      { label: 'Soil & Regeneration', score: soilRegeneration, max: 10 },
+      { label: 'Connectivity', score: connectivity, max: 15 },
+      { label: 'Stewardship Actions', score: stewardshipActions, max: 10 },
+      { label: 'Verification', score: verification, max: 15 }
+    ],
+    badges,
+    recommendations
+  };
+}
