@@ -170,6 +170,11 @@
       document.documentElement.classList.add("dark");
     }
 
+    function getGardenFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("garden") || "arundel";
+    }
+
     function renderScorePanel(record) {
       const result = scoreEcologicalRegistry(record);
 
@@ -232,7 +237,9 @@
 
     async function loadGardenRecord() {
       try {
-        const response = await fetch("data/arundel.json");
+        const gardenName = getGardenFromURL();
+        const response = await fetch(`data/${gardenName}.json`);
+
         if (!response.ok) {
           throw new Error("Could not load garden data");
         }
@@ -243,7 +250,7 @@
         console.error(error);
         document.getElementById("gardenName").textContent = "Unable to load score";
         document.getElementById("gardenMeta").textContent =
-          "Check data/arundel.json and js/reg-score.js paths.";
+          "Check data file name or URL parameter.";
         document.getElementById("progressNote").textContent =
           "The score panel could not load the assessment data.";
         document.getElementById("categoryList").innerHTML = "";
