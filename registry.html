@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry</title>
+  <meta
+    name="description"
+    content="The Ecological Registry is a growing index of registered gardens, ecological scores, field reports, and measurable urban habitat assets."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            regGreen: "#3d4535",
+            regBeige: "#fff0dc",
+            regLine: "#d7ccb9",
+            regSoft: "#f7ead6",
+            regDarkPanel: "#485141",
+            regDarkLine: "rgba(255,240,220,0.18)"
+          },
+          fontFamily: {
+            serif: ["Abril Fatface", "serif"],
+            sans: ["IBM Plex Sans", "sans-serif"]
+          },
+          boxShadow: {
+            card: "0 18px 50px rgba(32, 33, 28, 0.08)"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
+  <main class="min-h-screen px-6 py-10 md:px-10 lg:px-16">
+    <section class="mx-auto max-w-7xl">
+      <header class="border-b border-regLine pb-8 dark:border-regDarkLine">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div class="max-w-3xl">
+            <p class="mb-3 text-xs uppercase tracking-[0.28em]">Ecological Registry</p>
+            <h1 class="font-serif text-4xl leading-none md:text-6xl">
+              Registered Gardens
+            </h1>
+            <p class="mt-5 max-w-2xl text-sm leading-relaxed text-regGreen/80 dark:text-regBeige/80 md:text-base">
+              A growing registry of private gardens being re-understood as ecological assets:
+              measurable, mappable, and capable of contributing to urban biodiversity infrastructure.
+            </p>
+          </div>
+
+          <button
+            id="themeToggle"
+            type="button"
+            class="inline-flex items-center justify-center border border-regLine px-4 py-2 text-xs uppercase tracking-[0.22em] transition hover:opacity-80 dark:border-regDarkLine"
+          >
+            Toggle light / dark
+          </button>
+        </div>
+      </header>
+
+      <section class="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+        <div class="border border-regLine bg-regGreen px-6 py-6 text-regBeige shadow-card dark:border-regDarkLine md:px-8">
+          <p class="text-xs uppercase tracking-[0.24em] text-regBeige/70">Registry logic</p>
+          <p class="mt-3 font-serif text-2xl leading-tight">
+            Gardens can now be recorded, scored, verified, and understood as part of a wider urban ecological network.
+          </p>
+          <div class="mt-6 space-y-4 text-sm leading-relaxed text-regBeige/85">
+            <p>Each listing links to a score profile with assessment data, badges, and upgrade opportunities.</p>
+            <p>This creates a new cultural and technical layer between private stewardship and public ecological value.</p>
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="border border-regLine bg-white px-5 py-5 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
+            <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">Current focus</p>
+            <p class="mt-3 font-serif text-3xl" id="gardenCount">--</p>
+            <p class="mt-2 text-sm">Registered gardens in the live index</p>
+          </div>
+
+          <div class="border border-regLine bg-white px-5 py-5 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
+            <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">System layer</p>
+            <p class="mt-3 font-serif text-3xl">Score</p>
+            <p class="mt-2 text-sm">Visible ecological assessment and verification</p>
+          </div>
+
+          <div class="border border-regLine bg-white px-5 py-5 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
+            <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">Next stage</p>
+            <p class="mt-3 font-serif text-3xl">Network</p>
+            <p class="mt-2 text-sm">Connected gardens across suburbs and remnant edges</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-10">
+        <div class="mb-5 flex items-end justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.24em]">Live registry index</p>
+            <h2 class="mt-2 font-serif text-3xl md:text-4xl">Gardens</h2>
+          </div>
+          <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">
+            Click any garden to view score
+          </p>
+        </div>
+
+        <div id="gardenGrid" class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div class="border border-regLine bg-white p-6 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
+            Loading gardens...
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="js/reg-score.js"></script>
+  <script>
+    const savedTheme = localStorage.getItem("reg-theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+
+    function verificationLabel(level) {
+      const map = {
+        self_registered: "Self Registered",
+        photo_verified: "Photo Verified",
+        site_visit: "Site Visit Verified",
+        gardener_and_son_verified: "Gardener & Son Verified"
+      };
+      return map[level] || "Unverified";
+    }
+
+    function badgeTone(level) {
+      if (level === "gardener_and_son_verified") return "Gardener & Son Verified";
+      if (level === "site_visit") return "Site Visit Verified";
+      if (level === "photo_verified") return "Photo Verified";
+      return "Self Registered";
+    }
+
+    async function loadRegistryIndex() {
+      try {
+        const [gardensResponse, arundelResponse, nicholsonResponse] = await Promise.all([
+          fetch("data/gardens.json"),
+          fetch("data/arundel.json").catch(() => null),
+          fetch("data/nicholson.json").catch(() => null)
+        ]);
+
+        if (!gardensResponse.ok) {
+          throw new Error("Could not load gardens index");
+        }
+
+        const gardens = await gardensResponse.json();
+        document.getElementById("gardenCount").textContent = gardens.length;
+
+        const scoreMap = {};
+
+        if (arundelResponse && arundelResponse.ok) {
+          const record = await arundelResponse.json();
+          scoreMap["arundel"] = scoreEcologicalRegistry(record);
+        }
+
+        if (nicholsonResponse && nicholsonResponse.ok) {
+          const record = await nicholsonResponse.json();
+          scoreMap["nicholson"] = scoreEcologicalRegistry(record);
+        }
+
+        const grid = document.getElementById("gardenGrid");
+        grid.innerHTML = gardens.map(garden => {
+          const scoreData = scoreMap[garden.slug];
+          const scoreValue = scoreData ? scoreData.total : "—";
+          const scoreLevel = scoreData ? scoreData.level : "Assessment pending";
+
+          return `
+            <a
+              href="score.html?garden=${garden.slug}"
+              class="group border border-regLine bg-white p-6 text-regGreen shadow-card transition hover:-translate-y-1 hover:shadow-xl dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige"
+            >
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">${garden.garden_id}</p>
+                  <h3 class="mt-3 font-serif text-3xl leading-none">${garden.garden_name}</h3>
+                  <p class="mt-3 text-sm text-regGreen/75 dark:text-regBeige/75">${garden.suburb}</p>
+                </div>
+
+                <div class="border border-regLine bg-regSoft px-3 py-2 text-xs uppercase tracking-[0.18em] dark:border-regDarkLine dark:bg-regGreen">
+                  ${garden.status}
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-2 gap-4 border-t border-regLine pt-5 dark:border-regDarkLine">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">Score</p>
+                  <p class="mt-2 font-serif text-4xl leading-none">${scoreValue}</p>
+                </div>
+                <div>
+                  <p class="text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">Verification</p>
+                  <p class="mt-2 text-sm leading-snug">${badgeTone(garden.verification_level)}</p>
+                </div>
+              </div>
+
+              <p class="mt-5 text-sm leading-relaxed text-regGreen/80 dark:text-regBeige/80">
+                ${garden.summary}
+              </p>
+
+              <div class="mt-6 flex items-center justify-between border-t border-regLine pt-4 dark:border-regDarkLine">
+                <p class="text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">${scoreLevel}</p>
+                <p class="text-sm font-medium group-hover:underline">View score</p>
+              </div>
+            </a>
+          `;
+        }).join("");
+      } catch (error) {
+        console.error(error);
+        document.getElementById("gardenGrid").innerHTML = `
+          <div class="border border-regLine bg-white p-6 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
+            Unable to load registry index. Check <code>data/gardens.json</code> and garden data files.
+          </div>
+        `;
+      }
+    }
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("reg-theme", isDark ? "dark" : "light");
+    });
+
+    loadRegistryIndex();
+  </script>
+</body>
+</html>
