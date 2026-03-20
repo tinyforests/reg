@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -8,12 +7,10 @@
 
   <meta name="description" content="Ecological Registry profile for Arundel — score, badges, field notes, and trajectory." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,8 +21,8 @@
             sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
           },
           colors: {
-            gsGreen: "#3d4535",        // Gardener Green (canonical)
-            gsBeige: "#fff0dc",        // Nostalgic Beige (canonical)
+            gsGreen: "#3d4535",
+            gsBeige: "#fff0dc",
             gsInk: "#10221B",
             gsMist: "rgba(61,69,53,0.10)",
             gsLine: "rgba(61,69,53,0.18)"
@@ -36,18 +33,14 @@
   </script>
 
   <style>
-    /* clean cards, tight meta, subtle separators */
     .hairline { border-color: rgba(61,69,53,0.18); }
     .chip { border: 1px solid rgba(61,69,53,0.18); }
     .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(61,69,53,0.18); }
-
-    /* No rounded edges anywhere */
     * { border-radius: 0 !important; }
   </style>
 </head>
 
 <body class="bg-gsBeige text-gsInk font-sans">
-  <!-- Top bar -->
   <header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-[260px]">
@@ -55,9 +48,9 @@
         <div class="leading-tight">
           <div class="text-sm font-medium tracking-wide text-gsGreen">Ecological Registry</div>
           <div class="text-xs opacity-80">
-            Arundel • Profile
+            <span id="topGardenName">Arundel</span> • Profile
             <span class="opacity-40">•</span>
-            <span class="font-medium">ER-VIC-SH-ARU-0001</span>
+            <span id="topGardenId" class="font-medium">ER-VIC-SH-ARU-0001</span>
           </div>
         </div>
       </div>
@@ -72,7 +65,7 @@
 
       <div class="flex items-center gap-2">
         <div class="hidden lg:block text-xs opacity-70 text-right mr-2">
-          <div>Last verified: <span class="font-medium">18 Feb 2026</span></div>
+          <div>Last verified: <span id="headerLastVerified" class="font-medium">15 March 2026</span></div>
           <div>Status: <span class="font-medium">Active / Developing</span></div>
         </div>
 
@@ -85,18 +78,16 @@
       </div>
     </div>
 
-    <!-- Registry Status Strip (under header) -->
     <div class="border-t hairline">
       <div class="mx-auto max-w-6xl px-4 py-2 text-xs flex flex-wrap items-center gap-2">
         <span class="chip px-2.5 py-1 bg-gsBeige">Status: <span class="font-medium">Active / Developing</span></span>
         <span class="chip px-2.5 py-1 bg-gsBeige">Visibility: <span class="font-medium">Public (address masked)</span></span>
-        <span class="chip px-2.5 py-1 bg-gsBeige">Verification: <span class="font-medium">Site visit + dated notes</span></span>
-        <span class="chip px-2.5 py-1 bg-gsBeige">Last verified: <span class="font-medium">18 Feb 2026</span></span>
+        <span class="chip px-2.5 py-1 bg-gsBeige">Verification: <span id="stripVerification" class="font-medium">Loading...</span></span>
+        <span class="chip px-2.5 py-1 bg-gsBeige">Last verified: <span id="stripLastVerified" class="font-medium">Loading...</span></span>
         <span class="chip px-2.5 py-1 bg-gsBeige">Next review: <span class="font-medium">Aug 2026</span></span>
 
         <span class="opacity-40">•</span>
 
-        <!-- Keep actions here (not duplicated elsewhere) -->
         <button class="chip px-2.5 py-1 hover:bg-gsMist focus-ring" title="Placeholder action">
           Download snapshot (PDF)
         </button>
@@ -107,45 +98,17 @@
     </div>
   </header>
 
-  <!-- Content -->
   <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
-    <!-- =========================
-      MANUAL PROFILE DATA (edit these)
-      In future, this becomes dynamic.
-    ========================== -->
-    <section class="hidden" aria-hidden="true">
-      <!--
-      PROFILE DATA (MANUAL):
-      Name: Arundel
-      Suburb: Surrey Hills, VIC
-      Steward(s): Andrew & Elizabeth
-      Studio: Gardener & Son
-      Primary EVC: Grassy Woodland (EVC 175)
-      Status: Active / Developing
-      Score: 68
-      Rating label: Strong
-      Badges: Amphibian Active, Habitat Builder, Indigenous Dominant, Corridor Node
-      Registry ID: ER-VIC-SH-ARU-0001
-      Last verified: 18 Feb 2026
-      Next review: Aug 2026
-      Visibility: Public (address masked)
-      Verification: Site visit + dated notes
-      -->
-    </section>
-
-    <!-- Hero / Venue card -->
     <section id="overview" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <!-- Left: main card -->
       <div class="lg:col-span-8">
         <div class="bg-gsBeige border hairline p-5 md:p-7">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Arundel</h1>
+              <h1 id="heroGardenName" class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Arundel</h1>
 
-              <!-- Hero chips (DEDUPED: removed Active/Developing because it's in the status strip) -->
               <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
                 <span class="chip px-2.5 py-1 bg-gsBeige">Ecological Forest Garden</span>
-                <span class="chip px-2.5 py-1 bg-gsBeige">Surrey Hills, VIC</span>
+                <span id="heroSuburb" class="chip px-2.5 py-1 bg-gsBeige">Surrey Hills, VIC</span>
               </div>
 
               <div class="mt-4 text-sm leading-relaxed opacity-90">
@@ -153,7 +116,6 @@
                 soil reactivation, and reciprocal connectivity with adjacent green space.
               </div>
 
-              <!-- Quick meta row (DEDUPED: removed Registered date because status strip already gives verification timeline) -->
               <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                 <div class="chip p-3">
                   <div class="text-xs opacity-70">Primary EVC</div>
@@ -169,31 +131,28 @@
                 </div>
                 <div class="chip p-3">
                   <div class="text-xs opacity-70">Registry ID</div>
-                  <div class="font-medium">ER-VIC-SH-ARU-0001</div>
+                  <div id="heroGardenId" class="font-medium">ER-VIC-SH-ARU-0001</div>
                 </div>
               </div>
             </div>
 
-            <!-- Right: Score chip (kept for theatre; NOT repeated in the status strip) -->
             <div class="shrink-0 text-right">
               <div class="inline-flex flex-col items-end gap-2">
                 <div class="w-20 h-20 bg-gsGreen text-gsBeige grid place-items-center">
-                  <div class="text-3xl font-semibold leading-none">68</div>
+                  <div id="heroScore" class="text-3xl font-semibold leading-none">--</div>
                 </div>
                 <div class="text-sm font-medium text-gsGreen">Ecological Function</div>
-                <div class="text-xs opacity-80">Rating: <span class="font-medium">Strong</span></div>
+                <div class="text-xs opacity-80">Rating: <span id="heroLevel" class="font-medium">Loading...</span></div>
               </div>
             </div>
           </div>
 
-          <!-- Mini action row (DEDUPED: removed Download + Share, kept Follow + Map) -->
           <div class="mt-6 flex flex-wrap gap-2">
             <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">Follow Garden</button>
             <button class="chip px-3 py-2 text-sm hover:bg-gsMist focus-ring">View Map</button>
           </div>
         </div>
 
-        <!-- Notes feed -->
         <div class="mt-6 bg-gsBeige border hairline p-5 md:p-7">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-semibold text-gsGreen">Recent Notes</h2>
@@ -232,9 +191,7 @@
         </div>
       </div>
 
-      <!-- Right column -->
       <aside class="lg:col-span-4 space-y-6">
-        <!-- Map placeholder -->
         <div class="bg-gsBeige border hairline overflow-hidden">
           <div class="p-4 flex items-center justify-between">
             <div class="text-sm font-semibold text-gsGreen">Site Map</div>
@@ -248,7 +205,6 @@
           </div>
         </div>
 
-        <!-- Quick facts -->
         <div class="bg-gsBeige border hairline p-5">
           <div class="text-sm font-semibold text-gsGreen">Quick Facts</div>
           <dl class="mt-4 space-y-3 text-sm">
@@ -271,7 +227,6 @@
           </dl>
         </div>
 
-        <!-- Callout -->
         <div class="bg-gsGreen text-gsBeige p-5">
           <div class="text-sm font-semibold">Corridor Node Potential</div>
           <p class="mt-2 text-sm opacity-90 leading-relaxed">
@@ -290,87 +245,36 @@
       </aside>
     </section>
 
-    <!-- Score -->
     <section id="score" class="mt-10">
       <div class="flex items-end justify-between gap-4">
         <h2 class="text-2xl font-semibold text-gsGreen">Score</h2>
-        <div class="text-xs opacity-70">Pillars are stable • weighting adjustable later</div>
+        <div class="text-xs opacity-70">Live from registry inputs</div>
       </div>
 
       <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div class="lg:col-span-8 bg-gsBeige border hairline p-5 md:p-7">
           <div class="flex items-center justify-between">
             <div class="text-sm font-semibold text-gsGreen">Ecological Function Score</div>
-            <div class="chip px-2.5 py-1 text-xs">v1.0</div>
+            <div id="scoreVersion" class="chip px-2.5 py-1 text-xs">v1</div>
           </div>
 
           <div class="mt-5">
             <div class="flex items-center justify-between text-sm">
               <span class="opacity-80">Overall</span>
-              <span class="font-medium">68%</span>
+              <span id="overallPercentLabel" class="font-medium">--%</span>
             </div>
             <div class="mt-2 h-3 bg-gsMist overflow-hidden">
-              <div class="h-full bg-gsGreen" style="width:68%"></div>
+              <div id="overallPercentBar" class="h-full bg-gsGreen" style="width:0%"></div>
             </div>
-            <div class="mt-2 text-xs opacity-70">
-              Interpretation: strong functioning structure with clear headroom for water + soil consolidation.
-            </div>
-          </div>
-
-          <div class="mt-6 space-y-4">
-            <div>
-              <div class="flex items-center justify-between text-sm">
-                <span>Biodiversity Structure <span class="text-xs opacity-70">(30%)</span></span>
-                <span class="font-medium">72%</span>
-              </div>
-              <div class="mt-2 h-2.5 bg-gsMist overflow-hidden">
-                <div class="h-full bg-gsGreen" style="width:72%"></div>
-              </div>
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between text-sm">
-                <span>Soil Biology &amp; Health <span class="text-xs opacity-70">(20%)</span></span>
-                <span class="font-medium">64%</span>
-              </div>
-              <div class="mt-2 h-2.5 bg-gsMist overflow-hidden">
-                <div class="h-full bg-gsGreen" style="width:64%"></div>
-              </div>
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between text-sm">
-                <span>Water Function <span class="text-xs opacity-70">(20%)</span></span>
-                <span class="font-medium">62%</span>
-              </div>
-              <div class="mt-2 h-2.5 bg-gsMist overflow-hidden">
-                <div class="h-full bg-gsGreen" style="width:62%"></div>
-              </div>
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between text-sm">
-                <span>Habitat Complexity <span class="text-xs opacity-70">(20%)</span></span>
-                <span class="font-medium">70%</span>
-              </div>
-              <div class="mt-2 h-2.5 bg-gsMist overflow-hidden">
-                <div class="h-full bg-gsGreen" style="width:70%"></div>
-              </div>
-            </div>
-
-            <div>
-              <div class="flex items-center justify-between text-sm">
-                <span>Connectivity <span class="text-xs opacity-70">(10%)</span></span>
-                <span class="font-medium">78%</span>
-              </div>
-              <div class="mt-2 h-2.5 bg-gsMist overflow-hidden">
-                <div class="h-full bg-gsGreen" style="width:78%"></div>
-              </div>
+            <div id="overallInterpretation" class="mt-2 text-xs opacity-70">
+              Loading score interpretation...
             </div>
           </div>
+
+          <div id="liveCategoryList" class="mt-6 space-y-4"></div>
 
           <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-          Future: each pillar expands into sub-metrics + evidence links (photos, transects, soil tests, field notes).
+            Each score category is generated from registry inputs and can later be linked directly to evidence, dated notes, and media.
           </div>
         </div>
 
@@ -384,7 +288,7 @@
               </li>
               <li class="flex items-start justify-between gap-4">
                 <span class="opacity-75">Current</span>
-                <span class="font-medium">68%</span>
+                <span id="snapshotCurrent" class="font-medium">--%</span>
               </li>
               <li class="flex items-start justify-between gap-4">
                 <span class="opacity-75">Target (3 yrs)</span>
@@ -407,52 +311,39 @@
       </div>
     </section>
 
-    <!-- Badges -->
     <section id="badges" class="mt-10">
       <div class="flex items-end justify-between gap-4">
         <h2 class="text-2xl font-semibold text-gsGreen">Badges</h2>
-        <div class="text-xs opacity-70">Signals, not vibes • each has thresholds</div>
+        <div class="text-xs opacity-70">Signals, not vibes • generated from registry rules</div>
       </div>
 
       <div class="mt-4 bg-gsBeige border hairline p-5 md:p-7">
-        <div class="flex flex-wrap gap-2">
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🐸 Amphibian Active</span>
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🪵 Habitat Builder</span>
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🌾 Indigenous Dominant</span>
-          <span class="chip px-3 py-2 text-sm bg-gsBeige">🌳 Corridor Node</span>
-
-          <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🌧 Water Sensitive Site (pending)</span>
-          <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🍂 Soil Regenerating (pending)</span>
-          <span class="chip px-3 py-2 text-sm opacity-60 bg-gsBeige">🌼 Pollinator Supportive (pending)</span>
-        </div>
+        <div id="liveBadgeList" class="flex flex-wrap gap-2"></div>
 
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="chip p-4">
-            <div class="text-sm font-semibold text-gsGreen">🐸 Amphibian Active</div>
-            <div class="text-xs opacity-70 mt-1">Threshold: verified presence + refuge structure</div>
+            <div class="text-sm font-semibold text-gsGreen">Registry Badge Logic</div>
+            <div class="text-xs opacity-70 mt-1">Threshold based</div>
             <p class="mt-2 text-sm opacity-90 leading-relaxed">
-              Awarded when amphibian presence is verified (photo + date) and habitat readiness is demonstrated
-              (friable soil refuge, moisture gradient, cover).
+              Badges are awarded when ecological thresholds are met through measurable inputs such as habitat layers, canopy presence, connectivity, hydrology, and verification level.
             </p>
           </div>
 
           <div class="chip p-4">
-            <div class="text-sm font-semibold text-gsGreen">🌳 Corridor Node</div>
-            <div class="text-xs opacity-70 mt-1">Threshold: proximity + functional habitat</div>
+            <div class="text-sm font-semibold text-gsGreen">Verification Status</div>
+            <div class="text-xs opacity-70 mt-1">Current level</div>
             <p class="mt-2 text-sm opacity-90 leading-relaxed">
-              Awarded when site lies within a set distance to green space and contains layered habitat capable of
-              supporting movement and refuge, not merely ornamental planting.
+              <span id="badgeVerificationText">Loading...</span>
             </p>
           </div>
         </div>
 
         <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-          Future: badges become filterable + comparable across suburbs to reveal emerging corridors.
+          Future: badges become filterable and comparable across suburbs to reveal emerging corridors and ecological clusters.
         </div>
       </div>
     </section>
 
-    <!-- Field Notes -->
     <section id="reports" class="mt-10">
       <div class="flex items-end justify-between gap-4">
         <h2 class="text-2xl font-semibold text-gsGreen">Field Notes</h2>
@@ -544,7 +435,6 @@
       </div>
     </section>
 
-    <!-- Trajectory -->
     <section id="trajectory" class="mt-10">
       <div class="flex items-end justify-between gap-4">
         <h2 class="text-2xl font-semibold text-gsGreen">Trajectory</h2>
@@ -573,20 +463,7 @@
 
           <div class="lg:col-span-5">
             <div class="text-sm font-semibold text-gsGreen">Next Upgrades</div>
-            <div class="mt-4 space-y-3 text-sm">
-              <div class="chip p-4">
-                <div class="font-medium">🌧 Water Sensitive Site</div>
-                <div class="text-xs opacity-70 mt-1">Add one shallow seasonal basin + verify infiltration</div>
-              </div>
-              <div class="chip p-4">
-                <div class="font-medium">🍂 Soil Regenerating</div>
-                <div class="text-xs opacity-70 mt-1">Define mulch depth zones + log soil biology interventions</div>
-              </div>
-              <div class="chip p-4">
-                <div class="font-medium">🌼 Pollinator Supportive</div>
-                <div class="text-xs opacity-70 mt-1">Ensure flowering coverage across seasons + strata</div>
-              </div>
-            </div>
+            <div id="liveRecommendationList" class="mt-4 space-y-3 text-sm"></div>
           </div>
         </div>
 
@@ -596,7 +473,6 @@
       </div>
     </section>
 
-    <!-- Footer -->
     <footer class="mt-12 pb-10 text-xs opacity-70">
       <div class="border-t hairline pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         <div>© Ecological Registry — Gardener &amp; Son • ecologicalregistry.org</div>
@@ -610,5 +486,132 @@
       </div>
     </footer>
   </main>
+
+  <script src="../../js/reg-score.js"></script>
+  <script>
+    function ratingLabelFromScore(score) {
+      if (score >= 91) return "Urban Biodiversity Node";
+      if (score >= 81) return "High Habitat Garden";
+      if (score >= 61) return "Registered Ecological Garden";
+      if (score >= 41) return "Ecological Garden";
+      if (score >= 21) return "Habitat Garden";
+      return "Basic Garden";
+    }
+
+    function interpretationFromScore(score) {
+      if (score >= 81) {
+        return "Interpretation: high-functioning ecological structure with strong habitat layering, stewardship, and network value.";
+      }
+      if (score >= 61) {
+        return "Interpretation: strong functioning structure with clear headroom for further hydrology, canopy, and indigenous uplift.";
+      }
+      if (score >= 41) {
+        return "Interpretation: meaningful ecological foundations are present, with clear opportunity for strengthening and verification.";
+      }
+      return "Interpretation: early ecological structure is emerging and can be strengthened through further inputs and habitat actions.";
+    }
+
+    function renderCategoryBars(categories) {
+      const target = document.getElementById("liveCategoryList");
+      target.innerHTML = categories.map(category => {
+        const percent = (category.score / category.max) * 100;
+        return `
+          <div>
+            <div class="flex items-center justify-between text-sm">
+              <span>${category.label} <span class="text-xs opacity-70">(${category.max} pts)</span></span>
+              <span class="font-medium">${category.score} / ${category.max}</span>
+            </div>
+            <div class="mt-2 h-2.5 bg-gsMist overflow-hidden">
+              <div class="h-full bg-gsGreen" style="width:${percent}%"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderBadges(badges) {
+      const target = document.getElementById("liveBadgeList");
+      if (!badges.length) {
+        target.innerHTML = `<span class="chip px-3 py-2 text-sm bg-gsBeige opacity-70">No badges yet</span>`;
+        return;
+      }
+
+      target.innerHTML = badges.map(badge => `
+        <span class="chip px-3 py-2 text-sm bg-gsBeige">${badge}</span>
+      `).join("");
+    }
+
+    function renderRecommendations(recommendations) {
+      const target = document.getElementById("liveRecommendationList");
+      if (!recommendations.length) {
+        target.innerHTML = `
+          <div class="chip p-4">
+            <div class="font-medium">No immediate upgrades</div>
+            <div class="text-xs opacity-70 mt-1">Current inputs are already covering the main available gains.</div>
+          </div>
+        `;
+        return;
+      }
+
+      target.innerHTML = recommendations.slice(0, 4).map(item => `
+        <div class="chip p-4">
+          <div class="font-medium">${item.action}</div>
+          <div class="text-xs opacity-70 mt-1">Potential gain: +${item.points}</div>
+        </div>
+      `).join("");
+    }
+
+    async function loadProfileScore() {
+      try {
+        const response = await fetch("../../data/arundel.json");
+        if (!response.ok) {
+          throw new Error("Could not load Arundel data");
+        }
+
+        const record = await response.json();
+        const result = scoreEcologicalRegistry(record);
+
+        document.title = `Ecological Registry — ${record.garden_name}`;
+        document.getElementById("topGardenName").textContent = record.garden_name;
+        document.getElementById("topGardenId").textContent = record.garden_id;
+        document.getElementById("headerLastVerified").textContent = record.assessment_date;
+        document.getElementById("stripLastVerified").textContent = record.assessment_date;
+        document.getElementById("stripVerification").textContent = result.verificationLabel;
+
+        document.getElementById("heroGardenName").textContent = record.garden_name;
+        document.getElementById("heroSuburb").textContent = `${record.suburb}, VIC`;
+        document.getElementById("heroGardenId").textContent = record.garden_id;
+
+        document.getElementById("heroScore").textContent = result.total;
+        document.getElementById("heroLevel").textContent = ratingLabelFromScore(result.total);
+
+        document.getElementById("scoreVersion").textContent = record.score_version || "v1";
+        document.getElementById("overallPercentLabel").textContent = `${result.total}%`;
+        document.getElementById("overallPercentBar").style.width = `${result.total}%`;
+        document.getElementById("overallInterpretation").textContent = interpretationFromScore(result.total);
+        document.getElementById("snapshotCurrent").textContent = `${result.total}%`;
+
+        document.getElementById("badgeVerificationText").textContent =
+          `Current verification level: ${result.verificationLabel}. This level contributes directly to the live registry score and badge status.`;
+
+        renderCategoryBars(result.categories);
+        renderBadges(result.badges);
+        renderRecommendations(result.recommendations);
+
+      } catch (error) {
+        console.error(error);
+
+        document.getElementById("heroScore").textContent = "--";
+        document.getElementById("heroLevel").textContent = "Unavailable";
+        document.getElementById("overallPercentLabel").textContent = "Unavailable";
+        document.getElementById("overallInterpretation").textContent = "The live registry score could not be loaded. Check the JSON file path and scoring engine.";
+        document.getElementById("liveCategoryList").innerHTML = "";
+        document.getElementById("liveBadgeList").innerHTML = `<span class="chip px-3 py-2 text-sm bg-gsBeige">Unable to load badges</span>`;
+        document.getElementById("liveRecommendationList").innerHTML = `<div class="chip p-4">Unable to load recommendations</div>`;
+      }
+    }
+
+    loadProfileScore();
+  </script>
 </body>
 </html>
