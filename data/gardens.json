@@ -1,0 +1,24 @@
+[
+  {
+    "slug": "arundel",
+    "garden_id": "REG-VIC-SH-001",
+    "garden_name": "Arundel",
+    "suburb": "Surrey Hills",
+    "status": "Registered",
+    "verification_level": "gardener_and_son_verified",
+    "summary": "Ecological forest garden backing onto South Surrey Park with layered habitat planting, regenerative works, and field reporting.",
+    "profile_url": "gardens/REG-VIC-SH-001/",
+    "field_notes_url": "gardens/REG-VIC-SH-001/field-notes/"
+  },
+  {
+    "slug": "nicholson",
+    "garden_id": "REG-VIC-SY-001",
+    "garden_name": "Nicholson",
+    "suburb": "South Yarra",
+    "status": "Field Reports Active",
+    "verification_level": "gardener_and_son_verified",
+    "summary": "Urban ecological garden with field reports, regeneration work, and measured habitat uplift.",
+    "profile_url": "gardens/REG-VIC-SY-001/",
+    "field_notes_url": "gardens/REG-VIC-SY-001/field-notes/"
+  }
+]
