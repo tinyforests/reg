@@ -1,57 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ecological Registry — Field Note #005</title>
+  <meta name="description" content="Ecological Registry field note for Arundel — excavation for swales and water habitat." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        fontFamily: {
-          serif: ['"Abril Fatface"', "serif"],
-          sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
-        },
-        colors: {
-          gsGreen: "#3d4535",
-          gsBeige: "#fff0dc",
-          gsInk: "#2f3529",
-          gsMist: "rgba(61,69,53,0.08)",
-          gsLine: "rgba(61,69,53,0.18)"
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+          },
+          colors: {
+            regGreen: "#3d4535",
+            regBeige: "#fff0dc",
+            regLine: "#d7ccb9",
+            regSoft: "#f7ead6",
+            regDarkPanel: "#485141",
+            regDarkLine: "rgba(255,240,220,0.18)"
+          },
+          boxShadow: {
+            card: "0 18px 50px rgba(32, 33, 28, 0.08)"
+          }
         }
       }
-    }
-  }
-</script>
-
+    };
+  </script>
 
   <style>
-    .hairline { border-color: rgba(14,59,46,0.18); }
-    .chip { border: 1px solid rgba(14,59,46,0.18); }
-    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,59,46,0.18); }
+    * { border-radius: 0 !important; }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,240,220,0.16); }
   </style>
 </head>
 
-<body class="bg-gsBeige text-gsInk font-sans">
-  <header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
+<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
+  <header class="sticky top-0 z-40 border-b border-regLine bg-regBeige/90 backdrop-blur dark:border-regDarkLine dark:bg-regGreen/90">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="../../../index.html" class="w-9 h-9 rounded-xl bg-gsGreen text-gsBeige grid place-items-center font-semibold hover:opacity-90 transition-opacity" aria-label="Back to home">ER</a>
+        <a href="../../../index.html" class="grid h-9 w-9 place-items-center bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen font-semibold hover:opacity-90 transition-opacity" aria-label="Back to home">ER</a>
         <div class="leading-tight">
-          <div class="text-sm font-medium tracking-wide text-gsGreen">Ecological Registry</div>
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
           <div class="text-xs opacity-80">Field Note</div>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <a href="all.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">← Back to Field Notes</a>
-        <a href="../index.html" class="chip px-3 py-1.5 rounded-lg text-sm hover:bg-gsMist focus-ring">Arundel Profile</a>
+        <a href="index.html" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-sm hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">← Back to Field Notes</a>
+        <a href="../index.html" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-sm hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Arundel Profile</a>
+        <button id="themeToggle" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-sm hover:opacity-80 focus-ring">
+          Toggle light / dark
+        </button>
       </div>
     </div>
   </header>
@@ -59,20 +66,20 @@
   <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="lg:col-span-8">
-        <div class="bg-gsBeige border hairline rounded-2xl p-5 md:p-7">
+        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <h1 class="font-serif text-3xl md:text-4xl text-gsGreen leading-tight">Field Note #005</h1>
+              <h1 class="font-serif text-3xl md:text-4xl leading-tight">Field Note #005</h1>
               <div class="mt-2 text-sm opacity-85"><span class="font-medium">Arundel</span> • Surrey Hills, VIC</div>
 
               <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
-                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Swales</span>
-                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Water habitat</span>
-                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Infiltration</span>
-                <span class="chip px-2.5 py-1 rounded-full bg-gsBeige">Amphibians</span>
+                <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Swales</span>
+                <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Water habitat</span>
+                <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Infiltration</span>
+                <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Amphibians</span>
               </div>
 
-              <h2 class="mt-5 text-lg font-semibold text-gsGreen">Excavation for swales and water habitat</h2>
+              <h2 class="mt-5 text-lg font-semibold">Excavation for swales and water habitat</h2>
               <p class="mt-2 text-sm leading-relaxed opacity-90">
                 Swales and/or shallow basins excavated and formed to slow runoff, increase infiltration,
                 and create seasonal water habitat potential within the garden matrix.
@@ -81,7 +88,7 @@
 
             <div class="shrink-0 text-right">
               <div class="inline-flex flex-col items-end gap-2">
-                <span class="chip px-3 py-1.5 rounded-full text-xs bg-gsBeige">Draft</span>
+                <span class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-xs bg-regSoft dark:bg-regGreen">Draft</span>
                 <div class="text-xs opacity-80">Date: <span class="font-medium">TBD</span></div>
                 <div class="text-xs opacity-80">Observer: <span class="font-medium">Gardener &amp; Son</span></div>
               </div>
@@ -89,73 +96,97 @@
           </div>
 
           <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-            <div class="chip rounded-xl p-3">
+            <div class="border border-regLine dark:border-regDarkLine p-3">
               <div class="text-xs opacity-70">Design principle</div>
               <div class="font-medium">Seasonal water, not permanent pond</div>
             </div>
-            <div class="chip rounded-xl p-3">
+            <div class="border border-regLine dark:border-regDarkLine p-3">
               <div class="text-xs opacity-70">Risk control</div>
               <div class="font-medium">No mosquito traps</div>
               <div class="text-xs opacity-70 mt-1">Shallow, drains / infiltrates</div>
             </div>
-            <div class="chip rounded-xl p-3">
+            <div class="border border-regLine dark:border-regDarkLine p-3">
               <div class="text-xs opacity-70">Habitat intent</div>
               <div class="font-medium">Moisture refuge + breeding potential</div>
             </div>
           </div>
         </div>
 
-        <div class="mt-6 bg-gsBeige border hairline rounded-2xl p-5 md:p-7">
-          <h3 class="text-lg font-semibold text-gsGreen">Observation</h3>
+        <div class="mt-6 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+          <h3 class="text-lg font-semibold">Observation</h3>
           <p class="mt-3 text-sm leading-relaxed opacity-90">
-            (Describe the swales: length, depth, position on contour, overflow direction, where water enters/exits.)
+            Describe the swales: length, depth, position on contour, overflow direction, and where water enters and exits.
           </p>
 
-          <h3 class="mt-6 text-lg font-semibold text-gsGreen">Why this matters</h3>
+          <h3 class="mt-6 text-lg font-semibold">Why this matters</h3>
           <ul class="mt-3 space-y-2 text-sm opacity-90">
             <li>• Swales convert episodic runoff into stored soil moisture.</li>
             <li>• Seasonal wetting supports fungi, invertebrates, and amphibian refuge.</li>
-            <li>• Habitat diversity increases when wet/dry cycles are designed (not accidental).</li>
+            <li>• Habitat diversity increases when wet/dry cycles are designed, not accidental.</li>
           </ul>
 
-          <h3 class="mt-6 text-lg font-semibold text-gsGreen">Verification plan</h3>
+          <h3 class="mt-6 text-lg font-semibold">Verification plan</h3>
           <ul class="mt-3 space-y-2 text-sm opacity-90">
-            <li>• Photograph during rain event (inflow, pooling, overflow).</li>
-            <li>• Record infiltration time (hours to drain).</li>
+            <li>• Photograph during a rain event, including inflow, pooling, and overflow.</li>
+            <li>• Record infiltration time in hours until the basin drains.</li>
             <li>• Note any amphibian activity after rainfall.</li>
           </ul>
 
-          <div class="mt-6 pt-5 border-t hairline text-xs opacity-75 leading-relaxed">
-            This report becomes “verified” when a rainfall behaviour photo-set is attached.
+          <div class="mt-6 pt-5 border-t border-regLine dark:border-regDarkLine text-xs opacity-75 leading-relaxed">
+            This report becomes “verified” when a rainfall behaviour photo set is attached.
           </div>
         </div>
       </div>
 
       <aside class="lg:col-span-4 space-y-6">
-        <div class="bg-gsBeige border hairline rounded-2xl p-5">
-          <div class="text-sm font-semibold text-gsGreen">Badge Impact</div>
+        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+          <div class="text-sm font-semibold">Badge Impact</div>
           <div class="mt-4 space-y-3 text-sm">
-            <div class="chip rounded-2xl p-4 opacity-80">
+            <div class="border border-regLine dark:border-regDarkLine p-4 opacity-80">
               <div class="font-medium">🌧 Water Sensitive Site</div>
               <div class="text-xs opacity-70 mt-1">Likely awarded once verified by rainfall behaviour</div>
             </div>
-            <div class="chip rounded-2xl p-4 opacity-80">
+            <div class="border border-regLine dark:border-regDarkLine p-4 opacity-80">
               <div class="font-medium">🐸 Amphibian Active</div>
-              <div class="text-xs opacity-70 mt-1">Strengthened (adds habitat mechanism)</div>
+              <div class="text-xs opacity-70 mt-1">Strengthened by adding habitat mechanism</div>
             </div>
           </div>
         </div>
 
-        <div class="bg-gsBeige border hairline rounded-2xl p-5">
-          <div class="text-sm font-semibold text-gsGreen">Score Impacts (placeholders)</div>
+        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+          <div class="text-sm font-semibold">Score Impacts (placeholders)</div>
           <div class="mt-4 space-y-3 text-sm">
-            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Water Function</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+4</span></div>
-            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Habitat Complexity</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+2</span></div>
-            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Soil Biology &amp; Health</span><span class="chip px-2 py-1 rounded-full text-xs bg-gsBeige">+1</span></div>
+            <div class="flex items-center justify-between gap-4">
+              <span class="opacity-80">Water Function</span>
+              <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">+4</span>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <span class="opacity-80">Habitat Complexity</span>
+              <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">+2</span>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <span class="opacity-80">Soil Biology &amp; Health</span>
+              <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">+1</span>
+            </div>
           </div>
         </div>
       </aside>
     </section>
   </main>
+
+  <script>
+    const savedTheme = localStorage.getItem("reg-theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("reg-theme", isDark ? "dark" : "light");
+    });
+  </script>
 </body>
 </html>
