@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry — Nicholson — Field Report #001</title>
+  <title>Ecological Registry — Nicholson</title>
+  <meta name="description" content="Ecological Registry profile for Nicholson — score, badges, field reports, and trajectory." />
 
-  <meta name="description" content="Ecological Registry field report for Nicholson — Installation commenced (baseline capture, impermeable surface removal, base layer establishment, stepper repositioning)." />
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: "class",
       theme: {
         extend: {
           fontFamily: {
@@ -23,189 +21,608 @@
             sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
           },
           colors: {
-            gsGreen: "#3d4535",
-            gsBeige: "#fff0dc",
-            gsInk: "#10221B",
-            gsMist: "rgba(61,69,53,0.10)",
-            gsLine: "rgba(61,69,53,0.18)"
+            regGreen: "#3d4535",
+            regBeige: "#fff0dc",
+            regLine: "#d7ccb9",
+            regSoft: "#f7ead6",
+            regDarkPanel: "#485141",
+            regDarkLine: "rgba(255,240,220,0.18)"
+          },
+          boxShadow: {
+            card: "0 18px 50px rgba(32, 33, 28, 0.08)"
           }
         }
       }
-    }
+    };
   </script>
 
   <style>
-    .hairline { border-color: rgba(61,69,53,0.18); }
-    .chip { border: 1px solid rgba(61,69,53,0.18); }
-    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(61,69,53,0.18); }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace; }
-
-    /* Registry rule: no rounded edges */
     * { border-radius: 0 !important; }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,240,220,0.16); }
+    .metric-bar-fill { transition: width 700ms ease; }
   </style>
 </head>
 
-<body class="bg-gsBeige text-gsInk font-sans">
+<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
+  <header class="sticky top-0 z-40 border-b border-regLine bg-regBeige/90 backdrop-blur dark:border-regDarkLine dark:bg-regGreen/90">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-[260px]">
+        <div class="grid h-9 w-9 place-items-center bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen font-semibold">ER</div>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-80">
+            <span id="topGardenName">Nicholson</span> • Profile
+            <span class="opacity-40">•</span>
+            <span id="topGardenId" class="font-medium">ER-VIC-SY-NIC-0002</span>
+          </div>
+        </div>
+      </div>
 
-<header class="sticky top-0 z-40 bg-gsBeige/90 backdrop-blur border-b hairline">
-  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 bg-gsGreen text-gsBeige grid place-items-center font-semibold">ER</div>
-      <div>
-        <div class="text-sm font-medium text-gsGreen">Ecological Registry</div>
-        <div class="text-xs opacity-80">Field Report • Nicholson</div>
+      <nav class="hidden md:flex items-center gap-2 text-sm">
+        <a href="#overview" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Overview</a>
+        <a href="#score" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Score</a>
+        <a href="#badges" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Badges</a>
+        <a href="#reports" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Field Reports</a>
+        <a href="#trajectory" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Trajectory</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <div class="hidden lg:block text-xs opacity-70 text-right mr-2">
+          <div>Last verified: <span id="headerLastVerified" class="font-medium">15 March 2026</span></div>
+          <div>Status: <span id="headerStatus" class="font-medium">Field Reports Active</span></div>
+        </div>
+
+        <button id="themeToggle" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-sm hover:opacity-80 focus-ring">
+          Toggle light / dark
+        </button>
       </div>
     </div>
 
-    <div class="flex gap-2">
-      <a href="nicholson-reports.html" class="chip px-3 py-1.5 text-sm hover:bg-gsMist">← Back to Reports</a>
-      <a href="nicholson.html" class="chip px-3 py-1.5 text-sm hover:bg-gsMist">Nicholson Profile</a>
+    <div class="border-t border-regLine dark:border-regDarkLine">
+      <div class="mx-auto max-w-6xl px-4 py-2 text-xs flex flex-wrap items-center gap-2">
+        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Status: <span id="stripStatus" class="font-medium">Field Reports Active</span></span>
+        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Visibility: <span id="stripVisibility" class="font-medium">Public (address masked)</span></span>
+        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Verification: <span id="stripVerification" class="font-medium">Loading...</span></span>
+        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Last verified: <span id="stripLastVerified" class="font-medium">Loading...</span></span>
+        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Next review: <span id="stripNextReview" class="font-medium">Aug 2026</span></span>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+    <section id="overview" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8">
+        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1 id="heroGardenName" class="font-serif text-3xl md:text-4xl leading-tight">Nicholson</h1>
 
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-<div class="lg:col-span-8">
+              <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span id="heroType" class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Urban Ecological Retrofit</span>
+                <span id="heroSuburb" class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">South Yarra, VIC</span>
+              </div>
 
-<div class="bg-gsBeige border hairline p-6">
-  <h1 class="font-serif text-3xl text-gsGreen">Report #001</h1>
-  <div class="mt-2 text-sm opacity-85">
-    <strong>Nicholson</strong> • South Yarra, VIC • 23 Feb 2026
-  </div>
+              <div id="heroDescription" class="mt-4 text-sm leading-relaxed opacity-90">
+                A new registered installation focused on measurable uplift: compact-site habitat layering, soil reactivation, water-wise function, and repeatable documentation from day one.
+              </div>
 
-  <div class="mt-4 flex flex-wrap gap-2 text-sm">
-    <span class="chip px-2 py-1">Baseline</span>
-    <span class="chip px-2 py-1">Demolition</span>
-    <span class="chip px-2 py-1">Water function</span>
-    <span class="chip px-2 py-1">Wayfinding</span>
-    <span class="chip px-2 py-1">Site setup</span>
-  </div>
+              <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                <div class="border border-regLine dark:border-regDarkLine p-3">
+                  <div class="text-xs opacity-70">Primary EVC</div>
+                  <div id="metaEVC" class="font-medium">Ecological Garden <span class="opacity-70">(urban registry prototype)</span></div>
+                </div>
+                <div class="border border-regLine dark:border-regDarkLine p-3">
+                  <div class="text-xs opacity-70">Bioregion</div>
+                  <div id="metaBioregion" class="font-medium">Inner Melbourne / urban condition</div>
+                </div>
+                <div class="border border-regLine dark:border-regDarkLine p-3">
+                  <div class="text-xs opacity-70">Stewards</div>
+                  <div id="metaStewards" class="font-medium">Gardener &amp; Son</div>
+                </div>
+                <div class="border border-regLine dark:border-regDarkLine p-3">
+                  <div class="text-xs opacity-70">Registry ID</div>
+                  <div id="heroGardenId" class="font-medium">ER-VIC-SY-NIC-0002</div>
+                </div>
+              </div>
+            </div>
 
-  <h2 class="mt-6 text-lg font-semibold text-gsGreen">🧭 Installation commenced</h2>
-  <p class="mt-2 text-sm leading-relaxed opacity-90">
-    Site setup and baseline capture. Primary works included breaking up and removing non-permeable surfaces,
-    establishing the base layer, repositioning steppers for improved navigation and aesthetic alignment,
-    and clearing demolition materials from site.
-  </p>
+            <div class="shrink-0 text-right">
+              <div class="inline-flex flex-col items-end gap-2">
+                <div class="grid h-20 w-20 place-items-center bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen">
+                  <div id="heroScore" class="text-3xl font-semibold leading-none">--</div>
+                </div>
+                <div class="text-sm font-medium">Ecological Function</div>
+                <div class="text-xs opacity-80">Rating: <span id="heroLevel" class="font-medium">Loading...</span></div>
+              </div>
+            </div>
+          </div>
 
-  <!-- PHOTO GRID -->
-  <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <figure class="border hairline">
-      <img src="assets/field/nicholson/2026-02-23/2026-02-23_01-impermeable-breakup.jpg" class="w-full h-56 object-cover" loading="lazy">
-      <figcaption class="p-3 text-xs opacity-80">
-        1) Non-permeable surface broken and lifted — reopening infiltration capacity.
-      </figcaption>
-    </figure>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <button class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm hover:bg-regSoft dark:hover:bg-regGreen focus-ring">Follow Garden</button>
+            <button class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm hover:bg-regSoft dark:hover:bg-regGreen focus-ring">View Map</button>
+          </div>
+        </div>
 
-    <figure class="border hairline">
-      <img src="assets/field/nicholson/2026-02-23/2026-02-23_02-material-removal.jpg" class="w-full h-56 object-cover" loading="lazy">
-      <figcaption class="p-3 text-xs opacity-80">
-        2) Material sorting and removal — preparing ground for permeability.
-      </figcaption>
-    </figure>
+        <div class="mt-6 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Recent Notes</h2>
+            <span class="text-xs opacity-70">Recorded entries • manual mode</span>
+          </div>
 
-    <figure class="border hairline">
-      <img src="assets/field/nicholson/2026-02-23/2026-02-23_03-base-layer.jpg" class="w-full h-56 object-cover" loading="lazy">
-      <figcaption class="p-3 text-xs opacity-80">
-        3) Base layer established — breathable structure for drainage and soil recovery.
-      </figcaption>
-    </figure>
+          <div class="mt-4 space-y-4">
+            <article class="border border-regLine dark:border-regDarkLine p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <a href="field-notes/001.html" class="text-sm font-semibold underline underline-offset-2">
+                    Report #001 — Baseline capture
+                  </a>
+                  <div class="text-xs opacity-70 mt-1">23 Feb 2026 • Observer: Gardener &amp; Son</div>
+                </div>
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed opacity-90">
+                Baseline condition recorded (photos + notes). First moves target structure first: edges, refuge pockets,
+                and soil conditions that can carry life through summer.
+              </p>
+            </article>
 
-    <figure class="border hairline">
-      <img src="assets/field/nicholson/2026-02-23/2026-02-23_04-steppers-wayfinding.jpg" class="w-full h-56 object-cover" loading="lazy">
-      <figcaption class="p-3 text-xs opacity-80">
-        4) Steppers repositioned for clearer wayfinding and reduced compaction.
-      </figcaption>
-    </figure>
-  </div>
+            <article class="border border-regLine dark:border-regDarkLine p-4 opacity-90">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm font-medium">🌿 Planting intent drafted</div>
+                  <div class="text-xs opacity-70 mt-1">23 Feb 2026 • Layering plan (draft)</div>
+                </div>
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Draft</span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed opacity-90">
+                Prioritise indigenous dominance where possible; ensure year-round flowering coverage; add at least one hardy refuge zone (cool, shaded, moist) to support invertebrates and microfauna.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
 
-  <div class="mt-6 bg-gsMist p-4 border hairline">
-    <div class="text-sm font-semibold text-gsGreen">Work log</div>
-    <ul class="mt-3 space-y-2 text-sm opacity-90">
-      <li>• Broke up and removed non-permeable surfaces.</li>
-      <li>• Established breathable base layer for infiltration and staged build.</li>
-      <li>• Repositioned steppers for improved navigation, aesthetic clarity, and compaction control.</li>
-      <li>• Completed tip run — demolition materials removed from ecological system.</li>
-      <li>• Site staged for next structural and planting phase.</li>
-    </ul>
-  </div>
-</div>
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige overflow-hidden">
+          <div class="p-4 flex items-center justify-between">
+            <div class="text-sm font-semibold">Site Map</div>
+            <span class="text-xs opacity-70">Static placeholder</span>
+          </div>
+          <div class="h-56 bg-regSoft dark:bg-regGreen/70 grid place-items-center text-sm opacity-80">
+            Map panel (future Leaflet / pins)
+          </div>
+          <div class="p-4 text-xs opacity-75 leading-relaxed">
+            Future: pins for habitat pockets, shade refuges, water points, transects, and field report locations.
+          </div>
+        </div>
 
-<div class="mt-6 bg-gsBeige border hairline p-6">
-  <h3 class="text-lg font-semibold text-gsGreen">Why this matters</h3>
-  <ul class="mt-3 space-y-2 text-sm opacity-90">
-    <li>• Removing impermeable surfaces restores soil-water exchange.</li>
-    <li>• Base layers determine long-term oxygen flow and root viability.</li>
-    <li>• Steppers guide human movement — reducing unintended compaction.</li>
-    <li>• Baseline imagery anchors future trajectory measurement.</li>
-    <li>• Clear material ledger strengthens verification and circularity signals.</li>
-  </ul>
+        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+          <div class="text-sm font-semibold">Quick Facts</div>
+          <dl class="mt-4 space-y-3 text-sm">
+            <div class="flex items-center justify-between gap-4">
+              <dt class="opacity-75">Site type</dt>
+              <dd id="quickFactSiteType" class="font-medium text-right">Inner-urban residence</dd>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <dt class="opacity-75">Primary focus</dt>
+              <dd id="quickFactPrimaryFocus" class="font-medium text-right">Habitat + resilience</dd>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <dt class="opacity-75">Method</dt>
+              <dd id="quickFactMethod" class="font-medium text-right">Layered ecological planting</dd>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <dt class="opacity-75">Inputs</dt>
+              <dd id="quickFactInputs" class="font-medium text-right">Low-tox / low-input</dd>
+            </div>
+          </dl>
+        </div>
 
-  <h3 class="mt-6 text-lg font-semibold text-gsGreen">Immediate next steps</h3>
-  <ul class="mt-3 space-y-2 text-sm opacity-90">
-    <li>• Confirm final levels and water direction.</li>
-    <li>• Install refuge structure before soil cover.</li>
-    <li>• Photograph next stage prior to concealment.</li>
-  </ul>
-</div>
+        <div class="border border-regLine bg-regGreen text-regBeige shadow-card dark:border-regDarkLine p-5">
+          <div class="text-sm font-semibold">Urban Habitat Uplift</div>
+          <p class="mt-2 text-sm opacity-90 leading-relaxed">
+            Even small sites can behave like living nodes when structure is intentional: layered planting, refuge pockets, and water-wise function recorded as evidence over time.
+          </p>
+        </div>
+      </aside>
+    </section>
 
-</div>
+    <section id="score" class="mt-10">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-2xl font-semibold">Score</h2>
+        <div class="text-xs opacity-70">Live from registry inputs</div>
+      </div>
 
-<!-- RIGHT RAIL -->
-<aside class="lg:col-span-4 space-y-6">
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-8 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-semibold">Ecological Function Score</div>
+            <div id="scoreVersion" class="border border-regLine dark:border-regDarkLine px-2.5 py-1 text-xs">v1</div>
+          </div>
 
-<div class="bg-gsBeige border hairline p-5">
-  <div class="text-sm font-semibold text-gsGreen">Badge Impact</div>
-  <div class="mt-4 space-y-3 text-sm">
-    <div class="chip p-3">🏙 Urban Retrofit — supported</div>
-    <div class="chip p-3">🌧 Water Sensitive Site — supported</div>
-    <div class="chip p-3 opacity-70">🪵 Habitat Builder — pending</div>
-  </div>
-</div>
+          <div class="mt-5">
+            <div class="flex items-center justify-between text-sm">
+              <span class="opacity-80">Overall</span>
+              <span id="overallPercentLabel" class="font-medium">--%</span>
+            </div>
+            <div class="mt-2 h-3 w-full bg-regSoft dark:bg-regBeige/15 overflow-hidden">
+              <div id="overallPercentBar" class="metric-bar-fill h-full bg-regGreen dark:bg-regBeige" style="width:0%"></div>
+            </div>
+            <div id="overallInterpretation" class="mt-2 text-xs opacity-70">
+              Loading score interpretation...
+            </div>
+          </div>
 
-<div class="bg-gsBeige border hairline p-5">
-  <div class="text-sm font-semibold text-gsGreen">Score Impacts (provisional)</div>
-  <div class="mt-4 space-y-2 text-sm">
-    <div class="flex justify-between"><span>Water Function</span><span class="chip px-2 py-1 text-xs">+2</span></div>
-    <div class="flex justify-between"><span>Soil Biology</span><span class="chip px-2 py-1 text-xs">+1</span></div>
-    <div class="flex justify-between"><span>Habitat Complexity</span><span class="chip px-2 py-1 text-xs">0</span></div>
-  </div>
-</div>
+          <div id="liveCategoryList" class="mt-6 space-y-4"></div>
 
-<div class="bg-gsBeige border hairline p-5">
-  <div class="text-sm font-semibold text-gsGreen">Report Schema (Future)</div>
-  <pre class="mt-3 p-3 bg-gsMist text-xs mono overflow-auto border hairline"><code>{
-  "garden_id": "nicholson",
-  "report_id": "001",
-  "date": "2026-02-23",
-  "title": "Installation commenced",
-  "tags": [
-    "baseline",
-    "impermeable_surface_removal",
-    "base_layer",
-    "stepper_repositioning",
-    "wayfinding",
-    "waste_stream"
-  ],
-  "pillar_deltas": {
-    "water_function": 2,
-    "soil_biology": 1
-  }
-}</code></pre>
-</div>
+          <div class="mt-6 pt-5 border-t border-regLine dark:border-regDarkLine text-xs opacity-75 leading-relaxed">
+            Each score category is generated from registry inputs and can later be linked directly to evidence, dated notes, and media.
+          </div>
+        </div>
 
-</aside>
-</section>
+        <div class="lg:col-span-4 space-y-6">
+          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+            <div class="text-sm font-semibold">Snapshot</div>
+            <ul class="mt-4 space-y-2 text-sm">
+              <li class="flex items-start justify-between gap-4">
+                <span class="opacity-75">Baseline</span>
+                <span id="snapshotBaseline" class="font-medium">Baseline pending</span>
+              </li>
+              <li class="flex items-start justify-between gap-4">
+                <span class="opacity-75">Current</span>
+                <span id="snapshotCurrent" class="font-medium">--%</span>
+              </li>
+              <li class="flex items-start justify-between gap-4">
+                <span class="opacity-75">Target (18–24 mo)</span>
+                <span id="snapshotTarget" class="font-medium">80%</span>
+              </li>
+            </ul>
+            <div class="mt-4 text-xs opacity-70">
+              Baseline can be set to the first verified field report date.
+            </div>
+          </div>
 
-<footer class="mt-12 pb-10 text-xs opacity-70">
-  <div class="border-t hairline pt-6 flex justify-between">
-    <div>© Ecological Registry — Gardener & Son • ecologicalregistry.org</div>
-    <div>Report #001</div>
-  </div>
-</footer>
+          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+            <div class="text-sm font-semibold">Scoring Notes</div>
+            <p class="mt-3 text-sm leading-relaxed opacity-90">
+              Early scores reward repeatability and honesty: structure + evidence first, then density and complexity.
+              Badges only land once thresholds are met and verified.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-</main>
+    <section id="badges" class="mt-10">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-2xl font-semibold">Badges</h2>
+        <div class="text-xs opacity-70">Signals, not vibes • generated from registry rules</div>
+      </div>
+
+      <div class="mt-4 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+        <div id="liveBadgeList" class="flex flex-wrap gap-2"></div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="border border-regLine dark:border-regDarkLine p-4">
+            <div class="text-sm font-semibold">Registry Badge Logic</div>
+            <div class="text-xs opacity-70 mt-1">Threshold based</div>
+            <p class="mt-2 text-sm opacity-90 leading-relaxed">
+              Badges are awarded when ecological thresholds are met through measurable inputs such as habitat layers, canopy presence, connectivity, hydrology, and verification level.
+            </p>
+          </div>
+
+          <div class="border border-regLine dark:border-regDarkLine p-4">
+            <div class="text-sm font-semibold">Verification Status</div>
+            <div class="text-xs opacity-70 mt-1">Current level</div>
+            <p class="mt-2 text-sm opacity-90 leading-relaxed">
+              <span id="badgeVerificationText">Loading...</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reports" class="mt-10">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-2xl font-semibold">Field Reports</h2>
+        <div class="text-xs opacity-70">Future: add photos, GPS, attachments</div>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-8 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+          <div class="space-y-4">
+            <article class="border border-regLine dark:border-regDarkLine p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <a href="field-notes/001.html" class="text-sm font-semibold underline underline-offset-2">
+                    Report #001 — Baseline capture
+                  </a>
+                  <div class="text-xs opacity-70 mt-1">23 Feb 2026 • Observer: Gardener &amp; Son</div>
+                </div>
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed opacity-90">
+                Baseline documented (site photos + condition notes). Initial score set to establish trajectory tracking.
+                Priority signals: structure, refuge, soil readiness, and water-wise function.
+              </p>
+              <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1">Tag: Baseline</span>
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1">Tag: Evidence</span>
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1">Tag: Trajectory</span>
+              </div>
+            </article>
+
+            <article class="border border-regLine dark:border-regDarkLine p-4 opacity-80">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm font-semibold">Report #002 — Planting + habitat install</div>
+                  <div class="text-xs opacity-70 mt-1">TBD • draft placeholder</div>
+                </div>
+                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Draft</span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed">
+                Placeholder: planting layers, habitat elements, mulch/soil interventions, and what changed (with photos).
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 space-y-6">
+          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+            <div class="text-sm font-semibold">Report Template</div>
+            <ul class="mt-4 space-y-2 text-sm opacity-90">
+              <li>• Date + observer</li>
+              <li>• Location on site</li>
+              <li>• Evidence (photo / note)</li>
+              <li>• Signal (what it implies)</li>
+              <li>• Action (what changed)</li>
+              <li>• Score impact (pillar)</li>
+            </ul>
+            <div class="mt-4 text-xs opacity-70">
+              This becomes the schema for future dynamic ingestion.
+            </div>
+          </div>
+
+          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
+            <div class="text-sm font-semibold">Attachments</div>
+            <div class="mt-3 text-sm opacity-80">No attachments linked (static mode).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="trajectory" class="mt-10">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-2xl font-semibold">Trajectory</h2>
+        <div class="text-xs opacity-70">Shows change over time (the heart of the Registry)</div>
+      </div>
+
+      <div class="mt-4 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7">
+            <div class="text-sm font-semibold">Milestones</div>
+            <ol class="mt-4 space-y-3">
+              <li class="border border-regLine dark:border-regDarkLine p-4">
+                <div class="text-sm font-medium">Baseline established</div>
+                <div class="text-xs opacity-70 mt-1">23 Feb 2026 • Baseline score recorded</div>
+              </li>
+              <li class="border border-regLine dark:border-regDarkLine p-4 opacity-80">
+                <div class="text-sm font-medium">Layering installed</div>
+                <div class="text-xs opacity-70 mt-1">Planned • Autumn 2026</div>
+              </li>
+              <li class="border border-regLine dark:border-regDarkLine p-4 opacity-80">
+                <div class="text-sm font-medium">First seasonal review</div>
+                <div class="text-xs opacity-70 mt-1">Planned • Winter 2026</div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="text-sm font-semibold">Next Upgrades</div>
+            <div id="liveRecommendationList" class="mt-4 space-y-3 text-sm"></div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-5 border-t border-regLine dark:border-regDarkLine text-xs opacity-75 leading-relaxed">
+          Future: this becomes a time-series with score deltas, evidence links, and a “what changed” narrative.
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-12 pb-10 text-xs opacity-70">
+      <div class="border-t border-regLine dark:border-regDarkLine pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>© Ecological Registry — Gardener &amp; Son • ecologicalregistry.org</div>
+        <div class="flex gap-3">
+          <a href="#overview" class="hover:opacity-100">Top</a>
+          <span class="opacity-40">•</span>
+          <a href="#reports" class="hover:opacity-100">Reports</a>
+          <span class="opacity-40">•</span>
+          <a href="#badges" class="hover:opacity-100">Badges</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script src="../../js/reg-score.js"></script>
+  <script>
+    const savedTheme = localStorage.getItem("reg-theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+
+    const profileController = {
+      gardenSlug: "nicholson",
+      heroType: "Urban Ecological Retrofit",
+      suburbLabelSuffix: ", VIC",
+      description: "A new registered installation focused on measurable uplift: compact-site habitat layering, soil reactivation, water-wise function, and repeatable documentation from day one.",
+      evc: 'Ecological Garden <span class="opacity-70">(urban registry prototype)</span>',
+      bioregion: "Inner Melbourne / urban condition",
+      stewards: "Gardener & Son",
+      status: "Field Reports Active",
+      visibility: "Public (address masked)",
+      nextReview: "Aug 2026",
+      baselineScoreLabel: "Baseline pending",
+      targetScoreLabel: "80%",
+      quickFacts: {
+        siteType: "Inner-urban residence",
+        primaryFocus: "Habitat + resilience",
+        method: "Layered ecological planting",
+        inputs: "Low-tox / low-input"
+      }
+    };
+
+    function ratingLabelFromScore(score) {
+      if (score >= 91) return "Urban Biodiversity Node";
+      if (score >= 81) return "High Habitat Garden";
+      if (score >= 61) return "Registered Ecological Garden";
+      if (score >= 41) return "Ecological Garden";
+      if (score >= 21) return "Habitat Garden";
+      return "Basic Garden";
+    }
+
+    function interpretationFromScore(score) {
+      if (score >= 81) return "Interpretation: high-functioning ecological structure with strong habitat layering, stewardship, and network value.";
+      if (score >= 61) return "Interpretation: strong functioning structure with clear headroom for further hydrology, canopy, and indigenous uplift.";
+      if (score >= 41) return "Interpretation: meaningful ecological foundations are present, with clear opportunity for strengthening and verification.";
+      return "Interpretation: early ecological structure is emerging and can be strengthened through further inputs and habitat actions.";
+    }
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el && value !== undefined) el.textContent = value;
+    }
+
+    function setHTML(id, value) {
+      const el = document.getElementById(id);
+      if (el && value !== undefined) el.innerHTML = value;
+    }
+
+    function renderProfileController() {
+      setText("heroType", profileController.heroType);
+      setText("heroDescription", profileController.description);
+      setHTML("metaEVC", profileController.evc);
+      setText("metaBioregion", profileController.bioregion);
+      setText("metaStewards", profileController.stewards);
+      setText("headerStatus", profileController.status);
+      setText("stripStatus", profileController.status);
+      setText("stripVisibility", profileController.visibility);
+      setText("stripNextReview", profileController.nextReview);
+      setText("snapshotBaseline", profileController.baselineScoreLabel);
+      setText("snapshotTarget", profileController.targetScoreLabel);
+      setText("quickFactSiteType", profileController.quickFacts.siteType);
+      setText("quickFactPrimaryFocus", profileController.quickFacts.primaryFocus);
+      setText("quickFactMethod", profileController.quickFacts.method);
+      setText("quickFactInputs", profileController.quickFacts.inputs);
+    }
+
+    function renderCategoryBars(categories) {
+      const target = document.getElementById("liveCategoryList");
+      target.innerHTML = categories.map(category => {
+        const percent = (category.score / category.max) * 100;
+        return `
+          <div>
+            <div class="flex items-center justify-between text-sm">
+              <span>${category.label} <span class="text-xs opacity-70">(${category.max} pts)</span></span>
+              <span class="font-medium">${category.score} / ${category.max}</span>
+            </div>
+            <div class="mt-2 h-2.5 w-full bg-regSoft dark:bg-regBeige/15 overflow-hidden">
+              <div class="metric-bar-fill h-full bg-regGreen dark:bg-regBeige" style="width:${percent}%"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderBadges(badges) {
+      const target = document.getElementById("liveBadgeList");
+      if (!badges.length) {
+        target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">No badges yet</span>`;
+        return;
+      }
+
+      target.innerHTML = badges.map(badge => `
+        <span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen">${badge}</span>
+      `).join("");
+    }
+
+    function renderRecommendations(recommendations) {
+      const target = document.getElementById("liveRecommendationList");
+      if (!recommendations.length) {
+        target.innerHTML = `
+          <div class="border border-regLine dark:border-regDarkLine p-4">
+            <div class="font-medium">No immediate upgrades</div>
+            <div class="text-xs opacity-70 mt-1">Current inputs are already covering the main available gains.</div>
+          </div>
+        `;
+        return;
+      }
+
+      target.innerHTML = recommendations.slice(0, 4).map(item => `
+        <div class="border border-regLine dark:border-regDarkLine p-4">
+          <div class="font-medium">${item.action}</div>
+          <div class="text-xs opacity-70 mt-1">Potential gain: +${item.points}</div>
+        </div>
+      `).join("");
+    }
+
+    async function loadProfileScore() {
+      try {
+        const response = await fetch(`../../data/${profileController.gardenSlug}.json`);
+        if (!response.ok) throw new Error("Could not load garden data");
+
+        const record = await response.json();
+        const result = scoreEcologicalRegistry(record);
+
+        document.title = `Ecological Registry — ${record.garden_name}`;
+        setText("topGardenName", record.garden_name);
+        setText("topGardenId", record.garden_id);
+        setText("headerLastVerified", record.assessment_date);
+        setText("stripLastVerified", record.assessment_date);
+        setText("stripVerification", result.verificationLabel);
+
+        setText("heroGardenName", record.garden_name);
+        setText("heroSuburb", `${record.suburb}${profileController.suburbLabelSuffix}`);
+        setText("heroGardenId", record.garden_id);
+
+        setText("heroScore", result.total);
+        setText("heroLevel", ratingLabelFromScore(result.total));
+
+        setText("scoreVersion", record.score_version || "v1");
+        setText("overallPercentLabel", `${result.total}%`);
+        document.getElementById("overallPercentBar").style.width = `${result.total}%`;
+        setText("overallInterpretation", interpretationFromScore(result.total));
+        setText("snapshotCurrent", `${result.total}%`);
+
+        setText(
+          "badgeVerificationText",
+          `Current verification level: ${result.verificationLabel}. This level contributes directly to the live registry score and badge status.`
+        );
+
+        renderCategoryBars(result.categories);
+        renderBadges(result.badges);
+        renderRecommendations(result.recommendations);
+      } catch (error) {
+        console.error(error);
+        setText("heroScore", "--");
+        setText("heroLevel", "Unavailable");
+        setText("overallPercentLabel", "Unavailable");
+        setText("overallInterpretation", "The live registry score could not be loaded. Check the JSON file path and scoring engine.");
+        document.getElementById("liveCategoryList").innerHTML = "";
+        document.getElementById("liveBadgeList").innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen">Unable to load badges</span>`;
+        document.getElementById("liveRecommendationList").innerHTML = `<div class="border border-regLine dark:border-regDarkLine p-4">Unable to load recommendations</div>`;
+      }
+    }
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("reg-theme", isDark ? "dark" : "light");
+    });
+
+    renderProfileController();
+    loadProfileScore();
+  </script>
 </body>
 </html>
