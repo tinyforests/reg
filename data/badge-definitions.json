@@ -1,0 +1,92 @@
+{
+  "habitat_garden": {
+    "name": "Habitat Garden",
+    "description": "Complete habitat structure: ground, shrub, subcanopy, and canopy layers present",
+    "type": "score"
+  },
+  "indigenous_dominant": {
+    "name": "Indigenous Dominant", 
+    "description": "80% or more indigenous plant species",
+    "type": "score"
+  },
+  "water_sensitive": {
+    "name": "Water Sensitive",
+    "description": "Comprehensive water management with swales, permeable surfaces, and water reuse",
+    "type": "score"
+  },
+  "high_function_garden": {
+    "name": "High Function Garden",
+    "description": "Ecological function score of 70 or above",
+    "type": "score"
+  },
+  "urban_biodiversity_node": {
+    "name": "Urban Biodiversity Node",
+    "description": "40+ species with diverse growth forms and flowering succession",
+    "type": "score"
+  },
+  "registered_ecological_garden": {
+    "name": "Registered Ecological Garden",
+    "description": "Full registry compliance with annual updates and field reports",
+    "type": "score"
+  },
+  "pollinator_supporter": {
+    "name": "Pollinator Supporter",
+    "description": "Dedicated pollinator resources with indigenous flowering succession",
+    "type": "score"
+  },
+  "regenerative_practices": {
+    "name": "Regenerative Practices",
+    "description": "Soil building and ecosystem regeneration methods actively implemented",
+    "type": "score"
+  },
+  "verified_garden": {
+    "name": "Verified Garden",
+    "description": "Independently assessed and verified by Gardener & Son",
+    "type": "verification"
+  },
+  "registry_member": {
+    "name": "Registry Member",
+    "description": "Active participant in the Ecological Registry network",
+    "type": "verification"
+  },
+  "long_term_steward": {
+    "name": "Long Term Steward",
+    "description": "Multiple assessments over time demonstrating ongoing stewardship",
+    "type": "verification"
+  },
+  "documentation_complete": {
+    "name": "Documentation Complete",
+    "description": "Comprehensive field reports and monitoring documentation maintained",
+    "type": "verification"
+  },
+  "amphibian_active": {
+    "name": "Amphibian Active",
+    "description": "Amphibian activity or breeding documented through field observations",
+    "type": "evidence"
+  },
+  "bird_breeding": {
+    "name": "Bird Breeding",
+    "description": "Bird nesting or breeding activity recorded in garden",
+    "type": "evidence"
+  },
+  "pollinator_hotspot": {
+    "name": "Pollinator Hotspot",
+    "description": "High levels of pollinator activity observed and documented",
+    "type": "evidence"
+  },
+  "corridor_node": {
+    "name": "Corridor Node",
+    "description": "Functions as habitat connectivity node enabling wildlife movement",
+    "type": "evidence"
+  },
+  "water_habitat": {
+    "name": "Water Habitat",
+    "description": "Water features supporting aquatic or semi-aquatic wildlife",
+    "type": "evidence"
+  },
+  "regeneration_success": {
+    "name": "Regeneration Success",
+    "description": "Evidence of natural regeneration and ecosystem recovery processes",
+    "type": "evidence"
+  }
+}
