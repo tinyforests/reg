@@ -424,7 +424,7 @@
         </div>
 
         <div class="mt-6 pt-5 border-t border-regLine dark:border-regDarkLine text-xs opacity-75 leading-relaxed">
-          Future: this becomes a time-series with score deltas, evidence links, and a “what changed” narrative.
+          Future: this becomes a time-series with score deltas, evidence links, and a "what changed" narrative.
         </div>
       </div>
     </section>
@@ -444,6 +444,7 @@
   </main>
 
   <script src="../../js/reg-score.js"></script>
+  <script src="../../js/badge-engine.js"></script>
   <script>
     const savedTheme = localStorage.getItem("reg-theme");
     if (savedTheme === "light") {
@@ -535,16 +536,43 @@
       }).join("");
     }
 
-    function renderBadges(badges) {
-      const target = document.getElementById("liveBadgeList");
-      if (!badges.length) {
-        target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">No badges yet</span>`;
-        return;
-      }
+    async function renderBadges(gardenData) {
+      try {
+        // Calculate badges using badge engine
+        const badges = awardBadges(gardenData);
+        const definitions = await getBadgeDefinitions();
+        
+        const target = document.getElementById("liveBadgeList");
+        if (!badges.all_badges.length) {
+          target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">No badges yet</span>`;
+          return;
+        }
 
-      target.innerHTML = badges.map(badge => `
-        <span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen">${badge}</span>
-      `).join("");
+        target.innerHTML = badges.all_badges.map(badgeId => {
+          const badge = definitions[badgeId];
+          if (!badge) return '';
+          
+          // Style based on badge type
+          let typeClass = "bg-regSoft dark:bg-regGreen";
+          if (badge.type === "verification") typeClass = "bg-regGreen dark:bg-regBeige text-regBeige dark:text-regGreen";
+          if (badge.type === "evidence") typeClass = "bg-regSoft dark:bg-regGreen border-2";
+          
+          return `
+            <span class="
+              border border-regLine dark:border-regDarkLine 
+              px-3 py-2 text-sm 
+              ${typeClass}
+              hover:opacity-80 transition-opacity
+            " title="${badge.description}">
+              ${badge.name}
+            </span>
+          `;
+        }).join("");
+        
+      } catch (error) {
+        console.error('Badge rendering error:', error);
+        document.getElementById("liveBadgeList").innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">Badge system unavailable</span>`;
+      }
     }
 
     function renderRecommendations(recommendations) {
@@ -601,7 +629,7 @@
         );
 
         renderCategoryBars(result.categories);
-        renderBadges(result.badges);
+        await renderBadges(record); // NEW: Pass full record, not result.badges
         renderRecommendations(result.recommendations);
       } catch (error) {
         console.error(error);
