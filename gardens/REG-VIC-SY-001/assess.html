@@ -252,13 +252,20 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Badge Preview -->
+                <div class="mt-6 border border-regLine dark:border-regDarkLine p-4">
+                  <div class="text-sm font-semibold">Badge Preview</div>
+                  <p class="mt-1 text-xs opacity-70">Live preview of badges earned with current settings</p>
+                  <div id="assessBadgePreview" class="mt-3 flex flex-wrap gap-2"></div>
+                </div>
               </div>
 
               <div class="lg:col-span-4">
                 <div class="border border-regLine dark:border-regDarkLine p-4 h-full">
                   <div class="text-sm font-semibold">Working record</div>
                   <p class="mt-2 text-xs opacity-70 leading-relaxed">
-                    This reflects the current editable assessment state. Use “Copy updated JSON” to paste back into your data file.
+                    This reflects the current editable assessment state. Use "Copy updated JSON" to paste back into your data file.
                   </p>
                   <pre id="workingJsonPreview" class="mt-4 text-[11px] leading-relaxed whitespace-pre-wrap break-words opacity-85"></pre>
                 </div>
@@ -534,6 +541,7 @@
   </main>
 
   <script src="../../js/reg-score.js"></script>
+  <script src="../../js/badge-engine.js"></script>
   <script>
     const savedTheme = localStorage.getItem("reg-theme");
     if (savedTheme === "light") {
@@ -685,16 +693,48 @@
       }).join("");
     }
 
-    function renderBadges(badges) {
-      const target = document.getElementById("liveBadgeList");
-      if (!badges.length) {
-        target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">No badges yet</span>`;
-        return;
-      }
+    async function renderBadges(gardenData, containerSelector = "#liveBadgeList") {
+      try {
+        // Calculate badges using badge engine
+        const badges = awardBadges(gardenData);
+        const definitions = await getBadgeDefinitions();
+        
+        const target = document.querySelector(containerSelector);
+        if (!target) return;
+        
+        if (!badges.all_badges.length) {
+          target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">No badges yet</span>`;
+          return;
+        }
 
-      target.innerHTML = badges.map(badge => `
-        <span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen">${badge}</span>
-      `).join("");
+        target.innerHTML = badges.all_badges.map(badgeId => {
+          const badge = definitions[badgeId];
+          if (!badge) return '';
+          
+          // Style based on badge type
+          let typeClass = "bg-regSoft dark:bg-regGreen";
+          if (badge.type === "verification") typeClass = "bg-regGreen dark:bg-regBeige text-regBeige dark:text-regGreen";
+          if (badge.type === "evidence") typeClass = "bg-regSoft dark:bg-regGreen border-2";
+          
+          return `
+            <span class="
+              border border-regLine dark:border-regDarkLine 
+              px-3 py-2 text-sm 
+              ${typeClass}
+              hover:opacity-80 transition-opacity
+            " title="${badge.description}">
+              ${badge.name}
+            </span>
+          `;
+        }).join("");
+        
+      } catch (error) {
+        console.error('Badge rendering error:', error);
+        const target = document.querySelector(containerSelector);
+        if (target) {
+          target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">Badge system unavailable</span>`;
+        }
+      }
     }
 
     function renderRecommendations(recommendations) {
@@ -730,7 +770,7 @@
       document.getElementById("workingJsonPreview").textContent = JSON.stringify(preview, null, 2);
     }
 
-    function renderLiveProfile(record) {
+    async function renderLiveProfile(record) {
       const result = scoreEcologicalRegistry(record);
 
       document.title = `Ecological Registry — ${record.garden_name} Assessment`;
@@ -752,7 +792,8 @@
       setText("badgeVerificationText", `Current verification level: ${result.verificationLabel}. This level contributes directly to the live registry score and badge status.`);
 
       renderCategoryBars(result.categories);
-      renderBadges(result.badges);
+      await renderBadges(record, "#liveBadgeList"); // Main badge display
+      await renderBadges(record, "#assessBadgePreview"); // Assessment preview
       renderRecommendations(result.recommendations);
       renderWorkingJsonPreview(record);
     }
@@ -772,7 +813,7 @@
 
         renderProfileController();
         bindAssessmentController(workingRecord);
-        renderLiveProfile(workingRecord);
+        await renderLiveProfile(workingRecord);
       } catch (error) {
         console.error(error);
         setText("heroScore", "--");
