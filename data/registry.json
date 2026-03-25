@@ -1,0 +1,95 @@
+{
+  "registry_metadata": {
+    "total_gardens": 2,
+    "last_updated": "2026-03-25",
+    "version": "1.0",
+    "badge_engine_version": "1.0",
+    "description": "Ecological Registry master index with garden summaries and badge data"
+  },
+  "gardens": [
+    {
+      "garden_id": "ER-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "suburb": "Surrey Hills",
+      "state": "VIC",
+      "type": "Ecological Forest Garden",
+      "stewards": "Andrew & Elizabeth",
+      "score": 73,
+      "rating": "Registered Ecological Garden",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "Gardener & Son Verified",
+      "badges": [
+        "registered_garden",
+        "habitat_layers", 
+        "water_wise",
+        "soil_regenerator",
+        "pollinator_support",
+        "garden_verified",
+        "field_documented"
+      ],
+      "badge_count": 7,
+      "last_verified": "2026-03-15",
+      "assessment_date": "2026-03-15",
+      "status": "Active / Developing",
+      "visibility": "Public (address masked)",
+      "profile_url": "/gardens/REG-VIC-SH-001/index.html",
+      "assess_url": "/gardens/REG-VIC-SH-001/assess.html",
+      "data_file": "/data/arundel.json",
+      "adjacency": "South Surrey Park edge",
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain"
+    },
+    {
+      "garden_id": "ER-VIC-SY-NIC-0002", 
+      "garden_name": "Nicholson",
+      "suburb": "South Yarra",
+      "state": "VIC",
+      "type": "Urban Ecological Retrofit",
+      "stewards": "Gardener & Son",
+      "score": 42,
+      "rating": "Ecological Garden",
+      "verification_level": "gardener_and_son_verified", 
+      "verification_label": "Gardener & Son Verified",
+      "badges": [
+        "registered_garden",
+        "garden_verified",
+        "baseline_established"
+      ],
+      "badge_count": 3,
+      "last_verified": "2026-02-23",
+      "assessment_date": "2026-02-23", 
+      "status": "Field Reports Active",
+      "visibility": "Public (address masked)",
+      "profile_url": "/gardens/REG-VIC-SY-001/index.html",
+      "assess_url": "/gardens/REG-VIC-SY-001/assess.html", 
+      "data_file": "/data/nicholson.json",
+      "adjacency": "Inner-urban residence",
+      "primary_evc": "Ecological Garden (urban registry prototype)",
+      "bioregion": "Inner Melbourne / urban condition"
+    }
+  ],
+  "statistics": {
+    "total_score_points": 115,
+    "average_score": 57.5,
+    "verification_levels": {
+      "self_registered": 0,
+      "photo_verified": 0, 
+      "site_visit": 0,
+      "gardener_and_son_verified": 2
+    },
+    "total_badges_awarded": 10,
+    "most_common_badges": [
+      "registered_garden",
+      "garden_verified"
+    ],
+    "states": {
+      "VIC": 2
+    },
+    "garden_types": {
+      "Ecological Forest Garden": 1,
+      "Urban Ecological Retrofit": 1
+    }
+  },
+  "badge_definitions_url": "/data/badge-definitions.json",
+  "next_garden_id": "ER-VIC-XX-XXX-0003"
+}
