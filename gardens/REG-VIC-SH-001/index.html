@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry — Arundel</title>
+  <title>Ecological Registry -- Arundel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -53,7 +53,7 @@
       <div class="grid h-9 w-9 place-items-center bg-rg text-rb dark:bg-rb dark:text-rg font-semibold text-sm">ER</div>
       <div class="leading-tight">
         <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
-        <div class="text-xs opacity-60 font-mono" id="headerMeta">Loading…</div>
+        <div class="text-xs opacity-60 font-mono" id="headerMeta">Loading...</div>
       </div>
     </div>
     <nav class="hidden md:flex items-center gap-1 text-xs">
@@ -63,7 +63,7 @@
       <a href="#record"     class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Record</a>
       <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Trajectory</a>
     </nav>
-    <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">◐ Theme</button>
+    <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">o Theme</button>
   </div>
 </header>
 
@@ -73,8 +73,8 @@
   <section id="hero" class="stagger">
     <div class="grid lg:grid-cols-12 gap-6">
       <div class="lg:col-span-8 border border-rl dark:border-rdl bg-white dark:bg-rdp p-8 md:p-10">
-        <div class="section-label mb-4" id="heroType">—</div>
-        <h1 class="font-serif text-6xl md:text-7xl leading-none mb-4" id="heroName">—</h1>
+        <div class="section-label mb-4" id="heroType">--</div>
+        <h1 class="font-serif text-6xl md:text-7xl leading-none mb-4" id="heroName">--</h1>
         <div class="flex flex-wrap gap-2 mb-5" id="heroTags"></div>
         <p class="text-base leading-relaxed opacity-85 max-w-xl" id="heroDesc"></p>
         <div class="mt-6 pt-6 border-t border-rl dark:border-rdl">
@@ -85,15 +85,15 @@
       <div class="lg:col-span-4 flex flex-col gap-4">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-8 flex-1 flex flex-col justify-between">
           <div class="section-label mb-4" style="color:inherit;opacity:.6">Ecological Function Score</div>
-          <div class="font-serif text-8xl leading-none" id="heroScore">—</div>
+          <div class="font-serif text-8xl leading-none" id="heroScore">--</div>
           <div class="mt-4">
-            <div class="text-sm font-medium mb-3" id="heroLevel">Loading…</div>
+            <div class="text-sm font-medium mb-3" id="heroLevel">Loading...</div>
             <div class="h-1.5 bg-rb/20 dark:bg-rg/20">
               <div class="bar-fill h-full bg-rb dark:bg-rg" id="heroScoreBar" style="width:0%"></div>
             </div>
             <div class="flex justify-between text-xs mt-2 opacity-60">
-              <span>Baseline <span id="heroBaseline">—</span></span>
-              <span>Target <span id="heroTarget">—</span></span>
+              <span>Baseline <span id="heroBaseline">--</span></span>
+              <span>Target <span id="heroTarget">--</span></span>
             </div>
           </div>
           <div class="mt-5 pt-5 border-t border-rb/20 dark:border-rg/20">
@@ -103,8 +103,8 @@
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-2">Registry ID</div>
-          <div class="font-mono text-xs" id="heroId">—</div>
-          <div class="mt-3 text-xs opacity-60">Next review · Aug 2026</div>
+          <div class="font-mono text-xs" id="heroId">--</div>
+          <div class="mt-3 text-xs opacity-60">Next review ? Aug 2026</div>
         </div>
       </div>
     </div>
@@ -114,7 +114,7 @@
   <section id="signals" class="stagger">
     <div class="flex items-end justify-between gap-4 mb-4">
       <div><div class="section-label mb-1">Structured Ecological Data</div><h2 class="font-serif text-4xl">Ecological Signals</h2></div>
-      <div class="text-xs opacity-50 font-mono text-right">Baseline to Current<br><span id="signalDates">—</span></div>
+      <div class="text-xs opacity-50 font-mono text-right">Baseline to Current<br><span id="signalDates">--</span></div>
     </div>
     <p class="text-sm opacity-60 mb-6 max-w-xl">Structured measurements that make this garden legible to the network. These signals feed the Curbing aggregation layer.</p>
     <div class="signal-grid mb-4" id="signalGridPrimary"></div>
@@ -129,7 +129,7 @@
       <div class="lg:col-span-2 border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
         <div class="flex items-center justify-between mb-6">
           <div class="section-label">Category Scores</div>
-          <div class="text-2xl font-light" id="overallPct">—%</div>
+          <div class="text-2xl font-light" id="overallPct">--%</div>
         </div>
         <div class="space-y-5" id="categoryBars"></div>
       </div>
@@ -169,9 +169,9 @@
           <text x="60" y="137" text-anchor="middle" font-size="6" fill="currentColor" opacity=".4">Unregistered</text>
           <rect x="195" y="120" width="12" height="12" fill="#7a9e5f"/>
           <line x1="130" y1="90" x2="195" y2="126" stroke="#7a9e5f" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
-          <text x="201" y="145" text-anchor="middle" font-size="6" fill="#7a9e5f" id="svgAdjacentId">—</text>
+          <text x="201" y="145" text-anchor="middle" font-size="6" fill="#7a9e5f" id="svgAdjacentId">--</text>
           <rect x="110" y="65" width="20" height="20" fill="#7a9e5f"/>
-          <text x="120" y="58" text-anchor="middle" font-size="7" fill="#7a9e5f" font-weight="600" id="svgGardenName">—</text>
+          <text x="120" y="58" text-anchor="middle" font-size="7" fill="#7a9e5f" font-weight="600" id="svgGardenName">--</text>
         </svg>
         <div class="mt-4 pt-4 border-t border-rl dark:border-rdl flex items-center gap-3 text-xs">
           <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-signal flex-shrink-0"></div><span>Registered</span></div>
@@ -181,23 +181,23 @@
       <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-5">
           <div class="section-label mb-3" style="color:inherit;opacity:.6">Node Status</div>
-          <div class="text-2xl font-light mb-1" id="nodeStatus">—</div>
+          <div class="text-2xl font-light mb-1" id="nodeStatus">--</div>
           <div class="text-xs opacity-80 leading-relaxed" id="nodeStatusNote"></div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Adjacent Registered</div>
-          <div class="text-2xl font-light mb-1" id="adjacentCount">—</div>
+          <div class="text-2xl font-light mb-1" id="adjacentCount">--</div>
           <div id="adjacentList"></div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Connectivity Score</div>
-          <div class="text-2xl font-light mb-2" id="connectivityScore">—</div>
+          <div class="text-2xl font-light mb-2" id="connectivityScore">--</div>
           <div class="h-1.5 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" id="connectivityBar" style="width:0%"></div></div>
           <div class="text-xs opacity-50 mt-2">Increases as adjacent gardens register</div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Network Contribution</div>
-          <div class="text-2xl font-light mb-1" id="effectiveArea">—</div>
+          <div class="text-2xl font-light mb-1" id="effectiveArea">--</div>
           <div class="text-xs opacity-60 leading-relaxed" id="clusterNote"></div>
         </div>
         <div class="sm:col-span-2 border border-rl dark:border-rdl bg-rs dark:bg-rdp p-5">
@@ -239,8 +239,8 @@
       <div class="space-y-4">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-6">
           <div class="section-label mb-3" style="color:inherit;opacity:.6">Next Level</div>
-          <div class="text-2xl font-serif mb-2" id="nextLevelName">—</div>
-          <div class="text-sm opacity-80 mb-4" id="nextLevelGap">—</div>
+          <div class="text-2xl font-serif mb-2" id="nextLevelName">--</div>
+          <div class="text-sm opacity-80 mb-4" id="nextLevelGap">--</div>
           <div class="h-1.5 bg-rb/20 dark:bg-rg/20"><div class="bar-fill h-full bg-rb dark:bg-rg" id="nextLevelBar" style="width:0%"></div></div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
@@ -261,9 +261,9 @@
 </footer>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-// SCORING ENGINE — reg-score.js (five pillars, 100 pts)
-// ════════════════════════════════════════════════════════════════
+// ================================================================
+// SCORING ENGINE -- reg-score.js (five pillars, 100 pts)
+// ================================================================
 function scoreEcologicalRegistry(record) {
   const scores = {
     biodiversity: scoreBiodiversity(record),
@@ -294,10 +294,10 @@ function scoreBiodiversity(r) {
   const b = r.biodiversity || {}; let score = 0; const notes = [];
   const sp = b.indigenous_species_current || 0;
   if      (sp >= 30) { score += 10; notes.push("30+ indigenous species"); }
-  else if (sp >= 20) { score += 8;  notes.push("20–29 indigenous species"); }
-  else if (sp >= 12) { score += 6;  notes.push("12–19 indigenous species"); }
-  else if (sp >= 6)  { score += 4;  notes.push("6–11 indigenous species"); }
-  else if (sp >= 1)  { score += 2;  notes.push("1–5 indigenous species"); }
+  else if (sp >= 20) { score += 8;  notes.push("20-29 indigenous species"); }
+  else if (sp >= 12) { score += 6;  notes.push("12-19 indigenous species"); }
+  else if (sp >= 6)  { score += 4;  notes.push("6-11 indigenous species"); }
+  else if (sp >= 1)  { score += 2;  notes.push("1-5 indigenous species"); }
   if (b.indigenous_dominant) { score += 4; notes.push("Indigenous dominant"); }
   const ly = b.structural_layers_current || 0;
   if      (ly >= 5) { score += 6; notes.push("5 structural layers"); }
@@ -306,9 +306,9 @@ function scoreBiodiversity(r) {
   else if (ly >= 2) { score += 1; notes.push("2 structural layers"); }
   const ca = b.canopy_cover_pct_current || 0;
   if      (ca >= 50) { score += 5; notes.push("50%+ canopy"); }
-  else if (ca >= 30) { score += 4; notes.push("30–49% canopy"); }
-  else if (ca >= 15) { score += 2; notes.push("15–29% canopy"); }
-  else if (ca >= 5)  { score += 1; notes.push("5–14% canopy"); }
+  else if (ca >= 30) { score += 4; notes.push("30-49% canopy"); }
+  else if (ca >= 15) { score += 2; notes.push("15-29% canopy"); }
+  else if (ca >= 5)  { score += 1; notes.push("5-14% canopy"); }
   return { score: Math.min(score, 25), notes };
 }
 
@@ -330,8 +330,8 @@ function scoreHabitat(r) {
   const h = r.habitat || {}; let score = 0; const notes = [];
   const nd = h.habitat_nodes || 0;
   if      (nd >= 5) { score += 6; notes.push("5+ habitat nodes"); }
-  else if (nd >= 3) { score += 4; notes.push("3–4 habitat nodes"); }
-  else if (nd >= 1) { score += 2; notes.push("1–2 habitat nodes"); }
+  else if (nd >= 3) { score += 4; notes.push("3-4 habitat nodes"); }
+  else if (nd >= 1) { score += 2; notes.push("1-2 habitat nodes"); }
   if (h.has_embedded_logs) { score += 3; notes.push("Embedded logs"); }
   if (h.has_rock_refuges)  { score += 2; notes.push("Rock refuges"); }
   if (h.has_water_feature) { score += 3; notes.push("Water feature"); }
@@ -390,7 +390,7 @@ function nextLevelFromScore(score) {
     { min:61, name:"Registered Ecological Garden", benefits:"Full registry benefits and ecological infrastructure status." },
     { min:41, name:"Ecological Garden",            benefits:"Recognised ecological function and habitat contribution." },
     { min:21, name:"Habitat Garden",               benefits:"Basic habitat recognition and scoring system access." },
-    { min:0,  name:"Basic Garden",                 benefits:"Entry level — opportunity for ecological development." }
+    { min:0,  name:"Basic Garden",                 benefits:"Entry level -- opportunity for ecological development." }
   ];
   for (const l of levels) {
     if (score < l.min) return { name:l.name, target:l.min, gap:l.min-score, progress:Math.round((score/l.min)*100), benefits:l.benefits };
@@ -430,9 +430,9 @@ function buildRecommendations(record) {
   return recs.sort((a,b)=>b.points-a.points).slice(0,5);
 }
 
-// ════════════════════════════════════════════════════════════════
-// BADGE ENGINE — badge-engine.js
-// ════════════════════════════════════════════════════════════════
+// ================================================================
+// BADGE ENGINE -- badge-engine.js
+// ================================================================
 const BADGE_DEFINITIONS = {
   indigenous_dominant: { name:"Indigenous Dominant",  type:"score" },
   species_rich_20:     { name:"Species Rich",          type:"score" },
@@ -491,9 +491,9 @@ function badgeName(id) {
   return BADGE_DEFINITIONS[id]?.name || id.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 }
 
-// ════════════════════════════════════════════════════════════════
-// GARDEN DATA — arundel.json (inlined for portability)
-// ════════════════════════════════════════════════════════════════
+// ================================================================
+// GARDEN DATA -- arundel.json (inlined for portability)
+// ================================================================
 const GARDEN = {
   garden_id:"ER-VIC-SH-ARU-0001", garden_name:"Arundel",
   garden_type:"Ecological Forest Garden", suburb:"Surrey Hills", state:"VIC",
@@ -538,7 +538,7 @@ const GARDEN = {
     verification_level:"gardener_and_son_verified", verification_label:"G&S Verified", assessor:"Gardener & Son"
   },
 
-  // signals alias — keeps render function working without changes
+  // signals alias -- keeps render function working without changes
   get signals() {
     return {
       canopy_cover_pct_current:   this.biodiversity.canopy_cover_pct_current,
@@ -570,18 +570,18 @@ const GARDEN = {
   ],
 
   activity_log:[
-    { title:"Burrowing frog sighting — lower slope refuge zone", date:"18 Feb 2026", type:"Verified",
+    { title:"Burrowing frog sighting -- lower slope refuge zone", date:"18 Feb 2026", type:"Verified",
       notes:"Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden." },
-    { title:"Habitat structure installed — embedded logs and voids", date:"15 Feb 2026", type:"Installed",
+    { title:"Habitat structure installed -- embedded logs and voids", date:"15 Feb 2026", type:"Installed",
       notes:"Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded." },
     { title:"Ground contouring and soil preparation", date:"8 Feb 2026", type:"Recorded",
       notes:"Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ." }
   ]
 };
 
-// ════════════════════════════════════════════════════════════════
+// ================================================================
 // HELPERS
-// ════════════════════════════════════════════════════════════════
+// ================================================================
 const $t = (id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
 const $h = (id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
 const $w = (id,p)=>{const e=document.getElementById(id);if(e)e.style.width=p+'%';};
@@ -591,9 +591,9 @@ const delta = (cur,base)=>{
   return `<span class="delta-same">No change</span>`;
 };
 
-// ════════════════════════════════════════════════════════════════
+// ================================================================
 // RENDER
-// ════════════════════════════════════════════════════════════════
+// ================================================================
 function render() {
   const R      = GARDEN;
   const result = scoreEcologicalRegistry(R);
@@ -604,13 +604,13 @@ function render() {
   const adj    = c.adjacent_registered_gardens || [];
 
   // Header
-  $t("headerMeta", `${R.garden_name} · ${R.garden_id}`);
+  $t("headerMeta", `${R.garden_name} ? ${R.garden_id}`);
 
   // Hero identity
   $t("heroType",     R.garden_type);
   $t("heroName",     R.garden_name);
   $t("heroDesc",     R.description);
-  $t("heroStewards", `${R.stewards} · Registered ${R.baseline_date}`);
+  $t("heroStewards", `${R.stewards} ? Registered ${R.baseline_date}`);
 
   // Hero score
   $t("heroScore",    result.total);
@@ -624,10 +624,10 @@ function render() {
   $h("heroTags",`
     <span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">${R.garden_type}</span>
     <span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">${R.suburb}, ${R.state}</span>
-    <span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rg text-rb dark:bg-rb dark:text-rg font-medium">${result.verificationLabel} · ${R.assessment_date}</span>
+    <span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rg text-rb dark:bg-rb dark:text-rg font-medium">${result.verificationLabel} ? ${R.assessment_date}</span>
   `);
 
-  // Hero badges — wired to badge engine
+  // Hero badges -- wired to badge engine
   $h("heroBadges", badges.all_badges.map(id => {
     const isNode  = id === "corridor_node";
     const isVerif = badges.verification_badges.includes(id);
@@ -635,7 +635,7 @@ function render() {
     let style = "border-color:rgba(255,240,220,.25);background:rgba(255,240,220,.1)";
     if (isNode)  style = "border-color:rgba(255,240,220,.5);background:rgba(255,240,220,.2);font-weight:600";
     if (isVerif) style = "border-color:rgba(255,240,220,.4);background:rgba(255,240,220,.18);font-weight:600";
-    return `<span class="badge-pill" style="${style}">${isNode ? "● " : ""}${badgeName(id)}</span>`;
+    return `<span class="badge-pill" style="${style}">${isNode ? "* " : ""}${badgeName(id)}</span>`;
   }).join(""));
 
   // Signals
@@ -659,12 +659,12 @@ function render() {
     <div class="signal-cell"><div class="section-label mb-2">Last Assessment</div><div class="text-xs font-medium">${R.assessment_date}</div><div class="text-xs opacity-50 mt-1">${result.verificationLabel}</div></div>
   `);
 
-  // Score breakdown — wired to five-pillar categories
+  // Score breakdown -- wired to five-pillar categories
   const maxScore = result.categories.reduce((s,c)=>s+c.max,0);
   $t("overallPct", Math.round(result.total / maxScore * 100) + '%');
   $h("categoryBars", result.categories.map(cat => {
     const pct = Math.round(cat.score / cat.max * 100);
-    const desc = cat.notes?.join(" · ") || "";
+    const desc = cat.notes?.join(" ? ") || "";
     return `<div>
       <div class="flex justify-between text-sm mb-2"><span class="font-medium">${cat.label}</span><span class="font-mono text-xs">${cat.score} / ${cat.max}</span></div>
       <div class="h-2 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:${pct}%"></div></div>
@@ -672,7 +672,7 @@ function render() {
     </div>`;
   }).join(""));
 
-  // Badges section — wired to badge engine
+  // Badges section -- wired to badge engine
   $h("badgeList", badges.all_badges.map(id => {
     const isV = badges.verification_badges.includes(id);
     const isN = id === "corridor_node";
@@ -686,10 +686,10 @@ function render() {
     </div>
   `).join(""));
 
-  // Network — wired to connectivity data
-  $t("networkMapLabel", `Corridor Map — ${c.cluster_name}`);
+  // Network -- wired to connectivity data
+  $t("networkMapLabel", `Corridor Map -- ${c.cluster_name}`);
   $t("svgGardenName",   R.garden_name);
-  $t("svgAdjacentId",   adj.length ? adj[0].id : "—");
+  $t("svgAdjacentId",   adj.length ? adj[0].id : "--");
   $t("nodeStatus",      c.corridor_node_confirmed ? "Active" : "Pending");
   $t("nodeStatusNote",  c.corridor_node_confirmed
     ? "Confirmed corridor node. Amphibian presence and proximity to green space activate connectivity weighting."
@@ -697,7 +697,7 @@ function render() {
   $t("adjacentCount",   adj.length);
   $h("adjacentList", adj.map(g => `
     <div class="text-xs font-mono opacity-60 mt-1">${g.id}</div>
-    <div class="text-xs opacity-50">${g.distance_m}m ${g.direction} · Verified</div>
+    <div class="text-xs opacity-50">${g.distance_m}m ${g.direction} ? Verified</div>
   `).join(""));
 
   const cc = result.categories.find(x => x.label === "Connectivity");
@@ -722,7 +722,7 @@ function render() {
   $h("gardenFacts",`
     <div class="flex justify-between gap-4"><dt class="opacity-60">Primary EVC</dt><dd class="font-medium text-right">${R.evc.name} (${R.evc.code})</dd></div>
     <div class="flex justify-between gap-4"><dt class="opacity-60">Bioregion</dt><dd class="font-medium text-right">${R.evc.bioregion}</dd></div>
-    <div class="flex justify-between gap-4"><dt class="opacity-60">Area</dt><dd class="font-medium text-right">~${R.area_sqm}m²</dd></div>
+    <div class="flex justify-between gap-4"><dt class="opacity-60">Area</dt><dd class="font-medium text-right">~${R.area_sqm}m?</dd></div>
     <div class="flex justify-between gap-4"><dt class="opacity-60">Method</dt><dd class="font-medium text-right">${s.planting_method}</dd></div>
     <div class="flex justify-between gap-4"><dt class="opacity-60">Designed by</dt><dd class="font-medium text-right">${R.designer}</dd></div>
   `);
@@ -730,14 +730,14 @@ function render() {
   // Milestones
   $h("milestoneList", (R.milestones || []).map(m => `
     <li class="border border-rl dark:border-rdl p-4 ${m.complete ? "" : "opacity-50"}">
-      <div class="text-xs font-medium">${m.complete ? "✓" : "○"} ${m.title}</div>
+      <div class="text-xs font-medium">${m.complete ? "v" : "?"} ${m.title}</div>
       <div class="text-xs opacity-50 mt-1">${m.date}</div>
     </li>
   `).join(""));
 
-  // Next level — wired to scoring engine
+  // Next level -- wired to scoring engine
   $t("nextLevelName", nl.name);
-  $t("nextLevelGap",  nl.gap > 0 ? `${result.total} points · ${nl.target} required · ${nl.gap} to go` : "Maximum level achieved");
+  $t("nextLevelGap",  nl.gap > 0 ? `${result.total} points ? ${nl.target} required ? ${nl.gap} to go` : "Maximum level achieved");
   $w("nextLevelBar",  nl.progress);
   $t("visionText",    `At target trajectory, ${R.garden_name} reaches Urban Biodiversity Node status by 2028. Canopy cover projected at 55%, indigenous species at 40+, and confirmed habitat for 3+ fauna species. Network contribution rises to 0.7ha effective ecological area as adjacent properties register.`);
 
@@ -750,9 +750,9 @@ function render() {
   }, 200);
 }
 
-// ════════════════════════════════════════════════════════════════
+// ================================================================
 // THEME + BOOT
-// ════════════════════════════════════════════════════════════════
+// ================================================================
 const saved = localStorage.getItem("reg-theme");
 if (saved === "light") document.documentElement.classList.remove("dark");
 else document.documentElement.classList.add("dark");
