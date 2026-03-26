@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry — Badge Reference</title>
+  <meta name="description" content="Complete guide to all Ecological Registry badges, requirements, and how to earn them." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+          },
+          colors: {
+            regGreen: "#3d4535",
+            regBeige: "#fff0dc",
+            regLine: "#d7ccb9",
+            regSoft: "#f7ead6",
+            regDarkPanel: "#485141",
+            regDarkLine: "rgba(255,240,220,0.18)"
+          },
+          boxShadow: {
+            card: "0 18px 50px rgba(32, 33, 28, 0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * { border-radius: 0 !important; }
+    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,240,220,0.16); }
+    
+    .badge-earned {
+      background: linear-gradient(135deg, #3d4535 0%, #5a6149 100%);
+      color: #fff0dc;
+      border: 2px solid #3d4535;
+    }
+    
+    .badge-earned.dark {
+      background: linear-gradient(135deg, #fff0dc 0%, #f7ead6 100%);
+      color: #3d4535;
+      border: 2px solid #fff0dc;
+    }
+    
+    .badge-unearned {
+      background: rgba(255,240,220,0.08);
+      border: 2px dashed rgba(255,240,220,0.3);
+      opacity: 0.6;
+    }
+    
+    .badge-verification {
+      background: linear-gradient(135deg, #3d4535 0%, #5a6149 100%);
+      color: #fff0dc;
+    }
+    
+    .badge-verification.dark {
+      background: linear-gradient(135deg, #fff0dc 0%, #f7ead6 100%);
+      color: #3d4535;
+    }
+    
+    .badge-evidence {
+      border: 3px solid #3d4535;
+      background: rgba(255,240,220,0.08);
+    }
+    
+    .badge-evidence.dark {
+      border: 3px solid #fff0dc;
+      background: rgba(255,240,220,0.05);
+    }
+    
+    .category-header {
+      background: linear-gradient(135deg, rgba(61,69,53,0.1) 0%, rgba(61,69,53,0.05) 100%);
+    }
+    
+    .difficulty-easy { border-left: 4px solid #22c55e; }
+    .difficulty-medium { border-left: 4px solid #f59e0b; }
+    .difficulty-hard { border-left: 4px solid #ef4444; }
+  </style>
+</head>
+
+<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
+  <header class="sticky top-0 z-40 border-b border-regLine bg-regBeige/90 backdrop-blur dark:border-regDarkLine dark:bg-regGreen/90">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 min-w-[260px]">
+        <div class="grid h-9 w-9 place-items-center bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen font-semibold">ER</div>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-80">Badge Reference Guide</div>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-2 text-sm">
+        <a href="#overview" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Overview</a>
+        <a href="#habitat-badges" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Habitat & Function</a>
+        <a href="#verification-badges" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Verification</a>
+        <a href="#evidence-badges" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Evidence</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-sm hover:opacity-80 focus-ring">
+          Toggle theme
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+    <!-- Overview -->
+    <section id="overview" class="mb-12">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-8">
+          <h1 class="font-serif text-4xl md:text-5xl leading-tight mb-4">Badge Reference Guide</h1>
+          <p class="text-lg leading-relaxed opacity-90 mb-6">
+            Complete directory of all Ecological Registry badges. Each badge recognizes specific achievements in habitat creation, 
+            verification, and evidence documentation. Use this guide to plan your garden's ecological development.
+          </p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 text-center">
+              <div class="text-3xl font-light" id="totalBadgeCount">--</div>
+              <div class="text-sm opacity-70">Total Badges Available</div>
+            </div>
+            <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 text-center">
+              <div class="text-3xl font-light" id="earnedBadgeCount">--</div>
+              <div class="text-sm opacity-70">Badges You've Earned</div>
+            </div>
+            <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 text-center">
+              <div class="text-3xl font-light" id="remainingBadgeCount">--</div>
+              <div class="text-sm opacity-70">Still to Unlock</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4">
+          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-6">
+            <h3 class="text-lg font-semibold mb-4">Badge Categories</h3>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-4 h-4 bg-regGreen dark:bg-regBeige"></div>
+                  <span class="text-sm">Habitat & Function</span>
+                </div>
+                <span id="habitatBadgeCount" class="text-sm font-medium">-- badges</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-4 h-4 bg-regGreen dark:bg-regBeige"></div>
+                  <span class="text-sm">Verification</span>
+                </div>
+                <span id="verificationBadgeCount" class="text-sm font-medium">-- badges</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-4 h-4 border-2 border-regGreen dark:border-regBeige"></div>
+                  <span class="text-sm">Evidence</span>
+                </div>
+                <span id="evidenceBadgeCount" class="text-sm font-medium">-- badges</span>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-regLine dark:border-regDarkLine">
+              <h4 class="text-sm font-semibold mb-3">Quick Start</h4>
+              <div class="space-y-2 text-sm opacity-90">
+                <div>• Register your garden to unlock basic badges</div>
+                <div>• Add habitat layers for structural badges</div>
+                <div>• Complete field reports for evidence badges</div>
+                <div>• Get verified for credibility badges</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Habitat & Function Badges -->
+    <section id="habitat-badges" class="mb-12">
+      <div class="category-header border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-6 mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="font-serif text-3xl">🌿 Habitat & Function Badges</h2>
+            <p class="text-sm opacity-70 mt-2">Earned through ecological improvements and measurable habitat creation</p>
+          </div>
+          <div class="text-right">
+            <div id="habitatEarnedCount" class="text-2xl font-light">--</div>
+            <div class="text-xs opacity-70">earned</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="habitatBadgeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Verification Badges -->
+    <section id="verification-badges" class="mb-12">
+      <div class="category-header border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-6 mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="font-serif text-3xl">✅ Verification Badges</h2>
+            <p class="text-sm opacity-70 mt-2">Earned through registry compliance and external verification</p>
+          </div>
+          <div class="text-right">
+            <div id="verificationEarnedCount" class="text-2xl font-light">--</div>
+            <div class="text-xs opacity-70">earned</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="verificationBadgeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Evidence Badges -->
+    <section id="evidence-badges" class="mb-12">
+      <div class="category-header border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-6 mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="font-serif text-3xl">📋 Evidence Badges</h2>
+            <p class="text-sm opacity-70 mt-2">Earned through field documentation and evidence collection</p>
+          </div>
+          <div class="text-right">
+            <div id="evidenceEarnedCount" class="text-2xl font-light">--</div>
+            <div class="text-xs opacity-70">earned</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="evidenceBadgeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Populated by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Badge Earning Tips -->
+    <section class="mb-12">
+      <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-8">
+        <h2 class="font-serif text-2xl mb-6">Badge Earning Strategy</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="difficulty-easy border border-regLine dark:border-regDarkLine p-5">
+            <div class="text-sm font-semibold mb-3 text-green-700 dark:text-green-300">🟢 Quick Wins</div>
+            <ul class="space-y-2 text-sm opacity-90">
+              <li>• Register your garden</li>
+              <li>• Add basic mulch coverage</li>
+              <li>• Install one habitat layer</li>
+              <li>• Complete initial assessment</li>
+            </ul>
+          </div>
+          
+          <div class="difficulty-medium border border-regLine dark:border-regDarkLine p-5">
+            <div class="text-sm font-semibold mb-3 text-amber-700 dark:text-amber-300">🟡 Medium Goals</div>
+            <ul class="space-y-2 text-sm opacity-90">
+              <li>• Build 3+ habitat layers</li>
+              <li>• Reach 50% indigenous plants</li>
+              <li>• Install water management</li>
+              <li>• Complete field reports</li>
+            </ul>
+          </div>
+          
+          <div class="difficulty-hard border border-regLine dark:border-regDarkLine p-5">
+            <div class="text-sm font-semibold mb-3 text-red-700 dark:text-red-300">🔴 Long-term Achievements</div>
+            <ul class="space-y-2 text-sm opacity-90">
+              <li>• Professional verification</li>
+              <li>• Complete habitat complexity</li>
+              <li>• Network connectivity</li>
+              <li>• Ongoing documentation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../js/badge-engine.js"></script>
+  <script>
+    const savedTheme = localStorage.getItem("reg-theme");
+    if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+
+    let badgeDefinitions = {};
+    let userGarden = null;
+    let userBadges = [];
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el && value !== undefined) el.textContent = value;
+    }
+
+    function getDifficultyLevel(badgeId, badge) {
+      // Categorize badges by difficulty based on requirements
+      const easyBadges = ['registered_garden', 'baseline_established', 'mulch_champion'];
+      const hardBadges = ['garden_verified', 'biodiversity_champion', 'network_node'];
+      
+      if (easyBadges.includes(badgeId)) return 'easy';
+      if (hardBadges.includes(badgeId)) return 'hard';
+      return 'medium';
+    }
+
+    function renderBadgeCard(badgeId, badge, isEarned) {
+      const difficulty = getDifficultyLevel(badgeId, badge);
+      const difficultyColors = {
+        easy: 'border-green-500 dark:border-green-400',
+        medium: 'border-amber-500 dark:border-amber-400', 
+        hard: 'border-red-500 dark:border-red-400'
+      };
+
+      let badgeClass = 'border border-regLine dark:border-regDarkLine p-5 transition-all hover:shadow-lg';
+      let statusIndicator = '';
+      
+      if (isEarned) {
+        if (badge.type === 'verification') {
+          badgeClass += ' badge-verification';
+        } else if (badge.type === 'evidence') {
+          badgeClass += ' badge-evidence';
+        } else {
+          badgeClass += ' badge-earned';
+        }
+        statusIndicator = '<div class="absolute top-3 right-3 text-lg">✅</div>';
+      } else {
+        badgeClass += ' badge-unearned hover:opacity-80 cursor-pointer';
+        statusIndicator = '<div class="absolute top-3 right-3 text-lg opacity-40">🔒</div>';
+      }
+
+      return `
+        <div class="${badgeClass} relative ${difficultyColors[difficulty]}">
+          ${statusIndicator}
+          <div class="text-center mb-4">
+            <div class="text-3xl mb-2">${isEarned ? '🏆' : '🎯'}</div>
+            <h3 class="font-semibold">${badge.name}</h3>
+          </div>
+          
+          <div class="space-y-3">
+            <p class="text-sm opacity-90 leading-relaxed">${badge.description}</p>
+            
+            <div class="border-t border-regLine dark:border-regDarkLine pt-3">
+              <div class="text-xs font-semibold mb-2">Requirements:</div>
+              <div class="text-xs opacity-80 leading-relaxed">
+                ${badge.requirements || getRequirementsText(badgeId, badge)}
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between text-xs">
+              <span class="px-2 py-1 bg-regSoft dark:bg-regGreen/30 border border-regLine dark:border-regDarkLine">
+                ${badge.type || 'score'} badge
+              </span>
+              <span class="px-2 py-1 ${difficultyColors[difficulty]} bg-opacity-10">
+                ${difficulty} difficulty
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getRequirementsText(badgeId, badge) {
+      // Generate requirements text based on badge ID
+      const requirementMap = {
+        'registered_garden': 'Complete garden registration and submit to Registry',
+        'habitat_layers': 'Establish 3+ distinct habitat layers (ground, shrub, canopy)',
+        'water_wise': 'Implement rainwater collection or permeable surface system',
+        'soil_regenerator': 'Use organic matter, avoid synthetics, improve soil biology',
+        'pollinator_support': 'Plant flowering succession and mixed growth forms',
+        'garden_verified': 'Achieve Gardener & Son or Site Visit verification level',
+        'field_documented': 'Complete annual field report with evidence',
+        'baseline_established': 'Complete initial assessment and establish baseline score',
+        'mulch_champion': 'Maintain organic mulch coverage across planting areas',
+        'biodiversity_champion': 'Achieve 70%+ indigenous plants and high species count',
+        'network_node': 'Connect garden to broader ecological network or corridor'
+      };
+      
+      return requirementMap[badgeId] || 'Requirements vary - check scoring criteria for details';
+    }
+
+    function categorizeAndRenderBadges() {
+      const categories = {
+        score: { badges: [], container: 'habitatBadgeGrid', earnedCount: 'habitatEarnedCount' },
+        verification: { badges: [], container: 'verificationBadgeGrid', earnedCount: 'verificationEarnedCount' },
+        evidence: { badges: [], container: 'evidenceBadgeGrid', earnedCount: 'evidenceEarnedCount' }
+      };
+
+      // Categorize badges
+      Object.entries(badgeDefinitions).forEach(([badgeId, badge]) => {
+        const category = badge.type || 'score';
+        if (categories[category]) {
+          categories[category].badges.push({ id: badgeId, ...badge });
+        }
+      });
+
+      // Render each category
+      Object.values(categories).forEach(category => {
+        const container = document.getElementById(category.container);
+        if (!container) return;
+
+        let earnedInCategory = 0;
+        container.innerHTML = category.badges.map(badge => {
+          const isEarned = userBadges.includes(badge.id);
+          if (isEarned) earnedInCategory++;
+          return renderBadgeCard(badge.id, badge, isEarned);
+        }).join('');
+
+        setText(category.earnedCount, earnedInCategory);
+      });
+
+      // Update category counts
+      setText('habitatBadgeCount', `${categories.score.badges.length} badges`);
+      setText('verificationBadgeCount', `${categories.verification.badges.length} badges`);
+      setText('evidenceBadgeCount', `${categories.evidence.badges.length} badges`);
+    }
+
+    async function loadUserGarden() {
+      try {
+        // Try to load user garden data (could be from URL param or localStorage)
+        const urlParams = new URLSearchParams(window.location.search);
+        const gardenSlug = urlParams.get('garden') || 'arundel'; // default to Arundel for demo
+
+        const response = await fetch(`../../data/${gardenSlug}.json`);
+        if (response.ok) {
+          userGarden = await response.json();
+          const badges = awardBadges(userGarden);
+          userBadges = badges.all_badges;
+        }
+      } catch (error) {
+        console.warn('Could not load user garden data:', error);
+        userBadges = []; // Show all badges as unearned
+      }
+    }
+
+    async function initBadgeReference() {
+      try {
+        // Load badge definitions
+        badgeDefinitions = await getBadgeDefinitions();
+        
+        // Load user garden data if available
+        await loadUserGarden();
+
+        const totalBadges = Object.keys(badgeDefinitions).length;
+        const earnedBadges = userBadges.length;
+        const remainingBadges = totalBadges - earnedBadges;
+
+        // Update overview stats
+        setText('totalBadgeCount', totalBadges);
+        setText('earnedBadgeCount', earnedBadges);
+        setText('remainingBadgeCount', remainingBadges);
+
+        // Render all badges by category
+        categorizeAndRenderBadges();
+
+      } catch (error) {
+        console.error('Failed to load badge reference:', error);
+        document.getElementById('habitatBadgeGrid').innerHTML = '<div class="col-span-full text-center py-8 opacity-70">Badge system unavailable</div>';
+      }
+    }
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("reg-theme", isDark ? "dark" : "light");
+    });
+
+    initBadgeReference();
+  </script>
+</body>
+</html>
