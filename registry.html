@@ -1,241 +1,444 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry</title>
-  <meta
-    name="description"
-    content="The Ecological Registry is a growing index of registered gardens, ecological scores, field reports, and measurable urban habitat assets."
-  />
+  <title>Ecological Registry — Registered Gardens</title>
+  <meta name="description" content="Browse registered ecological gardens, their scores, badges, verification status, and ecological context." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
-          colors: {
-            regGreen: "#3d4535",
-            regBeige: "#fff0dc",
-            regLine: "#d7ccb9",
-            regSoft: "#f7ead6",
-            regDarkPanel: "#485141",
-            regDarkLine: "rgba(255,240,220,0.18)"
-          },
           fontFamily: {
-            serif: ["Abril Fatface", "serif"],
-            sans: ["IBM Plex Sans", "sans-serif"]
+            serif: ['"Abril Fatface"', 'serif'],
+            sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            regGreen: '#3d4535',
+            regBeige: '#fff0dc',
+            regLine: 'rgba(255,240,220,0.18)',
+            regSoft: 'rgba(255,240,220,0.08)',
           },
           boxShadow: {
-            card: "0 18px 50px rgba(32, 33, 28, 0.08)"
+            soft: '0 20px 50px rgba(0,0,0,0.18)',
           }
         }
       }
-    };
+    }
   </script>
+
+  <style>
+    body {
+      background: #3d4535;
+      color: #fff0dc;
+    }
+
+    .hairline { border-color: rgba(255,240,220,0.18); }
+    .soft-bg { background: rgba(255,240,220,0.06); }
+    .soft-bg-2 { background: rgba(255,240,220,0.08); }
+    .muted { color: rgba(255,240,220,0.75); }
+    .muted-2 { color: rgba(255,240,220,0.55); }
+    .table-row:hover { background: rgba(255,240,220,0.05); }
+    
+    /* Badge styling aligned with our system */
+    .badge-chip { 
+      border: 1px solid rgba(255,240,220,0.16); 
+      background: rgba(255,240,220,0.05); 
+      transition: opacity 0.2s ease;
+    }
+    
+    .badge-chip:hover {
+      opacity: 0.8;
+    }
+    
+    /* Badge type styling */
+    .badge-verification { 
+      background: rgba(255,240,220,0.12);
+      color: #3d4535;
+      background: #fff0dc;
+    }
+    
+    .badge-evidence { 
+      border: 2px solid rgba(255,240,220,0.16);
+      background: rgba(255,240,220,0.05); 
+    }
+    
+    .filter-btn.active,
+    .score-btn.active {
+      background: #fff0dc;
+      color: #3d4535;
+    }
+  </style>
 </head>
-<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
-  <main class="min-h-screen px-6 py-10 md:px-10 lg:px-16">
-    <section class="mx-auto max-w-7xl">
-      <header class="border-b border-regLine pb-8 dark:border-regDarkLine">
-        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div class="max-w-3xl">
-            <p class="mb-3 text-xs uppercase tracking-[0.28em]">Ecological Registry</p>
-            <h1 class="font-serif text-4xl leading-none md:text-6xl">
-              Registered Gardens
+<body class="font-sans antialiased">
+  <div class="min-h-screen">
+    <header class="border-b hairline sticky top-0 z-40 backdrop-blur-md" style="background: rgba(61,69,53,0.88);">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+        <div>
+          <div class="text-xs tracking-[0.22em] uppercase muted">Gardener &amp; Son</div>
+          <a href="#" class="font-serif text-2xl leading-none">Ecological Registry</a>
+        </div>
+        <nav class="hidden md:flex items-center gap-8 text-sm muted">
+          <a href="#overview" class="hover:text-regBeige transition">Overview</a>
+          <a href="#gardens" class="hover:text-regBeige transition">Registered Gardens</a>
+          <a href="#why-it-matters" class="hover:text-regBeige transition">Why It Matters</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="overview" class="border-b hairline">
+        <div class="max-w-7xl mx-auto px-6 py-20 md:py-28 grid lg:grid-cols-12 gap-10 items-end">
+          <div class="lg:col-span-7">
+            <div class="text-xs tracking-[0.22em] uppercase muted mb-4">Public Registry</div>
+            <h1 class="font-serif text-5xl md:text-7xl leading-[0.95] max-w-4xl">
+              Registered ecological gardens, made legible.
             </h1>
-            <p class="mt-5 max-w-2xl text-sm leading-relaxed text-regGreen/80 dark:text-regBeige/80 md:text-base">
-              A growing registry of private gardens being re-understood as ecological assets:
-              measurable, mappable, and capable of contributing to urban biodiversity infrastructure.
+            <p class="mt-8 text-lg md:text-xl leading-relaxed muted max-w-2xl">
+              Browse gardens that have been measured, documented, and recognised for their ecological contribution — including score, verification, habitat signals, badges, and place-based context.
             </p>
           </div>
 
-          <button
-            id="themeToggle"
-            type="button"
-            class="inline-flex items-center justify-center border border-regLine px-4 py-2 text-xs uppercase tracking-[0.22em] transition hover:opacity-80 dark:border-regDarkLine"
-          >
-            Toggle light / dark
-          </button>
-        </div>
-      </header>
-
-      <section class="mt-8 grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
-        <div class="border border-regLine bg-regGreen px-6 py-6 text-regBeige shadow-card dark:border-regDarkLine md:px-8">
-          <p class="text-xs uppercase tracking-[0.24em] text-regBeige/70">Registry logic</p>
-          <p class="mt-3 font-serif text-2xl leading-tight">
-            Gardens can now be recorded, scored, verified, and understood as part of a wider urban ecological network.
-          </p>
-          <div class="mt-6 space-y-4 text-sm leading-relaxed text-regBeige/85">
-            <p>Each listing links to a score profile with assessment data, badges, and upgrade opportunities.</p>
-            <p>This creates a new cultural and technical layer between private stewardship and public ecological value.</p>
-          </div>
-        </div>
-
-        <div class="grid gap-4 sm:grid-cols-3">
-          <div class="border border-regLine bg-white px-5 py-5 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
-            <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">Current focus</p>
-            <p class="mt-3 font-serif text-3xl" id="gardenCount">--</p>
-            <p class="mt-2 text-sm">Registered gardens in the live index</p>
-          </div>
-
-          <div class="border border-regLine bg-white px-5 py-5 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
-            <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">System layer</p>
-            <p class="mt-3 font-serif text-3xl">Score</p>
-            <p class="mt-2 text-sm">Visible ecological assessment and verification</p>
-          </div>
-
-          <div class="border border-regLine bg-white px-5 py-5 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
-            <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">Next stage</p>
-            <p class="mt-3 font-serif text-3xl">Network</p>
-            <p class="mt-2 text-sm">Connected gardens across suburbs and remnant edges</p>
+          <div class="lg:col-span-5 grid sm:grid-cols-3 lg:grid-cols-1 gap-4" id="statsGrid">
+            <div class="soft-bg border hairline p-5 shadow-soft">
+              <div class="text-xs uppercase tracking-[0.2em] muted-2">Registered Gardens</div>
+              <div id="statTotalGardens" class="text-4xl mt-3 font-light">—</div>
+            </div>
+            <div class="soft-bg border hairline p-5 shadow-soft">
+              <div class="text-xs uppercase tracking-[0.2em] muted-2">Average Score</div>
+              <div id="statAverageScore" class="text-4xl mt-3 font-light">—</div>
+            </div>
+            <div class="soft-bg border hairline p-5 shadow-soft">
+              <div class="text-xs uppercase tracking-[0.2em] muted-2">Badges Awarded</div>
+              <div id="statTotalBadges" class="text-4xl mt-3 font-light">—</div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="mt-10">
-        <div class="mb-5 flex items-end justify-between gap-4">
+      <section id="gardens" class="border-b hairline">
+        <div class="max-w-7xl mx-auto px-6 py-12 md:py-16">
+          <div class="grid lg:grid-cols-12 gap-8 items-start">
+            <aside class="lg:col-span-3 space-y-8 lg:sticky lg:top-24">
+              <div>
+                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Search</div>
+                <input id="searchInput" type="text" placeholder="Search suburb, EVC, garden..." class="w-full bg-transparent border hairline px-4 py-3 outline-none placeholder:text-[rgba(255,240,220,0.4)] focus:border-[rgba(255,240,220,0.5)]" />
+              </div>
+
+              <div>
+                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Verification</div>
+                <div class="flex flex-wrap gap-2">
+                  <button class="filter-btn active border hairline px-3 py-2 text-sm" data-filter="all">All</button>
+                  <button class="filter-btn border hairline px-3 py-2 text-sm" data-filter="gardener_and_son_verified">G&amp;S Verified</button>
+                  <button class="filter-btn border hairline px-3 py-2 text-sm" data-filter="site_visit">Site Visit</button>
+                  <button class="filter-btn border hairline px-3 py-2 text-sm" data-filter="photo_verified">Photo Verified</button>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Score</div>
+                <div class="flex flex-wrap gap-2">
+                  <button class="score-btn active border hairline px-3 py-2 text-sm" data-score="all">All</button>
+                  <button class="score-btn border hairline px-3 py-2 text-sm" data-score="70">70+</button>
+                  <button class="score-btn border hairline px-3 py-2 text-sm" data-score="50">50+</button>
+                  <button class="score-btn border hairline px-3 py-2 text-sm" data-score="0">Below 50</button>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">System Note</div>
+                <p class="text-sm leading-relaxed muted">
+                  This directory is powered by the registry master index. Each entry summarises a garden's score, verification, badges, status, and ecological context.
+                </p>
+              </div>
+            </aside>
+
+            <div class="lg:col-span-9">
+              <div class="flex items-end justify-between gap-6 mb-6">
+                <div>
+                  <div class="text-xs tracking-[0.2em] uppercase muted">Directory</div>
+                  <h2 class="font-serif text-3xl md:text-4xl mt-2">Registered Gardens</h2>
+                </div>
+                <div id="resultCount" class="text-sm muted">Loading registry…</div>
+              </div>
+
+              <div id="gardenGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why-it-matters">
+        <div class="max-w-7xl mx-auto px-6 py-16 md:py-20 grid lg:grid-cols-3 gap-8">
           <div>
-            <p class="text-xs uppercase tracking-[0.24em]">Live registry index</p>
-            <h2 class="mt-2 font-serif text-3xl md:text-4xl">Gardens</h2>
+            <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Why This Exists</div>
+            <h3 class="font-serif text-3xl leading-tight">Private land is ecological infrastructure.</h3>
           </div>
-          <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">
-            Click any garden to view score
-          </p>
-        </div>
-
-        <div id="gardenGrid" class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          <div class="border border-regLine bg-white p-6 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
-            Loading gardens...
+          <div class="lg:col-span-2 grid md:grid-cols-3 gap-5">
+            <div class="soft-bg border hairline p-5">
+              <div class="text-sm uppercase tracking-[0.18em] muted-2">Measure</div>
+              <p class="mt-3 text-sm leading-relaxed muted">Turn gardens into legible ecological assets through baselines, field notes, and scoring.</p>
+            </div>
+            <div class="soft-bg border hairline p-5">
+              <div class="text-sm uppercase tracking-[0.18em] muted-2">Recognise</div>
+              <p class="mt-3 text-sm leading-relaxed muted">Surface what has been achieved through badges, verification, and transparent signals.</p>
+            </div>
+            <div class="soft-bg border hairline p-5">
+              <div class="text-sm uppercase tracking-[0.18em] muted-2">Connect</div>
+              <p class="mt-3 text-sm leading-relaxed muted">Allow many individual gardens to contribute to a visible urban ecological network.</p>
+            </div>
           </div>
         </div>
       </section>
-    </section>
-  </main>
+    </main>
+  </div>
 
-  <script src="js/reg-score.js"></script>
+  <template id="gardenCardTemplate">
+    <article class="soft-bg border hairline p-5 flex flex-col h-full shadow-soft table-row transition">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs uppercase tracking-[0.18em] muted-2 garden-id"></div>
+          <h3 class="font-serif text-2xl mt-2 garden-name"></h3>
+          <div class="mt-2 text-sm muted garden-location"></div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs uppercase tracking-[0.18em] muted-2">Score</div>
+          <div class="text-3xl font-light garden-score"></div>
+        </div>
+      </div>
+
+      <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Rating</div>
+          <div class="mt-1 garden-rating"></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Verified</div>
+          <div class="mt-1 garden-verification"></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Primary EVC</div>
+          <div class="mt-1 garden-evc"></div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Status</div>
+          <div class="mt-1 garden-status"></div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <div class="flex items-center justify-between gap-4 mb-2">
+          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Badge Visibility</div>
+          <div class="text-xs muted garden-badge-count"></div>
+        </div>
+        <div class="garden-badges flex flex-wrap gap-2"></div>
+      </div>
+
+      <div class="mt-5 pt-5 border-t hairline flex items-center justify-between gap-4">
+        <div class="text-xs muted garden-last-verified"></div>
+        <a class="garden-link text-sm border hairline px-3 py-2 hover:bg-regBeige hover:text-regGreen transition" href="#">View profile</a>
+      </div>
+    </article>
+  </template>
+
+  <script src="../js/badge-engine.js"></script>
   <script>
-    const savedTheme = localStorage.getItem("reg-theme");
-    if (savedTheme === "light") {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
+    const registryPath = '/data/registry.json';
+
+    const state = {
+      gardens: [],
+      verification: 'all',
+      score: 'all',
+      search: '',
+      badgeDefinitions: {}
+    };
+
+    const els = {
+      statTotalGardens: document.getElementById('statTotalGardens'),
+      statAverageScore: document.getElementById('statAverageScore'),
+      statTotalBadges: document.getElementById('statTotalBadges'),
+      gardenGrid: document.getElementById('gardenGrid'),
+      resultCount: document.getElementById('resultCount'),
+      searchInput: document.getElementById('searchInput'),
+      template: document.getElementById('gardenCardTemplate')
+    };
+
+    async function formatBadgeLabel(badgeId) {
+      if (!state.badgeDefinitions[badgeId]) {
+        // Fallback for unknown badges
+        return badgeId.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+      }
+      return state.badgeDefinitions[badgeId].name;
     }
 
-    function verificationLabel(level) {
-      const map = {
-        self_registered: "Self Registered",
-        photo_verified: "Photo Verified",
-        site_visit: "Site Visit Verified",
-        gardener_and_son_verified: "Gardener & Son Verified"
-      };
-      return map[level] || "Unverified";
+    function getBadgeType(badgeId) {
+      return state.badgeDefinitions[badgeId]?.type || 'score';
     }
 
-    function badgeTone(level) {
-      if (level === "gardener_and_son_verified") return "Gardener & Son Verified";
-      if (level === "site_visit") return "Site Visit Verified";
-      if (level === "photo_verified") return "Photo Verified";
-      return "Self Registered";
+    function matchesScore(score, filter) {
+      if (filter === 'all') return true;
+      if (filter === '70') return score >= 70;
+      if (filter === '50') return score >= 50;
+      if (filter === '0') return score < 50;
+      return true;
     }
 
-    async function loadRegistryIndex() {
+    function filterGardens() {
+      return state.gardens.filter(garden => {
+        const verificationOk = state.verification === 'all' || garden.verification_level === state.verification;
+        const scoreOk = matchesScore(garden.score, state.score);
+
+        const searchable = [
+          garden.garden_name,
+          garden.suburb,
+          garden.state,
+          garden.type,
+          garden.primary_evc,
+          garden.bioregion,
+          garden.status,
+          ...(garden.badges || [])
+        ].join(' ').toLowerCase();
+
+        const searchOk = searchable.includes(state.search.toLowerCase());
+        return verificationOk && scoreOk && searchOk;
+      });
+    }
+
+    function renderStats(data) {
+      const totalGardens = data.registry_metadata?.total_gardens ?? data.gardens.length;
+      const averageScore = data.statistics?.average_score ?? '—';
+      const totalBadges = data.statistics?.total_badges_awarded ?? '—';
+
+      els.statTotalGardens.textContent = totalGardens;
+      els.statAverageScore.textContent = averageScore === '—' ? '—' : `${averageScore}`;
+      els.statTotalBadges.textContent = totalBadges;
+    }
+
+    async function renderGardens() {
+      const gardens = filterGardens();
+      els.gardenGrid.innerHTML = '';
+      els.resultCount.textContent = `${gardens.length} garden${gardens.length === 1 ? '' : 's'}`;
+
+      if (!gardens.length) {
+        els.gardenGrid.innerHTML = `
+          <div class="md:col-span-2 xl:col-span-3 border hairline p-8 soft-bg">
+            <div class="text-sm uppercase tracking-[0.18em] muted-2">No results</div>
+            <p class="mt-3 text-base muted">No gardens match the current search or filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      for (const garden of gardens) {
+        const node = els.template.content.cloneNode(true);
+
+        node.querySelector('.garden-id').textContent = garden.garden_id;
+        node.querySelector('.garden-name').textContent = garden.garden_name;
+        node.querySelector('.garden-location').textContent = `${garden.suburb}, ${garden.state}`;
+        node.querySelector('.garden-score').textContent = garden.score;
+        node.querySelector('.garden-rating').textContent = garden.rating;
+        node.querySelector('.garden-verification').textContent = garden.verification_label || garden.verification_level;
+        node.querySelector('.garden-evc').textContent = garden.primary_evc;
+        node.querySelector('.garden-status').textContent = garden.status;
+        node.querySelector('.garden-badge-count').textContent = `${garden.badge_count || garden.badges.length} earned`;
+        node.querySelector('.garden-last-verified').textContent = `Last verified ${garden.last_verified}`;
+
+        const link = node.querySelector('.garden-link');
+        link.href = garden.profile_url;
+
+        const badgeWrap = node.querySelector('.garden-badges');
+        const badgesToShow = (garden.badges || []).slice(0, 4);
+        
+        for (const badgeId of badgesToShow) {
+          const chip = document.createElement('span');
+          const badgeType = getBadgeType(badgeId);
+          const badgeLabel = await formatBadgeLabel(badgeId);
+          
+          // Apply type-specific styling
+          let badgeClass = 'badge-chip';
+          if (badgeType === 'verification') badgeClass += ' badge-verification';
+          if (badgeType === 'evidence') badgeClass += ' badge-evidence';
+          
+          chip.className = `${badgeClass} text-xs px-2 py-1`;
+          chip.textContent = badgeLabel;
+          chip.title = state.badgeDefinitions[badgeId]?.description || badgeLabel;
+          badgeWrap.appendChild(chip);
+        }
+
+        if ((garden.badges || []).length > 4) {
+          const chip = document.createElement('span');
+          chip.className = 'badge-chip text-xs px-2 py-1';
+          chip.textContent = `+${garden.badges.length - 4} more`;
+          badgeWrap.appendChild(chip);
+        }
+
+        els.gardenGrid.appendChild(node);
+      }
+    }
+
+    function setupFilters() {
+      document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          state.verification = button.dataset.filter;
+          renderGardens();
+        });
+      });
+
+      document.querySelectorAll('.score-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.score-btn').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          state.score = button.dataset.score;
+          renderGardens();
+        });
+      });
+
+      els.searchInput.addEventListener('input', (event) => {
+        state.search = event.target.value.trim();
+        renderGardens();
+      });
+    }
+
+    async function initRegistry() {
       try {
-        const [gardensResponse, arundelResponse, nicholsonResponse] = await Promise.all([
-          fetch("data/gardens.json"),
-          fetch("data/arundel.json").catch(() => null),
-          fetch("data/nicholson.json").catch(() => null)
-        ]);
-
-        if (!gardensResponse.ok) {
-          throw new Error("Could not load gardens index");
+        // Load badge definitions first
+        try {
+          state.badgeDefinitions = await getBadgeDefinitions();
+        } catch (error) {
+          console.warn('Could not load badge definitions:', error);
+          state.badgeDefinitions = {};
         }
 
-        const gardens = await gardensResponse.json();
-        document.getElementById("gardenCount").textContent = gardens.length;
+        const response = await fetch(registryPath, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-        const scoreMap = {};
+        const data = await response.json();
+        state.gardens = data.gardens || [];
 
-        if (arundelResponse && arundelResponse.ok) {
-          const record = await arundelResponse.json();
-          scoreMap["arundel"] = scoreEcologicalRegistry(record);
-        }
-
-        if (nicholsonResponse && nicholsonResponse.ok) {
-          const record = await nicholsonResponse.json();
-          scoreMap["nicholson"] = scoreEcologicalRegistry(record);
-        }
-
-        const grid = document.getElementById("gardenGrid");
-        grid.innerHTML = gardens.map(garden => {
-          const scoreData = scoreMap[garden.slug];
-          const scoreValue = scoreData ? scoreData.total : "—";
-          const scoreLevel = scoreData ? scoreData.level : "Assessment pending";
-
-          return `
-            <a
-              href="score.html?garden=${garden.slug}"
-              class="group border border-regLine bg-white p-6 text-regGreen shadow-card transition hover:-translate-y-1 hover:shadow-xl dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige"
-            >
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <p class="text-xs uppercase tracking-[0.22em] text-regGreen/65 dark:text-regBeige/65">${garden.garden_id}</p>
-                  <h3 class="mt-3 font-serif text-3xl leading-none">${garden.garden_name}</h3>
-                  <p class="mt-3 text-sm text-regGreen/75 dark:text-regBeige/75">${garden.suburb}</p>
-                </div>
-
-                <div class="border border-regLine bg-regSoft px-3 py-2 text-xs uppercase tracking-[0.18em] dark:border-regDarkLine dark:bg-regGreen">
-                  ${garden.status}
-                </div>
-              </div>
-
-              <div class="mt-6 grid grid-cols-2 gap-4 border-t border-regLine pt-5 dark:border-regDarkLine">
-                <div>
-                  <p class="text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">Score</p>
-                  <p class="mt-2 font-serif text-4xl leading-none">${scoreValue}</p>
-                </div>
-                <div>
-                  <p class="text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">Verification</p>
-                  <p class="mt-2 text-sm leading-snug">${badgeTone(garden.verification_level)}</p>
-                </div>
-              </div>
-
-              <p class="mt-5 text-sm leading-relaxed text-regGreen/80 dark:text-regBeige/80">
-                ${garden.summary}
-              </p>
-
-              <div class="mt-6 flex items-center justify-between border-t border-regLine pt-4 dark:border-regDarkLine">
-                <p class="text-xs uppercase tracking-[0.18em] text-regGreen/65 dark:text-regBeige/65">${scoreLevel}</p>
-                <p class="text-sm font-medium group-hover:underline">View score</p>
-              </div>
-            </a>
-          `;
-        }).join("");
+        renderStats(data);
+        await renderGardens();
       } catch (error) {
-        console.error(error);
-        document.getElementById("gardenGrid").innerHTML = `
-          <div class="border border-regLine bg-white p-6 text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige">
-            Unable to load registry index. Check <code>data/gardens.json</code> and garden data files.
+        console.error('Failed to load registry:', error);
+        els.resultCount.textContent = 'Could not load registry';
+        els.gardenGrid.innerHTML = `
+          <div class="md:col-span-2 xl:col-span-3 border hairline p-8 soft-bg">
+            <div class="text-sm uppercase tracking-[0.18em] muted-2">Registry unavailable</div>
+            <p class="mt-3 text-base muted">Check that <code>/data/registry.json</code> exists and the path is correct.</p>
           </div>
         `;
       }
     }
 
-    document.getElementById("themeToggle").addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      const isDark = document.documentElement.classList.contains("dark");
-      localStorage.setItem("reg-theme", isDark ? "dark" : "light");
-    });
-
-    loadRegistryIndex();
+    setupFilters();
+    initRegistry();
   </script>
 </body>
 </html>
