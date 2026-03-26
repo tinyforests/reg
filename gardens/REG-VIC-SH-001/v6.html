@@ -128,9 +128,18 @@
               </div>
             </div>
             
-            <!-- Rating Level Below -->
-            <div class="mt-4 text-center md:text-left">
-              <div id="heroLevel" class="text-lg font-medium opacity-90">Loading...</div>
+            <!-- Rating Level & Verification Below -->
+            <div class="mt-6 text-center md:text-left flex flex-col md:flex-row md:items-center gap-4">
+              <div>
+                <div id="heroLevel" class="text-xl font-semibold">Loading...</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="heroVerificationBadge" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen text-sm font-medium">
+                  Verified
+                </span>
+                <span class="text-xs opacity-70" id="heroLastVerified">Last verified Mar 2026</span>
+              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -158,15 +167,19 @@
 
           <!-- Quick Stats -->
           <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
-            <div class="text-sm font-semibold mb-4">Garden Stats</div>
-            <div class="grid grid-cols-2 gap-4 text-sm">
-              <div class="text-center">
-                <div id="statBadgeCount" class="text-2xl font-light">--</div>
-                <div class="text-xs opacity-70">Badges Earned</div>
+            <div class="text-sm font-semibold mb-4">Registry Status</div>
+            <div class="space-y-3 text-sm">
+              <div class="flex items-center justify-between">
+                <span class="opacity-75">Registry ID</span>
+                <span id="heroGardenId" class="font-medium text-xs">ER-VIC-SH-ARU-0001</span>
               </div>
-              <div class="text-center">
-                <div id="statVerificationLevel" class="text-2xl font-light">--</div>
-                <div class="text-xs opacity-70">Verification</div>
+              <div class="flex items-center justify-between">
+                <span class="opacity-75">Status</span>
+                <span class="font-medium text-xs">Active / Developing</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="opacity-75">Next Review</span>
+                <span class="font-medium text-xs">Aug 2026</span>
               </div>
             </div>
           </div>
@@ -491,7 +504,6 @@
         
         // Update badge counts
         setText("badgeCount", badges.all_badges.length);
-        setText("statBadgeCount", badges.all_badges.length);
         setText("scoreBadgeCount", badges.score_badges.length);
         setText("verificationBadgeCount", badges.verification_badges.length);
         setText("evidenceBadgeCount", badges.evidence_badges.length);
@@ -600,6 +612,11 @@
         // Calculate and display badge count prominently
         const badges = awardBadges(record);
         setText("heroBadgeCount", badges.all_badges.length);
+        
+        // Update verification display in hero
+        setText("heroVerificationBadge", result.verificationLabel);
+        setText("heroLastVerified", `Last verified ${record.assessment_date}`);
+        setText("heroGardenId", record.garden_id);
 
         // Next level information
         const nextLevel = getNextLevelInfo(result.total);
