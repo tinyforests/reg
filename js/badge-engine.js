@@ -1,15 +1,15 @@
 /**
  * badge-engine.js
- * Ecological Registry Badge Engine — Gardener & Son v1.0
+ * Ecological Registry Badge Engine - Gardener & Son v1.0
  *
  * Exports:
- *   awardBadges(record)         → { all_badges, score_badges, verification_badges, evidence_badges }
- *   getBadgeDefinitions()       → Promise<{ [id]: BadgeDefinition }>
+ *   awardBadges(record)      - returns { all_badges, score_badges, verification_badges, evidence_badges }
+ *   getBadgeDefinitions()    - returns Promise resolving to badge definitions object
  */
 
-const BADGE_DEFINITIONS = {
+var BADGE_DEFINITIONS = {
 
-  /* ── Biodiversity ── */
+  // Biodiversity
   indigenous_dominant: {
     name: "Indigenous Dominant",
     description: "Garden is dominated by indigenous species appropriate to EVC.",
@@ -41,7 +41,7 @@ const BADGE_DEFINITIONS = {
     category: "Habitat & Function"
   },
 
-  /* ── Habitat ── */
+  // Habitat
   habitat_builder: {
     name: "Habitat Builder",
     description: "Three or more habitat nodes installed and mapped.",
@@ -67,7 +67,7 @@ const BADGE_DEFINITIONS = {
     category: "Habitat & Function"
   },
 
-  /* ── Connectivity ── */
+  // Connectivity
   corridor_node: {
     name: "Corridor Node",
     description: "Garden confirmed as an active ecological corridor node.",
@@ -81,7 +81,7 @@ const BADGE_DEFINITIONS = {
     category: "Habitat & Function"
   },
 
-  /* ── Verification ── */
+  // Verification
   gs_verified: {
     name: "G&S Verified",
     description: "Professionally assessed and verified by Gardener & Son.",
@@ -95,7 +95,7 @@ const BADGE_DEFINITIONS = {
     category: "Verification"
   },
 
-  /* ── Evidence ── */
+  // Evidence
   full_record: {
     name: "Full Record",
     description: "Photos, field notes, species list, and fauna records all complete.",
@@ -115,52 +115,81 @@ const BADGE_DEFINITIONS = {
  * Returns categorised badge ID arrays.
  */
 function awardBadges(record) {
-  const b = record.biodiversity || {};
-  const h = record.habitat      || {};
-  const c = record.connectivity || {};
-  const e = record.evidence     || {};
-  const sw = record.soil_water  || {};
+  var b  = record.biodiversity || {};
+  var h  = record.habitat      || {};
+  var c  = record.connectivity || {};
+  var e  = record.evidence     || {};
+  var sw = record.soil_water   || {};
 
-  const score_badges        = [];
-  const verification_badges = [];
-  const evidence_badges     = [];
+  var score_badges        = [];
+  var verification_badges = [];
+  var evidence_badges     = [];
 
-  /* ── Biodiversity badges ── */
-  if (b.indigenous_dominant)               score_badges.push("indigenous_dominant");
-  if ((b.indigenous_species_current || 0) >= 20) score_badges.push("species_rich_20");
-  if ((b.indigenous_species_current || 0) >= 30) score_badges.push("species_rich_30");
-  if ((b.canopy_cover_pct_current   || 0) >= 30) score_badges.push("full_canopy");
-  if ((b.structural_layers_current  || 0) >= 5)  score_badges.push("five_layers");
+  // Biodiversity badges
+  if (b.indigenous_dominant) {
+    score_badges.push("indigenous_dominant");
+  }
+  if ((b.indigenous_species_current || 0) >= 20) {
+    score_badges.push("species_rich_20");
+  }
+  if ((b.indigenous_species_current || 0) >= 30) {
+    score_badges.push("species_rich_30");
+  }
+  if ((b.canopy_cover_pct_current || 0) >= 30) {
+    score_badges.push("full_canopy");
+  }
+  if ((b.structural_layers_current || 0) >= 5) {
+    score_badges.push("five_layers");
+  }
 
-  /* ── Habitat badges ── */
-  if ((h.habitat_nodes || 0) >= 3) score_badges.push("habitat_builder");
+  // Habitat badges
+  if ((h.habitat_nodes || 0) >= 3) {
+    score_badges.push("habitat_builder");
+  }
 
-  const verifiedFauna = (h.fauna_sightings || []).filter(s => s.verified);
+  var verifiedFauna = (h.fauna_sightings || []).filter(function(s) { return s.verified; });
   if (verifiedFauna.length >= 1) {
     score_badges.push("amphibian_active");
     evidence_badges.push("fauna_record");
   }
-  if (verifiedFauna.length >= 3) score_badges.push("pollinator_rich");
+  if (verifiedFauna.length >= 3) {
+    score_badges.push("pollinator_rich");
+  }
 
-  if (sw.has_rainwater_system && sw.has_moisture_basin) score_badges.push("water_wise");
+  if (sw.has_rainwater_system && sw.has_moisture_basin) {
+    score_badges.push("water_wise");
+  }
 
-  /* ── Connectivity badges ── */
-  if (c.corridor_node_confirmed) score_badges.push("corridor_node");
-  const adjVerified = (c.adjacent_registered_gardens || []).filter(g => g.verified).length;
-  if (adjVerified >= 2) score_badges.push("network_connected");
+  // Connectivity badges
+  if (c.corridor_node_confirmed) {
+    score_badges.push("corridor_node");
+  }
+  var adjVerified = (c.adjacent_registered_gardens || []).filter(function(g) { return g.verified; }).length;
+  if (adjVerified >= 2) {
+    score_badges.push("network_connected");
+  }
 
-  /* ── Verification badges ── */
-  if (e.verification_level === 'gardener_and_son_verified') verification_badges.push("gs_verified");
-  if (e.verification_level === 'site_visit')                verification_badges.push("site_visit");
+  // Verification badges
+  if (e.verification_level === "gardener_and_son_verified") {
+    verification_badges.push("gs_verified");
+  }
+  if (e.verification_level === "site_visit") {
+    verification_badges.push("site_visit");
+  }
 
-  /* ── Evidence badges ── */
+  // Evidence badges
   if (e.has_photos && e.has_field_notes && e.has_species_list && e.has_fauna_record) {
     evidence_badges.push("full_record");
   }
 
-  const all_badges = [...score_badges, ...verification_badges, ...evidence_badges];
+  var all_badges = score_badges.concat(verification_badges).concat(evidence_badges);
 
-  return { all_badges, score_badges, verification_badges, evidence_badges };
+  return {
+    all_badges: all_badges,
+    score_badges: score_badges,
+    verification_badges: verification_badges,
+    evidence_badges: evidence_badges
+  };
 }
 
 /**
