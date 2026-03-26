@@ -10,17 +10,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: "class",
+      darkMode: 'class',
       theme: { extend: {
         fontFamily: {
-          serif: ['"Abril Fatface"', "serif"],
-          sans:  ['"IBM Plex Sans"', "sans-serif"],
-          mono:  ['"IBM Plex Mono"', "monospace"]
+          serif: ['"Abril Fatface"', 'serif'],
+          sans:  ['"IBM Plex Sans"', 'sans-serif'],
+          mono:  ['"IBM Plex Mono"', 'monospace']
         },
         colors: {
-          rg: "#3d4535", rb: "#fff0dc", rs: "#f7ead6",
-          rl: "#d7ccb9", rdp: "#485141", rdl: "rgba(255,240,220,0.12)",
-          signal: "#7a9e5f"
+          rg: '#3d4535', rb: '#fff0dc', rs: '#f7ead6',
+          rl: '#d7ccb9', rdp: '#485141', rdl: 'rgba(255,240,220,0.12)',
+          signal: '#7a9e5f'
         }
       }}
     };
@@ -36,10 +36,10 @@
     .dark .signal-cell { background:#485141; }
     @media(min-width:640px){ .signal-grid{grid-template-columns:repeat(3,1fr)} }
     @media(min-width:1024px){ .signal-grid{grid-template-columns:repeat(6,1fr)} }
-    .delta-up  { color:#7a9e5f; font-weight:600; }
-    .delta-same{ opacity:.45; }
-    .delta-down{ color:#c0392b; font-weight:600; }
-    .badge-pill{ font-size:.7rem; border-width:1px; padding:.25rem .6rem; display:inline-block; }
+    .delta-up   { color:#7a9e5f; font-weight:600; }
+    .delta-same { opacity:.45; }
+    .delta-down { color:#c0392b; font-weight:600; }
+    .badge-pill { font-size:.7rem; border-width:1px; padding:.25rem .6rem; display:inline-block; }
     .stagger > * { opacity:0; transform:translateY(12px); animation:fadeUp 0.5s ease forwards; }
     .stagger > *:nth-child(1){animation-delay:.05s}
     .stagger > *:nth-child(2){animation-delay:.1s}
@@ -60,11 +60,11 @@
       </div>
     </div>
     <nav class="hidden md:flex items-center gap-1 text-xs">
-      <a href="#signals" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Signals</a>
-      <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Score</a>
-      <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Network</a>
-      <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Record</a>
-      <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp transition-colors">Trajectory</a>
+      <a href="#signals" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Signals</a>
+      <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
+      <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
+      <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
+      <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
     </nav>
     <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Theme</button>
   </div>
@@ -72,7 +72,6 @@
 
 <main class="mx-auto max-w-6xl px-4 py-8 md:py-12 space-y-12">
 
-  <!-- HERO -->
   <section class="stagger">
     <div class="grid lg:grid-cols-12 gap-6">
       <div class="lg:col-span-8 border border-rl dark:border-rdl bg-white dark:bg-rdp p-8 md:p-10">
@@ -99,21 +98,19 @@
               <span>Target <span id="heroTarget">82</span></span>
             </div>
           </div>
-          <div class="mt-5 pt-5 border-t border-rb/20 dark:border-rg/20">
-            <div class="section-label mb-3" style="color:inherit;opacity:.5">Achievements</div>
+          <div class="mt-5 pt-5" style="border-top:1px solid rgba(255,240,220,.2)">
+            <div class="section-label mb-3" style="opacity:.5">Achievements</div>
             <div class="flex flex-wrap gap-2" id="heroBadges"></div>
           </div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Registry ID</div>
           <div class="font-mono text-xs" id="heroId">--</div>
-          <div class="mt-3 text-xs opacity-60">Next review -- Aug 2026</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SIGNALS -->
   <section id="signals" class="stagger">
     <div class="flex items-end justify-between gap-4 mb-4">
       <div>
@@ -122,12 +119,10 @@
       </div>
       <div class="text-xs opacity-50 font-mono text-right" id="signalDates"></div>
     </div>
-    <p class="text-sm opacity-60 mb-6 max-w-xl">Structured measurements that make this garden legible to the network. These signals feed the Curbing aggregation layer.</p>
     <div class="signal-grid mb-4" id="signalGridPrimary"></div>
     <div class="signal-grid" id="signalGridSecondary"></div>
   </section>
 
-  <!-- SCORE -->
   <section id="score" class="stagger">
     <div class="section-label mb-1">Performance</div>
     <h2 class="font-serif text-4xl mb-6">Score Breakdown</h2>
@@ -152,34 +147,22 @@
     </div>
   </section>
 
-  <!-- NETWORK -->
   <section id="network" class="stagger">
     <div class="section-label mb-1">Curbing Layer</div>
-    <h2 class="font-serif text-4xl mb-2">Network Position</h2>
-    <p class="text-sm opacity-60 mb-6 max-w-xl">How this garden contributes to the wider urban ecological network.</p>
+    <h2 class="font-serif text-4xl mb-6">Network Position</h2>
     <div class="grid lg:grid-cols-12 gap-6">
       <div class="lg:col-span-5 border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
         <div class="section-label mb-4" id="networkMapLabel">Corridor Map</div>
         <svg viewBox="0 0 280 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
           <rect x="10" y="10" width="60" height="40" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="0.5" stroke-opacity="0.3"/>
-          <text x="40" y="34" text-anchor="middle" font-size="7" fill="currentColor" opacity="0.5" font-family="IBM Plex Sans">Park</text>
+          <text x="40" y="34" text-anchor="middle" font-size="7" fill="currentColor" opacity="0.5">Park</text>
           <line x1="70" y1="30" x2="110" y2="70" stroke="#7a9e5f" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
-          <line x1="130" y1="75" x2="175" y2="55" stroke="currentColor" stroke-width="1" stroke-dasharray="3,4" opacity="0.25"/>
-          <line x1="130" y1="95" x2="140" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="3,4" opacity="0.25"/>
-          <line x1="115" y1="80" x2="65" y2="120" stroke="currentColor" stroke-width="1" stroke-dasharray="3,4" opacity="0.25"/>
-          <rect x="172" y="48" width="10" height="10" fill="currentColor" opacity="0.3"/>
-          <rect x="137" y="137" width="10" height="10" fill="currentColor" opacity="0.3"/>
-          <rect x="55"  y="117" width="10" height="10" fill="currentColor" opacity="0.3"/>
+          <line x1="130" y1="95" x2="195" y2="126" stroke="#7a9e5f" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
           <rect x="195" y="120" width="12" height="12" fill="#7a9e5f"/>
-          <line x1="130" y1="90" x2="195" y2="126" stroke="#7a9e5f" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
           <text x="201" y="145" text-anchor="middle" font-size="6" fill="#7a9e5f" id="svgAdjacentId">--</text>
           <rect x="110" y="65" width="20" height="20" fill="#7a9e5f"/>
           <text x="120" y="58" text-anchor="middle" font-size="7" fill="#7a9e5f" font-weight="600" id="svgGardenName">--</text>
         </svg>
-        <div class="mt-4 pt-4 border-t border-rl dark:border-rdl flex items-center gap-3 text-xs">
-          <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-signal flex-shrink-0"></div><span>Registered</span></div>
-          <div class="flex items-center gap-1.5"><div class="w-3 h-3 bg-rg/30 dark:bg-rb/30 flex-shrink-0"></div><span>Unregistered</span></div>
-        </div>
       </div>
       <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-5">
@@ -212,7 +195,6 @@
     </div>
   </section>
 
-  <!-- RECORD -->
   <section id="record" class="stagger">
     <div class="section-label mb-1">Garden Story</div>
     <h2 class="font-serif text-4xl mb-6">Field Record</h2>
@@ -223,15 +205,10 @@
           <div class="section-label mb-4">Garden Facts</div>
           <dl class="space-y-3 text-xs" id="gardenFacts"></dl>
         </div>
-        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
-          <div class="section-label mb-3">Privacy</div>
-          <p class="text-xs opacity-70 leading-relaxed">Exact address, detailed species records, and raw field notes are held privately. The steward controls what appears on this public profile.</p>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- TRAJECTORY -->
   <section id="trajectory" class="stagger">
     <div class="section-label mb-1">Long-term View</div>
     <h2 class="font-serif text-4xl mb-6">Trajectory</h2>
@@ -273,590 +250,465 @@
 </footer>
 
 <script>
-// ================================================================
-// SCORING ENGINE
-// ================================================================
-function scoreEcologicalRegistry(record) {
-  var bio  = scoreBiodiversity(record);
-  var sw   = scoreSoilWater(record);
-  var hab  = scoreHabitat(record);
-  var con  = scoreConnectivity(record);
-  var ev   = scoreEvidence(record);
-  var total = bio.score + sw.score + hab.score + con.score + ev.score;
-  var categories = [
-    { label: "Biodiversity Structure",  score: bio.score, max: 25, notes: bio.notes },
-    { label: "Soil & Water Function",   score: sw.score,  max: 20, notes: sw.notes  },
-    { label: "Habitat Complexity",      score: hab.score, max: 20, notes: hab.notes  },
-    { label: "Connectivity",            score: con.score, max: 20, notes: con.notes  },
-    { label: "Evidence & Verification", score: ev.score,  max: 15, notes: ev.notes   }
-  ];
+/* Ecological Registry - Arundel - Profile Page */
+
+/* ---- SCORING ENGINE ---- */
+function scoreEcologicalRegistry(r) {
+  var bio = scoreBio(r);
+  var sw  = scoreSW(r);
+  var hab = scoreHab(r);
+  var con = scoreCon(r);
+  var ev  = scoreEv(r);
+  var total = bio.s + sw.s + hab.s + con.s + ev.s;
   return {
-    total:             total,
-    categories:        categories,
-    level:             ratingFromScore(total),
-    nextLevel:         nextLevelFromScore(total),
-    recommendations:   buildRecommendations(record),
-    verificationLabel: verificationLabel(record.evidence && record.evidence.verification_level),
-    baselineScore:     estimateBaseline(record)
+    total: total,
+    level: ratingFromScore(total),
+    verificationLabel: verLabel(r.evidence && r.evidence.verification_level),
+    nextLevel: nextLevel(total),
+    recommendations: recs(r),
+    baselineScore: baseline(r),
+    categories: [
+      { label: 'Biodiversity Structure',  score: bio.s, max: 25, notes: bio.n },
+      { label: 'Soil & Water Function',   score: sw.s,  max: 20, notes: sw.n  },
+      { label: 'Habitat Complexity',      score: hab.s, max: 20, notes: hab.n },
+      { label: 'Connectivity',            score: con.s, max: 20, notes: con.n },
+      { label: 'Evidence & Verification', score: ev.s,  max: 15, notes: ev.n  }
+    ]
   };
 }
 
-function scoreBiodiversity(r) {
-  var b = r.biodiversity || {};
-  var score = 0; var notes = [];
+function scoreBio(r) {
+  var b = r.biodiversity || {}; var s = 0; var n = [];
   var sp = b.indigenous_species_current || 0;
-  if (sp >= 30)      { score += 10; notes.push("30+ species"); }
-  else if (sp >= 20) { score += 8;  notes.push("20-29 species"); }
-  else if (sp >= 12) { score += 6;  notes.push("12-19 species"); }
-  else if (sp >= 6)  { score += 4;  notes.push("6-11 species"); }
-  else if (sp >= 1)  { score += 2;  notes.push("1-5 species"); }
-  if (b.indigenous_dominant) { score += 4; notes.push("Indigenous dominant"); }
+  if (sp >= 30) { s += 10; n.push('30+ species'); }
+  else if (sp >= 20) { s += 8; n.push('20-29 species'); }
+  else if (sp >= 12) { s += 6; n.push('12-19 species'); }
+  else if (sp >= 6)  { s += 4; n.push('6-11 species'); }
+  else if (sp >= 1)  { s += 2; n.push('1-5 species'); }
+  if (b.indigenous_dominant) { s += 4; n.push('Indigenous dominant'); }
   var ly = b.structural_layers_current || 0;
-  if (ly >= 5)      { score += 6; notes.push("5 layers"); }
-  else if (ly >= 4) { score += 5; notes.push("4 layers"); }
-  else if (ly >= 3) { score += 3; notes.push("3 layers"); }
-  else if (ly >= 2) { score += 1; notes.push("2 layers"); }
+  if (ly >= 5) { s += 6; } else if (ly >= 4) { s += 5; } else if (ly >= 3) { s += 3; } else if (ly >= 2) { s += 1; }
+  if (ly > 0) { n.push(ly + ' layers'); }
   var ca = b.canopy_cover_pct_current || 0;
-  if (ca >= 50)      { score += 5; notes.push("50%+ canopy"); }
-  else if (ca >= 30) { score += 4; notes.push("30-49% canopy"); }
-  else if (ca >= 15) { score += 2; notes.push("15-29% canopy"); }
-  else if (ca >= 5)  { score += 1; notes.push("5-14% canopy"); }
-  return { score: Math.min(score, 25), notes: notes };
+  if (ca >= 50) { s += 5; } else if (ca >= 30) { s += 4; } else if (ca >= 15) { s += 2; } else if (ca >= 5) { s += 1; }
+  if (ca > 0) { n.push(ca + '% canopy'); }
+  return { s: Math.min(s, 25), n: n };
 }
 
-function scoreSoilWater(r) {
-  var sw = r.soil_water || {};
-  var score = 0; var notes = [];
+function scoreSW(r) {
+  var sw = r.soil_water || {}; var s = 0; var n = [];
   var soil = sw.soil_health_score || 0;
-  score += Math.round((soil / 5) * 8);
-  if (soil > 0) { notes.push("Soil " + soil + "/5"); }
+  s += Math.round((soil / 5) * 8);
+  if (soil > 0) { n.push('Soil ' + soil + '/5'); }
   var water = sw.water_function_score || 0;
-  score += Math.round((water / 5) * 7);
-  if (water > 0) { notes.push("Water " + water + "/5"); }
-  if (sw.has_rainwater_system) { score += 2; notes.push("Rainwater"); }
-  if (sw.has_moisture_basin)   { score += 2; notes.push("Moisture basin"); }
-  if (sw.has_swale)            { score += 1; notes.push("Swale"); }
-  return { score: Math.min(score, 20), notes: notes };
+  s += Math.round((water / 5) * 7);
+  if (water > 0) { n.push('Water ' + water + '/5'); }
+  if (sw.has_rainwater_system) { s += 2; n.push('Rainwater'); }
+  if (sw.has_moisture_basin)   { s += 2; n.push('Basin'); }
+  if (sw.has_swale)            { s += 1; n.push('Swale'); }
+  return { s: Math.min(s, 20), n: n };
 }
 
-function scoreHabitat(r) {
-  var h = r.habitat || {};
-  var score = 0; var notes = [];
+function scoreHab(r) {
+  var h = r.habitat || {}; var s = 0; var n = [];
   var nd = h.habitat_nodes || 0;
-  if (nd >= 5)      { score += 6; notes.push("5+ nodes"); }
-  else if (nd >= 3) { score += 4; notes.push("3-4 nodes"); }
-  else if (nd >= 1) { score += 2; notes.push("1-2 nodes"); }
-  if (h.has_embedded_logs) { score += 3; notes.push("Logs"); }
-  if (h.has_rock_refuges)  { score += 2; notes.push("Rocks"); }
-  if (h.has_water_feature) { score += 3; notes.push("Water feature"); }
-  if (h.has_nest_boxes)    { score += 2; notes.push("Nest boxes"); }
-  var sightings = h.fauna_sightings || [];
-  var fauna = 0;
-  for (var i = 0; i < sightings.length; i++) {
-    if (sightings[i].verified) { fauna++; }
-  }
-  if (fauna >= 3)      { score += 4; notes.push("3+ fauna"); }
-  else if (fauna >= 1) { score += 3; notes.push(fauna + " fauna"); }
-  return { score: Math.min(score, 20), notes: notes };
+  if (nd >= 5) { s += 6; } else if (nd >= 3) { s += 4; } else if (nd >= 1) { s += 2; }
+  if (nd > 0) { n.push(nd + ' nodes'); }
+  if (h.has_embedded_logs) { s += 3; n.push('Logs'); }
+  if (h.has_rock_refuges)  { s += 2; n.push('Rocks'); }
+  if (h.has_water_feature) { s += 3; n.push('Water feature'); }
+  if (h.has_nest_boxes)    { s += 2; n.push('Nest boxes'); }
+  var fs = h.fauna_sightings || []; var fc = 0;
+  for (var i = 0; i < fs.length; i++) { if (fs[i].verified) { fc++; } }
+  if (fc >= 3) { s += 4; n.push('3+ fauna'); } else if (fc >= 1) { s += 3; n.push(fc + ' fauna'); }
+  return { s: Math.min(s, 20), n: n };
 }
 
-function scoreConnectivity(r) {
-  var c = r.connectivity || {};
-  var score = 0; var notes = [];
+function scoreCon(r) {
+  var c = r.connectivity || {}; var s = 0; var n = [];
   if (c.adjacent_park) {
-    var dist = c.park_distance_m || 999;
-    if (dist <= 50)       { score += 6; notes.push("Park <50m"); }
-    else if (dist <= 150) { score += 4; notes.push("Park <150m"); }
-    else if (dist <= 300) { score += 2; notes.push("Park <300m"); }
+    var d = c.park_distance_m || 999;
+    if (d <= 50) { s += 6; n.push('Park <50m'); }
+    else if (d <= 150) { s += 4; n.push('Park <150m'); }
+    else if (d <= 300) { s += 2; n.push('Park <300m'); }
   }
-  var adjList = c.adjacent_registered_gardens || [];
-  var adj = 0;
-  for (var i = 0; i < adjList.length; i++) {
-    if (adjList[i].verified) { adj++; }
-  }
-  if (adj >= 3)      { score += 6; notes.push("3+ adjacent"); }
-  else if (adj >= 2) { score += 4; notes.push("2 adjacent"); }
-  else if (adj >= 1) { score += 3; notes.push("1 adjacent"); }
-  if (c.corridor_node_confirmed) { score += 5; notes.push("Corridor node"); }
+  var al = c.adjacent_registered_gardens || []; var ac = 0;
+  for (var i = 0; i < al.length; i++) { if (al[i].verified) { ac++; } }
+  if (ac >= 3) { s += 6; n.push('3+ adjacent'); }
+  else if (ac >= 2) { s += 4; n.push('2 adjacent'); }
+  else if (ac >= 1) { s += 3; n.push('1 adjacent'); }
+  if (c.corridor_node_confirmed) { s += 5; n.push('Corridor node'); }
   var ha = c.cluster_area_ha || 0;
-  if (ha >= 2)      { score += 3; notes.push(ha + "ha cluster"); }
-  else if (ha >= 1) { score += 1; notes.push("Cluster forming"); }
-  return { score: Math.min(score, 20), notes: notes };
+  if (ha >= 2) { s += 3; n.push(ha + 'ha cluster'); }
+  else if (ha >= 1) { s += 1; n.push('Cluster forming'); }
+  return { s: Math.min(s, 20), n: n };
 }
 
-function scoreEvidence(r) {
-  var e = r.evidence || {};
-  var score = 0; var notes = [];
-  if (e.has_photos)                  { score += 2; notes.push("Photos"); }
-  if (e.has_field_notes)             { score += 2; notes.push("Field notes"); }
-  if (e.has_species_list)            { score += 2; notes.push("Species list"); }
-  if (e.has_fauna_record)            { score += 2; notes.push("Fauna record"); }
-  if (e.has_professional_assessment) { score += 3; notes.push("Professional"); }
-  var vl = e.verification_level || "";
-  if (vl === "gardener_and_son_verified") { score += 4; notes.push("G&S Verified"); }
-  else if (vl === "site_visit")           { score += 3; notes.push("Site visit"); }
-  else if (vl === "photo_verified")       { score += 1; notes.push("Photo verified"); }
-  return { score: Math.min(score, 15), notes: notes };
+function scoreEv(r) {
+  var e = r.evidence || {}; var s = 0; var n = [];
+  if (e.has_photos)                  { s += 2; n.push('Photos'); }
+  if (e.has_field_notes)             { s += 2; n.push('Field notes'); }
+  if (e.has_species_list)            { s += 2; n.push('Species list'); }
+  if (e.has_fauna_record)            { s += 2; n.push('Fauna record'); }
+  if (e.has_professional_assessment) { s += 3; n.push('Professional'); }
+  var vl = e.verification_level || '';
+  if (vl === 'gardener_and_son_verified') { s += 4; n.push('G&S Verified'); }
+  else if (vl === 'site_visit')           { s += 3; n.push('Site visit'); }
+  else if (vl === 'photo_verified')       { s += 1; n.push('Photo verified'); }
+  return { s: Math.min(s, 15), n: n };
 }
 
 function ratingFromScore(s) {
-  if (s >= 91) return "Urban Biodiversity Node";
-  if (s >= 81) return "High Habitat Garden";
-  if (s >= 61) return "Registered Ecological Garden";
-  if (s >= 41) return "Ecological Garden";
-  if (s >= 21) return "Habitat Garden";
-  return "Basic Garden";
+  if (s >= 91) return 'Urban Biodiversity Node';
+  if (s >= 81) return 'High Habitat Garden';
+  if (s >= 61) return 'Registered Ecological Garden';
+  if (s >= 41) return 'Ecological Garden';
+  if (s >= 21) return 'Habitat Garden';
+  return 'Basic Garden';
 }
 
-function nextLevelFromScore(score) {
+function nextLevel(score) {
   var levels = [
-    { min: 91, name: "Urban Biodiversity Node" },
-    { min: 81, name: "High Habitat Garden" },
-    { min: 61, name: "Registered Ecological Garden" },
-    { min: 41, name: "Ecological Garden" },
-    { min: 21, name: "Habitat Garden" }
+    { min: 91, name: 'Urban Biodiversity Node' },
+    { min: 81, name: 'High Habitat Garden' },
+    { min: 61, name: 'Registered Ecological Garden' },
+    { min: 41, name: 'Ecological Garden' },
+    { min: 21, name: 'Habitat Garden' }
   ];
   for (var i = 0; i < levels.length; i++) {
     if (score < levels[i].min) {
       return { name: levels[i].name, target: levels[i].min, gap: levels[i].min - score, progress: Math.round((score / levels[i].min) * 100) };
     }
   }
-  return { name: "Maximum Level Achieved", target: 100, gap: 0, progress: 100 };
+  return { name: 'Maximum Level Achieved', target: 100, gap: 0, progress: 100 };
 }
 
-function verificationLabel(level) {
-  var map = { gardener_and_son_verified: "G&S Verified", site_visit: "Site Visit", photo_verified: "Photo Verified", self_reported: "Self Reported" };
-  return map[level] || "Unverified";
+function verLabel(level) {
+  if (level === 'gardener_and_son_verified') return 'G&S Verified';
+  if (level === 'site_visit')   return 'Site Visit';
+  if (level === 'photo_verified') return 'Photo Verified';
+  if (level === 'self_reported')  return 'Self Reported';
+  return 'Unverified';
 }
 
-function estimateBaseline(record) {
-  var b  = record.biodiversity || {};
-  var sw = record.soil_water   || {};
-  var h  = record.habitat      || {};
-  var c  = record.connectivity || {};
-  var br = {
-    biodiversity: {
-      indigenous_species_current: b.indigenous_species_baseline || 0,
-      indigenous_dominant: false,
-      structural_layers_current: b.structural_layers_baseline || 0,
-      canopy_cover_pct_current: b.canopy_cover_pct_baseline || 0
-    },
-    soil_water: {
-      soil_health_score: sw.soil_health_baseline || 0,
-      water_function_score: sw.water_function_baseline || 0,
-      has_rainwater_system: false, has_moisture_basin: false, has_swale: false
-    },
-    habitat: {
-      habitat_nodes: h.habitat_nodes_baseline || 0,
-      has_embedded_logs: false, has_rock_refuges: false,
-      has_water_feature: false, has_nest_boxes: false,
-      fauna_sightings: []
-    },
-    connectivity: {
-      adjacent_park: c.adjacent_park || false,
-      park_distance_m: c.park_distance_m || 999,
-      adjacent_registered_gardens: [],
-      corridor_node_confirmed: false,
-      cluster_area_ha: 0
-    },
-    evidence: {
-      has_photos: false, has_field_notes: false,
-      has_professional_assessment: false, has_fauna_record: false,
-      has_species_list: false, verification_level: "self_reported"
-    }
-  };
-  return scoreEcologicalRegistry(br).total;
+function _scoreRaw(r) {
+  var bio = scoreBio(r); var s2 = scoreSW(r); var hab = scoreHab(r); var con = scoreCon(r); var ev = scoreEv(r);
+  return bio.s + s2.s + hab.s + con.s + ev.s;
 }
 
-function buildRecommendations(record) {
-  var recs = [];
-  var sw = record.soil_water   || {};
-  var h  = record.habitat      || {};
-  var b  = record.biodiversity || {};
-  var c  = record.connectivity || {};
-  if (!sw.has_moisture_basin)   { recs.push({ action: "Install seasonal moisture basin", points: 6 }); }
-  if (!h.has_water_feature)     { recs.push({ action: "Add a small water feature",       points: 3 }); }
-  if (!sw.has_rainwater_system) { recs.push({ action: "Add rainwater collection system", points: 2 }); }
-  if (!h.has_rock_refuges)      { recs.push({ action: "Add rock refuge zones",           points: 2 }); }
-  if (!h.has_nest_boxes)        { recs.push({ action: "Install nest boxes",              points: 2 }); }
+function baseline(r) {
+  var b = r.biodiversity || {}; var sw = r.soil_water || {}; var h = r.habitat || {}; var c = r.connectivity || {};
+  return _scoreRaw({
+    biodiversity: { indigenous_species_current: b.indigenous_species_baseline || 0, indigenous_dominant: false, structural_layers_current: b.structural_layers_baseline || 0, canopy_cover_pct_current: b.canopy_cover_pct_baseline || 0 },
+    soil_water:   { soil_health_score: sw.soil_health_baseline || 0, water_function_score: sw.water_function_baseline || 0, has_rainwater_system: false, has_moisture_basin: false, has_swale: false },
+    habitat:      { habitat_nodes: h.habitat_nodes_baseline || 0, has_embedded_logs: false, has_rock_refuges: false, has_water_feature: false, has_nest_boxes: false, fauna_sightings: [] },
+    connectivity: { adjacent_park: c.adjacent_park || false, park_distance_m: c.park_distance_m || 999, adjacent_registered_gardens: [], corridor_node_confirmed: false, cluster_area_ha: 0 },
+    evidence:     { has_photos: false, has_field_notes: false, has_professional_assessment: false, has_fauna_record: false, has_species_list: false, verification_level: 'self_reported' }
+  });
+}
+
+function recs(r) {
+  var out = [];
+  var sw = r.soil_water || {}; var h = r.habitat || {}; var b = r.biodiversity || {}; var c = r.connectivity || {};
+  if (!sw.has_moisture_basin)   out.push({ action: 'Install seasonal moisture basin', points: 6 });
+  if (!h.has_water_feature)     out.push({ action: 'Add a small water feature',       points: 3 });
+  if (!sw.has_rainwater_system) out.push({ action: 'Add rainwater collection system', points: 2 });
+  if (!h.has_rock_refuges)      out.push({ action: 'Add rock refuge zones',           points: 2 });
+  if (!h.has_nest_boxes)        out.push({ action: 'Install nest boxes',              points: 2 });
   var gap = (b.indigenous_species_target || 40) - (b.indigenous_species_current || 0);
-  if (gap > 0) { recs.push({ action: "Add " + Math.min(gap, 5) + " more indigenous species", points: Math.min(gap, 4) }); }
-  var adjCount = (c.adjacent_registered_gardens || []).length;
-  if (adjCount < 3) { recs.push({ action: "Encourage adjacent gardens to register", points: adjCount < 1 ? 3 : 1 }); }
-  recs.sort(function(a, b) { return b.points - a.points; });
-  return recs.slice(0, 5);
+  if (gap > 0) out.push({ action: 'Add ' + Math.min(gap, 5) + ' more indigenous species', points: Math.min(gap, 4) });
+  out.sort(function(a, b) { return b.points - a.points; });
+  return out.slice(0, 5);
 }
 
-// ================================================================
-// BADGE ENGINE
-// ================================================================
-var BADGE_DEFS = {
-  indigenous_dominant: { name: "Indigenous Dominant", type: "score" },
-  species_rich_20:     { name: "Species Rich",         type: "score" },
-  species_rich_30:     { name: "Highly Species Rich",  type: "score" },
-  full_canopy:         { name: "Canopy Forming",       type: "score" },
-  five_layers:         { name: "Five Layer Garden",    type: "score" },
-  habitat_builder:     { name: "Habitat Builder",      type: "score" },
-  amphibian_active:    { name: "Amphibian Active",     type: "score" },
-  pollinator_rich:     { name: "Pollinator Rich",      type: "score" },
-  water_wise:          { name: "Water Wise",           type: "score" },
-  corridor_node:       { name: "Corridor Node",        type: "score" },
-  network_connected:   { name: "Network Connected",    type: "score" },
-  gs_verified:         { name: "G&S Verified",         type: "verification" },
-  site_visit:          { name: "Site Visit",           type: "verification" },
-  full_record:         { name: "Full Record",          type: "evidence" },
-  fauna_record:        { name: "Fauna Record",         type: "evidence" }
+/* ---- BADGE ENGINE ---- */
+var BDEFS = {
+  indigenous_dominant: 'Indigenous Dominant',
+  species_rich_20:     'Species Rich',
+  species_rich_30:     'Highly Species Rich',
+  full_canopy:         'Canopy Forming',
+  five_layers:         'Five Layer Garden',
+  habitat_builder:     'Habitat Builder',
+  amphibian_active:    'Amphibian Active',
+  pollinator_rich:     'Pollinator Rich',
+  water_wise:          'Water Wise',
+  corridor_node:       'Corridor Node',
+  network_connected:   'Network Connected',
+  gs_verified:         'G&S Verified',
+  site_visit_badge:    'Site Visit',
+  full_record:         'Full Record',
+  fauna_record:        'Fauna Record'
 };
 
-function awardBadges(record) {
-  var b  = record.biodiversity || {};
-  var h  = record.habitat      || {};
-  var c  = record.connectivity || {};
-  var e  = record.evidence     || {};
-  var sw = record.soil_water   || {};
-  var score_badges = [], verification_badges = [], evidence_badges = [];
-
-  if (b.indigenous_dominant)                          { score_badges.push("indigenous_dominant"); }
-  if ((b.indigenous_species_current || 0) >= 20)      { score_badges.push("species_rich_20"); }
-  if ((b.indigenous_species_current || 0) >= 30)      { score_badges.push("species_rich_30"); }
-  if ((b.canopy_cover_pct_current   || 0) >= 30)      { score_badges.push("full_canopy"); }
-  if ((b.structural_layers_current  || 0) >= 5)       { score_badges.push("five_layers"); }
-  if ((h.habitat_nodes              || 0) >= 3)       { score_badges.push("habitat_builder"); }
-
-  var sightings = h.fauna_sightings || [];
-  var fauna = 0;
-  for (var i = 0; i < sightings.length; i++) {
-    if (sightings[i].verified) { fauna++; }
-  }
-  if (fauna >= 1) { score_badges.push("amphibian_active"); evidence_badges.push("fauna_record"); }
-  if (fauna >= 3) { score_badges.push("pollinator_rich"); }
-
-  if (sw.has_rainwater_system && sw.has_moisture_basin) { score_badges.push("water_wise"); }
-  if (c.corridor_node_confirmed) { score_badges.push("corridor_node"); }
-
-  var adjList = c.adjacent_registered_gardens || [];
-  var adjVerified = 0;
-  for (var j = 0; j < adjList.length; j++) {
-    if (adjList[j].verified) { adjVerified++; }
-  }
-  if (adjVerified >= 2) { score_badges.push("network_connected"); }
-
-  if (e.verification_level === "gardener_and_son_verified") { verification_badges.push("gs_verified"); }
-  if (e.verification_level === "site_visit")                { verification_badges.push("site_visit"); }
-  if (e.has_photos && e.has_field_notes && e.has_species_list && e.has_fauna_record) {
-    evidence_badges.push("full_record");
-  }
-
-  return {
-    all_badges:            score_badges.concat(verification_badges).concat(evidence_badges),
-    score_badges:          score_badges,
-    verification_badges:   verification_badges,
-    evidence_badges:       evidence_badges
-  };
+function awardBadges(r) {
+  var b = r.biodiversity || {}; var h = r.habitat || {}; var c = r.connectivity || {}; var e = r.evidence || {}; var sw = r.soil_water || {};
+  var sb = []; var vb = []; var eb = [];
+  if (b.indigenous_dominant)                     sb.push('indigenous_dominant');
+  if ((b.indigenous_species_current || 0) >= 20) sb.push('species_rich_20');
+  if ((b.indigenous_species_current || 0) >= 30) sb.push('species_rich_30');
+  if ((b.canopy_cover_pct_current   || 0) >= 30) sb.push('full_canopy');
+  if ((b.structural_layers_current  || 0) >= 5)  sb.push('five_layers');
+  if ((h.habitat_nodes              || 0) >= 3)  sb.push('habitat_builder');
+  var fs = h.fauna_sightings || []; var fc = 0;
+  for (var i = 0; i < fs.length; i++) { if (fs[i].verified) fc++; }
+  if (fc >= 1) { sb.push('amphibian_active'); eb.push('fauna_record'); }
+  if (fc >= 3)  sb.push('pollinator_rich');
+  if (sw.has_rainwater_system && sw.has_moisture_basin) sb.push('water_wise');
+  if (c.corridor_node_confirmed) sb.push('corridor_node');
+  var al = c.adjacent_registered_gardens || []; var ac = 0;
+  for (var j = 0; j < al.length; j++) { if (al[j].verified) ac++; }
+  if (ac >= 2) sb.push('network_connected');
+  if (e.verification_level === 'gardener_and_son_verified') vb.push('gs_verified');
+  if (e.verification_level === 'site_visit')                vb.push('site_visit_badge');
+  if (e.has_photos && e.has_field_notes && e.has_species_list && e.has_fauna_record) eb.push('full_record');
+  var all = []; var k;
+  for (k = 0; k < sb.length; k++) all.push(sb[k]);
+  for (k = 0; k < vb.length; k++) all.push(vb[k]);
+  for (k = 0; k < eb.length; k++) all.push(eb[k]);
+  return { all: all, vb: vb };
 }
 
-function badgeName(id) {
-  return BADGE_DEFS[id] ? BADGE_DEFS[id].name : id;
-}
-
-// ================================================================
-// GARDEN DATA
-// ================================================================
-var GARDEN = {
-  garden_id:       "ER-VIC-SH-ARU-0001",
-  garden_name:     "Arundel",
-  garden_type:     "Ecological Forest Garden",
-  suburb:          "Surrey Hills",
-  state:           "VIC",
-  assessment_date: "Mar 2026",
-  baseline_date:   "Feb 2026",
-  target_score:    82,
-  stewards:        "Andrew & Elizabeth",
-  designer:        "Gardener & Son",
-  area_sqm:        180,
-  description:     "A registered garden designed to mature over years. Contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.",
-  evc: {
-    name:           "Grassy Woodland",
-    code:           "EVC 175",
-    bioregion:      "Victorian Volcanic Plain",
-    bioregion_code: "VVP"
-  },
+/* ---- GARDEN DATA ---- */
+var G = {
+  garden_id: 'ER-VIC-SH-ARU-0001',
+  garden_name: 'Arundel',
+  garden_type: 'Ecological Forest Garden',
+  suburb: 'Surrey Hills',
+  state: 'VIC',
+  assessment_date: 'Mar 2026',
+  baseline_date: 'Feb 2026',
+  target_score: 82,
+  stewards: 'Andrew & Elizabeth',
+  designer: 'Gardener & Son',
+  area_sqm: 180,
+  description: 'A registered garden designed to mature over years. Contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.',
+  evc: { name: 'Grassy Woodland', code: 'EVC 175', bioregion: 'Victorian Volcanic Plain', bioregion_code: 'VVP' },
   biodiversity: {
-    indigenous_species_current:  23,
-    indigenous_species_baseline: 8,
-    indigenous_species_target:   40,
-    indigenous_dominant:         true,
-    structural_layers_current:   4,
-    structural_layers_baseline:  2,
-    canopy_cover_pct_current:    34,
-    canopy_cover_pct_baseline:   12,
-    canopy_cover_pct_target:     55,
-    weed_pressure:               "Low",
-    weed_pressure_baseline:      "High"
+    indigenous_species_current: 23, indigenous_species_baseline: 8, indigenous_species_target: 40,
+    indigenous_dominant: true,
+    structural_layers_current: 4, structural_layers_baseline: 2,
+    canopy_cover_pct_current: 34, canopy_cover_pct_baseline: 12, canopy_cover_pct_target: 55,
+    weed_pressure: 'Low', weed_pressure_baseline: 'High'
   },
   soil_water: {
-    soil_health_score:       3,
-    soil_health_baseline:    2,
-    water_function_score:    2,
-    water_function_baseline: 2,
-    has_rainwater_system:    false,
-    has_moisture_basin:      false,
-    has_swale:               false,
-    mulch_depth_mm:          80
+    soil_health_score: 3, soil_health_baseline: 2,
+    water_function_score: 2, water_function_baseline: 2,
+    has_rainwater_system: false, has_moisture_basin: false, has_swale: false, mulch_depth_mm: 80
   },
   habitat: {
-    habitat_nodes:          3,
-    habitat_nodes_baseline: 0,
-    has_embedded_logs:      true,
-    has_rock_refuges:       false,
-    has_water_feature:      false,
-    has_nest_boxes:         false,
-    planting_method:        "Miyawaki-style layering",
-    fauna_sightings: [
-      { species: "Burrowing frog", date: "18 Feb 2026", location: "Lower slope refuge zone", verified: true }
-    ]
+    habitat_nodes: 3, habitat_nodes_baseline: 0,
+    has_embedded_logs: true, has_rock_refuges: false, has_water_feature: false, has_nest_boxes: false,
+    planting_method: 'Miyawaki-style layering',
+    fauna_sightings: [{ species: 'Burrowing frog', date: '18 Feb 2026', location: 'Lower slope refuge zone', verified: true }]
   },
   connectivity: {
-    adjacent_park:      true,
-    park_name:          "Surrey Hills Reserve",
-    park_distance_m:    45,
-    adjacent_registered_gardens: [
-      { id: "ER-VIC-SH-MH-003", distance_m: 140, direction: "south", verified: true }
-    ],
-    corridor_node_confirmed:         true,
-    effective_ecological_area_ha:    0.4,
-    cluster_area_ha:                 2.1,
-    cluster_name:                    "Surrey Hills"
+    adjacent_park: true, park_name: 'Surrey Hills Reserve', park_distance_m: 45,
+    adjacent_registered_gardens: [{ id: 'ER-VIC-SH-MH-003', distance_m: 140, direction: 'south', verified: true }],
+    corridor_node_confirmed: true, effective_ecological_area_ha: 0.4, cluster_area_ha: 2.1, cluster_name: 'Surrey Hills'
   },
   evidence: {
-    has_photos:                  true,
-    has_field_notes:             true,
-    has_professional_assessment: true,
-    has_fauna_record:            true,
-    has_species_list:            true,
-    verification_level:          "gardener_and_son_verified",
-    assessor:                    "Gardener & Son"
+    has_photos: true, has_field_notes: true, has_professional_assessment: true,
+    has_fauna_record: true, has_species_list: true,
+    verification_level: 'gardener_and_son_verified', assessor: 'Gardener & Son'
   },
   milestones: [
-    { title: "Baseline established",          date: "Feb 2026",    complete: true  },
-    { title: "Habitat refuge nodes mapped",   date: "Mar 2026",    complete: true  },
-    { title: "Corridor node status confirmed",date: "Mar 2026",    complete: true  },
-    { title: "Seasonal moisture basin",       date: "Autumn 2026", complete: false },
-    { title: "High Habitat Garden (81 pts)",  date: "End 2026",    complete: false }
+    { title: 'Baseline established',          date: 'Feb 2026',    complete: true  },
+    { title: 'Habitat refuge nodes mapped',   date: 'Mar 2026',    complete: true  },
+    { title: 'Corridor node status confirmed',date: 'Mar 2026',    complete: true  },
+    { title: 'Seasonal moisture basin',       date: 'Autumn 2026', complete: false },
+    { title: 'High Habitat Garden (81 pts)',  date: 'End 2026',    complete: false }
   ],
   activity_log: [
-    { title: "Burrowing frog sighting -- lower slope refuge zone", date: "18 Feb 2026", type: "Verified",
-      notes: "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions." },
-    { title: "Habitat structure installed -- embedded logs and voids", date: "15 Feb 2026", type: "Installed",
-      notes: "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates." },
-    { title: "Ground contouring and soil preparation", date: "8 Feb 2026", type: "Recorded",
-      notes: "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones." }
+    { title: 'Burrowing frog sighting - lower slope refuge zone', date: '18 Feb 2026', type: 'Verified',
+      notes: 'Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions.' },
+    { title: 'Habitat structure installed - embedded logs and voids', date: '15 Feb 2026', type: 'Installed',
+      notes: 'Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates.' },
+    { title: 'Ground contouring and soil preparation', date: '8 Feb 2026', type: 'Recorded',
+      notes: 'Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones.' }
   ]
 };
 
-// ================================================================
-// HELPERS
-// ================================================================
-function $t(id, v) { var e = document.getElementById(id); if (e && v !== undefined) e.textContent = v; }
-function $h(id, v) { var e = document.getElementById(id); if (e && v !== undefined) e.innerHTML = v; }
-function $w(id, p) { var e = document.getElementById(id); if (e) e.style.width = p + "%"; }
-
-function delta(cur, base) {
-  if (cur > base) return "<span class=\"delta-up\">+" + (cur - base) + " from " + base + "</span>";
-  if (cur < base) return "<span class=\"delta-down\">from " + base + "</span>";
-  return "<span class=\"delta-same\">No change</span>";
+/* ---- HELPERS ---- */
+function el(id) { return document.getElementById(id); }
+function txt(id, v) { var e = el(id); if (e) e.textContent = String(v); }
+function html(id, v) { var e = el(id); if (e) e.innerHTML = v; }
+function wid(id, p) { var e = el(id); if (e) e.style.width = p + '%'; }
+function dta(cur, base) {
+  if (cur > base) return '<span class="delta-up">+' + (cur - base) + ' from ' + base + '</span>';
+  if (cur < base) return '<span class="delta-down">from ' + base + '</span>';
+  return '<span class="delta-same">No change</span>';
+}
+function sc(cls1, cls2) {
+  return 'text-xs border border-rl dark:border-rdl px-2.5 py-1.5 ' + (cls1 ? cls1 : cls2);
 }
 
-// ================================================================
-// RENDER
-// ================================================================
+/* ---- RENDER ---- */
 function render() {
-  var R      = GARDEN;
+  var R = G;
   var result = scoreEcologicalRegistry(R);
   var badges = awardBadges(R);
-  var b      = R.biodiversity;
-  var sw     = R.soil_water;
-  var h      = R.habitat;
-  var c      = R.connectivity;
-  var nl     = result.nextLevel;
-  var adj    = c.adjacent_registered_gardens || [];
-  var fauna  = h.fauna_sightings || [];
+  var b  = R.biodiversity;
+  var sw = R.soil_water;
+  var h  = R.habitat;
+  var c  = R.connectivity;
+  var nl = result.nextLevel;
+  var adj = c.adjacent_registered_gardens || [];
+  var fauna = h.fauna_sightings || [];
 
-  // Header + hero identity
-  $t("headerMeta",   R.garden_name + " - " + R.garden_id);
-  $t("heroType",     R.garden_type);
-  $t("heroName",     R.garden_name);
-  $t("heroDesc",     R.description);
-  $t("heroStewards", R.stewards + " - Registered " + R.baseline_date);
-  $t("heroScore",    result.total);
-  $t("heroLevel",    result.level);
-  $t("heroBaseline", result.baselineScore);
-  $t("heroTarget",   R.target_score);
-  $t("heroId",       R.garden_id);
-  $w("heroScoreBar", result.total);
+  txt('headerMeta',   R.garden_name + ' - ' + R.garden_id);
+  txt('heroType',     R.garden_type);
+  txt('heroName',     R.garden_name);
+  txt('heroDesc',     R.description);
+  txt('heroStewards', R.stewards + ' - Registered ' + R.baseline_date);
+  txt('heroScore',    result.total);
+  txt('heroLevel',    result.level);
+  txt('heroBaseline', result.baselineScore);
+  txt('heroTarget',   R.target_score);
+  txt('heroId',       R.garden_id);
+  wid('heroScoreBar', result.total);
 
-  $h("heroTags",
-    "<span class=\"text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg\">" + R.garden_type + "</span> " +
-    "<span class=\"text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg\">" + R.suburb + " " + R.state + "</span> " +
-    "<span class=\"text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rg text-rb dark:bg-rb dark:text-rg font-medium\">" + result.verificationLabel + " - " + R.assessment_date + "</span>"
+  html('heroTags',
+    '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.garden_type + '</span> ' +
+    '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.suburb + ' ' + R.state + '</span> ' +
+    '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rg text-rb dark:bg-rb dark:text-rg font-medium">' + result.verificationLabel + ' - ' + R.assessment_date + '</span>'
   );
 
-  // Hero badges
-  var heroBadgeHTML = "";
-  for (var i = 0; i < badges.all_badges.length; i++) {
-    var bid = badges.all_badges[i];
-    var isNode  = bid === "corridor_node";
-    var isVerif = badges.verification_badges.indexOf(bid) !== -1;
-    var st = isNode || isVerif
-      ? "border-color:rgba(255,240,220,.5);background:rgba(255,240,220,.2);font-weight:600"
-      : "border-color:rgba(255,240,220,.25);background:rgba(255,240,220,.1)";
-    heroBadgeHTML += "<span class=\"badge-pill\" style=\"" + st + "\">" + (isNode ? "* " : "") + badgeName(bid) + "</span> ";
+  var hbh = '';
+  for (var i = 0; i < badges.all.length; i++) {
+    var bid = badges.all[i];
+    var isN = bid === 'corridor_node';
+    var isV = badges.vb.indexOf(bid) !== -1;
+    var bst = isN || isV ? 'border-color:rgba(255,240,220,.5);background:rgba(255,240,220,.2);font-weight:600' : 'border-color:rgba(255,240,220,.25);background:rgba(255,240,220,.1)';
+    hbh += '<span class="badge-pill" style="' + bst + '">' + (BDEFS[bid] || bid) + '</span> ';
   }
-  $h("heroBadges", heroBadgeHTML);
+  html('heroBadges', hbh);
 
-  // Signals
-  $t("signalDates", R.baseline_date + " to " + R.assessment_date);
-  $h("signalGridPrimary",
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">EVC</div><div class=\"text-xs font-medium\">" + R.evc.name + "</div><div class=\"text-xs opacity-50 mt-1 font-mono\">" + R.evc.code + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Canopy Cover</div><div class=\"text-xl font-light\">" + b.canopy_cover_pct_current + "<span class=\"text-sm\">%</span></div><div class=\"text-xs mt-1\">" + delta(b.canopy_cover_pct_current, b.canopy_cover_pct_baseline) + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Indigenous Species</div><div class=\"text-xl font-light\">" + b.indigenous_species_current + "</div><div class=\"text-xs mt-1\">" + delta(b.indigenous_species_current, b.indigenous_species_baseline) + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Structural Layers</div><div class=\"text-xl font-light\">" + b.structural_layers_current + "</div><div class=\"text-xs mt-1\">" + delta(b.structural_layers_current, b.structural_layers_baseline) + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Soil Health</div><div class=\"text-xl font-light\">" + sw.soil_health_score + "<span class=\"text-sm\">/5</span></div><div class=\"text-xs mt-1\">" + delta(sw.soil_health_score, sw.soil_health_baseline) + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Water Function</div><div class=\"text-xl font-light\">" + sw.water_function_score + "<span class=\"text-sm\">/5</span></div><div class=\"text-xs mt-1\">" + delta(sw.water_function_score, sw.water_function_baseline) + "</div></div>"
-  );
-  $h("signalGridSecondary",
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Habitat Nodes</div><div class=\"text-xl font-light\">" + h.habitat_nodes + "</div><div class=\"text-xs mt-1 delta-up\">Logs + voids</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Fauna Sightings</div><div class=\"text-xl font-light\">" + fauna.length + "</div><div class=\"text-xs mt-1 delta-up\">" + (fauna.length > 0 ? fauna[0].species : "None yet") + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Bioregion</div><div class=\"text-xs font-medium\">" + R.evc.bioregion + "</div><div class=\"text-xs opacity-50 mt-1 font-mono\">" + R.evc.bioregion_code + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Planting Method</div><div class=\"text-xs font-medium\">" + h.planting_method + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Weed Pressure</div><div class=\"text-xl font-light\">" + b.weed_pressure + "</div><div class=\"text-xs mt-1 delta-up\">From " + b.weed_pressure_baseline + "</div></div>" +
-    "<div class=\"signal-cell\"><div class=\"section-label mb-2\">Last Assessment</div><div class=\"text-xs font-medium\">" + R.assessment_date + "</div><div class=\"text-xs opacity-50 mt-1\">" + result.verificationLabel + "</div></div>"
+  txt('signalDates', R.baseline_date + ' to ' + R.assessment_date);
+
+  html('signalGridPrimary',
+    '<div class="signal-cell"><div class="section-label mb-2">EVC</div><div class="text-xs font-medium">' + R.evc.name + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + R.evc.code + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Canopy Cover</div><div class="text-xl font-light">' + b.canopy_cover_pct_current + '<span class="text-sm">%</span></div><div class="text-xs mt-1">' + dta(b.canopy_cover_pct_current, b.canopy_cover_pct_baseline) + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Indigenous Species</div><div class="text-xl font-light">' + b.indigenous_species_current + '</div><div class="text-xs mt-1">' + dta(b.indigenous_species_current, b.indigenous_species_baseline) + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Structural Layers</div><div class="text-xl font-light">' + b.structural_layers_current + '</div><div class="text-xs mt-1">' + dta(b.structural_layers_current, b.structural_layers_baseline) + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Soil Health</div><div class="text-xl font-light">' + sw.soil_health_score + '<span class="text-sm">/5</span></div><div class="text-xs mt-1">' + dta(sw.soil_health_score, sw.soil_health_baseline) + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Water Function</div><div class="text-xl font-light">' + sw.water_function_score + '<span class="text-sm">/5</span></div><div class="text-xs mt-1">' + dta(sw.water_function_score, sw.water_function_baseline) + '</div></div>'
   );
 
-  // Score breakdown
-  $t("overallPct", result.total + "%");
-  var catHTML = "";
+  html('signalGridSecondary',
+    '<div class="signal-cell"><div class="section-label mb-2">Habitat Nodes</div><div class="text-xl font-light">' + h.habitat_nodes + '</div><div class="text-xs mt-1 delta-up">Logs + voids</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Fauna Sightings</div><div class="text-xl font-light">' + fauna.length + '</div><div class="text-xs mt-1 delta-up">' + (fauna.length > 0 ? fauna[0].species : 'None yet') + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Bioregion</div><div class="text-xs font-medium">' + R.evc.bioregion + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + R.evc.bioregion_code + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Planting Method</div><div class="text-xs font-medium">' + h.planting_method + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Weed Pressure</div><div class="text-xl font-light">' + b.weed_pressure + '</div><div class="text-xs mt-1 delta-up">From ' + b.weed_pressure_baseline + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Last Assessment</div><div class="text-xs font-medium">' + R.assessment_date + '</div><div class="text-xs opacity-50 mt-1">' + result.verificationLabel + '</div></div>'
+  );
+
+  txt('overallPct', result.total + '%');
+
+  var ch = '';
   for (var ci = 0; ci < result.categories.length; ci++) {
     var cat = result.categories[ci];
     var pct = Math.round(cat.score / cat.max * 100);
-    var noteStr = cat.notes && cat.notes.length ? cat.notes.join(" - ") : "";
-    catHTML += "<div>" +
-      "<div class=\"flex justify-between text-sm mb-2\"><span class=\"font-medium\">" + cat.label + "</span><span class=\"font-mono text-xs\">" + cat.score + " / " + cat.max + "</span></div>" +
-      "<div class=\"h-2 bg-rs dark:bg-rb/10\"><div class=\"bar-fill h-full bg-rg dark:bg-rb\" style=\"width:" + pct + "%\"></div></div>" +
-      (noteStr ? "<div class=\"text-xs opacity-40 mt-1\">" + noteStr + "</div>" : "") +
-      "</div>";
+    ch += '<div><div class="flex justify-between text-sm mb-2"><span class="font-medium">' + cat.label + '</span><span class="font-mono text-xs">' + cat.score + ' / ' + cat.max + '</span></div>' +
+      '<div class="h-2 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:' + pct + '%"></div></div>' +
+      (cat.notes && cat.notes.length ? '<div class="text-xs opacity-40 mt-1">' + cat.notes.join(' - ') + '</div>' : '') + '</div>';
   }
-  $h("categoryBars", catHTML);
+  html('categoryBars', ch);
 
-  // Badge list
-  var badgeListHTML = "";
-  for (var bi = 0; bi < badges.all_badges.length; bi++) {
-    var bid2 = badges.all_badges[bi];
-    var isV2 = badges.verification_badges.indexOf(bid2) !== -1;
-    var isN2 = bid2 === "corridor_node";
-    var cls = (isV2 || isN2) ? "bg-rg text-rb dark:bg-rb dark:text-rg" : "bg-rs dark:bg-rg";
-    badgeListHTML += "<span class=\"text-xs border border-rl dark:border-rdl px-2.5 py-1.5 " + cls + "\">" + badgeName(bid2) + "</span> ";
+  var blh = '';
+  for (var bi = 0; bi < badges.all.length; bi++) {
+    var bid2 = badges.all[bi];
+    var isV2 = badges.vb.indexOf(bid2) !== -1;
+    var isN2 = bid2 === 'corridor_node';
+    var bcls = (isV2 || isN2) ? 'bg-rg text-rb dark:bg-rb dark:text-rg' : 'bg-rs dark:bg-rg';
+    blh += '<span class="text-xs border border-rl dark:border-rdl px-2.5 py-1.5 ' + bcls + '">' + (BDEFS[bid2] || bid2) + '</span> ';
   }
-  $h("badgeList", badgeListHTML);
+  html('badgeList', blh);
 
-  // Opportunities
-  var oppHTML = "";
-  var recs = result.recommendations.slice(0, 3);
-  for (var ri = 0; ri < recs.length; ri++) {
-    oppHTML += "<div class=\"border border-rl dark:border-rdl p-3\"><div class=\"text-xs font-medium\">" + recs[ri].action + "</div><div class=\"text-xs opacity-50 mt-1\">+" + recs[ri].points + " points</div></div>";
+  var oh = '';
+  var rl = result.recommendations.slice(0, 3);
+  for (var ri = 0; ri < rl.length; ri++) {
+    oh += '<div class="border border-rl dark:border-rdl p-3"><div class="text-xs font-medium">' + rl[ri].action + '</div><div class="text-xs opacity-50 mt-1">+' + rl[ri].points + ' points</div></div>';
   }
-  $h("opportunityList", oppHTML);
+  html('opportunityList', oh);
 
-  // Network
-  $t("networkMapLabel", "Corridor Map -- " + c.cluster_name);
-  $t("svgGardenName",   R.garden_name);
-  $t("svgAdjacentId",   adj.length ? adj[0].id : "--");
-  $t("nodeStatus",      c.corridor_node_confirmed ? "Active" : "Pending");
-  $t("nodeStatusNote",  c.corridor_node_confirmed
-    ? "Confirmed corridor node. Amphibian presence and proximity to green space activate connectivity weighting."
-    : "Not yet confirmed as corridor node.");
-  $t("adjacentCount",   adj.length);
-  var adjHTML = "";
+  txt('networkMapLabel', 'Corridor Map - ' + c.cluster_name);
+  txt('svgGardenName',   R.garden_name);
+  txt('svgAdjacentId',   adj.length ? adj[0].id : '--');
+  txt('nodeStatus',      c.corridor_node_confirmed ? 'Active' : 'Pending');
+  txt('nodeStatusNote',  c.corridor_node_confirmed ? 'Confirmed corridor node. Amphibian presence and proximity to green space activate connectivity weighting.' : 'Not yet confirmed.');
+  txt('adjacentCount',   adj.length);
+
+  var ah = '';
   for (var ai = 0; ai < adj.length; ai++) {
-    adjHTML += "<div class=\"text-xs font-mono opacity-60 mt-1\">" + adj[ai].id + "</div><div class=\"text-xs opacity-50\">" + adj[ai].distance_m + "m " + adj[ai].direction + " - Verified</div>";
+    ah += '<div class="text-xs font-mono opacity-60 mt-1">' + adj[ai].id + '</div><div class="text-xs opacity-50">' + adj[ai].distance_m + 'm ' + adj[ai].direction + ' - Verified</div>';
   }
-  $h("adjacentList", adjHTML);
-  var connCat = null;
-  for (var ki = 0; ki < result.categories.length; ki++) {
-    if (result.categories[ki].label === "Connectivity") { connCat = result.categories[ki]; break; }
-  }
-  if (connCat) {
-    $t("connectivityScore", connCat.score + " / " + connCat.max);
-    $w("connectivityBar", Math.round(connCat.score / connCat.max * 100));
-  }
-  $t("effectiveArea", c.effective_ecological_area_ha + "ha");
-  $t("clusterNote",   "Effective ecological area including adjacency weighting. Part of " + c.cluster_area_ha + "ha " + c.cluster_name + " cluster.");
-  $t("curbingNote",   "This garden's signals are included in the " + c.cluster_name + " corridor dataset. With " + (adj.length + 1) + " registered gardens and 1 adjacent park, the cluster currently represents " + c.cluster_area_ha + "ha of measured ecological function. Registration of 3 more adjacent properties would activate a formal corridor designation.");
+  html('adjacentList', ah);
 
-  // Activity log
-  var logHTML = "";
+  var cc = null;
+  for (var ki = 0; ki < result.categories.length; ki++) {
+    if (result.categories[ki].label === 'Connectivity') { cc = result.categories[ki]; break; }
+  }
+  if (cc) { txt('connectivityScore', cc.score + ' / ' + cc.max); wid('connectivityBar', Math.round(cc.score / cc.max * 100)); }
+
+  txt('effectiveArea', c.effective_ecological_area_ha + 'ha');
+  txt('clusterNote',   'Part of ' + c.cluster_area_ha + 'ha ' + c.cluster_name + ' cluster.');
+  txt('curbingNote',   'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' + (adj.length + 1) + ' registered gardens and 1 adjacent park representing ' + c.cluster_area_ha + 'ha of measured ecological function.');
+
+  var lh = '';
   var log = R.activity_log || [];
   for (var li = 0; li < log.length; li++) {
-    var entry = log[li];
-    logHTML += "<article class=\"border border-rl dark:border-rdl bg-white dark:bg-rdp p-5\">" +
-      "<div class=\"flex items-start justify-between gap-4 mb-3\">" +
-      "<div><div class=\"text-sm font-medium\">" + entry.title + "</div><div class=\"text-xs opacity-50 mt-1 font-mono\">" + entry.date + "</div></div>" +
-      "<span class=\"flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg\">" + entry.type + "</span></div>" +
-      "<p class=\"text-sm leading-relaxed opacity-80\">" + entry.notes + "</p></article>";
+    var ent = log[li];
+    lh += '<article class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">' +
+      '<div class="flex items-start justify-between gap-4 mb-3">' +
+      '<div><div class="text-sm font-medium">' + ent.title + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + ent.date + '</div></div>' +
+      '<span class="flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg">' + ent.type + '</span></div>' +
+      '<p class="text-sm leading-relaxed opacity-80">' + ent.notes + '</p></article>';
   }
-  $h("activityLog", logHTML);
+  html('activityLog', lh);
 
-  // Garden facts
-  $h("gardenFacts",
-    "<div class=\"flex justify-between gap-4\"><dt class=\"opacity-60\">Primary EVC</dt><dd class=\"font-medium text-right\">" + R.evc.name + " (" + R.evc.code + ")</dd></div>" +
-    "<div class=\"flex justify-between gap-4\"><dt class=\"opacity-60\">Bioregion</dt><dd class=\"font-medium text-right\">" + R.evc.bioregion + "</dd></div>" +
-    "<div class=\"flex justify-between gap-4\"><dt class=\"opacity-60\">Area</dt><dd class=\"font-medium text-right\">~" + R.area_sqm + "m2</dd></div>" +
-    "<div class=\"flex justify-between gap-4\"><dt class=\"opacity-60\">Method</dt><dd class=\"font-medium text-right\">" + h.planting_method + "</dd></div>" +
-    "<div class=\"flex justify-between gap-4\"><dt class=\"opacity-60\">Designed by</dt><dd class=\"font-medium text-right\">" + R.designer + "</dd></div>"
+  html('gardenFacts',
+    '<div class="flex justify-between gap-4"><dt class="opacity-60">EVC</dt><dd class="font-medium text-right">' + R.evc.name + ' (' + R.evc.code + ')</dd></div>' +
+    '<div class="flex justify-between gap-4"><dt class="opacity-60">Bioregion</dt><dd class="font-medium text-right">' + R.evc.bioregion + '</dd></div>' +
+    '<div class="flex justify-between gap-4"><dt class="opacity-60">Area</dt><dd class="font-medium text-right">~' + R.area_sqm + 'm2</dd></div>' +
+    '<div class="flex justify-between gap-4"><dt class="opacity-60">Method</dt><dd class="font-medium text-right">' + h.planting_method + '</dd></div>' +
+    '<div class="flex justify-between gap-4"><dt class="opacity-60">Designed by</dt><dd class="font-medium text-right">' + R.designer + '</dd></div>'
   );
 
-  // Milestones
-  var mHTML = "";
+  var mh = '';
   var ms = R.milestones || [];
   for (var mi = 0; mi < ms.length; mi++) {
     var m = ms[mi];
-    mHTML += "<li class=\"border border-rl dark:border-rdl p-4 " + (m.complete ? "" : "opacity-50") + "\">" +
-      "<div class=\"text-xs font-medium\">" + (m.complete ? "v " : "o ") + m.title + "</div>" +
-      "<div class=\"text-xs opacity-50 mt-1\">" + m.date + "</div></li>";
+    mh += '<li class="border border-rl dark:border-rdl p-4' + (m.complete ? '' : ' opacity-50') + '">' +
+      '<div class="text-xs font-medium">' + (m.complete ? 'v ' : 'o ') + m.title + '</div>' +
+      '<div class="text-xs opacity-50 mt-1">' + m.date + '</div></li>';
   }
-  $h("milestoneList", mHTML);
+  html('milestoneList', mh);
 
-  // Next level
-  $t("nextLevelName", nl.name);
-  $t("nextLevelGap",  nl.gap > 0 ? result.total + " points - " + nl.target + " required - " + nl.gap + " to go" : "Maximum level achieved");
-  $w("nextLevelBar",  nl.progress);
-  $t("visionText", "At target trajectory, " + R.garden_name + " reaches Urban Biodiversity Node status by 2028. Canopy cover projected at 55%, indigenous species at 40+, and confirmed habitat for 3+ fauna species.");
+  txt('nextLevelName', nl.name);
+  txt('nextLevelGap',  nl.gap > 0 ? result.total + ' pts - ' + nl.target + ' required - ' + nl.gap + ' to go' : 'Maximum level achieved');
+  wid('nextLevelBar',  nl.progress);
+  txt('visionText', 'At target trajectory, ' + R.garden_name + ' reaches Urban Biodiversity Node status by 2028. Canopy cover projected at 55%, indigenous species at 40+, confirmed habitat for 3+ fauna species.');
 
-  // Animate bars
   setTimeout(function() {
-    var bars = document.querySelectorAll(".bar-fill");
-    for (var i = 0; i < bars.length; i++) {
+    var bars = document.querySelectorAll('.bar-fill');
+    for (var xi = 0; xi < bars.length; xi++) {
       (function(bar) {
-        var w = bar.style.width;
-        bar.style.width = "0%";
-        requestAnimationFrame(function() {
-          setTimeout(function() { bar.style.width = w; }, 50);
-        });
-      })(bars[i]);
+        var w = bar.style.width; bar.style.width = '0%';
+        requestAnimationFrame(function() { setTimeout(function() { bar.style.width = w; }, 50); });
+      })(bars[xi]);
     }
   }, 200);
 }
 
-// ================================================================
-// BOOT
-// ================================================================
-var savedTheme = localStorage.getItem("reg-theme");
-if (savedTheme === "light") { document.documentElement.classList.remove("dark"); }
-else { document.documentElement.classList.add("dark"); }
+/* ---- BOOT ---- */
+var st = localStorage.getItem('reg-theme');
+if (st === 'light') { document.documentElement.classList.remove('dark'); }
+else                { document.documentElement.classList.add('dark'); }
 
-document.getElementById("themeToggle").addEventListener("click", function() {
-  document.documentElement.classList.toggle("dark");
-  localStorage.setItem("reg-theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+document.getElementById('themeToggle').addEventListener('click', function() {
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 });
 
 render();
