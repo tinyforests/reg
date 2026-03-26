@@ -1,196 +1,171 @@
 /**
- * ECOLOGICAL REGISTRY BADGE ENGINE
- * Calculates badges from garden data (score + verification + evidence)
- * Returns structured badge object for display across all pages
+ * badge-engine.js
+ * Ecological Registry Badge Engine — Gardener & Son v1.0
+ *
+ * Exports:
+ *   awardBadges(record)         → { all_badges, score_badges, verification_badges, evidence_badges }
+ *   getBadgeDefinitions()       → Promise<{ [id]: BadgeDefinition }>
  */
 
-function awardBadges(gardenData) {
-    const scoreBadges = calculateScoreBadges(gardenData);
-    const verificationBadges = calculateVerificationBadges(gardenData);
-    const evidenceBadges = calculateEvidenceBadges(gardenData);
+const BADGE_DEFINITIONS = {
 
-    const all = [
-        ...scoreBadges,
-        ...verificationBadges,
-        ...evidenceBadges
-    ];
+  /* ── Biodiversity ── */
+  indigenous_dominant: {
+    name: "Indigenous Dominant",
+    description: "Garden is dominated by indigenous species appropriate to EVC.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  species_rich_20: {
+    name: "Species Rich",
+    description: "20 or more indigenous species recorded.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  species_rich_30: {
+    name: "Highly Species Rich",
+    description: "30 or more indigenous species recorded.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  full_canopy: {
+    name: "Canopy Forming",
+    description: "30% or greater canopy cover established.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  five_layers: {
+    name: "Five Layer Garden",
+    description: "All five structural layers present.",
+    type: "score",
+    category: "Habitat & Function"
+  },
 
-    return {
-        score_badges: scoreBadges,
-        verification_badges: verificationBadges,
-        evidence_badges: evidenceBadges,
-        all_badges: [...new Set(all)] // Remove duplicates
-    };
+  /* ── Habitat ── */
+  habitat_builder: {
+    name: "Habitat Builder",
+    description: "Three or more habitat nodes installed and mapped.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  amphibian_active: {
+    name: "Amphibian Active",
+    description: "Verified amphibian sighting recorded in the garden.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  pollinator_rich: {
+    name: "Pollinator Rich",
+    description: "Three or more pollinator fauna sightings verified.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  water_wise: {
+    name: "Water Wise",
+    description: "Rainwater system and moisture basin both installed.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+
+  /* ── Connectivity ── */
+  corridor_node: {
+    name: "Corridor Node",
+    description: "Garden confirmed as an active ecological corridor node.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+  network_connected: {
+    name: "Network Connected",
+    description: "Adjacent to two or more other registered gardens.",
+    type: "score",
+    category: "Habitat & Function"
+  },
+
+  /* ── Verification ── */
+  gs_verified: {
+    name: "G&S Verified",
+    description: "Professionally assessed and verified by Gardener & Son.",
+    type: "verification",
+    category: "Verification"
+  },
+  site_visit: {
+    name: "Site Visit",
+    description: "On-site assessment completed by a registry assessor.",
+    type: "verification",
+    category: "Verification"
+  },
+
+  /* ── Evidence ── */
+  full_record: {
+    name: "Full Record",
+    description: "Photos, field notes, species list, and fauna records all complete.",
+    type: "evidence",
+    category: "Evidence"
+  },
+  fauna_record: {
+    name: "Fauna Record",
+    description: "Verified fauna sighting recorded and documented.",
+    type: "evidence",
+    category: "Evidence"
+  }
+};
+
+/**
+ * Award badges based on a garden record.
+ * Returns categorised badge ID arrays.
+ */
+function awardBadges(record) {
+  const b = record.biodiversity || {};
+  const h = record.habitat      || {};
+  const c = record.connectivity || {};
+  const e = record.evidence     || {};
+  const sw = record.soil_water  || {};
+
+  const score_badges        = [];
+  const verification_badges = [];
+  const evidence_badges     = [];
+
+  /* ── Biodiversity badges ── */
+  if (b.indigenous_dominant)               score_badges.push("indigenous_dominant");
+  if ((b.indigenous_species_current || 0) >= 20) score_badges.push("species_rich_20");
+  if ((b.indigenous_species_current || 0) >= 30) score_badges.push("species_rich_30");
+  if ((b.canopy_cover_pct_current   || 0) >= 30) score_badges.push("full_canopy");
+  if ((b.structural_layers_current  || 0) >= 5)  score_badges.push("five_layers");
+
+  /* ── Habitat badges ── */
+  if ((h.habitat_nodes || 0) >= 3) score_badges.push("habitat_builder");
+
+  const verifiedFauna = (h.fauna_sightings || []).filter(s => s.verified);
+  if (verifiedFauna.length >= 1) {
+    score_badges.push("amphibian_active");
+    evidence_badges.push("fauna_record");
+  }
+  if (verifiedFauna.length >= 3) score_badges.push("pollinator_rich");
+
+  if (sw.has_rainwater_system && sw.has_moisture_basin) score_badges.push("water_wise");
+
+  /* ── Connectivity badges ── */
+  if (c.corridor_node_confirmed) score_badges.push("corridor_node");
+  const adjVerified = (c.adjacent_registered_gardens || []).filter(g => g.verified).length;
+  if (adjVerified >= 2) score_badges.push("network_connected");
+
+  /* ── Verification badges ── */
+  if (e.verification_level === 'gardener_and_son_verified') verification_badges.push("gs_verified");
+  if (e.verification_level === 'site_visit')                verification_badges.push("site_visit");
+
+  /* ── Evidence badges ── */
+  if (e.has_photos && e.has_field_notes && e.has_species_list && e.has_fauna_record) {
+    evidence_badges.push("full_record");
+  }
+
+  const all_badges = [...score_badges, ...verification_badges, ...evidence_badges];
+
+  return { all_badges, score_badges, verification_badges, evidence_badges };
 }
 
-function calculateScoreBadges(data) {
-    const badges = [];
-    const inputs = data.inputs || {};
-    const score = data.current_score || scoreEcologicalRegistry(data);
-
-    // Habitat Garden - Complete structural layers
-    if (inputs.ground_layer_present && 
-        inputs.shrub_layer_present && 
-        inputs.subcanopy_present && 
-        inputs.canopy_present) {
-        badges.push('habitat_garden');
-    }
-
-    // Indigenous Dominant - 80%+ indigenous species
-    if (inputs.indigenous_percent >= 80) {
-        badges.push('indigenous_dominant');
-    }
-
-    // Water Sensitive - Comprehensive water management
-    if (inputs.swale_or_infiltration && 
-        inputs.permeable_surfaces && 
-        (inputs.rainwater_use || inputs.passive_irrigation)) {
-        badges.push('water_sensitive');
-    }
-
-    // High Function Garden - Score 70+
-    if (score >= 70) {
-        badges.push('high_function_garden');
-    }
-
-    // Urban Biodiversity Node - High species count + habitat
-    if (inputs.species_count >= 40 && 
-        inputs.mixed_growth_forms && 
-        inputs.flowering_succession) {
-        badges.push('urban_biodiversity_node');
-    }
-
-    // Registered Ecological Garden - Full registry compliance
-    if (inputs.registered_garden && 
-        inputs.annual_update_complete && 
-        inputs.field_report_complete) {
-        badges.push('registered_ecological_garden');
-    }
-
-    // Pollinator Support - Dedicated pollinator resources
-    if (inputs.pollinator_support && 
-        inputs.flowering_succession && 
-        inputs.indigenous_percent >= 60) {
-        badges.push('pollinator_supporter');
-    }
-
-    // Regenerative Practices - Soil + ecosystem building
-    if (inputs.mycorrhiza_or_regen_methods && 
-        inputs.soil_improvement_works && 
-        inputs.organic_matter_or_mulch && 
-        inputs.no_synthetic_chemicals) {
-        badges.push('regenerative_practices');
-    }
-
-    return badges;
-}
-
-function calculateVerificationBadges(data) {
-    const badges = [];
-    const inputs = data.inputs || {};
-
-    // Verified Garden - Professional assessment
-    if (data.verification_level === 'gardener_and_son_verified') {
-        badges.push('verified_garden');
-    }
-
-    // Registry Member - Active registry participation
-    if (inputs.registered_garden && inputs.registered_in_network) {
-        badges.push('registry_member');
-    }
-
-    // Long Term Steward - Multiple assessments over time
-    const scoreHistory = data.score_history || [];
-    if (scoreHistory.length >= 3) {
-        badges.push('long_term_steward');
-    }
-
-    // Documentation Complete - Full reporting
-    if (inputs.field_report_complete && 
-        inputs.monitoring_photos_uploaded && 
-        inputs.habitat_additions_recorded) {
-        badges.push('documentation_complete');
-    }
-
-    return badges;
-}
-
-function calculateEvidenceBadges(data) {
-    const badges = [];
-    const fieldNotes = data.field_notes || [];
-
-    // Process field notes for evidence signals
-    const signals = new Set();
-    for (let note of fieldNotes) {
-        if (note.signals) {
-            note.signals.forEach(signal => signals.add(signal));
-        }
-    }
-
-    // Amphibian Active - Amphibian activity documented
-    if (signals.has('amphibian-activity') || signals.has('amphibian-breeding')) {
-        badges.push('amphibian_active');
-    }
-
-    // Bird Breeding - Nesting or breeding activity
-    if (signals.has('bird-nesting') || signals.has('bird-breeding')) {
-        badges.push('bird_breeding');
-    }
-
-    // Pollinator Hotspot - High pollinator activity observed
-    if (signals.has('pollinator-abundance') || signals.has('native-bee-activity')) {
-        badges.push('pollinator_hotspot');
-    }
-
-    // Corridor Node - Strategic habitat connectivity
-    if (signals.has('corridor-function') || signals.has('wildlife-movement')) {
-        badges.push('corridor_node');
-    }
-
-    // Water Habitat - Water feature supporting wildlife
-    if (signals.has('water-habitat') || signals.has('aquatic-wildlife')) {
-        badges.push('water_habitat');
-    }
-
-    // Regeneration Success - Evidence of ecosystem recovery
-    if (signals.has('natural-regeneration') || signals.has('seed-recruitment')) {
-        badges.push('regeneration_success');
-    }
-
-    return badges;
-}
-
-// Utility function to get badge metadata
-async function getBadgeDefinitions() {
-    try {
-        const response = await fetch('/data/badge-definitions.json');
-        return await response.json();
-    } catch (error) {
-        console.warn('Could not load badge definitions:', error);
-        return {};
-    }
-}
-
-// Render badges for display (used across all pages)
-function renderBadges(badgeIds, containerSelector) {
-    getBadgeDefinitions().then(definitions => {
-        const container = document.querySelector(containerSelector);
-        if (!container) return;
-
-        container.innerHTML = badgeIds.map(badgeId => {
-            const badge = definitions[badgeId];
-            if (!badge) return '';
-
-            return `
-                <div class="badge badge-${badge.type}" title="${badge.description}">
-                    <span class="badge-name">${badge.name}</span>
-                </div>
-            `;
-        }).join('');
-    });
-}
-
-// Export for use in other scripts
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { awardBadges, renderBadges, getBadgeDefinitions };
+/**
+ * Returns badge definitions as a Promise (async-compatible for the index page).
+ */
+function getBadgeDefinitions() {
+  return Promise.resolve(BADGE_DEFINITIONS);
 }
