@@ -110,14 +110,27 @@
                 </div>
               </div>
 
-              <!-- Prominent Score Display -->
-              <div class="flex-shrink-0">
-                <div class="bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen p-8 score-glow text-center">
+              <!-- Prominent Score & Badge Display -->
+              <div class="flex-shrink-0 flex gap-4">
+                <!-- Score Display -->
+                <div class="bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen p-6 score-glow text-center min-w-[140px]">
                   <div class="text-xs uppercase tracking-wide opacity-80 mb-2">Ecological Function</div>
-                  <div id="heroScore" class="text-6xl font-light leading-none">--</div>
-                  <div id="heroLevel" class="text-sm font-medium mt-3 opacity-90">Loading...</div>
+                  <div id="heroScore" class="text-5xl font-light leading-none">--</div>
+                  <div class="text-xs font-medium mt-2 opacity-90">points</div>
+                </div>
+                
+                <!-- Badge Display -->
+                <div class="bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen p-6 score-glow text-center min-w-[140px]">
+                  <div class="text-xs uppercase tracking-wide opacity-80 mb-2">Achievements</div>
+                  <div id="heroBadgeCount" class="text-5xl font-light leading-none">--</div>
+                  <div class="text-xs font-medium mt-2 opacity-90">badges earned</div>
                 </div>
               </div>
+            </div>
+            
+            <!-- Rating Level Below -->
+            <div class="mt-4 text-center md:text-left">
+              <div id="heroLevel" class="text-lg font-medium opacity-90">Loading...</div>
             </div>
           </div>
         </div>
@@ -583,6 +596,10 @@
         setText("overallPercentLabel", `${result.total}%`);
         setText("snapshotCurrent", `${result.total}%`);
         setText("statVerificationLevel", result.verificationLabel.split(' ')[0]); // Short version
+
+        // Calculate and display badge count prominently
+        const badges = awardBadges(record);
+        setText("heroBadgeCount", badges.all_badges.length);
 
         // Next level information
         const nextLevel = getNextLevelInfo(result.total);
