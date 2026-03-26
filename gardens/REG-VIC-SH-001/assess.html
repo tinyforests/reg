@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry — Arundel</title>
-  <meta name="description" content="Ecological Registry profile for Arundel — score, badges, field notes, trajectory, and live assessment controller." />
+  <title>Ecological Registry — Assessment</title>
+  <meta name="description" content="Live assessment controller for Ecological Registry gardens." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -18,18 +18,13 @@
         extend: {
           fontFamily: {
             serif: ['"Abril Fatface"', "serif"],
-            sans: ['"IBM Plex Sans"', "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+            sans:  ['"IBM Plex Sans"', "sans-serif"],
+            mono:  ['"IBM Plex Mono"', "monospace"],
           },
           colors: {
-            regGreen: "#3d4535",
-            regBeige: "#fff0dc",
-            regLine: "#d7ccb9",
-            regSoft: "#f7ead6",
-            regDarkPanel: "#485141",
-            regDarkLine: "rgba(255,240,220,0.18)"
-          },
-          boxShadow: {
-            card: "0 18px 50px rgba(32, 33, 28, 0.08)"
+            rg: "#3d4535", rb: "#fff0dc", rs: "#f7ead6",
+            rl: "#d7ccb9", rdp: "#485141", rdl: "rgba(255,240,220,0.12)",
+            signal: "#7a9e5f"
           }
         }
       }
@@ -38,855 +33,874 @@
 
   <style>
     * { border-radius: 0 !important; }
-    .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,240,220,0.16); }
-    .metric-bar-fill { transition: width 700ms ease; }
+    body { transition: background 0.3s, color 0.3s; }
+    .section-label { font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; opacity:.5; }
+    .bar-fill { transition: width 700ms cubic-bezier(0.16,1,0.3,1); }
 
-    input, select, textarea {
-      border-radius: 0 !important;
+    /* Form inputs */
+    input[type="number"],
+    input[type="text"],
+    select {
+      background: transparent;
+      border: 1px solid #d7ccb9;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+      width: 100%;
+      color: inherit;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .dark input[type="number"],
+    .dark input[type="text"],
+    .dark select {
+      border-color: rgba(255,240,220,0.12);
+      background: rgba(255,240,220,0.04);
+    }
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #7a9e5f;
+    }
+    select option { background: #3d4535; color: #fff0dc; }
+
+    /* Checkbox custom */
+    input[type="checkbox"] {
+      width: 1rem; height: 1rem;
+      accent-color: #7a9e5f;
+      flex-shrink: 0;
+      cursor: pointer;
     }
 
-    .controller-grid {
-      display: grid;
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-      gap: 0.75rem;
+    /* Pillar tabs */
+    .pillar-tab { cursor: pointer; transition: all 0.15s; }
+    .pillar-tab.active { background: #3d4535; color: #fff0dc; }
+    .dark .pillar-tab.active { background: #fff0dc; color: #3d4535; }
+    .pillar-panel { display: none; }
+    .pillar-panel.active { display: block; }
+
+    /* Score ring */
+    .score-ring {
+      width: 80px; height: 80px;
+      border: 3px solid currentColor;
+      display: flex; align-items: center; justify-content: center;
     }
 
-    @media (min-width: 768px) {
-      .controller-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 1100px) {
-      .controller-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
+    /* Delta */
+    .delta-up   { color: #7a9e5f; font-weight: 600; font-size: 0.7rem; }
+    .delta-same { opacity: 0.4; font-size: 0.7rem; }
   </style>
 </head>
 
-<body class="bg-regBeige text-regGreen font-sans antialiased transition-colors duration-300 dark:bg-regGreen dark:text-regBeige">
-  <header class="sticky top-0 z-40 border-b border-regLine bg-regBeige/90 backdrop-blur dark:border-regDarkLine dark:bg-regGreen/90">
-    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3 min-w-[260px]">
-        <div class="grid h-9 w-9 place-items-center bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen font-semibold">ER</div>
+<body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b border-rl bg-rb/90 backdrop-blur dark:border-rdl dark:bg-rg/90">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="grid h-9 w-9 place-items-center bg-rg text-rb dark:bg-rb dark:text-rg font-semibold text-sm">ER</div>
         <div class="leading-tight">
           <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
-          <div class="text-xs opacity-80">
-            <span id="topGardenName">Arundel</span> • Profile
-            <span class="opacity-40">•</span>
-            <span id="topGardenId" class="font-medium">ER-VIC-SH-ARU-0001</span>
-          </div>
+          <div class="text-xs opacity-60 font-mono" id="headerMeta">Assessment Controller</div>
         </div>
       </div>
-
-      <nav class="hidden md:flex items-center gap-2 text-sm">
-        <a href="#overview" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Overview</a>
-        <a href="#score" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Score</a>
-        <a href="#badges" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Badges</a>
-        <a href="#reports" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Field Notes</a>
-        <a href="#trajectory" class="px-3 py-1.5 hover:bg-regSoft dark:hover:bg-regDarkPanel focus-ring">Trajectory</a>
-      </nav>
 
       <div class="flex items-center gap-2">
-        <div class="hidden lg:block text-xs opacity-70 text-right mr-2">
-          <div>Last verified: <span id="headerLastVerified" class="font-medium">15 March 2026</span></div>
-          <div>Status: <span id="headerStatus" class="font-medium">Active / Developing</span></div>
-        </div>
-
-        <button id="themeToggle" class="border border-regLine dark:border-regDarkLine px-3 py-1.5 text-sm hover:opacity-80 focus-ring">
-          Toggle light / dark
-        </button>
-      </div>
-    </div>
-
-    <div class="border-t border-regLine dark:border-regDarkLine">
-      <div class="mx-auto max-w-6xl px-4 py-2 text-xs flex flex-wrap items-center gap-2">
-        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Status: <span id="stripStatus" class="font-medium">Active / Developing</span></span>
-        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Visibility: <span id="stripVisibility" class="font-medium">Public (address masked)</span></span>
-        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Verification: <span id="stripVerification" class="font-medium">Loading...</span></span>
-        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Last verified: <span id="stripLastVerified" class="font-medium">Loading...</span></span>
-        <span class="border border-regLine dark:border-regDarkLine px-2.5 py-1">Next review: <span id="stripNextReview" class="font-medium">Aug 2026</span></span>
+        <button id="resetBtn" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80">Reset</button>
+        <button id="copyBtn" class="bg-rg text-rb dark:bg-rb dark:text-rg px-4 py-1.5 text-xs font-medium hover:opacity-90">Copy JSON</button>
+        <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono ml-2">◐</button>
       </div>
     </div>
   </header>
 
-  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
-    <section id="overview" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8">
-        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-          <div class="flex items-start justify-between gap-4">
+  <main class="mx-auto max-w-7xl px-4 py-6 md:py-8">
+    <div class="grid lg:grid-cols-12 gap-6">
+
+      <!-- ── LEFT: Controller ── -->
+      <div class="lg:col-span-7 space-y-4">
+
+        <!-- Garden identity -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-4">Garden Identity</div>
+          <div class="grid grid-cols-2 gap-3 text-xs">
             <div>
-              <h1 id="heroGardenName" class="font-serif text-3xl md:text-4xl leading-tight">Arundel</h1>
-
-              <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
-                <span id="heroType" class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Ecological Forest Garden</span>
-                <span id="heroSuburb" class="border border-regLine dark:border-regDarkLine px-2.5 py-1 bg-regSoft dark:bg-regGreen">Surrey Hills, VIC</span>
-              </div>
-
-              <div id="heroDescription" class="mt-4 text-sm leading-relaxed opacity-90">
-                A registered garden designed to mature over years: contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.
-              </div>
-
-              <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                <div class="border border-regLine dark:border-regDarkLine p-3">
-                  <div class="text-xs opacity-70">Primary EVC</div>
-                  <div id="metaEVC" class="font-medium">Grassy Woodland <span class="opacity-70">(EVC 175)</span></div>
-                </div>
-                <div class="border border-regLine dark:border-regDarkLine p-3">
-                  <div class="text-xs opacity-70">Bioregion</div>
-                  <div id="metaBioregion" class="font-medium">Victorian Volcanic Plain</div>
-                </div>
-                <div class="border border-regLine dark:border-regDarkLine p-3">
-                  <div class="text-xs opacity-70">Stewards</div>
-                  <div id="metaStewards" class="font-medium">Andrew &amp; Elizabeth</div>
-                </div>
-                <div class="border border-regLine dark:border-regDarkLine p-3">
-                  <div class="text-xs opacity-70">Registry ID</div>
-                  <div id="heroGardenId" class="font-medium">ER-VIC-SH-ARU-0001</div>
-                </div>
-              </div>
+              <div class="opacity-50 mb-1">Garden Name</div>
+              <input type="text" id="f_garden_name" placeholder="e.g. Arundel" />
             </div>
-
-            <div class="shrink-0 text-right">
-              <div class="inline-flex flex-col items-end gap-2">
-                <div class="grid h-20 w-20 place-items-center bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen">
-                  <div id="heroScore" class="text-3xl font-semibold leading-none">--</div>
-                </div>
-                <div class="text-sm font-medium">Ecological Function</div>
-                <div class="text-xs opacity-80">Rating: <span id="heroLevel" class="font-medium">Loading...</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-          <div class="flex items-center justify-between gap-4">
             <div>
-              <h2 class="text-lg font-semibold">Assessment Controller</h2>
-              <p class="mt-1 text-xs opacity-70">Use this on site to adjust inputs and see the score update live.</p>
+              <div class="opacity-50 mb-1">Garden ID</div>
+              <input type="text" id="f_garden_id" placeholder="ER-VIC-SH-ARU-0001" />
             </div>
-            <div class="flex flex-wrap gap-2">
-              <button id="toggleControllerBtn" class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm hover:bg-regSoft dark:hover:bg-regGreen focus-ring">Hide Controller</button>
-              <button id="resetControllerBtn" class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm hover:bg-regSoft dark:hover:bg-regGreen focus-ring">Reset to saved data</button>
-              <button id="copyJsonBtn" class="bg-regGreen text-regBeige dark:bg-regBeige dark:text-regGreen px-3 py-2 text-sm hover:opacity-90 focus-ring">Copy updated JSON</button>
+            <div>
+              <div class="opacity-50 mb-1">Suburb</div>
+              <input type="text" id="f_suburb" placeholder="Surrey Hills" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">State</div>
+              <input type="text" id="f_state" placeholder="VIC" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Stewards</div>
+              <input type="text" id="f_stewards" placeholder="Andrew & Elizabeth" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Area (m²)</div>
+              <input type="number" id="f_area_sqm" placeholder="180" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">EVC Name</div>
+              <input type="text" id="f_evc_name" placeholder="Grassy Woodland" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">EVC Code</div>
+              <input type="text" id="f_evc_code" placeholder="EVC 175" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Assessment Date</div>
+              <input type="text" id="f_assessment_date" placeholder="Mar 2026" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Baseline Date</div>
+              <input type="text" id="f_baseline_date" placeholder="Feb 2026" />
             </div>
           </div>
+        </div>
 
-          <div id="controllerPanel" class="mt-5">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div class="lg:col-span-8">
-                <div class="controller-grid">
-                  <div class="border border-regLine dark:border-regDarkLine p-4">
-                    <div class="text-sm font-semibold">Structure</div>
-                    <div class="mt-3 space-y-2 text-sm">
-                      <label class="flex items-center justify-between gap-3"><span>Ground layer present</span><input id="input_ground_layer_present" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Shrub layer present</span><input id="input_shrub_layer_present" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Subcanopy present</span><input id="input_subcanopy_present" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Canopy present</span><input id="input_canopy_present" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Habitat logs</span><input id="input_habitat_logs" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Rocks</span><input id="input_rocks" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Pond flag</span><input id="input_pond" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Mulch present</span><input id="input_mulch_present" type="checkbox" class="w-4 h-4" /></label>
-                    </div>
-                  </div>
+        <!-- Pillar tabs -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp">
+          <!-- Tab bar -->
+          <div class="flex border-b border-rl dark:border-rdl text-xs overflow-x-auto">
+            <button class="pillar-tab active px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="biodiversity">Biodiversity</button>
+            <button class="pillar-tab px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="soil_water">Soil & Water</button>
+            <button class="pillar-tab px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="habitat">Habitat</button>
+            <button class="pillar-tab px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="connectivity">Connectivity</button>
+            <button class="pillar-tab px-4 py-3 whitespace-nowrap" data-tab="evidence">Evidence</button>
+          </div>
 
-                  <div class="border border-regLine dark:border-regDarkLine p-4">
-                    <div class="text-sm font-semibold">Diversity</div>
-                    <div class="mt-3 space-y-3 text-sm">
-                      <label class="block">
-                        <span class="block mb-1">Species count</span>
-                        <input id="input_species_count" type="number" min="0" class="w-full border border-regLine dark:border-regDarkLine px-3 py-2 bg-regSoft text-regGreen dark:bg-regGreen dark:text-regBeige" />
-                      </label>
-                      <label class="block">
-                        <span class="block mb-1">Indigenous percent</span>
-                        <input id="input_indigenous_percent" type="number" min="0" max="100" class="w-full border border-regLine dark:border-regDarkLine px-3 py-2 bg-regSoft text-regGreen dark:bg-regGreen dark:text-regBeige" />
-                      </label>
-                      <label class="flex items-center justify-between gap-3"><span>Flowering succession</span><input id="input_flowering_succession" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Mixed growth forms</span><input id="input_mixed_growth_forms" type="checkbox" class="w-4 h-4" /></label>
-                    </div>
-                  </div>
+          <!-- Pillar: Biodiversity -->
+          <div class="pillar-panel active p-5" id="panel_biodiversity">
+            <div class="section-label mb-4">Biodiversity Structure — 25 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
 
-                  <div class="border border-regLine dark:border-regDarkLine p-4">
-                    <div class="text-sm font-semibold">Water</div>
-                    <div class="mt-3 space-y-2 text-sm">
-                      <label class="flex items-center justify-between gap-3"><span>Permeable surfaces</span><input id="input_permeable_surfaces" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Rainwater use</span><input id="input_rainwater_use" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Swale or infiltration</span><input id="input_swale_or_infiltration" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Pond or wet area</span><input id="input_pond_or_wet_area" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Passive irrigation</span><input id="input_passive_irrigation" type="checkbox" class="w-4 h-4" /></label>
-                    </div>
-                  </div>
-
-                  <div class="border border-regLine dark:border-regDarkLine p-4">
-                    <div class="text-sm font-semibold">Soil</div>
-                    <div class="mt-3 space-y-2 text-sm">
-                      <label class="flex items-center justify-between gap-3"><span>Organic matter or mulch</span><input id="input_organic_matter_or_mulch" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>No synthetic chemicals</span><input id="input_no_synthetic_chemicals" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Compost or bio inputs</span><input id="input_compost_or_bioinputs" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Soil improvement works</span><input id="input_soil_improvement_works" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Mycorrhiza or regen methods</span><input id="input_mycorrhiza_or_regen_methods" type="checkbox" class="w-4 h-4" /></label>
-                    </div>
-                  </div>
-
-                  <div class="border border-regLine dark:border-regDarkLine p-4">
-                    <div class="text-sm font-semibold">Connectivity</div>
-                    <div class="mt-3 space-y-2 text-sm">
-                      <label class="flex items-center justify-between gap-3"><span>Near park or remnant</span><input id="input_near_park_or_remnant" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Visible native planting to street</span><input id="input_visible_native_planting_to_street" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Pollinator support</span><input id="input_pollinator_support" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Bird habitat</span><input id="input_bird_habitat" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Registered in network</span><input id="input_registered_in_network" type="checkbox" class="w-4 h-4" /></label>
-                    </div>
-                  </div>
-
-                  <div class="border border-regLine dark:border-regDarkLine p-4">
-                    <div class="text-sm font-semibold">Stewardship + verification</div>
-                    <div class="mt-3 space-y-3 text-sm">
-                      <label class="flex items-center justify-between gap-3"><span>Registered garden</span><input id="input_registered_garden" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Annual update complete</span><input id="input_annual_update_complete" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Field report complete</span><input id="input_field_report_complete" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Habitat additions recorded</span><input id="input_habitat_additions_recorded" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="flex items-center justify-between gap-3"><span>Monitoring photos uploaded</span><input id="input_monitoring_photos_uploaded" type="checkbox" class="w-4 h-4" /></label>
-                      <label class="block">
-                        <span class="block mb-1">Verification level</span>
-                        <select id="input_verification_level" class="w-full border border-regLine dark:border-regDarkLine px-3 py-2 bg-regSoft text-regGreen dark:bg-regGreen dark:text-regBeige">
-                          <option value="self_registered">Self Registered</option>
-                          <option value="photo_verified">Photo Verified</option>
-                          <option value="site_visit">Site Visit Verified</option>
-                          <option value="gardener_and_son_verified">Gardener &amp; Son Verified</option>
-                        </select>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Badge Preview -->
-                <div class="mt-6 border border-regLine dark:border-regDarkLine p-4">
-                  <div class="text-sm font-semibold">Badge Preview</div>
-                  <p class="mt-1 text-xs opacity-70">Live preview of badges earned with current settings</p>
-                  <div id="assessBadgePreview" class="mt-3 flex flex-wrap gap-2"></div>
-                </div>
+              <div>
+                <div class="opacity-50 mb-1">Indigenous species — current</div>
+                <input type="number" id="f_bio_species_current" min="0" placeholder="23" />
+                <div class="delta-up mt-1" id="d_bio_species">—</div>
               </div>
-
-              <div class="lg:col-span-4">
-                <div class="border border-regLine dark:border-regDarkLine p-4 h-full">
-                  <div class="text-sm font-semibold">Working record</div>
-                  <p class="mt-2 text-xs opacity-70 leading-relaxed">
-                    This reflects the current editable assessment state. Use "Copy updated JSON" to paste back into your data file.
-                  </p>
-                  <pre id="workingJsonPreview" class="mt-4 text-[11px] leading-relaxed whitespace-pre-wrap break-words opacity-85"></pre>
-                </div>
+              <div>
+                <div class="opacity-50 mb-1">Indigenous species — baseline</div>
+                <input type="number" id="f_bio_species_baseline" min="0" placeholder="8" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Indigenous species — target</div>
+                <input type="number" id="f_bio_species_target" min="0" placeholder="40" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Structural layers — current (1–5)</div>
+                <input type="number" id="f_bio_layers_current" min="0" max="5" placeholder="4" />
+                <div class="delta-up mt-1" id="d_bio_layers">—</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Structural layers — baseline</div>
+                <input type="number" id="f_bio_layers_baseline" min="0" max="5" placeholder="2" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Canopy cover % — current</div>
+                <input type="number" id="f_bio_canopy_current" min="0" max="100" placeholder="34" />
+                <div class="delta-up mt-1" id="d_bio_canopy">—</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Canopy cover % — baseline</div>
+                <input type="number" id="f_bio_canopy_baseline" min="0" max="100" placeholder="12" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Canopy cover % — target</div>
+                <input type="number" id="f_bio_canopy_target" min="0" max="100" placeholder="55" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Weed pressure — current</div>
+                <select id="f_bio_weed_pressure">
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low" selected>Low</option>
+                </select>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Weed pressure — baseline</div>
+                <select id="f_bio_weed_baseline">
+                  <option value="high" selected>High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" id="f_bio_dominant" />
+                  <span>Indigenous dominant (>70% indigenous by species)</span>
+                </label>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="mt-6 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold">Recent Notes</h2>
-            <span class="text-xs opacity-70">Recorded entries • manual mode</span>
-          </div>
-
-          <div class="mt-4 space-y-4">
-            <article class="border border-regLine dark:border-regDarkLine p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="text-sm font-medium">🐸 Amphibian sighting (burrowing frog)</div>
-                  <div class="text-xs opacity-70 mt-1">18 Feb 2026 • Lower slope refuge zone</div>
-                </div>
-                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+          <!-- Pillar: Soil & Water -->
+          <div class="pillar-panel p-5" id="panel_soil_water">
+            <div class="section-label mb-4">Soil & Water Function — 20 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="opacity-50 mb-1">Soil health — current (1–5)</div>
+                <input type="number" id="f_sw_soil_current" min="0" max="5" placeholder="3" />
+                <div class="delta-up mt-1" id="d_sw_soil">—</div>
               </div>
-              <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions.
-                Tagged for corridor-node modelling.
-              </p>
-            </article>
-
-            <article class="border border-regLine dark:border-regDarkLine p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <div class="text-sm font-medium">🪵 Habitat structure: embedded logs + voids</div>
-                  <div class="text-xs opacity-70 mt-1">15 Feb 2026 • Contour line 2</div>
-                </div>
-                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Installed</span>
+              <div>
+                <div class="opacity-50 mb-1">Soil health — baseline (1–5)</div>
+                <input type="number" id="f_sw_soil_baseline" min="0" max="5" placeholder="2" />
               </div>
-              <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Logs partially embedded to retain moisture and create cool refuges; rock pockets left ungrouted for invertebrate and amphibian movement.
-              </p>
-            </article>
-          </div>
-        </div>
-      </div>
-
-      <aside class="lg:col-span-4 space-y-6">
-        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige overflow-hidden">
-          <div class="p-4 flex items-center justify-between">
-            <div class="text-sm font-semibold">Site Map</div>
-            <span class="text-xs opacity-70">Static placeholder</span>
-          </div>
-          <div class="h-56 bg-regSoft dark:bg-regGreen/70 grid place-items-center text-sm opacity-80">
-            Map panel (future Leaflet / pins)
-          </div>
-          <div class="p-4 text-xs opacity-75 leading-relaxed">
-            Future: pins for refuge nodes, moisture basins, habitat logs, transects, and field note locations.
-          </div>
-        </div>
-
-        <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
-          <div class="text-sm font-semibold">Quick Facts</div>
-          <dl class="mt-4 space-y-3 text-sm">
-            <div class="flex items-center justify-between gap-4">
-              <dt class="opacity-75">Adjacency</dt>
-              <dd id="quickFactAdjacency" class="font-medium text-right">South Surrey Park edge</dd>
-            </div>
-            <div class="flex items-center justify-between gap-4">
-              <dt class="opacity-75">Hydrology</dt>
-              <dd id="quickFactHydrology" class="font-medium text-right">Contour-led infiltration</dd>
-            </div>
-            <div class="flex items-center justify-between gap-4">
-              <dt class="opacity-75">Planting method</dt>
-              <dd id="quickFactPlantingMethod" class="font-medium text-right">Miyawaki-style layering</dd>
-            </div>
-            <div class="flex items-center justify-between gap-4">
-              <dt class="opacity-75">Chemistry</dt>
-              <dd id="quickFactChemistry" class="font-medium text-right">Low-input / avoid toxins</dd>
-            </div>
-          </dl>
-        </div>
-
-        <div class="border border-regLine bg-regGreen text-regBeige shadow-card dark:border-regDarkLine p-5">
-          <div class="text-sm font-semibold">Corridor Node Potential</div>
-          <p class="mt-2 text-sm opacity-90 leading-relaxed">
-            Proximity to green space activates connectivity weighting. With amphibian activity confirmed,
-            Arundel behaves like a micro-corridor node rather than an isolated garden.
-          </p>
-        </div>
-      </aside>
-    </section>
-
-    <section id="score" class="mt-10">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold">Score</h2>
-        <div class="text-xs opacity-70">Live from registry inputs</div>
-      </div>
-
-      <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-8 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-          <div class="flex items-center justify-between">
-            <div class="text-sm font-semibold">Ecological Function Score</div>
-            <div id="scoreVersion" class="border border-regLine dark:border-regDarkLine px-2.5 py-1 text-xs">v1</div>
-          </div>
-
-          <div class="mt-5">
-            <div class="flex items-center justify-between text-sm">
-              <span class="opacity-80">Overall</span>
-              <span id="overallPercentLabel" class="font-medium">--%</span>
-            </div>
-            <div class="mt-2 h-3 w-full bg-regSoft dark:bg-regBeige/15 overflow-hidden">
-              <div id="overallPercentBar" class="metric-bar-fill h-full bg-regGreen dark:bg-regBeige" style="width:0%"></div>
-            </div>
-            <div id="overallInterpretation" class="mt-2 text-xs opacity-70">Loading score interpretation...</div>
-          </div>
-
-          <div id="liveCategoryList" class="mt-6 space-y-4"></div>
-
-          <div class="mt-6 pt-5 border-t border-regLine dark:border-regDarkLine text-xs opacity-75 leading-relaxed">
-            Each score category is generated from registry inputs and can later be linked directly to evidence, dated notes, and media.
-          </div>
-        </div>
-
-        <div class="lg:col-span-4 space-y-6">
-          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
-            <div class="text-sm font-semibold">Snapshot</div>
-            <ul class="mt-4 space-y-2 text-sm">
-              <li class="flex items-start justify-between gap-4">
-                <span class="opacity-75">Baseline</span>
-                <span id="snapshotBaseline" class="font-medium">52% (est.)</span>
-              </li>
-              <li class="flex items-start justify-between gap-4">
-                <span class="opacity-75">Current</span>
-                <span id="snapshotCurrent" class="font-medium">--%</span>
-              </li>
-              <li class="flex items-start justify-between gap-4">
-                <span class="opacity-75">Target (3 yrs)</span>
-                <span id="snapshotTarget" class="font-medium">82%</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
-            <div class="text-sm font-semibold">Scoring Notes</div>
-            <p class="mt-3 text-sm leading-relaxed opacity-90">
-              Scoring prioritises repeatability: each increment should be backed by evidence and time-stamped changes. Badges are awarded only when thresholds are met and verified.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="badges" class="mt-10">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold">Badges</h2>
-        <div class="text-xs opacity-70">Signals, not vibes • generated from registry rules</div>
-      </div>
-
-      <div class="mt-4 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-        <div id="liveBadgeList" class="flex flex-wrap gap-2"></div>
-
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="border border-regLine dark:border-regDarkLine p-4">
-            <div class="text-sm font-semibold">Registry Badge Logic</div>
-            <div class="text-xs opacity-70 mt-1">Threshold based</div>
-            <p class="mt-2 text-sm opacity-90 leading-relaxed">
-              Badges are awarded when ecological thresholds are met through measurable inputs such as habitat layers, canopy presence, connectivity, hydrology, and verification level.
-            </p>
-          </div>
-
-          <div class="border border-regLine dark:border-regDarkLine p-4">
-            <div class="text-sm font-semibold">Verification Status</div>
-            <div class="text-xs opacity-70 mt-1">Current level</div>
-            <p class="mt-2 text-sm opacity-90 leading-relaxed">
-              <span id="badgeVerificationText">Loading...</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="reports" class="mt-10">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold">Field Notes</h2>
-        <div class="text-xs opacity-70">Linked notes from the garden field log</div>
-      </div>
-
-      <div class="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-8 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-          <div class="space-y-4">
-            <article class="border border-regLine dark:border-regDarkLine p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="field-notes/002.html" class="text-sm font-semibold underline underline-offset-2">Field Note #002 — Weed removal (multi-date)</a>
-                  <div class="text-xs opacity-70 mt-1">24 Jan 2026 • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+              <div>
+                <div class="opacity-50 mb-1">Water function — current (1–5)</div>
+                <input type="number" id="f_sw_water_current" min="0" max="5" placeholder="2" />
+                <div class="delta-up mt-1" id="d_sw_water">—</div>
               </div>
-              <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Site prep and weed removal before ecological layering. This note records removal method and the initial condition of the planting zones.
-              </p>
-            </article>
-
-            <article class="border border-regLine dark:border-regDarkLine p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="field-notes/003.html" class="text-sm font-semibold underline underline-offset-2">Field Note #003 — Sub-base / crushed rock for pathmaking</a>
-                  <div class="text-xs opacity-70 mt-1">24 Jan 2026 • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+              <div>
+                <div class="opacity-50 mb-1">Water function — baseline (1–5)</div>
+                <input type="number" id="f_sw_water_baseline" min="0" max="5" placeholder="2" />
               </div>
-              <p class="mt-3 text-sm leading-relaxed">
-                Documents foundational path structure and permeability intent before planting and habitat layering.
-              </p>
-            </article>
-
-            <article class="border border-regLine dark:border-regDarkLine p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="field-notes/004.html" class="text-sm font-semibold underline underline-offset-2">Field Note #004 — Ground contouring and forming</a>
-                  <div class="text-xs opacity-70 mt-1">24 Jan 2026 • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+              <div>
+                <div class="opacity-50 mb-1">Mulch depth (mm)</div>
+                <input type="number" id="f_sw_mulch" min="0" placeholder="80" />
               </div>
-              <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Captures contour formation to guide runoff, support infiltration, and establish future moisture gradients.
-              </p>
-            </article>
-
-            <article class="border border-regLine dark:border-regDarkLine p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <a href="field-notes/005.html" class="text-sm font-semibold underline underline-offset-2">Field Note #005 — Excavation for swales and water habitat</a>
-                  <div class="text-xs opacity-70 mt-1">24 Jan 2026 • Observer: Gardener &amp; Son</div>
-                </div>
-                <span class="border border-regLine dark:border-regDarkLine px-2 py-1 text-xs bg-regSoft dark:bg-regGreen">Verified</span>
+              <div class="sm:col-span-2 space-y-2 mt-2">
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_sw_rainwater" /><span>Rainwater system installed (+2 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_sw_basin" /><span>Moisture basin installed (+2 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_sw_swale" /><span>Swale or infiltration system (+1 pt)</span></label>
               </div>
-              <p class="mt-3 text-sm leading-relaxed opacity-90">
-                Logs early hydrology interventions that increase seasonal water holding and habitat opportunity.
-              </p>
-            </article>
+            </div>
+          </div>
+
+          <!-- Pillar: Habitat -->
+          <div class="pillar-panel p-5" id="panel_habitat">
+            <div class="section-label mb-4">Habitat Complexity — 20 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="opacity-50 mb-1">Habitat nodes — current</div>
+                <input type="number" id="f_hab_nodes_current" min="0" placeholder="3" />
+                <div class="delta-up mt-1" id="d_hab_nodes">—</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Habitat nodes — baseline</div>
+                <input type="number" id="f_hab_nodes_baseline" min="0" placeholder="0" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Verified fauna sightings</div>
+                <input type="number" id="f_hab_fauna_count" min="0" placeholder="1" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Fauna species (first sighting)</div>
+                <input type="text" id="f_hab_fauna_species" placeholder="Burrowing frog" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Planting method</div>
+                <input type="text" id="f_hab_method" placeholder="Miyawaki-style layering" />
+              </div>
+              <div class="sm:col-span-2 space-y-2 mt-2">
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_logs" /><span>Embedded logs (+3 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_rocks" /><span>Rock refuges (+2 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_water" /><span>Water feature (+3 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_nest" /><span>Nest boxes (+2 pts)</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar: Connectivity -->
+          <div class="pillar-panel p-5" id="panel_connectivity">
+            <div class="section-label mb-4">Connectivity — 20 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="opacity-50 mb-1">Adjacent park / reserve name</div>
+                <input type="text" id="f_con_park_name" placeholder="Surrey Hills Reserve" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Park distance (m)</div>
+                <input type="number" id="f_con_park_dist" min="0" placeholder="45" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Adjacent registered garden ID</div>
+                <input type="text" id="f_con_adj_id" placeholder="ER-VIC-SH-MH-003" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Adjacent garden distance (m)</div>
+                <input type="number" id="f_con_adj_dist" min="0" placeholder="140" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Cluster name</div>
+                <input type="text" id="f_con_cluster_name" placeholder="Surrey Hills" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Cluster area (ha)</div>
+                <input type="number" id="f_con_cluster_ha" min="0" step="0.1" placeholder="2.1" />
+              </div>
+              <div class="sm:col-span-2 space-y-2 mt-2">
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_park" /><span>Adjacent park or reserve confirmed</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_corridor" /><span>Corridor node confirmed (+5 pts)</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar: Evidence -->
+          <div class="pillar-panel p-5" id="panel_evidence">
+            <div class="section-label mb-4">Evidence & Verification — 15 pts max</div>
+            <div class="text-xs space-y-3">
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_photos" /><span>Photos documented (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_notes" /><span>Field notes recorded (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_species_list" /><span>Species list complete (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_fauna_record" /><span>Fauna record included (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_professional" /><span>Professional assessment (+3 pts)</span></label>
+
+              <div class="mt-4">
+                <div class="opacity-50 mb-2">Verification level</div>
+                <select id="f_ev_verification">
+                  <option value="self_reported">Self Reported</option>
+                  <option value="photo_verified">Photo Verified (+1 pt)</option>
+                  <option value="site_visit">Site Visit (+3 pts)</option>
+                  <option value="gardener_and_son_verified">G&S Verified (+4 pts)</option>
+                </select>
+              </div>
+              <div class="mt-2">
+                <div class="opacity-50 mb-1">Assessor name</div>
+                <input type="text" id="f_ev_assessor" placeholder="Gardener & Son" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="lg:col-span-4 space-y-6">
-          <div class="border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5">
-            <div class="text-sm font-semibold">Field Note Template</div>
-            <ul class="mt-4 space-y-2 text-sm opacity-90">
-              <li>• Date + observer</li>
-              <li>• Location on site</li>
-              <li>• Evidence (photo / note)</li>
-              <li>• Signal (what it implies)</li>
-              <li>• Action (what changed)</li>
-              <li>• Score impact (pillar)</li>
-            </ul>
+        <!-- Badge preview -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Live Badge Preview</div>
+          <div id="badgePreview" class="flex flex-wrap gap-2 min-h-[2rem]">
+            <span class="text-xs opacity-40">Badges will appear here as thresholds are met</span>
           </div>
         </div>
       </div>
-    </section>
 
-    <section id="trajectory" class="mt-10">
-      <div class="flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-semibold">Trajectory</h2>
-        <div class="text-xs opacity-70">Shows change over time</div>
-      </div>
+      <!-- ── RIGHT: Live score + JSON ── -->
+      <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-20 lg:self-start">
 
-      <div class="mt-4 border border-regLine bg-white text-regGreen shadow-card dark:border-regDarkLine dark:bg-regDarkPanel dark:text-regBeige p-5 md:p-7">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div class="lg:col-span-7">
-            <div class="text-sm font-semibold">Milestones</div>
-            <ol class="mt-4 space-y-3">
-              <li class="border border-regLine dark:border-regDarkLine p-4">
-                <div class="text-sm font-medium">Baseline established</div>
-                <div class="text-xs opacity-70 mt-1">Feb 2026 • Baseline score recorded</div>
-              </li>
-              <li class="border border-regLine dark:border-regDarkLine p-4">
-                <div class="text-sm font-medium">Habitat refuge nodes designated</div>
-                <div class="text-xs opacity-70 mt-1">Mar 2026 • 3 nodes mapped</div>
-              </li>
-            </ol>
+        <!-- Live score -->
+        <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-6">
+          <div class="section-label mb-4" style="color:inherit;opacity:0.6">Live Score</div>
+          <div class="flex items-end gap-4 mb-4">
+            <div class="font-serif text-7xl leading-none" id="liveScore">—</div>
+            <div class="pb-1 text-sm opacity-80" id="liveRating">—</div>
           </div>
-
-          <div class="lg:col-span-5">
-            <div class="text-sm font-semibold">Next Upgrades</div>
-            <div id="liveRecommendationList" class="mt-4 space-y-3 text-sm"></div>
+          <div class="h-1.5 bg-rb/20 dark:bg-rg/20 mb-2">
+            <div class="bar-fill h-full bg-rb dark:bg-rg" id="liveScoreBar" style="width:0%"></div>
+          </div>
+          <div class="flex justify-between text-xs opacity-50">
+            <span>Baseline <span id="liveBaseline">—</span></span>
+            <span>Target 82</span>
           </div>
         </div>
+
+        <!-- Category breakdown -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-4">Pillar Breakdown</div>
+          <div class="space-y-3" id="categoryBars">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Biggest Opportunities</div>
+          <div class="space-y-2 text-xs" id="recommendations">—</div>
+        </div>
+
+        <!-- JSON output -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div class="section-label">Output JSON</div>
+            <button id="copyBtn2" class="text-xs border border-rl dark:border-rdl px-3 py-1 hover:opacity-80">Copy</button>
+          </div>
+          <pre id="jsonOutput" class="text-[10px] font-mono leading-relaxed opacity-80 whitespace-pre-wrap break-words max-h-80 overflow-y-auto"></pre>
+        </div>
       </div>
-    </section>
+
+    </div>
   </main>
 
-  <script src="../../js/reg-score.js"></script>
-  <script src="../../js/badge-engine.js"></script>
-  <script>
-    const savedTheme = localStorage.getItem("reg-theme");
-    if (savedTheme === "light") {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
+<script>
+// ════════════════════════════════════════════════════════════════
+// SCORING ENGINE — five pillars, 100 pts
+// ════════════════════════════════════════════════════════════════
+function scoreEcologicalRegistry(record) {
+  const scores = {
+    biodiversity: scoreBiodiversity(record),
+    soil_water:   scoreSoilWater(record),
+    habitat:      scoreHabitat(record),
+    connectivity: scoreConnectivity(record),
+    evidence:     scoreEvidence(record)
+  };
+  const total = Object.values(scores).reduce((sum, c) => sum + c.score, 0);
+  const categories = [
+    { label:"Biodiversity Structure",  score:scores.biodiversity.score, max:25 },
+    { label:"Soil & Water Function",   score:scores.soil_water.score,   max:20 },
+    { label:"Habitat Complexity",      score:scores.habitat.score,      max:20 },
+    { label:"Connectivity",            score:scores.connectivity.score,  max:20 },
+    { label:"Evidence & Verification", score:scores.evidence.score,     max:15 }
+  ];
+  return { total, categories,
+    rating: ratingFromScore(total),
+    verificationLabel: verificationLabelFromLevel(record.evidence?.verification_level),
+    recommendations: buildRecommendations(record),
+    baselineScore: estimateBaseline(record)
+  };
+}
+function scoreBiodiversity(r) {
+  const b = r.biodiversity||{}; let score=0;
+  const sp=b.indigenous_species_current||0;
+  if(sp>=30)score+=10; else if(sp>=20)score+=8; else if(sp>=12)score+=6; else if(sp>=6)score+=4; else if(sp>=1)score+=2;
+  if(b.indigenous_dominant)score+=4;
+  const ly=b.structural_layers_current||0;
+  if(ly>=5)score+=6; else if(ly>=4)score+=5; else if(ly>=3)score+=3; else if(ly>=2)score+=1;
+  const ca=b.canopy_cover_pct_current||0;
+  if(ca>=50)score+=5; else if(ca>=30)score+=4; else if(ca>=15)score+=2; else if(ca>=5)score+=1;
+  return{score:Math.min(score,25)};
+}
+function scoreSoilWater(r) {
+  const sw=r.soil_water||{}; let score=0;
+  score+=Math.round(((sw.soil_health_score||0)/5)*8);
+  score+=Math.round(((sw.water_function_score||0)/5)*7);
+  if(sw.has_rainwater_system)score+=2;
+  if(sw.has_moisture_basin)score+=2;
+  if(sw.has_swale)score+=1;
+  return{score:Math.min(score,20)};
+}
+function scoreHabitat(r) {
+  const h=r.habitat||{}; let score=0;
+  const nd=h.habitat_nodes||0;
+  if(nd>=5)score+=6; else if(nd>=3)score+=4; else if(nd>=1)score+=2;
+  if(h.has_embedded_logs)score+=3;
+  if(h.has_rock_refuges)score+=2;
+  if(h.has_water_feature)score+=3;
+  if(h.has_nest_boxes)score+=2;
+  const fauna=(h.fauna_sightings||[]).filter(s=>s.verified).length;
+  if(fauna>=3)score+=4; else if(fauna>=1)score+=3;
+  return{score:Math.min(score,20)};
+}
+function scoreConnectivity(r) {
+  const c=r.connectivity||{}; let score=0;
+  if(c.adjacent_park){
+    const d=c.park_distance_m||999;
+    if(d<=50)score+=6; else if(d<=150)score+=4; else if(d<=300)score+=2;
+  }
+  const adj=(c.adjacent_registered_gardens||[]).filter(g=>g.verified).length;
+  if(adj>=3)score+=6; else if(adj>=2)score+=4; else if(adj>=1)score+=3;
+  if(c.corridor_node_confirmed)score+=5;
+  if((c.cluster_area_ha||0)>=2)score+=3; else if((c.cluster_area_ha||0)>=1)score+=1;
+  return{score:Math.min(score,20)};
+}
+function scoreEvidence(r) {
+  const e=r.evidence||{}; let score=0;
+  if(e.has_photos)score+=2; if(e.has_field_notes)score+=2;
+  if(e.has_species_list)score+=2; if(e.has_fauna_record)score+=2;
+  if(e.has_professional_assessment)score+=3;
+  const vl=e.verification_level||'';
+  if(vl==='gardener_and_son_verified')score+=4;
+  else if(vl==='site_visit')score+=3;
+  else if(vl==='photo_verified')score+=1;
+  return{score:Math.min(score,15)};
+}
+function ratingFromScore(s){
+  if(s>=91)return"Urban Biodiversity Node";
+  if(s>=81)return"High Habitat Garden";
+  if(s>=61)return"Registered Ecological Garden";
+  if(s>=41)return"Ecological Garden";
+  if(s>=21)return"Habitat Garden";
+  return"Basic Garden";
+}
+function verificationLabelFromLevel(l){
+  return{gardener_and_son_verified:"G&S Verified",site_visit:"Site Visit",photo_verified:"Photo Verified",self_reported:"Self Reported"}[l]||"Unverified";
+}
+function estimateBaseline(record){
+  const b=record.biodiversity||{},sw=record.soil_water||{},h=record.habitat||{};
+  const br={...record,
+    biodiversity:{...b,indigenous_species_current:b.indigenous_species_baseline||0,structural_layers_current:b.structural_layers_baseline||0,canopy_cover_pct_current:b.canopy_cover_pct_baseline||0,indigenous_dominant:false},
+    soil_water:{...sw,soil_health_score:sw.soil_health_baseline||0,water_function_score:sw.water_function_baseline||0,has_rainwater_system:false,has_moisture_basin:false,has_swale:false},
+    habitat:{...h,habitat_nodes:h.habitat_nodes_baseline||0,has_embedded_logs:false,has_rock_refuges:false,has_water_feature:false,has_nest_boxes:false,fauna_sightings:[]},
+    connectivity:{...record.connectivity,corridor_node_confirmed:false,adjacent_registered_gardens:[]},
+    evidence:{has_photos:false,has_field_notes:false,has_professional_assessment:false,has_fauna_record:false,has_species_list:false,verification_level:'self_reported'}
+  };
+  return scoreEcologicalRegistry(br).total;
+}
+function buildRecommendations(record){
+  const recs=[];
+  const sw=record.soil_water||{},h=record.habitat||{},b=record.biodiversity||{},c=record.connectivity||{};
+  if(!sw.has_moisture_basin)recs.push({action:"Install seasonal moisture basin",points:6});
+  if(!h.has_water_feature)recs.push({action:"Add a small water feature",points:3});
+  if(!sw.has_rainwater_system)recs.push({action:"Add rainwater collection system",points:2});
+  if(!h.has_rock_refuges)recs.push({action:"Add rock refuge zones",points:2});
+  if(!h.has_nest_boxes)recs.push({action:"Install nest boxes",points:2});
+  const gap=(b.indigenous_species_target||40)-(b.indigenous_species_current||0);
+  if(gap>0)recs.push({action:`Add ${Math.min(gap,5)} more indigenous species`,points:Math.min(gap,4)});
+  const adjCount=(c.adjacent_registered_gardens||[]).length;
+  if(adjCount<3)recs.push({action:"Encourage adjacent gardens to register",points:adjCount<1?3:1});
+  return recs.sort((a,b)=>b.points-a.points).slice(0,5);
+}
 
-    const profileController = {
-      gardenSlug: "arundel",
-      heroType: "Ecological Forest Garden",
-      suburbLabelSuffix: ", VIC",
-      description: "A registered garden designed to mature over years: contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.",
-      evc: 'Grassy Woodland <span class="opacity-70">(EVC 175)</span>',
-      bioregion: "Victorian Volcanic Plain",
-      stewards: "Andrew & Elizabeth",
-      status: "Active / Developing",
-      visibility: "Public (address masked)",
-      nextReview: "Aug 2026",
-      baselineScoreLabel: "52% (est.)",
-      targetScoreLabel: "82%",
-      quickFacts: {
-        adjacency: "South Surrey Park edge",
-        hydrology: "Contour-led infiltration",
-        plantingMethod: "Miyawaki-style layering",
-        chemistry: "Low-input / avoid toxins"
-      }
-    };
+// ════════════════════════════════════════════════════════════════
+// BADGE ENGINE
+// ════════════════════════════════════════════════════════════════
+const BADGE_DEFS = {
+  indigenous_dominant:{name:"Indigenous Dominant",type:"score"},
+  species_rich_20:{name:"Species Rich",type:"score"},
+  species_rich_30:{name:"Highly Species Rich",type:"score"},
+  full_canopy:{name:"Canopy Forming",type:"score"},
+  five_layers:{name:"Five Layer Garden",type:"score"},
+  habitat_builder:{name:"Habitat Builder",type:"score"},
+  amphibian_active:{name:"Amphibian Active",type:"score"},
+  pollinator_rich:{name:"Pollinator Rich",type:"score"},
+  water_wise:{name:"Water Wise",type:"score"},
+  corridor_node:{name:"Corridor Node",type:"score"},
+  network_connected:{name:"Network Connected",type:"score"},
+  gs_verified:{name:"G&S Verified",type:"verification"},
+  site_visit:{name:"Site Visit",type:"verification"},
+  full_record:{name:"Full Record",type:"evidence"},
+  fauna_record:{name:"Fauna Record",type:"evidence"}
+};
+function awardBadges(record){
+  const b=record.biodiversity||{},h=record.habitat||{},c=record.connectivity||{},e=record.evidence||{},sw=record.soil_water||{};
+  const score_badges=[],verification_badges=[],evidence_badges=[];
+  if(b.indigenous_dominant)score_badges.push("indigenous_dominant");
+  if((b.indigenous_species_current||0)>=20)score_badges.push("species_rich_20");
+  if((b.indigenous_species_current||0)>=30)score_badges.push("species_rich_30");
+  if((b.canopy_cover_pct_current||0)>=30)score_badges.push("full_canopy");
+  if((b.structural_layers_current||0)>=5)score_badges.push("five_layers");
+  if((h.habitat_nodes||0)>=3)score_badges.push("habitat_builder");
+  const fauna=(h.fauna_sightings||[]).filter(s=>s.verified).length;
+  if(fauna>=1){score_badges.push("amphibian_active");evidence_badges.push("fauna_record");}
+  if(fauna>=3)score_badges.push("pollinator_rich");
+  if(sw.has_rainwater_system&&sw.has_moisture_basin)score_badges.push("water_wise");
+  if(c.corridor_node_confirmed)score_badges.push("corridor_node");
+  const adjV=(c.adjacent_registered_gardens||[]).filter(g=>g.verified).length;
+  if(adjV>=2)score_badges.push("network_connected");
+  if(e.verification_level==='gardener_and_son_verified')verification_badges.push("gs_verified");
+  if(e.verification_level==='site_visit')verification_badges.push("site_visit");
+  if(e.has_photos&&e.has_field_notes&&e.has_species_list&&e.has_fauna_record)evidence_badges.push("full_record");
+  return{all_badges:[...score_badges,...verification_badges,...evidence_badges],score_badges,verification_badges,evidence_badges};
+}
 
-    let savedRecord = null;
-    let workingRecord = null;
+// ════════════════════════════════════════════════════════════════
+// STATE & RECORD BUILDER
+// ════════════════════════════════════════════════════════════════
+let savedRecord = null;
 
-    const inputKeys = [
-      "ground_layer_present","shrub_layer_present","subcanopy_present","canopy_present",
-      "habitat_logs","rocks","pond","mulch_present","species_count","flowering_succession",
-      "mixed_growth_forms","indigenous_percent","permeable_surfaces","rainwater_use",
-      "swale_or_infiltration","pond_or_wet_area","passive_irrigation","organic_matter_or_mulch",
-      "no_synthetic_chemicals","compost_or_bioinputs","soil_improvement_works",
-      "mycorrhiza_or_regen_methods","near_park_or_remnant","visible_native_planting_to_street",
-      "pollinator_support","bird_habitat","registered_in_network","registered_garden",
-      "annual_update_complete","field_report_complete","habitat_additions_recorded",
-      "monitoring_photos_uploaded"
-    ];
+function buildRecordFromForm() {
+  const n = id => document.getElementById(id);
+  const v = id => n(id)?.value || '';
+  const num = id => parseFloat(n(id)?.value) || 0;
+  const chk = id => n(id)?.checked || false;
 
-    function deepClone(obj) {
-      return JSON.parse(JSON.stringify(obj));
-    }
+  const faunaCount = num('f_hab_fauna_count');
+  const faunaSpecies = v('f_hab_fauna_species');
+  const fauna_sightings = faunaCount > 0
+    ? [{ species: faunaSpecies || 'Unknown', date: 'Recorded', location: 'Field observation', verified: true }]
+    : [];
 
-    function ratingLabelFromScore(score) {
-      if (score >= 91) return "Urban Biodiversity Node";
-      if (score >= 81) return "High Habitat Garden";
-      if (score >= 61) return "Registered Ecological Garden";
-      if (score >= 41) return "Ecological Garden";
-      if (score >= 21) return "Habitat Garden";
-      return "Basic Garden";
-    }
+  const adjId = v('f_con_adj_id');
+  const adjDist = num('f_con_adj_dist');
+  const adjacent_registered_gardens = adjId
+    ? [{ id: adjId, distance_m: adjDist, direction: 'adjacent', verified: true }]
+    : [];
 
-    function interpretationFromScore(score) {
-      if (score >= 81) return "Interpretation: high-functioning ecological structure with strong habitat layering, stewardship, and network value.";
-      if (score >= 61) return "Interpretation: strong functioning structure with clear headroom for further hydrology, canopy, and indigenous uplift.";
-      if (score >= 41) return "Interpretation: meaningful ecological foundations are present, with clear opportunity for strengthening and verification.";
-      return "Interpretation: early ecological structure is emerging and can be strengthened through further inputs and habitat actions.";
-    }
+  return {
+    garden_id:       v('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
+    garden_name:     v('f_garden_name') || 'New Garden',
+    garden_type:     'Ecological Garden',
+    suburb:          v('f_suburb'),
+    state:           v('f_state'),
+    assessment_date: v('f_assessment_date'),
+    baseline_date:   v('f_baseline_date'),
+    target_score:    82,
+    stewards:        v('f_stewards'),
+    designer:        'Gardener & Son',
+    area_sqm:        num('f_area_sqm'),
+    description:     '',
 
-    function setText(id, value) {
-      const el = document.getElementById(id);
-      if (el && value !== undefined) el.textContent = value;
-    }
+    evc: {
+      name:       v('f_evc_name'),
+      code:       v('f_evc_code'),
+      bioregion:  '',
+      bioregion_code: ''
+    },
 
-    function setHTML(id, value) {
-      const el = document.getElementById(id);
-      if (el && value !== undefined) el.innerHTML = value;
-    }
+    biodiversity: {
+      indigenous_species_current:  num('f_bio_species_current'),
+      indigenous_species_baseline: num('f_bio_species_baseline'),
+      indigenous_species_target:   num('f_bio_species_target'),
+      indigenous_dominant:         chk('f_bio_dominant'),
+      structural_layers_current:   num('f_bio_layers_current'),
+      structural_layers_baseline:  num('f_bio_layers_baseline'),
+      canopy_cover_pct_current:    num('f_bio_canopy_current'),
+      canopy_cover_pct_baseline:   num('f_bio_canopy_baseline'),
+      canopy_cover_pct_target:     num('f_bio_canopy_target'),
+      weed_pressure:               v('f_bio_weed_pressure'),
+      weed_pressure_baseline:      v('f_bio_weed_baseline')
+    },
 
-    function renderProfileController() {
-      setText("heroType", profileController.heroType);
-      setText("heroDescription", profileController.description);
-      setHTML("metaEVC", profileController.evc);
-      setText("metaBioregion", profileController.bioregion);
-      setText("metaStewards", profileController.stewards);
-      setText("headerStatus", profileController.status);
-      setText("stripStatus", profileController.status);
-      setText("stripVisibility", profileController.visibility);
-      setText("stripNextReview", profileController.nextReview);
-      setText("snapshotBaseline", profileController.baselineScoreLabel);
-      setText("snapshotTarget", profileController.targetScoreLabel);
-      setText("quickFactAdjacency", profileController.quickFacts.adjacency);
-      setText("quickFactHydrology", profileController.quickFacts.hydrology);
-      setText("quickFactPlantingMethod", profileController.quickFacts.plantingMethod);
-      setText("quickFactChemistry", profileController.quickFacts.chemistry);
-    }
+    soil_water: {
+      soil_health_score:    num('f_sw_soil_current'),
+      soil_health_baseline: num('f_sw_soil_baseline'),
+      soil_health_max:      5,
+      water_function_score:    num('f_sw_water_current'),
+      water_function_baseline: num('f_sw_water_baseline'),
+      water_function_max:      5,
+      has_rainwater_system: chk('f_sw_rainwater'),
+      has_moisture_basin:   chk('f_sw_basin'),
+      has_swale:            chk('f_sw_swale'),
+      mulch_depth_mm:       num('f_sw_mulch')
+    },
 
-    function bindAssessmentController(record) {
-      inputKeys.forEach(key => {
-        const el = document.getElementById(`input_${key}`);
-        if (!el) return;
-        const value = record.inputs[key];
+    habitat: {
+      habitat_nodes:          num('f_hab_nodes_current'),
+      habitat_nodes_baseline: num('f_hab_nodes_baseline'),
+      has_embedded_logs:  chk('f_hab_logs'),
+      has_rock_refuges:   chk('f_hab_rocks'),
+      has_water_feature:  chk('f_hab_water'),
+      has_nest_boxes:     chk('f_hab_nest'),
+      planting_method:    v('f_hab_method'),
+      fauna_sightings
+    },
 
-        if (el.type === "checkbox") {
-          el.checked = Boolean(value);
-          el.addEventListener("change", () => {
-            workingRecord.inputs[key] = el.checked;
-            rerenderFromWorkingRecord();
-          });
-        } else {
-          el.value = value ?? "";
-          el.addEventListener("input", () => {
-            workingRecord.inputs[key] = Number(el.value || 0);
-            rerenderFromWorkingRecord();
-          });
-        }
-      });
+    connectivity: {
+      adjacent_park:      chk('f_con_park'),
+      park_name:          v('f_con_park_name'),
+      park_distance_m:    num('f_con_park_dist'),
+      adjacent_registered_gardens,
+      corridor_node_confirmed:    chk('f_con_corridor'),
+      effective_ecological_area_ha: 0,
+      cluster_area_ha:    num('f_con_cluster_ha'),
+      cluster_name:       v('f_con_cluster_name')
+    },
 
-      const verificationSelect = document.getElementById("input_verification_level");
-      verificationSelect.value = record.verification_level || "self_registered";
-      verificationSelect.addEventListener("change", () => {
-        workingRecord.verification_level = verificationSelect.value;
-        rerenderFromWorkingRecord();
-      });
-    }
+    evidence: {
+      has_photos:                  chk('f_ev_photos'),
+      has_field_notes:             chk('f_ev_notes'),
+      has_species_list:            chk('f_ev_species_list'),
+      has_fauna_record:            chk('f_ev_fauna_record'),
+      has_professional_assessment: chk('f_ev_professional'),
+      verification_level:          v('f_ev_verification'),
+      verification_label:          verificationLabelFromLevel(v('f_ev_verification')),
+      assessor:                    v('f_ev_assessor')
+    },
 
-    function syncControllerInputsFromRecord(record) {
-      inputKeys.forEach(key => {
-        const el = document.getElementById(`input_${key}`);
-        if (!el) return;
-        const value = record.inputs[key];
-        if (el.type === "checkbox") el.checked = Boolean(value);
-        else el.value = value ?? "";
-      });
+    milestones: [],
+    activity_log: []
+  };
+}
 
-      document.getElementById("input_verification_level").value = record.verification_level || "self_registered";
-    }
+function populateFormFromRecord(r) {
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val ?? ''; };
+  const chk = (id, val) => { const el = document.getElementById(id); if(el) el.checked = !!val; };
 
-    function renderCategoryBars(categories) {
-      const target = document.getElementById("liveCategoryList");
-      target.innerHTML = categories.map(category => {
-        const percent = (category.score / category.max) * 100;
-        return `
-          <div>
-            <div class="flex items-center justify-between text-sm">
-              <span>${category.label} <span class="text-xs opacity-70">(${category.max} pts)</span></span>
-              <span class="font-medium">${category.score} / ${category.max}</span>
-            </div>
-            <div class="mt-2 h-2.5 w-full bg-regSoft dark:bg-regBeige/15 overflow-hidden">
-              <div class="metric-bar-fill h-full bg-regGreen dark:bg-regBeige" style="width:${percent}%"></div>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
+  set('f_garden_name',       r.garden_name);
+  set('f_garden_id',         r.garden_id);
+  set('f_suburb',            r.suburb);
+  set('f_state',             r.state);
+  set('f_stewards',          r.stewards);
+  set('f_area_sqm',          r.area_sqm);
+  set('f_evc_name',          r.evc?.name);
+  set('f_evc_code',          r.evc?.code);
+  set('f_assessment_date',   r.assessment_date);
+  set('f_baseline_date',     r.baseline_date);
 
-    async function renderBadges(gardenData, containerSelector = "#liveBadgeList") {
-      try {
-        // Calculate badges using badge engine
-        const badges = awardBadges(gardenData);
-        const definitions = await getBadgeDefinitions();
-        
-        const target = document.querySelector(containerSelector);
-        if (!target) return;
-        
-        if (!badges.all_badges.length) {
-          target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">No badges yet</span>`;
-          return;
-        }
+  const b = r.biodiversity || {};
+  set('f_bio_species_current',  b.indigenous_species_current);
+  set('f_bio_species_baseline', b.indigenous_species_baseline);
+  set('f_bio_species_target',   b.indigenous_species_target);
+  chk('f_bio_dominant',         b.indigenous_dominant);
+  set('f_bio_layers_current',   b.structural_layers_current);
+  set('f_bio_layers_baseline',  b.structural_layers_baseline);
+  set('f_bio_canopy_current',   b.canopy_cover_pct_current);
+  set('f_bio_canopy_baseline',  b.canopy_cover_pct_baseline);
+  set('f_bio_canopy_target',    b.canopy_cover_pct_target);
+  set('f_bio_weed_pressure',    b.weed_pressure);
+  set('f_bio_weed_baseline',    b.weed_pressure_baseline);
 
-        target.innerHTML = badges.all_badges.map(badgeId => {
-          const badge = definitions[badgeId];
-          if (!badge) return '';
-          
-          // Style based on badge type
-          let typeClass = "bg-regSoft dark:bg-regGreen";
-          if (badge.type === "verification") typeClass = "bg-regGreen dark:bg-regBeige text-regBeige dark:text-regGreen";
-          if (badge.type === "evidence") typeClass = "bg-regSoft dark:bg-regGreen border-2";
-          
-          return `
-            <span class="
-              border border-regLine dark:border-regDarkLine 
-              px-3 py-2 text-sm 
-              ${typeClass}
-              hover:opacity-80 transition-opacity
-            " title="${badge.description}">
-              ${badge.name}
-            </span>
-          `;
-        }).join("");
-        
-      } catch (error) {
-        console.error('Badge rendering error:', error);
-        const target = document.querySelector(containerSelector);
-        if (target) {
-          target.innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen opacity-70">Badge system unavailable</span>`;
-        }
-      }
-    }
+  const sw = r.soil_water || {};
+  set('f_sw_soil_current',   sw.soil_health_score);
+  set('f_sw_soil_baseline',  sw.soil_health_baseline);
+  set('f_sw_water_current',  sw.water_function_score);
+  set('f_sw_water_baseline', sw.water_function_baseline);
+  set('f_sw_mulch',          sw.mulch_depth_mm);
+  chk('f_sw_rainwater',      sw.has_rainwater_system);
+  chk('f_sw_basin',          sw.has_moisture_basin);
+  chk('f_sw_swale',          sw.has_swale);
 
-    function renderRecommendations(recommendations) {
-      const target = document.getElementById("liveRecommendationList");
-      if (!recommendations.length) {
-        target.innerHTML = `
-          <div class="border border-regLine dark:border-regDarkLine p-4">
-            <div class="font-medium">No immediate upgrades</div>
-            <div class="text-xs opacity-70 mt-1">Current inputs are already covering the main available gains.</div>
-          </div>
-        `;
-        return;
-      }
+  const h = r.habitat || {};
+  set('f_hab_nodes_current',  h.habitat_nodes);
+  set('f_hab_nodes_baseline', h.habitat_nodes_baseline);
+  chk('f_hab_logs',   h.has_embedded_logs);
+  chk('f_hab_rocks',  h.has_rock_refuges);
+  chk('f_hab_water',  h.has_water_feature);
+  chk('f_hab_nest',   h.has_nest_boxes);
+  set('f_hab_method', h.planting_method);
+  const fauna = h.fauna_sightings || [];
+  set('f_hab_fauna_count',   fauna.length);
+  set('f_hab_fauna_species', fauna[0]?.species || '');
 
-      target.innerHTML = recommendations.slice(0, 4).map(item => `
-        <div class="border border-regLine dark:border-regDarkLine p-4">
-          <div class="font-medium">${item.action}</div>
-          <div class="text-xs opacity-70 mt-1">Potential gain: +${item.points}</div>
-        </div>
-      `).join("");
-    }
+  const c = r.connectivity || {};
+  chk('f_con_park',      c.adjacent_park);
+  set('f_con_park_name', c.park_name);
+  set('f_con_park_dist', c.park_distance_m);
+  chk('f_con_corridor',  c.corridor_node_confirmed);
+  set('f_con_cluster_name', c.cluster_name);
+  set('f_con_cluster_ha',   c.cluster_area_ha);
+  const adj = c.adjacent_registered_gardens || [];
+  set('f_con_adj_id',   adj[0]?.id || '');
+  set('f_con_adj_dist', adj[0]?.distance_m || '');
 
-    function renderWorkingJsonPreview(record) {
-      const preview = {
-        garden_id: record.garden_id,
-        garden_name: record.garden_name,
-        suburb: record.suburb,
-        verification_level: record.verification_level,
-        assessment_date: record.assessment_date,
-        score_version: record.score_version,
-        inputs: record.inputs
-      };
-      document.getElementById("workingJsonPreview").textContent = JSON.stringify(preview, null, 2);
-    }
+  const e = r.evidence || {};
+  chk('f_ev_photos',      e.has_photos);
+  chk('f_ev_notes',       e.has_field_notes);
+  chk('f_ev_species_list',e.has_species_list);
+  chk('f_ev_fauna_record',e.has_fauna_record);
+  chk('f_ev_professional',e.has_professional_assessment);
+  set('f_ev_verification',e.verification_level);
+  set('f_ev_assessor',    e.assessor);
+}
 
-    async function renderLiveProfile(record) {
-      const result = scoreEcologicalRegistry(record);
+// ════════════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════════════
+function updateDeltas() {
+  const d = (cur, base, id) => {
+    const el = document.getElementById(id); if(!el) return;
+    const c = parseFloat(document.getElementById(cur)?.value) || 0;
+    const b = parseFloat(document.getElementById(base)?.value) || 0;
+    if(c > b)      el.innerHTML = `<span class="delta-up">+${c-b} from ${b}</span>`;
+    else if(c < b) el.textContent = `↓ from ${b}`;
+    else           el.innerHTML = `<span class="delta-same">No change</span>`;
+  };
+  d('f_bio_species_current','f_bio_species_baseline','d_bio_species');
+  d('f_bio_layers_current', 'f_bio_layers_baseline', 'd_bio_layers');
+  d('f_bio_canopy_current',  'f_bio_canopy_baseline',  'd_bio_canopy');
+  d('f_sw_soil_current',    'f_sw_soil_baseline',    'd_sw_soil');
+  d('f_sw_water_current',   'f_sw_water_baseline',   'd_sw_water');
+  d('f_hab_nodes_current',  'f_hab_nodes_baseline',  'd_hab_nodes');
+}
 
-      document.title = `Ecological Registry — ${record.garden_name}`;
-      setText("topGardenName", record.garden_name);
-      setText("topGardenId", record.garden_id);
-      setText("headerLastVerified", record.assessment_date);
-      setText("stripLastVerified", record.assessment_date);
-      setText("stripVerification", result.verificationLabel);
-      setText("heroGardenName", record.garden_name);
-      setText("heroSuburb", `${record.suburb}${profileController.suburbLabelSuffix}`);
-      setText("heroGardenId", record.garden_id);
-      setText("heroScore", result.total);
-      setText("heroLevel", ratingLabelFromScore(result.total));
-      setText("scoreVersion", record.score_version || "v1");
-      setText("overallPercentLabel", `${result.total}%`);
-      document.getElementById("overallPercentBar").style.width = `${result.total}%`;
-      setText("overallInterpretation", interpretationFromScore(result.total));
-      setText("snapshotCurrent", `${result.total}%`);
-      setText("badgeVerificationText", `Current verification level: ${result.verificationLabel}. This level contributes directly to the live registry score and badge status.`);
+function renderLive() {
+  const record = buildRecordFromForm();
+  const result = scoreEcologicalRegistry(record);
+  const badges = awardBadges(record);
 
-      renderCategoryBars(result.categories);
-      await renderBadges(record, "#liveBadgeList"); // Main badge display
-      await renderBadges(record, "#assessBadgePreview"); // Assessment preview
-      renderRecommendations(result.recommendations);
-      renderWorkingJsonPreview(record);
-    }
+  // Score
+  document.getElementById('liveScore').textContent    = result.total;
+  document.getElementById('liveRating').textContent   = result.rating;
+  document.getElementById('liveScoreBar').style.width = result.total + '%';
+  document.getElementById('liveBaseline').textContent = result.baselineScore;
+  document.getElementById('headerMeta').textContent   = `${record.garden_name || 'New Garden'} · ${record.garden_id || '—'}`;
 
-    function rerenderFromWorkingRecord() {
-      renderLiveProfile(workingRecord);
-    }
+  // Category bars
+  document.getElementById('categoryBars').innerHTML = result.categories.map(cat => {
+    const pct = Math.round(cat.score / cat.max * 100);
+    return `<div>
+      <div class="flex justify-between text-xs mb-1"><span>${cat.label}</span><span class="font-mono">${cat.score}/${cat.max}</span></div>
+      <div class="h-1.5 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
 
-    async function loadProfileScore() {
-      try {
-        const response = await fetch(`../../data/${profileController.gardenSlug}.json`);
-        if (!response.ok) throw new Error("Could not load garden data");
+  // Recommendations
+  document.getElementById('recommendations').innerHTML = result.recommendations.length
+    ? result.recommendations.map(r => `<div class="flex justify-between border-b border-rl dark:border-rdl pb-1.5"><span>${r.action}</span><span class="font-mono opacity-60">+${r.points}</span></div>`).join('')
+    : '<span class="opacity-40">No immediate gains identified</span>';
 
-        const record = await response.json();
-        savedRecord = deepClone(record);
-        workingRecord = deepClone(record);
+  // Badges
+  const bp = document.getElementById('badgePreview');
+  bp.innerHTML = badges.all_badges.length
+    ? badges.all_badges.map(id => {
+        const def = BADGE_DEFS[id];
+        const isV = badges.verification_badges.includes(id);
+        const isN = id === 'corridor_node';
+        const st  = isV||isN ? 'bg-rg text-rb dark:bg-rb dark:text-rg' : 'bg-rs dark:bg-rdp';
+        return `<span class="text-xs border border-rl dark:border-rdl px-2.5 py-1 ${st}">${def?.name||id}</span>`;
+      }).join('')
+    : '<span class="text-xs opacity-40">Badges will appear as thresholds are met</span>';
 
-        renderProfileController();
-        bindAssessmentController(workingRecord);
-        await renderLiveProfile(workingRecord);
-      } catch (error) {
-        console.error(error);
-        setText("heroScore", "--");
-        setText("heroLevel", "Unavailable");
-        setText("overallPercentLabel", "Unavailable");
-        setText("overallInterpretation", "The live registry score could not be loaded. Check the JSON file path and scoring engine.");
-        document.getElementById("liveCategoryList").innerHTML = "";
-        document.getElementById("liveBadgeList").innerHTML = `<span class="border border-regLine dark:border-regDarkLine px-3 py-2 text-sm bg-regSoft dark:bg-regGreen">Unable to load badges</span>`;
-        document.getElementById("liveRecommendationList").innerHTML = `<div class="border border-regLine dark:border-regDarkLine p-4">Unable to load recommendations</div>`;
-      }
-    }
+  // JSON output
+  document.getElementById('jsonOutput').textContent = JSON.stringify(record, null, 2);
 
-    document.getElementById("resetControllerBtn").addEventListener("click", () => {
-      if (!savedRecord) return;
-      workingRecord = deepClone(savedRecord);
-      syncControllerInputsFromRecord(workingRecord);
-      rerenderFromWorkingRecord();
+  // Deltas
+  updateDeltas();
+}
+
+// ════════════════════════════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════════════════════════════
+document.querySelectorAll('.pillar-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.pillar-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pillar-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel_' + tab.dataset.tab)?.classList.add('active');
+  });
+});
+
+// ════════════════════════════════════════════════════════════════
+// LIVE BINDING — all inputs trigger re-render
+// ════════════════════════════════════════════════════════════════
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('change', renderLive);
+  el.addEventListener('input',  renderLive);
+});
+
+// ════════════════════════════════════════════════════════════════
+// BUTTONS
+// ════════════════════════════════════════════════════════════════
+async function copyJSON() {
+  const json = document.getElementById('jsonOutput').textContent;
+  try {
+    await navigator.clipboard.writeText(json);
+    ['copyBtn','copyBtn2'].forEach(id => {
+      const btn = document.getElementById(id);
+      if(!btn) return;
+      const orig = btn.textContent;
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => btn.textContent = orig, 1400);
     });
+  } catch(e) { alert('Copy failed — select the JSON manually.'); }
+}
 
-    document.getElementById("copyJsonBtn").addEventListener("click", async () => {
-      if (!workingRecord) return;
-      const json = JSON.stringify(workingRecord, null, 2);
-      try {
-        await navigator.clipboard.writeText(json);
-        const btn = document.getElementById("copyJsonBtn");
-        const original = btn.textContent;
-        btn.textContent = "Copied JSON";
-        setTimeout(() => { btn.textContent = original; }, 1400);
-      } catch (error) {
-        console.error(error);
-        alert("Could not copy JSON automatically. Use the working record panel to copy manually.");
-      }
-    });
+document.getElementById('copyBtn').addEventListener('click', copyJSON);
+document.getElementById('copyBtn2').addEventListener('click', copyJSON);
 
-    document.getElementById("toggleControllerBtn").addEventListener("click", () => {
-      const panel = document.getElementById("controllerPanel");
-      const btn = document.getElementById("toggleControllerBtn");
-      const hidden = panel.style.display === "none";
-      panel.style.display = hidden ? "" : "none";
-      btn.textContent = hidden ? "Hide Controller" : "Show Controller";
-    });
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (savedRecord) { populateFormFromRecord(savedRecord); renderLive(); }
+});
 
-    document.getElementById("themeToggle").addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      const isDark = document.documentElement.classList.contains("dark");
-      localStorage.setItem("reg-theme", isDark ? "dark" : "light");
-    });
+document.getElementById('themeToggle').addEventListener('click', () => {
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+});
 
-    loadProfileScore();
-  </script>
+// ════════════════════════════════════════════════════════════════
+// BOOT — try to load arundel.json, fall back to blank
+// ════════════════════════════════════════════════════════════════
+const saved = localStorage.getItem('reg-theme');
+if (saved === 'light') document.documentElement.classList.remove('dark');
+else document.documentElement.classList.add('dark');
+
+(async () => {
+  try {
+    const res = await fetch('../../data/arundel.json');
+    if (!res.ok) throw new Error('no data');
+    const record = await res.json();
+    savedRecord = JSON.parse(JSON.stringify(record));
+    populateFormFromRecord(record);
+  } catch(e) {
+    // Start with empty form — new garden mode
+    console.info('No garden data loaded — starting fresh');
+  }
+  renderLive();
+})();
+</script>
 </body>
 </html>
