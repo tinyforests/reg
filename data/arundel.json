@@ -1,42 +1,127 @@
 {
   "garden_id": "ER-VIC-SH-ARU-0001",
   "garden_name": "Arundel",
+  "garden_type": "Ecological Forest Garden",
   "suburb": "Surrey Hills",
-  "verification_level": "gardener_and_son_verified",
-  "assessment_date": "15 March 2026",
-  "score_version": "v1",
-  "inputs": {
-    "ground_layer_present": true,
-    "shrub_layer_present": true,
-    "subcanopy_present": true,
-    "canopy_present": true,
-    "habitat_logs": true,
-    "rocks": true,
-    "pond": true,
-    "mulch_present": true,
-    "species_count": 36,
-    "flowering_succession": true,
-    "mixed_growth_forms": true,
-    "indigenous_percent": 62,
-    "permeable_surfaces": true,
-    "rainwater_use": true,
-    "swale_or_infiltration": true,
-    "pond_or_wet_area": true,
-    "passive_irrigation": true,
-    "organic_matter_or_mulch": true,
-    "no_synthetic_chemicals": false,
-    "compost_or_bioinputs": false,
-    "soil_improvement_works": false,
-    "mycorrhiza_or_regen_methods": false,
-    "near_park_or_remnant": true,
-    "visible_native_planting_to_street": true,
-    "pollinator_support": true,
-    "bird_habitat": true,
-    "registered_in_network": true,
-    "registered_garden": true,
-    "annual_update_complete": true,
-    "field_report_complete": true,
-    "habitat_additions_recorded": true,
-    "monitoring_photos_uploaded": true
-  }
+  "state": "VIC",
+  "assessment_date": "Mar 2026",
+  "baseline_date": "Feb 2026",
+  "stewards": "Andrew & Elizabeth",
+  "designer": "Gardener & Son",
+  "area_sqm": 180,
+  "description": "A registered garden designed to mature over years. Contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.",
+
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+
+  "biodiversity": {
+    "indigenous_species_current": 23,
+    "indigenous_species_baseline": 8,
+    "indigenous_species_target": 40,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 2,
+    "structural_layers_max": 5,
+    "canopy_cover_pct_current": 34,
+    "canopy_cover_pct_baseline": 12,
+    "canopy_cover_pct_target": 55,
+    "weed_pressure": "low",
+    "weed_pressure_baseline": "high"
+  },
+
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 2,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 2,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 80
+  },
+
+  "habitat": {
+    "habitat_nodes": 3,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": [
+      {
+        "species": "Burrowing frog",
+        "date": "18 Feb 2026",
+        "location": "Lower slope refuge zone",
+        "verified": true
+      }
+    ],
+    "planting_method": "Miyawaki-style layering"
+  },
+
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Surrey Hills Reserve",
+    "park_distance_m": 45,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-VIC-SH-MH-003",
+        "distance_m": 140,
+        "direction": "south",
+        "verified": true
+      }
+    ],
+    "corridor_node_confirmed": true,
+    "effective_ecological_area_ha": 0.4,
+    "cluster_area_ha": 2.1,
+    "cluster_name": "Surrey Hills"
+  },
+
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": true,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+
+  "milestones": [
+    { "title": "Baseline established", "date": "Feb 2026", "complete": true },
+    { "title": "Habitat refuge nodes mapped", "date": "Mar 2026", "complete": true },
+    { "title": "Corridor node status confirmed", "date": "Mar 2026", "complete": true },
+    { "title": "Seasonal moisture basin", "date": "Autumn 2026", "complete": false },
+    { "title": "High Habitat Garden (81 points)", "date": "End 2026", "complete": false }
+  ],
+
+  "activity_log": [
+    {
+      "title": "Burrowing frog sighting — lower slope refuge zone",
+      "date": "18 Feb 2026",
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden."
+    },
+    {
+      "title": "Habitat structure installed — embedded logs and voids",
+      "date": "15 Feb 2026",
+      "type": "Installed",
+      "category": "structure",
+      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded."
+    },
+    {
+      "title": "Ground contouring and soil preparation",
+      "date": "8 Feb 2026",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ."
+    }
+  ]
 }
