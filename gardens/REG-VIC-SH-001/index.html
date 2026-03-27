@@ -498,6 +498,7 @@ function sc(cls1, cls2) {
 
 /* ---- RENDER ---- */
 function render() {
+  try {
   var R = G;
   var result = scoreEcologicalRegistry(R);
   var badges = awardBadges(R);
@@ -650,6 +651,10 @@ function render() {
   txt('nextLevelGap',  nl.gap > 0 ? result.total + ' pts - ' + nl.target + ' required - ' + nl.gap + ' to go' : 'Maximum level achieved');
   wid('nextLevelBar',  nl.progress);
   txt('visionText', 'At target trajectory, ' + R.garden_name + ' reaches Urban Biodiversity Node status by 2028. Canopy cover projected at 55%, indigenous species at 40+, confirmed habitat for 3+ fauna species.');
+
+  } catch(err) {
+    console.error('Render error:', err);
+  }
 
   setTimeout(function() {
     var bars = document.querySelectorAll('.bar-fill');
