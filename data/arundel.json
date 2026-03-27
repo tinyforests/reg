@@ -10,14 +10,12 @@
   "designer": "Gardener & Son",
   "area_sqm": 180,
   "description": "A registered garden designed to mature over years. Contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.",
-
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
     "bioregion": "Victorian Volcanic Plain",
     "bioregion_code": "VVP"
   },
-
   "biodiversity": {
     "indigenous_species_current": 23,
     "indigenous_species_baseline": 8,
@@ -32,7 +30,6 @@
     "weed_pressure": "low",
     "weed_pressure_baseline": "high"
   },
-
   "soil_water": {
     "soil_health_score": 3,
     "soil_health_baseline": 2,
@@ -45,7 +42,6 @@
     "has_swale": false,
     "mulch_depth_mm": 80
   },
-
   "habitat": {
     "habitat_nodes": 3,
     "habitat_nodes_baseline": 0,
@@ -63,7 +59,6 @@
     ],
     "planting_method": "Miyawaki-style layering"
   },
-
   "connectivity": {
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
@@ -71,17 +66,23 @@
     "adjacent_registered_gardens": [
       {
         "id": "ER-VIC-SH-MH-003",
+        "lat": -37.8251,
+        "lng": 145.0876,
         "distance_m": 140,
         "direction": "south",
-        "verified": true
+        "verified": true,
+        "name": "Mont Hollis"
       }
     ],
     "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0.4,
     "cluster_area_ha": 2.1,
-    "cluster_name": "Surrey Hills"
+    "cluster_name": "Surrey Hills",
+    "lat": -37.8234,
+    "lng": 145.0891,
+    "park_lat": -37.8221,
+    "park_lng": 145.0895
   },
-
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
@@ -92,15 +93,33 @@
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son"
   },
-
   "milestones": [
-    { "title": "Baseline established", "date": "Feb 2026", "complete": true },
-    { "title": "Habitat refuge nodes mapped", "date": "Mar 2026", "complete": true },
-    { "title": "Corridor node status confirmed", "date": "Mar 2026", "complete": true },
-    { "title": "Seasonal moisture basin", "date": "Autumn 2026", "complete": false },
-    { "title": "High Habitat Garden (81 points)", "date": "End 2026", "complete": false }
+    {
+      "title": "Baseline established",
+      "date": "Feb 2026",
+      "complete": true
+    },
+    {
+      "title": "Habitat refuge nodes mapped",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Corridor node status confirmed",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Seasonal moisture basin",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "High Habitat Garden (81 points)",
+      "date": "End 2026",
+      "complete": false
+    }
   ],
-
   "activity_log": [
     {
       "title": "Burrowing frog sighting -- lower slope refuge zone",
