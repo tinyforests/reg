@@ -91,6 +91,9 @@
     .delta-up   { color: #7a9e5f; font-weight: 600; font-size: 0.7rem; }
     .delta-same { opacity: 0.4; font-size: 0.7rem; }
     /* Map styles */
+    .leaflet-tile-pane {
+      filter: grayscale(0.3) sepia(0.15) hue-rotate(60deg) brightness(0.97);
+    }
     .map-preview { height: 240px; width: 100%; z-index:1; }
     .leaflet-container { font-family: "IBM Plex Sans", sans-serif; font-size: 11px; }
     .leaflet-popup-content-wrapper { border-radius:0 !important; border:1px solid #d7ccb9; box-shadow:none; font-size:11px; }
@@ -1027,7 +1030,9 @@ function initMiniMap(key, lat, lng) {
     center: center, zoom: zoom,
     zoomControl: true, scrollWheelZoom: false, attributionControl: false
   });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(m);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd'
+  }).addTo(m);
   _maps[key] = m;
 
   if (lat && lng) { placePin(key, lat, lng); }
