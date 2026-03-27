@@ -1,38 +1,35 @@
 {
   "garden_id": "ER-VIC-SH-ARU-0001",
   "garden_name": "Arundel",
-  "garden_type": "Ecological Forest Garden",
+  "garden_type": "Ecological Garden",
   "suburb": "Surrey Hills",
   "state": "VIC",
   "assessment_date": "Mar 2026",
   "baseline_date": "Feb 2026",
+  "target_score": 82,
   "stewards": "Andrew & Elizabeth",
   "designer": "Gardener & Son",
   "area_sqm": 180,
-  "description": "A registered garden designed to mature over years. Contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.",
-
+  "description": "",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "",
+    "bioregion_code": ""
   },
-
   "biodiversity": {
-    "indigenous_species_current": 23,
-    "indigenous_species_baseline": 8,
+    "indigenous_species_current": 13,
+    "indigenous_species_baseline": 0,
     "indigenous_species_target": 40,
     "indigenous_dominant": true,
-    "structural_layers_current": 4,
+    "structural_layers_current": 0,
     "structural_layers_baseline": 2,
-    "structural_layers_max": 5,
     "canopy_cover_pct_current": 34,
     "canopy_cover_pct_baseline": 12,
     "canopy_cover_pct_target": 55,
     "weed_pressure": "low",
     "weed_pressure_baseline": "high"
   },
-
   "soil_water": {
     "soil_health_score": 3,
     "soil_health_baseline": 2,
@@ -45,7 +42,6 @@
     "has_swale": false,
     "mulch_depth_mm": 80
   },
-
   "habitat": {
     "habitat_nodes": 3,
     "habitat_nodes_baseline": 0,
@@ -53,17 +49,16 @@
     "has_rock_refuges": false,
     "has_water_feature": false,
     "has_nest_boxes": false,
+    "planting_method": "Miyawaki-style layering",
     "fauna_sightings": [
       {
         "species": "Burrowing frog",
-        "date": "18 Feb 2026",
-        "location": "Lower slope refuge zone",
+        "date": "Recorded",
+        "location": "Field observation",
         "verified": true
       }
-    ],
-    "planting_method": "Miyawaki-style layering"
+    ]
   },
-
   "connectivity": {
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
@@ -72,56 +67,25 @@
       {
         "id": "ER-VIC-SH-MH-003",
         "distance_m": 140,
-        "direction": "south",
+        "direction": "adjacent",
         "verified": true
       }
     ],
     "corridor_node_confirmed": true,
-    "effective_ecological_area_ha": 0.4,
+    "effective_ecological_area_ha": 0,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills"
   },
-
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
-    "has_fauna_record": true,
     "has_species_list": true,
+    "has_fauna_record": true,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son"
   },
-
-  "milestones": [
-    { "title": "Baseline established", "date": "Feb 2026", "complete": true },
-    { "title": "Habitat refuge nodes mapped", "date": "Mar 2026", "complete": true },
-    { "title": "Corridor node status confirmed", "date": "Mar 2026", "complete": true },
-    { "title": "Seasonal moisture basin", "date": "Autumn 2026", "complete": false },
-    { "title": "High Habitat Garden (81 points)", "date": "End 2026", "complete": false }
-  ],
-
-  "activity_log": [
-    {
-      "title": "Burrowing frog sighting — lower slope refuge zone",
-      "date": "18 Feb 2026",
-      "type": "Verified",
-      "category": "fauna",
-      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden."
-    },
-    {
-      "title": "Habitat structure installed — embedded logs and voids",
-      "date": "15 Feb 2026",
-      "type": "Installed",
-      "category": "structure",
-      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded."
-    },
-    {
-      "title": "Ground contouring and soil preparation",
-      "date": "8 Feb 2026",
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ."
-    }
-  ]
+  "milestones": [],
+  "activity_log": []
 }
