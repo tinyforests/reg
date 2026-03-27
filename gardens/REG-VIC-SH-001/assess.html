@@ -11,6 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -88,6 +90,21 @@
     /* Delta */
     .delta-up   { color: #7a9e5f; font-weight: 600; font-size: 0.7rem; }
     .delta-same { opacity: 0.4; font-size: 0.7rem; }
+    /* Map styles */
+    .map-preview { height: 240px; width: 100%; z-index:1; }
+    .leaflet-container { font-family: "IBM Plex Sans", sans-serif; font-size: 11px; }
+    .leaflet-popup-content-wrapper { border-radius:0 !important; border:1px solid #d7ccb9; box-shadow:none; font-size:11px; }
+    .leaflet-popup-tip { display:none; }
+    .leaflet-control-zoom a { border-radius:0 !important; }
+    .map-search-btn { border:1px solid #d7ccb9; background:transparent; padding:4px 10px; font-size:11px; cursor:pointer; white-space:nowrap; color:inherit; font-family:inherit; }
+    .dark .map-search-btn { border-color:rgba(255,240,220,.12); }
+    .map-search-btn:hover { opacity:.7; }
+    .coord-display { font-family:"IBM Plex Mono",monospace; font-size:10px; opacity:.5; margin-top:4px; min-height:14px; }
+    .map-search-wrap { display:flex; gap:4px; margin-bottom:6px; }
+    .map-search-wrap input { flex:1; }
+    .map-pin-green { background:#7a9e5f; border:2px solid #3d4535; width:12px !important; height:12px !important; margin-left:-6px !important; margin-top:-6px !important; }
+    .map-pin-dark  { background:#3d4535; opacity:.5; border:1px solid #3d4535; width:10px !important; height:10px !important; margin-left:-5px !important; margin-top:-5px !important; }
+    .map-pin-adj   { background:transparent; border:2px solid #7a9e5f; width:10px !important; height:10px !important; margin-left:-5px !important; margin-top:-5px !important; }
   </style>
 </head>
 
@@ -312,35 +329,98 @@
           <!-- Pillar: Connectivity -->
           <div class="pillar-panel p-5" id="panel_connectivity">
             <div class="section-label mb-4">Connectivity -- 20 pts max</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div>
-                <div class="opacity-50 mb-1">Adjacent park / reserve name</div>
-                <input type="text" id="f_con_park_name" placeholder="Surrey Hills Reserve" />
+            <div class="space-y-6 text-xs">
+
+              <!-- Garden position -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="section-label mb-3">Garden Position</div>
+                <div class="map-search-wrap">
+                  <input type="text" id="f_con_garden_address" placeholder="Search address or postcode..." />
+                  <button class="map-search-btn" onclick="geocodeAddress('garden')">Locate</button>
+                </div>
+                <div class="map-preview" id="map_garden"></div>
+                <div class="coord-display" id="coord_garden">Click map or search to place pin</div>
+                <input type="hidden" id="f_con_lat" />
+                <input type="hidden" id="f_con_lng" />
               </div>
-              <div>
-                <div class="opacity-50 mb-1">Park distance (m)</div>
-                <input type="number" id="f_con_park_dist" min="0" placeholder="45" />
+
+              <!-- Park position -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="section-label mb-3">Adjacent Park or Reserve</div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <div class="opacity-50 mb-1">Park name</div>
+                    <input type="text" id="f_con_park_name" placeholder="Surrey Hills Reserve" />
+                  </div>
+                  <div>
+                    <div class="opacity-50 mb-1">Distance (m)</div>
+                    <input type="number" id="f_con_park_dist" min="0" placeholder="45" />
+                  </div>
+                </div>
+                <div class="map-search-wrap">
+                  <input type="text" id="f_con_park_address" placeholder="Search park address..." />
+                  <button class="map-search-btn" onclick="geocodeAddress('park')">Locate</button>
+                </div>
+                <div class="map-preview" id="map_park"></div>
+                <div class="coord-display" id="coord_park">Click map or search to place pin</div>
+                <input type="hidden" id="f_con_park_lat" />
+                <input type="hidden" id="f_con_park_lng" />
+                <div class="mt-3">
+                  <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_park" /><span>Adjacent park confirmed</span></label>
+                </div>
               </div>
-              <div>
-                <div class="opacity-50 mb-1">Adjacent registered garden ID</div>
-                <input type="text" id="f_con_adj_id" placeholder="ER-VIC-SH-MH-003" />
+
+              <!-- Adjacent registered garden -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="section-label mb-3">Adjacent Registered Garden</div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <div class="opacity-50 mb-1">Registry ID</div>
+                    <input type="text" id="f_con_adj_id" placeholder="ER-VIC-SH-MH-003" />
+                  </div>
+                  <div>
+                    <div class="opacity-50 mb-1">Garden name</div>
+                    <input type="text" id="f_con_adj_name" placeholder="Mont Hollis" />
+                  </div>
+                  <div>
+                    <div class="opacity-50 mb-1">Distance (m)</div>
+                    <input type="number" id="f_con_adj_dist" min="0" placeholder="140" />
+                  </div>
+                  <div>
+                    <div class="opacity-50 mb-1">Direction</div>
+                    <select id="f_con_adj_direction">
+                      <option value="north">North</option>
+                      <option value="south" selected>South</option>
+                      <option value="east">East</option>
+                      <option value="west">West</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="map-search-wrap">
+                  <input type="text" id="f_con_adj_address" placeholder="Search adjacent garden address..." />
+                  <button class="map-search-btn" onclick="geocodeAddress('adj')">Locate</button>
+                </div>
+                <div class="map-preview" id="map_adj"></div>
+                <div class="coord-display" id="coord_adj">Click map or search to place pin</div>
+                <input type="hidden" id="f_con_adj_lat" />
+                <input type="hidden" id="f_con_adj_lng" />
               </div>
-              <div>
-                <div class="opacity-50 mb-1">Adjacent garden distance (m)</div>
-                <input type="number" id="f_con_adj_dist" min="0" placeholder="140" />
+
+              <!-- Cluster + corridor -->
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <div class="opacity-50 mb-1">Cluster name</div>
+                  <input type="text" id="f_con_cluster_name" placeholder="Surrey Hills" />
+                </div>
+                <div>
+                  <div class="opacity-50 mb-1">Cluster area (ha)</div>
+                  <input type="number" id="f_con_cluster_ha" min="0" step="0.1" placeholder="2.1" />
+                </div>
+                <div class="col-span-2 mt-1">
+                  <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_corridor" /><span>Corridor node confirmed (+5 pts)</span></label>
+                </div>
               </div>
-              <div>
-                <div class="opacity-50 mb-1">Cluster name</div>
-                <input type="text" id="f_con_cluster_name" placeholder="Surrey Hills" />
-              </div>
-              <div>
-                <div class="opacity-50 mb-1">Cluster area (ha)</div>
-                <input type="number" id="f_con_cluster_ha" min="0" step="0.1" placeholder="2.1" />
-              </div>
-              <div class="sm:col-span-2 space-y-2 mt-2">
-                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_park" /><span>Adjacent park or reserve confirmed</span></label>
-                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_corridor" /><span>Corridor node confirmed (+5 pts)</span></label>
-              </div>
+
             </div>
           </div>
 
@@ -659,8 +739,12 @@ function buildRecordFromForm() {
     : [];
   var adjId   = gv('f_con_adj_id');
   var adjDist = gn('f_con_adj_dist');
+  var adjLat  = parseFloat(gv('f_con_adj_lat'))  || null;
+  var adjLng  = parseFloat(gv('f_con_adj_lng'))  || null;
+  var adjName = gv('f_con_adj_name');
+  var adjDir  = gv('f_con_adj_direction') || 'adjacent';
   var adjacent_registered_gardens = adjId
-    ? [{ id: adjId, distance_m: adjDist, direction: 'adjacent', verified: true }]
+    ? [{ id: adjId, name: adjName || adjId, distance_m: adjDist, direction: adjDir, lat: adjLat, lng: adjLng, verified: true }]
     : [];
   return {
     garden_id:       gv('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
@@ -712,9 +796,13 @@ function buildRecordFromForm() {
       fauna_sightings:    fauna_sightings
     },
     connectivity: {
-      adjacent_park:      gc('f_con_park'),
-      park_name:          gv('f_con_park_name'),
-      park_distance_m:    gn('f_con_park_dist'),
+      lat:            parseFloat(gv('f_con_lat'))      || null,
+      lng:            parseFloat(gv('f_con_lng'))      || null,
+      adjacent_park:  gc('f_con_park'),
+      park_name:      gv('f_con_park_name'),
+      park_distance_m: gn('f_con_park_dist'),
+      park_lat:       parseFloat(gv('f_con_park_lat')) || null,
+      park_lng:       parseFloat(gv('f_con_park_lng')) || null,
       adjacent_registered_gardens: adjacent_registered_gardens,
       corridor_node_confirmed:  gc('f_con_corridor'),
       effective_ecological_area_ha: 0,
@@ -782,15 +870,23 @@ function populateFormFromRecord(r) {
   sv('f_hab_fauna_count',   fauna.length);
   sv('f_hab_fauna_species', fauna.length > 0 ? fauna[0].species : '');
   var c = r.connectivity || {};
+  sv('f_con_lat',       c.lat);
+  sv('f_con_lng',       c.lng);
   sc('f_con_park',      c.adjacent_park);
   sv('f_con_park_name', c.park_name);
   sv('f_con_park_dist', c.park_distance_m);
+  sv('f_con_park_lat',  c.park_lat);
+  sv('f_con_park_lng',  c.park_lng);
   sc('f_con_corridor',  c.corridor_node_confirmed);
   sv('f_con_cluster_name', c.cluster_name);
   sv('f_con_cluster_ha',   c.cluster_area_ha);
   var adj = c.adjacent_registered_gardens || [];
-  sv('f_con_adj_id',   adj.length > 0 ? adj[0].id : '');
-  sv('f_con_adj_dist', adj.length > 0 ? adj[0].distance_m : '');
+  sv('f_con_adj_id',        adj.length > 0 ? adj[0].id : '');
+  sv('f_con_adj_name',      adj.length > 0 ? adj[0].name || '' : '');
+  sv('f_con_adj_dist',      adj.length > 0 ? adj[0].distance_m : '');
+  sv('f_con_adj_direction', adj.length > 0 ? adj[0].direction || 'south' : 'south');
+  sv('f_con_adj_lat',       adj.length > 0 && adj[0].lat ? adj[0].lat : '');
+  sv('f_con_adj_lng',       adj.length > 0 && adj[0].lng ? adj[0].lng : '');
   var e = r.evidence || {};
   sc('f_ev_photos',       e.has_photos);
   sc('f_ev_notes',        e.has_field_notes);
@@ -885,6 +981,7 @@ function initTabs() {
   for (var i = 0; i < tabs.length; i++) {
     (function(tab) {
       tab.addEventListener('click', function() {
+        initMapsOnTabSwitch(tab.dataset.tab);
         var allTabs = document.querySelectorAll('.pillar-tab');
         var allPanels = document.querySelectorAll('.pillar-panel');
         for (var j = 0; j < allTabs.length; j++) allTabs[j].classList.remove('active');
@@ -916,6 +1013,121 @@ function copyJSON() {
   }).catch(function() {
     alert('Copy failed - select the JSON manually.');
   });
+}
+
+/* ---- GEOCODING + MINI MAPS ---- */
+var _maps = {};
+var _markers = {};
+
+function initMiniMap(key, lat, lng) {
+  if (_maps[key]) { _maps[key].remove(); }
+  var center = (lat && lng) ? [lat, lng] : [-37.8136, 144.9631];
+  var zoom   = (lat && lng) ? 15 : 11;
+  var m = L.map('map_' + key, {
+    center: center, zoom: zoom,
+    zoomControl: true, scrollWheelZoom: false, attributionControl: false
+  });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(m);
+  _maps[key] = m;
+
+  if (lat && lng) { placePin(key, lat, lng); }
+
+  m.on('click', function(e) {
+    placePin(key, e.latlng.lat, e.latlng.lng);
+    renderLive();
+  });
+
+  setTimeout(function() { m.invalidateSize(); }, 150);
+}
+
+function placePin(key, lat, lng) {
+  var iconClass = key === 'park' ? 'map-pin-dark' : (key === 'adj' ? 'map-pin-adj' : 'map-pin-green');
+  var icon = L.divIcon({ className: iconClass, iconSize: [12,12] });
+
+  if (_markers[key]) { _maps[key].removeLayer(_markers[key]); }
+  _markers[key] = L.marker([lat, lng], { icon: icon, draggable: true }).addTo(_maps[key]);
+
+  _markers[key].on('dragend', function(e) {
+    var p = e.target.getLatLng();
+    saveCoords(key, p.lat, p.lng);
+    renderLive();
+  });
+
+  saveCoords(key, lat, lng);
+}
+
+function saveCoords(key, lat, lng) {
+  var latEl = document.getElementById('f_con_' + (key === 'garden' ? '' : key + '_') + 'lat');
+  var lngEl = document.getElementById('f_con_' + (key === 'garden' ? '' : key + '_') + 'lng');
+  var disp  = document.getElementById('coord_' + key);
+
+  if (key === 'garden') {
+    latEl = document.getElementById('f_con_lat');
+    lngEl = document.getElementById('f_con_lng');
+  }
+
+  if (latEl) latEl.value = lat.toFixed(6);
+  if (lngEl) lngEl.value = lng.toFixed(6);
+  if (disp)  disp.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
+}
+
+function geocodeAddress(key) {
+  var inputId = 'f_con_' + (key === 'garden' ? 'garden' : key) + '_address';
+  var input = document.getElementById(inputId);
+  if (!input || !input.value.trim()) return;
+
+  var query = input.value.trim() + ', Australia';
+  var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+
+  var disp = document.getElementById('coord_' + key);
+  if (disp) disp.textContent = 'Searching...';
+
+  fetch(url, { headers: { 'Accept-Language': 'en' } })
+    .then(function(r) { return r.json(); })
+    .then(function(results) {
+      if (!results || results.length === 0) {
+        if (disp) disp.textContent = 'Address not found -- try a different search';
+        return;
+      }
+      var lat = parseFloat(results[0].lat);
+      var lng = parseFloat(results[0].lon);
+
+      if (!_maps[key]) { initMiniMap(key, lat, lng); }
+      else {
+        _maps[key].setView([lat, lng], 16);
+        placePin(key, lat, lng);
+      }
+      renderLive();
+    })
+    .catch(function() {
+      if (disp) disp.textContent = 'Search failed -- check connection';
+    });
+}
+
+function initAllMaps() {
+  var lat = parseFloat(document.getElementById('f_con_lat') && document.getElementById('f_con_lat').value) || 0;
+  var lng = parseFloat(document.getElementById('f_con_lng') && document.getElementById('f_con_lng').value) || 0;
+  initMiniMap('garden', lat || null, lng || null);
+
+  var pLat = parseFloat(document.getElementById('f_con_park_lat') && document.getElementById('f_con_park_lat').value) || 0;
+  var pLng = parseFloat(document.getElementById('f_con_park_lng') && document.getElementById('f_con_park_lng').value) || 0;
+  initMiniMap('park', pLat || null, pLng || null);
+
+  var aLat = parseFloat(document.getElementById('f_con_adj_lat') && document.getElementById('f_con_adj_lat').value) || 0;
+  var aLng = parseFloat(document.getElementById('f_con_adj_lng') && document.getElementById('f_con_adj_lng').value) || 0;
+  initMiniMap('adj', aLat || null, aLng || null);
+}
+
+/* Re-init maps when connectivity tab is clicked */
+function initMapsOnTabSwitch(tabName) {
+  if (tabName === 'connectivity') {
+    setTimeout(function() {
+      if (!_maps['garden']) { initAllMaps(); }
+      else {
+        Object.keys(_maps).forEach(function(k) { _maps[k].invalidateSize(); });
+      }
+    }, 50);
+  }
 }
 
 /* ---- BOOT ---- */
@@ -955,7 +1167,7 @@ initTabs();
 /* Try to load existing garden data */
 fetch('/data/arundel.json')
   .then(function(r) { return r.json(); })
-  .then(function(data) { populateFormFromRecord(data); renderLive(); })
+  .then(function(data) { populateFormFromRecord(data); renderLive(); initAllMaps(); })
   .catch(function() { renderLive(); });
 
 </script>
