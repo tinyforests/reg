@@ -50,6 +50,9 @@
     @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
     /* Leaflet map overrides */
+    #corridorMap .leaflet-tile-pane {
+      filter: grayscale(0.3) sepia(0.15) hue-rotate(60deg) brightness(0.97);
+    }
     #corridorMap { z-index: 1; }
     .leaflet-container { font-family: "IBM Plex Sans", sans-serif; }
     .leaflet-popup-content-wrapper {
@@ -736,8 +739,8 @@ function initCorridorMap(record) {
     attributionControl: false
   });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd'
   }).addTo(_map);
 
   /* Primary garden marker */
