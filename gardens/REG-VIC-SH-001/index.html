@@ -93,12 +93,12 @@
       <div class="lg:col-span-4 flex flex-col gap-4">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-8 flex-1 flex flex-col justify-between">
           <div class="section-label mb-6" style="color:inherit;opacity:.6">Ecological Function</div>
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div>
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <div style="border:1px solid rgba(255,240,220,.25);padding:1rem 1.25rem">
               <div class="font-serif text-8xl leading-none" id="heroScore">--</div>
               <div class="text-xs mt-2" style="opacity:.5">score</div>
             </div>
-            <div>
+            <div style="border:1px solid rgba(255,240,220,.25);padding:1rem 1.25rem">
               <div class="font-serif text-8xl leading-none" id="heroBadgeCount">--</div>
               <div class="text-xs mt-2" style="opacity:.5">badges</div>
             </div>
@@ -114,8 +114,10 @@
             </div>
           </div>
           <div style="border-top:1px solid rgba(255,240,220,.2);padding-top:1.25rem">
-            <div class="section-label mb-3" style="opacity:.5">Badges earned</div>
-            <div class="flex flex-wrap gap-2" id="heroBadges"></div>
+            <div class="flex flex-wrap gap-2 items-center">
+              <span style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(255,240,220,.25);padding:.3rem .65rem;opacity:.6">Badges earned</span>
+              <div class="flex flex-wrap gap-2" id="heroBadges"></div>
+            </div>
           </div>
         </div>
       </div>
