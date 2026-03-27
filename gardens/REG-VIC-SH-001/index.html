@@ -99,7 +99,11 @@
             </div>
           </div>
           <div class="mt-5 pt-5" style="border-top:1px solid rgba(255,240,220,.2)">
-            <div class="section-label mb-3" style="opacity:.5">Achievements</div>
+            <div class="flex items-baseline justify-between mb-3">
+              <div class="section-label" style="opacity:.5">Achievements</div>
+              <div class="font-serif text-3xl leading-none" id="heroBadgeCount">--</div>
+            </div>
+            <div class="text-xs mb-3" style="opacity:.5" id="heroBadgeLabel">badges earned</div>
             <div class="flex flex-wrap gap-2" id="heroBadges"></div>
           </div>
         </div>
@@ -468,65 +472,8 @@ function awardBadges(r) {
   return { all: all, vb: vb };
 }
 
-/* ---- GARDEN DATA ---- */
-var G = {
-  garden_id: 'ER-VIC-SH-ARU-0001',
-  garden_name: 'Arundel',
-  garden_type: 'Ecological Forest Garden',
-  suburb: 'Surrey Hills',
-  state: 'VIC',
-  assessment_date: 'Mar 2026',
-  baseline_date: 'Feb 2026',
-  target_score: 82,
-  stewards: 'Andrew & Elizabeth',
-  designer: 'Gardener & Son',
-  area_sqm: 180,
-  description: 'A registered garden designed to mature over years. Contour-led hydrology, layered indigenous structure, soil reactivation, and reciprocal connectivity with adjacent green space.',
-  evc: { name: 'Grassy Woodland', code: 'EVC 175', bioregion: 'Victorian Volcanic Plain', bioregion_code: 'VVP' },
-  biodiversity: {
-    indigenous_species_current: 23, indigenous_species_baseline: 8, indigenous_species_target: 40,
-    indigenous_dominant: true,
-    structural_layers_current: 4, structural_layers_baseline: 2,
-    canopy_cover_pct_current: 34, canopy_cover_pct_baseline: 12, canopy_cover_pct_target: 55,
-    weed_pressure: 'Low', weed_pressure_baseline: 'High'
-  },
-  soil_water: {
-    soil_health_score: 3, soil_health_baseline: 2,
-    water_function_score: 2, water_function_baseline: 2,
-    has_rainwater_system: false, has_moisture_basin: false, has_swale: false, mulch_depth_mm: 80
-  },
-  habitat: {
-    habitat_nodes: 3, habitat_nodes_baseline: 0,
-    has_embedded_logs: true, has_rock_refuges: false, has_water_feature: false, has_nest_boxes: false,
-    planting_method: 'Miyawaki-style layering',
-    fauna_sightings: [{ species: 'Burrowing frog', date: '18 Feb 2026', location: 'Lower slope refuge zone', verified: true }]
-  },
-  connectivity: {
-    adjacent_park: true, park_name: 'Surrey Hills Reserve', park_distance_m: 45,
-    adjacent_registered_gardens: [{ id: 'ER-VIC-SH-MH-003', distance_m: 140, direction: 'south', verified: true }],
-    corridor_node_confirmed: true, effective_ecological_area_ha: 0.4, cluster_area_ha: 2.1, cluster_name: 'Surrey Hills'
-  },
-  evidence: {
-    has_photos: true, has_field_notes: true, has_professional_assessment: true,
-    has_fauna_record: true, has_species_list: true,
-    verification_level: 'gardener_and_son_verified', assessor: 'Gardener & Son'
-  },
-  milestones: [
-    { title: 'Baseline established',          date: 'Feb 2026',    complete: true  },
-    { title: 'Habitat refuge nodes mapped',   date: 'Mar 2026',    complete: true  },
-    { title: 'Corridor node status confirmed',date: 'Mar 2026',    complete: true  },
-    { title: 'Seasonal moisture basin',       date: 'Autumn 2026', complete: false },
-    { title: 'High Habitat Garden (81 pts)',  date: 'End 2026',    complete: false }
-  ],
-  activity_log: [
-    { title: 'Burrowing frog sighting - lower slope refuge zone', date: '18 Feb 2026', type: 'Verified',
-      notes: 'Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions.' },
-    { title: 'Habitat structure installed - embedded logs and voids', date: '15 Feb 2026', type: 'Installed',
-      notes: 'Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates.' },
-    { title: 'Ground contouring and soil preparation', date: '8 Feb 2026', type: 'Recorded',
-      notes: 'Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones.' }
-  ]
-};
+/* ---- GARDEN DATA (loaded from JSON) ---- */
+var G = null;
 
 /* ---- HELPERS ---- */
 function el(id) { return document.getElementById(id); }
@@ -572,6 +519,11 @@ function render() {
     '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.suburb + ' ' + R.state + '</span> ' +
     '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rg text-rb dark:bg-rb dark:text-rg font-medium">' + result.verificationLabel + ' - ' + R.assessment_date + '</span>'
   );
+
+  txt('heroBadgeCount', badges.all.length);
+
+  txt('heroBadgeCount', badges.all.length);
+  txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
   for (var i = 0; i < badges.all.length; i++) {
@@ -711,7 +663,21 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 });
 
-render();
+fetch('/data/arundel.json')
+  .then(function(r) {
+    if (!r.ok) { throw new Error('HTTP ' + r.status); }
+    return r.json();
+  })
+  .then(function(data) {
+    G = data;
+    render();
+  })
+  .catch(function(err) {
+    console.error('Could not load garden data:', err);
+    document.getElementById('heroName').textContent = 'Data unavailable';
+    document.getElementById('heroScore').textContent = '--';
+    document.getElementById('heroLevel').textContent = 'Check /data/arundel.json';
+  });
 </script>
 </body>
 </html>
