@@ -79,16 +79,31 @@
         <h1 class="font-serif text-6xl md:text-7xl leading-none mb-4" id="heroName">--</h1>
         <div class="flex flex-wrap gap-2 mb-5" id="heroTags"></div>
         <p class="text-base leading-relaxed opacity-85 max-w-xl" id="heroDesc"></p>
-        <div class="mt-6 pt-6 border-t border-rl dark:border-rdl">
-          <div class="section-label mb-3">Stewards</div>
-          <div class="text-sm" id="heroStewards"></div>
-        </div>
+        <div class="mt-6 pt-6 border-t border-rl dark:border-rdl grid grid-cols-2 gap-4">
+            <div>
+              <div class="section-label mb-2">Stewards</div>
+              <div class="text-sm" id="heroStewards"></div>
+            </div>
+            <div>
+              <div class="section-label mb-2">Registry ID</div>
+              <div class="font-mono text-xs" id="heroId">--</div>
+            </div>
+          </div>
       </div>
       <div class="lg:col-span-4 flex flex-col gap-4">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-8 flex-1 flex flex-col justify-between">
-          <div class="section-label mb-4" style="color:inherit;opacity:.6">Ecological Function Score</div>
-          <div class="font-serif text-8xl leading-none" id="heroScore">--</div>
-          <div class="mt-4">
+          <div class="section-label mb-6" style="color:inherit;opacity:.6">Ecological Function</div>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <div class="font-serif text-8xl leading-none" id="heroScore">--</div>
+              <div class="text-xs mt-2" style="opacity:.5">score</div>
+            </div>
+            <div>
+              <div class="font-serif text-8xl leading-none" id="heroBadgeCount">--</div>
+              <div class="text-xs mt-2" style="opacity:.5">badges</div>
+            </div>
+          </div>
+          <div class="mb-5">
             <div class="text-sm font-medium mb-3" id="heroLevel">--</div>
             <div class="h-1.5 bg-rb/20 dark:bg-rg/20">
               <div class="bar-fill h-full bg-rb dark:bg-rg" id="heroScoreBar" style="width:0%"></div>
@@ -98,18 +113,10 @@
               <span>Target <span id="heroTarget">82</span></span>
             </div>
           </div>
-          <div class="mt-5 pt-5" style="border-top:1px solid rgba(255,240,220,.2)">
-            <div class="flex items-baseline justify-between mb-3">
-              <div class="section-label" style="opacity:.5">Achievements</div>
-              <div class="font-serif text-3xl leading-none" id="heroBadgeCount">--</div>
-            </div>
-            <div class="text-xs mb-3" style="opacity:.5" id="heroBadgeLabel">badges earned</div>
+          <div style="border-top:1px solid rgba(255,240,220,.2);padding-top:1.25rem">
+            <div class="section-label mb-3" style="opacity:.5">Badges earned</div>
             <div class="flex flex-wrap gap-2" id="heroBadges"></div>
           </div>
-        </div>
-        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
-          <div class="section-label mb-3">Registry ID</div>
-          <div class="font-mono text-xs" id="heroId">--</div>
         </div>
       </div>
     </div>
@@ -139,10 +146,6 @@
         <div class="space-y-5" id="categoryBars"></div>
       </div>
       <div class="space-y-4">
-        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
-          <div class="section-label mb-4">Badges Earned</div>
-          <div class="flex flex-wrap gap-2" id="badgeList"></div>
-        </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-4">Biggest Opportunities</div>
           <div class="space-y-3" id="opportunityList"></div>
@@ -530,8 +533,10 @@ function render() {
     var bid = badges.all[i];
     var isN = bid === 'corridor_node';
     var isV = badges.vb.indexOf(bid) !== -1;
-    var bst = isN || isV ? 'border-color:rgba(255,240,220,.5);background:rgba(255,240,220,.2);font-weight:600' : 'border-color:rgba(255,240,220,.25);background:rgba(255,240,220,.1)';
-    hbh += '<span class="badge-pill" style="' + bst + '">' + (BDEFS[bid] || bid) + '</span> ';
+    var bst = isN || isV
+      ? 'border-color:rgba(255,240,220,.6);background:rgba(255,240,220,.25);font-weight:600'
+      : 'border-color:rgba(255,240,220,.2);background:rgba(255,240,220,.08)';
+    hbh += '<span style="font-size:.7rem;border-width:1px;padding:.3rem .65rem;display:inline-block;margin-bottom:.25rem;' + bst + '">' + (BDEFS[bid] || bid) + '</span>';
   }
   html('heroBadges', hbh);
 
