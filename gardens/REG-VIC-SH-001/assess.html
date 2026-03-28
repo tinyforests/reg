@@ -374,40 +374,13 @@
                 </div>
               </div>
 
-              <!-- Adjacent registered garden -->
+              <!-- Adjacent registered gardens - dynamic list -->
               <div class="border border-rl dark:border-rdl p-4">
-                <div class="section-label mb-3">Adjacent Registered Garden</div>
-                <div class="grid grid-cols-2 gap-3 mb-3">
-                  <div>
-                    <div class="opacity-50 mb-1">Registry ID</div>
-                    <input type="text" id="f_con_adj_id" placeholder="ER-VIC-SH-MH-003" />
-                  </div>
-                  <div>
-                    <div class="opacity-50 mb-1">Garden name</div>
-                    <input type="text" id="f_con_adj_name" placeholder="Mont Hollis" />
-                  </div>
-                  <div>
-                    <div class="opacity-50 mb-1">Distance (m)</div>
-                    <input type="number" id="f_con_adj_dist" min="0" placeholder="140" />
-                  </div>
-                  <div>
-                    <div class="opacity-50 mb-1">Direction</div>
-                    <select id="f_con_adj_direction">
-                      <option value="north">North</option>
-                      <option value="south" selected>South</option>
-                      <option value="east">East</option>
-                      <option value="west">West</option>
-                    </select>
-                  </div>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="section-label">Adjacent Registered Gardens</div>
+                  <button class="map-search-btn" onclick="addAdjacentGarden()">+ Add garden</button>
                 </div>
-                <div class="map-search-wrap">
-                  <input type="text" id="f_con_adj_address" placeholder="Search adjacent garden address..." />
-                  <button class="map-search-btn" onclick="geocodeAddress('adj')">Locate</button>
-                </div>
-                <div class="map-preview" id="map_adj"></div>
-                <div class="coord-display" id="coord_adj">Click map or search to place pin</div>
-                <input type="hidden" id="f_con_adj_lat" />
-                <input type="hidden" id="f_con_adj_lng" />
+                <div id="adjGardenList" class="space-y-4"></div>
               </div>
 
               <!-- Cluster + corridor -->
@@ -741,15 +714,7 @@ function buildRecordFromForm() {
   var fauna_sightings = faunaCount > 0
     ? [{ species: faunaSpecies || 'Unknown', date: 'Recorded', location: 'Field observation', verified: true }]
     : [];
-  var adjId   = gv('f_con_adj_id');
-  var adjDist = gn('f_con_adj_dist');
-  var adjLat  = parseFloat(gv('f_con_adj_lat'))  || null;
-  var adjLng  = parseFloat(gv('f_con_adj_lng'))  || null;
-  var adjName = gv('f_con_adj_name');
-  var adjDir  = gv('f_con_adj_direction') || 'adjacent';
-  var adjacent_registered_gardens = adjId
-    ? [{ id: adjId, name: adjName || adjId, distance_m: adjDist, direction: adjDir, lat: adjLat, lng: adjLng, verified: true }]
-    : [];
+  var adjacent_registered_gardens = getAdjacentGardens();
   return {
     garden_id:       gv('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
     garden_name:     gv('f_garden_name') || 'New Garden',
@@ -885,12 +850,10 @@ function populateFormFromRecord(r) {
   sv('f_con_cluster_name', c.cluster_name);
   sv('f_con_cluster_ha',   c.cluster_area_ha);
   var adj = c.adjacent_registered_gardens || [];
-  sv('f_con_adj_id',        adj.length > 0 ? adj[0].id : '');
-  sv('f_con_adj_name',      adj.length > 0 ? adj[0].name || '' : '');
-  sv('f_con_adj_dist',      adj.length > 0 ? adj[0].distance_m : '');
-  sv('f_con_adj_direction', adj.length > 0 ? adj[0].direction || 'south' : 'south');
-  sv('f_con_adj_lat',       adj.length > 0 && adj[0].lat ? adj[0].lat : '');
-  sv('f_con_adj_lng',       adj.length > 0 && adj[0].lng ? adj[0].lng : '');
+  // Clear and repopulate adjacent garden list
+  var adjContainer = document.getElementById('adjGardenList');
+  if (adjContainer) { adjContainer.innerHTML = ''; _adjCount = 0; }
+  for (var ai = 0; ai < adj.length; ai++) { addAdjacentGarden(adj[ai]); }
   var e = r.evidence || {};
   sc('f_ev_photos',       e.has_photos);
   sc('f_ev_notes',        e.has_field_notes);
@@ -1063,22 +1026,28 @@ function placePin(key, lat, lng) {
 }
 
 function saveCoords(key, lat, lng) {
-  var latEl = document.getElementById('f_con_' + (key === 'garden' ? '' : key + '_') + 'lat');
-  var lngEl = document.getElementById('f_con_' + (key === 'garden' ? '' : key + '_') + 'lng');
-  var disp  = document.getElementById('coord_' + key);
-
+  var latEl, lngEl;
   if (key === 'garden') {
     latEl = document.getElementById('f_con_lat');
     lngEl = document.getElementById('f_con_lng');
+  } else if (key === 'park') {
+    latEl = document.getElementById('f_con_park_lat');
+    lngEl = document.getElementById('f_con_park_lng');
+  } else {
+    // adj_N keys
+    latEl = document.getElementById('lat_' + key);
+    lngEl = document.getElementById('lng_' + key);
   }
-
+  var disp = document.getElementById('coord_' + key);
   if (latEl) latEl.value = lat.toFixed(6);
   if (lngEl) lngEl.value = lng.toFixed(6);
   if (disp)  disp.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
 }
 
 function geocodeAddress(key) {
-  var inputId = 'f_con_' + (key === 'garden' ? 'garden' : key) + '_address';
+  var inputId = key.indexOf('adj_') === 0
+    ? 'addr_' + key
+    : 'f_con_' + (key === 'garden' ? 'garden' : key) + '_address';
   var input = document.getElementById(inputId);
   if (!input || !input.value.trim()) return;
 
@@ -1097,12 +1066,8 @@ function geocodeAddress(key) {
       }
       var lat = parseFloat(results[0].lat);
       var lng = parseFloat(results[0].lon);
-
       if (!_maps[key]) { initMiniMap(key, lat, lng); }
-      else {
-        _maps[key].setView([lat, lng], 16);
-        placePin(key, lat, lng);
-      }
+      else { _maps[key].setView([lat, lng], 15); placePin(key, lat, lng); }
       renderLive();
     })
     .catch(function() {
@@ -1110,18 +1075,121 @@ function geocodeAddress(key) {
     });
 }
 
+/* ---- DYNAMIC ADJACENT GARDEN LIST ---- */
+var _adjCount = 0;
+
+function addAdjacentGarden(prefill) {
+  var idx = _adjCount++;
+  var key = 'adj_' + idx;
+  var container = document.getElementById('adjGardenList');
+  if (!container) return;
+
+  var div = document.createElement('div');
+  div.id = 'adj_block_' + idx;
+  div.style.cssText = 'border:1px solid #d7ccb9;padding:1rem;';
+  div.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">' +
+      '<div class="section-label">Garden ' + (idx + 1) + '</div>' +
+      '<button class="map-search-btn" onclick="removeAdjacentGarden(' + idx + ')">Remove</button>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem">' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Registry ID</div>' +
+        '<input type="text" id="adj_id_' + idx + '" placeholder="ER-VIC-SH-XXX-000" /></div>' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Garden name</div>' +
+        '<input type="text" id="adj_name_' + idx + '" placeholder="Garden name" /></div>' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Distance (m)</div>' +
+        '<input type="number" id="adj_dist_' + idx + '" min="0" placeholder="140" /></div>' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Direction</div>' +
+        '<select id="adj_dir_' + idx + '">' +
+          '<option value="north">North</option><option value="south" selected>South</option>' +
+          '<option value="east">East</option><option value="west">West</option>' +
+        '</select></div>' +
+    '</div>' +
+    '<div class="map-search-wrap">' +
+      '<input type="text" id="addr_' + key + '" placeholder="Search address..." />' +
+      '<button class="map-search-btn" data-mapkey="' + key + '" onclick="geocodeAddress(this.getAttribute(\'data-mapkey\'))">Locate</button>' +
+    '</div>' +
+    '<div id="map_' + key + '" class="map-preview"></div>' +
+    '<div class="coord-display" id="coord_' + key + '">Click map or search to place pin</div>' +
+    '<input type="hidden" id="lat_' + key + '" />' +
+    '<input type="hidden" id="lng_' + key + '" />';
+
+  container.appendChild(div);
+
+  // Bind inputs for live scoring
+  var inputs = div.querySelectorAll('input, select');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('change', renderLive);
+    inputs[i].addEventListener('input',  renderLive);
+  }
+
+  // Prefill if loading existing data
+  if (prefill) {
+    if (prefill.id)          { var el = document.getElementById('adj_id_'   + idx); if(el) el.value = prefill.id; }
+    if (prefill.name)        { var el = document.getElementById('adj_name_' + idx); if(el) el.value = prefill.name; }
+    if (prefill.distance_m)  { var el = document.getElementById('adj_dist_' + idx); if(el) el.value = prefill.distance_m; }
+    if (prefill.direction)   { var el = document.getElementById('adj_dir_'  + idx); if(el) el.value = prefill.direction; }
+    if (prefill.lat && prefill.lng) {
+      var latEl = document.getElementById('lat_' + key);
+      var lngEl = document.getElementById('lng_' + key);
+      if(latEl) latEl.value = prefill.lat;
+      if(lngEl) lngEl.value = prefill.lng;
+    }
+  }
+
+  setTimeout(function() { initMiniMap(key, prefill && prefill.lat || null, prefill && prefill.lng || null); }, 50);
+}
+
+function removeAdjacentGarden(idx) {
+  var block = document.getElementById('adj_block_' + idx);
+  if (block) block.remove();
+  var key = 'adj_' + idx;
+  if (_maps[key]) { _maps[key].remove(); delete _maps[key]; }
+  if (_markers[key]) { delete _markers[key]; }
+  renderLive();
+}
+
+function getAdjacentGardens() {
+  var results = [];
+  var container = document.getElementById('adjGardenList');
+  if (!container) return results;
+  var blocks = container.querySelectorAll('[id^="adj_block_"]');
+  for (var i = 0; i < blocks.length; i++) {
+    var idx = blocks[i].id.replace('adj_block_', '');
+    var key = 'adj_' + idx;
+    var id   = document.getElementById('adj_id_'   + idx);
+    var name = document.getElementById('adj_name_' + idx);
+    var dist = document.getElementById('adj_dist_' + idx);
+    var dir  = document.getElementById('adj_dir_'  + idx);
+    var lat  = document.getElementById('lat_' + key);
+    var lng  = document.getElementById('lng_' + key);
+    if (!id || !id.value.trim()) continue;
+    results.push({
+      id:         id.value.trim(),
+      name:       name ? name.value : '',
+      distance_m: dist ? parseFloat(dist.value) || 0 : 0,
+      direction:  dir  ? dir.value : 'adjacent',
+      lat:        lat  ? parseFloat(lat.value) || null : null,
+      lng:        lng  ? parseFloat(lng.value) || null : null,
+      verified:   true
+    });
+  }
+  return results;
+}
+
 function initAllMaps() {
-  var lat = parseFloat(document.getElementById('f_con_lat') && document.getElementById('f_con_lat').value) || 0;
-  var lng = parseFloat(document.getElementById('f_con_lng') && document.getElementById('f_con_lng').value) || 0;
-  initMiniMap('garden', lat || null, lng || null);
+  var latEl = document.getElementById('f_con_lat');
+  var lngEl = document.getElementById('f_con_lng');
+  var lat = latEl ? parseFloat(latEl.value) || null : null;
+  var lng = lngEl ? parseFloat(lngEl.value) || null : null;
+  initMiniMap('garden', lat, lng);
 
-  var pLat = parseFloat(document.getElementById('f_con_park_lat') && document.getElementById('f_con_park_lat').value) || 0;
-  var pLng = parseFloat(document.getElementById('f_con_park_lng') && document.getElementById('f_con_park_lng').value) || 0;
-  initMiniMap('park', pLat || null, pLng || null);
-
-  var aLat = parseFloat(document.getElementById('f_con_adj_lat') && document.getElementById('f_con_adj_lat').value) || 0;
-  var aLng = parseFloat(document.getElementById('f_con_adj_lng') && document.getElementById('f_con_adj_lng').value) || 0;
-  initMiniMap('adj', aLat || null, aLng || null);
+  var pLatEl = document.getElementById('f_con_park_lat');
+  var pLngEl = document.getElementById('f_con_park_lng');
+  var pLat = pLatEl ? parseFloat(pLatEl.value) || null : null;
+  var pLng = pLngEl ? parseFloat(pLngEl.value) || null : null;
+  initMiniMap('park', pLat, pLng);
+  // Adjacent gardens init individually when added via addAdjacentGarden()
 }
 
 /* Re-init maps when connectivity tab is clicked */
