@@ -1,0 +1,133 @@
+{
+  "garden_id": "ER-VIC-BAL-001",
+  "garden_name": "Parring",
+  "garden_type": "Connected Habitat Landscape",
+  "suburb": "Balwyn",
+  "state": "VIC",
+  "assessment_date": "Mar 2026",
+  "baseline_date": "Mar 2026",
+  "target_score": 80,
+  "stewards": "Vasilija",
+  "designer": "Gardener & Son",
+  "area_sqm": 120,
+  "description": "A connected habitat landscape where front and rear gardens work as one living system. Composed as a series of small habitat zones relating to the nearby Maranoa Gardens and surrounding remnant vegetation. Layered planting from local plant communities providing nectar, shelter and structure for birds, insects and pollinators.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 28,
+    "indigenous_species_baseline": 3,
+    "indigenous_species_target": 35,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 1,
+    "canopy_cover_pct_current": 12,
+    "canopy_cover_pct_baseline": 5,
+    "canopy_cover_pct_target": 35,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Casuarina glauca prostrate",
+      "Kennedia prostrata",
+      "Indigofera australis",
+      "Lomandra Lime Tuff",
+      "Westringia Wynyabbie Gem",
+      "Hardenbergia violacea",
+      "Brachyscome Mauve Bliss",
+      "Viola hederacea",
+      "Myoporum floribundum",
+      "Banksia spinulosa Birthday Candles",
+      "Billardiera mutabilis",
+      "Scaevola Mauve Clusters",
+      "Dichelachne crinata",
+      "Correa reflexa",
+      "Dampiera diversifolia",
+      "Callistemon viminalis",
+      "Orthosanthus multiflorius",
+      "Stylidium armeria",
+      "Lechenaultia biloba",
+      "Acacia myrtifolia",
+      "Rubus parvifolius",
+      "Chrysocephalum apiculatum",
+      "Wahlenbergia stricta",
+      "Leucophyta brownii",
+      "Bulbine bulbosa",
+      "Arthropodium strictum",
+      "Anigozanthos Bush Gems",
+      "Themeda triandra"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 2,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 75
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Layered ecological planting - stepping-stone habitat zones",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Maranoa Gardens",
+    "park_distance_m": 200,
+    "park_lat": -37.8089,
+    "park_lng": 145.0831,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.12,
+    "cluster_area_ha": 0,
+    "cluster_name": "Balwyn"
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Baseline established",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Fauna monitoring commenced",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "Corridor node assessment",
+      "date": "Winter 2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Baseline assessment -- connected habitat landscape",
+      "date": "Mar 2026",
+      "type": "Verified",
+      "category": "baseline",
+      "notes": "Front and rear gardens documented as one connected system. 28 indigenous species recorded across groundcover, grass, shrub and small tree layers. Strong pollinator succession through banksia, correa, hardenbergia and kangaroo paw. Proximity to Maranoa Gardens noted as significant connectivity asset."
+    }
+  ]
+}
