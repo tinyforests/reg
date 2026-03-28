@@ -1,34 +1,117 @@
 {
   "garden_id": "ER-VIC-SH-ARU-0001",
   "garden_name": "Arundel",
-  "garden_type": "Ecological Garden",
+  "garden_type": "Ecological Forest Garden",
   "suburb": "Surrey Hills",
   "state": "VIC",
   "assessment_date": "Mar 2026",
   "baseline_date": "Feb 2026",
-  "target_score": 82,
   "stewards": "Andrew & Elizabeth",
   "designer": "Gardener & Son",
   "area_sqm": 180,
-  "description": "",
+  "description": "The Arundel site sits at the meeting point of historic Grassy Woodland and Valley Grassy Forest systems that once characterised this part of Surrey Hills, shaped by gentle slopes, well-drained soils, and open canopies of eucalypts. Over time, urban development has simplified these ecologies, fragmenting habitat, compacting soil, and reducing the diversity of ground and shrub layers that once supported rich insect and bird life. Despite this, the land still holds its ecological memory visible in the way water moves across the site, in remnant soil profiles, and in its proximity to South Surrey Park. This garden responds directly to that context, using layered planting, dense groundcover, and woodland structure to re-establish ecological function at a domestic scale. In doing so, Arundel becomes a small but meaningful act of repair, reconnecting the site to the broader landscape and contributing to the long-term resilience of local ecological systems.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "",
-    "bioregion_code": ""
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
   },
   "biodiversity": {
-    "indigenous_species_current": 23,
+    "indigenous_species_current": 81,
     "indigenous_species_baseline": 8,
     "indigenous_species_target": 40,
     "indigenous_dominant": true,
     "structural_layers_current": 4,
     "structural_layers_baseline": 2,
+    "structural_layers_max": 5,
     "canopy_cover_pct_current": 34,
     "canopy_cover_pct_baseline": 12,
     "canopy_cover_pct_target": 55,
     "weed_pressure": "low",
-    "weed_pressure_baseline": "high"
+    "weed_pressure_baseline": "high",
+    "species_list": [
+      "Vittadinia muelleri",
+      "Pelargonium australe",
+      "Dampiera diversifolia",
+      "Austrodanthonia racemosa",
+      "Scutellaria humilis",
+      "Xerochrysum viscosum",
+      "Wahlenbergia gracilis",
+      "Pycnosorus globosus",
+      "Bulbine bulbosa",
+      "Xerochrysum bracteatum",
+      "Dichelachne crinita",
+      "Poa labillardieri",
+      "Chrysocephalum apiculatum",
+      "Dianella tasmanica",
+      "Hardenbergia violacea",
+      "Dichondra repens",
+      "Arthropodium strictum",
+      "Acaena novae-zelandiae",
+      "Ficinia nodosa",
+      "Banksia spinulosa Birthday Candles",
+      "Clematis microphylla",
+      "Einadia nutans",
+      "Austrostipa elegantissima",
+      "Pandorea pandorana Wonga Gold Sunset",
+      "Stylidium armeria",
+      "Chrysocephalum semipapposum",
+      "Poa labillardieri Eskdale",
+      "Dianella tasmanica Tas Red",
+      "Ptilotus spathulatus",
+      "Leptorhynchos tenuifolius",
+      "Brunonia australis",
+      "Linum marginale",
+      "Brachyscome multifida Pink Form",
+      "Glycine clandestina",
+      "Bossiaea prostrata",
+      "Nicotiana suaveolens",
+      "Kennedia prostrata",
+      "Rubus parvifolius",
+      "Themeda triandra",
+      "Calytrix tetragona",
+      "Hakea decurrens",
+      "Billardiera mutabilis",
+      "Hakea ulicina",
+      "Spyridium parvifolium",
+      "Kunzea leptospermoides",
+      "Daviesia leptophylla",
+      "Coprosma quadrifida",
+      "Leptospermum continentale",
+      "Olearia ramulosa",
+      "Indigofera australis",
+      "Correa glabra",
+      "Westringia fruticosa",
+      "Goodenia ovata",
+      "Correa reflexa",
+      "Callistemon sieberi",
+      "Bursaria spinosa",
+      "Olearia lirata",
+      "Epacris impressa",
+      "Acacia dealbata",
+      "Prostanthera melissifolia",
+      "Pomaderris racemosa",
+      "Acacia ulcifolia",
+      "Solanum aviculare",
+      "Acacia myrtifolia",
+      "Dodonaea viscosa",
+      "Viminaria juncea",
+      "Hymenosporum flavum",
+      "Allocasuarina verticillata",
+      "Banksia marginata",
+      "Elaeocarpus reticulatus",
+      "Syzygium anisatum",
+      "Eucalyptus rubida",
+      "Eucalyptus radiata",
+      "Eucalyptus leucoxylon Rosea",
+      "Acacia implexa",
+      "Juncus australis",
+      "Mentha australis",
+      "Crassula helmsii",
+      "Lythrum salicaria",
+      "Cycnogeton procerum",
+      "Mazus pumilio"
+    ]
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -49,50 +132,147 @@
     "has_rock_refuges": false,
     "has_water_feature": false,
     "has_nest_boxes": false,
-    "planting_method": "Miyawaki-style layering",
     "fauna_sightings": [
       {
         "species": "Burrowing frog",
-        "date": "Recorded",
-        "location": "Field observation",
-        "verified": true
-      }
-    ]
-  },
-  "connectivity": {
-    "lat": -37.83145,
-    "lng": 145.092931,
-    "adjacent_park": true,
-    "park_name": "south surrey park",
-    "park_distance_m": 45,
-    "park_lat": -37.833187,
-    "park_lng": 145.093412,
-    "adjacent_registered_gardens": [
-      {
-        "id": "ER-VIC-SH-MH-003",
-        "name": "Mont Hollis",
-        "distance_m": 155,
-        "direction": "south",
-        "lat": -37.8251,
-        "lng": 145.0876,
+        "date": "18 Feb 2026",
+        "location": "Lower slope refuge zone",
         "verified": true
       }
     ],
+    "planting_method": "Miyawaki-style layering"
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Surrey Hills Reserve",
+    "park_distance_m": 45,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-VIC-SH-MH-003",
+        "lat": -37.8251,
+        "lng": 145.0876,
+        "distance_m": 140,
+        "direction": "south",
+        "verified": true,
+        "name": "Mont Hollis"
+      }
+    ],
     "corridor_node_confirmed": true,
-    "effective_ecological_area_ha": 0,
+    "effective_ecological_area_ha": 0.4,
     "cluster_area_ha": 2.1,
-    "cluster_name": "Surrey Hills"
+    "cluster_name": "Surrey Hills",
+    "lat": -37.8234,
+    "lng": 145.0891,
+    "park_lat": -37.8221,
+    "park_lng": 145.0895
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_species_list": true,
-    "has_fauna_record": true,
     "has_professional_assessment": true,
+    "has_fauna_record": true,
+    "has_species_list": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son"
   },
-  "milestones": [],
-  "activity_log": []
+  "milestones": [
+    {
+      "title": "Baseline established",
+      "date": "Feb 2026",
+      "complete": true
+    },
+    {
+      "title": "Habitat refuge nodes mapped",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Corridor node status confirmed",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Seasonal moisture basin",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "High Habitat Garden (81 points)",
+      "date": "End 2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Burrowing frog sighting -- lower slope refuge zone",
+      "date": "18 Feb 2026",
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden."
+    },
+    {
+      "title": "Habitat structure installed -- embedded logs and voids",
+      "date": "15 Feb 2026",
+      "type": "Installed",
+      "category": "structure",
+      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded."
+    },
+    {
+      "title": "Ground contouring and soil preparation",
+      "date": "8 Feb 2026",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ."
+    },
+    {
+      "title": "Waterways & Swales",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "hydrology",
+      "notes": "Water is one of the quiet architects of an ecological garden. By shaping the land with gentle swales, contour-led channels, and slow-moving waterways, rainfall is captured rather than lost. These forms hold moisture in the soil, reduce runoff, and create pockets of microclimate where plants thrive with less intervention. Swales also guide the eye and the body through the landscape, becoming subtle pathways of movement and seasonal change. In heavy rain they come alive; in dry periods they act as cool, shaded reservoirs of resilience. This approach reconnects the garden to its natural hydrology, restoring patterns that once shaped local ecologies."
+    },
+    {
+      "title": "Habitat Elements",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "habitat",
+      "notes": "Habitat elements such as rocks and fallen logs provide the structure, complexity, and shelter that wildlife depends on. Strategically placed boulders create thermal mass for lizards, insects, and soil life, while hollow logs and decaying timber offer refuge for skinks, microbats, beetles, and fungi. These materials anchor the garden in place and add a timeless, grounded presence to the design. More than aesthetic accents, they operate as miniature ecosystems -- stabilising soil, supporting moisture retention, and forming the essential building blocks for biodiversity. By integrating these features, the garden becomes not just a space for people, but a living habitat where nature can return, settle, and flourish."
+    },
+    {
+      "title": "Ground Layer",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "The ground layer is the living fabric of the garden -- the continuous weave of grasses, sedges, herbs, and forbs that drives most of the ecological function. This layer stabilises soil, cools the microclimate, suppresses weeds, and supports insect life at an extraordinary scale. It is where pollinators forage, where fungi exchange nutrients, and where the first signs of seasonal change appear. At Arundel, this layer forms the foundation of the forested rear garden. With an ecological density of 3 plants per m2, the ground layer contributes approximately 714 plants across the site -- a thick, species-rich under-storey that quickly knits the soil surface together. These plants occupy every microclimate shaped by the site's contours: sunny rises, cooler swales, and moisture-holding depressions. In ecological design, the ground layer is the engine room, grounding the whole system in life and continuity."
+    },
+    {
+      "title": "Shrub Layer",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "The shrub layer provides the garden with structure, rhythm, and habitat complexity. These mid-storey species introduce seasonal colour, flowering pulses, density for small birds, and layered textures that soften the transitions between ground and canopy. At Arundel, this layer accounts for 25% of the planting density, contributing around 262 shrubs across the site. Placed in naturalistic clusters, they define movement corridors, frame views toward South Surrey Park, and create pockets of enclosure along the meandering paths. These shrubs form the connective tissue between the garden's lower and upper layers, ensuring continuity of habitat and a dynamic sense of depth as the garden matures."
+    },
+    {
+      "title": "Sub-Canopy Layer",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "The sub-canopy layer is the woodland heart of the garden -- the 3-6 metre trees and large shrubs that provide dappled shade, structure, and vertical variation. This layer regulates temperature, slows wind, enriches soil through leaf litter, and forms a protective envelope under which the ground layer thrives. At Arundel, this layer represents 4% of the total planting, adding approximately 42 sub-canopy trees across the rear garden. These are spaced to create alternating pools of light and shade, ensuring the dense Miyawaki-inspired underplanting can establish vigorously. Their placement reinforces the natural topography -- gathering around swales, stretching along slope lines, and framing the internal forest rooms."
+    },
+    {
+      "title": "Canopy Layer",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "The canopy layer is the long-term architecture of the garden -- the tallest trees that anchor the design, shape the microclimate, and link the property to the broader green corridor of South Surrey Park. At Arundel, the canopy comprises 3% of the planting density, with approximately 32 canopy trees distributed carefully across the 475m2 space. Their spacing allows them to mature without crowding while still creating an interconnected canopy that supports bird movement and enhances biodiversity. These trees form the garden's upper frame -- a gesture of reciprocity to the parkland beyond the fence and a long-term ecological investment that will define the garden for decades."
+    },
+    {
+      "title": "Seasonal Swale / Bio-swale / Water Garden",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "hydrology",
+      "notes": "At the rear of the garden, a seasonal swale is proposed -- a softly formed bio-swale that reads as both water feature and living system. Rather than a fixed pond, this element responds to rainfall, gently slowing, holding and filtering water as it moves through the site. In wetter months it becomes animated, lightly pooling and nourishing a palette of water-loving species. In drier periods it settles back into a textural, planted depression -- still legible, still alive -- offering habitat, cooling, and seasonal change. This swale reduces runoff, improves soil moisture, supports insect and bird life, and reconnects the garden to the natural hydrology of the broader landscape. A water feature not for spectacle, but for function, resilience and presence."
+    }
+  ]
 }

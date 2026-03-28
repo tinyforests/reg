@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 56,
+    "total_species": 94,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -583,6 +583,386 @@
       "layer": "grass",
       "family": "Poaceae",
       "notes": "cultivar",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Calytrix tetragona",
+      "common_name": "Fringe Myrtle",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Hakea decurrens",
+      "common_name": "Bushy Needlewood",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Hakea ulicina",
+      "common_name": "Furze Hakea",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Spyridium parvifolium",
+      "common_name": "Australian Dusty Miller",
+      "layer": "shrub",
+      "family": "Rhamnaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Kunzea leptospermoides",
+      "common_name": "Yarra Burgan",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Daviesia leptophylla",
+      "common_name": "Narrow-leaf Bitter-pea",
+      "layer": "shrub",
+      "family": "Fabaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Coprosma quadrifida",
+      "common_name": "Prickly Currant-bush",
+      "layer": "shrub",
+      "family": "Rubiaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Leptospermum continentale",
+      "common_name": "Prickly Tea-tree",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Olearia ramulosa",
+      "common_name": "Twiggy Daisy Bush",
+      "layer": "shrub",
+      "family": "Asteraceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Correa glabra",
+      "common_name": "Rock Correa",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Westringia fruticosa",
+      "common_name": "Coastal Rosemary",
+      "layer": "shrub",
+      "family": "Lamiaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Goodenia ovata",
+      "common_name": "Hop Goodenia",
+      "layer": "shrub",
+      "family": "Goodeniaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Callistemon sieberi",
+      "common_name": "River Bottlebrush",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Bursaria spinosa",
+      "common_name": "Sweet Bursaria",
+      "layer": "shrub",
+      "family": "Pittosporaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Olearia lirata",
+      "common_name": "Snowy Daisy Bush",
+      "layer": "shrub",
+      "family": "Asteraceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Epacris impressa",
+      "common_name": "Common Heath",
+      "layer": "shrub",
+      "family": "Ericaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Acacia dealbata",
+      "common_name": "Silver Wattle",
+      "layer": "small_tree",
+      "family": "Fabaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Prostanthera melissifolia",
+      "common_name": "Balm Mint Bush",
+      "layer": "small_tree",
+      "family": "Lamiaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Pomaderris racemosa",
+      "common_name": "Cluster Pomaderris",
+      "layer": "small_tree",
+      "family": "Rhamnaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Acacia ulcifolia",
+      "common_name": "Juniper Wattle",
+      "layer": "small_tree",
+      "family": "Fabaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Solanum aviculare",
+      "common_name": "Kangaroo Apple",
+      "layer": "small_tree",
+      "family": "Solanaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Dodonaea viscosa",
+      "common_name": "Wedge-leaf Hop Bush",
+      "layer": "small_tree",
+      "family": "Sapindaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Viminaria juncea",
+      "common_name": "Golden Spray",
+      "layer": "small_tree",
+      "family": "Fabaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Hymenosporum flavum",
+      "common_name": "Native Frangipani",
+      "layer": "tree",
+      "family": "Pittosporaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Allocasuarina verticillata",
+      "common_name": "Drooping Sheoak",
+      "layer": "tree",
+      "family": "Casuarinaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Banksia marginata",
+      "common_name": "Silver Banksia",
+      "layer": "tree",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Elaeocarpus reticulatus",
+      "common_name": "Blueberry Ash",
+      "layer": "tree",
+      "family": "Elaeocarpaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Syzygium anisatum",
+      "common_name": "Aniseed Myrtle",
+      "layer": "tree",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus rubida",
+      "common_name": "Candlebark",
+      "layer": "tree",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus radiata",
+      "common_name": "Narrow-leaf Peppermint",
+      "layer": "tree",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus leucoxylon Rosea",
+      "common_name": "Red Flowering Yellow Gum",
+      "layer": "tree",
+      "family": "Myrtaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Acacia implexa",
+      "common_name": "Lightwood",
+      "layer": "tree",
+      "family": "Fabaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Juncus australis",
+      "common_name": "Common Rush",
+      "layer": "sedge",
+      "family": "Juncaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Mentha australis",
+      "common_name": "Native River Mint",
+      "layer": "forb",
+      "family": "Lamiaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Crassula helmsii",
+      "common_name": "Swamp Crassula",
+      "layer": "groundcover",
+      "family": "Crassulaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Lythrum salicaria",
+      "common_name": "Purple Loosestrife",
+      "layer": "forb",
+      "family": "Lythraceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Cycnogeton procerum",
+      "common_name": "Water Ribbons",
+      "layer": "forb",
+      "family": "Juncaginaceae",
+      "notes": "",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Mazus pumilio",
+      "common_name": "Swamp Mazus",
+      "layer": "groundcover",
+      "family": "Phrymaceae",
+      "notes": "",
       "gardens": [
         "arundel"
       ]
