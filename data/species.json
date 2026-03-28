@@ -1,0 +1,591 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "Mar 2026",
+    "total_species": 56,
+    "custodian": "Gardener & Son"
+  },
+  "layers": [
+    "groundcover",
+    "grass",
+    "sedge",
+    "forb",
+    "shrub",
+    "small_tree",
+    "tree",
+    "climber"
+  ],
+  "species": [
+    {
+      "botanical_name": "Casuarina glauca prostrate",
+      "common_name": "Cousin It",
+      "layer": "groundcover",
+      "family": "Casuarinaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Kennedia prostrata",
+      "common_name": "Running Postman",
+      "layer": "groundcover",
+      "family": "Fabaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Indigofera australis",
+      "common_name": "Austral Indigo",
+      "layer": "shrub",
+      "family": "Fabaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Lomandra longifolia Lime Tuff",
+      "common_name": "Mat Rush",
+      "layer": "groundcover",
+      "family": "Asparagaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Westringia fruticosa Wynyabbie Gem",
+      "common_name": "Westringia",
+      "layer": "shrub",
+      "family": "Lamiaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Hardenbergia violacea",
+      "common_name": "Purple Coral Pea",
+      "layer": "climber",
+      "family": "Fabaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Brachyscome Mauve Bliss",
+      "common_name": "Swan River Daisy",
+      "layer": "groundcover",
+      "family": "Asteraceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Viola hederacea",
+      "common_name": "Native Violet",
+      "layer": "groundcover",
+      "family": "Violaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Myoporum floribundum",
+      "common_name": "Slender Myoporum",
+      "layer": "shrub",
+      "family": "Scrophulariaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Banksia spinulosa Birthday Candles",
+      "common_name": "Hairpin Banksia",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Billardiera mutabilis",
+      "common_name": "Common Apple Berry",
+      "layer": "climber",
+      "family": "Pittosporaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Scaevola Mauve Clusters",
+      "common_name": "Fan Flower",
+      "layer": "groundcover",
+      "family": "Goodeniaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Correa reflexa",
+      "common_name": "Common Correa",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Callistemon viminalis Little John",
+      "common_name": "Bottlebrush Little John",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Orthosanthus multiflorus",
+      "common_name": "Morning Iris",
+      "layer": "forb",
+      "family": "Iridaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Lechenaultia biloba",
+      "common_name": "Blue Lechenaultia",
+      "layer": "groundcover",
+      "family": "Goodeniaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Acacia myrtifolia",
+      "common_name": "Myrtle Wattle",
+      "layer": "shrub",
+      "family": "Fabaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Chrysocephalum apiculatum",
+      "common_name": "Common Everlasting",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Wahlenbergia stricta",
+      "common_name": "Tall Bluebell",
+      "layer": "forb",
+      "family": "Campanulaceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Leucophyta brownii",
+      "common_name": "Cushion Bush",
+      "layer": "shrub",
+      "family": "Asteraceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Anigozanthos Bush Gems",
+      "common_name": "Kangaroo Paw",
+      "layer": "forb",
+      "family": "Haemodoraceae",
+      "gardens": [
+        "parring"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Vittadinia muelleri",
+      "common_name": "Narrow-leaf New Holland Daisy",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Pelargonium australe",
+      "common_name": "Austral Storks-bill",
+      "layer": "forb",
+      "family": "Geraniaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Dampiera diversifolia",
+      "common_name": "Dampiera",
+      "layer": "groundcover",
+      "family": "Goodeniaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Austrodanthonia racemosa",
+      "common_name": "Clustered Wallaby-Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Scutellaria humilis",
+      "common_name": "Dwarf Skullcap",
+      "layer": "forb",
+      "family": "Lamiaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Xerochrysum viscosum",
+      "common_name": "Sticky Everlasting",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Wahlenbergia gracilis",
+      "common_name": "Australian Bluebell",
+      "layer": "forb",
+      "family": "Campanulaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Pycnosorus globosus",
+      "common_name": "Billy Buttons",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Bulbine bulbosa",
+      "common_name": "Native Leek",
+      "layer": "forb",
+      "family": "Asphodelaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Xerochrysum bracteatum",
+      "common_name": "Everlasting Paper Daisy",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "notes": "cultivar variant noted",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Dichelachne crinita",
+      "common_name": "Longhair Plume Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Poa labillardieri",
+      "common_name": "Common Tussock-Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Dianella tasmanica",
+      "common_name": "Tasman Flax Lily",
+      "layer": "forb",
+      "family": "Asphodelaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Dichondra repens",
+      "common_name": "Kidneyweed",
+      "layer": "groundcover",
+      "family": "Convolvulaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Arthropodium strictum",
+      "common_name": "Chocolate Lily",
+      "layer": "forb",
+      "family": "Asparagaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Acaena novae-zelandiae",
+      "common_name": "Bidgee-widgee",
+      "layer": "groundcover",
+      "family": "Rosaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Ficinia nodosa",
+      "common_name": "Knobby Club-Sedge",
+      "layer": "sedge",
+      "family": "Cyperaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Clematis microphylla",
+      "common_name": "Old Man's Beard",
+      "layer": "climber",
+      "family": "Ranunculaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Einadia nutans",
+      "common_name": "Nodding Saltbush",
+      "layer": "shrub",
+      "family": "Amaranthaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Austrostipa elegantissima",
+      "common_name": "Elegant Spear Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Pandorea pandorana Wonga Gold Sunset",
+      "common_name": "Wonga Wonga Vine",
+      "layer": "climber",
+      "family": "Bignoniaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Stylidium armeria",
+      "common_name": "Grass-leaved Triggerplant",
+      "layer": "forb",
+      "family": "Stylidiaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Chrysocephalum semipapposum",
+      "common_name": "Clustered Everlasting",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Dianella tasmanica Tas Red",
+      "common_name": "Tasmanian Flax Lily",
+      "layer": "forb",
+      "family": "Asphodelaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Ptilotus spathulatus",
+      "common_name": "Pussy Tails",
+      "layer": "forb",
+      "family": "Amaranthaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Leptorhynchos tenuifolius",
+      "common_name": "Wiry Buttons",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Brunonia australis",
+      "common_name": "Blue Pincushion",
+      "layer": "forb",
+      "family": "Goodeniaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Linum marginale",
+      "common_name": "Native Flax",
+      "layer": "forb",
+      "family": "Linaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Brachyscome multifida Pink Form",
+      "common_name": "Cut-leaf Daisy",
+      "layer": "groundcover",
+      "family": "Asteraceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Glycine clandestina",
+      "common_name": "Twining Glycine",
+      "layer": "climber",
+      "family": "Fabaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Bossiaea prostrata",
+      "common_name": "Creeping Bossiaea",
+      "layer": "groundcover",
+      "family": "Fabaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Nicotiana suaveolens",
+      "common_name": "Austral Tobacco",
+      "layer": "forb",
+      "family": "Solanaceae",
+      "gardens": [
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Rubus parvifolius",
+      "common_name": "Native Raspberry",
+      "layer": "shrub",
+      "family": "Rosaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Themeda triandra",
+      "common_name": "Kangaroo Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "gardens": [
+        "parring",
+        "arundel"
+      ],
+      "notes": ""
+    },
+    {
+      "botanical_name": "Poa labillardieri Eskdale",
+      "common_name": "Common Tussock-Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "arundel"
+      ]
+    }
+  ]
+}

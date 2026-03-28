@@ -194,6 +194,22 @@
               <div class="opacity-50 mb-1">Baseline Date</div>
               <input type="text" id="f_baseline_date" placeholder="Feb 2026" />
             </div>
+            <div>
+              <div class="opacity-50 mb-1">Garden Type</div>
+              <input type="text" id="f_garden_type" placeholder="Ecological Forest Garden" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">EVC Bioregion</div>
+              <input type="text" id="f_evc_bioregion" placeholder="Victorian Volcanic Plain" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Bioregion Code</div>
+              <input type="text" id="f_evc_bioregion_code" placeholder="VVP" />
+            </div>
+            <div class="col-span-2">
+              <div class="opacity-50 mb-1">Description</div>
+              <textarea id="f_description" rows="3" style="width:100%;background:transparent;border:1px solid #d7ccb9;padding:.5rem;font-size:.75rem;font-family:inherit;color:inherit;resize:vertical" placeholder="Brief description of the garden..."></textarea>
+            </div>
           </div>
         </div>
 
@@ -271,6 +287,40 @@
                 </label>
               </div>
             </div>
+
+            <!-- Species list -->
+            <div class="border border-rl dark:border-rdl p-4 mt-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="section-label">Species List</div>
+                <div class="text-xs opacity-50" id="speciesDbStatus">Loading database...</div>
+              </div>
+              <div id="speciesList" class="space-y-1 mb-3"></div>
+              <!-- Search -->
+              <div style="position:relative">
+                <div class="flex gap-2 mb-1">
+                  <input type="text" id="f_species_input"
+                    placeholder="Search botanical or common name..."
+                    style="flex:1"
+                    autocomplete="off"
+                    oninput="searchSpecies(this.value)"
+                    onkeydown="handleSpeciesKey(event)" />
+                  <select id="f_species_layer" style="background:transparent;border:1px solid #d7ccb9;padding:.35rem .5rem;font-size:.75rem;color:inherit;font-family:inherit" class="dark:border-rdl">
+                    <option value="">Any layer</option>
+                    <option value="groundcover">Groundcover</option>
+                    <option value="grass">Grass</option>
+                    <option value="sedge">Sedge</option>
+                    <option value="forb">Forb</option>
+                    <option value="shrub">Shrub</option>
+                    <option value="small_tree">Small tree</option>
+                    <option value="tree">Tree</option>
+                    <option value="climber">Climber</option>
+                  </select>
+                </div>
+                <div id="speciesDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:50;max-height:220px;overflow-y:auto;border:1px solid #d7ccb9;background:#fff0dc" class="dark:bg-rdp dark:border-rdl"></div>
+              </div>
+              <div class="text-xs opacity-40 mt-2">Search the database or type a new name and press Enter to add. Click x to remove.</div>
+            </div>
+
           </div>
 
           <!-- Pillar: Soil & Water -->
@@ -729,7 +779,7 @@ function buildRecordFromForm() {
   return {
     garden_id:       gv('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
     garden_name:     gv('f_garden_name') || 'New Garden',
-    garden_type:     'Ecological Garden',
+    garden_type:     gv('f_garden_type') || 'Ecological Garden',
     suburb:          gv('f_suburb'),
     state:           gv('f_state'),
     assessment_date: gv('f_assessment_date'),
@@ -738,8 +788,8 @@ function buildRecordFromForm() {
     stewards:        gv('f_stewards'),
     designer:        'Gardener & Son',
     area_sqm:        gn('f_area_sqm'),
-    description:     '',
-    evc: { name: gv('f_evc_name'), code: gv('f_evc_code'), bioregion: '', bioregion_code: '' },
+    description:     gv('f_description'),
+    evc: { name: gv('f_evc_name'), code: gv('f_evc_code'), bioregion: gv('f_evc_bioregion'), bioregion_code: gv('f_evc_bioregion_code') },
     biodiversity: {
       indigenous_species_current:  gn('f_bio_species_current'),
       indigenous_species_baseline: gn('f_bio_species_baseline'),
@@ -751,7 +801,8 @@ function buildRecordFromForm() {
       canopy_cover_pct_baseline:   gn('f_bio_canopy_baseline'),
       canopy_cover_pct_target:     gn('f_bio_canopy_target'),
       weed_pressure:               gv('f_bio_weed_pressure'),
-      weed_pressure_baseline:      gv('f_bio_weed_baseline')
+      weed_pressure_baseline:      gv('f_bio_weed_baseline'),
+      species_list:                _speciesList.slice()
     },
     soil_water: {
       soil_health_score:    gn('f_sw_soil_current'),
@@ -819,6 +870,7 @@ function populateFormFromRecord(r) {
   sv('f_baseline_date',     r.baseline_date);
   var b = r.biodiversity || {};
   sv('f_bio_species_current',  b.indigenous_species_current);
+  loadSpeciesList(b.species_list || []);
   sv('f_bio_species_baseline', b.indigenous_species_baseline);
   sv('f_bio_species_target',   b.indigenous_species_target);
   sc('f_bio_dominant',         b.indigenous_dominant);
@@ -1214,6 +1266,180 @@ function initMapsOnTabSwitch(tabName) {
     }, 50);
   }
 }
+
+/* ---- SPECIES DATABASE + LIST ---- */
+var _speciesList = [];
+var _speciesDb = [];
+var _dropdownIdx = -1;
+
+/* Load species database from JSON */
+fetch('/data/species.json', { cache: 'no-store' })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    _speciesDb = data.species || [];
+    var status = document.getElementById('speciesDbStatus');
+    if (status) status.textContent = _speciesDb.length + ' species in database';
+  })
+  .catch(function() {
+    var status = document.getElementById('speciesDbStatus');
+    if (status) status.textContent = 'Database unavailable -- manual entry only';
+  });
+
+function renderSpeciesList() {
+  var container = document.getElementById('speciesList');
+  if (!container) return;
+  if (_speciesList.length === 0) {
+    container.innerHTML = '<div class="text-xs opacity-40">No species added yet</div>';
+    return;
+  }
+  var h = '';
+  for (var i = 0; i < _speciesList.length; i++) {
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:.3rem .5rem;border:1px solid rgba(61,69,53,.12);font-size:.75rem">' +
+      '<span class="italic">' + _speciesList[i] + '</span>' +
+      '<button onclick="removeSpecies(' + i + ')" style="opacity:.4;font-size:.7rem;background:none;border:none;cursor:pointer;padding:0 .25rem;color:inherit">x</button>' +
+      '</div>';
+  }
+  container.innerHTML = h;
+}
+
+function searchSpecies(query) {
+  var dropdown = document.getElementById('speciesDropdown');
+  var layerFilter = document.getElementById('f_species_layer');
+  var layer = layerFilter ? layerFilter.value : '';
+  _dropdownIdx = -1;
+
+  if (!query || query.trim().length < 2) {
+    dropdown.style.display = 'none';
+    return;
+  }
+
+  var q = query.toLowerCase();
+  var results = [];
+  for (var i = 0; i < _speciesDb.length; i++) {
+    var s = _speciesDb[i];
+    if (layer && s.layer !== layer) continue;
+    if (_speciesList.indexOf(s.botanical_name) !== -1) continue;
+    if (s.botanical_name.toLowerCase().indexOf(q) !== -1 ||
+        (s.common_name && s.common_name.toLowerCase().indexOf(q) !== -1)) {
+      results.push(s);
+    }
+    if (results.length >= 8) break;
+  }
+
+  if (results.length === 0) {
+    dropdown.innerHTML = '<div style="padding:.5rem .75rem;font-size:.75rem;opacity:.5">No match -- press Enter to add as new species</div>';
+    dropdown.style.display = 'block';
+    return;
+  }
+
+  var h = '';
+  for (var j = 0; j < results.length; j++) {
+    var sp = results[j];
+    h += '<div class="species-opt" data-botanical="' + sp.botanical_name + '"' +
+      ' style="padding:.5rem .75rem;font-size:.75rem;cursor:pointer;border-bottom:1px solid rgba(61,69,53,.08)"' +
+      ' onmousedown="selectSpeciesFromEl(this)"' +
+      ' onmouseover="highlightDropdownItem(this)">' +
+      '<span class="italic">' + sp.botanical_name + '</span>' +
+      '<span style="opacity:.5;margin-left:.5rem">' + sp.common_name + '</span>' +
+      '<span style="opacity:.35;margin-left:.5rem;font-size:.65rem;text-transform:uppercase;letter-spacing:.06em">' + sp.layer + '</span>' +
+      '</div>';
+  }
+  dropdown.innerHTML = h;
+  dropdown.style.display = 'block';
+}
+
+function highlightDropdownItem(el) {
+  var opts = document.querySelectorAll('.species-opt');
+  for (var i = 0; i < opts.length; i++) opts[i].style.background = '';
+  el.style.background = 'rgba(122,158,95,.15)';
+}
+
+function handleSpeciesKey(e) {
+  var dropdown = document.getElementById('speciesDropdown');
+  var opts = dropdown.querySelectorAll('.species-opt');
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _dropdownIdx = Math.min(_dropdownIdx + 1, opts.length - 1);
+    for (var i = 0; i < opts.length; i++) opts[i].style.background = i === _dropdownIdx ? 'rgba(122,158,95,.15)' : '';
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _dropdownIdx = Math.max(_dropdownIdx - 1, -1);
+    for (var i = 0; i < opts.length; i++) opts[i].style.background = i === _dropdownIdx ? 'rgba(122,158,95,.15)' : '';
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (_dropdownIdx >= 0 && opts[_dropdownIdx]) {
+      selectSpecies(opts[_dropdownIdx].dataset.botanical);
+    } else {
+      addManualSpecies();
+    }
+  } else if (e.key === 'Escape') {
+    dropdown.style.display = 'none';
+  }
+}
+
+function selectSpeciesFromEl(el) {
+  selectSpecies(el.getAttribute('data-botanical'));
+}
+
+function selectSpecies(botanicalName) {
+  if (_speciesList.indexOf(botanicalName) === -1) {
+    _speciesList.push(botanicalName);
+    renderSpeciesList();
+    renderLive();
+  }
+  var input = document.getElementById('f_species_input');
+  if (input) { input.value = ''; input.focus(); }
+  var dropdown = document.getElementById('speciesDropdown');
+  if (dropdown) dropdown.style.display = 'none';
+  _dropdownIdx = -1;
+}
+
+function addManualSpecies() {
+  var input = document.getElementById('f_species_input');
+  if (!input) return;
+  var val = input.value.trim();
+  if (!val) return;
+
+  if (_speciesList.indexOf(val) === -1) {
+    _speciesList.push(val);
+    /* Also add to local DB so it appears in future searches this session */
+    _speciesDb.push({
+      botanical_name: val, common_name: '', layer: 'forb', family: '', notes: 'Added on site', gardens: []
+    });
+    renderSpeciesList();
+    renderLive();
+    var status = document.getElementById('speciesDbStatus');
+    if (status) status.textContent = _speciesDb.length + ' species (includes new)';
+  }
+  input.value = '';
+  input.focus();
+  var dropdown = document.getElementById('speciesDropdown');
+  if (dropdown) dropdown.style.display = 'none';
+}
+
+/* Keep addSpecies as alias for button onclick */
+function addSpecies() { addManualSpecies(); }
+
+function removeSpecies(idx) {
+  _speciesList.splice(idx, 1);
+  renderSpeciesList();
+  renderLive();
+}
+
+function loadSpeciesList(list) {
+  _speciesList = list ? list.slice() : [];
+  renderSpeciesList();
+}
+
+/* Close dropdown on outside click */
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('speciesDropdown');
+  var input = document.getElementById('f_species_input');
+  if (dd && input && !dd.contains(e.target) && e.target !== input) {
+    dd.style.display = 'none';
+  }
+});
 
 /* ---- BOOT ---- */
 var st = localStorage.getItem('reg-theme');
