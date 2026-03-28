@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry - Nicholson</title>
+  <title>Ecological Registry - Vasilija</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -170,7 +170,7 @@
           <div class="text-xs">Coordinates pending -- add via assess page</div>
         </div>
         <div class="px-4 py-3 border-t border-rl dark:border-rdl">
-          <div class="section-label" id="networkMapLabel">South Yarra</div>
+          <div class="section-label" id="networkMapLabel">--</div>
         </div>
       </div>
       <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
@@ -676,7 +676,7 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 });
 
-fetch('/data/nicholson.json')
+fetch('/data/vasilija.json')
   .then(function(r) {
     if (!r.ok) { throw new Error('HTTP ' + r.status); }
     return r.json();
@@ -689,7 +689,7 @@ fetch('/data/nicholson.json')
     console.error('Could not load garden data:', err);
     document.getElementById('heroName').textContent = 'Data unavailable';
     document.getElementById('heroScore').textContent = '--';
-    document.getElementById('heroLevel').textContent = 'Check /data/arundel.json';
+    document.getElementById('heroLevel').textContent = 'Check /data/vasilija.json';
   });
 </script>
 </body>
