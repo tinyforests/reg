@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry - Vasilija</title>
+  <title>Ecological Registry - Arundel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -25,6 +25,8 @@
       }}
     };
   </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
     * { border-radius: 0 !important; }
     body { transition: background 0.3s, color 0.3s; }
@@ -47,7 +49,52 @@
     .stagger > *:nth-child(4){animation-delay:.2s}
     @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-    /* No map on this profile */
+    /* Leaflet map overrides */
+    .leaflet-div-icon { background:transparent !important; border:none !important; }
+    #corridorMap .leaflet-tile-pane {
+      filter: grayscale(0.3) sepia(0.15) hue-rotate(60deg) brightness(0.97);
+    }
+    #corridorMap { z-index: 1; }
+    .leaflet-container { font-family: "IBM Plex Sans", sans-serif; }
+    .leaflet-popup-content-wrapper {
+      border-radius: 0 !important;
+      border: 1px solid #d7ccb9;
+      box-shadow: none;
+      font-size: 11px;
+    }
+    .dark .leaflet-popup-content-wrapper {
+      background: #485141;
+      color: #fff0dc;
+      border-color: rgba(255,240,220,.12);
+    }
+    .leaflet-popup-tip { display: none; }
+    .reg-marker {
+      background: rgba(122,158,95,.35);
+      border: 2px solid #7a9e5f;
+      border-radius: 50% !important;
+      width: 60px !important;
+      height: 60px !important;
+      margin-left: -30px !important;
+      margin-top: -30px !important;
+    }
+    .park-marker {
+      background: rgba(61,69,53,.2);
+      border: 2px solid rgba(61,69,53,.5);
+      border-radius: 50% !important;
+      width: 50px !important;
+      height: 50px !important;
+      margin-left: -25px !important;
+      margin-top: -25px !important;
+    }
+    .adj-marker {
+      background: rgba(122,158,95,.2);
+      border: 2px solid rgba(122,158,95,.6);
+      border-radius: 50% !important;
+      width: 50px !important;
+      height: 50px !important;
+      margin-left: -25px !important;
+      margin-top: -25px !important;
+    }
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
@@ -60,12 +107,13 @@
         <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
         <div class="text-xs opacity-60 font-mono" id="headerMeta">Loading...</div>
       </div>
-    </a>
+    </div>
     <nav class="hidden md:flex items-center gap-1 text-xs">
       <a href="#signals" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Signals</a>
       <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
       <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
       <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
+      <a href="#species" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
       <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
     </nav>
     <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Theme</button>
@@ -165,12 +213,12 @@
     <h2 class="font-serif text-4xl mb-6">Network Position</h2>
     <div class="grid lg:grid-cols-12 gap-6">
       <div class="lg:col-span-5 border border-rl dark:border-rdl bg-white dark:bg-rdp overflow-hidden">
-        <div style="height:320px;width:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;opacity:.4">
-          <div class="section-label">Corridor Map</div>
-          <div class="text-xs">Coordinates pending -- add via assess page</div>
-        </div>
-        <div class="px-4 py-3 border-t border-rl dark:border-rdl">
-          <div class="section-label" id="networkMapLabel">--</div>
+        <div id="corridorMap" style="height:320px;width:100%"></div>
+        <div class="px-4 py-3 border-t border-rl dark:border-rdl flex items-center gap-4 text-xs">
+          <div class="section-label mr-2" id="networkMapLabel">Corridor Map</div>
+          <div class="flex items-center gap-1.5"><div style="width:10px;height:10px;background:#7a9e5f;flex-shrink:0"></div><span>Registered</span></div>
+          <div class="flex items-center gap-1.5"><div style="width:10px;height:10px;background:#3d4535;opacity:.4;flex-shrink:0"></div><span>Park</span></div>
+          <div class="flex items-center gap-1.5"><div style="width:10px;height:10px;border:1px solid #7a9e5f;flex-shrink:0"></div><span>Adjacent</span></div>
         </div>
       </div>
       <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
@@ -216,6 +264,12 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <section id="species" class="stagger">
+    <div class="section-label mb-1">Documented Flora</div>
+    <h2 class="font-serif text-4xl mb-6">Species List</h2>
+    <div id="speciesSection"></div>
   </section>
 
   <section id="trajectory" class="stagger">
@@ -548,7 +602,7 @@ function render() {
   html('signalGridPrimary',
     '<div class="signal-cell"><div class="section-label mb-2">EVC</div><div class="text-xs font-medium">' + R.evc.name + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + R.evc.code + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Canopy Cover</div><div class="text-xl font-light">' + b.canopy_cover_pct_current + '<span class="text-sm">%</span></div><div class="text-xs mt-1">' + dta(b.canopy_cover_pct_current, b.canopy_cover_pct_baseline) + '</div></div>' +
-    '<div class="signal-cell"><div class="section-label mb-2">Indigenous Species</div><div class="text-xl font-light">' + b.indigenous_species_current + '</div><div class="text-xs mt-1">' + dta(b.indigenous_species_current, b.indigenous_species_baseline) + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Indigenous Species</div><div class="text-xl font-light"><a href="#species" style="text-decoration:none;color:inherit">' + b.indigenous_species_current + '</a></div><div class="text-xs mt-1">' + dta(b.indigenous_species_current, b.indigenous_species_baseline) + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Structural Layers</div><div class="text-xl font-light">' + b.structural_layers_current + '</div><div class="text-xs mt-1">' + dta(b.structural_layers_current, b.structural_layers_baseline) + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Soil Health</div><div class="text-xl font-light">' + sw.soil_health_score + '<span class="text-sm">/5</span></div><div class="text-xs mt-1">' + dta(sw.soil_health_score, sw.soil_health_baseline) + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Water Function</div><div class="text-xl font-light">' + sw.water_function_score + '<span class="text-sm">/5</span></div><div class="text-xs mt-1">' + dta(sw.water_function_score, sw.water_function_baseline) + '</div></div>'
@@ -615,6 +669,10 @@ function render() {
   txt('clusterNote',   'Part of ' + c.cluster_area_ha + 'ha ' + c.cluster_name + ' cluster.');
   txt('curbingNote',   'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' + (adj.length + 1) + ' registered gardens and 1 adjacent park representing ' + c.cluster_area_ha + 'ha of measured ecological function.');
 
+  /* Store score on record for map popup then init map */
+  R._score = result.total;
+  initCorridorMap(R);
+
   var lh = '';
   var log = R.activity_log || [];
   for (var li = 0; li < log.length; li++) {
@@ -634,6 +692,27 @@ function render() {
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Method</dt><dd class="font-medium text-right">' + h.planting_method + '</dd></div>' +
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Designed by</dt><dd class="font-medium text-right">' + R.designer + '</dd></div>'
   );
+
+  /* Species list */
+  var speciesSection = document.getElementById('speciesSection');
+  var sl = (R.biodiversity && R.biodiversity.species_list) || [];
+  if (speciesSection) {
+    if (sl.length > 0) {
+      var sh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">';
+      sh += '<div class="section-label mb-4">' + sl.length + ' documented species</div>';
+      sh += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.5rem 2rem">';
+      for (var si = 0; si < sl.length; si++) {
+        var sp = sl[si];
+        sh += '<div class="text-xs py-2 border-b border-rl dark:border-rdl">';
+        sh += '<span class="font-medium italic">' + sp + '</span>';
+        sh += '</div>';
+      }
+      sh += '</div></div>';
+      speciesSection.innerHTML = sh;
+    } else {
+      speciesSection.innerHTML = '';
+    }
+  }
 
   var mh = '';
   var ms = R.milestones || [];
@@ -665,6 +744,87 @@ function render() {
   }, 200);
 }
 
+/* ---- MAP ---- */
+var _map = null;
+
+function initCorridorMap(record) {
+  var c = record.connectivity || {};
+  var lat = c.lat;
+  var lng = c.lng;
+
+  if (!lat || !lng) {
+    document.getElementById('corridorMap').innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;opacity:.4;font-size:.75rem">No coordinates in data</div>';
+    return;
+  }
+
+  if (_map) {
+    _map.remove();
+    _map = null;
+  }
+
+  _map = L.map('corridorMap', {
+    center: [lat, lng],
+    zoom: 14,
+    zoomControl: true,
+    scrollWheelZoom: false,
+    attributionControl: false
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd'
+  }).addTo(_map);
+
+  /* Collect all bounds from the start */
+  var bounds = [[lat, lng]];
+
+  /* Primary garden marker */
+  var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [60,60] });
+  var primary = L.marker([lat, lng], { icon: regIcon }).addTo(_map);
+  primary.bindPopup(
+    '<strong>' + (record.garden_name || 'This garden') + '</strong><br>' +
+    (record.garden_id || '') + '<br>' +
+    '<span style="color:#7a9e5f">Score: ' + (record._score || '--') + '</span>'
+  );
+
+  /* Park marker */
+  if (c.adjacent_park && c.park_lat && c.park_lng) {
+    bounds.push([c.park_lat, c.park_lng]);
+    var parkIcon = L.divIcon({ className: 'park-marker', iconSize: [50,50] });
+    var park = L.marker([c.park_lat, c.park_lng], { icon: parkIcon }).addTo(_map);
+    park.bindPopup('<strong>' + (c.park_name || 'Adjacent park') + '</strong>');
+    L.polyline([[lat, lng], [c.park_lat, c.park_lng]], {
+      color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.6
+    }).addTo(_map);
+  }
+
+  /* Adjacent registered gardens */
+  var adj = c.adjacent_registered_gardens || [];
+
+  for (var i = 0; i < adj.length; i++) {
+    var g = adj[i];
+    if (!g.lat || !g.lng) continue;
+    bounds.push([g.lat, g.lng]);
+    var adjIcon = L.divIcon({ className: 'adj-marker', iconSize: [12,12] });
+    var adjMarker = L.marker([g.lat, g.lng], { icon: adjIcon }).addTo(_map);
+    adjMarker.bindPopup(
+      '<strong>' + (g.name || g.id) + '</strong><br>' +
+      g.id + '<br>' +
+      g.distance_m + 'm ' + (g.direction || '')
+    );
+    /* Dashed line to adjacent */
+    L.polyline([[lat, lng], [g.lat, g.lng]], {
+      color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.7
+    }).addTo(_map);
+  }
+
+  /* Fit bounds if multiple points */
+  if (bounds.length > 1) {
+    _map.fitBounds(bounds, { padding: [50, 50] });
+  }
+
+  /* Invalidate size after render to fix tile loading */
+  setTimeout(function() { _map.invalidateSize(); }, 100);
+}
 
 /* ---- BOOT ---- */
 var st = localStorage.getItem('reg-theme');
@@ -676,7 +836,7 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
 });
 
-fetch('/data/vasilija.json')
+fetch('/data/arundel.json')
   .then(function(r) {
     if (!r.ok) { throw new Error('HTTP ' + r.status); }
     return r.json();
@@ -689,7 +849,7 @@ fetch('/data/vasilija.json')
     console.error('Could not load garden data:', err);
     document.getElementById('heroName').textContent = 'Data unavailable';
     document.getElementById('heroScore').textContent = '--';
-    document.getElementById('heroLevel').textContent = 'Check /data/vasilija.json';
+    document.getElementById('heroLevel').textContent = 'Check /data/arundel.json';
   });
 </script>
 </body>

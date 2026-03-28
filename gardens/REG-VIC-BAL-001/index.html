@@ -66,6 +66,7 @@
       <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
       <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
       <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
+      <a href="#species" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
       <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
     </nav>
     <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Theme</button>
@@ -215,6 +216,14 @@
           <dl class="space-y-3 text-xs" id="gardenFacts"></dl>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="species" class="stagger">
+    <div class="section-label mb-1">Documented Flora</div>
+    <h2 class="font-serif text-4xl mb-6">Species List</h2>
+    <div id="speciesSection">
+      <!-- Populated by render() if species_list exists in JSON -->
     </div>
   </section>
 
@@ -548,7 +557,7 @@ function render() {
   html('signalGridPrimary',
     '<div class="signal-cell"><div class="section-label mb-2">EVC</div><div class="text-xs font-medium">' + R.evc.name + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + R.evc.code + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Canopy Cover</div><div class="text-xl font-light">' + b.canopy_cover_pct_current + '<span class="text-sm">%</span></div><div class="text-xs mt-1">' + dta(b.canopy_cover_pct_current, b.canopy_cover_pct_baseline) + '</div></div>' +
-    '<div class="signal-cell"><div class="section-label mb-2">Indigenous Species</div><div class="text-xl font-light">' + b.indigenous_species_current + '</div><div class="text-xs mt-1">' + dta(b.indigenous_species_current, b.indigenous_species_baseline) + '</div></div>' +
+    '<div class="signal-cell"><div class="section-label mb-2">Indigenous Species</div><div class="text-xl font-light"><a href="#species" style="text-decoration:none;color:inherit">' + b.indigenous_species_current + '</a></div><div class="text-xs mt-1">' + dta(b.indigenous_species_current, b.indigenous_species_baseline) + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Structural Layers</div><div class="text-xl font-light">' + b.structural_layers_current + '</div><div class="text-xs mt-1">' + dta(b.structural_layers_current, b.structural_layers_baseline) + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Soil Health</div><div class="text-xl font-light">' + sw.soil_health_score + '<span class="text-sm">/5</span></div><div class="text-xs mt-1">' + dta(sw.soil_health_score, sw.soil_health_baseline) + '</div></div>' +
     '<div class="signal-cell"><div class="section-label mb-2">Water Function</div><div class="text-xl font-light">' + sw.water_function_score + '<span class="text-sm">/5</span></div><div class="text-xs mt-1">' + dta(sw.water_function_score, sw.water_function_baseline) + '</div></div>'
@@ -634,6 +643,27 @@ function render() {
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Method</dt><dd class="font-medium text-right">' + h.planting_method + '</dd></div>' +
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Designed by</dt><dd class="font-medium text-right">' + R.designer + '</dd></div>'
   );
+
+  /* Species list */
+  var speciesSection = document.getElementById('speciesSection');
+  var sl = (R.biodiversity && R.biodiversity.species_list) || [];
+  if (speciesSection) {
+    if (sl.length > 0) {
+      var sh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">';
+      sh += '<div class="section-label mb-4">' + sl.length + ' documented species</div>';
+      sh += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.5rem 2rem">';
+      for (var si = 0; si < sl.length; si++) {
+        var sp = sl[si];
+        sh += '<div class="text-xs py-2 border-b border-rl dark:border-rdl">';
+        sh += '<span class="font-medium italic">' + sp + '</span>';
+        sh += '</div>';
+      }
+      sh += '</div></div>';
+      speciesSection.innerHTML = sh;
+    } else {
+      speciesSection.innerHTML = '';
+    }
+  }
 
   var mh = '';
   var ms = R.milestones || [];
