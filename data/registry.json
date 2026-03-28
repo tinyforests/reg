@@ -63,7 +63,7 @@
     },
     {
       "garden_id": "ER-VIC-BAL-001",
-      "garden_name": "Vasilija",
+      "garden_name": "Parring",
       "type": "Connected Habitat Landscape",
       "suburb": "Balwyn",
       "state": "VIC",
@@ -83,7 +83,7 @@
         "full_record"
       ],
       "profile_url": "/gardens/REG-VIC-BAL-001/index.html",
-      "data_file": "data/vasilija.json"
+      "data_file": "data/parring.json"
     }
   ]
 }
