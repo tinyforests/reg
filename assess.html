@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry -- Assessment</title>
+  <meta name="description" content="Live assessment controller for Ecological Registry gardens." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans:  ['"IBM Plex Sans"', "sans-serif"],
+            mono:  ['"IBM Plex Mono"', "monospace"],
+          },
+          colors: {
+            rg: "#3d4535", rb: "#fff0dc", rs: "#f7ead6",
+            rl: "#d7ccb9", rdp: "#485141", rdl: "rgba(255,240,220,0.12)",
+            signal: "#7a9e5f"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * { border-radius: 0 !important; }
+    body { transition: background 0.3s, color 0.3s; }
+    .section-label { font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; opacity:.5; }
+    .bar-fill { transition: width 700ms cubic-bezier(0.16,1,0.3,1); }
+
+    /* Form inputs */
+    input[type="number"],
+    input[type="text"],
+    select {
+      background: transparent;
+      border: 1px solid #d7ccb9;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+      width: 100%;
+      color: inherit;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .dark input[type="number"],
+    .dark input[type="text"],
+    .dark select {
+      border-color: rgba(255,240,220,0.12);
+      background: rgba(255,240,220,0.04);
+    }
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #7a9e5f;
+    }
+    select option { background: #3d4535; color: #fff0dc; }
+
+    /* Checkbox custom */
+    input[type="checkbox"] {
+      width: 1rem; height: 1rem;
+      accent-color: #7a9e5f;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    /* Pillar tabs */
+    .pillar-tab { cursor: pointer; transition: all 0.15s; }
+    .pillar-tab.active { background: #3d4535; color: #fff0dc; }
+    .dark .pillar-tab.active { background: #fff0dc; color: #3d4535; }
+    .pillar-panel { display: none; }
+    .pillar-panel.active { display: block; }
+
+    /* Score ring */
+    .score-ring {
+      width: 80px; height: 80px;
+      border: 3px solid currentColor;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Delta */
+    .delta-up   { color: #7a9e5f; font-weight: 600; font-size: 0.7rem; }
+    .delta-same { opacity: 0.4; font-size: 0.7rem; }
+    /* Map styles */
+    .leaflet-tile-pane {
+      filter: grayscale(0.3) sepia(0.15) hue-rotate(60deg) brightness(0.97);
+    }
+    .map-preview { height: 240px; width: 100%; z-index:1; }
+    .leaflet-container { font-family: "IBM Plex Sans", sans-serif; font-size: 11px; }
+    .leaflet-div-icon { background:transparent !important; border:none !important; }
+    .leaflet-popup-content-wrapper { border-radius:0 !important; border:1px solid #d7ccb9; box-shadow:none; font-size:11px; }
+    .leaflet-popup-tip { display:none; }
+    .leaflet-control-zoom a { border-radius:0 !important; }
+    .map-search-btn { border:1px solid #d7ccb9; background:transparent; padding:4px 10px; font-size:11px; cursor:pointer; white-space:nowrap; color:inherit; font-family:inherit; }
+    .dark .map-search-btn { border-color:rgba(255,240,220,.12); }
+    .map-search-btn:hover { opacity:.7; }
+    .coord-display { font-family:"IBM Plex Mono",monospace; font-size:10px; opacity:.5; margin-top:4px; min-height:14px; }
+    .map-search-wrap { display:flex; gap:4px; margin-bottom:6px; }
+    .map-search-wrap input { flex:1; }
+    .map-pin-green { background:rgba(122,158,95,.35); border:2px solid #7a9e5f; border-radius:50% !important; width:52px !important; height:52px !important; margin-left:-26px !important; margin-top:-26px !important; }
+    .map-pin-dark  { background:rgba(61,69,53,.2); border:2px solid rgba(61,69,53,.5); border-radius:50% !important; width:44px !important; height:44px !important; margin-left:-22px !important; margin-top:-22px !important; }
+    .map-pin-adj   { background:rgba(122,158,95,.2); border:2px solid rgba(122,158,95,.6); border-radius:50% !important; width:44px !important; height:44px !important; margin-left:-22px !important; margin-top:-22px !important; }
+  </style>
+</head>
+
+<body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b border-rl bg-rb/90 backdrop-blur dark:border-rdl dark:bg-rg/90">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <div class="grid h-9 w-9 place-items-center bg-rg text-rb dark:bg-rb dark:text-rg font-semibold text-sm">ER</div>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-60 font-mono" id="headerMeta">Assessment</div>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <button id="resetBtn" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80">Reset</button>
+        <button id="copyBtn" class="bg-rg text-rb dark:bg-rb dark:text-rg px-4 py-1.5 text-xs font-medium hover:opacity-90">Copy JSON</button>
+        <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono ml-2">o</button>
+      </div>
+    </div>
+  </header>
+
+  <div style="background:rgba(255,240,220,.06);border-bottom:1px solid #d7ccb9" class="dark:border-rdl">
+  <div class="mx-auto max-w-7xl px-4 py-3 flex items-center gap-3 flex-wrap">
+    <div class="section-label" style="opacity:.5;white-space:nowrap">Garden</div>
+    <select id="gardenSelector" style="background:transparent;border:1px solid #d7ccb9;padding:.35rem .75rem;font-size:.8rem;color:inherit;font-family:inherit;min-width:220px" class="dark:border-rdl">
+      <option value="">-- Select garden --</option>
+      <option value="__new__">+ New garden</option>
+    </select>
+    <div id="gardenSelectorStatus" class="text-xs opacity-50"></div>
+  </div>
+</div>
+
+<main class="mx-auto max-w-7xl px-4 py-6 md:py-8">
+    <div class="grid lg:grid-cols-12 gap-6">
+
+      <!-- -- LEFT: Controller -- -->
+      <div class="lg:col-span-7 space-y-4">
+
+        <!-- Garden identity -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-4">Garden Identity</div>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <div class="opacity-50 mb-1">Garden Name</div>
+              <input type="text" id="f_garden_name" placeholder="e.g. Arundel" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Garden ID</div>
+              <input type="text" id="f_garden_id" placeholder="ER-VIC-SH-ARU-0001" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Suburb</div>
+              <input type="text" id="f_suburb" placeholder="Surrey Hills" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">State</div>
+              <input type="text" id="f_state" placeholder="VIC" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Stewards</div>
+              <input type="text" id="f_stewards" placeholder="Andrew & Elizabeth" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Area (m?)</div>
+              <input type="number" id="f_area_sqm" placeholder="180" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">EVC Name</div>
+              <input type="text" id="f_evc_name" placeholder="Grassy Woodland" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">EVC Code</div>
+              <input type="text" id="f_evc_code" placeholder="EVC 175" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Assessment Date</div>
+              <input type="text" id="f_assessment_date" placeholder="Mar 2026" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Baseline Date</div>
+              <input type="text" id="f_baseline_date" placeholder="Feb 2026" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Pillar tabs -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp">
+          <!-- Tab bar -->
+          <div class="flex border-b border-rl dark:border-rdl text-xs overflow-x-auto">
+            <button class="pillar-tab active px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="biodiversity">Biodiversity</button>
+            <button class="pillar-tab px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="soil_water">Soil & Water</button>
+            <button class="pillar-tab px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="habitat">Habitat</button>
+            <button class="pillar-tab px-4 py-3 border-r border-rl dark:border-rdl whitespace-nowrap" data-tab="connectivity">Connectivity</button>
+            <button class="pillar-tab px-4 py-3 whitespace-nowrap" data-tab="evidence">Evidence</button>
+          </div>
+
+          <!-- Pillar: Biodiversity -->
+          <div class="pillar-panel active p-5" id="panel_biodiversity">
+            <div class="section-label mb-4">Biodiversity Structure -- 25 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+
+              <div>
+                <div class="opacity-50 mb-1">Indigenous species -- current</div>
+                <input type="number" id="f_bio_species_current" min="0" placeholder="23" />
+                <div class="delta-up mt-1" id="d_bio_species">--</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Indigenous species -- baseline</div>
+                <input type="number" id="f_bio_species_baseline" min="0" placeholder="8" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Indigenous species -- target</div>
+                <input type="number" id="f_bio_species_target" min="0" placeholder="40" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Structural layers -- current (1-5)</div>
+                <input type="number" id="f_bio_layers_current" min="0" max="5" placeholder="4" />
+                <div class="delta-up mt-1" id="d_bio_layers">--</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Structural layers -- baseline</div>
+                <input type="number" id="f_bio_layers_baseline" min="0" max="5" placeholder="2" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Canopy cover % -- current</div>
+                <input type="number" id="f_bio_canopy_current" min="0" max="100" placeholder="34" />
+                <div class="delta-up mt-1" id="d_bio_canopy">--</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Canopy cover % -- baseline</div>
+                <input type="number" id="f_bio_canopy_baseline" min="0" max="100" placeholder="12" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Canopy cover % -- target</div>
+                <input type="number" id="f_bio_canopy_target" min="0" max="100" placeholder="55" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Weed pressure -- current</div>
+                <select id="f_bio_weed_pressure">
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low" selected>Low</option>
+                </select>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Weed pressure -- baseline</div>
+                <select id="f_bio_weed_baseline">
+                  <option value="high" selected>High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" id="f_bio_dominant" />
+                  <span>Indigenous dominant (>70% indigenous by species)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar: Soil & Water -->
+          <div class="pillar-panel p-5" id="panel_soil_water">
+            <div class="section-label mb-4">Soil & Water Function -- 20 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="opacity-50 mb-1">Soil health -- current (1-5)</div>
+                <input type="number" id="f_sw_soil_current" min="0" max="5" placeholder="3" />
+                <div class="delta-up mt-1" id="d_sw_soil">--</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Soil health -- baseline (1-5)</div>
+                <input type="number" id="f_sw_soil_baseline" min="0" max="5" placeholder="2" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Water function -- current (1-5)</div>
+                <input type="number" id="f_sw_water_current" min="0" max="5" placeholder="2" />
+                <div class="delta-up mt-1" id="d_sw_water">--</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Water function -- baseline (1-5)</div>
+                <input type="number" id="f_sw_water_baseline" min="0" max="5" placeholder="2" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Mulch depth (mm)</div>
+                <input type="number" id="f_sw_mulch" min="0" placeholder="80" />
+              </div>
+              <div class="sm:col-span-2 space-y-2 mt-2">
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_sw_rainwater" /><span>Rainwater system installed (+2 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_sw_basin" /><span>Moisture basin installed (+2 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_sw_swale" /><span>Swale or infiltration system (+1 pt)</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar: Habitat -->
+          <div class="pillar-panel p-5" id="panel_habitat">
+            <div class="section-label mb-4">Habitat Complexity -- 20 pts max</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="opacity-50 mb-1">Habitat nodes -- current</div>
+                <input type="number" id="f_hab_nodes_current" min="0" placeholder="3" />
+                <div class="delta-up mt-1" id="d_hab_nodes">--</div>
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Habitat nodes -- baseline</div>
+                <input type="number" id="f_hab_nodes_baseline" min="0" placeholder="0" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Verified fauna sightings</div>
+                <input type="number" id="f_hab_fauna_count" min="0" placeholder="1" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Fauna species (first sighting)</div>
+                <input type="text" id="f_hab_fauna_species" placeholder="Burrowing frog" />
+              </div>
+              <div>
+                <div class="opacity-50 mb-1">Planting method</div>
+                <input type="text" id="f_hab_method" placeholder="Miyawaki-style layering" />
+              </div>
+              <div class="sm:col-span-2 space-y-2 mt-2">
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_logs" /><span>Embedded logs (+3 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_rocks" /><span>Rock refuges (+2 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_water" /><span>Water feature (+3 pts)</span></label>
+                <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_hab_nest" /><span>Nest boxes (+2 pts)</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar: Connectivity -->
+          <div class="pillar-panel p-5" id="panel_connectivity">
+            <div class="section-label mb-4">Connectivity -- 20 pts max</div>
+            <div class="space-y-6 text-xs">
+
+              <!-- Garden position -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="section-label mb-3">Garden Position</div>
+                <div class="map-search-wrap">
+                  <input type="text" id="f_con_garden_address" placeholder="Search address or postcode..." />
+                  <button class="map-search-btn" onclick="geocodeAddress('garden')">Locate</button>
+                </div>
+                <div class="map-preview" id="map_garden"></div>
+                <div class="coord-display" id="coord_garden">Click map or search to place pin</div>
+                <input type="hidden" id="f_con_lat" />
+                <input type="hidden" id="f_con_lng" />
+              </div>
+
+              <!-- Park position -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="section-label mb-3">Adjacent Park or Reserve</div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <div class="opacity-50 mb-1">Park name</div>
+                    <input type="text" id="f_con_park_name" placeholder="Surrey Hills Reserve" />
+                  </div>
+                  <div>
+                    <div class="opacity-50 mb-1">Distance (m)</div>
+                    <input type="number" id="f_con_park_dist" min="0" placeholder="45" />
+                  </div>
+                </div>
+                <div class="map-search-wrap">
+                  <input type="text" id="f_con_park_address" placeholder="Search park address..." />
+                  <button class="map-search-btn" onclick="geocodeAddress('park')">Locate</button>
+                </div>
+                <div class="map-preview" id="map_park"></div>
+                <div class="coord-display" id="coord_park">Click map or search to place pin</div>
+                <input type="hidden" id="f_con_park_lat" />
+                <input type="hidden" id="f_con_park_lng" />
+                <div class="mt-3">
+                  <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_park" /><span>Adjacent park confirmed</span></label>
+                </div>
+              </div>
+
+              <!-- Adjacent registered gardens - dynamic list -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="section-label">Adjacent Registered Gardens</div>
+                  <button class="map-search-btn" onclick="addAdjacentGarden()">+ Add garden</button>
+                </div>
+                <div id="adjGardenList" class="space-y-4"></div>
+              </div>
+
+              <!-- Cluster + corridor -->
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <div class="opacity-50 mb-1">Cluster name</div>
+                  <input type="text" id="f_con_cluster_name" placeholder="Surrey Hills" />
+                </div>
+                <div>
+                  <div class="opacity-50 mb-1">Cluster area (ha)</div>
+                  <input type="number" id="f_con_cluster_ha" min="0" step="0.1" placeholder="2.1" />
+                </div>
+                <div class="col-span-2 mt-1">
+                  <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_corridor" /><span>Corridor node confirmed (+5 pts)</span></label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Pillar: Evidence -->
+          <div class="pillar-panel p-5" id="panel_evidence">
+            <div class="section-label mb-4">Evidence & Verification -- 15 pts max</div>
+            <div class="text-xs space-y-3">
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_photos" /><span>Photos documented (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_notes" /><span>Field notes recorded (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_species_list" /><span>Species list complete (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_fauna_record" /><span>Fauna record included (+2 pts)</span></label>
+              <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_ev_professional" /><span>Professional assessment (+3 pts)</span></label>
+
+              <div class="mt-4">
+                <div class="opacity-50 mb-2">Verification level</div>
+                <select id="f_ev_verification">
+                  <option value="self_reported">Self Reported</option>
+                  <option value="photo_verified">Photo Verified (+1 pt)</option>
+                  <option value="site_visit">Site Visit (+3 pts)</option>
+                  <option value="gardener_and_son_verified">G&S Verified (+4 pts)</option>
+                </select>
+              </div>
+              <div class="mt-2">
+                <div class="opacity-50 mb-1">Assessor name</div>
+                <input type="text" id="f_ev_assessor" placeholder="Gardener & Son" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badge preview -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Live Badge Preview</div>
+          <div id="badgePreview" class="flex flex-wrap gap-2 min-h-[2rem]">
+            <span class="text-xs opacity-40">Badges will appear here as thresholds are met</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- -- RIGHT: Live score + JSON -- -->
+      <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-20 lg:self-start">
+
+        <!-- Live score -->
+        <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-6">
+          <div class="section-label mb-4" style="color:inherit;opacity:0.6">Live Score</div>
+          <div class="flex items-end gap-4 mb-4">
+            <div class="font-serif text-7xl leading-none" id="liveScore">--</div>
+            <div class="pb-1 text-sm opacity-80" id="liveRating">--</div>
+          </div>
+          <div class="h-1.5 bg-rb/20 dark:bg-rg/20 mb-2">
+            <div class="bar-fill h-full bg-rb dark:bg-rg" id="liveScoreBar" style="width:0%"></div>
+          </div>
+          <div class="flex justify-between text-xs opacity-50">
+            <span>Baseline <span id="liveBaseline">--</span></span>
+            <span>Target 82</span>
+          </div>
+        </div>
+
+        <!-- Category breakdown -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-4">Pillar Breakdown</div>
+          <div class="space-y-3" id="categoryBars">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Biggest Opportunities</div>
+          <div class="space-y-2 text-xs" id="recommendations">--</div>
+        </div>
+
+        <!-- JSON output -->
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div class="section-label">Output JSON</div>
+            <button id="copyBtn2" class="text-xs border border-rl dark:border-rdl px-3 py-1 hover:opacity-80">Copy</button>
+          </div>
+          <pre id="jsonOutput" class="text-[10px] font-mono leading-relaxed opacity-80 whitespace-pre-wrap break-words max-h-80 overflow-y-auto"></pre>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+<script>
+/* ================================================================
+   Ecological Registry - Assessment Controller
+   Clean ES5 - no arrows, no spread, no const/let, no optional chaining
+   ================================================================ */
+
+/* ---- SCORING ENGINE ---- */
+function scoreEcologicalRegistry(r) {
+  var bio = scoreBio(r);
+  var sw  = scoreSW(r);
+  var hab = scoreHab(r);
+  var con = scoreCon(r);
+  var ev  = scoreEv(r);
+  var total = bio.s + sw.s + hab.s + con.s + ev.s;
+  return {
+    total: total,
+    level: ratingFromScore(total),
+    verificationLabel: verLabel(r.evidence && r.evidence.verification_level),
+    nextLevel: nextLvl(total),
+    recommendations: buildRecs(r),
+    baselineScore: _scoreRaw_baseline(r),
+    categories: [
+      { label: 'Biodiversity Structure',  score: bio.s, max: 25, notes: bio.n },
+      { label: 'Soil & Water Function',   score: sw.s,  max: 20, notes: sw.n  },
+      { label: 'Habitat Complexity',      score: hab.s, max: 20, notes: hab.n },
+      { label: 'Connectivity',            score: con.s, max: 20, notes: con.n },
+      { label: 'Evidence & Verification', score: ev.s,  max: 15, notes: ev.n  }
+    ]
+  };
+}
+
+/* Separate raw scorer for baseline - avoids infinite recursion */
+function _scoreRaw(r) {
+  return scoreBio(r).s + scoreSW(r).s + scoreHab(r).s + scoreCon(r).s + scoreEv(r).s;
+}
+
+function _scoreRaw_baseline(record) {
+  var b  = record.biodiversity || {};
+  var sw = record.soil_water   || {};
+  var h  = record.habitat      || {};
+  var c  = record.connectivity || {};
+  var br = {
+    biodiversity: { indigenous_species_current: b.indigenous_species_baseline || 0, indigenous_dominant: false, structural_layers_current: b.structural_layers_baseline || 0, canopy_cover_pct_current: b.canopy_cover_pct_baseline || 0 },
+    soil_water:   { soil_health_score: sw.soil_health_baseline || 0, water_function_score: sw.water_function_baseline || 0, has_rainwater_system: false, has_moisture_basin: false, has_swale: false },
+    habitat:      { habitat_nodes: h.habitat_nodes_baseline || 0, has_embedded_logs: false, has_rock_refuges: false, has_water_feature: false, has_nest_boxes: false, fauna_sightings: [] },
+    connectivity: { adjacent_park: c.adjacent_park || false, park_distance_m: c.park_distance_m || 999, adjacent_registered_gardens: [], corridor_node_confirmed: false, cluster_area_ha: 0 },
+    evidence:     { has_photos: false, has_field_notes: false, has_professional_assessment: false, has_fauna_record: false, has_species_list: false, verification_level: 'self_reported' }
+  };
+  return _scoreRaw(br);
+}
+
+function scoreBio(r) {
+  var b = r.biodiversity || {}; var s = 0; var n = [];
+  var sp = b.indigenous_species_current || 0;
+  if (sp >= 30) { s += 10; n.push('30+ species'); }
+  else if (sp >= 20) { s += 8;  n.push('20-29 species'); }
+  else if (sp >= 12) { s += 6;  n.push('12-19 species'); }
+  else if (sp >= 6)  { s += 4;  n.push('6-11 species'); }
+  else if (sp >= 1)  { s += 2;  n.push('1-5 species'); }
+  if (b.indigenous_dominant) { s += 4; n.push('Indigenous dominant'); }
+  var ly = b.structural_layers_current || 0;
+  if (ly >= 5) { s += 6; } else if (ly >= 4) { s += 5; } else if (ly >= 3) { s += 3; } else if (ly >= 2) { s += 1; }
+  if (ly > 0) { n.push(ly + ' layers'); }
+  var ca = b.canopy_cover_pct_current || 0;
+  if (ca >= 50) { s += 5; } else if (ca >= 30) { s += 4; } else if (ca >= 15) { s += 2; } else if (ca >= 5) { s += 1; }
+  if (ca > 0) { n.push(ca + '% canopy'); }
+  return { s: Math.min(s, 25), n: n };
+}
+
+function scoreSW(r) {
+  var sw = r.soil_water || {}; var s = 0; var n = [];
+  var soil = sw.soil_health_score || 0;
+  s += Math.round((soil / 5) * 8);
+  if (soil > 0) { n.push('Soil ' + soil + '/5'); }
+  var water = sw.water_function_score || 0;
+  s += Math.round((water / 5) * 7);
+  if (water > 0) { n.push('Water ' + water + '/5'); }
+  if (sw.has_rainwater_system) { s += 2; n.push('Rainwater'); }
+  if (sw.has_moisture_basin)   { s += 2; n.push('Basin'); }
+  if (sw.has_swale)            { s += 1; n.push('Swale'); }
+  return { s: Math.min(s, 20), n: n };
+}
+
+function scoreHab(r) {
+  var h = r.habitat || {}; var s = 0; var n = [];
+  var nd = h.habitat_nodes || 0;
+  if (nd >= 5) { s += 6; } else if (nd >= 3) { s += 4; } else if (nd >= 1) { s += 2; }
+  if (nd > 0) { n.push(nd + ' nodes'); }
+  if (h.has_embedded_logs) { s += 3; n.push('Logs'); }
+  if (h.has_rock_refuges)  { s += 2; n.push('Rocks'); }
+  if (h.has_water_feature) { s += 3; n.push('Water feature'); }
+  if (h.has_nest_boxes)    { s += 2; n.push('Nest boxes'); }
+  var fs = h.fauna_sightings || []; var fc = 0;
+  for (var i = 0; i < fs.length; i++) { if (fs[i].verified) { fc++; } }
+  if (fc >= 3) { s += 4; n.push('3+ fauna'); } else if (fc >= 1) { s += 3; n.push(fc + ' fauna'); }
+  return { s: Math.min(s, 20), n: n };
+}
+
+function scoreCon(r) {
+  var c = r.connectivity || {}; var s = 0; var n = [];
+  if (c.adjacent_park) {
+    var d = c.park_distance_m || 999;
+    if (d <= 50) { s += 6; n.push('Park <50m'); }
+    else if (d <= 150) { s += 4; n.push('Park <150m'); }
+    else if (d <= 300) { s += 2; n.push('Park <300m'); }
+  }
+  var al = c.adjacent_registered_gardens || []; var ac = 0;
+  for (var i = 0; i < al.length; i++) { if (al[i].verified) { ac++; } }
+  if (ac >= 3) { s += 6; n.push('3+ adjacent'); }
+  else if (ac >= 2) { s += 4; n.push('2 adjacent'); }
+  else if (ac >= 1) { s += 3; n.push('1 adjacent'); }
+  if (c.corridor_node_confirmed) { s += 5; n.push('Corridor node'); }
+  var ha = c.cluster_area_ha || 0;
+  if (ha >= 2) { s += 3; n.push(ha + 'ha cluster'); } else if (ha >= 1) { s += 1; n.push('Cluster forming'); }
+  return { s: Math.min(s, 20), n: n };
+}
+
+function scoreEv(r) {
+  var e = r.evidence || {}; var s = 0; var n = [];
+  if (e.has_photos)                  { s += 2; n.push('Photos'); }
+  if (e.has_field_notes)             { s += 2; n.push('Field notes'); }
+  if (e.has_species_list)            { s += 2; n.push('Species list'); }
+  if (e.has_fauna_record)            { s += 2; n.push('Fauna record'); }
+  if (e.has_professional_assessment) { s += 3; n.push('Professional'); }
+  var vl = e.verification_level || '';
+  if (vl === 'gardener_and_son_verified') { s += 4; n.push('G&S Verified'); }
+  else if (vl === 'site_visit')           { s += 3; n.push('Site visit'); }
+  else if (vl === 'photo_verified')       { s += 1; n.push('Photo verified'); }
+  return { s: Math.min(s, 15), n: n };
+}
+
+function ratingFromScore(s) {
+  if (s >= 91) return 'Urban Biodiversity Node';
+  if (s >= 81) return 'High Habitat Garden';
+  if (s >= 61) return 'Registered Ecological Garden';
+  if (s >= 41) return 'Ecological Garden';
+  if (s >= 21) return 'Habitat Garden';
+  return 'Basic Garden';
+}
+
+function nextLvl(score) {
+  var levels = [
+    { min: 91, name: 'Urban Biodiversity Node' },
+    { min: 81, name: 'High Habitat Garden' },
+    { min: 61, name: 'Registered Ecological Garden' },
+    { min: 41, name: 'Ecological Garden' },
+    { min: 21, name: 'Habitat Garden' }
+  ];
+  for (var i = 0; i < levels.length; i++) {
+    if (score < levels[i].min) {
+      return { name: levels[i].name, target: levels[i].min, gap: levels[i].min - score, progress: Math.round((score / levels[i].min) * 100) };
+    }
+  }
+  return { name: 'Maximum Level Achieved', target: 100, gap: 0, progress: 100 };
+}
+
+function verLabel(level) {
+  if (level === 'gardener_and_son_verified') return 'G&S Verified';
+  if (level === 'site_visit')   return 'Site Visit';
+  if (level === 'photo_verified') return 'Photo Verified';
+  return 'Self Reported';
+}
+
+function buildRecs(r) {
+  var out = [];
+  var sw = r.soil_water || {}; var h = r.habitat || {}; var b = r.biodiversity || {}; var c = r.connectivity || {};
+  if (!sw.has_moisture_basin)   out.push({ action: 'Install seasonal moisture basin', points: 6 });
+  if (!h.has_water_feature)     out.push({ action: 'Add a small water feature',       points: 3 });
+  if (!sw.has_rainwater_system) out.push({ action: 'Add rainwater collection system', points: 2 });
+  if (!h.has_rock_refuges)      out.push({ action: 'Add rock refuge zones',           points: 2 });
+  if (!h.has_nest_boxes)        out.push({ action: 'Install nest boxes',              points: 2 });
+  var gap = (b.indigenous_species_target || 40) - (b.indigenous_species_current || 0);
+  if (gap > 0) out.push({ action: 'Add ' + Math.min(gap, 5) + ' more indigenous species', points: Math.min(gap, 4) });
+  out.sort(function(a, b) { return b.points - a.points; });
+  return out.slice(0, 5);
+}
+
+/* ---- BADGE ENGINE ---- */
+var BDEFS = {
+  indigenous_dominant: 'Indigenous Dominant',
+  species_rich_20:     'Species Rich',
+  species_rich_30:     'Highly Species Rich',
+  full_canopy:         'Canopy Forming',
+  five_layers:         'Five Layer Garden',
+  habitat_builder:     'Habitat Builder',
+  amphibian_active:    'Amphibian Active',
+  pollinator_rich:     'Pollinator Rich',
+  water_wise:          'Water Wise',
+  corridor_node:       'Corridor Node',
+  network_connected:   'Network Connected',
+  gs_verified:         'G&S Verified',
+  site_visit_badge:    'Site Visit',
+  full_record:         'Full Record',
+  fauna_record:        'Fauna Record'
+};
+
+function awardBadges(r) {
+  var b = r.biodiversity || {}; var h = r.habitat || {}; var c = r.connectivity || {}; var e = r.evidence || {}; var sw = r.soil_water || {};
+  var sb = []; var vb = []; var eb = [];
+  if (b.indigenous_dominant)                     sb.push('indigenous_dominant');
+  if ((b.indigenous_species_current || 0) >= 20) sb.push('species_rich_20');
+  if ((b.indigenous_species_current || 0) >= 30) sb.push('species_rich_30');
+  if ((b.canopy_cover_pct_current   || 0) >= 30) sb.push('full_canopy');
+  if ((b.structural_layers_current  || 0) >= 5)  sb.push('five_layers');
+  if ((h.habitat_nodes              || 0) >= 3)  sb.push('habitat_builder');
+  var fs = h.fauna_sightings || []; var fc = 0;
+  for (var i = 0; i < fs.length; i++) { if (fs[i].verified) fc++; }
+  if (fc >= 1) { sb.push('amphibian_active'); eb.push('fauna_record'); }
+  if (fc >= 3) sb.push('pollinator_rich');
+  if (sw.has_rainwater_system && sw.has_moisture_basin) sb.push('water_wise');
+  if (c.corridor_node_confirmed) sb.push('corridor_node');
+  var al = c.adjacent_registered_gardens || []; var ac = 0;
+  for (var j = 0; j < al.length; j++) { if (al[j].verified) ac++; }
+  if (ac >= 2) sb.push('network_connected');
+  if (e.verification_level === 'gardener_and_son_verified') vb.push('gs_verified');
+  if (e.verification_level === 'site_visit')                vb.push('site_visit_badge');
+  if (e.has_photos && e.has_field_notes && e.has_species_list && e.has_fauna_record) eb.push('full_record');
+  return { all: sb.concat(vb).concat(eb), vb: vb };
+}
+
+/* ---- FORM BUILDER ---- */
+function gv(id) { var e = document.getElementById(id); return e ? e.value || '' : ''; }
+function gn(id) { var e = document.getElementById(id); return e ? parseFloat(e.value) || 0 : 0; }
+function gc(id) { var e = document.getElementById(id); return e ? e.checked || false : false; }
+
+function buildRecordFromForm() {
+  var faunaCount = gn('f_hab_fauna_count');
+  var faunaSpecies = gv('f_hab_fauna_species');
+  var fauna_sightings = faunaCount > 0
+    ? [{ species: faunaSpecies || 'Unknown', date: 'Recorded', location: 'Field observation', verified: true }]
+    : [];
+  var adjacent_registered_gardens = getAdjacentGardens();
+  return {
+    garden_id:       gv('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
+    garden_name:     gv('f_garden_name') || 'New Garden',
+    garden_type:     'Ecological Garden',
+    suburb:          gv('f_suburb'),
+    state:           gv('f_state'),
+    assessment_date: gv('f_assessment_date'),
+    baseline_date:   gv('f_baseline_date'),
+    target_score:    82,
+    stewards:        gv('f_stewards'),
+    designer:        'Gardener & Son',
+    area_sqm:        gn('f_area_sqm'),
+    description:     '',
+    evc: { name: gv('f_evc_name'), code: gv('f_evc_code'), bioregion: '', bioregion_code: '' },
+    biodiversity: {
+      indigenous_species_current:  gn('f_bio_species_current'),
+      indigenous_species_baseline: gn('f_bio_species_baseline'),
+      indigenous_species_target:   gn('f_bio_species_target'),
+      indigenous_dominant:         gc('f_bio_dominant'),
+      structural_layers_current:   gn('f_bio_layers_current'),
+      structural_layers_baseline:  gn('f_bio_layers_baseline'),
+      canopy_cover_pct_current:    gn('f_bio_canopy_current'),
+      canopy_cover_pct_baseline:   gn('f_bio_canopy_baseline'),
+      canopy_cover_pct_target:     gn('f_bio_canopy_target'),
+      weed_pressure:               gv('f_bio_weed_pressure'),
+      weed_pressure_baseline:      gv('f_bio_weed_baseline')
+    },
+    soil_water: {
+      soil_health_score:    gn('f_sw_soil_current'),
+      soil_health_baseline: gn('f_sw_soil_baseline'),
+      soil_health_max:      5,
+      water_function_score:    gn('f_sw_water_current'),
+      water_function_baseline: gn('f_sw_water_baseline'),
+      water_function_max:      5,
+      has_rainwater_system: gc('f_sw_rainwater'),
+      has_moisture_basin:   gc('f_sw_basin'),
+      has_swale:            gc('f_sw_swale'),
+      mulch_depth_mm:       gn('f_sw_mulch')
+    },
+    habitat: {
+      habitat_nodes:          gn('f_hab_nodes_current'),
+      habitat_nodes_baseline: gn('f_hab_nodes_baseline'),
+      has_embedded_logs:  gc('f_hab_logs'),
+      has_rock_refuges:   gc('f_hab_rocks'),
+      has_water_feature:  gc('f_hab_water'),
+      has_nest_boxes:     gc('f_hab_nest'),
+      planting_method:    gv('f_hab_method'),
+      fauna_sightings:    fauna_sightings
+    },
+    connectivity: {
+      lat:            parseFloat(gv('f_con_lat'))      || null,
+      lng:            parseFloat(gv('f_con_lng'))      || null,
+      adjacent_park:  gc('f_con_park'),
+      park_name:      gv('f_con_park_name'),
+      park_distance_m: gn('f_con_park_dist'),
+      park_lat:       parseFloat(gv('f_con_park_lat')) || null,
+      park_lng:       parseFloat(gv('f_con_park_lng')) || null,
+      adjacent_registered_gardens: adjacent_registered_gardens,
+      corridor_node_confirmed:  gc('f_con_corridor'),
+      effective_ecological_area_ha: 0,
+      cluster_area_ha:  gn('f_con_cluster_ha'),
+      cluster_name:     gv('f_con_cluster_name')
+    },
+    evidence: {
+      has_photos:                  gc('f_ev_photos'),
+      has_field_notes:             gc('f_ev_notes'),
+      has_species_list:            gc('f_ev_species_list'),
+      has_fauna_record:            gc('f_ev_fauna_record'),
+      has_professional_assessment: gc('f_ev_professional'),
+      verification_level:          gv('f_ev_verification'),
+      verification_label:          verLabel(gv('f_ev_verification')),
+      assessor:                    gv('f_ev_assessor')
+    },
+    milestones: [],
+    activity_log: []
+  };
+}
+
+function populateFormFromRecord(r) {
+  function sv(id, val) { var e = document.getElementById(id); if (e && val !== undefined) e.value = val; }
+  function sc(id, val) { var e = document.getElementById(id); if (e) e.checked = !!val; }
+  sv('f_garden_name',       r.garden_name);
+  sv('f_garden_id',         r.garden_id);
+  sv('f_suburb',            r.suburb);
+  sv('f_state',             r.state);
+  sv('f_stewards',          r.stewards);
+  sv('f_area_sqm',          r.area_sqm);
+  sv('f_evc_name',          r.evc && r.evc.name);
+  sv('f_evc_code',          r.evc && r.evc.code);
+  sv('f_assessment_date',   r.assessment_date);
+  sv('f_baseline_date',     r.baseline_date);
+  var b = r.biodiversity || {};
+  sv('f_bio_species_current',  b.indigenous_species_current);
+  sv('f_bio_species_baseline', b.indigenous_species_baseline);
+  sv('f_bio_species_target',   b.indigenous_species_target);
+  sc('f_bio_dominant',         b.indigenous_dominant);
+  sv('f_bio_layers_current',   b.structural_layers_current);
+  sv('f_bio_layers_baseline',  b.structural_layers_baseline);
+  sv('f_bio_canopy_current',   b.canopy_cover_pct_current);
+  sv('f_bio_canopy_baseline',  b.canopy_cover_pct_baseline);
+  sv('f_bio_canopy_target',    b.canopy_cover_pct_target);
+  sv('f_bio_weed_pressure',    b.weed_pressure);
+  sv('f_bio_weed_baseline',    b.weed_pressure_baseline);
+  var sw = r.soil_water || {};
+  sv('f_sw_soil_current',   sw.soil_health_score);
+  sv('f_sw_soil_baseline',  sw.soil_health_baseline);
+  sv('f_sw_water_current',  sw.water_function_score);
+  sv('f_sw_water_baseline', sw.water_function_baseline);
+  sv('f_sw_mulch',          sw.mulch_depth_mm);
+  sc('f_sw_rainwater',      sw.has_rainwater_system);
+  sc('f_sw_basin',          sw.has_moisture_basin);
+  sc('f_sw_swale',          sw.has_swale);
+  var h = r.habitat || {};
+  sv('f_hab_nodes_current',  h.habitat_nodes);
+  sv('f_hab_nodes_baseline', h.habitat_nodes_baseline);
+  sc('f_hab_logs',   h.has_embedded_logs);
+  sc('f_hab_rocks',  h.has_rock_refuges);
+  sc('f_hab_water',  h.has_water_feature);
+  sc('f_hab_nest',   h.has_nest_boxes);
+  sv('f_hab_method', h.planting_method);
+  var fauna = h.fauna_sightings || [];
+  sv('f_hab_fauna_count',   fauna.length);
+  sv('f_hab_fauna_species', fauna.length > 0 ? fauna[0].species : '');
+  var c = r.connectivity || {};
+  sv('f_con_lat',       c.lat);
+  sv('f_con_lng',       c.lng);
+  sc('f_con_park',      c.adjacent_park);
+  sv('f_con_park_name', c.park_name);
+  sv('f_con_park_dist', c.park_distance_m);
+  sv('f_con_park_lat',  c.park_lat);
+  sv('f_con_park_lng',  c.park_lng);
+  sc('f_con_corridor',  c.corridor_node_confirmed);
+  sv('f_con_cluster_name', c.cluster_name);
+  sv('f_con_cluster_ha',   c.cluster_area_ha);
+  var adj = c.adjacent_registered_gardens || [];
+  // Clear and repopulate adjacent garden list
+  var adjContainer = document.getElementById('adjGardenList');
+  if (adjContainer) { adjContainer.innerHTML = ''; _adjCount = 0; }
+  for (var ai = 0; ai < adj.length; ai++) { addAdjacentGarden(adj[ai]); }
+  var e = r.evidence || {};
+  sc('f_ev_photos',       e.has_photos);
+  sc('f_ev_notes',        e.has_field_notes);
+  sc('f_ev_species_list', e.has_species_list);
+  sc('f_ev_fauna_record', e.has_fauna_record);
+  sc('f_ev_professional', e.has_professional_assessment);
+  sv('f_ev_verification', e.verification_level);
+  sv('f_ev_assessor',     e.assessor);
+}
+
+/* ---- DELTAS ---- */
+function updateDeltas() {
+  function d(cur, base, id) {
+    var el = document.getElementById(id); if (!el) return;
+    var c = parseFloat(document.getElementById(cur) ? document.getElementById(cur).value : 0) || 0;
+    var b = parseFloat(document.getElementById(base) ? document.getElementById(base).value : 0) || 0;
+    if (c > b)      el.innerHTML = '<span class="delta-up">+' + (c - b) + ' from ' + b + '</span>';
+    else if (c < b) el.textContent = 'from ' + b;
+    else            el.innerHTML = '<span class="delta-same">No change</span>';
+  }
+  d('f_bio_species_current', 'f_bio_species_baseline', 'd_bio_species');
+  d('f_bio_layers_current',  'f_bio_layers_baseline',  'd_bio_layers');
+  d('f_bio_canopy_current',  'f_bio_canopy_baseline',  'd_bio_canopy');
+  d('f_sw_soil_current',     'f_sw_soil_baseline',     'd_sw_soil');
+  d('f_sw_water_current',    'f_sw_water_baseline',    'd_sw_water');
+  d('f_hab_nodes_current',   'f_hab_nodes_baseline',   'd_hab_nodes');
+}
+
+/* ---- RENDER ---- */
+function txt(id, v) { var e = document.getElementById(id); if (e) e.textContent = String(v); }
+function wid(id, p) { var e = document.getElementById(id); if (e) e.style.width = p + '%'; }
+
+function renderLive() {
+  var record = buildRecordFromForm();
+  var result = scoreEcologicalRegistry(record);
+  var badges = awardBadges(record);
+
+  txt('liveScore',   result.total);
+  txt('liveRating',  result.level);
+  txt('liveBaseline', result.baselineScore);
+  wid('liveScoreBar', result.total);
+  txt('headerMeta', (record.garden_name || 'New Garden') + ' - ' + (record.garden_id || '--'));
+
+  /* Category bars */
+  var ch = '';
+  for (var ci = 0; ci < result.categories.length; ci++) {
+    var cat = result.categories[ci];
+    var pct = Math.round(cat.score / cat.max * 100);
+    ch += '<div><div class="flex justify-between text-xs mb-1"><span>' + cat.label + '</span><span class="font-mono">' + cat.score + '/' + cat.max + '</span></div>' +
+      '<div class="h-1.5 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:' + pct + '%"></div></div></div>';
+  }
+  var el = document.getElementById('categoryBars');
+  if (el) el.innerHTML = ch;
+
+  /* Recommendations */
+  var rh = '';
+  var rl = result.recommendations;
+  for (var ri = 0; ri < rl.length; ri++) {
+    rh += '<div class="flex justify-between border-b border-rl dark:border-rdl pb-1.5"><span>' + rl[ri].action + '</span><span class="font-mono opacity-60">+' + rl[ri].points + '</span></div>';
+  }
+  var relEl = document.getElementById('recommendations');
+  if (relEl) relEl.innerHTML = rh || '<span class="opacity-40">No immediate gains</span>';
+
+  /* Badge preview */
+  var bp = document.getElementById('badgePreview');
+  if (bp) {
+    if (badges.all.length > 0) {
+      var bh = '';
+      for (var bi = 0; bi < badges.all.length; bi++) {
+        var bid = badges.all[bi];
+        var isV = badges.vb.indexOf(bid) !== -1;
+        var isN = bid === 'corridor_node';
+        var bcls = (isV || isN) ? 'bg-rg text-rb dark:bg-rb dark:text-rg' : 'bg-rs dark:bg-rdp';
+        bh += '<span class="text-xs border border-rl dark:border-rdl px-2.5 py-1 ' + bcls + '">' + (BDEFS[bid] || bid) + '</span> ';
+      }
+      bp.innerHTML = bh;
+    } else {
+      bp.innerHTML = '<span class="text-xs opacity-40">Badges will appear as thresholds are met</span>';
+    }
+  }
+
+  /* JSON output */
+  var jo = document.getElementById('jsonOutput');
+  if (jo) jo.textContent = JSON.stringify(record, null, 2);
+
+  updateDeltas();
+}
+
+/* ---- TABS ---- */
+function initTabs() {
+  var tabs = document.querySelectorAll('.pillar-tab');
+  for (var i = 0; i < tabs.length; i++) {
+    (function(tab) {
+      tab.addEventListener('click', function() {
+        initMapsOnTabSwitch(tab.dataset.tab);
+        var allTabs = document.querySelectorAll('.pillar-tab');
+        var allPanels = document.querySelectorAll('.pillar-panel');
+        for (var j = 0; j < allTabs.length; j++) allTabs[j].classList.remove('active');
+        for (var k = 0; k < allPanels.length; k++) allPanels[k].classList.remove('active');
+        tab.classList.add('active');
+        var panel = document.getElementById('panel_' + tab.dataset.tab);
+        if (panel) panel.classList.add('active');
+      });
+    })(tabs[i]);
+  }
+}
+
+/* ---- COPY ---- */
+function copyJSON() {
+  var jo = document.getElementById('jsonOutput');
+  if (!jo) return;
+  var json = jo.textContent;
+  navigator.clipboard.writeText(json).then(function() {
+    var ids = ['copyBtn', 'copyBtn2'];
+    for (var i = 0; i < ids.length; i++) {
+      (function(id) {
+        var btn = document.getElementById(id);
+        if (!btn) return;
+        var orig = btn.textContent;
+        btn.textContent = 'Copied';
+        setTimeout(function() { btn.textContent = orig; }, 1400);
+      })(ids[i]);
+    }
+  }).catch(function() {
+    alert('Copy failed - select the JSON manually.');
+  });
+}
+
+/* ---- GEOCODING + MINI MAPS ---- */
+var _maps = {};
+var _markers = {};
+
+function initMiniMap(key, lat, lng) {
+  if (_maps[key]) { _maps[key].remove(); }
+  var center = (lat && lng) ? [lat, lng] : [-37.8136, 144.9631];
+  var zoom   = (lat && lng) ? 14 : 11;
+  var m = L.map('map_' + key, {
+    center: center, zoom: zoom,
+    zoomControl: true, scrollWheelZoom: false, attributionControl: false
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd'
+  }).addTo(m);
+  _maps[key] = m;
+
+  if (lat && lng) { placePin(key, lat, lng); }
+
+  m.on('click', function(e) {
+    placePin(key, e.latlng.lat, e.latlng.lng);
+    renderLive();
+  });
+
+  setTimeout(function() { m.invalidateSize(); }, 150);
+}
+
+function placePin(key, lat, lng) {
+  var iconClass = key === 'park' ? 'map-pin-dark' : (key === 'adj' ? 'map-pin-adj' : 'map-pin-green');
+  var icon = L.divIcon({ className: iconClass, iconSize: [12,12] });
+
+  if (_markers[key]) { _maps[key].removeLayer(_markers[key]); }
+  _markers[key] = L.marker([lat, lng], { icon: icon, draggable: true }).addTo(_maps[key]);
+
+  _markers[key].on('dragend', function(e) {
+    var p = e.target.getLatLng();
+    saveCoords(key, p.lat, p.lng);
+    renderLive();
+  });
+
+  saveCoords(key, lat, lng);
+}
+
+function saveCoords(key, lat, lng) {
+  var latEl, lngEl;
+  if (key === 'garden') {
+    latEl = document.getElementById('f_con_lat');
+    lngEl = document.getElementById('f_con_lng');
+  } else if (key === 'park') {
+    latEl = document.getElementById('f_con_park_lat');
+    lngEl = document.getElementById('f_con_park_lng');
+  } else {
+    // adj_N keys
+    latEl = document.getElementById('lat_' + key);
+    lngEl = document.getElementById('lng_' + key);
+  }
+  var disp = document.getElementById('coord_' + key);
+  if (latEl) latEl.value = lat.toFixed(6);
+  if (lngEl) lngEl.value = lng.toFixed(6);
+  if (disp)  disp.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
+}
+
+function geocodeAddress(key) {
+  var inputId = key.indexOf('adj_') === 0
+    ? 'addr_' + key
+    : 'f_con_' + (key === 'garden' ? 'garden' : key) + '_address';
+  var input = document.getElementById(inputId);
+  if (!input || !input.value.trim()) return;
+
+  var query = input.value.trim() + ', Australia';
+  var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+
+  var disp = document.getElementById('coord_' + key);
+  if (disp) disp.textContent = 'Searching...';
+
+  fetch(url, { headers: { 'Accept-Language': 'en' } })
+    .then(function(r) { return r.json(); })
+    .then(function(results) {
+      if (!results || results.length === 0) {
+        if (disp) disp.textContent = 'Address not found -- try a different search';
+        return;
+      }
+      var lat = parseFloat(results[0].lat);
+      var lng = parseFloat(results[0].lon);
+      if (!_maps[key]) { initMiniMap(key, lat, lng); }
+      else { _maps[key].setView([lat, lng], 15); placePin(key, lat, lng); }
+      renderLive();
+    })
+    .catch(function() {
+      if (disp) disp.textContent = 'Search failed -- check connection';
+    });
+}
+
+/* ---- DYNAMIC ADJACENT GARDEN LIST ---- */
+var _adjCount = 0;
+
+function addAdjacentGarden(prefill) {
+  var idx = _adjCount++;
+  var key = 'adj_' + idx;
+  var container = document.getElementById('adjGardenList');
+  if (!container) return;
+
+  var div = document.createElement('div');
+  div.id = 'adj_block_' + idx;
+  div.style.cssText = 'border:1px solid #d7ccb9;padding:1rem;';
+  div.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">' +
+      '<div class="section-label">Garden ' + (idx + 1) + '</div>' +
+      '<button class="map-search-btn" onclick="removeAdjacentGarden(' + idx + ')">Remove</button>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem">' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Registry ID</div>' +
+        '<input type="text" id="adj_id_' + idx + '" placeholder="ER-VIC-SH-XXX-000" /></div>' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Garden name</div>' +
+        '<input type="text" id="adj_name_' + idx + '" placeholder="Garden name" /></div>' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Distance (m)</div>' +
+        '<input type="number" id="adj_dist_' + idx + '" min="0" placeholder="140" /></div>' +
+      '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Direction</div>' +
+        '<select id="adj_dir_' + idx + '">' +
+          '<option value="north">North</option><option value="south" selected>South</option>' +
+          '<option value="east">East</option><option value="west">West</option>' +
+        '</select></div>' +
+    '</div>' +
+    '<div class="map-search-wrap">' +
+      '<input type="text" id="addr_' + key + '" placeholder="Search address..." />' +
+      '<button class="map-search-btn" data-mapkey="' + key + '" onclick="geocodeAddress(this.getAttribute(\'data-mapkey\'))">Locate</button>' +
+    '</div>' +
+    '<div id="map_' + key + '" class="map-preview"></div>' +
+    '<div class="coord-display" id="coord_' + key + '">Click map or search to place pin</div>' +
+    '<input type="hidden" id="lat_' + key + '" />' +
+    '<input type="hidden" id="lng_' + key + '" />';
+
+  container.appendChild(div);
+
+  // Bind inputs for live scoring
+  var inputs = div.querySelectorAll('input, select');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('change', renderLive);
+    inputs[i].addEventListener('input',  renderLive);
+  }
+
+  // Prefill if loading existing data
+  if (prefill) {
+    if (prefill.id)          { var el = document.getElementById('adj_id_'   + idx); if(el) el.value = prefill.id; }
+    if (prefill.name)        { var el = document.getElementById('adj_name_' + idx); if(el) el.value = prefill.name; }
+    if (prefill.distance_m)  { var el = document.getElementById('adj_dist_' + idx); if(el) el.value = prefill.distance_m; }
+    if (prefill.direction)   { var el = document.getElementById('adj_dir_'  + idx); if(el) el.value = prefill.direction; }
+    if (prefill.lat && prefill.lng) {
+      var latEl = document.getElementById('lat_' + key);
+      var lngEl = document.getElementById('lng_' + key);
+      if(latEl) latEl.value = prefill.lat;
+      if(lngEl) lngEl.value = prefill.lng;
+    }
+  }
+
+  setTimeout(function() { initMiniMap(key, prefill && prefill.lat || null, prefill && prefill.lng || null); }, 50);
+}
+
+function removeAdjacentGarden(idx) {
+  var block = document.getElementById('adj_block_' + idx);
+  if (block) block.remove();
+  var key = 'adj_' + idx;
+  if (_maps[key]) { _maps[key].remove(); delete _maps[key]; }
+  if (_markers[key]) { delete _markers[key]; }
+  renderLive();
+}
+
+function getAdjacentGardens() {
+  var results = [];
+  var container = document.getElementById('adjGardenList');
+  if (!container) return results;
+  var blocks = container.querySelectorAll('[id^="adj_block_"]');
+  for (var i = 0; i < blocks.length; i++) {
+    var idx = blocks[i].id.replace('adj_block_', '');
+    var key = 'adj_' + idx;
+    var id   = document.getElementById('adj_id_'   + idx);
+    var name = document.getElementById('adj_name_' + idx);
+    var dist = document.getElementById('adj_dist_' + idx);
+    var dir  = document.getElementById('adj_dir_'  + idx);
+    var lat  = document.getElementById('lat_' + key);
+    var lng  = document.getElementById('lng_' + key);
+    if (!id || !id.value.trim()) continue;
+    results.push({
+      id:         id.value.trim(),
+      name:       name ? name.value : '',
+      distance_m: dist ? parseFloat(dist.value) || 0 : 0,
+      direction:  dir  ? dir.value : 'adjacent',
+      lat:        lat  ? parseFloat(lat.value) || null : null,
+      lng:        lng  ? parseFloat(lng.value) || null : null,
+      verified:   true
+    });
+  }
+  return results;
+}
+
+function initAllMaps() {
+  var latEl = document.getElementById('f_con_lat');
+  var lngEl = document.getElementById('f_con_lng');
+  var lat = latEl ? parseFloat(latEl.value) || null : null;
+  var lng = lngEl ? parseFloat(lngEl.value) || null : null;
+  initMiniMap('garden', lat, lng);
+
+  var pLatEl = document.getElementById('f_con_park_lat');
+  var pLngEl = document.getElementById('f_con_park_lng');
+  var pLat = pLatEl ? parseFloat(pLatEl.value) || null : null;
+  var pLng = pLngEl ? parseFloat(pLngEl.value) || null : null;
+  initMiniMap('park', pLat, pLng);
+  // Adjacent gardens init individually when added via addAdjacentGarden()
+}
+
+/* Re-init maps when connectivity tab is clicked */
+function initMapsOnTabSwitch(tabName) {
+  if (tabName === 'connectivity') {
+    setTimeout(function() {
+      if (!_maps['garden']) { initAllMaps(); }
+      else {
+        Object.keys(_maps).forEach(function(k) { _maps[k].invalidateSize(); });
+      }
+    }, 50);
+  }
+}
+
+/* ---- BOOT ---- */
+var st = localStorage.getItem('reg-theme');
+if (st === 'light') { document.documentElement.classList.remove('dark'); }
+else                { document.documentElement.classList.add('dark'); }
+
+document.getElementById('themeToggle').addEventListener('click', function() {
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+});
+
+var copyBtn = document.getElementById('copyBtn');
+if (copyBtn) copyBtn.addEventListener('click', copyJSON);
+var copyBtn2 = document.getElementById('copyBtn2');
+if (copyBtn2) copyBtn2.addEventListener('click', copyJSON);
+
+var resetBtn = document.getElementById('resetBtn');
+if (resetBtn) {
+  resetBtn.addEventListener('click', function() {
+    fetch('/data/arundel.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) { populateFormFromRecord(data); renderLive(); })
+      .catch(function() { console.log('No saved data to reset to'); });
+  });
+}
+
+/* Bind all inputs */
+var inputs = document.querySelectorAll('input, select');
+for (var ii = 0; ii < inputs.length; ii++) {
+  inputs[ii].addEventListener('change', renderLive);
+  inputs[ii].addEventListener('input',  renderLive);
+}
+
+initTabs();
+
+/* Try to load existing garden data */
+/* Load garden list from registry */
+function loadGardenSelector() {
+  fetch('/data/registry.json', { cache: 'no-store' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var sel = document.getElementById('gardenSelector');
+      var gardens = data.gardens || [];
+      for (var i = 0; i < gardens.length; i++) {
+        var g = gardens[i];
+        var opt = document.createElement('option');
+        opt.value = g.data_file || ('data/' + g.garden_name.toLowerCase() + '.json');
+        opt.textContent = g.garden_name + ' -- ' + g.suburb;
+        sel.appendChild(opt);
+      }
+    })
+    .catch(function() { console.log('Registry not available for selector'); });
+}
+
+function loadGarden(dataPath) {
+  var status = document.getElementById('gardenSelectorStatus');
+  if (status) status.textContent = 'Loading...';
+  fetch('/' + dataPath, { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      populateFormFromRecord(data);
+      renderLive();
+      initAllMaps();
+      if (status) status.textContent = 'Loaded ' + (data.garden_name || dataPath);
+    })
+    .catch(function() {
+      if (status) status.textContent = 'Could not load data';
+      renderLive();
+    });
+}
+
+function resetToNew() {
+  var inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+  for (var i = 0; i < inputs.length; i++) { inputs[i].value = ''; }
+  var checks = document.querySelectorAll('input[type="checkbox"]');
+  for (var i = 0; i < checks.length; i++) { checks[i].checked = false; }
+  var adjContainer = document.getElementById('adjGardenList');
+  if (adjContainer) { adjContainer.innerHTML = ''; _adjCount = 0; }
+  var mapKeys = Object.keys(_maps);
+  for (var k = 0; k < mapKeys.length; k++) {
+    if (_maps[mapKeys[k]]) { _maps[mapKeys[k]].remove(); delete _maps[mapKeys[k]]; }
+  }
+  _maps = {}; _markers = {};
+  var status = document.getElementById('gardenSelectorStatus');
+  if (status) status.textContent = 'New garden';
+  renderLive();
+}
+
+document.getElementById('gardenSelector').addEventListener('change', function() {
+  var val = this.value;
+  if (!val) return;
+  if (val === '__new__') { resetToNew(); return; }
+  loadGarden(val);
+});
+
+loadGardenSelector();
+renderLive();
+
+</script>
+</body>
+</html>
