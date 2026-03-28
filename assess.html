@@ -808,7 +808,13 @@ function buildRecordFromForm() {
       canopy_cover_pct_target:     gn('f_bio_canopy_target'),
       weed_pressure:               gv('f_bio_weed_pressure'),
       weed_pressure_baseline:      gv('f_bio_weed_baseline'),
-      species_list:                _speciesList.slice()
+      species_list:                (function() {
+        var out = [];
+        for (var xi = 0; xi < _speciesList.length; xi++) {
+          out.push(typeof _speciesList[xi] === 'object' ? _speciesList[xi].name : _speciesList[xi]);
+        }
+        return out;
+      })()
     },
     soil_water: {
       soil_health_score:    gn('f_sw_soil_current'),
@@ -872,6 +878,8 @@ function populateFormFromRecord(r) {
   sv('f_area_sqm',          r.area_sqm);
   sv('f_evc_name',          r.evc && r.evc.name);
   sv('f_evc_code',          r.evc && r.evc.code);
+  sv('f_garden_type',      r.garden_type || '');
+  sv('f_description',      r.description || '');
   sv('f_assessment_date',   r.assessment_date);
   sv('f_baseline_date',     r.baseline_date);
   var b = r.biodiversity || {};
@@ -1302,8 +1310,13 @@ function renderSpeciesList() {
   }
   var h = '';
   for (var i = 0; i < _speciesList.length; i++) {
+    var sp = _speciesList[i];
+    var name = typeof sp === 'object' ? sp.name : sp;
+    var layer = typeof sp === 'object' ? sp.layer : '';
     h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:.3rem .5rem;border:1px solid rgba(61,69,53,.12);font-size:.75rem">' +
-      '<span class="italic">' + _speciesList[i] + '</span>' +
+      '<div><span class="italic">' + name + '</span>' +
+      (layer ? '<span style="font-size:.65rem;opacity:.4;margin-left:.5rem;text-transform:uppercase;letter-spacing:.06em">' + layer + '</span>' : '') +
+      '</div>' +
       '<button onclick="removeSpecies(' + i + ')" style="opacity:.4;font-size:.7rem;background:none;border:none;cursor:pointer;padding:0 .25rem;color:inherit">x</button>' +
       '</div>';
   }
@@ -1388,11 +1401,19 @@ function selectSpeciesFromEl(el) {
 }
 
 function selectSpecies(botanicalName) {
-  if (_speciesList.indexOf(botanicalName) === -1) {
-    _speciesList.push(botanicalName);
-    renderSpeciesList();
-    renderLive();
+  /* Check not already added */
+  for (var si = 0; si < _speciesList.length; si++) {
+    var existing = typeof _speciesList[si] === 'object' ? _speciesList[si].name : _speciesList[si];
+    if (existing === botanicalName) return;
   }
+  /* Find layer from DB */
+  var layer = '';
+  for (var di = 0; di < _speciesDb.length; di++) {
+    if (_speciesDb[di].botanical_name === botanicalName) { layer = _speciesDb[di].layer || ''; break; }
+  }
+  _speciesList.push({ name: botanicalName, layer: layer });
+  renderSpeciesList();
+  renderLive();
   var input = document.getElementById('f_species_input');
   if (input) { input.value = ''; input.focus(); }
   var dropdown = document.getElementById('speciesDropdown');
@@ -1406,11 +1427,16 @@ function addManualSpecies() {
   var val = input.value.trim();
   if (!val) return;
 
-  if (_speciesList.indexOf(val) === -1) {
-    _speciesList.push(val);
+  var alreadyIn = false;
+  for (var mi = 0; mi < _speciesList.length; mi++) {
+    var mn = typeof _speciesList[mi] === 'object' ? _speciesList[mi].name : _speciesList[mi];
+    if (mn === val) { alreadyIn = true; break; }
+  }
+  if (!alreadyIn) {
+    _speciesList.push({ name: val, layer: '' });
     /* Also add to local DB so it appears in future searches this session */
     _speciesDb.push({
-      botanical_name: val, common_name: '', layer: 'forb', family: '', notes: 'Added on site', gardens: []
+      botanical_name: val, common_name: '', layer: '', family: '', notes: 'Added on site', gardens: []
     });
     renderSpeciesList();
     renderLive();
@@ -1433,7 +1459,21 @@ function removeSpecies(idx) {
 }
 
 function loadSpeciesList(list) {
-  _speciesList = list ? list.slice() : [];
+  if (!list || !list.length) { _speciesList = []; renderSpeciesList(); return; }
+  _speciesList = [];
+  for (var li = 0; li < list.length; li++) {
+    var item = list[li];
+    if (typeof item === 'object') {
+      _speciesList.push(item);
+    } else {
+      /* Plain string -- look up layer from DB */
+      var lyr = '';
+      for (var di = 0; di < _speciesDb.length; di++) {
+        if (_speciesDb[di].botanical_name === item) { lyr = _speciesDb[di].layer || ''; break; }
+      }
+      _speciesList.push({ name: item, layer: lyr });
+    }
+  }
   renderSpeciesList();
 }
 
