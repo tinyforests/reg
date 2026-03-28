@@ -746,8 +746,11 @@ function initCorridorMap(record) {
     maxZoom: 19, subdomains: 'abcd'
   }).addTo(_map);
 
+  /* Collect all bounds from the start */
+  var bounds = [[lat, lng]];
+
   /* Primary garden marker */
-  var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [14,14] });
+  var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [60,60] });
   var primary = L.marker([lat, lng], { icon: regIcon }).addTo(_map);
   primary.bindPopup(
     '<strong>' + (record.garden_name || 'This garden') + '</strong><br>' +
@@ -757,10 +760,10 @@ function initCorridorMap(record) {
 
   /* Park marker */
   if (c.adjacent_park && c.park_lat && c.park_lng) {
-    var parkIcon = L.divIcon({ className: 'park-marker', iconSize: [12,12] });
+    bounds.push([c.park_lat, c.park_lng]);
+    var parkIcon = L.divIcon({ className: 'park-marker', iconSize: [50,50] });
     var park = L.marker([c.park_lat, c.park_lng], { icon: parkIcon }).addTo(_map);
     park.bindPopup('<strong>' + (c.park_name || 'Adjacent park') + '</strong>');
-    /* Dashed line to park */
     L.polyline([[lat, lng], [c.park_lat, c.park_lng]], {
       color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.6
     }).addTo(_map);
@@ -768,7 +771,6 @@ function initCorridorMap(record) {
 
   /* Adjacent registered gardens */
   var adj = c.adjacent_registered_gardens || [];
-  var bounds = [[lat, lng]];
 
   for (var i = 0; i < adj.length; i++) {
     var g = adj[i];
@@ -789,7 +791,7 @@ function initCorridorMap(record) {
 
   /* Fit bounds if multiple points */
   if (bounds.length > 1) {
-    _map.fitBounds(bounds, { padding: [30, 30] });
+    _map.fitBounds(bounds, { padding: [50, 50] });
   }
 
   /* Invalidate size after render to fix tile loading */
