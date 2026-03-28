@@ -315,29 +315,16 @@
               </div>
               <div id="speciesList" class="space-y-1 mb-3"></div>
               <!-- Search -->
-              <div style="position:relative">
-                <div class="species-search-row">
-                  <input type="text" id="f_species_input"
-                    class="species-input"
-                    placeholder="Search botanical or common name..."
-                    autocomplete="off"
-                    oninput="searchSpecies(this.value)"
-                    onkeydown="handleSpeciesKey(event)" />
-                  <select id="f_species_layer" style="background:transparent;border:1px solid #d7ccb9;padding:.35rem .5rem;font-size:.75rem;color:inherit;font-family:inherit" class="dark:border-rdl">
-                    <option value="">Any layer</option>
-                    <option value="groundcover">Groundcover</option>
-                    <option value="grass">Grass</option>
-                    <option value="sedge">Sedge</option>
-                    <option value="forb">Forb</option>
-                    <option value="shrub">Shrub</option>
-                    <option value="small_tree">Small tree</option>
-                    <option value="tree">Tree</option>
-                    <option value="climber">Climber</option>
-                  </select>
-                </div>
-                <div id="speciesDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:50;max-height:220px;overflow-y:auto;border:1px solid #d7ccb9;background:#fff0dc" class="dark:bg-rdp dark:border-rdl"></div>
+              <div style="position:relative;width:100%">
+                <input type="text" id="f_species_input"
+                  placeholder="Search botanical or common name..."
+                  autocomplete="off"
+                  oninput="searchSpecies(this.value)"
+                  onkeydown="handleSpeciesKey(event)"
+                  style="width:100%;display:block;padding:.65rem .75rem;border:1px solid #d7ccb9;font-size:.8rem;background:transparent;color:inherit;font-family:inherit;box-sizing:border-box" />
+                <div id="speciesDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:50;max-height:220px;overflow-y:auto"></div>
               </div>
-              <div class="text-xs opacity-40 mt-2">Search the database or type a new name and press Enter to add. Click x to remove.</div>
+              <div class="text-xs opacity-40 mt-2">Press Enter to add new. Click x to remove.</div>
             </div>
 
           </div>
@@ -1325,8 +1312,6 @@ function renderSpeciesList() {
 
 function searchSpecies(query) {
   var dropdown = document.getElementById('speciesDropdown');
-  var layerFilter = document.getElementById('f_species_layer');
-  var layer = layerFilter ? layerFilter.value : '';
   _dropdownIdx = -1;
 
   if (!query || query.trim().length < 2) {
@@ -1338,7 +1323,6 @@ function searchSpecies(query) {
   var results = [];
   for (var i = 0; i < _speciesDb.length; i++) {
     var s = _speciesDb[i];
-    if (layer && s.layer !== layer) continue;
     if (_speciesList.indexOf(s.botanical_name) !== -1) continue;
     if (s.botanical_name.toLowerCase().indexOf(q) !== -1 ||
         (s.common_name && s.common_name.toLowerCase().indexOf(q) !== -1)) {
