@@ -300,7 +300,7 @@
                 <div class="flex gap-2 mb-1">
                   <input type="text" id="f_species_input"
                     placeholder="Search botanical or common name..."
-                    style="flex:1"
+                    style="flex:1;padding:.5rem .75rem;border:1px solid #d7ccb9;font-size:.8rem;min-width:0;height:2.25rem"
                     autocomplete="off"
                     oninput="searchSpecies(this.value)"
                     onkeydown="handleSpeciesKey(event)" />
@@ -1272,18 +1272,20 @@ var _speciesList = [];
 var _speciesDb = [];
 var _dropdownIdx = -1;
 
-/* Load species database from JSON */
-fetch('/data/species.json', { cache: 'no-store' })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    _speciesDb = data.species || [];
-    var status = document.getElementById('speciesDbStatus');
-    if (status) status.textContent = _speciesDb.length + ' species in database';
-  })
-  .catch(function() {
-    var status = document.getElementById('speciesDbStatus');
-    if (status) status.textContent = 'Database unavailable -- manual entry only';
-  });
+/* Load species database from JSON -- called at boot */
+function loadSpeciesDb() {
+  fetch('/data/species.json', { cache: 'no-store' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      _speciesDb = data.species || [];
+      var status = document.getElementById('speciesDbStatus');
+      if (status) status.textContent = _speciesDb.length + ' species in database';
+    })
+    .catch(function() {
+      var status = document.getElementById('speciesDbStatus');
+      if (status) status.textContent = 'Database unavailable -- manual entry only';
+    });
+}
 
 function renderSpeciesList() {
   var container = document.getElementById('speciesList');
@@ -1539,6 +1541,7 @@ document.getElementById('gardenSelector').addEventListener('change', function() 
 });
 
 loadGardenSelector();
+loadSpeciesDb();
 renderLive();
 
 </script>
