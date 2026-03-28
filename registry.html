@@ -3,445 +3,377 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry — Registered Gardens</title>
+  <title>Ecological Registry -- Registered Gardens</title>
   <meta name="description" content="Browse registered ecological gardens, their scores, badges, verification status, and ecological context." />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Abril Fatface"', 'serif'],
-            sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            regGreen: '#3d4535',
-            regBeige: '#fff0dc',
-            regLine: 'rgba(255,240,220,0.18)',
-            regSoft: 'rgba(255,240,220,0.08)',
-          },
-          boxShadow: {
-            soft: '0 20px 50px rgba(0,0,0,0.18)',
-          }
+      theme: { extend: {
+        fontFamily: {
+          serif: ['"Abril Fatface"', 'serif'],
+          sans:  ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          rg: '#3d4535', rb: '#fff0dc',
+          rl: 'rgba(255,240,220,0.18)',
+          rs: 'rgba(255,240,220,0.08)',
+          signal: '#7a9e5f'
         }
-      }
-    }
+      }}
+    };
   </script>
-
   <style>
-    body {
-      background: #3d4535;
-      color: #fff0dc;
-    }
-
-    .hairline { border-color: rgba(255,240,220,0.18); }
-    .soft-bg { background: rgba(255,240,220,0.06); }
-    .soft-bg-2 { background: rgba(255,240,220,0.08); }
-    .muted { color: rgba(255,240,220,0.75); }
-    .muted-2 { color: rgba(255,240,220,0.55); }
-    .table-row:hover { background: rgba(255,240,220,0.05); }
-    
-    /* Badge styling aligned with our system */
-    .badge-chip { 
-      border: 1px solid rgba(255,240,220,0.16); 
-      background: rgba(255,240,220,0.05); 
-      transition: opacity 0.2s ease;
-    }
-    
-    .badge-chip:hover {
-      opacity: 0.8;
-    }
-    
-    /* Badge type styling */
-    .badge-verification { 
-      background: rgba(255,240,220,0.12);
-      color: #3d4535;
-      background: #fff0dc;
-    }
-    
-    .badge-evidence { 
-      border: 2px solid rgba(255,240,220,0.16);
-      background: rgba(255,240,220,0.05); 
-    }
-    
-    .filter-btn.active,
-    .score-btn.active {
-      background: #fff0dc;
-      color: #3d4535;
-    }
+    * { border-radius: 0 !important; }
+    body { background: #3d4535; color: #fff0dc; }
+    .hl  { border-color: rgba(255,240,220,0.18); }
+    .sb  { background: rgba(255,240,220,0.06); }
+    .mu  { color: rgba(255,240,220,0.75); }
+    .mu2 { color: rgba(255,240,220,0.55); }
+    .card:hover { background: rgba(255,240,220,0.07); }
+    .filter-btn.active, .score-btn.active { background: #fff0dc; color: #3d4535; }
+    .badge-chip { border: 1px solid rgba(255,240,220,0.16); background: rgba(255,240,220,0.05); }
+    .badge-verif { background: #fff0dc; color: #3d4535; }
+    input { background: transparent; color: #fff0dc; }
+    input::placeholder { color: rgba(255,240,220,0.35); }
+    .bar-fill { transition: width 700ms ease; }
   </style>
 </head>
 <body class="font-sans antialiased">
-  <div class="min-h-screen">
-    <header class="border-b hairline sticky top-0 z-40 backdrop-blur-md" style="background: rgba(61,69,53,0.88);">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
-        <div class="flex items-center gap-3 min-w-[260px]">
-          <div class="grid h-9 w-9 place-items-center bg-regBeige text-regGreen font-semibold">ER</div>
-          <div class="leading-tight">
-            <div class="text-sm font-medium tracking-wide text-regBeige">Ecological Registry</div>
-            <div class="text-xs muted">Browse registered gardens</div>
-          </div>
-        </div>
-        <nav class="hidden md:flex items-center gap-8 text-sm muted">
-          <a href="#overview" class="hover:text-regBeige transition">Overview</a>
-          <a href="#gardens" class="hover:text-regBeige transition">Registered Gardens</a>
-          <a href="#why-it-matters" class="hover:text-regBeige transition">Why It Matters</a>
-        </nav>
-      </div>
-    </header>
 
-    <main>
-      <section id="overview" class="border-b hairline">
-        <div class="max-w-7xl mx-auto px-6 py-20 md:py-28 grid lg:grid-cols-12 gap-10 items-end">
-          <div class="lg:col-span-7">
-            <div class="text-xs tracking-[0.22em] uppercase muted mb-4">Public Registry</div>
-            <h1 class="font-serif text-5xl md:text-7xl leading-[0.95] max-w-4xl">
-              Registered ecological gardens, made legible.
-            </h1>
-            <p class="mt-8 text-lg md:text-xl leading-relaxed muted max-w-2xl">
-              Browse gardens that have been measured, documented, and recognised for their ecological contribution — including score, verification, habitat signals, badges, and place-based context.
+<header class="border-b hl sticky top-0 z-40 backdrop-blur-md" style="background:rgba(61,69,53,.88)">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+    <a href="/" class="flex items-center gap-3 min-w-[220px] hover:opacity-80 transition-opacity">
+      <div class="grid h-9 w-9 place-items-center bg-rb text-rg font-semibold text-sm">ER</div>
+      <div class="leading-tight">
+        <div class="text-sm font-medium tracking-wide text-rb">Ecological Registry</div>
+        <div class="text-xs mu">Browse registered gardens</div>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 text-sm mu">
+      <a href="#overview" class="hover:text-rb transition">Overview</a>
+      <a href="#gardens" class="hover:text-rb transition">Gardens</a>
+      <a href="#why" class="hover:text-rb transition">Why It Matters</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Overview -->
+  <section id="overview" class="border-b hl">
+    <div class="max-w-7xl mx-auto px-6 py-20 md:py-28 grid lg:grid-cols-12 gap-10 items-end">
+      <div class="lg:col-span-7">
+        <div class="text-xs tracking-[0.22em] uppercase mu2 mb-4">Public Registry</div>
+        <h1 class="font-serif text-5xl md:text-7xl leading-[0.95] max-w-4xl">
+          Registered ecological gardens, made legible.
+        </h1>
+        <p class="mt-8 text-lg md:text-xl leading-relaxed mu max-w-2xl">
+          Gardens that have been measured, documented, and recognised for their ecological contribution -- score, verification, habitat signals, badges, and place-based context.
+        </p>
+      </div>
+      <div class="lg:col-span-5 grid sm:grid-cols-3 lg:grid-cols-1 gap-4">
+        <div class="sb border hl p-5">
+          <div class="text-xs uppercase tracking-[0.2em] mu2">Registered Gardens</div>
+          <div id="statTotalGardens" class="font-serif text-5xl mt-3 font-light">--</div>
+        </div>
+        <div class="sb border hl p-5">
+          <div class="text-xs uppercase tracking-[0.2em] mu2">Average Score</div>
+          <div id="statAverageScore" class="font-serif text-5xl mt-3 font-light">--</div>
+        </div>
+        <div class="sb border hl p-5">
+          <div class="text-xs uppercase tracking-[0.2em] mu2">Badges Awarded</div>
+          <div id="statTotalBadges" class="font-serif text-5xl mt-3 font-light">--</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Garden directory -->
+  <section id="gardens" class="border-b hl">
+    <div class="max-w-7xl mx-auto px-6 py-12 md:py-16">
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Filters sidebar -->
+        <aside class="lg:col-span-3 space-y-8 lg:sticky lg:top-24">
+          <div>
+            <div class="text-xs tracking-[0.2em] uppercase mu mb-3">Search</div>
+            <input id="searchInput" type="text" placeholder="Suburb, EVC, garden..."
+              class="w-full border hl px-4 py-3 outline-none focus:border-rb/50 text-sm" />
+          </div>
+          <div>
+            <div class="text-xs tracking-[0.2em] uppercase mu mb-3">Verification</div>
+            <div class="flex flex-wrap gap-2">
+              <button class="filter-btn active border hl px-3 py-2 text-xs" data-filter="all">All</button>
+              <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="gardener_and_son_verified">G&amp;S Verified</button>
+              <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="site_visit">Site Visit</button>
+              <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="photo_verified">Photo Verified</button>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs tracking-[0.2em] uppercase mu mb-3">Score</div>
+            <div class="flex flex-wrap gap-2">
+              <button class="score-btn active border hl px-3 py-2 text-xs" data-score="all">All</button>
+              <button class="score-btn border hl px-3 py-2 text-xs" data-score="70">70+</button>
+              <button class="score-btn border hl px-3 py-2 text-xs" data-score="50">50+</button>
+              <button class="score-btn border hl px-3 py-2 text-xs" data-score="0">Below 50</button>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs tracking-[0.2em] uppercase mu mb-3">System Note</div>
+            <p class="text-sm leading-relaxed mu">
+              Powered by the registry master index. Each entry summarises a garden's score, verification, badges, and ecological context.
             </p>
           </div>
+        </aside>
 
-          <div class="lg:col-span-5 grid sm:grid-cols-3 lg:grid-cols-1 gap-4" id="statsGrid">
-            <div class="soft-bg border hairline p-5 shadow-soft">
-              <div class="text-xs uppercase tracking-[0.2em] muted-2">Registered Gardens</div>
-              <div id="statTotalGardens" class="text-4xl mt-3 font-light">—</div>
+        <!-- Garden grid -->
+        <div class="lg:col-span-9">
+          <div class="flex items-end justify-between gap-6 mb-6">
+            <div>
+              <div class="text-xs tracking-[0.2em] uppercase mu">Directory</div>
+              <h2 class="font-serif text-3xl md:text-4xl mt-2">Registered Gardens</h2>
             </div>
-            <div class="soft-bg border hairline p-5 shadow-soft">
-              <div class="text-xs uppercase tracking-[0.2em] muted-2">Average Score</div>
-              <div id="statAverageScore" class="text-4xl mt-3 font-light">—</div>
-            </div>
-            <div class="soft-bg border hairline p-5 shadow-soft">
-              <div class="text-xs uppercase tracking-[0.2em] muted-2">Badges Awarded</div>
-              <div id="statTotalBadges" class="text-4xl mt-3 font-light">—</div>
-            </div>
+            <div id="resultCount" class="text-sm mu">Loading...</div>
           </div>
+          <div id="gardenGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
         </div>
-      </section>
 
-      <section id="gardens" class="border-b hairline">
-        <div class="max-w-7xl mx-auto px-6 py-12 md:py-16">
-          <div class="grid lg:grid-cols-12 gap-8 items-start">
-            <aside class="lg:col-span-3 space-y-8 lg:sticky lg:top-24">
-              <div>
-                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Search</div>
-                <input id="searchInput" type="text" placeholder="Search suburb, EVC, garden..." class="w-full bg-transparent border hairline px-4 py-3 outline-none placeholder:text-[rgba(255,240,220,0.4)] focus:border-[rgba(255,240,220,0.5)]" />
-              </div>
+      </div>
+    </div>
+  </section>
 
-              <div>
-                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Verification</div>
-                <div class="flex flex-wrap gap-2">
-                  <button class="filter-btn active border hairline px-3 py-2 text-sm" data-filter="all">All</button>
-                  <button class="filter-btn border hairline px-3 py-2 text-sm" data-filter="gardener_and_son_verified">G&amp;S Verified</button>
-                  <button class="filter-btn border hairline px-3 py-2 text-sm" data-filter="site_visit">Site Visit</button>
-                  <button class="filter-btn border hairline px-3 py-2 text-sm" data-filter="photo_verified">Photo Verified</button>
-                </div>
-              </div>
-
-              <div>
-                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Score</div>
-                <div class="flex flex-wrap gap-2">
-                  <button class="score-btn active border hairline px-3 py-2 text-sm" data-score="all">All</button>
-                  <button class="score-btn border hairline px-3 py-2 text-sm" data-score="70">70+</button>
-                  <button class="score-btn border hairline px-3 py-2 text-sm" data-score="50">50+</button>
-                  <button class="score-btn border hairline px-3 py-2 text-sm" data-score="0">Below 50</button>
-                </div>
-              </div>
-
-              <div>
-                <div class="text-xs tracking-[0.2em] uppercase muted mb-3">System Note</div>
-                <p class="text-sm leading-relaxed muted">
-                  This directory is powered by the registry master index. Each entry summarises a garden's score, verification, badges, status, and ecological context.
-                </p>
-              </div>
-            </aside>
-
-            <div class="lg:col-span-9">
-              <div class="flex items-end justify-between gap-6 mb-6">
-                <div>
-                  <div class="text-xs tracking-[0.2em] uppercase muted">Directory</div>
-                  <h2 class="font-serif text-3xl md:text-4xl mt-2">Registered Gardens</h2>
-                </div>
-                <div id="resultCount" class="text-sm muted">Loading registry…</div>
-              </div>
-
-              <div id="gardenGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
-            </div>
-          </div>
+  <!-- Why it matters -->
+  <section id="why">
+    <div class="max-w-7xl mx-auto px-6 py-16 md:py-20 grid lg:grid-cols-3 gap-8">
+      <div>
+        <div class="text-xs tracking-[0.2em] uppercase mu mb-3">Why This Exists</div>
+        <h3 class="font-serif text-3xl leading-tight">Private land is ecological infrastructure.</h3>
+      </div>
+      <div class="lg:col-span-2 grid md:grid-cols-3 gap-5">
+        <div class="sb border hl p-5">
+          <div class="text-xs uppercase tracking-[0.18em] mu2 mb-3">Measure</div>
+          <p class="text-sm leading-relaxed mu">Turn gardens into legible ecological assets through baselines, field notes, and scoring.</p>
         </div>
-      </section>
-
-      <section id="why-it-matters">
-        <div class="max-w-7xl mx-auto px-6 py-16 md:py-20 grid lg:grid-cols-3 gap-8">
-          <div>
-            <div class="text-xs tracking-[0.2em] uppercase muted mb-3">Why This Exists</div>
-            <h3 class="font-serif text-3xl leading-tight">Private land is ecological infrastructure.</h3>
-          </div>
-          <div class="lg:col-span-2 grid md:grid-cols-3 gap-5">
-            <div class="soft-bg border hairline p-5">
-              <div class="text-sm uppercase tracking-[0.18em] muted-2">Measure</div>
-              <p class="mt-3 text-sm leading-relaxed muted">Turn gardens into legible ecological assets through baselines, field notes, and scoring.</p>
-            </div>
-            <div class="soft-bg border hairline p-5">
-              <div class="text-sm uppercase tracking-[0.18em] muted-2">Recognise</div>
-              <p class="mt-3 text-sm leading-relaxed muted">Surface what has been achieved through badges, verification, and transparent signals.</p>
-            </div>
-            <div class="soft-bg border hairline p-5">
-              <div class="text-sm uppercase tracking-[0.18em] muted-2">Connect</div>
-              <p class="mt-3 text-sm leading-relaxed muted">Allow many individual gardens to contribute to a visible urban ecological network.</p>
-            </div>
-          </div>
+        <div class="sb border hl p-5">
+          <div class="text-xs uppercase tracking-[0.18em] mu2 mb-3">Recognise</div>
+          <p class="text-sm leading-relaxed mu">Surface what has been achieved through badges, verification, and transparent signals.</p>
         </div>
-      </section>
-    </main>
-  </div>
-
-  <template id="gardenCardTemplate">
-    <article class="soft-bg border hairline p-5 flex flex-col h-full shadow-soft table-row transition">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <div class="text-xs uppercase tracking-[0.18em] muted-2 garden-id"></div>
-          <h3 class="font-serif text-2xl mt-2 garden-name"></h3>
-          <div class="mt-2 text-sm muted garden-location"></div>
-        </div>
-        <div class="text-right">
-          <div class="text-xs uppercase tracking-[0.18em] muted-2">Score</div>
-          <div class="text-3xl font-light garden-score"></div>
+        <div class="sb border hl p-5">
+          <div class="text-xs uppercase tracking-[0.18em] mu2 mb-3">Connect</div>
+          <p class="text-sm leading-relaxed mu">Allow many individual gardens to contribute to a visible urban ecological network.</p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="mt-5 grid grid-cols-2 gap-3 text-sm">
-        <div>
-          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Rating</div>
-          <div class="mt-1 garden-rating"></div>
-        </div>
-        <div>
-          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Verified</div>
-          <div class="mt-1 garden-verification"></div>
-        </div>
-        <div>
-          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Primary EVC</div>
-          <div class="mt-1 garden-evc"></div>
-        </div>
-        <div>
-          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Status</div>
-          <div class="mt-1 garden-status"></div>
-        </div>
-      </div>
+</main>
 
-      <div class="mt-5">
-        <div class="flex items-center justify-between gap-4 mb-2">
-          <div class="text-[11px] uppercase tracking-[0.16em] muted-2">Badge Visibility</div>
-          <div class="text-xs muted garden-badge-count"></div>
-        </div>
-        <div class="garden-badges flex flex-wrap gap-2"></div>
-      </div>
+<script>
+/* ================================================================
+   Ecological Registry -- Index Page
+   Clean ES5 - no arrows, no spread, no const/let, no optional chaining
+   ================================================================ */
 
-      <div class="mt-5 pt-5 border-t hairline flex items-center justify-between gap-4">
-        <div class="text-xs muted garden-last-verified"></div>
-        <a class="garden-link text-sm border hairline px-3 py-2 hover:bg-regBeige hover:text-regGreen transition" href="#">View profile</a>
-      </div>
-    </article>
-  </template>
+var BADGE_NAMES = {
+  indigenous_dominant: 'Indigenous Dominant',
+  species_rich_20:     'Species Rich',
+  species_rich_30:     'Highly Species Rich',
+  full_canopy:         'Canopy Forming',
+  five_layers:         'Five Layer Garden',
+  habitat_builder:     'Habitat Builder',
+  amphibian_active:    'Amphibian Active',
+  pollinator_rich:     'Pollinator Rich',
+  water_wise:          'Water Wise',
+  corridor_node:       'Corridor Node',
+  network_connected:   'Network Connected',
+  gs_verified:         'G&S Verified',
+  site_visit_badge:    'Site Visit',
+  full_record:         'Full Record',
+  fauna_record:        'Fauna Record'
+};
 
-  <script src="../js/badge-engine.js"></script>
-  <script>
-    const registryPath = '/data/registry.json';
+var VERIF_TYPES = ['gs_verified', 'site_visit_badge'];
 
-    const state = {
-      gardens: [],
-      verification: 'all',
-      score: 'all',
-      search: '',
-      badgeDefinitions: {}
-    };
+var state = { gardens: [], verification: 'all', score: 'all', search: '' };
 
-    const els = {
-      statTotalGardens: document.getElementById('statTotalGardens'),
-      statAverageScore: document.getElementById('statAverageScore'),
-      statTotalBadges: document.getElementById('statTotalBadges'),
-      gardenGrid: document.getElementById('gardenGrid'),
-      resultCount: document.getElementById('resultCount'),
-      searchInput: document.getElementById('searchInput'),
-      template: document.getElementById('gardenCardTemplate')
-    };
+/* ---- FILTER ---- */
+function matchesScore(score, filter) {
+  if (filter === 'all') return true;
+  if (filter === '70')  return score >= 70;
+  if (filter === '50')  return score >= 50;
+  if (filter === '0')   return score < 50;
+  return true;
+}
 
-    async function formatBadgeLabel(badgeId) {
-      if (!state.badgeDefinitions[badgeId]) {
-        // Fallback for unknown badges
-        return badgeId.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-      }
-      return state.badgeDefinitions[badgeId].name;
+function filterGardens() {
+  var results = [];
+  for (var i = 0; i < state.gardens.length; i++) {
+    var g = state.gardens[i];
+    var verifOk = state.verification === 'all' || g.verification_level === state.verification;
+    var scoreOk = matchesScore(g.score, state.score);
+    var searchable = [
+      g.garden_name || '', g.suburb || '', g.state || '',
+      g.type || '', g.primary_evc || '', g.bioregion || '',
+      g.status || ''
+    ].concat(g.badges || []).join(' ').toLowerCase();
+    var searchOk = state.search === '' || searchable.indexOf(state.search.toLowerCase()) !== -1;
+    if (verifOk && scoreOk && searchOk) results.push(g);
+  }
+  return results;
+}
+
+/* ---- RENDER ---- */
+function renderStats(data) {
+  var meta  = data.registry_metadata || {};
+  var stats = data.statistics || {};
+  var total = meta.total_gardens !== undefined ? meta.total_gardens : (data.gardens || []).length;
+  var avg   = stats.average_score !== undefined ? stats.average_score : '--';
+  var bdgs  = stats.total_badges_awarded !== undefined ? stats.total_badges_awarded : '--';
+
+  var tg = document.getElementById('statTotalGardens');
+  var as = document.getElementById('statAverageScore');
+  var tb = document.getElementById('statTotalBadges');
+  if (tg) tg.textContent = total;
+  if (as) as.textContent = avg;
+  if (tb) tb.textContent = bdgs;
+}
+
+function badgeLabel(id) {
+  return BADGE_NAMES[id] || id.replace(/_/g, ' ').replace(/\w/g, function(c) { return c.toUpperCase(); });
+}
+
+function renderGardens() {
+  var gardens = filterGardens();
+  var grid = document.getElementById('gardenGrid');
+  var count = document.getElementById('resultCount');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+  if (count) count.textContent = gardens.length + ' garden' + (gardens.length === 1 ? '' : 's');
+
+  if (!gardens.length) {
+    grid.innerHTML = '<div class="md:col-span-2 xl:col-span-3 border hl p-8 sb"><div class="text-xs uppercase tracking-[0.18em] mu2">No results</div><p class="mt-3 text-sm mu">No gardens match the current filters.</p></div>';
+    return;
+  }
+
+  for (var i = 0; i < gardens.length; i++) {
+    var g = gardens[i];
+    var badges = g.badges || [];
+    var show = badges.slice(0, 4);
+
+    /* Badge HTML */
+    var badgeHtml = '';
+    for (var bi = 0; bi < show.length; bi++) {
+      var bid = show[bi];
+      var isV = VERIF_TYPES.indexOf(bid) !== -1;
+      var cls = 'badge-chip text-xs px-2 py-1' + (isV ? ' badge-verif' : '');
+      badgeHtml += '<span class="' + cls + '">' + badgeLabel(bid) + '</span>';
+    }
+    if (badges.length > 4) {
+      badgeHtml += '<span class="badge-chip text-xs px-2 py-1">+' + (badges.length - 4) + ' more</span>';
     }
 
-    function getBadgeType(badgeId) {
-      return state.badgeDefinitions[badgeId]?.type || 'score';
-    }
+    /* Score bar */
+    var pct = Math.min(100, Math.round((g.score || 0) / 100 * 100));
 
-    function matchesScore(score, filter) {
-      if (filter === 'all') return true;
-      if (filter === '70') return score >= 70;
-      if (filter === '50') return score >= 50;
-      if (filter === '0') return score < 50;
-      return true;
-    }
+    var card = document.createElement('article');
+    card.className = 'card sb border hl p-5 flex flex-col h-full transition';
+    card.innerHTML =
+      '<div class="flex items-start justify-between gap-4">' +
+        '<div>' +
+          '<div class="text-xs uppercase tracking-[0.16em] mu2">' + (g.garden_id || '') + '</div>' +
+          '<h3 class="font-serif text-2xl mt-1">' + (g.garden_name || '') + '</h3>' +
+          '<div class="mt-1 text-sm mu">' + (g.suburb || '') + ', ' + (g.state || '') + '</div>' +
+        '</div>' +
+        '<div style="text-align:right;flex-shrink:0">' +
+          '<div class="text-xs uppercase tracking-[0.16em] mu2">Score</div>' +
+          '<div class="font-serif text-4xl font-light">' + (g.score || '--') + '</div>' +
+          '<div class="text-xs mu2 mt-0.5">' + (g.badge_count || badges.length) + ' badges</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="mt-3 h-1" style="background:rgba(255,240,220,.1)">' +
+        '<div class="bar-fill h-full" style="width:' + pct + '%;background:#7a9e5f"></div>' +
+      '</div>' +
+      '<div class="mt-4 grid grid-cols-2 gap-3 text-xs">' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Rating</div><div class="mu">' + (g.rating || '--') + '</div></div>' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Verified</div><div class="mu">' + (g.verification_label || g.verification_level || '--') + '</div></div>' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">EVC</div><div class="mu">' + (g.primary_evc || '--') + '</div></div>' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Status</div><div class="mu">' + (g.status || '--') + '</div></div>' +
+      '</div>' +
+      '<div class="mt-4">' +
+        '<div class="uppercase tracking-[0.14em] mu2 text-xs mb-2">Badges</div>' +
+        '<div class="flex flex-wrap gap-2">' + badgeHtml + '</div>' +
+      '</div>' +
+      '<div class="mt-4 pt-4 border-t hl flex items-center justify-between gap-4">' +
+        '<div class="text-xs mu">Last verified ' + (g.last_verified || '--') + '</div>' +
+        '<a href="' + (g.profile_url || '#') + '" class="text-xs border hl px-3 py-2 hover:bg-rb hover:text-rg transition">View profile</a>' +
+      '</div>';
 
-    function filterGardens() {
-      return state.gardens.filter(garden => {
-        const verificationOk = state.verification === 'all' || garden.verification_level === state.verification;
-        const scoreOk = matchesScore(garden.score, state.score);
+    grid.appendChild(card);
+  }
+}
 
-        const searchable = [
-          garden.garden_name,
-          garden.suburb,
-          garden.state,
-          garden.type,
-          garden.primary_evc,
-          garden.bioregion,
-          garden.status,
-          ...(garden.badges || [])
-        ].join(' ').toLowerCase();
-
-        const searchOk = searchable.includes(state.search.toLowerCase());
-        return verificationOk && scoreOk && searchOk;
-      });
-    }
-
-    function renderStats(data) {
-      const totalGardens = data.registry_metadata?.total_gardens ?? data.gardens.length;
-      const averageScore = data.statistics?.average_score ?? '—';
-      const totalBadges = data.statistics?.total_badges_awarded ?? '—';
-
-      els.statTotalGardens.textContent = totalGardens;
-      els.statAverageScore.textContent = averageScore === '—' ? '—' : `${averageScore}`;
-      els.statTotalBadges.textContent = totalBadges;
-    }
-
-    async function renderGardens() {
-      const gardens = filterGardens();
-      els.gardenGrid.innerHTML = '';
-      els.resultCount.textContent = `${gardens.length} garden${gardens.length === 1 ? '' : 's'}`;
-
-      if (!gardens.length) {
-        els.gardenGrid.innerHTML = `
-          <div class="md:col-span-2 xl:col-span-3 border hairline p-8 soft-bg">
-            <div class="text-sm uppercase tracking-[0.18em] muted-2">No results</div>
-            <p class="mt-3 text-base muted">No gardens match the current search or filters.</p>
-          </div>
-        `;
-        return;
-      }
-
-      for (const garden of gardens) {
-        const node = els.template.content.cloneNode(true);
-
-        node.querySelector('.garden-id').textContent = garden.garden_id;
-        node.querySelector('.garden-name').textContent = garden.garden_name;
-        node.querySelector('.garden-location').textContent = `${garden.suburb}, ${garden.state}`;
-        node.querySelector('.garden-score').textContent = garden.score;
-        node.querySelector('.garden-rating').textContent = garden.rating;
-        node.querySelector('.garden-verification').textContent = garden.verification_label || garden.verification_level;
-        node.querySelector('.garden-evc').textContent = garden.primary_evc;
-        node.querySelector('.garden-status').textContent = garden.status;
-        node.querySelector('.garden-badge-count').textContent = `${garden.badge_count || garden.badges.length} earned`;
-        node.querySelector('.garden-last-verified').textContent = `Last verified ${garden.last_verified}`;
-
-        const link = node.querySelector('.garden-link');
-        link.href = garden.profile_url;
-
-        const badgeWrap = node.querySelector('.garden-badges');
-        const badgesToShow = (garden.badges || []).slice(0, 4);
-        
-        for (const badgeId of badgesToShow) {
-          const chip = document.createElement('span');
-          const badgeType = getBadgeType(badgeId);
-          const badgeLabel = await formatBadgeLabel(badgeId);
-          
-          // Apply type-specific styling
-          let badgeClass = 'badge-chip';
-          if (badgeType === 'verification') badgeClass += ' badge-verification';
-          if (badgeType === 'evidence') badgeClass += ' badge-evidence';
-          
-          chip.className = `${badgeClass} text-xs px-2 py-1`;
-          chip.textContent = badgeLabel;
-          chip.title = state.badgeDefinitions[badgeId]?.description || badgeLabel;
-          badgeWrap.appendChild(chip);
-        }
-
-        if ((garden.badges || []).length > 4) {
-          const chip = document.createElement('span');
-          chip.className = 'badge-chip text-xs px-2 py-1';
-          chip.textContent = `+${garden.badges.length - 4} more`;
-          badgeWrap.appendChild(chip);
-        }
-
-        els.gardenGrid.appendChild(node);
-      }
-    }
-
-    function setupFilters() {
-      document.querySelectorAll('.filter-btn').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-          button.classList.add('active');
-          state.verification = button.dataset.filter;
-          renderGardens();
-        });
-      });
-
-      document.querySelectorAll('.score-btn').forEach(button => {
-        button.addEventListener('click', () => {
-          document.querySelectorAll('.score-btn').forEach(btn => btn.classList.remove('active'));
-          button.classList.add('active');
-          state.score = button.dataset.score;
-          renderGardens();
-        });
-      });
-
-      els.searchInput.addEventListener('input', (event) => {
-        state.search = event.target.value.trim();
+/* ---- FILTERS ---- */
+function setupFilters() {
+  var fBtns = document.querySelectorAll('.filter-btn');
+  for (var i = 0; i < fBtns.length; i++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        for (var j = 0; j < fBtns.length; j++) fBtns[j].classList.remove('active');
+        btn.classList.add('active');
+        state.verification = btn.dataset.filter;
         renderGardens();
       });
-    }
+    })(fBtns[i]);
+  }
 
-    async function initRegistry() {
-      try {
-        // Load badge definitions first
-        try {
-          state.badgeDefinitions = await getBadgeDefinitions();
-        } catch (error) {
-          console.warn('Could not load badge definitions:', error);
-          state.badgeDefinitions = {};
-        }
+  var sBtns = document.querySelectorAll('.score-btn');
+  for (var i = 0; i < sBtns.length; i++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        for (var j = 0; j < sBtns.length; j++) sBtns[j].classList.remove('active');
+        btn.classList.add('active');
+        state.score = btn.dataset.score;
+        renderGardens();
+      });
+    })(sBtns[i]);
+  }
 
-        const response = await fetch(registryPath, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  var search = document.getElementById('searchInput');
+  if (search) {
+    search.addEventListener('input', function() {
+      state.search = search.value.trim();
+      renderGardens();
+    });
+  }
+}
 
-        const data = await response.json();
-        state.gardens = data.gardens || [];
+/* ---- BOOT ---- */
+function initRegistry() {
+  fetch('/data/registry.json', { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      state.gardens = data.gardens || [];
+      renderStats(data);
+      renderGardens();
+    })
+    .catch(function(err) {
+      console.error('Registry load failed:', err);
+      var rc = document.getElementById('resultCount');
+      var grid = document.getElementById('gardenGrid');
+      if (rc) rc.textContent = 'Could not load registry';
+      if (grid) grid.innerHTML = '<div class="md:col-span-2 xl:col-span-3 border hl p-8 sb"><div class="text-xs uppercase tracking-[0.18em] mu2">Registry unavailable</div><p class="mt-3 text-sm mu">Check that /data/registry.json exists.</p></div>';
+    });
+}
 
-        renderStats(data);
-        await renderGardens();
-      } catch (error) {
-        console.error('Failed to load registry:', error);
-        els.resultCount.textContent = 'Could not load registry';
-        els.gardenGrid.innerHTML = `
-          <div class="md:col-span-2 xl:col-span-3 border hairline p-8 soft-bg">
-            <div class="text-sm uppercase tracking-[0.18em] muted-2">Registry unavailable</div>
-            <p class="mt-3 text-base muted">Check that <code>/data/registry.json</code> exists and the path is correct.</p>
-          </div>
-        `;
-      }
-    }
-
-    setupFilters();
-    initRegistry();
-  </script>
+setupFilters();
+initRegistry();
+</script>
 </body>
 </html>
