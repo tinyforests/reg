@@ -1026,7 +1026,7 @@ var _markers = {};
 function initMiniMap(key, lat, lng) {
   if (_maps[key]) { _maps[key].remove(); }
   var center = (lat && lng) ? [lat, lng] : [-37.8136, 144.9631];
-  var zoom   = (lat && lng) ? 15 : 11;
+  var zoom   = (lat && lng) ? 14 : 11;
   var m = L.map('map_' + key, {
     center: center, zoom: zoom,
     zoomControl: true, scrollWheelZoom: false, attributionControl: false
