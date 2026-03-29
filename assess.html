@@ -1294,6 +1294,21 @@ function loadSpeciesDb() {
       _speciesDb = data.species || [];
       var status = document.getElementById('speciesDbStatus');
       if (status) status.textContent = _speciesDb.length + ' species in database';
+      /* Re-render species list now that DB has layers available */
+      if (_speciesList.length > 0) {
+        for (var ri = 0; ri < _speciesList.length; ri++) {
+          var sp = _speciesList[ri];
+          if (typeof sp === 'object' && !sp.layer) {
+            for (var di = 0; di < _speciesDb.length; di++) {
+              if (_speciesDb[di].botanical_name === sp.name) {
+                sp.layer = _speciesDb[di].layer || '';
+                break;
+              }
+            }
+          }
+        }
+        renderSpeciesList();
+      }
     })
     .catch(function() {
       var status = document.getElementById('speciesDbStatus');
