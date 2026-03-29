@@ -862,8 +862,9 @@ function buildRecordFromForm() {
       verification_label:          verLabel(gv('f_ev_verification')),
       assessor:                    gv('f_ev_assessor')
     },
-    milestones: [],
-    activity_log: []
+    milestones:    _loadedRecord ? (_loadedRecord.milestones    || []) : [],
+    activity_log:  _loadedRecord ? (_loadedRecord.activity_log  || []) : [],
+    notes:         _loadedRecord ? (_loadedRecord.notes         || '') : ''
   };
 }
 
@@ -1285,6 +1286,7 @@ function initMapsOnTabSwitch(tabName) {
 var _speciesList = [];
 var _speciesDb = [];
 var _dropdownIdx = -1;
+var _loadedRecord = null; /* preserves fields the form does not cover */
 
 /* Load species database from JSON -- called at boot */
 function loadSpeciesDb() {
@@ -1521,7 +1523,7 @@ if (resetBtn) {
   resetBtn.addEventListener('click', function() {
     fetch('/data/arundel.json')
       .then(function(r) { return r.json(); })
-      .then(function(data) { populateFormFromRecord(data); renderLive(); })
+      .then(function(data) { _loadedRecord = data; populateFormFromRecord(data); renderLive(); })
       .catch(function() { console.log('No saved data to reset to'); });
   });
 }
@@ -1563,6 +1565,7 @@ function loadGarden(dataPath) {
       return r.json();
     })
     .then(function(data) {
+      _loadedRecord = data;
       populateFormFromRecord(data);
       renderLive();
       initAllMaps();
@@ -1586,6 +1589,7 @@ function resetToNew() {
     if (_maps[mapKeys[k]]) { _maps[mapKeys[k]].remove(); delete _maps[mapKeys[k]]; }
   }
   _maps = {}; _markers = {};
+  _loadedRecord = null;
   var status = document.getElementById('gardenSelectorStatus');
   if (status) status.textContent = 'New garden';
   renderLive();
