@@ -7,8 +7,8 @@
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
-    "average_score": 42,
-    "total_badges_awarded": 14
+    "average_score": 44,
+    "total_badges_awarded": 15
   },
   "gardens": [
     {
@@ -46,7 +46,7 @@
       "type": "Urban Ecological Retrofit",
       "suburb": "South Yarra",
       "state": "VIC",
-      "score": 23,
+      "score": 29,
       "rating": "Habitat Garden",
       "primary_evc": "Urban Ecological Garden",
       "bioregion": "Inner Melbourne",
@@ -54,9 +54,10 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Feb 2026",
-      "badge_count": 1,
+      "badge_count": 2,
       "badges": [
-        "gs_verified"
+        "gs_verified",
+        "species_rich_20"
       ],
       "profile_url": "/gardens/nicholson10/index.html",
       "data_file": "data/nicholson.json"

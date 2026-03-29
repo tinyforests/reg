@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 94,
+    "total_species": 103,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -965,6 +965,96 @@
       "notes": "",
       "gardens": [
         "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Actinotus helianthi",
+      "common_name": "Flannel Flower",
+      "layer": "forb",
+      "family": "Apiaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Correa pulchella",
+      "common_name": "Salmon Correa",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Doryanthes excelsa",
+      "common_name": "Gymea Lily",
+      "layer": "forb",
+      "family": "Doryanthaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus corymbia citriodora Dwarf",
+      "common_name": "Dwarf Lemon Scented Gum",
+      "layer": "small_tree",
+      "family": "Myrtaceae",
+      "notes": "dwarf cultivar",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus pulverulenta",
+      "common_name": "Baby Blue",
+      "layer": "small_tree",
+      "family": "Myrtaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Hakea francisiana",
+      "common_name": "Emu Tree",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Prostanthera sieberi",
+      "common_name": "Minty Native",
+      "layer": "shrub",
+      "family": "Lamiaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Poa cita",
+      "common_name": "Silver Tussock",
+      "layer": "grass",
+      "family": "Poaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Pratia puberula",
+      "common_name": "Alpine Pratia",
+      "layer": "groundcover",
+      "family": "Campanulaceae",
+      "notes": "",
+      "gardens": [
+        "nicholson"
       ]
     }
   ]
