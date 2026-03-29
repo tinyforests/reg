@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 107,
+    "total_species": 116,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -738,7 +738,8 @@
       "family": "Lamiaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ]
     },
     {
@@ -1144,6 +1145,96 @@
       "common_name": "Tea Tree Burgundy",
       "layer": "shrub",
       "family": "Myrtaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Eremophila glabra Kalbarri Carpet",
+      "common_name": "Emu Bush Kalbarri Carpet",
+      "layer": "groundcover",
+      "family": "Scrophulariaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Lagerstroemia Lipan",
+      "common_name": "Crepe Myrtle Lipan",
+      "layer": "small_tree",
+      "family": "Lythraceae",
+      "notes": "non-indigenous cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Carex testacea Prairie Fire",
+      "common_name": "Orange Sedge Prairie Fire",
+      "layer": "grass",
+      "family": "Cyperaceae",
+      "notes": "non-indigenous cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Helichrysum petiolare",
+      "common_name": "Licorice Plant",
+      "layer": "groundcover",
+      "family": "Asteraceae",
+      "notes": "non-indigenous",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Salvia nemorosa Ostfriesland",
+      "common_name": "Salvia Ostfriesland",
+      "layer": "forb",
+      "family": "Lamiaceae",
+      "notes": "non-indigenous cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Euphorbia wulfenii",
+      "common_name": "Mediterranean Spurge",
+      "layer": "forb",
+      "family": "Euphorbiaceae",
+      "notes": "non-indigenous",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Kniphofia Poco Red",
+      "common_name": "Dwarf Red Hot Poker",
+      "layer": "forb",
+      "family": "Asphodelaceae",
+      "notes": "non-indigenous cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Carex testacea",
+      "common_name": "Orange Sedge Prairie Fire",
+      "layer": "sedge",
+      "family": "Cyperaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Salvia nemorosa",
+      "common_name": "Salvia Ostfriesland",
+      "layer": "forb",
+      "family": "Lamiaceae",
       "notes": "cultivar",
       "gardens": [
         "montAlbert"
