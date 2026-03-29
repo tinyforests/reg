@@ -112,9 +112,9 @@
       <a href="#signals" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Signals</a>
       <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
       <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
-      <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
       <a href="#species" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
-      <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
+      <a <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
+      href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
     </nav>
     <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Theme</button>
   </div>
@@ -252,27 +252,12 @@
     </div>
   </section>
 
-  <section id="record" class="stagger">
-    <div class="section-label mb-1">Garden Story</div>
-    <h2 class="font-serif text-4xl mb-6">Field Record</h2>
-    <div class="grid lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 space-y-4" id="activityLog"></div>
-      <div class="space-y-4">
-        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
-          <div class="section-label mb-4">Garden Facts</div>
-          <dl class="space-y-3 text-xs" id="gardenFacts"></dl>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="species" class="stagger">
     <div class="section-label mb-1">Documented Flora</div>
     <h2 class="font-serif text-4xl mb-6">Species List</h2>
     <div id="speciesSection"></div>
   </section>
-
-  <section id="trajectory" class="stagger">
+<section id="trajectory" class="stagger">
     <div class="section-label mb-1">Long-term View</div>
     <h2 class="font-serif text-4xl mb-6">Trajectory</h2>
     <div class="grid lg:grid-cols-2 gap-6">
@@ -292,6 +277,19 @@
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">3-Year Vision</div>
           <p class="text-sm leading-relaxed opacity-80" id="visionText"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="record" class="stagger">
+    <div class="section-label mb-1">Garden Story</div>
+    <h2 class="font-serif text-4xl mb-6">Field Record</h2>
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4" id="activityLog"></div>
+      <div class="space-y-4">
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-4">Garden Facts</div>
+          <dl class="space-y-3 text-xs" id="gardenFacts"></dl>
         </div>
       </div>
     </div>
