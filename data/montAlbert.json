@@ -9,7 +9,7 @@
   "target_score": 80,
   "stewards": "Gardener & Son",
   "designer": "Gardener & Son",
-  "area_sqm": 128,
+  "area_sqm": 256,
   "description": "A layered ecological planting designed to create the sense of moving through a small landscape rather than viewing a traditional garden border. A gentle stepping-stone path passes through the bed, allowing moments of immersion within the planting, while the surrounding vegetation builds structure, softness, and seasonal change. Taller shrubs and small trees form a protective woodland backdrop along the far edge, while grasses and flowering perennials create a flowing meadow-like matrix through the middle. Lower groundcovers soften the path edge and create a continuous living ground layer. The intention is a small ecological landscape -- soft, natural, and immersive -- where structure, habitat, and seasonal beauty work together.",
   "evc": {
     "name": "Grassy Woodland",
@@ -20,7 +20,7 @@
   "biodiversity": {
     "indigenous_species_current": 0,
     "indigenous_species_baseline": 0,
-    "indigenous_species_target": 36,
+    "indigenous_species_target": 48,
     "indigenous_dominant": false,
     "structural_layers_current": 0,
     "structural_layers_baseline": 0,
@@ -65,7 +65,19 @@
       "Poa labillardieri Eskdale",
       "Dianella tasmanica Tas Red",
       "Leptospermum Morrison Burgundy",
-      "Plectranthus parviflorus Blue Spires"
+      "Plectranthus parviflorus Blue Spires",
+      "Westringia fruticosa",
+      "Eremophila glabra Kalbarri Carpet",
+      "Lagerstroemia Lipan",
+      "Buddleja davidii",
+      "Carex testacea Prairie Fire",
+      "Helichrysum petiolare",
+      "Salvia nemorosa Ostfriesland",
+      "Miscanthus Flamingo",
+      "Euphorbia wulfenii",
+      "Kniphofia Poco Red",
+      "Carex testacea",
+      "Salvia nemorosa"
     ]
   },
   "soil_water": {
@@ -112,12 +124,22 @@
   },
   "milestones": [
     {
-      "title": "Design presented to client",
+      "title": "Ecological Cottage Garden design presented",
       "date": "Mar 2026",
       "complete": true
     },
     {
-      "title": "Installation",
+      "title": "Silver Native Garden design presented",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Installation -- Ecological Cottage Garden",
+      "date": "TBC",
+      "complete": false
+    },
+    {
+      "title": "Installation -- Silver Native Garden",
       "date": "TBC",
       "complete": false
     },
@@ -127,7 +149,7 @@
       "complete": false
     },
     {
-      "title": "Full garden stocktake",
+      "title": "Full garden stocktake -- all beds",
       "date": "TBC",
       "complete": false
     }
@@ -139,7 +161,21 @@
       "type": "Design",
       "category": "planting",
       "notes": "A layered ecological planting designed to create the sense of moving through a small landscape. A stepping-stone path passes through the bed allowing moments of immersion. Taller shrubs and small trees form a woodland backdrop -- Elaeocarpus, Hakea, Leptospermum and Olearia establish the upper layer. Through the middle, grasses including Themeda, Poa and Dichelachne create a flowing matrix, while flowering perennials emerge through to provide cottage seasonal colour. Closer to the path, Myoporum, Dichondra, Pratia and Scaevola soften the ground plane. The bed responds to varying light conditions -- shade-tolerant shrubs behind the path, sun-loving grasses and wildflowers in the open areas."
+    },
+    {
+      "title": "Silver Native Garden -- Design",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "A sunny, open planting within the lawn as a softer curved island bed. The mature pear remains dominant, with existing silverberry, agapanthus, flax and echium retained to form a light, airy backdrop in grey-blue tones. A crepe myrtle with soft lilac flower is introduced as a new structural tree, tying in with others already in the garden. Through the middle, ornamental grasses and flowering shrubs -- including a large miscanthus as focal point -- give movement and softness. Dianella, carex and euphorbia create repetition and rhythm. Toward the lawn edge, salvias, kniphofia, brachyscome and helichrysum bring seasonal colour while silver-toned and trailing plants soften the boundary between garden and grass. The reduced bed shape improves movement through the space while layered planting suppresses weeds and reduces maintenance."
+    },
+    {
+      "title": "Silver Native Garden -- Design",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "A sunny, open planting redesigned as a softer curved island within the lawn. The bed has been slightly reduced in size to improve flow and create a stronger sense of openness. The mature pear remains the dominant feature at the northern rear, with the existing silverberry, agapanthus, flax and echium retained to form a light, airy grey-blue backdrop. A crepe myrtle in soft lilac is introduced as a new structural tree to connect this bed to the wider garden. Through the middle, ornamental grasses and flowering shrubs give movement and softness -- a large miscanthus forms a focal point in the lower curve, with dianella, carex and euphorbia creating repetition and rhythm. Toward the lawn edge, salvias, kniphofia, brachyscome and helichrysum bring colour through warmer months while silver-toned trailing plants soften the boundary between garden and grass."
     }
   ],
-  "notes": "Design proposal stage. Baseline score will be recorded post-installation. Full garden stocktake of all beds planned at a later date -- this record covers the primary ecological cottage garden bed only (16x8m)."
+  "notes": "Design proposal stage -- two garden beds documented (Ecological Cottage Garden 16x8m and Silver Native Garden). Baseline score will be recorded post-installation. Full garden stocktake of all beds planned at a later date."
 }
