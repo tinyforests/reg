@@ -10,7 +10,7 @@
   "stewards": "Gardener & Son",
   "designer": "Gardener & Son",
   "area_sqm": 60,
-  "description": "A new registered installation focused on measurable uplift: compact-site habitat layering, soil reactivation, water-wise function, and repeatable documentation from day one.",
+  "description": "A place of calm immersion where cottage softness meets Japanese-inspired restraint. The rear garden is anchored by seasonal canopy, sculptural habitat forms, and a tapestry of everlastings and daisies in pink and purple tones. The front garden is conceived as a soft meadow arrival -- a textural landscape of grasses, wind flowers, and mauve drifts that shifts beautifully through the seasons. Non-permeable surfaces removed throughout, improving drainage and grounding the design in material honesty.",
   "evc": {
     "name": "Urban Ecological Garden",
     "code": "Urban prototype",
@@ -18,17 +18,55 @@
     "bioregion_code": "IML"
   },
   "biodiversity": {
-    "indigenous_species_current": 6,
+    "indigenous_species_current": 23,
     "indigenous_species_baseline": 2,
     "indigenous_species_target": 20,
     "indigenous_dominant": false,
-    "structural_layers_current": 2,
+    "structural_layers_current": 3,
     "structural_layers_baseline": 1,
     "canopy_cover_pct_current": 8,
     "canopy_cover_pct_baseline": 5,
     "canopy_cover_pct_target": 30,
     "weed_pressure": "Medium",
-    "weed_pressure_baseline": "High"
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Actinotus helianthi",
+      "Banksia spinulosa Birthday Candles",
+      "Brachyscome Mauve Bliss",
+      "Chrysocephalum apiculatum",
+      "Acaena novae-zelandiae",
+      "Correa pulchella",
+      "Dampiera diversifolia",
+      "Dichondra repens",
+      "Doryanthes excelsa",
+      "Eucalyptus corymbia citriodora Dwarf",
+      "Eucalyptus pulverulenta",
+      "Hakea francisiana",
+      "Leucophyta brownii",
+      "Linum marginale",
+      "Prostanthera sieberi",
+      "Pycnosorus globosus",
+      "Scaevola Mauve Clusters",
+      "Vittadinia muelleri",
+      "Wahlenbergia stricta",
+      "Xerochrysum bracteatum",
+      "Acer palmatum Osakazuki",
+      "Carex Frosted Curls",
+      "Euphorbia myrsinites",
+      "Pennisetum Purple Lea",
+      "Soleirolia soleirolii",
+      "Poa cita",
+      "Pratia puberula",
+      "Viola hederacea",
+      "Anemone hupehensis",
+      "Echinops ritro",
+      "Hylotelephium Matrona",
+      "Nepeta x faassenii",
+      "Buddleja davidii",
+      "Miscanthus Flamingo",
+      "Tulbaghia violacea",
+      "Lavandula x intermedia"
+    ]
   },
   "soil_water": {
     "soil_health_score": 2,
@@ -91,18 +129,25 @@
   ],
   "activity_log": [
     {
-      "title": "Report #001 -- Baseline capture",
-      "date": "23 Feb 2026",
+      "title": "Baseline assessment -- urban ecological retrofit",
+      "date": "Feb 2026",
       "type": "Verified",
       "category": "baseline",
-      "notes": "Baseline condition recorded. First moves target structure: edges, refuge pockets, and soil conditions that can carry life through summer."
+      "notes": "Baseline condition recorded. Initial score set to establish trajectory tracking. Priority signals: structure, refuge, soil readiness, and water-wise function."
     },
     {
-      "title": "Planting intent drafted",
-      "date": "23 Feb 2026",
-      "type": "Draft",
-      "category": "planning",
-      "notes": "Prioritise indigenous dominance where possible. Ensure year-round flowering coverage. Add at least one hardy refuge zone to support invertebrates and microfauna."
+      "title": "Rear Garden -- Calm Immersion",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "Beth's garden has been designed as a place of calm immersion -- a space where cottage softness meets Japanese-inspired restraint. The canopy of Acer palmatum and dwarf lemon-scented gum creates seasonal presence and dappled light, while sculptural forms like Doryanthes, Hakea and soft drifts of Banksia and Correa anchor the space with structure and habitat value. Beneath this framework, a tapestry of everlastings, billy buttons, flannel flowers and mauve daisies bring pink and purple tones through the seasons, many chosen for their ability to dry beautifully for preserving. The result is a resilient, low-maintenance garden that feels expressive yet grounded -- a place to read, illustrate, forage, hang laundry in the breeze, and quietly lose yourself in beauty year-round."
+    },
+    {
+      "title": "Front Garden -- Soft Meadow Arrival",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "The front garden has been conceived as a soft meadow arrival -- a gentle, textural landscape with movement and seasonal rhythm. Repurposed bricks are reset into a small meandering path, creating a sense of wander rather than directness, while improving permeability and grounding the space in material honesty. Grasses such as Poa cita provide structure and sway, forming a luminous backdrop for wind flowers, globe thistles and Jerusalem sage. Lavender, catmint and society garlic weave through in mauve and soft purple tones, echoing Beth's love of colour while maintaining resilience. The result is a meadow that feels expressive and romantic but controlled -- a welcoming threshold that shifts beautifully through the seasons."
     }
   ]
 }
