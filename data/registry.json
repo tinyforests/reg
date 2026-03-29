@@ -2,13 +2,13 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 3,
+    "total_gardens": 4,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
     "average_score": 44,
-    "total_badges_awarded": 15
+    "total_badges_awarded": 18
   },
   "gardens": [
     {
@@ -85,6 +85,29 @@
       ],
       "profile_url": "/gardens/parring11/index.html",
       "data_file": "data/parring.json"
+    },
+    {
+      "garden_id": "ER-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "type": "Habitat Garden",
+      "suburb": "Surrey Hills",
+      "state": "VIC",
+      "score": 44,
+      "rating": "Ecological Garden",
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Baseline established",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Mar 2026",
+      "badge_count": 3,
+      "badges": [
+        "gs_verified",
+        "indigenous_dominant",
+        "species_rich_20"
+      ],
+      "profile_url": "/gardens/middlesex80/index.html",
+      "data_file": "data/middlesex.json"
     }
   ]
 }
