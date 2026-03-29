@@ -5,7 +5,7 @@
   "suburb": "Surrey Hills",
   "state": "VIC",
   "assessment_date": "Mar 2026",
-  "baseline_date": "Mar 2026",
+  "baseline_date": "Dec 2025",
   "target_score": 82,
   "stewards": "Gardener & Son",
   "designer": "Gardener & Son",
@@ -132,18 +132,95 @@
   ],
   "activity_log": [
     {
-      "title": "Baseline assessment -- habitat garden installation",
-      "date": "Mar 2026",
-      "type": "Verified",
-      "category": "baseline",
-      "notes": "Baseline condition recorded. 20 indigenous species installed across ground, shrub and emerging canopy layers. Strong pollinator and small bird habitat intent. Surrey Hills EVC context -- Grassy Woodland -- acknowledged in species selection. Proximity to Surrey Hills Reserve noted as connectivity asset. Corridor node status confirmed."
-    },
-    {
       "title": "The Habitat Garden",
-      "date": "Mar 2026",
+      "date": "Nov 2025",
       "type": "Design",
       "category": "planting",
       "notes": "The Habitat Garden has been designed to bring together native bushland character, wild meadow softness, and selective productive planting. A habitat-rich, low-chemical landscape that supports pollinators, small birds, butterflies, and local insect life while providing a calming daily outlook from the home. The planting palette prioritises Victorian natives, favouring species indigenous to the Surrey Hills area, selected for year-round flowering, seasonal movement, and layered ecological function. This forward-thinking design focuses on long-term resilience, sensory experience and supporting the re-establishment of local biodiversity."
+    },
+    {
+      "title": "Goods Delivery",
+      "date": "9 Dec 2025",
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Materials delivered to site."
+    },
+    {
+      "title": "Installation of Bio Mulch",
+      "date": "9 Dec 2025",
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Bio mulch installed across planting zones."
+    },
+    {
+      "title": "Installation of Organic Soil Mix",
+      "date": "9 Dec 2025",
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Organic soil mix installed to improve soil health and water retention."
+    },
+    {
+      "title": "Rock installation and placement",
+      "date": "9 Dec 2025",
+      "type": "Installed",
+      "category": "habitat",
+      "notes": "Rocks placed to create thermal mass for lizards, insects and soil life."
+    },
+    {
+      "title": "Blow down and tidy of grounds",
+      "date": "9 Dec 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Site cleaned and prepared."
+    },
+    {
+      "title": "Excavation and removal of existing plants",
+      "date": "9 Dec 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Existing non-indigenous plants removed. Site cleared for ecological planting."
+    },
+    {
+      "title": "Weeding",
+      "date": "9 Dec 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Weed pressure reduced ahead of planting installation."
+    },
+    {
+      "title": "Ground contouring and shaping",
+      "date": "9 Dec 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Ground shaped to direct water movement and create planting zones."
+    },
+    {
+      "title": "Plant Sourcing",
+      "date": "10 Dec 2025",
+      "type": "Recorded",
+      "category": "planting",
+      "notes": "Indigenous species sourced for installation."
+    },
+    {
+      "title": "Plant Placement",
+      "date": "10 Dec 2025",
+      "type": "Recorded",
+      "category": "planting",
+      "notes": "Plants positioned across site prior to planting."
+    },
+    {
+      "title": "Planting",
+      "date": "10 Dec 2025",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "20 indigenous species planted across ground, shrub and emerging canopy layers."
+    },
+    {
+      "title": "Project Wrap",
+      "date": "10 Dec 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Site completed, cleaned and handed over."
     }
   ]
 }
