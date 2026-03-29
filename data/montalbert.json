@@ -1,0 +1,145 @@
+{
+  "garden_id": "ER-VIC-CAN-MON-001",
+  "garden_name": "Mont Albert",
+  "garden_type": "Ecological Cottage Garden",
+  "suburb": "Canterbury",
+  "state": "VIC",
+  "assessment_date": "Mar 2026",
+  "baseline_date": "Mar 2026",
+  "target_score": 80,
+  "stewards": "Gardener & Son",
+  "designer": "Gardener & Son",
+  "area_sqm": 128,
+  "description": "A layered ecological planting designed to create the sense of moving through a small landscape rather than viewing a traditional garden border. A gentle stepping-stone path passes through the bed, allowing moments of immersion within the planting, while the surrounding vegetation builds structure, softness, and seasonal change. Taller shrubs and small trees form a protective woodland backdrop along the far edge, while grasses and flowering perennials create a flowing meadow-like matrix through the middle. Lower groundcovers soften the path edge and create a continuous living ground layer. The intention is a small ecological landscape -- soft, natural, and immersive -- where structure, habitat, and seasonal beauty work together.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 0,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 36,
+    "indigenous_dominant": false,
+    "structural_layers_current": 0,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 20,
+    "weed_pressure": "",
+    "weed_pressure_baseline": "",
+    "species_list": [
+      "Billardiera mutabilis",
+      "Westringia fruticosa Wynyabbie Gem",
+      "Xerochrysum viscosum",
+      "Dichelachne crinita",
+      "Pelargonium australe",
+      "Correa pulchella",
+      "Indigofera australis",
+      "Hakea ulicina",
+      "Hakea francisiana",
+      "Olearia lirata",
+      "Myoporum parvifolium Purpurea",
+      "Pycnosorus globosus",
+      "Bulbine bulbosa",
+      "Poa labillardieri",
+      "Elaeocarpus reticulatus",
+      "Chrysocephalum apiculatum",
+      "Dianella tasmanica",
+      "Hardenbergia violacea",
+      "Dichondra repens",
+      "Themeda triandra",
+      "Wahlenbergia stricta",
+      "Anigozanthos Bush Gems",
+      "Stylidium armeria",
+      "Banksia spinulosa Birthday Candles",
+      "Goodenia ovata",
+      "Leptorhynchos tenuifolius",
+      "Scaevola Mauve Clusters",
+      "Pratia puberula",
+      "Linum marginale",
+      "Spyridium parvifolium",
+      "Coprosma quadrifida",
+      "Brachyscome Mauve Bliss",
+      "Poa labillardieri Eskdale",
+      "Dianella tasmanica Tas Red",
+      "Leptospermum Morrison Burgundy",
+      "Plectranthus parviflorus Blue Spires"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 0,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 0,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 0
+  },
+  "habitat": {
+    "habitat_nodes": 0,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Layered ecological planting -- stepping-stone path design",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": "",
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.13,
+    "cluster_area_ha": 0,
+    "cluster_name": "Canterbury"
+  },
+  "evidence": {
+    "has_photos": false,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Design presented to client",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Installation",
+      "date": "TBC",
+      "complete": false
+    },
+    {
+      "title": "Baseline assessment",
+      "date": "Post-install",
+      "complete": false
+    },
+    {
+      "title": "Full garden stocktake",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Ecological Cottage Garden -- Design",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "A layered ecological planting designed to create the sense of moving through a small landscape. A stepping-stone path passes through the bed allowing moments of immersion. Taller shrubs and small trees form a woodland backdrop -- Elaeocarpus, Hakea, Leptospermum and Olearia establish the upper layer. Through the middle, grasses including Themeda, Poa and Dichelachne create a flowing matrix, while flowering perennials emerge through to provide cottage seasonal colour. Closer to the path, Myoporum, Dichondra, Pratia and Scaevola soften the ground plane. The bed responds to varying light conditions -- shade-tolerant shrubs behind the path, sun-loving grasses and wildflowers in the open areas."
+    }
+  ],
+  "notes": "Design proposal stage. Baseline score will be recorded post-installation. Full garden stocktake of all beds planned at a later date -- this record covers the primary ecological cottage garden bed only (16x8m)."
+}

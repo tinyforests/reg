@@ -2,13 +2,13 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 4,
+    "total_gardens": 5,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
     "average_score": 45,
-    "total_badges_awarded": 19
+    "total_badges_awarded": 20
   },
   "gardens": [
     {
@@ -109,6 +109,27 @@
       ],
       "profile_url": "/gardens/middlesex80/index.html",
       "data_file": "data/middlesex.json"
+    },
+    {
+      "garden_id": "ER-VIC-CAN-MON-001",
+      "garden_name": "Mont Albert",
+      "type": "Ecological Cottage Garden",
+      "suburb": "Canterbury",
+      "state": "VIC",
+      "score": 0,
+      "rating": "Design Proposal",
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Design Proposal",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Mar 2026",
+      "badge_count": 1,
+      "badges": [
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/montAlbert100/index.html",
+      "data_file": "data/montAlbert.json"
     }
   ]
 }
