@@ -6,7 +6,7 @@
   "state": "VIC",
   "assessment_date": "Mar 2026",
   "baseline_date": "Mar 2026",
-  "target_score": 80,
+  "target_score": 82,
   "stewards": "Gardener & Son",
   "designer": "Gardener & Son",
   "area_sqm": 200,
@@ -75,21 +75,25 @@
     "fauna_sightings": []
   },
   "connectivity": {
+    "lat": -37.831705,
+    "lng": 145.088767,
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
     "park_distance_m": 120,
+    "park_lat": -37.833187,
+    "park_lng": 145.093412,
     "adjacent_registered_gardens": [
       {
         "id": "ER-VIC-SH-ARU-0001",
         "name": "Arundel",
         "distance_m": 350,
         "direction": "north",
-        "verified": true,
-        "lat": -37.8234,
-        "lng": 145.0891
+        "lat": -37.830478,
+        "lng": 145.088303,
+        "verified": true
       }
     ],
-    "corridor_node_confirmed": false,
+    "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0.2,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills"
@@ -97,9 +101,9 @@
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
-    "has_fauna_record": false,
     "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son"
@@ -111,12 +115,17 @@
       "complete": true
     },
     {
+      "title": "Corridor node confirmed",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
       "title": "Fauna monitoring commenced",
       "date": "Autumn 2026",
       "complete": false
     },
     {
-      "title": "Corridor node assessment",
+      "title": "Habitat nodes installed",
       "date": "Winter 2026",
       "complete": false
     }
@@ -127,7 +136,7 @@
       "date": "Mar 2026",
       "type": "Verified",
       "category": "baseline",
-      "notes": "Baseline condition recorded. 20 indigenous species installed across ground, shrub and emerging canopy layers. Strong pollinator and small bird habitat intent. Surrey Hills EVC context -- Grassy Woodland -- acknowledged in species selection. Proximity to Surrey Hills Reserve noted as connectivity asset."
+      "notes": "Baseline condition recorded. 20 indigenous species installed across ground, shrub and emerging canopy layers. Strong pollinator and small bird habitat intent. Surrey Hills EVC context -- Grassy Woodland -- acknowledged in species selection. Proximity to Surrey Hills Reserve noted as connectivity asset. Corridor node status confirmed."
     },
     {
       "title": "The Habitat Garden",
