@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 103,
+    "total_species": 104,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -33,7 +33,8 @@
       "family": "Fabaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -43,7 +44,8 @@
       "layer": "shrub",
       "family": "Fabaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -74,7 +76,8 @@
       "family": "Fabaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -125,7 +128,8 @@
       "layer": "climber",
       "family": "Pittosporaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -145,7 +149,8 @@
       "layer": "shrub",
       "family": "Rutaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -236,7 +241,8 @@
       "layer": "forb",
       "family": "Asteraceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -339,7 +345,8 @@
       "family": "Poaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -349,7 +356,8 @@
       "layer": "grass",
       "family": "Poaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -420,7 +428,8 @@
       "layer": "shrub",
       "family": "Amaranthaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -531,7 +540,8 @@
       "layer": "climber",
       "family": "Fabaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -541,7 +551,8 @@
       "layer": "groundcover",
       "family": "Fabaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -551,7 +562,8 @@
       "layer": "forb",
       "family": "Solanaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ],
       "notes": ""
     },
@@ -584,7 +596,8 @@
       "family": "Poaceae",
       "notes": "cultivar",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -614,7 +627,8 @@
       "family": "Proteaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -624,7 +638,8 @@
       "family": "Rhamnaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -644,7 +659,8 @@
       "family": "Fabaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -654,7 +670,8 @@
       "family": "Rubiaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -704,7 +721,8 @@
       "family": "Goodeniaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -734,7 +752,8 @@
       "family": "Asteraceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "middlesex"
       ]
     },
     {
@@ -1055,6 +1074,16 @@
       "notes": "",
       "gardens": [
         "nicholson"
+      ]
+    },
+    {
+      "botanical_name": "Wahlenbergia communis",
+      "common_name": "Tufted Bluebell",
+      "layer": "forb",
+      "family": "Campanulaceae",
+      "notes": "",
+      "gardens": [
+        "middlesex"
       ]
     }
   ]

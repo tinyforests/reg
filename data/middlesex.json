@@ -1,0 +1,140 @@
+{
+  "garden_id": "ER-VIC-SH-MID-001",
+  "garden_name": "Middlesex",
+  "garden_type": "Habitat Garden",
+  "suburb": "Surrey Hills",
+  "state": "VIC",
+  "assessment_date": "Mar 2026",
+  "baseline_date": "Mar 2026",
+  "target_score": 80,
+  "stewards": "Gardener & Son",
+  "designer": "Gardener & Son",
+  "area_sqm": 200,
+  "description": "The Habitat Garden has been designed to bring together native bushland character, wild meadow softness, and selective productive planting. A habitat-rich, low-chemical landscape that supports pollinators, small birds, butterflies, and local insect life while providing a calming daily outlook from the home. The planting palette prioritises Victorian natives, favouring species indigenous to the Surrey Hills area, selected for year-round flowering, seasonal movement, and layered ecological function. This forward-thinking design focuses on long-term resilience, sensory experience and supporting the re-establishment of local biodiversity.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 20,
+    "indigenous_species_baseline": 2,
+    "indigenous_species_target": 30,
+    "indigenous_dominant": true,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 1,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 2,
+    "canopy_cover_pct_target": 30,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Kennedia prostrata",
+      "Hardenbergia violacea",
+      "Poa labillardieri",
+      "Vittadinia muelleri",
+      "Billardiera mutabilis",
+      "Bossiaea prostrata",
+      "Hakea ulicina",
+      "Wahlenbergia communis",
+      "Coprosma quadrifida",
+      "Spyridium parvifolium",
+      "Glycine clandestina",
+      "Dichelachne crinita",
+      "Daviesia leptophylla",
+      "Indigofera australis",
+      "Nicotiana suaveolens",
+      "Goodenia ovata",
+      "Correa reflexa",
+      "Olearia lirata",
+      "Einadia nutans",
+      "Poa labillardieri Eskdale"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 2,
+    "soil_health_baseline": 1,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 75
+  },
+  "habitat": {
+    "habitat_nodes": 1,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Layered ecological planting -- Victorian indigenous species",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Surrey Hills Reserve",
+    "park_distance_m": 120,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-VIC-SH-ARU-0001",
+        "name": "Arundel",
+        "distance_m": 350,
+        "direction": "north",
+        "verified": true,
+        "lat": -37.8234,
+        "lng": 145.0891
+      }
+    ],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.2,
+    "cluster_area_ha": 2.1,
+    "cluster_name": "Surrey Hills"
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Baseline established",
+      "date": "Mar 2026",
+      "complete": true
+    },
+    {
+      "title": "Fauna monitoring commenced",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "Corridor node assessment",
+      "date": "Winter 2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Baseline assessment -- habitat garden installation",
+      "date": "Mar 2026",
+      "type": "Verified",
+      "category": "baseline",
+      "notes": "Baseline condition recorded. 20 indigenous species installed across ground, shrub and emerging canopy layers. Strong pollinator and small bird habitat intent. Surrey Hills EVC context -- Grassy Woodland -- acknowledged in species selection. Proximity to Surrey Hills Reserve noted as connectivity asset."
+    },
+    {
+      "title": "The Habitat Garden",
+      "date": "Mar 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "The Habitat Garden has been designed to bring together native bushland character, wild meadow softness, and selective productive planting. A habitat-rich, low-chemical landscape that supports pollinators, small birds, butterflies, and local insect life while providing a calming daily outlook from the home. The planting palette prioritises Victorian natives, favouring species indigenous to the Surrey Hills area, selected for year-round flowering, seasonal movement, and layered ecological function. This forward-thinking design focuses on long-term resilience, sensory experience and supporting the re-establishment of local biodiversity."
+    }
+  ]
+}
