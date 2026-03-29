@@ -37,7 +37,7 @@
         "fauna_record",
         "full_record"
       ],
-      "profile_url": "/gardens/REG-VIC-SH-001/index.html",
+      "profile_url": "/gardens/arundel08/index.html",
       "data_file": "data/arundel.json"
     },
     {
@@ -58,7 +58,7 @@
       "badges": [
         "gs_verified"
       ],
-      "profile_url": "/gardens/REG-VIC-SY-001/index.html",
+      "profile_url": "/gardens/nicholson10/index.html",
       "data_file": "data/nicholson.json"
     },
     {
@@ -82,7 +82,7 @@
         "gs_verified",
         "full_record"
       ],
-      "profile_url": "/gardens/REG-VIC-BAL-001/index.html",
+      "profile_url": "/gardens/parring11/index.html",
       "data_file": "data/parring.json"
     }
   ]
