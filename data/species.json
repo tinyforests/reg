@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 104,
+    "total_species": 107,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -45,7 +45,8 @@
       "family": "Fabaceae",
       "gardens": [
         "parring",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -65,7 +66,8 @@
       "layer": "shrub",
       "family": "Lamiaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -77,7 +79,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -87,7 +90,8 @@
       "layer": "groundcover",
       "family": "Asteraceae",
       "gardens": [
-        "parring"
+        "parring",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -118,7 +122,8 @@
       "family": "Proteaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -129,7 +134,8 @@
       "family": "Pittosporaceae",
       "gardens": [
         "parring",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -139,7 +145,8 @@
       "layer": "groundcover",
       "family": "Goodeniaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -201,7 +208,8 @@
       "family": "Asteraceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -211,7 +219,8 @@
       "layer": "forb",
       "family": "Campanulaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -231,7 +240,8 @@
       "layer": "forb",
       "family": "Haemodoraceae",
       "gardens": [
-        "parring"
+        "parring",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -252,7 +262,8 @@
       "layer": "forb",
       "family": "Geraniaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -293,7 +304,8 @@
       "layer": "forb",
       "family": "Asteraceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -313,7 +325,8 @@
       "layer": "forb",
       "family": "Asteraceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -324,7 +337,8 @@
       "family": "Asphodelaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -346,7 +360,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -357,7 +372,8 @@
       "family": "Poaceae",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -367,7 +383,8 @@
       "layer": "forb",
       "family": "Asphodelaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -377,7 +394,8 @@
       "layer": "groundcover",
       "family": "Convolvulaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -460,7 +478,8 @@
       "family": "Stylidiaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -481,7 +500,8 @@
       "family": "Asphodelaceae",
       "notes": "cultivar",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ]
     },
     {
@@ -500,7 +520,8 @@
       "layer": "forb",
       "family": "Asteraceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -520,7 +541,8 @@
       "layer": "forb",
       "family": "Linaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -585,7 +607,8 @@
       "family": "Poaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "montAlbert"
       ],
       "notes": ""
     },
@@ -597,7 +620,8 @@
       "notes": "cultivar",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ]
     },
     {
@@ -628,7 +652,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ]
     },
     {
@@ -639,7 +664,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ]
     },
     {
@@ -671,7 +697,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ]
     },
     {
@@ -722,7 +749,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ]
     },
     {
@@ -753,7 +781,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "montAlbert"
       ]
     },
     {
@@ -873,7 +902,8 @@
       "family": "Elaeocarpaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "montAlbert"
       ]
     },
     {
@@ -1003,7 +1033,8 @@
       "family": "Rutaceae",
       "notes": "",
       "gardens": [
-        "nicholson"
+        "nicholson",
+        "montAlbert"
       ]
     },
     {
@@ -1043,7 +1074,8 @@
       "family": "Proteaceae",
       "notes": "",
       "gardens": [
-        "nicholson"
+        "nicholson",
+        "montAlbert"
       ]
     },
     {
@@ -1073,7 +1105,8 @@
       "family": "Campanulaceae",
       "notes": "",
       "gardens": [
-        "nicholson"
+        "nicholson",
+        "montAlbert"
       ]
     },
     {
@@ -1084,6 +1117,36 @@
       "notes": "",
       "gardens": [
         "middlesex"
+      ]
+    },
+    {
+      "botanical_name": "Myoporum parvifolium Purpurea",
+      "common_name": "Purple Creeping Boobialla",
+      "layer": "groundcover",
+      "family": "Scrophulariaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Plectranthus parviflorus Blue Spires",
+      "common_name": "Cockspur Flower",
+      "layer": "groundcover",
+      "family": "Lamiaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Leptospermum Morrison Burgundy",
+      "common_name": "Tea Tree Burgundy",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "montAlbert"
       ]
     }
   ]
