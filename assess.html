@@ -848,7 +848,7 @@ function buildRecordFromForm() {
       park_lng:       parseFloat(gv('f_con_park_lng')) || null,
       adjacent_registered_gardens: adjacent_registered_gardens,
       corridor_node_confirmed:  gc('f_con_corridor'),
-      effective_ecological_area_ha: 0,
+      effective_ecological_area_ha: Math.round((gn('f_area_sqm') / 10000) * 100) / 100,
       cluster_area_ha:  gn('f_con_cluster_ha'),
       cluster_name:     gv('f_con_cluster_name')
     },
