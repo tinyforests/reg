@@ -120,8 +120,8 @@
     "water_function_score": 2,
     "water_function_baseline": 2,
     "water_function_max": 5,
-    "has_rainwater_system": false,
-    "has_moisture_basin": false,
+    "has_rainwater_system": true,
+    "has_moisture_basin": true,
     "has_swale": false,
     "mulch_depth_mm": 80
   },
