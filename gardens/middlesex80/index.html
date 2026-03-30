@@ -52,7 +52,7 @@
     /* Badge notification */
     #badgeNotification {
       position: fixed;
-      bottom: -160px;
+      top: -160px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 200;
@@ -61,10 +61,10 @@
       color: #3d4535;
       border: 1px solid rgba(61,69,53,.3);
       padding: 1.25rem 1.5rem;
-      transition: bottom 0.5s cubic-bezier(0.16,1,0.3,1);
+      transition: top 0.5s cubic-bezier(0.16,1,0.3,1);
       box-shadow: 0 8px 32px rgba(0,0,0,.15);
     }
-    #badgeNotification.show { bottom: 1.5rem; }
+    #badgeNotification.show { top: 5rem; }
     #badgeNotification .notif-label { font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; opacity:.6; margin-bottom:.35rem; }
     #badgeNotification .notif-badge { font-size:1.1rem; font-weight:600; margin-bottom:.25rem; font-family:"Abril Fatface",serif; }
     #badgeNotification .notif-desc  { font-size:.75rem; opacity:.75; line-height:1.4; }
