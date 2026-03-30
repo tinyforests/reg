@@ -14,8 +14,8 @@
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "",
+    "bioregion_code": ""
   },
   "biodiversity": {
     "indigenous_species_current": 20,
@@ -27,8 +27,8 @@
     "canopy_cover_pct_current": 5,
     "canopy_cover_pct_baseline": 2,
     "canopy_cover_pct_target": 30,
-    "weed_pressure": "Low",
-    "weed_pressure_baseline": "High",
+    "weed_pressure": "",
+    "weed_pressure_baseline": "",
     "species_list": [
       "Kennedia prostrata",
       "Hardenbergia violacea",
@@ -67,16 +67,16 @@
   "habitat": {
     "habitat_nodes": 1,
     "habitat_nodes_baseline": 0,
-    "has_embedded_logs": false,
-    "has_rock_refuges": false,
-    "has_water_feature": false,
-    "has_nest_boxes": false,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": true,
+    "has_nest_boxes": true,
     "planting_method": "Layered ecological planting -- Victorian indigenous species",
     "fauna_sightings": []
   },
   "connectivity": {
-    "lat": -37.831705,
-    "lng": 145.088767,
+    "lat": -37.830546,
+    "lng": 145.089223,
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
     "park_distance_m": 120,
@@ -88,13 +88,13 @@
         "name": "Arundel",
         "distance_m": 350,
         "direction": "north",
-        "lat": -37.830478,
-        "lng": 145.088303,
+        "lat": -37.83145,
+        "lng": 145.092931,
         "verified": true
       }
     ],
     "corridor_node_confirmed": true,
-    "effective_ecological_area_ha": 0.2,
+    "effective_ecological_area_ha": 0,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills"
   },
@@ -222,5 +222,6 @@
       "category": "groundworks",
       "notes": "Site completed, cleaned and handed over."
     }
-  ]
+  ],
+  "notes": ""
 }
