@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ecological Registry - Profile</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+* { border-radius:0!important; }
+
+/* STICKY PANEL */
+.sticky-panel{
+position:sticky;
+top:100px;
+}
+
+/* STRONG METRIC BOX */
+.metric{
+border:2px solid rgba(61,69,53,.4);
+background:rgba(61,69,53,.08);
+padding:1rem;
+text-align:center;
+}
+
+/* BADGES */
+.badge{
+padding:.35rem .7rem;
+font-size:.7rem;
+display:inline-block;
+}
+
+.badge-strong{
+border:2px solid rgba(61,69,53,.5);
+background:rgba(61,69,53,.2);
+font-weight:600;
+}
+
+.badge-soft{
+border:1px solid rgba(61,69,53,.2);
+background:rgba(61,69,53,.08);
+}
+
+/* UPGRADE CARDS */
+.upgrade{
+border:1px solid rgba(61,69,53,.2);
+background:rgba(61,69,53,.06);
+padding:.75rem;
+}
+</style>
+</head>
+
+<body class="bg-[#fff0dc] text-[#3d4535] font-sans">
+
+<header class="sticky top-0 bg-[#fff0dc] border-b p-4 flex justify-between">
+<div class="flex gap-3 items-center">
+<div class="w-8 h-8 bg-[#3d4535] text-white grid place-items-center">ER</div>
+<div>
+<div class="text-sm">Ecological Registry</div>
+<div id="headerMeta" class="text-xs opacity-60"></div>
+</div>
+</div>
+
+<div class="text-xs border px-2 py-1">UPLOAD TEST MARKER</div>
+</header>
+
+<main class="max-w-6xl mx-auto p-6">
+
+<div class="grid lg:grid-cols-12 gap-6">
+
+<!-- LEFT -->
+<div class="lg:col-span-8 border p-8">
+
+<div id="heroType" class="text-xs opacity-50 mb-3"></div>
+<h1 id="heroName" class="text-6xl font-serif mb-4"></h1>
+
+<div id="heroTags" class="flex gap-2 mb-4"></div>
+
+<p id="heroDesc" class="opacity-80 mb-6"></p>
+
+<div class="grid grid-cols-2 gap-4 text-sm">
+<div>
+<div class="text-xs opacity-50">Stewards</div>
+<div id="heroStewards"></div>
+</div>
+
+<div>
+<div class="text-xs opacity-50">Registry ID</div>
+<div id="heroId"></div>
+</div>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="lg:col-span-4">
+<div class="sticky-panel flex flex-col gap-4">
+
+<!-- SCORE PANEL -->
+<div class="relative p-8" style="background:#7a9e5f">
+
+<div style="position:absolute;top:12px;right:12px;font-size:.65rem;border:1px solid rgba(0,0,0,.2);padding:.3rem .6rem;">
+UPDATED LAYOUT V5
+</div>
+
+<div class="grid grid-cols-2 gap-3 mb-6">
+
+<div class="metric">
+<div class="text-xs opacity-50 mb-2">Score</div>
+<div id="heroScore" class="text-7xl font-serif"></div>
+</div>
+
+<div class="metric">
+<div class="text-xs opacity-50 mb-2">Badges</div>
+<div id="heroBadgeCount" class="text-7xl font-serif"></div>
+</div>
+
+</div>
+
+<div class="mb-4">
+
+<div id="heroLevel" class="badge badge-strong mb-3"></div>
+
+<div class="h-2 bg-white/30">
+<div id="heroScoreBar" class="h-full bg-black" style="width:0%"></div>
+</div>
+
+<div class="flex justify-between text-xs mt-2">
+<span>Baseline <span id="heroBaseline"></span></span>
+<span>Target 82</span>
+</div>
+
+</div>
+
+<div>
+<div class="text-xs mb-2">Badges earned</div>
+<div id="heroBadges" class="flex flex-wrap gap-2"></div>
+</div>
+
+</div>
+
+<!-- UPGRADE ENGINE -->
+<div class="border p-5">
+
+<div class="text-xs opacity-50 mb-2">Upgrade Engine</div>
+
+<div id="upgradePoints" class="text-2xl mb-3"></div>
+
+<div id="upgradeList" class="space-y-2"></div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+
+</main>
+
+<script>
+
+// DEMO DATA (replace with your JSON)
+const data = {
+name:"Vasilija",
+type:"Ecological Garden",
+id:"REG-VIC-BAL-001",
+stewards:"Vasilija",
+desc:"Connected habitat garden.",
+score:64,
+baseline:48,
+badges:[
+{label:"Habitat Builder",strong:true},
+{label:"G&S Verified",strong:true},
+{label:"Indigenous Dominant"}
+],
+upgrades:[
+{action:"Add water feature",points:3},
+{action:"Add nest boxes",points:2},
+{action:"Increase species diversity",points:4}
+]
+}
+
+// RENDER
+document.getElementById("heroName").innerText = data.name
+document.getElementById("heroType").innerText = data.type
+document.getElementById("heroDesc").innerText = data.desc
+document.getElementById("heroId").innerText = data.id
+document.getElementById("heroStewards").innerText = data.stewards
+
+document.getElementById("heroScore").innerText = data.score
+document.getElementById("heroBaseline").innerText = data.baseline
+document.getElementById("heroScoreBar").style.width = data.score+"%"
+
+document.getElementById("heroBadgeCount").innerText = data.badges.length
+document.getElementById("heroLevel").innerText = "Registered Ecological Garden"
+
+// badges
+let badgeHTML=""
+data.badges.forEach(b=>{
+badgeHTML+=`<span class="badge ${b.strong?'badge-strong':'badge-soft'}">${b.label}</span>`
+})
+document.getElementById("heroBadges").innerHTML = badgeHTML
+
+// upgrades
+let total=0
+let upgradeHTML=""
+data.upgrades.forEach(u=>{
+total+=u.points
+upgradeHTML+=`<div class="upgrade">${u.action} (+${u.points})</div>`
+})
+
+document.getElementById("upgradePoints").innerText = "+"+total+" points available"
+document.getElementById("upgradeList").innerHTML = upgradeHTML
+
+</script>
+
+</body>
+</html>
