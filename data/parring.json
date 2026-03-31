@@ -18,13 +18,13 @@
     "bioregion_code": "VVP"
   },
   "biodiversity": {
-    "indigenous_species_current": 28,
-    "indigenous_species_baseline": 3,
+    "indigenous_species_current": 0,
+    "indigenous_species_baseline": 2,
     "indigenous_species_target": 35,
-    "indigenous_dominant": true,
-    "structural_layers_current": 4,
+    "indigenous_dominant": false,
+    "structural_layers_current": 0,
     "structural_layers_baseline": 1,
-    "canopy_cover_pct_current": 12,
+    "canopy_cover_pct_current": 0,
     "canopy_cover_pct_baseline": 5,
     "canopy_cover_pct_target": 35,
     "weed_pressure": "Low",
@@ -57,14 +57,17 @@
       "Bulbine bulbosa",
       "Arthropodium strictum",
       "Anigozanthos Bush Gems",
-      "Themeda triandra"
+      "Themeda triandra",
+      "Liriope muscari",
+      "Rosa",
+      "Hydrangea macrophylla"
     ]
   },
   "soil_water": {
     "soil_health_score": 3,
     "soil_health_baseline": 2,
     "soil_health_max": 5,
-    "water_function_score": 2,
+    "water_function_score": 1,
     "water_function_baseline": 1,
     "water_function_max": 5,
     "has_rainwater_system": false,
@@ -80,7 +83,15 @@
     "has_water_feature": false,
     "has_nest_boxes": false,
     "planting_method": "Layered ecological planting - stepping-stone habitat zones",
-    "fauna_sightings": []
+    "fauna_sightings": [
+      {
+        "species": "Skink",
+        "date": "31 Mar 2026",
+        "location": "Habitat rock zone",
+        "verified": true,
+        "notes": "Two skinks observed in rock refuge zone shortly after installation."
+      }
+    ]
   },
   "connectivity": {
     "adjacent_park": true,
@@ -98,7 +109,7 @@
     "has_photos": true,
     "has_field_notes": true,
     "has_professional_assessment": true,
-    "has_fauna_record": false,
+    "has_fauna_record": true,
     "has_species_list": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
@@ -134,7 +145,16 @@
       "date": "31 Mar 2026",
       "type": "Installed",
       "category": "groundworks",
-      "notes": "Installation commenced today. Underperforming vegetation removed including camellia and buxus. New soil and mulch installed. Habitat rocks placed throughout the garden beds. Micro-topology created across planting zones to guide water movement and create varied conditions for plant establishment."
+      "notes": "Installation commenced today. Underperforming vegetation removed including camellia and buxus. New soil and mulch installed. Habitat rocks placed throughout the garden beds. Micro-topology created across planting zones to guide water movement and create varied conditions for plant establishment. Rocks selected for both aesthetic presence and ecological function -- thermal mass, shelter and soil anchoring.",
+      "note_url": "/gardens/parring11/field-notes/001.html"
+    },
+    {
+      "title": "Two skinks observed -- habitat rock zone",
+      "date": "31 Mar 2026",
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Two skinks observed in the rock refuge zone shortly after installation. Immediate fauna response to habitat rocks confirms thermal mass and shelter function. Adds to corridor node weighting."
     }
-  ]
+  ],
+  "notes": "Values reflect pre-planting installation stage. Species, layers and canopy will be updated once planting is complete. Soil, habitat rocks and fauna sightings reflect actual installed conditions."
 }

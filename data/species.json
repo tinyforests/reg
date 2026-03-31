@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 116,
+    "total_species": 119,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -1238,6 +1238,36 @@
       "notes": "cultivar",
       "gardens": [
         "montAlbert"
+      ]
+    },
+    {
+      "botanical_name": "Liriope muscari",
+      "common_name": "Liriope",
+      "layer": "groundcover",
+      "family": "Asparagaceae",
+      "notes": "",
+      "gardens": [
+        "parring"
+      ]
+    },
+    {
+      "botanical_name": "Rosa",
+      "common_name": "Rose",
+      "layer": "shrub",
+      "family": "Rosaceae",
+      "notes": "",
+      "gardens": [
+        "parring"
+      ]
+    },
+    {
+      "botanical_name": "Hydrangea macrophylla",
+      "common_name": "Hydrangea",
+      "layer": "shrub",
+      "family": "Hydrangeaceae",
+      "notes": "",
+      "gardens": [
+        "parring"
       ]
     }
   ]

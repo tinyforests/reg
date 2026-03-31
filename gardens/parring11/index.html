@@ -707,7 +707,7 @@ function render() {
     var ent = log[li];
     lh += '<article class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">' +
       '<div class="flex items-start justify-between gap-4 mb-3">' +
-      '<div><div class="text-sm font-medium">' + ent.title + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + ent.date + '</div></div>' +
+      '<div><div class="text-sm font-medium">' + (ent.note_url ? '<a href="' + ent.note_url + '" style="text-decoration:underline;text-underline-offset:2px">' + ent.title + '</a>' : ent.title) + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + ent.date + '</div></div>' +
       '<span class="flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg">' + ent.type + '</span></div>' +
       '<p class="text-sm leading-relaxed opacity-80">' + ent.notes + '</p></article>';
   }
