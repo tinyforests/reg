@@ -76,7 +76,7 @@
     "habitat_nodes": 2,
     "habitat_nodes_baseline": 0,
     "has_embedded_logs": false,
-    "has_rock_refuges": false,
+    "has_rock_refuges": true,
     "has_water_feature": false,
     "has_nest_boxes": false,
     "planting_method": "Layered ecological planting - stepping-stone habitat zones",
@@ -128,6 +128,13 @@
       "type": "Verified",
       "category": "baseline",
       "notes": "Front and rear gardens documented as one connected system. 28 indigenous species recorded across groundcover, grass, shrub and small tree layers. Strong pollinator succession through banksia, correa, hardenbergia and kangaroo paw. Proximity to Maranoa Gardens noted as significant connectivity asset."
+    },
+    {
+      "title": "Installation begins -- soil, mulch, habitat rocks and micro-topology",
+      "date": "31 Mar 2026",
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Installation commenced today. Underperforming vegetation removed including camellia and buxus. New soil and mulch installed. Habitat rocks placed throughout the garden beds. Micro-topology created across planting zones to guide water movement and create varied conditions for plant establishment."
     }
   ]
 }
