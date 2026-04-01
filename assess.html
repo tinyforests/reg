@@ -839,13 +839,13 @@ function buildRecordFromForm() {
       fauna_sightings:    fauna_sightings
     },
     connectivity: {
-      lat:            parseFloat(gv('f_con_lat'))      || null,
-      lng:            parseFloat(gv('f_con_lng'))      || null,
+      lat:            parseFloat(gv('f_con_lat'))      || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.lat)      || null,
+      lng:            parseFloat(gv('f_con_lng'))      || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.lng)      || null,
       adjacent_park:  gc('f_con_park'),
       park_name:      gv('f_con_park_name'),
       park_distance_m: gn('f_con_park_dist'),
-      park_lat:       parseFloat(gv('f_con_park_lat')) || null,
-      park_lng:       parseFloat(gv('f_con_park_lng')) || null,
+      park_lat:       parseFloat(gv('f_con_park_lat')) || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.park_lat) || null,
+      park_lng:       parseFloat(gv('f_con_park_lng')) || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.park_lng) || null,
       adjacent_registered_gardens: adjacent_registered_gardens,
       corridor_node_confirmed:  gc('f_con_corridor'),
       effective_ecological_area_ha: Math.round((gn('f_area_sqm') / 10000) * 100) / 100,
