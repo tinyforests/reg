@@ -7,8 +7,8 @@
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
-    "average_score": 42,
-    "total_badges_awarded": 19
+    "average_score": 47,
+    "total_badges_awarded": 22
   },
   "gardens": [
     {
@@ -68,17 +68,20 @@
       "type": "Connected Habitat Landscape",
       "suburb": "Balwyn",
       "state": "VIC",
-      "score": 30,
-      "rating": "Habitat Garden",
+      "score": 50,
+      "rating": "Ecological Garden",
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
-      "status": "Active / Pre-planting",
+      "status": "Active / Establishing",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 3,
+      "badge_count": 6,
       "badges": [
         "gs_verified",
+        "indigenous_dominant",
+        "species_rich_20",
+        "habitat_builder",
         "amphibian_active",
         "fauna_record"
       ],

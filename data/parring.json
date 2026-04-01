@@ -4,31 +4,31 @@
   "garden_type": "Connected Habitat Landscape",
   "suburb": "Balwyn",
   "state": "VIC",
-  "assessment_date": "Mar 2026",
+  "assessment_date": "Apr 2026",
   "baseline_date": "Mar 2026",
-  "target_score": 82,
+  "target_score": 80,
   "stewards": "Vasilija",
   "designer": "Gardener & Son",
-  "area_sqm": 14,
+  "area_sqm": 120,
   "description": "A connected habitat landscape where front and rear gardens work as one living system. Composed as a series of small habitat zones relating to the nearby Maranoa Gardens and surrounding remnant vegetation. Layered planting from local plant communities providing nectar, shelter and structure for birds, insects and pollinators.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "",
-    "bioregion_code": ""
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
   },
   "biodiversity": {
-    "indigenous_species_current": 0,
-    "indigenous_species_baseline": 0,
+    "indigenous_species_current": 28,
+    "indigenous_species_baseline": 2,
     "indigenous_species_target": 35,
-    "indigenous_dominant": false,
-    "structural_layers_current": 0,
+    "indigenous_dominant": true,
+    "structural_layers_current": 3,
     "structural_layers_baseline": 1,
-    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_current": 5,
     "canopy_cover_pct_baseline": 5,
     "canopy_cover_pct_target": 35,
-    "weed_pressure": "",
-    "weed_pressure_baseline": "",
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
     "species_list": [
       "Casuarina glauca prostrate",
       "Kennedia prostrata",
@@ -67,7 +67,7 @@
     "soil_health_score": 3,
     "soil_health_baseline": 2,
     "soil_health_max": 5,
-    "water_function_score": 1,
+    "water_function_score": 2,
     "water_function_baseline": 1,
     "water_function_max": 5,
     "has_rainwater_system": false,
@@ -76,7 +76,7 @@
     "mulch_depth_mm": 75
   },
   "habitat": {
-    "habitat_nodes": 2,
+    "habitat_nodes": 3,
     "habitat_nodes_baseline": 0,
     "has_embedded_logs": false,
     "has_rock_refuges": true,
@@ -86,32 +86,31 @@
     "fauna_sightings": [
       {
         "species": "Skink",
-        "date": "Recorded",
-        "location": "Field observation",
-        "verified": true
+        "date": "31 Mar 2026",
+        "location": "Habitat rock zone",
+        "verified": true,
+        "notes": "Two skinks observed in rock refuge zone shortly after installation."
       }
     ]
   },
   "connectivity": {
-    "lat": -37.812238,
-    "lng": 145.090533,
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 200,
-    "park_lat": -37.810306,
-    "park_lng": 145.090509,
+    "park_lat": -37.8089,
+    "park_lng": 145.0831,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0,
+    "effective_ecological_area_ha": 0.12,
     "cluster_area_ha": 0,
     "cluster_name": "Balwyn"
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_species_list": true,
-    "has_fauna_record": true,
     "has_professional_assessment": true,
+    "has_fauna_record": true,
+    "has_species_list": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son"
@@ -155,7 +154,22 @@
       "type": "Verified",
       "category": "fauna",
       "notes": "Two skinks observed in the rock refuge zone shortly after installation. Immediate fauna response to habitat rocks confirms thermal mass and shelter function. Adds to corridor node weighting."
+    },
+    {
+      "title": "Planting, mycorrhiza inoculant, mulch and irrigation",
+      "date": "1 Apr 2026",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Full planting installation completed. All 31 documented species planted with mycorrhiza inoculant applied at root zone. Finishing mulch layer installed. Drip irrigation system connected and tested. All plants hand watered in.",
+      "note_url": "/gardens/parring11/field-notes/002.html"
+    },
+    {
+      "title": "Handmade Habitats -- natural material habitat structures installed",
+      "date": "1 Apr 2026",
+      "type": "Installed",
+      "category": "habitat",
+      "notes": "Habitat elements from Handmade Habitats -- hollowed logs set half into the ground, packed with sticks, dried grasses, gum nuts, native seeds, dried eucalyptus leaves and paper daisies. Designed to attract native bees, beetles, lizards and invertebrates. The embedded base creates a moist microclimate at soil level. Paper daisies closed in the rain on installation day. Local craft production from natural materials."
     }
   ],
-  "notes": "Values reflect pre-planting installation stage. Species, layers and canopy will be updated once planting is complete. Soil, habitat rocks and fauna sightings reflect actual installed conditions."
+  "notes": "Values reflect day-of-planting installation. Structural layers, canopy and soil health will be reassessed at 6 and 12 months as planting establishes."
 }
