@@ -96,28 +96,33 @@
       margin-top: -25px !important;
     }
 
-    /* Badge notification */
+    /* Badge & score notifications */
     #badgeNotification {
       position: fixed;
-      top: -160px;
+      top: -220px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 200;
-      width: min(420px, calc(100vw - 2rem));
-      background: #7a9e5f;
+      width: min(480px, calc(100vw - 2rem));
+      background: #e8f0e0;
       color: #3d4535;
-      border: 1px solid rgba(61,69,53,.3);
-      padding: 1.25rem 1.5rem;
+      border: 1px solid #b8d4a0;
+      padding: 1.25rem 1.5rem 1.25rem 1.25rem;
       transition: top 0.5s cubic-bezier(0.16,1,0.3,1);
-      box-shadow: 0 8px 32px rgba(0,0,0,.15);
+      box-shadow: 0 4px 24px rgba(61,69,53,.12);
     }
     #badgeNotification.show { top: 5rem; }
-    #badgeNotification .notif-label { font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; opacity:.6; margin-bottom:.35rem; }
-    #badgeNotification .notif-badge { font-size:1.1rem; font-weight:600; margin-bottom:.25rem; font-family:"Abril Fatface",serif; }
-    #badgeNotification .notif-desc  { font-size:.75rem; opacity:.75; line-height:1.4; }
-    #badgeNotification .notif-close { position:absolute; top:.75rem; right:.75rem; background:none; border:none; cursor:pointer; opacity:.5; font-size:.8rem; color:inherit; padding:.25rem .5rem; }
-    #badgeNotification .notif-close:hover { opacity:1; }
-    #badgeNotification .notif-count { font-size:.7rem; opacity:.5; margin-top:.5rem; }
+    #badgeNotification .notif-close {
+      position: absolute; top: .6rem; right: .6rem;
+      background: none; border: none; cursor: pointer;
+      color: #3d4535; opacity: .4; font-size: 1rem;
+      line-height: 1; padding: .25rem .4rem;
+    }
+    #badgeNotification .notif-close:hover { opacity: 1; }
+    #badgeNotification .notif-type  { font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; opacity:.55; margin-bottom:.3rem; }
+    #badgeNotification .notif-title { font-size:1rem; font-weight:600; font-family:"Abril Fatface",serif; margin-bottom:.3rem; line-height:1.2; }
+    #badgeNotification .notif-desc  { font-size:.78rem; opacity:.75; line-height:1.45; }
+    #badgeNotification .notif-extra { font-size:.7rem; opacity:.5; margin-top:.5rem; }
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
@@ -604,7 +609,7 @@ function render() {
   txt('heroBadgeCount', badges.all.length);
 
   txt('heroBadgeCount', badges.all.length);
-  checkBadgeNotifications(R.garden_id, badges.all);
+  checkBadgeNotifications(R.garden_id, badges.all, result.total, result.baselineScore);
   txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
@@ -849,26 +854,63 @@ function initCorridorMap(record) {
 }
 
 
-/* ---- BADGE NOTIFICATIONS ---- */
+/* ---- NOTIFICATIONS ---- */
 var BADGE_DESCS = {
-  indigenous_dominant: 'More than 70% of species are indigenous to this area.',
-  species_rich_20:     '20 or more indigenous species documented on site.',
-  species_rich_30:     '30 or more indigenous species documented on site.',
+  indigenous_dominant: 'More than 70% of species in this garden are indigenous to the local area.',
+  species_rich_20:     '20 or more indigenous species are now documented on site.',
+  species_rich_30:     '30 or more indigenous species documented -- a highly species-rich garden.',
   full_canopy:         'Canopy cover has reached 30% or above.',
-  five_layers:         'All five structural layers present and established.',
-  habitat_builder:     'Three or more habitat nodes active on site.',
-  amphibian_active:    'Verified amphibian or fauna sighting recorded.',
-  pollinator_rich:     'Three or more verified fauna species recorded.',
-  water_wise:          'Rainwater system and moisture basin both installed.',
+  five_layers:         'All five structural layers are present and established.',
+  habitat_builder:     'Three or more habitat nodes are active on site.',
+  amphibian_active:    'A verified fauna sighting has been recorded in this garden.',
+  pollinator_rich:     'Three or more verified fauna species have been recorded.',
+  water_wise:          'Rainwater system and moisture basin are both installed and active.',
   corridor_node:       'This garden is a confirmed ecological corridor node.',
-  network_connected:   'Two or more adjacent registered gardens verified.',
-  gs_verified:         'Verified by Gardener & Son.',
-  site_visit_badge:    'Verified by site visit.',
-  full_record:         'Photos, field notes, species list and fauna record all complete.',
-  fauna_record:        'Fauna sighting verified and on record.'
+  network_connected:   'Two or more adjacent registered gardens are verified in the network.',
+  gs_verified:         'This garden has been assessed and verified by Gardener & Son.',
+  site_visit_badge:    'This garden has received a verified site visit assessment.',
+  full_record:         'Photos, field notes, species list and fauna record are all complete.',
+  fauna_record:        'A verified fauna sighting has been recorded and documented.'
 };
 
-function checkBadgeNotifications(gardenId, currentBadges) {
+var _notifQueue = [];
+var _notifShowing = false;
+
+function showNextNotification() {
+  if (_notifShowing || _notifQueue.length === 0) return;
+  var n = _notifQueue.shift();
+  _notifShowing = true;
+
+  var el    = document.getElementById('badgeNotification');
+  var type  = document.getElementById('notifType');
+  var title = document.getElementById('notifTitle');
+  var desc  = document.getElementById('notifDesc');
+  var extra = document.getElementById('notifExtra');
+
+  if (!el) return;
+  if (type)  type.textContent  = n.type;
+  if (title) title.textContent = n.title;
+  if (desc)  desc.textContent  = n.desc;
+  if (extra) extra.textContent = n.extra || '';
+
+  setTimeout(function() { el.classList.add('show'); }, 100);
+}
+
+function dismissNotification() {
+  var el = document.getElementById('badgeNotification');
+  if (el) el.classList.remove('show');
+  setTimeout(function() {
+    _notifShowing = false;
+    showNextNotification();
+  }, 500);
+}
+
+function queueNotification(type, title, desc, extra) {
+  _notifQueue.push({ type: type, title: title, desc: desc, extra: extra || '' });
+  if (!_notifShowing) showNextNotification();
+}
+
+function checkBadgeNotifications(gardenId, currentBadges, currentScore, prevScore) {
   var key = 'seen_badges_' + gardenId;
   var stored = '';
   try { stored = localStorage.getItem(key) || ''; } catch(e) {}
@@ -881,38 +923,39 @@ function checkBadgeNotifications(gardenId, currentBadges) {
     }
   }
 
-  if (newBadges.length === 0) return;
+  /* Score lift notification */
+  var scoreKey = 'seen_score_' + gardenId;
+  var seenScore = 0;
+  try { seenScore = parseInt(localStorage.getItem(scoreKey) || '0'); } catch(e) {}
 
-  /* Show first new badge */
-  var badge = newBadges[0];
-  var name  = BDEFS[badge] || badge;
-  var desc  = BADGE_DESCS[badge] || '';
+  if (seenScore > 0 && currentScore > seenScore) {
+    queueNotification(
+      'Score update',
+      'Your score lifted from ' + seenScore + ' to ' + currentScore,
+      'Your garden has improved across one or more ecological pillars. Keep going -- the next level is within reach.',
+      newBadges.length > 0 ? 'You also earned ' + newBadges.length + ' new badge' + (newBadges.length > 1 ? 's' : '') + ' today.' : ''
+    );
+  }
+  try { localStorage.setItem(scoreKey, currentScore); } catch(e) {}
 
-  var el = document.getElementById('badgeNotification');
-  var nm = document.getElementById('notifBadgeName');
-  var ds = document.getElementById('notifBadgeDesc');
-  var ct = document.getElementById('notifBadgeCount');
-
-  if (!el || !nm) return;
-  nm.textContent = name;
-  if (ds) ds.textContent = desc;
-  if (ct) ct.textContent = newBadges.length > 1
-    ? newBadges.length + ' new badges earned'
-    : '';
-
-  setTimeout(function() { el.classList.add('show'); }, 300);
-
-  /* Auto-dismiss after 8 seconds */
-  setTimeout(function() { dismissBadgeNotification(); }, 8000);
+  /* Badge notifications -- one at a time, queued */
+  for (var j = 0; j < newBadges.length; j++) {
+    var bid  = newBadges[j];
+    var name = BDEFS[bid] || bid;
+    var desc = BADGE_DESCS[bid] || '';
+    queueNotification(
+      'Badge earned',
+      'You have been awarded the ' + name + ' badge',
+      desc,
+      ''
+    );
+  }
 
   /* Mark all new badges as seen */
-  var allSeen = seen.concat(newBadges);
-  try { localStorage.setItem(key, allSeen.join(',')); } catch(e) {}
-}
-
-function dismissBadgeNotification() {
-  var el = document.getElementById('badgeNotification');
-  if (el) el.classList.remove('show');
+  if (newBadges.length > 0) {
+    var allSeen = seen.concat(newBadges);
+    try { localStorage.setItem(key, allSeen.join(',')); } catch(e) {}
+  }
 }
 
 /* ---- BOOT ---- */
