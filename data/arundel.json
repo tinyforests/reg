@@ -120,8 +120,8 @@
     "water_function_score": 2,
     "water_function_baseline": 2,
     "water_function_max": 5,
-    "has_rainwater_system": true,
-    "has_moisture_basin": true,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
     "has_swale": false,
     "mulch_depth_mm": 80
   },
@@ -205,74 +205,77 @@
   ],
   "activity_log": [
     {
-      "title": "Burrowing frog sighting -- lower slope refuge zone",
-      "date": "18 Feb 2026",
-      "type": "Verified",
-      "category": "fauna",
-      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden."
-    },
-    {
-      "title": "Habitat structure installed -- embedded logs and voids",
-      "date": "15 Feb 2026",
-      "type": "Installed",
-      "category": "structure",
-      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded."
-    },
-    {
-      "title": "Ground contouring and soil preparation",
-      "date": "8 Feb 2026",
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ."
-    },
-    {
       "title": "Waterways & Swales",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "hydrology",
       "notes": "Water is one of the quiet architects of an ecological garden. By shaping the land with gentle swales, contour-led channels, and slow-moving waterways, rainfall is captured rather than lost. These forms hold moisture in the soil, reduce runoff, and create pockets of microclimate where plants thrive with less intervention. Swales also guide the eye and the body through the landscape, becoming subtle pathways of movement and seasonal change. In heavy rain they come alive; in dry periods they act as cool, shaded reservoirs of resilience. This approach reconnects the garden to its natural hydrology, restoring patterns that once shaped local ecologies."
     },
     {
       "title": "Habitat Elements",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "habitat",
       "notes": "Habitat elements such as rocks and fallen logs provide the structure, complexity, and shelter that wildlife depends on. Strategically placed boulders create thermal mass for lizards, insects, and soil life, while hollow logs and decaying timber offer refuge for skinks, microbats, beetles, and fungi. These materials anchor the garden in place and add a timeless, grounded presence to the design. More than aesthetic accents, they operate as miniature ecosystems -- stabilising soil, supporting moisture retention, and forming the essential building blocks for biodiversity. By integrating these features, the garden becomes not just a space for people, but a living habitat where nature can return, settle, and flourish."
     },
     {
       "title": "Ground Layer",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "planting",
       "notes": "The ground layer is the living fabric of the garden -- the continuous weave of grasses, sedges, herbs, and forbs that drives most of the ecological function. This layer stabilises soil, cools the microclimate, suppresses weeds, and supports insect life at an extraordinary scale. It is where pollinators forage, where fungi exchange nutrients, and where the first signs of seasonal change appear. At Arundel, this layer forms the foundation of the forested rear garden. With an ecological density of 3 plants per m2, the ground layer contributes approximately 714 plants across the site -- a thick, species-rich under-storey that quickly knits the soil surface together. These plants occupy every microclimate shaped by the site's contours: sunny rises, cooler swales, and moisture-holding depressions. In ecological design, the ground layer is the engine room, grounding the whole system in life and continuity."
     },
     {
       "title": "Shrub Layer",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "planting",
       "notes": "The shrub layer provides the garden with structure, rhythm, and habitat complexity. These mid-storey species introduce seasonal colour, flowering pulses, density for small birds, and layered textures that soften the transitions between ground and canopy. At Arundel, this layer accounts for 25% of the planting density, contributing around 262 shrubs across the site. Placed in naturalistic clusters, they define movement corridors, frame views toward South Surrey Park, and create pockets of enclosure along the meandering paths. These shrubs form the connective tissue between the garden's lower and upper layers, ensuring continuity of habitat and a dynamic sense of depth as the garden matures."
     },
     {
       "title": "Sub-Canopy Layer",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "planting",
       "notes": "The sub-canopy layer is the woodland heart of the garden -- the 3-6 metre trees and large shrubs that provide dappled shade, structure, and vertical variation. This layer regulates temperature, slows wind, enriches soil through leaf litter, and forms a protective envelope under which the ground layer thrives. At Arundel, this layer represents 4% of the total planting, adding approximately 42 sub-canopy trees across the rear garden. These are spaced to create alternating pools of light and shade, ensuring the dense Miyawaki-inspired underplanting can establish vigorously. Their placement reinforces the natural topography -- gathering around swales, stretching along slope lines, and framing the internal forest rooms."
     },
     {
       "title": "Canopy Layer",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "planting",
       "notes": "The canopy layer is the long-term architecture of the garden -- the tallest trees that anchor the design, shape the microclimate, and link the property to the broader green corridor of South Surrey Park. At Arundel, the canopy comprises 3% of the planting density, with approximately 32 canopy trees distributed carefully across the 475m2 space. Their spacing allows them to mature without crowding while still creating an interconnected canopy that supports bird movement and enhances biodiversity. These trees form the garden's upper frame -- a gesture of reciprocity to the parkland beyond the fence and a long-term ecological investment that will define the garden for decades."
     },
     {
       "title": "Seasonal Swale / Bio-swale / Water Garden",
-      "date": "Mar 2026",
+      "date": "19 Dec 2025",
       "type": "Design",
       "category": "hydrology",
       "notes": "At the rear of the garden, a seasonal swale is proposed -- a softly formed bio-swale that reads as both water feature and living system. Rather than a fixed pond, this element responds to rainfall, gently slowing, holding and filtering water as it moves through the site. In wetter months it becomes animated, lightly pooling and nourishing a palette of water-loving species. In drier periods it settles back into a textural, planted depression -- still legible, still alive -- offering habitat, cooling, and seasonal change. This swale reduces runoff, improves soil moisture, supports insect and bird life, and reconnects the garden to the natural hydrology of the broader landscape. A water feature not for spectacle, but for function, resilience and presence."
+    },
+    {
+      "title": "Ground contouring and soil preparation",
+      "date": "8 Feb 2026",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ.",
+      "note_url": "/gardens/arundel08/field-notes/001.html"
+    },
+    {
+      "title": "Habitat structure installed -- embedded logs and voids",
+      "date": "15 Feb 2026",
+      "type": "Installed",
+      "category": "structure",
+      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded.",
+      "note_url": "/gardens/arundel08/field-notes/002.html"
+    },
+    {
+      "title": "Burrowing frog sighting -- lower slope refuge zone",
+      "date": "18 Feb 2026",
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden.",
+      "note_url": "/gardens/arundel08/field-notes/003.html"
     }
   ],
   "notes": "Values reflect installation stage. Canopy, layers and soil health will be reassessed at 6 and 12 months.",
