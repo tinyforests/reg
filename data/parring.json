@@ -103,7 +103,9 @@
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0.12,
     "cluster_area_ha": 0,
-    "cluster_name": "Balwyn"
+    "cluster_name": "Balwyn",
+    "lat": -37.8089,
+    "lng": 145.084
   },
   "evidence": {
     "has_photos": true,
@@ -146,14 +148,15 @@
       "type": "Installed",
       "category": "groundworks",
       "notes": "Installation commenced today. Underperforming vegetation removed including camellia and buxus. New soil and mulch installed. Habitat rocks placed throughout the garden beds. Micro-topology created across planting zones to guide water movement and create varied conditions for plant establishment. Rocks selected for both aesthetic presence and ecological function -- thermal mass, shelter and soil anchoring.",
-      "note_url": "/gardens/parring11/field-notes/001.html"
+      "note_url": "/gardens/parring11/field-notes/2026-03-31.html"
     },
     {
       "title": "Two skinks observed -- habitat rock zone",
       "date": "31 Mar 2026",
       "type": "Verified",
       "category": "fauna",
-      "notes": "Two skinks observed in the rock refuge zone shortly after installation. Immediate fauna response to habitat rocks confirms thermal mass and shelter function. Adds to corridor node weighting."
+      "notes": "Two skinks observed in the rock refuge zone shortly after installation. Immediate fauna response to habitat rocks confirms thermal mass and shelter function. Adds to corridor node weighting.",
+      "note_url": "/gardens/parring11/field-notes/2026-03-31.html"
     },
     {
       "title": "Planting, mycorrhiza inoculant, mulch and irrigation",
@@ -161,14 +164,15 @@
       "type": "Installed",
       "category": "planting",
       "notes": "Full planting installation completed. All 31 documented species planted with mycorrhiza inoculant applied at root zone. Finishing mulch layer installed. Drip irrigation system connected and tested. All plants hand watered in.",
-      "note_url": "/gardens/parring11/field-notes/002.html"
+      "note_url": "/gardens/parring11/field-notes/2026-04-01.html"
     },
     {
       "title": "Handmade Habitats -- natural material habitat structures installed",
       "date": "1 Apr 2026",
       "type": "Installed",
       "category": "habitat",
-      "notes": "Habitat elements from Handmade Habitats -- hollowed logs set half into the ground, packed with sticks, dried grasses, gum nuts, native seeds, dried eucalyptus leaves and paper daisies. Designed to attract native bees, beetles, lizards and invertebrates. The embedded base creates a moist microclimate at soil level. Paper daisies closed in the rain on installation day. Local craft production from natural materials."
+      "notes": "Habitat elements from Handmade Habitats -- hollowed logs set half into the ground, packed with sticks, dried grasses, gum nuts, native seeds, dried eucalyptus leaves and paper daisies. Designed to attract native bees, beetles, lizards and invertebrates. The embedded base creates a moist microclimate at soil level. Paper daisies closed in the rain on installation day. Local craft production from natural materials.",
+      "note_url": "/gardens/parring11/field-notes/2026-04-01.html"
     }
   ],
   "notes": "Values reflect day-of-planting installation. Structural layers, canopy and soil health will be reassessed at 6 and 12 months as planting establishes."
