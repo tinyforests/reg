@@ -4,8 +4,8 @@
   "garden_type": "Wild Native Meadow",
   "suburb": "Mont Albert North",
   "state": "VIC",
-  "assessment_date": "Apr 2026",
-  "baseline_date": "Apr 2026",
+  "assessment_date": "Nov 2025",
+  "baseline_date": "Nov 2025",
   "target_score": 75,
   "stewards": "David & Marlene",
   "designer": "Gardener & Son",
@@ -137,10 +137,34 @@
   "activity_log": [
     {
       "title": "Maggie's Garden -- Wild Native Meadow",
-      "date": "Apr 2026",
+      "date": "Nov 2025",
       "type": "Design",
       "category": "planting",
-      "notes": "Maggie's Garden continues Gardener & Son's commitment to purpose-driven, regenerative, and biophilic garden design. Designed as a wild native meadow with cottage-style softness. High-density planting at 6-10 plants per m2 across a 3x8m front garden. Provides food, shelter, and shade for local fauna while softening the visual edge of the driveway and concealing the power pole. Log steppers, habitat logs, igneous rocks, bio mulch blend, and premium organic soil installed."
+      "notes": "Wild native meadow design for 3x8m front garden. High-density planting 6-10 plants per m2. 29 species across all layers."
+    },
+    {
+      "title": "Groundworks -- soil, mulch, rocks and habitat materials",
+      "date": "24 Nov 2025",
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Bio mulch blend and premium organic soil installed. Igneous rocks placed. Habitat logs embedded. Log steppers positioned. Site blown down and tidied.",
+      "note_url": "/gardens/evelina23/field-notes/2025-11-24.html"
+    },
+    {
+      "title": "Plant sourcing -- full palette assembled",
+      "date": "25 Nov 2025",
+      "type": "Recorded",
+      "category": "planting",
+      "notes": "All 29 species sourced. Lechenaultia already flowering at nursery.",
+      "note_url": "/gardens/evelina23/field-notes/2025-11-25.html"
+    },
+    {
+      "title": "Planting day -- 29 species with mycorrhizal dip",
+      "date": "28 Nov 2025",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "All 29 species planted with mycorrhizal dip. Screenings and toppings installed. Hand watered in. Kangaroo paw flowering on planting day.",
+      "note_url": "/gardens/evelina23/field-notes/2025-11-28.html"
     }
   ],
   "notes": "Compact front garden 3x8m. High-density ecological planting. 29 species installed. Habitat logs and igneous rocks provide immediate habitat structure."
