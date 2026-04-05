@@ -1,0 +1,147 @@
+{
+  "garden_id": "ER-VIC-MAN-EVE-001",
+  "garden_name": "Evelina",
+  "garden_type": "Wild Native Meadow",
+  "suburb": "Mont Albert North",
+  "state": "VIC",
+  "assessment_date": "Apr 2026",
+  "baseline_date": "Apr 2026",
+  "target_score": 75,
+  "stewards": "David & Marlene",
+  "designer": "Gardener & Son",
+  "area_sqm": 24,
+  "description": "Maggie's Garden continues Gardener & Son's commitment to purpose-driven, regenerative, and biophilic garden design -- creating a living landscape that restores habitat, supports biodiversity, and offers daily beauty and calm. Designed as a wild native meadow with cottage-style softness, the garden provides food, shelter, and shade for local fauna while softening the visual edge of the driveway and concealing the power pole. High-density planting at 6-10 plants per m2 across a 3x8m front garden. It also welcomes people, children, neighbours, and passers-by into a space that feels generous, natural, and alive.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 28,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 29,
+    "indigenous_dominant": true,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 3,
+    "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 20,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
+    "planting_density": "6-10 plants per m2",
+    "species_list": [
+      "Anigozanthos Landscape Gold",
+      "Poa labillardieri Eskdale",
+      "Banksia praemorsa",
+      "Melaleuca elliptica",
+      "Grevillea synophea",
+      "Pimelea ferruginea",
+      "Lechenaultia biloba",
+      "Hypocalymma angustifolium",
+      "Hovea acutifolia",
+      "Dampiera lavandulacea",
+      "Austrostipa spp",
+      "Glycine clandestina",
+      "Stylidium armeria",
+      "Chrysocephalum semipapposum",
+      "Leptospermum continentale",
+      "Clematis microphylla",
+      "Indigofera australis",
+      "Wahlenbergia gracilis",
+      "Thryptomene saxicola FC Payne",
+      "Kennedia prostrata",
+      "Banksia spinulosa Birthday Candles",
+      "Bulbine bulbosa",
+      "Einadia nutans",
+      "Epacris impressa",
+      "Arthropodium strictum",
+      "Alyogyne huegelii",
+      "Anigozanthos Bush Gems",
+      "Poa labillardieri",
+      "Calamagrostis x acutiflora Karl Foerster"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 1,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 75,
+    "mulch_type": "Bio Mulch Blend"
+  },
+  "habitat": {
+    "habitat_nodes": 3,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "High-density ecological planting -- wild native meadow",
+    "materials": [
+      "Log steppers",
+      "Habitat logs",
+      "Igneous rocks",
+      "Bio mulch blend",
+      "Premium organic soil"
+    ],
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": "",
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.0024,
+    "cluster_area_ha": 0,
+    "cluster_name": "Mont Albert North"
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Installation complete",
+      "date": "Apr 2026",
+      "complete": true
+    },
+    {
+      "title": "Baseline assessment",
+      "date": "Apr 2026",
+      "complete": true
+    },
+    {
+      "title": "Fauna monitoring commenced",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "6-month review",
+      "date": "Oct 2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Maggie's Garden -- Wild Native Meadow",
+      "date": "Apr 2026",
+      "type": "Design",
+      "category": "planting",
+      "notes": "Maggie's Garden continues Gardener & Son's commitment to purpose-driven, regenerative, and biophilic garden design. Designed as a wild native meadow with cottage-style softness. High-density planting at 6-10 plants per m2 across a 3x8m front garden. Provides food, shelter, and shade for local fauna while softening the visual edge of the driveway and concealing the power pole. Log steppers, habitat logs, igneous rocks, bio mulch blend, and premium organic soil installed."
+    }
+  ],
+  "notes": "Compact front garden 3x8m. High-density ecological planting. 29 species installed. Habitat logs and igneous rocks provide immediate habitat structure."
+}
