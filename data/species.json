@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 119,
+    "total_species": 131,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -34,7 +34,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "middlesex"
+        "middlesex",
+        "evelina"
       ],
       "notes": ""
     },
@@ -46,7 +47,8 @@
       "gardens": [
         "parring",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ],
       "notes": ""
     },
@@ -123,7 +125,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ],
       "notes": ""
     },
@@ -187,7 +190,8 @@
       "layer": "groundcover",
       "family": "Goodeniaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "evelina"
       ],
       "notes": ""
     },
@@ -241,7 +245,8 @@
       "family": "Haemodoraceae",
       "gardens": [
         "parring",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ],
       "notes": ""
     },
@@ -315,7 +320,8 @@
       "layer": "forb",
       "family": "Campanulaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "evelina"
       ],
       "notes": ""
     },
@@ -338,7 +344,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ],
       "notes": ""
     },
@@ -373,7 +380,8 @@
       "gardens": [
         "arundel",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ],
       "notes": ""
     },
@@ -406,7 +414,8 @@
       "family": "Asparagaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "evelina"
       ],
       "notes": ""
     },
@@ -436,7 +445,8 @@
       "layer": "climber",
       "family": "Ranunculaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "evelina"
       ],
       "notes": ""
     },
@@ -447,7 +457,8 @@
       "family": "Amaranthaceae",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "evelina"
       ],
       "notes": ""
     },
@@ -479,7 +490,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ],
       "notes": ""
     },
@@ -489,7 +501,8 @@
       "layer": "forb",
       "family": "Asteraceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "evelina"
       ],
       "notes": ""
     },
@@ -563,7 +576,8 @@
       "family": "Fabaceae",
       "gardens": [
         "arundel",
-        "middlesex"
+        "middlesex",
+        "evelina"
       ],
       "notes": ""
     },
@@ -621,7 +635,8 @@
       "gardens": [
         "arundel",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "evelina"
       ]
     },
     {
@@ -708,7 +723,8 @@
       "family": "Myrtaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "evelina"
       ]
     },
     {
@@ -793,7 +809,8 @@
       "family": "Ericaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "evelina"
       ]
     },
     {
@@ -1268,6 +1285,126 @@
       "notes": "",
       "gardens": [
         "parring"
+      ]
+    },
+    {
+      "botanical_name": "Banksia praemorsa",
+      "common_name": "Cut-leaf Banksia",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Melaleuca elliptica",
+      "common_name": "Granite Bottlebrush",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Grevillea synophea",
+      "common_name": "Catkin Grevillea",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Pimelea ferruginea",
+      "common_name": "Pink Rice Flower",
+      "layer": "shrub",
+      "family": "Thymelaeaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Hypocalymma angustifolium",
+      "common_name": "White Myrtle",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Hovea acutifolia",
+      "common_name": "Purple Bush Pea",
+      "layer": "shrub",
+      "family": "Fabaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Dampiera lavandulacea",
+      "common_name": "Lavender Dampiera",
+      "layer": "groundcover",
+      "family": "Goodeniaceae",
+      "notes": "",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Austrostipa spp",
+      "common_name": "Spear Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "notes": "spp.",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Thryptomene saxicola FC Payne",
+      "common_name": "Thryptomene",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Alyogyne huegelii",
+      "common_name": "Purple Hibiscus",
+      "layer": "shrub",
+      "family": "Malvaceae",
+      "notes": "WA native",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Anigozanthos Landscape Gold",
+      "common_name": "Kangaroo Paw Landscape Gold",
+      "layer": "forb",
+      "family": "Haemodoraceae",
+      "notes": "cultivar",
+      "gardens": [
+        "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Calamagrostis x acutiflora Karl Foerster",
+      "common_name": "Feather Reed Grass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "notes": "exotic cultivar",
+      "gardens": [
+        "evelina"
       ]
     }
   ]
