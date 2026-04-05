@@ -126,9 +126,44 @@
     #badgeNotification .notif-title { font-size:1rem; font-weight:600; font-family:"Abril Fatface",serif; margin-bottom:.3rem; line-height:1.2; }
     #badgeNotification .notif-desc  { font-size:.78rem; opacity:.75; line-height:1.45; }
     #badgeNotification .notif-extra { font-size:.7rem; opacity:.5; margin-top:.5rem; }
+  
+    /* ---- Sticky notification ---- */
+    #erNotif {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      width: min(460px, calc(100vw - 2rem));
+      background: #e8f0e0;
+      color: #3d4535;
+      border: 1px solid #b8d4a0;
+      padding: 1rem 2.5rem 1rem 1.25rem;
+      box-shadow: 0 4px 24px rgba(61,69,53,.18);
+      transition: top 0.45s cubic-bezier(0.16,1,0.3,1);
+      font-family: "IBM Plex Sans", sans-serif;
+    }
+    #erNotif.show { top: 5rem; }
+    #erNotif-close {
+      position: absolute; top: .5rem; right: .6rem;
+      background: none; border: none; cursor: pointer;
+      color: #3d4535; opacity: .4; font-size: 1.1rem;
+      line-height: 1; padding: .2rem .4rem;
+    }
+    #erNotif-close:hover { opacity: 1; }
+    #erNotif-type  { font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; opacity:.5; margin-bottom:.3rem; }
+    #erNotif-title { font-size:.95rem; font-weight:600; margin-bottom:.25rem; line-height:1.2; }
+    #erNotif-body  { font-size:.78rem; opacity:.75; line-height:1.45; }
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
+
+<div id="erNotif" role="alert" aria-live="polite">
+  <button id="erNotif-close" onclick="erNotifDismiss()" aria-label="Close">&times;</button>
+  <div id="erNotif-type"></div>
+  <div id="erNotif-title"></div>
+  <div id="erNotif-body"></div>
+</div>
 
 <header class="sticky top-0 z-40 border-b border-rl bg-rb/90 backdrop-blur dark:border-rdl dark:bg-rg/90">
   <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
@@ -615,7 +650,7 @@ function render() {
   txt('heroBadgeCount', badges.all.length);
 
   txt('heroBadgeCount', badges.all.length);
-  checkBadgeNotifications(R.garden_id, badges.all, result.total, result.baselineScore);
+  erCheckNotifications(R.garden_id, badges.all, result.total);
   txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
@@ -1057,6 +1092,75 @@ fetch('/data/parring.json')
     document.getElementById('heroScore').textContent = '--';
     document.getElementById('heroLevel').textContent = 'Check /data/vasilija.json';
   });
+
+  /* ---- Notification engine ---- */
+  var _erQueue = [];
+  var _erShowing = false;
+
+  function erNotifShow(type, title, body) {
+    var el = document.getElementById('erNotif');
+    if (!el) return;
+    document.getElementById('erNotif-type').textContent  = type;
+    document.getElementById('erNotif-title').textContent = title;
+    document.getElementById('erNotif-body').textContent  = body;
+    _erShowing = true;
+    el.classList.add('show');
+    setTimeout(function() { erNotifDismiss(); }, 7000);
+  }
+
+  function erNotifDismiss() {
+    var el = document.getElementById('erNotif');
+    if (!el) return;
+    el.classList.remove('show');
+    _erShowing = false;
+    setTimeout(function() {
+      if (_erQueue.length > 0) {
+        var n = _erQueue.shift();
+        erNotifShow(n.type, n.title, n.body);
+      }
+    }, 600);
+  }
+
+  function erNotifQueue(type, title, body) {
+    if (!_erShowing) {
+      erNotifShow(type, title, body);
+    } else {
+      _erQueue.push({ type: type, title: title, body: body });
+    }
+  }
+
+  function erCheckNotifications(gardenId, badges, score) {
+    var badgeKey = 'er_badges_' + gardenId;
+    var scoreKey = 'er_score_'  + gardenId;
+    var seenRaw  = '';
+    var seenScore = 0;
+    try { seenRaw   = localStorage.getItem(badgeKey) || ''; } catch(e) {}
+    try { seenScore = parseInt(localStorage.getItem(scoreKey) || '0'); } catch(e) {}
+    var seen = seenRaw ? seenRaw.split(',') : [];
+    var newBadges = [];
+    for (var i = 0; i < badges.length; i++) {
+      if (seen.indexOf(badges[i]) === -1) newBadges.push(badges[i]);
+    }
+    var badgeLabels = {
+      'gs_verified':'G&S Verified','indigenous_dominant':'Indigenous Dominant',
+      'species_rich_20':'Species Rich (20+)','species_rich_30':'Species Rich (30+)',
+      'full_canopy':'Full Canopy','five_layers':'Five Layers',
+      'habitat_builder':'Habitat Builder','amphibian_active':'Amphibian Active',
+      'pollinator_rich':'Pollinator Rich','water_wise':'Water Wise',
+      'corridor_node':'Corridor Node','network_connected':'Network Connected',
+      'site_visit_badge':'Site Visit','full_record':'Full Record','fauna_record':'Fauna Record'
+    };
+    for (var j = 0; j < newBadges.length; j++) {
+      var label = badgeLabels[newBadges[j]] || newBadges[j];
+      erNotifQueue('New badge', 'You have been awarded the ' + label + ' badge', 'This badge has been added to your garden profile in the Ecological Registry.');
+    }
+    if (seenScore > 0 && score > seenScore) {
+      erNotifQueue('Score update', 'Your score lifted from ' + seenScore + ' to ' + score, 'Your garden has improved across one or more ecological pillars.');
+    }
+    try { localStorage.setItem(badgeKey, badges.join(',')); } catch(e) {}
+    try { localStorage.setItem(scoreKey, String(score));    } catch(e) {}
+  }
+
 </script>
 </body>
 </html>
