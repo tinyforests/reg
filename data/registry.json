@@ -2,13 +2,13 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 5,
+    "total_gardens": 6,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
-    "average_score": 47,
-    "total_badges_awarded": 22
+    "average_score": 46,
+    "total_badges_awarded": 26
   },
   "gardens": [
     {
@@ -132,6 +132,30 @@
       ],
       "profile_url": "/gardens/montAlbert100/index.html",
       "data_file": "data/montAlbert.json"
+    },
+    {
+      "garden_id": "ER-VIC-MAN-EVE-001",
+      "garden_name": "Evelina",
+      "type": "Wild Native Meadow",
+      "suburb": "Mont Albert North",
+      "state": "VIC",
+      "score": 45,
+      "rating": "Ecological Garden",
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Apr 2026",
+      "badge_count": 4,
+      "badges": [
+        "gs_verified",
+        "indigenous_dominant",
+        "species_rich_20",
+        "habitat_builder"
+      ],
+      "profile_url": "/gardens/evelina23/index.html",
+      "data_file": "data/evelina.json"
     }
   ]
 }
