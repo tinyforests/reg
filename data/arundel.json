@@ -214,11 +214,51 @@
     },
     {
       "title": "Site documentation -- pre-installation baseline",
-      "date": "30 Sep 2025",
+      "date": "28 Sep 2025",
       "type": "Design",
       "category": "site_analysis",
       "notes": "Comprehensive photographic site documentation. 19 photographs record pre-installation condition -- slope, existing brick walls and stone steps, weed pressure, rainwater tank infrastructure, plant staging, and direct park adjacency. Visual baseline established for ecological change tracking.",
+      "note_url": "/gardens/arundel08/field-notes/2025-09-28.html"
+    },
+    {
+      "title": "Excavation, soil removal and weeding",
+      "date": "29 Sep 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Unwanted and contaminated soil excavated and removed from slope. Existing plants removed across planting zones. Weeding completed. Slope cleared to bare soil ready for contouring and amendment.",
+      "note_url": "/gardens/arundel08/field-notes/2025-09-29.html"
+    },
+    {
+      "title": "Excavation, soil removal and weeding -- day 2",
+      "date": "30 Sep 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Second day of site preparation. Excavation and soil removal continued. Existing plants removed, weeding completed across remaining zones. Slope cleared and settled -- small tree planted on upper slope.",
       "note_url": "/gardens/arundel08/field-notes/2025-09-30.html"
+    },
+    {
+      "title": "Excavation, soil removal and weeding -- day 3",
+      "date": "1 Oct 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Third and final day of site preparation. Excavation and soil removal completed across all zones. Existing plants removed, weeding finalised. Logs staged on slope ready for habitat embedding. Site preparation complete.",
+      "note_url": "/gardens/arundel08/field-notes/2025-10-01.html"
+    },
+    {
+      "title": "Excavation and soil removal -- Kanga loader deployed",
+      "date": "2 Oct 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Kanga mini loader deployed for excavation and soil removal. Contaminated soil and existing plants cleared across all remaining zones. Four days of preparation now complete.",
+      "note_url": "/gardens/arundel08/field-notes/2025-10-02.html"
+    },
+    {
+      "title": "Excavation, soil removal and weeding -- day 5",
+      "date": "7 Oct 2025",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Fifth day of preparation. Full aerial view of cleared slope from deck -- 475m2 visible in cleared state, Reserve canopy in spring flush beyond fence. Contaminated soil and plant material removal continuing.",
+      "note_url": "/gardens/arundel08/field-notes/2025-10-07.html"
     },
     {
       "title": "Design presented -- layered ecological planting system",
@@ -227,6 +267,30 @@
       "category": "planting",
       "notes": "Full ecological design presented to Andrew and Elizabeth. Five-layer planting system across 475m2 rear garden -- canopy (~32 trees), sub-canopy (~42 trees), shrub (~262 plants), ground layer (~714 plants), and swale/water garden. Form and element strategy documents waterway hydrology and habitat structure. All species drawn from Grassy Woodland EVC context confirmed in site analysis.",
       "note_url": "/gardens/arundel08/field-notes/2025-12-19.html"
+    },
+    {
+      "title": "Ecological baseline and preparation -- return visit",
+      "date": "15 Jan 2026",
+      "type": "Verified",
+      "category": "baseline",
+      "notes": "Return visit months after clearance. Six soil samples collected across site zones -- sandy, low organic matter, biologically active. Six weed species identified and hand-removed without chemicals: Flaxleaf fleabane, Common sow-thistle, Panic veldt grass, Barley grass, Wireweed, California poppy. Active ant colonies and soil insects observed. Site in settling and observation phase.",
+      "note_url": "/gardens/arundel08/field-notes/2026-01-15.html"
+    },
+    {
+      "title": "Day 3 site report -- mechanical shaping and pathway definition",
+      "date": "19 Jan 2026",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Kanga mini loader used for mechanical weed removal, pathway alignment, landform shaping, and surface consolidation. Intentionally shallow and controlled. Soil biology preserved. Site ready for sub-base introduction.",
+      "note_url": "/gardens/arundel08/field-notes/2026-01-19.html"
+    },
+    {
+      "title": "Day 4 site report -- sub-base installation and path definition",
+      "date": "20 Jan 2026",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Crushed rock sub-base partially installed across pathway zones. Path line visible from above for first time. Sub-base watered in. Granite rocks relocated for gabion reuse. Path curve follows design intent.",
+      "note_url": "/gardens/arundel08/field-notes/2026-01-20.html"
     },
     {
       "title": "Ground contouring and soil preparation",
