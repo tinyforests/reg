@@ -1,0 +1,225 @@
+{
+  "garden_id": "ER-VIC-BLA-DEW-001",
+  "garden_name": "Dewrang",
+  "garden_type": "Multi-Zone Ecological Garden",
+  "suburb": "Blackburn",
+  "state": "VIC",
+  "assessment_date": "Nov 2025",
+  "baseline_date": "Nov 2025",
+  "stewards": "Jan",
+  "designer": "Gardener & Son",
+  "area_sqm": 25,
+  "description": "A calm, welcoming front garden designed to reflect the natural character of the local landscape. Using a palette of indigenous and native species, the design balances structure and softness, providing seasonal variation, subtle colour, and ecological value. Three distinct zones -- entrance garden, scented tunnel pathway, and driveway garden -- create a layered experience from street to home. Through layered foliage, water-wise species, and pollinator-friendly flowering plants, this garden becomes a living habitat, a place of quiet reflection, biodiversity, and beauty viewed from every angle.",
+  "zones": [
+    {
+      "name": "Entrance garden",
+      "area_sqm": 8,
+      "dimensions": "8m x 1m",
+      "species": [
+        "Lomandra longifolia",
+        "Plectranthus parviflorus Blue Spires",
+        "Dianella tasmanica",
+        "Poa labillardieri",
+        "Viola hederacea",
+        "Spyridium parvifolium",
+        "Indigofera australis",
+        "Acacia myrtifolia",
+        "Pelargonium australe",
+        "Glycine clandestina",
+        "Clematis microphylla",
+        "Hypocalymma robustum",
+        "Poa labillardieri Eskdale",
+        "Dianella tasmanica Tas Red"
+      ]
+    },
+    {
+      "name": "Scented tunnel pathway",
+      "area_sqm": 8,
+      "dimensions": "2m x 4m",
+      "species": [
+        "Leionema phebalium",
+        "Grevillea juncifolia",
+        "Callistemon viminalis",
+        "Clematis microphylla",
+        "Philotheca myoporoides Winter Rouge",
+        "Prostanthera sieberi",
+        "Hardenbergia violacea",
+        "Viola hederacea",
+        "Kennedia prostrata",
+        "Einadia nutans"
+      ]
+    },
+    {
+      "name": "Driveway garden",
+      "area_sqm": 9,
+      "dimensions": "3m x 3m",
+      "species": [
+        "Acacia implexa",
+        "Bursaria spinosa",
+        "Linum marginale",
+        "Olearia ramulosa",
+        "Bulbine bulbosa",
+        "Enchylaena tomentosa",
+        "Hardenbergia violacea",
+        "Chrysocephalum apiculatum",
+        "Goodenia ovata",
+        "Pelargonium australe",
+        "Correa glabra",
+        "Wahlenbergia communis",
+        "Xerochrysum viscosum",
+        "Austrostipa elegantissima",
+        "Brachyscome Mauve Bliss",
+        "Dodonaea viscosa"
+      ]
+    }
+  ],
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 36,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 36,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Lomandra longifolia",
+      "Plectranthus parviflorus Blue Spires",
+      "Dianella tasmanica",
+      "Poa labillardieri",
+      "Viola hederacea",
+      "Spyridium parvifolium",
+      "Indigofera australis",
+      "Acacia myrtifolia",
+      "Pelargonium australe",
+      "Glycine clandestina",
+      "Clematis microphylla",
+      "Hypocalymma robustum",
+      "Poa labillardieri Eskdale",
+      "Dianella tasmanica Tas Red",
+      "Leionema phebalium",
+      "Grevillea juncifolia",
+      "Callistemon viminalis",
+      "Philotheca myoporoides Winter Rouge",
+      "Prostanthera sieberi",
+      "Hardenbergia violacea",
+      "Kennedia prostrata",
+      "Einadia nutans",
+      "Acacia implexa",
+      "Bursaria spinosa",
+      "Linum marginale",
+      "Olearia ramulosa",
+      "Bulbine bulbosa",
+      "Enchylaena tomentosa",
+      "Chrysocephalum apiculatum",
+      "Goodenia ovata",
+      "Correa glabra",
+      "Wahlenbergia communis",
+      "Xerochrysum viscosum",
+      "Austrostipa elegantissima",
+      "Brachyscome Mauve Bliss",
+      "Dodonaea viscosa"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 1,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_type": "Organic mulch"
+  },
+  "habitat": {
+    "habitat_nodes": 3,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "materials": [
+      "Habitat rocks",
+      "Habitat logs",
+      "Organic soil",
+      "Organic mulch"
+    ],
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.0025,
+    "cluster_name": "Blackburn"
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Installation complete",
+      "date": "26 Nov 2025",
+      "complete": true
+    },
+    {
+      "title": "Baseline assessment",
+      "date": "Nov 2025",
+      "complete": true
+    },
+    {
+      "title": "Fauna monitoring commenced",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "6-month review",
+      "date": "May 2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Three-zone ecological garden -- entrance, scented tunnel, driveway",
+      "date": "Nov 2025",
+      "type": "Design",
+      "category": "design",
+      "notes": "Three-zone front garden designed as a calm welcoming space reflecting the natural character of the local landscape. Entrance garden (8x1m), scented tunnel pathway (2x4m), driveway garden (3x3m). 37 species across all zones. Habitat rocks, logs, organic soil and mulch installed."
+    },
+    {
+      "title": "Installation -- three zones planted",
+      "date": "17 Nov 2025",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Installation commenced 17 November 2025, completed 26 November 2025. All three zones planted across 25m2."
+    }
+  ],
+  "notes": "Three-zone front garden. Entrance garden 8x1m, scented tunnel 2x4m, driveway garden 3x3m. 37 unique species. Habitat rocks and logs installed throughout.",
+  "score": 48,
+  "badges": [
+    "gs_verified",
+    "indigenous_dominant",
+    "species_rich_20",
+    "species_rich_30",
+    "habitat_builder",
+    "five_layers"
+  ]
+}
