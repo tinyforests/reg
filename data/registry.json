@@ -2,13 +2,13 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 6,
+    "total_gardens": 7,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
-    "average_score": 46,
-    "total_badges_awarded": 26
+    "average_score": 47,
+    "total_badges_awarded": 32
   },
   "gardens": [
     {
@@ -156,6 +156,32 @@
       ],
       "profile_url": "/gardens/evelina23/index.html",
       "data_file": "data/evelina.json"
+    },
+    {
+      "garden_id": "ER-VIC-BLA-DEW-001",
+      "garden_name": "Dewrang",
+      "type": "Multi-Zone Ecological Garden",
+      "suburb": "Blackburn",
+      "state": "VIC",
+      "score": 48,
+      "rating": "Ecological Garden",
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Nov 2025",
+      "badge_count": 6,
+      "badges": [
+        "gs_verified",
+        "indigenous_dominant",
+        "species_rich_20",
+        "species_rich_30",
+        "habitat_builder",
+        "five_layers"
+      ],
+      "profile_url": "/gardens/dewrang1a/index.html",
+      "data_file": "data/dewrang.json"
     }
   ]
 }
