@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 131,
+    "total_species": 138,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -35,7 +35,8 @@
         "parring",
         "arundel",
         "middlesex",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -48,7 +49,8 @@
         "parring",
         "middlesex",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -82,7 +84,8 @@
         "parring",
         "arundel",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -93,7 +96,8 @@
       "family": "Asteraceae",
       "gardens": [
         "parring",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -103,7 +107,8 @@
       "layer": "groundcover",
       "family": "Violaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -201,7 +206,8 @@
       "layer": "shrub",
       "family": "Fabaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -213,7 +219,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -268,7 +275,8 @@
       "family": "Geraniaceae",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -310,7 +318,8 @@
       "family": "Asteraceae",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -345,7 +354,8 @@
         "parring",
         "arundel",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -381,7 +391,8 @@
         "arundel",
         "middlesex",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -392,7 +403,8 @@
       "family": "Asphodelaceae",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -446,7 +458,8 @@
       "family": "Ranunculaceae",
       "gardens": [
         "arundel",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -458,7 +471,8 @@
       "gardens": [
         "arundel",
         "middlesex",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -468,7 +482,8 @@
       "layer": "grass",
       "family": "Poaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -514,7 +529,8 @@
       "notes": "cultivar",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ]
     },
     {
@@ -555,7 +571,8 @@
       "family": "Linaceae",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -577,7 +594,8 @@
       "gardens": [
         "arundel",
         "middlesex",
-        "evelina"
+        "evelina",
+        "dewrang"
       ],
       "notes": ""
     },
@@ -636,7 +654,8 @@
         "arundel",
         "middlesex",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "dewrang"
       ]
     },
     {
@@ -680,7 +699,8 @@
       "gardens": [
         "arundel",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ]
     },
     {
@@ -734,7 +754,8 @@
       "family": "Asteraceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "dewrang"
       ]
     },
     {
@@ -744,7 +765,8 @@
       "family": "Rutaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "dewrang"
       ]
     },
     {
@@ -767,7 +789,8 @@
       "gardens": [
         "arundel",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ]
     },
     {
@@ -787,7 +810,8 @@
       "family": "Pittosporaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "dewrang"
       ]
     },
     {
@@ -870,7 +894,8 @@
       "family": "Sapindaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "dewrang"
       ]
     },
     {
@@ -971,7 +996,8 @@
       "family": "Fabaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "dewrang"
       ]
     },
     {
@@ -1103,7 +1129,8 @@
       "family": "Lamiaceae",
       "notes": "",
       "gardens": [
-        "nicholson"
+        "nicholson",
+        "dewrang"
       ]
     },
     {
@@ -1134,7 +1161,8 @@
       "family": "Campanulaceae",
       "notes": "",
       "gardens": [
-        "middlesex"
+        "middlesex",
+        "dewrang"
       ]
     },
     {
@@ -1154,7 +1182,8 @@
       "family": "Lamiaceae",
       "notes": "cultivar",
       "gardens": [
-        "montAlbert"
+        "montAlbert",
+        "dewrang"
       ]
     },
     {
@@ -1405,6 +1434,69 @@
       "notes": "exotic cultivar",
       "gardens": [
         "evelina"
+      ]
+    },
+    {
+      "botanical_name": "Lomandra longifolia",
+      "common_name": "Lomandra Longleaf Mat Rush",
+      "layer": "grass",
+      "family": "Asparagaceae",
+      "gardens": [
+        "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Hypocalymma robustum",
+      "common_name": "Swan River Myrtle",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "gardens": [
+        "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Leionema phebalium",
+      "common_name": "Leionema Green Screen",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "gardens": [
+        "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Grevillea juncifolia",
+      "common_name": "Honeysuckle Grevillea",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "gardens": [
+        "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Callistemon viminalis",
+      "common_name": "Callistemon Little John",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "gardens": [
+        "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Philotheca myoporoides Winter Rouge",
+      "common_name": "Long Leaf Waxflower",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "gardens": [
+        "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Enchylaena tomentosa",
+      "common_name": "Ruby Saltbush",
+      "layer": "shrub",
+      "family": "Chenopodiaceae",
+      "gardens": [
+        "dewrang"
       ]
     }
   ]
