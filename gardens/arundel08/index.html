@@ -188,7 +188,7 @@
       <a <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
       <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
     </nav>
-    <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Theme</button>
+    <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Canopy</button>
   </div>
 </header>
 
@@ -1004,12 +1004,15 @@ function checkBadgeNotifications(gardenId, currentBadges, currentScore, prevScor
 
 /* ---- BOOT ---- */
 var st = localStorage.getItem('reg-theme');
-if (st === 'light') { document.documentElement.classList.remove('dark'); }
-else                { document.documentElement.classList.add('dark'); }
+var thBtn = document.getElementById('themeToggle');
+if (st === 'light') { document.documentElement.classList.remove('dark'); if(thBtn) thBtn.textContent='Understory'; }
+else                { document.documentElement.classList.add('dark'); if(thBtn) thBtn.textContent='Canopy'; }
 
 document.getElementById('themeToggle').addEventListener('click', function() {
   document.documentElement.classList.toggle('dark');
-  localStorage.setItem('reg-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  var isDark = document.documentElement.classList.contains('dark');
+  this.textContent = isDark ? 'Canopy' : 'Understory';
+  localStorage.setItem('reg-theme', isDark ? 'dark' : 'light');
 });
 
 fetch('/data/arundel.json')
