@@ -7,8 +7,8 @@
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
-    "average_score": 49,
-    "total_badges_awarded": 34
+    "average_score": 47,
+    "total_badges_awarded": 29
   },
   "gardens": [
     {
@@ -17,7 +17,7 @@
       "type": "Ecological Forest Garden",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 75,
+      "score": 63,
       "rating": "Registered Ecological Garden",
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -25,19 +25,14 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 11,
+      "badge_count": 6,
       "badges": [
         "gs_verified",
-        "indigenous_dominant",
         "species_rich_20",
         "habitat_builder",
         "amphibian_active",
-        "corridor_node",
         "fauna_record",
-        "full_record",
-        "five_layers",
-        "water_wise",
-        "pollinator_rich"
+        "full_record"
       ],
       "profile_url": "/gardens/arundel08/index.html",
       "data_file": "data/arundel.json"
