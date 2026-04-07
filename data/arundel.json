@@ -17,17 +17,17 @@
     "bioregion_code": "VVP"
   },
   "biodiversity": {
-    "indigenous_species_current": 81,
+    "indigenous_species_current": 87,
     "indigenous_species_baseline": 8,
     "indigenous_species_target": 40,
     "indigenous_dominant": true,
-    "structural_layers_current": 2,
+    "structural_layers_current": 5,
     "structural_layers_baseline": 2,
     "structural_layers_max": 5,
-    "canopy_cover_pct_current": 8,
+    "canopy_cover_pct_current": 5,
     "canopy_cover_pct_baseline": 12,
     "canopy_cover_pct_target": 55,
-    "weed_pressure": "low",
+    "weed_pressure": "Low",
     "weed_pressure_baseline": "high",
     "species_list": [
       "Vittadinia muelleri",
@@ -110,27 +110,33 @@
       "Crassula helmsii",
       "Lythrum salicaria",
       "Cycnogeton procerum",
-      "Mazus pumilio"
+      "Mazus pumilio",
+      "Viola hederacea",
+      "Eucalyptus leucoxylon connata",
+      "Kunzea baxteri",
+      "Correa lawrenceana",
+      "Grevillea Red Rambler",
+      "Acacia verticillata"
     ]
   },
   "soil_water": {
-    "soil_health_score": 2,
+    "soil_health_score": 3,
     "soil_health_baseline": 2,
     "soil_health_max": 5,
-    "water_function_score": 2,
+    "water_function_score": 4,
     "water_function_baseline": 2,
     "water_function_max": 5,
     "has_rainwater_system": false,
-    "has_moisture_basin": false,
-    "has_swale": false,
-    "mulch_depth_mm": 80
+    "has_moisture_basin": true,
+    "has_swale": true,
+    "mulch_depth_mm": 75
   },
   "habitat": {
-    "habitat_nodes": 2,
+    "habitat_nodes": 5,
     "habitat_nodes_baseline": 0,
     "has_embedded_logs": true,
-    "has_rock_refuges": false,
-    "has_water_feature": false,
+    "has_rock_refuges": true,
+    "has_water_feature": true,
     "has_nest_boxes": false,
     "fauna_sightings": [
       {
@@ -140,7 +146,8 @@
         "verified": true
       }
     ],
-    "planting_method": "Miyawaki-style layering"
+    "planting_method": "Miyawaki-style layering",
+    "water_feature_count": 6
   },
   "connectivity": {
     "adjacent_park": true,
@@ -315,6 +322,13 @@
       "category": "fauna",
       "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden.",
       "note_url": "/gardens/arundel08/field-notes/2026-02-18.html"
+    },
+    {
+      "title": "Planting day -- 23 species installed, ponds, rocks, logs and mulch",
+      "date": "7 Apr 2026",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "First planting day. 23 species installed including two eucalypts (E. leucoxylon connata, E. radiata), Kunzea baxteri, Correa lawrenceana, Grevillea Red Rambler, Hardenbergia, Viola, Poa, Austrostipa, Dichelachne, Austrodanthonia and groundcovers. 6 ponds installed. Rocks and logs placed throughout. First layers of mulch and soil complete. Five structural layers now present."
     }
   ],
   "notes": "Values reflect installation stage. Canopy, layers and soil health will be reassessed at 6 and 12 months.",

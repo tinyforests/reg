@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_species": 138,
+    "total_species": 143,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -108,7 +108,8 @@
       "family": "Violaceae",
       "gardens": [
         "parring",
-        "dewrang"
+        "dewrang",
+        "arundel"
       ],
       "notes": ""
     },
@@ -1497,6 +1498,51 @@
       "family": "Chenopodiaceae",
       "gardens": [
         "dewrang"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus leucoxylon connata",
+      "common_name": "SA Blue Gum",
+      "layer": "canopy",
+      "family": "Myrtaceae",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Kunzea baxteri",
+      "common_name": "Crimson Kunzea",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Correa lawrenceana",
+      "common_name": "Mountain Correa",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Grevillea Red Rambler",
+      "common_name": "Grevillea Red Rambler",
+      "layer": "groundcover",
+      "family": "Proteaceae",
+      "gardens": [
+        "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Acacia verticillata",
+      "common_name": "Prickly Moses",
+      "layer": "shrub",
+      "family": "Fabaceae",
+      "gardens": [
+        "arundel"
       ]
     }
   ]
