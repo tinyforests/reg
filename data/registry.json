@@ -7,7 +7,7 @@
     "contact": "registry@gardenerandson.com.au"
   },
   "statistics": {
-    "average_score": 47,
+    "average_score": 50,
     "total_badges_awarded": 30
   },
   "gardens": [
@@ -17,7 +17,7 @@
       "type": "Ecological Forest Garden",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 63,
+      "score": 73,
       "rating": "Registered Ecological Garden",
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -91,7 +91,7 @@
       "type": "Habitat Garden",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 48,
+      "score": 54,
       "rating": "Ecological Garden",
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -161,7 +161,7 @@
       "type": "Multi-Zone Ecological Garden",
       "suburb": "Blackburn",
       "state": "VIC",
-      "score": 48,
+      "score": 50,
       "rating": "Ecological Garden",
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
