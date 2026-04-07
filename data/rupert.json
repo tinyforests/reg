@@ -1,0 +1,171 @@
+{
+  "garden_id": "ER-VIC-NTH-RUP-001",
+  "garden_name": "Rupert",
+  "garden_type": "Ecological Backyard Conversion",
+  "suburb": "Northcote",
+  "state": "VIC",
+  "address": "14 Rupert Street, Northcote",
+  "assessment_date": "Mar 2025",
+  "baseline_date": "Jan 2024",
+  "stewards": "Claire & Tom",
+  "designer": "Gardener & Son",
+  "area_sqm": 180,
+  "description": "Claire and Tom converted their entire back lawn in January 2024 after the December 2023 heatwave killed most of what was growing. Rather than replant with the same, they asked a different question: what was here before the lawn? The answer -- a Wet Sclerophyll Forest remnant, with Merri Creek just 200 metres away -- changed everything. The garden is now in its second year of establishment, the canopy beginning to close, the understorey thickening, the burrowing bee population they documented in autumn 2024 now reliably returning. It is not finished. It is working.",
+  "evc": {
+    "name": "Wet Sclerophyll Forest",
+    "code": "EVC 38",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 22,
+    "indigenous_species_baseline": 3,
+    "indigenous_species_target": 35,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 1,
+    "canopy_cover_pct_current": 12,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Eucalyptus camaldulensis",
+      "Acacia melanoxylon",
+      "Leptospermum continentale",
+      "Bursaria spinosa",
+      "Correa reflexa",
+      "Grevillea victoriae",
+      "Poa labillardieri",
+      "Dianella tasmanica",
+      "Lomandra longifolia",
+      "Viola hederacea",
+      "Dichondra repens",
+      "Hardenbergia violacea",
+      "Clematis microphylla",
+      "Glycine clandestina",
+      "Chrysocephalum apiculatum",
+      "Bulbine bulbosa",
+      "Arthropodium strictum",
+      "Wahlenbergia gracilis",
+      "Austrostipa rudis",
+      "Microlaena stipoides",
+      "Einadia nutans",
+      "Pelargonium australe"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 2,
+    "soil_health_baseline": 1,
+    "soil_health_max": 5,
+    "water_function_score": 3,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": true,
+    "has_moisture_basin": true,
+    "has_swale": false,
+    "mulch_depth_mm": 100,
+    "mulch_type": "Wood chip mulch"
+  },
+  "habitat": {
+    "habitat_nodes": 3,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": [
+      {
+        "species": "Burrowing bee (Halictus sp.)",
+        "date": "Apr 2024",
+        "location": "Bare soil patch, north corner",
+        "verified": false
+      },
+      {
+        "species": "Common Brown Butterfly",
+        "date": "Nov 2024",
+        "location": "Poa clump, eastern bed",
+        "verified": false
+      }
+    ]
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": "Merri Creek corridor",
+    "park_distance_m": 200,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": true,
+    "effective_ecological_area_ha": 0.018,
+    "cluster_name": "Northcote"
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Lawn removed",
+      "date": "Jan 2024",
+      "complete": true
+    },
+    {
+      "title": "First planting",
+      "date": "Mar 2024",
+      "complete": true
+    },
+    {
+      "title": "Fauna documented",
+      "date": "Apr 2024",
+      "complete": true
+    },
+    {
+      "title": "Canopy closing",
+      "date": "2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Lawn removed -- full site conversion begins",
+      "date": "Jan 2024",
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "180m2 lawn removed following December 2023 heatwave. Soil amended. First mulch layer installed. The question asked: what was here before?"
+    },
+    {
+      "title": "First planting -- 18 species installed",
+      "date": "Mar 2024",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "First 18 species planted across canopy, shrub, grass and groundcover layers. Logs and rocks positioned. Mulch 100mm depth."
+    },
+    {
+      "title": "Burrowing bee colony documented",
+      "date": "Apr 2024",
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Halictus sp. burrowing bee colony observed in bare soil patch, north corner. First fauna record for the site. Soil patch preserved deliberately."
+    },
+    {
+      "title": "Second planting -- 4 additional species",
+      "date": "Mar 2025",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "4 further species added as gaps appeared in the canopy and shrub layers. Total now 22 species. Canopy beginning to close."
+    }
+  ],
+  "notes": "Demo garden. Fictional stewards. Based on typical Northcote backyard conversion near Merri Creek corridor. Score 52 represents a well-established Year 2 ecological garden.",
+  "score": 52,
+  "badges": [
+    "gs_verified",
+    "indigenous_dominant",
+    "species_rich_20",
+    "habitat_builder",
+    "corridor_node"
+  ]
+}
