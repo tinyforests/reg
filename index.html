@@ -110,7 +110,7 @@
       <a href="/registry.html" class="muted hover:text-current transition-colors hidden md:block">Browse gardens</a>
       <a href="/gardens/rupert14/index.html" class="muted hover:text-current transition-colors hidden md:block">Example</a>
       <a href="mailto:hello@gardenerandson.com.au" class="btn-outline text-xs px-4 py-2">Register your garden</a>
-      <button id="themeToggle" class="text-xs muted hover:text-current transition-colors">Dark</button>
+      <button id="themeToggle" class="text-xs muted hover:text-current transition-colors">Understory</button>
     </div>
   </div>
 </nav>
@@ -497,11 +497,11 @@
   function setMode(mode) {
     if (mode === 'dark') {
       root.classList.add('dark');
-      btn.textContent = 'Light';
+      btn.textContent = 'Canopy';
       try { localStorage.setItem('reg_mode', 'dark'); } catch(e) {}
     } else {
       root.classList.remove('dark');
-      btn.textContent = 'Dark';
+      btn.textContent = 'Understory';
       try { localStorage.setItem('reg_mode', 'light'); } catch(e) {}
     }
   }
