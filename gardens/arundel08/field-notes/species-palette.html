@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry -- Species Palette -- Arundel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{serif:['"Abril Fatface"',"serif"],sans:['"IBM Plex Sans"',"system-ui","sans-serif"]}}}}</script>
+  <style>
+    *{-webkit-font-smoothing:antialiased;border-radius:0!important}
+    :root{--bg:#3d4535;--fg:#fff0dc;--hair:rgba(255,240,220,.10);--wash:rgba(255,240,220,.06)}
+    html.light{--bg:#fff0dc;--fg:#3d4535;--hair:rgba(61,69,53,.10);--wash:rgba(61,69,53,.05)}
+    body{background:var(--bg);color:var(--fg);font-family:"IBM Plex Sans",sans-serif;transition:background-color .25s,color .25s}
+    .chip{border:1px solid var(--hair)}.nav-border{border-bottom:1px solid var(--hair)}.bg-subtle{background:var(--wash)}
+    .border-strong{border-color:var(--hair)}
+    .gs-badge{position:fixed;bottom:24px;right:24px;z-index:50;background:var(--bg);border:1px solid var(--hair);padding:8px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;color:var(--fg);text-decoration:none;line-height:1.2}
+    .gs-badge:hover{opacity:1}
+    .theme-toggle{position:fixed;bottom:24px;left:24px;z-index:50;background:var(--bg);border:1px solid var(--hair);padding:8px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;color:var(--fg);cursor:pointer;line-height:1.2}
+    .theme-toggle:hover{opacity:1}
+  </style>
+</head>
+<body>
+  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">Powered by<br/>Gardener &amp; Son</a>
+  <button id="themeToggle" class="theme-toggle">Light</button>
+
+  <header class="sticky top-0 z-40 backdrop-blur nav-border" style="background:var(--bg)">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="/" class="w-9 h-9 grid place-items-center font-semibold hover:opacity-90" style="background:#fff0dc;color:#3d4535">ER</a>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-80">Field Note</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/gardens/arundel08/field-notes/2025-12-19.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle">19 Dec 2025</a>
+        <a href="/gardens/arundel08/index.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle">Arundel Profile</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10 space-y-6">
+
+    <div class="border border-strong bg-subtle p-5 md:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 class="font-serif text-3xl md:text-4xl leading-tight">Species Palette</h1>
+          <div class="mt-2 text-sm opacity-85"><span class="font-medium">Arundel</span> -- Surrey Hills, VIC</div>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="chip px-2.5 py-1">26 proposed species</span>
+            <span class="chip px-2.5 py-1">5 structural layers</span>
+            <span class="chip px-2.5 py-1">EVC 55 -- Grassy Woodland</span>
+            <span class="chip px-2.5 py-1">Design proposal</span>
+          </div>
+          <h2 class="mt-5 text-lg font-semibold">Full design palette -- proposed species by layer</h2>
+          <p class="mt-2 text-sm leading-relaxed opacity-90">
+            The complete proposed species palette for the Arundel ecological garden, organised by structural layer. This is the design intent -- the full palette from which installation will proceed over multiple planting seasons. Species marked as planted are confirmed in the ground as of 7 Apr 2026. The remainder will be introduced as the garden establishes and space opens up through the canopy and shrub layers.
+          </p>
+        </div>
+        <div class="shrink-0 text-right">
+          <div class="inline-flex flex-col items-end gap-2">
+            <span class="chip px-3 py-1.5 text-xs" style="background:rgba(122,158,95,.2);border-color:#7a9e5f">Design</span>
+            <div class="text-xs opacity-80">Gardener &amp; Son</div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="chip p-3"><div class="text-xs opacity-70">Proposed</div><div class="font-medium">26 species</div><div class="text-xs opacity-70 mt-1">Full design palette</div></div>
+        <div class="chip p-3"><div class="text-xs opacity-70">Planted</div><div class="font-medium">24 species</div><div class="text-xs opacity-70 mt-1">As of 7 Apr 2026</div></div>
+        <div class="chip p-3"><div class="text-xs opacity-70">Layers</div><div class="font-medium">5 structural</div><div class="text-xs opacity-70 mt-1">Canopy to groundcover</div></div>
+        <div class="chip p-3"><div class="text-xs opacity-70">EVC</div><div class="font-medium">Grassy Woodland</div><div class="text-xs opacity-70 mt-1">EVC 55</div></div>
+      </div>
+    </div>
+
+    <div class="border border-strong bg-subtle p-5 md:p-7">
+      <h3 class="text-lg font-semibold">Proposed species by layer</h3>
+      <p class="mt-2 text-sm opacity-70 leading-relaxed">Species confirmed planted as of 7 Apr 2026 are marked. All others are design proposals for future planting phases.</p>
+      <div class="mt-5">
+          <div class="text-xs opacity-50 uppercase tracking-wide mb-2">Canopy</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Eucalyptus leucoxylon connata</span>
+              <span class="text-xs opacity-50 flex-shrink-0">SA Blue Gum</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Eucalyptus radiata</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Narrow-leaf Peppermint</span>
+            </div>
+          </div>
+        </div><div class="mt-5">
+          <div class="text-xs opacity-50 uppercase tracking-wide mb-2">Subcanopy / Large shrub</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Kunzea baxteri</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Crimson Kunzea</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Acacia verticillata</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Prickly Moses</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Leptospermum continentale</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Prickly Tea-tree</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Indigofera australis</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Austral Indigo</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Correa lawrenceana</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Mountain Correa</span>
+            </div>
+          </div>
+        </div><div class="mt-5">
+          <div class="text-xs opacity-50 uppercase tracking-wide mb-2">Shrub</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Grevillea Red Rambler</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Grevillea Red Rambler</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Chrysocephalum semipapposum</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Clustered Everlasting</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Pycnosorus globosus</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Billy Buttons</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Xerochrysum viscosum</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Sticky Everlasting</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Xerochrysum bracteatum</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Golden Everlasting</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Linum marginale</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Native Flax</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Bulbine bulbosa</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Native Leek</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Einadia nutans</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Nodding Saltbush</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Pelargonium australe</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Austral Stork's-bill</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Wahlenbergia gracilis</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Australian Bluebell</span>
+            </div>
+          </div>
+        </div><div class="mt-5">
+          <div class="text-xs opacity-50 uppercase tracking-wide mb-2">Grass / Sedge</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Poa labillardieri</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Common Tussock-Grass</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Austrostipa elegantissima</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Feather Spear Grass</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Austrodanthonia racemosa</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Wallaby Grass</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Dichelachne crinita</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Long-hair Plume Grass</span>
+            </div>
+          </div>
+        </div><div class="mt-5">
+          <div class="text-xs opacity-50 uppercase tracking-wide mb-2">Groundcover / Climber</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5">
+            <div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Hardenbergia violacea</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Purple Coral Pea</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Viola hederacea</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Native Violet</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Dichondra repens</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Kidney Weed</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Glycine clandestina</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Twining Glycine</span>
+            </div><div class="chip px-3 py-2 flex items-start justify-between gap-2">
+              <span class="text-xs font-medium">Clematis microphylla</span>
+              <span class="text-xs opacity-50 flex-shrink-0">Old Man's Beard</span>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="border border-strong bg-subtle p-5 md:p-7">
+      <h3 class="text-lg font-semibold">Design intent</h3>
+      <ul class="mt-3 space-y-2 text-sm opacity-90">
+        <li>-- The palette is structured around the Grassy Woodland EVC -- the pre-European ecological community of the Surrey Hills area. Each species is either indigenous to this community or native to south-eastern Victoria.</li>
+        <li>-- Two eucalypts (E. leucoxylon connata and E. radiata) form the eventual canopy, with Kunzea baxteri and Acacia verticillata as the subcanopy frame. These are long-horizon plants -- their full value will be realised over 10-20 years.</li>
+        <li>-- The groundcover and grass layer is designed to close over quickly, suppressing weeds and building soil biology from the base up. Viola hederacea, Dichondra repens and the grasses will knit the surface together within one growing season.</li>
+        <li>-- The corridor relationship with South Surrey Park is the ecological ambition. As the planting matures and canopy closes, this garden will function as a genuine stepping stone for fauna moving between the Reserve and the surrounding neighbourhood.</li>
+      </ul>
+    </div>
+
+    <div class="border border-strong bg-subtle p-4 text-xs opacity-60">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div><span class="uppercase tracking-wide block mb-1">Related</span><a href="/gardens/arundel08/field-notes/2025-12-19.html" style="text-decoration:underline;text-underline-offset:2px">19 Dec 2025 -- Design presented</a></div>
+        <div><span class="uppercase tracking-wide block mb-1">Profile</span><a href="/gardens/arundel08/index.html" style="text-decoration:underline;text-underline-offset:2px">Arundel garden profile</a></div>
+        <div><span class="uppercase tracking-wide block mb-1">Registry ID</span>ER-VIC-SH-ARU-0001</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    var root=document.documentElement,btn=document.getElementById('themeToggle');
+    function setMode(m){if(m==='light'){root.classList.add('light');btn.textContent='Dark';try{localStorage.setItem('reg_mode','light')}catch(e){}}else{root.classList.remove('light');btn.textContent='Light';try{localStorage.setItem('reg_mode','dark')}catch(e){}}}
+    var s='';try{s=localStorage.getItem('reg_mode')||''}catch(e){}
+    setMode(s==='light'?'light':'dark');
+    btn.onclick=function(){setMode(root.classList.contains('light')?'dark':'light');};
+  </script>
+</body>
+</html>
