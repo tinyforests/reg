@@ -8,7 +8,7 @@
   },
   "statistics": {
     "average_score": 47,
-    "total_badges_awarded": 29
+    "total_badges_awarded": 30
   },
   "gardens": [
     {
@@ -91,7 +91,7 @@
       "type": "Habitat Garden",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 49,
+      "score": 48,
       "rating": "Ecological Garden",
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -99,12 +99,13 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 4,
+      "badge_count": 5,
       "badges": [
         "gs_verified",
         "indigenous_dominant",
         "species_rich_20",
-        "corridor_node"
+        "habitat_builder",
+        "full_record"
       ],
       "profile_url": "/gardens/middlesex80/index.html",
       "data_file": "data/middlesex.json"
