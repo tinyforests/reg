@@ -220,8 +220,8 @@
             <div class="mb-3">
               <span style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.3rem .65rem;display:inline-block" id="heroLevel">--</span>
             </div>
-            <div class="h-1.5" style="background:rgba(61,69,53,.15)">
-              <div class="bar-fill h-full" id="heroScoreBar" style="background:#3d4535" style="width:0%"></div>
+            <div class="bar-track">
+              <div class="bar-fill" id="heroScoreBar" style="width:0%"></div>
             </div>
             <div class="flex justify-between text-xs mt-2 opacity-60">
               <span>Baseline <span id="heroBaseline">--</span></span>
@@ -652,10 +652,8 @@ function render() {
     var bid = badges.all[i];
     var isN = bid === 'corridor_node';
     var isV = badges.vb.indexOf(bid) !== -1;
-    var bst = isN || isV
-      ? 'border:1px solid rgba(61,69,53,.4);background:rgba(61,69,53,.15);font-weight:600'
-      : 'border:1px solid rgba(61,69,53,.25);background:rgba(61,69,53,.08)';
-    hbh += '<span style="font-size:.7rem;border-width:1px;padding:.3rem .65rem;display:inline-block;margin-bottom:.25rem;' + bst + '">' + (BDEFS[bid] || bid) + '</span>';
+    var bcls = (isN || isV) ? 'badge-pill badge-pill-strong' : 'badge-pill';
+    hbh += '<span class="' + bcls + '">' + (BDEFS[bid] || bid) + '</span>';
   }
   html('heroBadges', hbh);
 
