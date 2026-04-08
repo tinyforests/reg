@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -27,10 +25,12 @@
       }}
     };
   </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
     * { border-radius: 0 !important; }
     body { transition: background 0.3s, color 0.3s; }
-    .bar-fill { transition: width 900ms cubic-bezier(0.16,1,0.3,1); height: 4px; }
+    .bar-fill { transition: width 900ms cubic-bezier(0.16,1,0.3,1); }
     .section-label { font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; opacity:.5; }
     .signal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(61,69,53,.15); }
     .dark .signal-grid { background:rgba(255,240,220,.1); }
@@ -49,9 +49,7 @@
     .stagger > *:nth-child(4){animation-delay:.2s}
     @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-    /* No map on this profile */
-
-/* Leaflet map overrides */
+    /* Leaflet map overrides */
     .leaflet-div-icon { background:transparent !important; border:none !important; }
     #corridorMap .leaflet-tile-pane {
       filter: grayscale(0.3) sepia(0.15) hue-rotate(60deg) brightness(0.97);
@@ -97,7 +95,6 @@
       margin-left: -25px !important;
       margin-top: -25px !important;
     }
-
 
     /* Badge & score notifications */
     #badgeNotification {
@@ -154,6 +151,15 @@
     #erNotif-type  { font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; opacity:.5; margin-bottom:.3rem; }
     #erNotif-title { font-size:.95rem; font-weight:600; margin-bottom:.25rem; line-height:1.2; }
     #erNotif-body  { font-size:.78rem; opacity:.75; line-height:1.45; }
+
+    /* Score bar + badge pill -- exact match to landing page (dark default, html.light = light) */
+    .bar-track { background: rgba(255,240,220,.12); height: 4px; }
+    html.light .bar-track { background: rgba(61,69,53,.12); }
+    .bar-fill  { height: 4px; transition: width 900ms cubic-bezier(0.16,1,0.3,1); }
+    .badge-pill { border: 1px solid rgba(255,240,220,.2); background: rgba(255,240,220,.06); padding: .25rem .65rem; font-size: .7rem; display: inline-block; margin: .15rem; color: #3d4535; }
+    html.light .badge-pill { border-color: rgba(61,69,53,.2); background: rgba(61,69,53,.06); }
+    .badge-pill-strong { border-color: rgba(255,240,220,.4) !important; background: rgba(255,240,220,.15) !important; font-weight: 600; }
+    html.light .badge-pill-strong { border-color: rgba(61,69,53,.4) !important; background: rgba(61,69,53,.15) !important; }
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
@@ -220,7 +226,7 @@
             </div>
           </div>
           <div class="mb-4">
-            <div class="mb-2">
+            <div style="margin-bottom:.75rem">
               <span style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.25rem .6rem;display:inline-block" id="heroLevel">--</span>
             </div>
             <div class="bar-track">
@@ -233,7 +239,7 @@
           </div>
           <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:1.25rem">
             <div class="flex flex-wrap gap-2 items-center">
-              <span style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(61,69,53,.3);padding:.3rem .65rem;opacity:.7">Badges earned</span>
+              <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(61,69,53,.25);padding:.25rem .6rem;opacity:.65;display:inline-block;margin-bottom:.6rem">Badges earned</div>
               <div class="flex flex-wrap gap-2" id="heroBadges"></div>
             </div>
           </div>
@@ -287,7 +293,6 @@
           <div class="flex items-center gap-1.5"><div style="width:10px;height:10px;border:1px solid #7a9e5f;flex-shrink:0"></div><span>Adjacent</span></div>
         </div>
       </div>
-
       <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-5">
           <div class="section-label mb-3" style="color:inherit;opacity:.6">Node Status</div>
@@ -660,7 +665,6 @@ function render() {
       ? 'border-color:rgba(61,69,53,.4);background:rgba(61,69,53,.15);font-weight:600'
       : '';
     hbh += '<span class="badge-pill" style="' + bst + '">' + (BDEFS[bid] || bid) + '</span>';
-
   }
   html('heroBadges', hbh);
 
@@ -811,6 +815,87 @@ function render() {
   }, 200);
 }
 
+/* ---- MAP ---- */
+var _map = null;
+
+function initCorridorMap(record) {
+  var c = record.connectivity || {};
+  var lat = c.lat;
+  var lng = c.lng;
+
+  if (!lat || !lng) {
+    document.getElementById('corridorMap').innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;opacity:.4;font-size:.75rem">No coordinates in data</div>';
+    return;
+  }
+
+  if (_map) {
+    _map.remove();
+    _map = null;
+  }
+
+  _map = L.map('corridorMap', {
+    center: [lat, lng],
+    zoom: 14,
+    zoomControl: true,
+    scrollWheelZoom: false,
+    attributionControl: false
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd'
+  }).addTo(_map);
+
+  /* Collect all bounds from the start */
+  var bounds = [[lat, lng]];
+
+  /* Primary garden marker */
+  var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [60,60] });
+  var primary = L.marker([lat, lng], { icon: regIcon }).addTo(_map);
+  primary.bindPopup(
+    '<strong>' + (record.garden_name || 'This garden') + '</strong><br>' +
+    (record.garden_id || '') + '<br>' +
+    '<span style="color:#7a9e5f">Score: ' + (record._score || '--') + '</span>'
+  );
+
+  /* Park marker */
+  if (c.adjacent_park && c.park_lat && c.park_lng) {
+    bounds.push([c.park_lat, c.park_lng]);
+    var parkIcon = L.divIcon({ className: 'park-marker', iconSize: [50,50] });
+    var park = L.marker([c.park_lat, c.park_lng], { icon: parkIcon }).addTo(_map);
+    park.bindPopup('<strong>' + (c.park_name || 'Adjacent park') + '</strong>');
+    L.polyline([[lat, lng], [c.park_lat, c.park_lng]], {
+      color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.6
+    }).addTo(_map);
+  }
+
+  /* Adjacent registered gardens */
+  var adj = c.adjacent_registered_gardens || [];
+
+  for (var i = 0; i < adj.length; i++) {
+    var g = adj[i];
+    if (!g.lat || !g.lng) continue;
+    bounds.push([g.lat, g.lng]);
+    var adjIcon = L.divIcon({ className: 'adj-marker', iconSize: [12,12] });
+    var adjMarker = L.marker([g.lat, g.lng], { icon: adjIcon }).addTo(_map);
+    adjMarker.bindPopup(
+      '<strong>' + (g.name || g.id) + '</strong><br>' +
+      g.id + '<br>' +
+      g.distance_m + 'm ' + (g.direction || '')
+    );
+    /* Dashed line to adjacent */
+    L.polyline([[lat, lng], [g.lat, g.lng]], {
+      color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.7
+    }).addTo(_map);
+  }
+
+  /* Fit bounds if multiple points */
+  if (bounds.length > 1) {
+    _map.fitBounds(bounds, { padding: [50, 50] });
+  }
+
+  /* Invalidate size after render to fix tile loading */
+  setTimeout(function() { _map.invalidateSize(); }, 100);
+}
 
 
 /* ---- NOTIFICATIONS ---- */
@@ -917,155 +1002,6 @@ function checkBadgeNotifications(gardenId, currentBadges, currentScore, prevScor
   }
 }
 
-/* ---- MAP ---- */
-var _map = null;
-
-function initCorridorMap(record) {
-  var c = record.connectivity || {};
-  var lat = c.lat;
-  var lng = c.lng;
-
-  if (!lat || !lng) {
-    document.getElementById('corridorMap').innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;opacity:.4;font-size:.75rem">No coordinates in data</div>';
-    return;
-  }
-
-  if (_map) {
-    _map.remove();
-    _map = null;
-  }
-
-  _map = L.map('corridorMap', {
-    center: [lat, lng],
-    zoom: 14,
-    zoomControl: true,
-    scrollWheelZoom: false,
-    attributionControl: false
-  });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 19, subdomains: 'abcd'
-  }).addTo(_map);
-
-  /* Collect all bounds from the start */
-  var bounds = [[lat, lng]];
-
-  /* Primary garden marker */
-  var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [60,60] });
-  var primary = L.marker([lat, lng], { icon: regIcon }).addTo(_map);
-  primary.bindPopup(
-    '<strong>' + (record.garden_name || 'This garden') + '</strong><br>' +
-    (record.garden_id || '') + '<br>' +
-    '<span style="color:#7a9e5f">Score: ' + (record._score || '--') + '</span>'
-  );
-
-  /* Park marker */
-  if (c.adjacent_park && c.park_lat && c.park_lng) {
-    bounds.push([c.park_lat, c.park_lng]);
-    var parkIcon = L.divIcon({ className: 'park-marker', iconSize: [50,50] });
-    var park = L.marker([c.park_lat, c.park_lng], { icon: parkIcon }).addTo(_map);
-    park.bindPopup('<strong>' + (c.park_name || 'Adjacent park') + '</strong>');
-    L.polyline([[lat, lng], [c.park_lat, c.park_lng]], {
-      color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.6
-    }).addTo(_map);
-  }
-
-  /* Adjacent registered gardens */
-  var adj = c.adjacent_registered_gardens || [];
-
-  for (var i = 0; i < adj.length; i++) {
-    var g = adj[i];
-    if (!g.lat || !g.lng) continue;
-    bounds.push([g.lat, g.lng]);
-    var adjIcon = L.divIcon({ className: 'adj-marker', iconSize: [12,12] });
-    var adjMarker = L.marker([g.lat, g.lng], { icon: adjIcon }).addTo(_map);
-    adjMarker.bindPopup(
-      '<strong>' + (g.name || g.id) + '</strong><br>' +
-      g.id + '<br>' +
-      g.distance_m + 'm ' + (g.direction || '')
-    );
-    /* Dashed line to adjacent */
-    L.polyline([[lat, lng], [g.lat, g.lng]], {
-      color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.7
-    }).addTo(_map);
-  }
-
-  /* Fit bounds if multiple points */
-  if (bounds.length > 1) {
-    _map.fitBounds(bounds, { padding: [50, 50] });
-  }
-
-  /* Invalidate size after render to fix tile loading */
-  setTimeout(function() { _map.invalidateSize(); }, 100);
-}
-
-
-/* ---- BADGE NOTIFICATIONS ---- */
-var BADGE_DESCS = {
-  indigenous_dominant: 'More than 70% of species are indigenous to this area.',
-  species_rich_20:     '20 or more indigenous species documented on site.',
-  species_rich_30:     '30 or more indigenous species documented on site.',
-  full_canopy:         'Canopy cover has reached 30% or above.',
-  five_layers:         'All five structural layers present and established.',
-  habitat_builder:     'Three or more habitat nodes active on site.',
-  amphibian_active:    'Verified amphibian or fauna sighting recorded.',
-  pollinator_rich:     'Three or more verified fauna species recorded.',
-  water_wise:          'Rainwater system and moisture basin both installed.',
-  corridor_node:       'Awarded once planting is established and the garden functions as a movement pathway -- typically 12-24 months post-installation.',
-  network_connected:   'Two or more adjacent registered gardens verified.',
-  gs_verified:         'Verified by Gardener & Son.',
-  site_visit_badge:    'Verified by site visit.',
-  full_record:         'Photos, field notes, species list and fauna record all complete.',
-  fauna_record:        'Fauna sighting verified and on record.'
-};
-
-function checkBadgeNotifications(gardenId, currentBadges) {
-  var key = 'seen_badges_' + gardenId;
-  var stored = '';
-  try { stored = localStorage.getItem(key) || ''; } catch(e) {}
-  var seen = stored ? stored.split(',') : [];
-
-  var newBadges = [];
-  for (var i = 0; i < currentBadges.length; i++) {
-    if (seen.indexOf(currentBadges[i]) === -1) {
-      newBadges.push(currentBadges[i]);
-    }
-  }
-
-  if (newBadges.length === 0) return;
-
-  /* Show first new badge */
-  var badge = newBadges[0];
-  var name  = BDEFS[badge] || badge;
-  var desc  = BADGE_DESCS[badge] || '';
-
-  var el = document.getElementById('badgeNotification');
-  var nm = document.getElementById('notifBadgeName');
-  var ds = document.getElementById('notifBadgeDesc');
-  var ct = document.getElementById('notifBadgeCount');
-
-  if (!el || !nm) return;
-  nm.textContent = name;
-  if (ds) ds.textContent = desc;
-  if (ct) ct.textContent = newBadges.length > 1
-    ? newBadges.length + ' new badges earned'
-    : '';
-
-  setTimeout(function() { el.classList.add('show'); }, 300);
-
-  /* Auto-dismiss after 8 seconds */
-  setTimeout(function() { dismissBadgeNotification(); }, 8000);
-
-  /* Mark all new badges as seen */
-  var allSeen = seen.concat(newBadges);
-  try { localStorage.setItem(key, allSeen.join(',')); } catch(e) {}
-}
-
-function dismissBadgeNotification() {
-  var el = document.getElementById('badgeNotification');
-  if (el) el.classList.remove('show');
-}
-
 /* ---- BOOT ---- */
 var st = localStorage.getItem('reg-theme');
 var thBtn = document.getElementById('themeToggle');
@@ -1092,7 +1028,7 @@ fetch('/data/nicholson.json')
     console.error('Could not load garden data:', err);
     document.getElementById('heroName').textContent = 'Data unavailable';
     document.getElementById('heroScore').textContent = '--';
-    document.getElementById('heroLevel').textContent = 'Check /data/arundel.json';
+    document.getElementById('heroLevel').textContent = 'Check /data/nicholson.json';
   });
 
   /* ---- Notification engine ---- */
