@@ -2,14 +2,14 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 7,
+    "total_gardens": 8,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
   },
   "statistics": {
-    "average_score": 50,
-    "total_badges_awarded": 30
+    "average_score": 45,
+    "total_badges_awarded": 31
   },
   "gardens": [
     {
@@ -258,6 +258,41 @@
         "gardens": 1,
         "area_ha": 0.025,
         "status": "Emerging"
+      }
+    },
+    {
+      "garden_id": "ER-VIC-BAL-PRD-001",
+      "garden_name": "Parring Road",
+      "typology": "Connected Habitat Landscape",
+      "type": "Connected Ecological System",
+      "suburb": "Balwyn",
+      "state": "VIC",
+      "score": 11,
+      "rating": {
+        "current": "Basic Garden",
+        "next": "Habitat Garden",
+        "points_to_next": 10
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Design Proposal",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Apr 2026",
+      "badge_count": 1,
+      "badges": [
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/parringroad17/index.html",
+      "data_file": "data/parringroad.json",
+      "registry_role": "Connector",
+      "trajectory": "Emerging",
+      "points_available": 69,
+      "cluster": {
+        "name": "Balwyn",
+        "gardens": 2,
+        "area_ha": 0.12,
+        "status": "Forming"
       }
     }
   ],
