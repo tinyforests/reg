@@ -161,12 +161,6 @@
     .badge-pill-strong { border-color: rgba(255,240,220,.4) !important; background: rgba(255,240,220,.15) !important; font-weight: 600; }
     html.light .badge-pill-strong { border-color: rgba(61,69,53,.4) !important; background: rgba(61,69,53,.15) !important; }
 
-    /* Yield panel */
-    .yield-panel { border-top: 1px solid rgba(61,69,53,.15); margin-top: 1rem; padding-top: 1rem; }
-    .yield-amount { font-family: "Abril Fatface", serif; font-size: 2.5rem; line-height: 1; color: #3d4535; }
-    .yield-label  { font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; opacity: .55; margin-bottom: .4rem; }
-    .yield-pill   { font-size: .65rem; border: 1px solid rgba(61,69,53,.3); padding: .2rem .55rem; display: inline-block; margin-right: .25rem; }
-    .yield-inactive { opacity: .5; }
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
@@ -253,12 +247,7 @@
           </div>
         </div>
       </div>
-        <div class="border p-5" style="background:#f0f4ec;border-color:rgba(61,69,53,.2)">
-          <div class="yield-label">Yield (Annual)</div>
-          <div id="yieldAmount" class="yield-amount">--</div>
-          <div class="mt-2 flex flex-wrap gap-1" id="yieldMeta"></div>
-          <div class="mt-3" id="yieldUpgrades"></div>
-        </div>
+
     </div>
   </section>
 
@@ -723,7 +712,6 @@ function render() {
 
   txt('heroBadgeCount', badges.all.length);
   erCheckNotifications(R.garden_id, badges.all, result.total);
-  renderYield(R, result);
   txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
@@ -1217,51 +1205,6 @@ fetch('/data/rupert.json')
     try { localStorage.setItem(scoreKey, String(score));    } catch(e) {}
   }
 
-  /* ---- YIELD ENGINE ---- */
-  function renderYield(R, result) {
-    var y = R.yield || {};
-    var amt = document.getElementById('yieldAmount');
-    var meta = document.getElementById('yieldMeta');
-    var upg = document.getElementById('yieldUpgrades');
-    if (!amt) return;
-
-    if (y.eligible) {
-      amt.textContent = '$' + (y.estimated_annual || 0);
-      amt.style.opacity = '1';
-    } else {
-      amt.textContent = 'Not yet active';
-      amt.style.fontSize = '1.1rem';
-      amt.style.opacity = '.6';
-    }
-
-    var mh = '';
-    if (y.eligible) {
-      mh += '<span class="yield-pill" style="border-color:rgba(61,69,53,.5);background:rgba(61,69,53,.1);font-weight:600">Active</span>';
-      mh += '<span class="yield-pill">Potential $' + (y.potential_annual || 0) + '</span>';
-    } else {
-      mh += '<span class="yield-pill yield-inactive">Min score ' + (y.minimum_score_required || 40) + ' required</span>';
-      if (result && result.total < (y.minimum_score_required || 40)) {
-        var gap = (y.minimum_score_required || 40) - result.total;
-        mh += '<span class="yield-pill yield-inactive">+' + gap + ' pts to unlock</span>';
-      }
-    }
-    if (meta) meta.innerHTML = mh;
-
-    var uh = '';
-    if (y.yield_per_point && y.yield_per_point > 0) {
-      uh += '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin-bottom:.4rem">Increase yield</div>';
-      var recs = result ? result.recommendations : [];
-      for (var ri = 0; ri < Math.min(recs.length, 3); ri++) {
-        var pts = recs[ri].points;
-        var yieldGain = pts * y.yield_per_point;
-        uh += '<div style="font-size:.7rem;opacity:.7;margin-bottom:.25rem;display:flex;justify-content:space-between">' +
-          '<span>' + recs[ri].action + '</span>' +
-          '<span style="font-weight:600;color:#3d4535;flex-shrink:0;margin-left:.5rem">+$' + yieldGain + '/yr</span>' +
-          '</div>';
-      }
-    }
-    if (upg) upg.innerHTML = uh;
-  }
 
 </script>
 </body>
