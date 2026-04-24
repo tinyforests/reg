@@ -167,5 +167,36 @@
     "species_rich_20",
     "habitat_builder",
     "corridor_node"
-  ]
+  ],
+  "yield": {
+    "eligible": true,
+    "status": "Active -- pending sponsor matching",
+    "estimated_annual": 270,
+    "potential_annual": 350,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Achieve Corridor Node status",
+        "annual_yield_increase": 60,
+        "notes": "Merri Creek 200m -- strong candidate once planting established"
+      },
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 35
+      },
+      {
+        "action": "Install moisture basin",
+        "annual_yield_increase": 20
+      },
+      {
+        "action": "Install nest boxes",
+        "annual_yield_increase": 25
+      },
+      {
+        "action": "Reach 30 indigenous species",
+        "annual_yield_increase": 15
+      }
+    ]
+  }
 }
