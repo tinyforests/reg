@@ -2,14 +2,14 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 8,
+    "total_gardens": 9,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
   },
   "statistics": {
-    "average_score": 45,
-    "total_badges_awarded": 31
+    "average_score": 46,
+    "total_badges_awarded": 36
   },
   "gardens": [
     {
@@ -293,6 +293,45 @@
         "gardens": 2,
         "area_ha": 0.12,
         "status": "Forming"
+      }
+    },
+    {
+      "garden_id": "ER-VIC-NTH-RUP-001",
+      "garden_name": "Rupert",
+      "typology": "Urban Ecological Retrofit",
+      "type": "Urban Ecological Retrofit",
+      "suburb": "Northcote",
+      "state": "VIC",
+      "score": 52,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 9
+      },
+      "primary_evc": "Wet Sclerophyll Forest (EVC 38)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Demo garden",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Jan 2026",
+      "badge_count": 5,
+      "badges": [
+        "indigenous_dominant",
+        "species_rich_20",
+        "habitat_builder",
+        "gs_verified",
+        "fauna_record"
+      ],
+      "profile_url": "/gardens/rupert14/index.html",
+      "data_file": "data/rupert.json",
+      "registry_role": "Prototype",
+      "trajectory": "Rising",
+      "points_available": 18,
+      "cluster": {
+        "name": "Northcote",
+        "gardens": 1,
+        "area_ha": 0.018,
+        "status": "Emerging"
       }
     }
   ],
