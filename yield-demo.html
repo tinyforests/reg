@@ -659,6 +659,38 @@ function awardBadges(r) {
   return { all: all, vb: vb };
 }
 
+/* ---- YIELD ENGINE ---- */
+function calcYield(R, score) {
+  var e = R.evidence || {};
+  var con = R.connectivity || {};
+  var verified = e.verification_level === 'gardener_and_son_verified';
+  var park     = con.adjacent_park || false;
+  var corridor = con.corridor_node_confirmed || false;
+  var area     = R.area_sqm || 0;
+
+  var base         = score * 3;
+  var areaVal      = Math.min(area * 0.1, 80);
+  var connectivity = (park ? 20 : 0) + (corridor ? 50 : 0);
+  var vmult        = verified ? 1.2 : 1.0;
+  var estimated    = Math.round((base + areaVal + connectivity) * vmult / 10) * 10;
+
+  var potBase      = Math.min(score + 15, 90) * 3;
+  var potential    = Math.round((potBase + areaVal + 70) * 1.2 / 10) * 10;
+
+  var eligible = score >= 40;
+  return {
+    estimated:    eligible ? estimated : 0,
+    potential:    potential,
+    eligible:     eligible,
+    breakdown: {
+      base:         base,
+      area:         Math.round(areaVal),
+      connectivity: connectivity,
+      vmult:        vmult
+    }
+  };
+}
+
 /* ---- GARDEN DATA (loaded from JSON) ---- */
 var G = null;
 
@@ -847,24 +879,19 @@ function render() {
 
 
   /* ---- YIELD ---- */
-  var yld = R.yield || {};
-  var yEst = yld.estimated_annual || 0;
-  var yPot = yld.potential_annual || 0;
-  var yElig = yld.eligible;
-  txt('yieldEstimated', yEst > 0 ? ('$' + yEst) : '$0');
-  txt('yieldPotential', yPot > 0 ? ('$' + yPot) : '--');
-  txt('yieldEligible',  yElig ? 'Yes' : 'No');
+  var yld  = R.yield || {};
+  var ycalc = calcYield(R, result.total);
+  txt('yieldEstimated', ycalc.estimated > 0 ? ('$' + ycalc.estimated) : '$0');
+  txt('yieldPotential', ycalc.potential > 0 ? ('$' + ycalc.potential) : '--');
+  txt('yieldEligible',  ycalc.eligible ? 'Yes' : 'No');
   txt('yieldStatus',    yld.status || '');
 
-  /* Yield factors breakdown */
-  var score_contrib = Math.round(result.total * 3 * 1.2);
-  var area_contrib  = Math.round(Math.min((R.area_sqm || 0) * 0.1, 80));
-  var conn_contrib  = (c.adjacent_park ? 20 : 0) + (c.corridor_node_confirmed ? 50 : 0);
+  /* Yield factors breakdown -- from live calculation */
   html('yieldFactors',
-    '<div class="flex justify-between"><span>Score contribution</span><span>$' + score_contrib + '</span></div>' +
-    '<div class="flex justify-between"><span>Area contribution</span><span>$' + area_contrib + '</span></div>' +
-    '<div class="flex justify-between"><span>Connectivity bonus</span><span>$' + conn_contrib + '</span></div>' +
-    '<div class="flex justify-between"><span>Verification multiplier</span><span>1.2x</span></div>'
+    '<div class="flex justify-between"><span>Score contribution</span><span>$' + ycalc.breakdown.base + '</span></div>' +
+    '<div class="flex justify-between"><span>Area contribution</span><span>$' + ycalc.breakdown.area + '</span></div>' +
+    '<div class="flex justify-between"><span>Connectivity bonus</span><span>$' + ycalc.breakdown.connectivity + '</span></div>' +
+    '<div class="flex justify-between"><span>Verification multiplier</span><span>' + ycalc.breakdown.vmult + 'x</span></div>'
   );
 
   /* Cluster yield note */
@@ -876,7 +903,7 @@ function render() {
     'a viable target for council or corporate sponsor funding.'
   );
 
-  /* Yield upgrade list */
+  /* Yield upgrade list -- from JSON */
   var yuh = '';
   var yUpgrades = yld.upgrades || [];
   for (var yi = 0; yi < yUpgrades.length; yi++) {
