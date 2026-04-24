@@ -1,8 +1,8 @@
 {
   "metadata": {
     "version": "1.0",
-    "last_updated": "Mar 2026",
-    "total_species": 143,
+    "last_updated": "Apr 2026",
+    "total_species": 151,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -22,7 +22,8 @@
       "layer": "groundcover",
       "family": "Casuarinaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -50,7 +51,8 @@
         "middlesex",
         "montAlbert",
         "evelina",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -85,7 +87,8 @@
         "arundel",
         "middlesex",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -97,7 +100,8 @@
       "gardens": [
         "parring",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -109,7 +113,8 @@
       "gardens": [
         "parring",
         "dewrang",
-        "arundel"
+        "arundel",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -132,7 +137,8 @@
         "parring",
         "arundel",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -155,7 +161,8 @@
       "family": "Goodeniaceae",
       "gardens": [
         "parring",
-        "montAlbert"
+        "montAlbert",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -208,7 +215,8 @@
       "family": "Fabaceae",
       "gardens": [
         "parring",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -254,7 +262,8 @@
       "gardens": [
         "parring",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -288,7 +297,8 @@
       "family": "Goodeniaceae",
       "gardens": [
         "parring",
-        "arundel"
+        "arundel",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -342,7 +352,8 @@
       "family": "Asteraceae",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -356,7 +367,8 @@
         "arundel",
         "montAlbert",
         "evelina",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -379,7 +391,8 @@
         "parring",
         "arundel",
         "middlesex",
-        "montAlbert"
+        "montAlbert",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -416,7 +429,8 @@
       "family": "Convolvulaceae",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -428,7 +442,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "evelina"
+        "evelina",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -507,7 +522,8 @@
         "parring",
         "arundel",
         "montAlbert",
-        "evelina"
+        "evelina",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -531,7 +547,8 @@
       "gardens": [
         "arundel",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -573,7 +590,8 @@
       "gardens": [
         "arundel",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -583,7 +601,8 @@
       "layer": "groundcover",
       "family": "Asteraceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "parringroad"
       ],
       "notes": ""
     },
@@ -656,7 +675,8 @@
         "middlesex",
         "montAlbert",
         "evelina",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -701,7 +721,8 @@
         "arundel",
         "middlesex",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -767,7 +788,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -896,7 +918,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -987,7 +1010,8 @@
       "family": "Myrtaceae",
       "notes": "cultivar",
       "gardens": [
-        "arundel"
+        "arundel",
+        "parringroad"
       ]
     },
     {
@@ -998,7 +1022,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -1152,7 +1177,8 @@
       "notes": "",
       "gardens": [
         "nicholson",
-        "montAlbert"
+        "montAlbert",
+        "parringroad"
       ]
     },
     {
@@ -1204,7 +1230,8 @@
       "family": "Scrophulariaceae",
       "notes": "cultivar",
       "gardens": [
-        "montAlbert"
+        "montAlbert",
+        "parringroad"
       ]
     },
     {
@@ -1424,7 +1451,8 @@
       "family": "Haemodoraceae",
       "notes": "cultivar",
       "gardens": [
-        "evelina"
+        "evelina",
+        "parringroad"
       ]
     },
     {
@@ -1488,7 +1516,8 @@
       "layer": "shrub",
       "family": "Rutaceae",
       "gardens": [
-        "dewrang"
+        "dewrang",
+        "parringroad"
       ]
     },
     {
@@ -1543,6 +1572,86 @@
       "family": "Fabaceae",
       "gardens": [
         "arundel"
+      ]
+    },
+    {
+      "botanical_name": "Geranium solanderi",
+      "common_name": "Austral Cranesbill",
+      "layer": "forb",
+      "family": "Geraniaceae",
+      "notes": "",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Poa clivicola Mountain Blue",
+      "common_name": "Fine Leaf Snowgrass",
+      "layer": "grass",
+      "family": "Poaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Banksia integrifolia Sentinel",
+      "common_name": "Banksia Sentinel",
+      "layer": "canopy",
+      "family": "Proteaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Hakea laurina",
+      "common_name": "Pincushion Hakea",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Westringia hybrid Aussie Box",
+      "common_name": "Compact Coastal Rosemary",
+      "layer": "shrub",
+      "family": "Lamiaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Pimelea ferruginea Pink Solitare",
+      "common_name": "Rice Flower Pink Solitare",
+      "layer": "shrub",
+      "family": "Thymelaeaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Prostanthera rotundifolia",
+      "common_name": "Native Oregano",
+      "layer": "shrub",
+      "family": "Lamiaceae",
+      "notes": "",
+      "gardens": [
+        "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Lomandra confertifolia Seascape",
+      "common_name": "Spiny-Head Mat-Rush",
+      "layer": "grass",
+      "family": "Asparagaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "parringroad"
       ]
     }
   ]

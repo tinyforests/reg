@@ -4,7 +4,8 @@
     "last_updated": "Mar 2026",
     "total_gardens": 7,
     "data_custodian": "Gardener & Son",
-    "contact": "registry@gardenerandson.com.au"
+    "contact": "registry@gardenerandson.com.au",
+    "schema_version": "2.0"
   },
   "statistics": {
     "average_score": 50,
@@ -14,11 +15,14 @@
     {
       "garden_id": "ER-VIC-SH-ARU-0001",
       "garden_name": "Arundel",
-      "type": "Ecological Forest Garden",
       "suburb": "Surrey Hills",
       "state": "VIC",
       "score": 73,
-      "rating": "Registered Ecological Garden",
+      "rating": {
+        "current": "Registered Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 18
+      },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
       "status": "Active / Establishing",
@@ -35,16 +39,29 @@
         "full_record"
       ],
       "profile_url": "/gardens/arundel08/index.html",
-      "data_file": "data/arundel.json"
+      "data_file": "data/arundel.json",
+      "typology": "Ecological Forest Garden",
+      "registry_role": "Performer",
+      "trajectory": "Rising",
+      "points_available": 19,
+      "cluster": {
+        "name": "Surrey Hills",
+        "gardens": 2,
+        "area_ha": 0.48,
+        "status": "Forming"
+      }
     },
     {
       "garden_id": "ER-VIC-SY-NIC-0002",
       "garden_name": "Nicholson",
-      "type": "Urban Ecological Retrofit",
       "suburb": "South Yarra",
       "state": "VIC",
       "score": 29,
-      "rating": "Habitat Garden",
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 62
+      },
       "primary_evc": "Urban Ecological Garden",
       "bioregion": "Inner Melbourne",
       "status": "Baseline established",
@@ -57,16 +74,29 @@
         "species_rich_20"
       ],
       "profile_url": "/gardens/nicholson10/index.html",
-      "data_file": "data/nicholson.json"
+      "data_file": "data/nicholson.json",
+      "typology": "Urban Ecological Retrofit",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Emerging",
+      "points_available": 51,
+      "cluster": {
+        "name": "South Yarra",
+        "gardens": 1,
+        "area_ha": 0.06,
+        "status": "Emerging"
+      }
     },
     {
       "garden_id": "ER-VIC-BAL-001",
       "garden_name": "Parring",
-      "type": "Connected Habitat Landscape",
       "suburb": "Balwyn",
       "state": "VIC",
       "score": 50,
-      "rating": "Ecological Garden",
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 41
+      },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
       "status": "Active / Establishing",
@@ -83,16 +113,29 @@
         "fauna_record"
       ],
       "profile_url": "/gardens/parring11/index.html",
-      "data_file": "data/parring.json"
+      "data_file": "data/parring.json",
+      "typology": "Ecological Cottage Garden",
+      "registry_role": "Connector",
+      "trajectory": "Rising",
+      "points_available": 32,
+      "cluster": {
+        "name": "Balwyn",
+        "gardens": 1,
+        "area_ha": 0.12,
+        "status": "Emerging"
+      }
     },
     {
       "garden_id": "ER-VIC-SH-MID-001",
       "garden_name": "Middlesex",
-      "type": "Habitat Garden",
       "suburb": "Surrey Hills",
       "state": "VIC",
       "score": 54,
-      "rating": "Ecological Garden",
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 37
+      },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
       "status": "Baseline established",
@@ -108,7 +151,17 @@
         "full_record"
       ],
       "profile_url": "/gardens/middlesex80/index.html",
-      "data_file": "data/middlesex.json"
+      "data_file": "data/middlesex.json",
+      "typology": "Connected Habitat Landscape",
+      "registry_role": "Connector",
+      "trajectory": "Stable",
+      "points_available": 36,
+      "cluster": {
+        "name": "Surrey Hills",
+        "gardens": 2,
+        "area_ha": 0.48,
+        "status": "Forming"
+      }
     },
     {
       "garden_id": "ER-VIC-CAN-MON-001",
@@ -134,11 +187,14 @@
     {
       "garden_id": "ER-VIC-MAN-EVE-001",
       "garden_name": "Evelina",
-      "type": "Wild Native Meadow",
       "suburb": "Mont Albert North",
       "state": "VIC",
       "score": 45,
-      "rating": "Ecological Garden",
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 46
+      },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
       "status": "Active / Establishing",
@@ -153,16 +209,29 @@
         "habitat_builder"
       ],
       "profile_url": "/gardens/evelina23/index.html",
-      "data_file": "data/evelina.json"
+      "data_file": "data/evelina.json",
+      "typology": "Wild Native Meadow",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Rising",
+      "points_available": 35,
+      "cluster": {
+        "name": "Mont Albert North",
+        "gardens": 1,
+        "area_ha": 0.0024,
+        "status": "Emerging"
+      }
     },
     {
       "garden_id": "ER-VIC-BLA-DEW-001",
       "garden_name": "Dewrang",
-      "type": "Multi-Zone Ecological Garden",
       "suburb": "Blackburn",
       "state": "VIC",
       "score": 50,
-      "rating": "Ecological Garden",
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 41
+      },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
       "status": "Active / Establishing",
@@ -179,7 +248,61 @@
         "five_layers"
       ],
       "profile_url": "/gardens/dewrang1a/index.html",
-      "data_file": "data/dewrang.json"
+      "data_file": "data/dewrang.json",
+      "typology": "Multi-Zone Ecological Garden",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Rising",
+      "points_available": 30,
+      "cluster": {
+        "name": "Blackburn",
+        "gardens": 1,
+        "area_ha": 0.025,
+        "status": "Emerging"
+      }
     }
-  ]
+  ],
+  "leaderboard": {
+    "top_garden": "Arundel",
+    "top_score": 73,
+    "most_badges": "Arundel",
+    "highest_upgrade_potential": "Nicholson",
+    "rankings": [
+      {
+        "garden": "Arundel",
+        "score": 73
+      },
+      {
+        "garden": "Middlesex",
+        "score": 54
+      },
+      {
+        "garden": "Parring",
+        "score": 50
+      },
+      {
+        "garden": "Dewrang",
+        "score": 50
+      },
+      {
+        "garden": "Evelina",
+        "score": 45
+      },
+      {
+        "garden": "Nicholson",
+        "score": 29
+      }
+    ]
+  },
+  "network": {
+    "total_area_ha": 1.187,
+    "active_clusters": 6,
+    "gardens_in_establishment": 5,
+    "total_gardens": 7,
+    "avg_score": 50,
+    "total_species": 143,
+    "total_badges": 30,
+    "total_estimated_yield_aud": 1150,
+    "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
+    "yield_status": "Pre-activation -- sponsor model pending"
+  }
 }
