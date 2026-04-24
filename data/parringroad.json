@@ -1,0 +1,226 @@
+{
+  "garden_id": "ER-VIC-BAL-PRD-001",
+  "garden_name": "Parring Road",
+  "garden_type": "Connected Ecological System",
+  "typology": "Connected Habitat Landscape",
+  "registry_role": "Connector",
+  "trajectory": "Emerging",
+  "suburb": "Balwyn",
+  "state": "VIC",
+  "assessment_date": "Apr 2026",
+  "baseline_date": "Apr 2026",
+  "stewards": "",
+  "designer": "Gardener & Son",
+  "area_sqm": 0,
+  "description": "The garden has been designed as a connected ecological system -- each space from the narrow front bed to the more immersive rear garden contributes to a layered, living landscape. Structure, movement and dense groundcover create habitat, support pollinators, and improve soil and water function, while remaining soft and highly liveable.",
+  "zones": [
+    {
+      "name": "Front bed",
+      "species": [
+        "Geranium solanderi",
+        "Linum marginale",
+        "Brachyscome multifida Pink Form",
+        "Spyridium parvifolium",
+        "Stylidium armeria",
+        "Dichelachne crinita",
+        "Dampiera diversifolia",
+        "Poa clivicola Mountain Blue",
+        "Indigofera australis",
+        "Casuarina glauca prostrate",
+        "Viola hederacea"
+      ]
+    },
+    {
+      "name": "Rear garden",
+      "species": [
+        "Banksia integrifolia Sentinel",
+        "Hakea laurina",
+        "Eremophila glabra Kalbarri Carpet",
+        "Pycnosorus globosus",
+        "Philotheca myoporoides Winter Rouge",
+        "Casuarina glauca prostrate",
+        "Hardenbergia violacea",
+        "Dichondra repens",
+        "Banksia spinulosa Birthday Candles",
+        "Anigozanthos Bush Gems",
+        "Scaevola Mauve Clusters",
+        "Ficus pumila",
+        "Correa glabra",
+        "Westringia hybrid Aussie Box",
+        "Pimelea ferruginea Pink Solitare",
+        "Poa labillardieri Eskdale",
+        "Linum marginale",
+        "Brachyscome Mauve Bliss",
+        "Prostanthera rotundifolia",
+        "Pratia puberula",
+        "Dianella tasmanica Tas Red",
+        "Vitis coignetiae",
+        "Lomandra confertifolia Seascape",
+        "Eucalyptus leucoxylon Rosea",
+        "Anigozanthos Landscape Gold"
+      ]
+    }
+  ],
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 0,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 34,
+    "indigenous_dominant": false,
+    "structural_layers_current": 0,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Unknown",
+    "weed_pressure_baseline": "Unknown",
+    "species_list": [],
+    "species_proposed": [
+      "Geranium solanderi",
+      "Linum marginale",
+      "Brachyscome multifida Pink Form",
+      "Spyridium parvifolium",
+      "Stylidium armeria",
+      "Dichelachne crinita",
+      "Dampiera diversifolia",
+      "Poa clivicola Mountain Blue",
+      "Indigofera australis",
+      "Casuarina glauca prostrate",
+      "Viola hederacea",
+      "Banksia integrifolia Sentinel",
+      "Hakea laurina",
+      "Eremophila glabra Kalbarri Carpet",
+      "Pycnosorus globosus",
+      "Philotheca myoporoides Winter Rouge",
+      "Hardenbergia violacea",
+      "Dichondra repens",
+      "Banksia spinulosa Birthday Candles",
+      "Anigozanthos Bush Gems",
+      "Scaevola Mauve Clusters",
+      "Ficus pumila",
+      "Correa glabra",
+      "Westringia hybrid Aussie Box",
+      "Pimelea ferruginea Pink Solitare",
+      "Poa labillardieri Eskdale",
+      "Brachyscome Mauve Bliss",
+      "Prostanthera rotundifolia",
+      "Pratia puberula",
+      "Dianella tasmanica Tas Red",
+      "Vitis coignetiae",
+      "Lomandra confertifolia Seascape",
+      "Eucalyptus leucoxylon Rosea",
+      "Anigozanthos Landscape Gold"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 0,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 0,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false
+  },
+  "habitat": {
+    "habitat_nodes": 0,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": [],
+    "planting_method": "Ecological planting -- design proposal"
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0,
+    "cluster_name": "Balwyn",
+    "cluster": {
+      "name": "Balwyn",
+      "gardens": 2,
+      "area_ha": 0.12,
+      "status": "Forming"
+    }
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Design presented",
+      "date": "Apr 2026",
+      "complete": true
+    },
+    {
+      "title": "Installation commences",
+      "date": "May 2026",
+      "complete": false
+    },
+    {
+      "title": "Planting complete",
+      "date": "May 2026",
+      "complete": false
+    },
+    {
+      "title": "Ecological baseline",
+      "date": "Jul 2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Design presented -- connected ecological system, front and rear",
+      "date": "Apr 2026",
+      "type": "Design",
+      "category": "design",
+      "notes": "Design presented for 4/17 Parring Road, Balwyn. Two-zone connected ecological system -- narrow front bed and immersive rear garden. 34 species proposed across both zones. Installation to begin in coming weeks."
+    }
+  ],
+  "rating": {
+    "current": "Basic Garden",
+    "next": "Habitat Garden",
+    "points_to_next": 10
+  },
+  "upgrade_potential": 69,
+  "points_available": 69,
+  "notes": "Design proposal. Installation pending. 34 species proposed across front bed and rear garden.",
+  "yield": {
+    "eligible": false,
+    "status": "Not yet eligible -- installation pending",
+    "estimated_annual": 0,
+    "potential_annual": 280,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Complete installation and establish planting",
+        "annual_yield_increase": 120
+      },
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 35
+      },
+      {
+        "action": "Achieve corridor node status",
+        "annual_yield_increase": 60
+      }
+    ]
+  },
+  "target_score": 80
+}
