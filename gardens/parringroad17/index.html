@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry - Parring Road</title>
+  <title>Ecological Registry - Parringroad</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -161,12 +161,6 @@
     .badge-pill-strong { border-color: rgba(255,240,220,.4) !important; background: rgba(255,240,220,.15) !important; font-weight: 600; }
     html.light .badge-pill-strong { border-color: rgba(61,69,53,.4) !important; background: rgba(61,69,53,.15) !important; }
 
-    /* Yield panel */
-    .yield-panel { border-top: 1px solid rgba(61,69,53,.15); margin-top: 1rem; padding-top: 1rem; }
-    .yield-amount { font-family: "Abril Fatface", serif; font-size: 2.5rem; line-height: 1; color: #3d4535; }
-    .yield-label  { font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; opacity: .55; margin-bottom: .4rem; }
-    .yield-pill   { font-size: .65rem; border: 1px solid rgba(61,69,53,.3); padding: .2rem .55rem; display: inline-block; margin-right: .25rem; }
-    .yield-inactive { opacity: .5; }
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
@@ -193,7 +187,6 @@
       <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
       <a href="#species" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
       <a <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
-      <a href="#yield"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Yield</a>
       <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
     </nav>
     <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Canopy</button>
@@ -253,12 +246,7 @@
           </div>
         </div>
       </div>
-        <div class="border p-5" style="background:#f0f4ec;border-color:rgba(61,69,53,.2)">
-          <div class="yield-label">Yield (Annual)</div>
-          <div id="yieldAmount" class="yield-amount">--</div>
-          <div class="mt-2 flex flex-wrap gap-1" id="yieldMeta"></div>
-          <div class="mt-3" id="yieldUpgrades"></div>
-        </div>
+
     </div>
   </section>
 
@@ -342,44 +330,6 @@
     <div class="section-label mb-1">Documented Flora</div>
     <h2 class="font-serif text-4xl mb-6">Species List</h2>
     <div id="speciesSection"></div>
-  </section>
-  <section id="yield" class="stagger">
-    <div class="section-label mb-1">Economic Layer</div>
-    <h2 class="font-serif text-4xl mb-6">Yield</h2>
-    <div class="grid lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 space-y-4">
-        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
-          <div class="section-label mb-4">What is Yield?</div>
-          <p class="text-sm leading-relaxed opacity-80 mb-4">Yield is the annual support your garden receives when the ecological function it delivers is recognised and backed by sponsors. It is not a carbon credit or offset -- it is ongoing recognition of real, local ecological performance that persists over time.</p>
-          <p class="text-sm leading-relaxed opacity-60">Yield becomes active once sponsors are matched to the registry network. The values shown are estimates based on current score, area, connectivity, and verification status.</p>
-        </div>
-        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
-          <div class="section-label mb-4">Increase Yield</div>
-          <div class="space-y-3" id="yieldUpgradeList"></div>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <div class="border p-6" style="background:#7a9e5f;color:#3d4535;border-color:rgba(61,69,53,.25)">
-          <div class="section-label mb-4" style="opacity:.6">Yield (Annual)</div>
-          <div class="font-serif mb-1" style="font-size:3.5rem;line-height:1" id="yieldEstimated">--</div>
-          <div style="font-size:.65rem;opacity:.5;margin-bottom:1.25rem">estimated / year</div>
-          <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:1rem;margin-bottom:.75rem">
-            <div style="font-size:.65rem;opacity:.6;margin-bottom:.4rem">Potential</div>
-            <div class="font-serif" style="font-size:2rem;line-height:1" id="yieldPotential">--</div>
-            <div style="font-size:.65rem;opacity:.4;margin-top:.25rem">if upgrades completed</div>
-          </div>
-          <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:.75rem">
-            <span style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(61,69,53,.3);padding:.2rem .5rem;display:inline-block;margin-bottom:.4rem">Eligible</span>
-            <div style="font-size:.75rem" id="yieldEligible">--</div>
-            <div style="font-size:.65rem;opacity:.5;margin-top:.25rem" id="yieldStatus"></div>
-          </div>
-        </div>
-        <div class="border border-rl dark:border-rdl bg-rs dark:bg-rdp p-5">
-          <div class="section-label mb-3">Yield Formula</div>
-          <p class="text-xs leading-relaxed opacity-60">Score x Area x Connectivity x Verification. Corridor Node status increases yield by $60/yr. G&S Verification increases yield by 20%. Formula v1 -- subject to sponsor activation.</p>
-        </div>
-      </div>
-    </div>
   </section>
 
 <section id="trajectory" class="stagger">
@@ -707,7 +657,6 @@ function render() {
 
   txt('heroBadgeCount', badges.all.length);
   erCheckNotifications(R.garden_id, badges.all, result.total);
-  renderYield(R, result);
   txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
@@ -840,24 +789,6 @@ function render() {
   }
 
 
-  /* ---- YIELD ---- */
-  var yld = R.yield || {};
-  var yEst = yld.estimated_annual || 0;
-  var yPot = yld.potential_annual || 0;
-  var yEligible = yld.eligible;
-  txt('yieldEstimated', yEst > 0 ? ('$' + yEst) : 'Not active');
-  txt('yieldPotential', yPot > 0 ? ('$' + yPot) : '--');
-  txt('yieldEligible', yEligible ? 'Yes' : 'No');
-  txt('yieldStatus', yld.status || '');
-  var yuh = '';
-  var yUpgrades = yld.upgrades || [];
-  for (var yi = 0; yi < yUpgrades.length; yi++) {
-    var yu = yUpgrades[yi];
-    yuh += '<div class="border border-rl dark:border-rdl p-3 flex items-start justify-between gap-4">' +
-      '<div class="text-xs font-medium">' + yu.action + (yu.notes ? '<div class="opacity-50 font-normal mt-0.5">' + yu.notes + '</div>' : '') + '</div>' +
-      '<div class="text-xs flex-shrink-0" style="color:#7a9e5f;font-weight:600">+$' + yu.annual_yield_increase + '/yr</div></div>';
-  }
-  html('yieldUpgradeList', yuh || '<p class="text-xs opacity-50">No yield upgrades available -- garden is performing well.</p>');
 
   var mh = '';
   var ms = R.milestones || [];
@@ -1173,51 +1104,6 @@ fetch('/data/parringroad.json')
     try { localStorage.setItem(scoreKey, String(score));    } catch(e) {}
   }
 
-  /* ---- YIELD ENGINE ---- */
-  function renderYield(R, result) {
-    var y = R.yield || {};
-    var amt = document.getElementById('yieldAmount');
-    var meta = document.getElementById('yieldMeta');
-    var upg = document.getElementById('yieldUpgrades');
-    if (!amt) return;
-
-    if (y.eligible) {
-      amt.textContent = '$' + (y.estimated_annual || 0);
-      amt.style.opacity = '1';
-    } else {
-      amt.textContent = 'Not yet active';
-      amt.style.fontSize = '1.1rem';
-      amt.style.opacity = '.6';
-    }
-
-    var mh = '';
-    if (y.eligible) {
-      mh += '<span class="yield-pill" style="border-color:rgba(61,69,53,.5);background:rgba(61,69,53,.1);font-weight:600">Active</span>';
-      mh += '<span class="yield-pill">Potential $' + (y.potential_annual || 0) + '</span>';
-    } else {
-      mh += '<span class="yield-pill yield-inactive">Min score ' + (y.minimum_score_required || 40) + ' required</span>';
-      if (result && result.total < (y.minimum_score_required || 40)) {
-        var gap = (y.minimum_score_required || 40) - result.total;
-        mh += '<span class="yield-pill yield-inactive">+' + gap + ' pts to unlock</span>';
-      }
-    }
-    if (meta) meta.innerHTML = mh;
-
-    var uh = '';
-    if (y.yield_per_point && y.yield_per_point > 0) {
-      uh += '<div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin-bottom:.4rem">Increase yield</div>';
-      var recs = result ? result.recommendations : [];
-      for (var ri = 0; ri < Math.min(recs.length, 3); ri++) {
-        var pts = recs[ri].points;
-        var yieldGain = pts * y.yield_per_point;
-        uh += '<div style="font-size:.7rem;opacity:.7;margin-bottom:.25rem;display:flex;justify-content:space-between">' +
-          '<span>' + recs[ri].action + '</span>' +
-          '<span style="font-weight:600;color:#3d4535;flex-shrink:0;margin-left:.5rem">+$' + yieldGain + '/yr</span>' +
-          '</div>';
-      }
-    }
-    if (upg) upg.innerHTML = uh;
-  }
 
 </script>
 </body>
