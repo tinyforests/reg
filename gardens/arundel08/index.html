@@ -160,6 +160,7 @@
     html.light .badge-pill { border-color: rgba(61,69,53,.2); background: rgba(61,69,53,.06); }
     .badge-pill-strong { border-color: rgba(255,240,220,.4) !important; background: rgba(255,240,220,.15) !important; font-weight: 600; }
     html.light .badge-pill-strong { border-color: rgba(61,69,53,.4) !important; background: rgba(61,69,53,.15) !important; }
+
   </style>
 </head>
 <body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
@@ -245,6 +246,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -329,6 +331,7 @@
     <h2 class="font-serif text-4xl mb-6">Species List</h2>
     <div id="speciesSection"></div>
   </section>
+
 <section id="trajectory" class="stagger">
     <div class="section-label mb-1">Long-term View</div>
     <h2 class="font-serif text-4xl mb-6">Trajectory</h2>
@@ -785,6 +788,8 @@ function render() {
     }
   }
 
+
+
   var mh = '';
   var ms = R.milestones || [];
   for (var mi = 0; mi < ms.length; mi++) {
@@ -1098,6 +1103,7 @@ fetch('/data/arundel.json')
     try { localStorage.setItem(badgeKey, badges.join(',')); } catch(e) {}
     try { localStorage.setItem(scoreKey, String(score));    } catch(e) {}
   }
+
 
 </script>
 </body>
