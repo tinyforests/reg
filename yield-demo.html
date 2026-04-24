@@ -223,12 +223,9 @@
               <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">score</div>
             </div>
             <div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">
-              <div class="font-serif" style="font-size:1.75rem;line-height:1;margin-top:.5rem" id="heroYieldBox">--</div>
-              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">yield / yr</div>
+              <div class="font-serif" style="font-size:4.5rem;line-height:1" id="heroBadgeCount">--</div>
+              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">badges</div>
             </div>
-          </div>
-          <div style="margin-bottom:.75rem">
-            <span style="font-size:.65rem;opacity:.5">Badges: </span><span style="font-size:.65rem;font-weight:600" id="heroBadgeCountInline">--</span>
           </div>
           <div class="mb-4">
             <div style="margin-bottom:.75rem">
@@ -251,6 +248,7 @@
           <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:.75rem;margin-top:.1rem">
             <div style="font-size:.65rem;opacity:.45" id="heroYieldSub">pending activation</div>
             <div style="font-size:.65rem;opacity:.45;margin-top:.15rem">Funds ecological stewardship</div>
+            <div style="font-size:.7rem;opacity:.5;margin-top:.2rem">Scales with score</div>
           </div>
         </div>
       </div>
@@ -348,7 +346,8 @@
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
           <div class="section-label mb-4">What is Yield?</div>
           <p class="text-sm leading-relaxed opacity-80 mb-4">Yield is the annual support your garden receives when the ecological function it delivers is recognised and backed by sponsors. It is not a carbon credit or offset -- it is ongoing recognition of real, local ecological performance that persists over time.</p>
-          <p class="text-sm leading-relaxed opacity-60">Yield becomes active once sponsors are matched to the registry network. The values shown are estimates based on current score, area, connectivity, and verification status.</p>
+          <p class="text-sm leading-relaxed opacity-60 mb-4">Yield becomes active once sponsors are matched to the registry network. The values shown are estimates based on current score, area, connectivity, and verification status.</p>
+          <p class="text-sm leading-relaxed opacity-60">As ecological function increases, so does yield -- creating a direct link between care and value.</p>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
           <div class="section-label mb-4">Increase Yield</div>
@@ -382,7 +381,7 @@
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Activate Yield</div>
           <div style="font-size:.75rem;opacity:.7;margin-bottom:1rem;letter-spacing:.02em">
-            Score &rarr; Yield &rarr; Upgrade &rarr; Score &uarr;
+            Score &rarr; Yield &rarr; Upgrade &rarr; Score &uarr; &rarr; Yield &uarr;
           </div>
           <p class="text-xs leading-relaxed opacity-60 mb-3">Yield activation requires minimum score 40, G&S verification, and sponsor matching. Once active, yield is paid annually while ecological function is maintained.</p>
           <div style="font-size:.7rem;border:1px solid rgba(61,69,53,.25);padding:.4rem .75rem;opacity:.5;display:inline-block">Sponsor matching pending</div>
@@ -405,7 +404,7 @@
           </div>
           <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:.875rem">
             <div style="font-size:.65rem;opacity:.5;margin-bottom:.35rem">Status</div>
-            <div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(61,69,53,.3);padding:.2rem .5rem;display:inline-block">Pre-activation</div>
+            <div style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(61,69,53,.3);padding:.2rem .5rem;display:inline-block">Awaiting activation</div>
           </div>
         </div>
       </div>
@@ -910,15 +909,15 @@ function render() {
   /* Hero yield -- score | yield | badges order */
   var ptsToElig = Math.max(0, 40 - result.total);
   if (ycalc.eligible) {
-    txt('heroYield',          '$' + ycalc.estimated);
+    txt('heroYieldBox',          '$' + ycalc.estimated);
     txt('heroYieldSub',       'per year (pending activation)');
     txt('heroYieldBox',       '$' + ycalc.estimated);
   } else {
-    txt('heroYield',          '$0');
+    txt('heroYieldBox',          '$0');
     txt('heroYieldSub',       ptsToElig + ' points to activation');
     txt('heroYieldBox',       ptsToElig + 'pts');
   }
-  txt('heroBadgeCountInline', badges.all.length);
+  txt('heroBadgeCount', badges.all.length);
 
   /* Yield section panel -- keep value and status separate */
   if (ycalc.eligible) {
@@ -967,7 +966,7 @@ function render() {
       '<div>' +
         '<div class="text-xs font-medium">' + yu.action + '</div>' +
         (yu.notes ? '<div class="text-xs opacity-40 mt-0.5">' + yu.notes + '</div>' : '') +
-        '<div class="text-xs opacity-40 mt-0.5">Pays back in ~2-3 years</div>' +
+        '<div class="text-xs opacity-40 mt-0.5">+~' + Math.round(yu.annual_yield_increase / 3) + ' pts &nbsp;|&nbsp; Pays back in ~2-3 years</div>' +
       '</div>' +
       '<div class="text-xs flex-shrink-0 font-semibold" style="color:#7a9e5f">+$' + yu.annual_yield_increase + '/yr</div>' +
     '</div>';
