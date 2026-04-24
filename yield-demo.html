@@ -186,7 +186,7 @@
       <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
       <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
       <a href="#species" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
-      <a <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
+      <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
       <a href="#yield"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Yield</a>
       <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
     </nav>
@@ -244,6 +244,11 @@
               <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(61,69,53,.25);padding:.25rem .6rem;opacity:.65;display:inline-block;margin-bottom:.6rem">Badges earned</div>
               <div class="flex flex-wrap gap-2" id="heroBadges"></div>
             </div>
+          </div>
+          <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:1rem;margin-top:.25rem">
+            <div style="font-size:.65rem;opacity:.6;margin-bottom:.3rem">Yield (est.)</div>
+            <div class="font-serif" style="font-size:1.75rem;line-height:1" id="heroYield">--</div>
+            <div style="font-size:.65rem;opacity:.45;margin-top:.2rem" id="heroYieldSub">annual / pre-activation</div>
           </div>
         </div>
       </div>
@@ -345,20 +350,38 @@
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
           <div class="section-label mb-4">Increase Yield</div>
-          <p class="text-xs opacity-50 mb-4">Complete these upgrades to increase your estimated annual yield.</p>
-          <div class="space-y-3" id="yieldUpgradeList"></div>
+          <div class="space-y-3 mb-4" id="yieldUpgradeList"></div>
+          <div class="border-t border-rl dark:border-rdl pt-3 mt-3 flex items-center justify-between">
+            <div style="font-size:.75rem;opacity:.7">Potential increase</div>
+            <div style="font-size:.9rem;font-weight:700;color:#7a9e5f" id="yieldTotalUplift">--</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-rl dark:border-rdl">
+            <p class="text-xs opacity-60 mb-2">These upgrades can be completed through Gardener & Son uplift services.</p>
+            <a href="/" style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.3rem .75rem;display:inline-block;text-decoration:none;opacity:.8">View Uplift Plan</a>
+          </div>
         </div>
         <div class="border border-rl dark:border-rdl bg-rs dark:bg-rdp p-5">
           <div class="section-label mb-3">Cluster Yield</div>
-          <p class="text-sm leading-relaxed opacity-80" id="clusterYieldNote">--</p>
+          <p class="text-sm leading-relaxed opacity-80 mb-4" id="clusterYieldNote">--</p>
+          <div class="section-label mb-2">Activation threshold</div>
+          <div class="flex gap-1 mb-2" id="clusterProgress"></div>
+          <div style="font-size:.7rem;opacity:.55" id="clusterProgressLabel">-- gardens of 6 required</div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Yield Formula</div>
-          <p class="text-xs leading-relaxed opacity-60 mb-3">Score x Area x Connectivity x Verification. Corridor Node adds $60/yr. G&S Verification adds 20%. Formula v1.</p>
+          <div class="space-y-1 text-xs mb-4" style="opacity:.8">
+            <div class="font-medium">Score drives value.</div>
+            <div class="font-medium">Connectivity multiplies it.</div>
+            <div class="font-medium">Verification proves it.</div>
+          </div>
           <div class="space-y-1 text-xs opacity-60" id="yieldFactors"></div>
+          <div style="font-size:.65rem;opacity:.4;margin-top:.75rem">Formula v1 -- area contribution capped at $80 (800m2)</div>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Activate Yield</div>
+          <div style="font-size:.75rem;opacity:.7;margin-bottom:1rem;letter-spacing:.02em">
+            Score &rarr; Yield &rarr; Upgrade &rarr; Score &uarr;
+          </div>
           <p class="text-xs leading-relaxed opacity-60 mb-3">Yield activation requires minimum score 40, G&S verification, and sponsor matching. Once active, yield is paid annually while ecological function is maintained.</p>
           <div style="font-size:.7rem;border:1px solid rgba(61,69,53,.25);padding:.4rem .75rem;opacity:.5;display:inline-block">Sponsor matching pending</div>
         </div>
@@ -881,7 +904,18 @@ function render() {
   /* ---- YIELD ---- */
   var yld  = R.yield || {};
   var ycalc = calcYield(R, result.total);
-  txt('yieldEstimated', ycalc.estimated > 0 ? ('$' + ycalc.estimated) : '$0');
+
+  /* Hero yield panel */
+  if (ycalc.eligible) {
+    txt('heroYield', '$' + ycalc.estimated);
+    txt('heroYieldSub', 'per year / pre-activation');
+  } else {
+    var ptsToElig = 40 - result.total;
+    txt('heroYield', '$0');
+    txt('heroYieldSub', ptsToElig + ' points to activation');
+  }
+
+  txt('yieldEstimated', ycalc.estimated > 0 ? ('$' + ycalc.estimated) : '$0 -- ' + (40 - result.total) + ' pts to eligibility');
   txt('yieldPotential', ycalc.potential > 0 ? ('$' + ycalc.potential) : '--');
   txt('yieldEligible',  ycalc.eligible ? 'Yes' : 'No');
   txt('yieldStatus',    yld.status || '');
@@ -897,11 +931,21 @@ function render() {
   /* Cluster yield note */
   var clusterName = (c.cluster && c.cluster.name) || c.cluster_name || '--';
   var clusterGardens = (c.cluster && c.cluster.gardens) || 1;
+  var clusterTarget = 6;
   txt('clusterYieldNote',
     'The ' + clusterName + ' cluster currently includes ' + clusterGardens + ' registered garden' + (clusterGardens > 1 ? 's' : '') + '. ' +
-    'At full cluster formation (6+ gardens), total cluster yield is estimated at $4,200-6,500/year -- ' +
+    'At full cluster formation (' + clusterTarget + ' gardens), total cluster yield is estimated at $4,200-6,500/year -- ' +
     'a viable target for council or corporate sponsor funding.'
   );
+
+  /* Cluster progress bar */
+  var cpBar = '';
+  for (var cpi = 0; cpi < clusterTarget; cpi++) {
+    var filled = cpi < clusterGardens;
+    cpBar += '<div style="width:28px;height:10px;background:' + (filled ? '#7a9e5f' : 'rgba(61,69,53,.15)') + ';border:1px solid rgba(61,69,53,.2)"></div>';
+  }
+  html('clusterProgress', cpBar);
+  txt('clusterProgressLabel', clusterGardens + ' of ' + clusterTarget + ' gardens -- ' + (clusterTarget - clusterGardens) + ' more to activate cluster yield');
 
   /* Yield upgrade list -- from JSON */
   var yuh = '';
@@ -917,6 +961,9 @@ function render() {
     '</div>';
   }
   html('yieldUpgradeList', yuh || '<p class="text-xs opacity-40">No yield upgrades identified.</p>');
+  var totalUplift = 0;
+  for (var yti = 0; yti < yUpgrades.length; yti++) { totalUplift += yUpgrades[yti].annual_yield_increase || 0; }
+  txt('yieldTotalUplift', totalUplift > 0 ? ('+$' + totalUplift + '/yr') : '--');
 
   var mh = '';
   var ms = R.milestones || [];
