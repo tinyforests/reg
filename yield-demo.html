@@ -223,9 +223,12 @@
               <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">score</div>
             </div>
             <div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">
-              <div class="font-serif" style="font-size:4.5rem;line-height:1" id="heroBadgeCount">--</div>
-              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">badges</div>
+              <div class="font-serif" style="font-size:1.75rem;line-height:1;margin-top:.5rem" id="heroYieldBox">--</div>
+              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">yield / yr</div>
             </div>
+          </div>
+          <div style="margin-bottom:.75rem">
+            <span style="font-size:.65rem;opacity:.5">Badges: </span><span style="font-size:.65rem;font-weight:600" id="heroBadgeCountInline">--</span>
           </div>
           <div class="mb-4">
             <div style="margin-bottom:.75rem">
@@ -245,10 +248,9 @@
               <div class="flex flex-wrap gap-2" id="heroBadges"></div>
             </div>
           </div>
-          <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:1rem;margin-top:.25rem">
-            <div style="font-size:.65rem;opacity:.6;margin-bottom:.3rem">Yield (est.)</div>
-            <div class="font-serif" style="font-size:1.75rem;line-height:1" id="heroYield">--</div>
-            <div style="font-size:.65rem;opacity:.45;margin-top:.2rem" id="heroYieldSub">annual / pre-activation</div>
+          <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:.75rem;margin-top:.1rem">
+            <div style="font-size:.65rem;opacity:.45" id="heroYieldSub">pending activation</div>
+            <div style="font-size:.65rem;opacity:.45;margin-top:.15rem">Funds ecological stewardship</div>
           </div>
         </div>
       </div>
@@ -905,20 +907,29 @@ function render() {
   var yld  = R.yield || {};
   var ycalc = calcYield(R, result.total);
 
-  /* Hero yield panel */
+  /* Hero yield -- score | yield | badges order */
+  var ptsToElig = Math.max(0, 40 - result.total);
   if (ycalc.eligible) {
-    txt('heroYield', '$' + ycalc.estimated);
-    txt('heroYieldSub', 'per year / pre-activation');
+    txt('heroYield',          '$' + ycalc.estimated);
+    txt('heroYieldSub',       'per year (pending activation)');
+    txt('heroYieldBox',       '$' + ycalc.estimated);
   } else {
-    var ptsToElig = 40 - result.total;
-    txt('heroYield', '$0');
-    txt('heroYieldSub', ptsToElig + ' points to activation');
+    txt('heroYield',          '$0');
+    txt('heroYieldSub',       ptsToElig + ' points to activation');
+    txt('heroYieldBox',       ptsToElig + 'pts');
   }
+  txt('heroBadgeCountInline', badges.all.length);
 
-  txt('yieldEstimated', ycalc.estimated > 0 ? ('$' + ycalc.estimated) : '$0 -- ' + (40 - result.total) + ' pts to eligibility');
+  /* Yield section panel -- keep value and status separate */
+  if (ycalc.eligible) {
+    txt('yieldEstimated', '$' + ycalc.estimated);
+    txt('yieldStatus',    yld.status || 'Pending activation');
+  } else {
+    txt('yieldEstimated', '$0');
+    txt('yieldStatus',    ptsToElig + ' points to activation');
+  }
   txt('yieldPotential', ycalc.potential > 0 ? ('$' + ycalc.potential) : '--');
   txt('yieldEligible',  ycalc.eligible ? 'Yes' : 'No');
-  txt('yieldStatus',    yld.status || '');
 
   /* Yield factors breakdown -- from live calculation */
   html('yieldFactors',
@@ -935,7 +946,7 @@ function render() {
   txt('clusterYieldNote',
     'The ' + clusterName + ' cluster currently includes ' + clusterGardens + ' registered garden' + (clusterGardens > 1 ? 's' : '') + '. ' +
     'At full cluster formation (' + clusterTarget + ' gardens), total cluster yield is estimated at $4,200-6,500/year -- ' +
-    'a viable target for council or corporate sponsor funding.'
+    'split across participating gardens, and a viable target for council or corporate sponsor funding.'
   );
 
   /* Cluster progress bar */
@@ -956,6 +967,7 @@ function render() {
       '<div>' +
         '<div class="text-xs font-medium">' + yu.action + '</div>' +
         (yu.notes ? '<div class="text-xs opacity-40 mt-0.5">' + yu.notes + '</div>' : '') +
+        '<div class="text-xs opacity-40 mt-0.5">Pays back in ~2-3 years</div>' +
       '</div>' +
       '<div class="text-xs flex-shrink-0 font-semibold" style="color:#7a9e5f">+$' + yu.annual_yield_increase + '/yr</div>' +
     '</div>';
