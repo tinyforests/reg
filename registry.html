@@ -339,6 +339,18 @@ function setupFilters() {
     })(fBtns[i]);
   }
 
+  var lgaBtns = document.querySelectorAll('.lga-btn');
+  for (var li = 0; li < lgaBtns.length; li++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        for (var lj = 0; lj < lgaBtns.length; lj++) lgaBtns[lj].classList.remove('active');
+        btn.classList.add('active');
+        state.lga = btn.dataset.lga;
+        renderGardens();
+      });
+    })(lgaBtns[li]);
+  }
+
   var sBtns = document.querySelectorAll('.score-btn');
   for (var i = 0; i < sBtns.length; i++) {
     (function(btn) {
