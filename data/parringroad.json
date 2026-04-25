@@ -222,5 +222,8 @@
       }
     ]
   },
-  "target_score": 80
+  "target_score": 80,
+  "council": "Boroondara City Council",
+  "ward": "Gardiner",
+  "lga": "Boroondara"
 }

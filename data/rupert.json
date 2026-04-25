@@ -198,5 +198,8 @@
         "annual_yield_increase": 15
       }
     ]
-  }
+  },
+  "council": "Darebin City Council",
+  "ward": "Merri",
+  "lga": "Darebin"
 }
