@@ -162,7 +162,13 @@
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0.0025,
-    "cluster_name": "Blackburn"
+    "cluster_name": "Blackburn",
+    "cluster": {
+      "name": "Blackburn",
+      "gardens": 1,
+      "area_ha": 0.025,
+      "status": "Emerging"
+    }
   },
   "evidence": {
     "has_photos": true,
@@ -230,5 +236,45 @@
     "species_rich_30",
     "habitat_builder",
     "five_layers"
-  ]
+  ],
+  "typology": "Multi-Zone Ecological Garden",
+  "registry_role": "Cluster Seed",
+  "trajectory": "Rising",
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Urban Biodiversity Node",
+    "points_to_next": 41
+  },
+  "upgrade_potential": 30,
+  "points_available": 30,
+  "yield": {
+    "eligible": true,
+    "status": "Active",
+    "estimated_annual": 180,
+    "potential_annual": 320,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Achieve Corridor Node status",
+        "annual_yield_increase": 60,
+        "notes": "Requires established planting and park connectivity"
+      },
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 35
+      },
+      {
+        "action": "Install nest boxes",
+        "annual_yield_increase": 25
+      },
+      {
+        "action": "Install moisture basin",
+        "annual_yield_increase": 20
+      }
+    ]
+  },
+  "council": "Whitehorse City Council",
+  "ward": "Morack",
+  "lga": "Whitehorse"
 }

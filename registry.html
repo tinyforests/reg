@@ -33,7 +33,7 @@
     .mu  { color: rgba(255,240,220,0.75); }
     .mu2 { color: rgba(255,240,220,0.55); }
     .card:hover { background: rgba(255,240,220,0.07); }
-    .filter-btn.active, .score-btn.active { background: #fff0dc; color: #3d4535; }
+    .filter-btn.active, .score-btn.active, .lga-btn.active { background: #fff0dc; color: #3d4535; }
     .badge-chip { border: 1px solid rgba(255,240,220,0.16); background: rgba(255,240,220,0.05); }
     .badge-verif { background: #fff0dc; color: #3d4535; }
     input { background: transparent; color: #fff0dc; }
@@ -110,6 +110,13 @@
               <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="gardener_and_son_verified">G&amp;S Verified</button>
               <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="site_visit">Site Visit</button>
               <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="photo_verified">Photo Verified</button>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <button class="lga-btn active border hl px-3 py-2 text-xs" data-lga="all">All Councils</button>
+              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Boroondara">Boroondara</button>
+              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Whitehorse">Whitehorse</button>
+              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Stonnington">Stonnington</button>
+              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Darebin">Darebin</button>
             </div>
           </div>
           <div>
@@ -197,7 +204,7 @@ var BADGE_NAMES = {
 
 var VERIF_TYPES = ['gs_verified', 'site_visit_badge'];
 
-var state = { gardens: [], verification: 'all', score: 'all', search: '' };
+var state = { gardens: [], verification: 'all', score: 'all', search: '', lga: 'all' };
 
 /* ---- FILTER ---- */
 function matchesScore(score, filter) {
@@ -214,13 +221,14 @@ function filterGardens() {
     var g = state.gardens[i];
     var verifOk = state.verification === 'all' || g.verification_level === state.verification;
     var scoreOk = matchesScore(g.score, state.score);
+    var lgaOk   = state.lga === 'all' || g.lga === state.lga;
     var searchable = [
       g.garden_name || '', g.suburb || '', g.state || '',
       g.type || '', g.primary_evc || '', g.bioregion || '',
-      g.status || ''
+      g.status || '', g.council || '', g.lga || '', g.ward || ''
     ].concat(g.badges || []).join(' ').toLowerCase();
     var searchOk = state.search === '' || searchable.indexOf(state.search.toLowerCase()) !== -1;
-    if (verifOk && scoreOk && searchOk) results.push(g);
+    if (verifOk && scoreOk && lgaOk && searchOk) results.push(g);
   }
   return results;
 }
@@ -300,6 +308,7 @@ function renderGardens() {
       '<div class="mt-4 grid grid-cols-2 gap-3 text-xs">' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Rating</div><div class="mu">' + (g.rating || '--') + '</div></div>' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Verified</div><div class="mu">' + (g.verification_label || g.verification_level || '--') + '</div></div>' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Council</div><div class="mu">' + (g.lga || '--') + '</div></div>' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">EVC</div><div class="mu">' + (g.primary_evc || '--') + '</div></div>' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Status</div><div class="mu">' + (g.status || '--') + '</div></div>' +
       '</div>' +
