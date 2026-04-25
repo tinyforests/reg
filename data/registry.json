@@ -49,7 +49,10 @@
         "gardens": 2,
         "area_ha": 0.48,
         "status": "Forming"
-      }
+      },
+      "council": "Boroondara City Council",
+      "ward": "Gardiner",
+      "lga": "Boroondara"
     },
     {
       "garden_id": "ER-VIC-SY-NIC-0002",
@@ -84,7 +87,10 @@
         "gardens": 1,
         "area_ha": 0.06,
         "status": "Emerging"
-      }
+      },
+      "council": "Stonnington City Council",
+      "ward": "Central",
+      "lga": "Stonnington"
     },
     {
       "garden_id": "ER-VIC-BAL-001",
@@ -123,7 +129,10 @@
         "gardens": 1,
         "area_ha": 0.12,
         "status": "Emerging"
-      }
+      },
+      "council": "Boroondara City Council",
+      "ward": "Gardiner",
+      "lga": "Boroondara"
     },
     {
       "garden_id": "ER-VIC-SH-MID-001",
@@ -161,7 +170,10 @@
         "gardens": 2,
         "area_ha": 0.48,
         "status": "Forming"
-      }
+      },
+      "council": "Boroondara City Council",
+      "ward": "Gardiner",
+      "lga": "Boroondara"
     },
     {
       "garden_id": "ER-VIC-CAN-MON-001",
@@ -182,7 +194,10 @@
         "gs_verified"
       ],
       "profile_url": "/gardens/montAlbert100/index.html",
-      "data_file": "data/montAlbert.json"
+      "data_file": "data/montAlbert.json",
+      "council": "Boroondara City Council",
+      "ward": "Maranoa",
+      "lga": "Boroondara"
     },
     {
       "garden_id": "ER-VIC-MAN-EVE-001",
@@ -219,7 +234,10 @@
         "gardens": 1,
         "area_ha": 0.0024,
         "status": "Emerging"
-      }
+      },
+      "council": "Whitehorse City Council",
+      "ward": "Elgar",
+      "lga": "Whitehorse"
     },
     {
       "garden_id": "ER-VIC-BLA-DEW-001",
@@ -258,7 +276,10 @@
         "gardens": 1,
         "area_ha": 0.025,
         "status": "Emerging"
-      }
+      },
+      "council": "Whitehorse City Council",
+      "ward": "Morack",
+      "lga": "Whitehorse"
     },
     {
       "garden_id": "ER-VIC-BAL-PRD-001",
@@ -293,7 +314,10 @@
         "gardens": 2,
         "area_ha": 0.12,
         "status": "Forming"
-      }
+      },
+      "council": "Boroondara City Council",
+      "ward": "Gardiner",
+      "lga": "Boroondara"
     },
     {
       "garden_id": "ER-VIC-NTH-RUP-001",
@@ -332,7 +356,10 @@
         "gardens": 1,
         "area_ha": 0.018,
         "status": "Emerging"
-      }
+      },
+      "council": "Darebin City Council",
+      "ward": "Merri",
+      "lga": "Darebin"
     }
   ],
   "leaderboard": {
@@ -377,6 +404,13 @@
     "total_badges": 30,
     "total_estimated_yield_aud": 1150,
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
-    "yield_status": "Pre-activation -- sponsor model pending"
+    "yield_status": "Pre-activation -- sponsor model pending",
+    "councils": {
+      "Boroondara": 5,
+      "Stonnington": 1,
+      "Whitehorse": 2,
+      "Darebin": 1
+    },
+    "total_councils": 4
   }
 }
