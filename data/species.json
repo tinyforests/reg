@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Apr 2026",
-    "total_species": 160,
+    "total_species": 167,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -105,7 +105,8 @@
         "montAlbert",
         "dewrang",
         "parringroad",
-        "windella"
+        "windella",
+        "york"
       ],
       "notes": ""
     },
@@ -143,7 +144,8 @@
         "arundel",
         "montAlbert",
         "evelina",
-        "parringroad"
+        "parringroad",
+        "york"
       ],
       "notes": ""
     },
@@ -167,7 +169,8 @@
       "gardens": [
         "parring",
         "montAlbert",
-        "parringroad"
+        "parringroad",
+        "york"
       ],
       "notes": ""
     },
@@ -235,7 +238,8 @@
         "parring",
         "arundel",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "york"
       ],
       "notes": ""
     },
@@ -256,7 +260,8 @@
       "layer": "shrub",
       "family": "Asteraceae",
       "gardens": [
-        "parring"
+        "parring",
+        "york"
       ],
       "notes": ""
     },
@@ -269,7 +274,8 @@
         "parring",
         "montAlbert",
         "evelina",
-        "parringroad"
+        "parringroad",
+        "york"
       ],
       "notes": ""
     },
@@ -363,7 +369,8 @@
       "gardens": [
         "arundel",
         "montAlbert",
-        "parringroad"
+        "parringroad",
+        "york"
       ],
       "notes": ""
     },
@@ -1050,7 +1057,8 @@
       "family": "Juncaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "york"
       ]
     },
     {
@@ -1473,7 +1481,8 @@
       "notes": "cultivar",
       "gardens": [
         "evelina",
-        "parringroad"
+        "parringroad",
+        "york"
       ]
     },
     {
@@ -1492,7 +1501,8 @@
       "layer": "grass",
       "family": "Asparagaceae",
       "gardens": [
-        "dewrang"
+        "dewrang",
+        "york"
       ]
     },
     {
@@ -1693,7 +1703,8 @@
       "family": "Elaeocarpaceae",
       "notes": "",
       "gardens": [
-        "windella"
+        "windella",
+        "york"
       ]
     },
     {
@@ -1733,7 +1744,8 @@
       "family": "Proteaceae",
       "notes": "non-indigenous cultivar",
       "gardens": [
-        "windella"
+        "windella",
+        "york"
       ]
     },
     {
@@ -1764,6 +1776,76 @@
       "notes": "hybrid",
       "gardens": [
         "windella"
+      ]
+    },
+    {
+      "botanical_name": "Eucalyptus caesia",
+      "common_name": "Silver Princess Gum",
+      "layer": "small_tree",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": [
+        "york"
+      ]
+    },
+    {
+      "botanical_name": "Lomandra confertifolia Little Pal",
+      "common_name": "Lomandra Little Pal",
+      "layer": "grass",
+      "family": "Asparagaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "york"
+      ]
+    },
+    {
+      "botanical_name": "Adenanthos sericeus",
+      "common_name": "Woolly Bush",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "",
+      "gardens": [
+        "york"
+      ]
+    },
+    {
+      "botanical_name": "Eremophila nivea",
+      "common_name": "Silky Emu Bush",
+      "layer": "shrub",
+      "family": "Scrophulariaceae",
+      "notes": "",
+      "gardens": [
+        "york"
+      ]
+    },
+    {
+      "botanical_name": "Xerochrysum bracteatum Pearl",
+      "common_name": "Everlasting Paper Daisy Pearl",
+      "layer": "forb",
+      "family": "Asteraceae",
+      "notes": "cultivar",
+      "gardens": [
+        "york"
+      ]
+    },
+    {
+      "botanical_name": "Grevillea aurea Molly",
+      "common_name": "Grevillea Molly",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "york"
+      ]
+    },
+    {
+      "botanical_name": "Carpobrotus rossii",
+      "common_name": "Pigface",
+      "layer": "groundcover",
+      "family": "Aizoaceae",
+      "notes": "",
+      "gardens": [
+        "york"
       ]
     }
   ]
