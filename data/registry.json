@@ -2,14 +2,14 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 10,
+    "total_gardens": 11,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
   },
   "statistics": {
     "average_score": 46,
-    "total_badges_awarded": 37
+    "total_badges_awarded": 42
   },
   "gardens": [
     {
@@ -398,6 +398,48 @@
         "area_ha": 0.68,
         "status": "Forming"
       }
+    },
+    {
+      "garden_id": "ER-VIC-WHI-YRK-001",
+      "garden_name": "York Street",
+      "typology": "Urban Ecological Retrofit",
+      "type": "Ecological Home Garden",
+      "suburb": "Mont Albert",
+      "state": "VIC",
+      "council": "Whitehorse City Council",
+      "ward": "Elgar",
+      "lga": "Whitehorse",
+      "score": 52,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 39
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Apr 2026",
+      "badge_count": 5,
+      "badges": [
+        "gs_verified",
+        "indigenous_dominant",
+        "habitat_builder",
+        "amphibian_active",
+        "fauna_record"
+      ],
+      "profile_url": "/gardens/york12/index.html",
+      "data_file": "data/york.json",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Rising",
+      "points_available": 48,
+      "cluster": {
+        "name": "Whitehorse",
+        "gardens": 3,
+        "area_ha": 0.074,
+        "status": "Forming"
+      }
     }
   ],
   "leaderboard": {
@@ -446,7 +488,7 @@
     "councils": {
       "Boroondara": 6,
       "Stonnington": 1,
-      "Whitehorse": 2,
+      "Whitehorse": 3,
       "Darebin": 1
     },
     "total_councils": 4
