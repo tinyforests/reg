@@ -1,0 +1,183 @@
+{
+  "garden_id": "ER-VIC-BOR-WIN-001",
+  "garden_name": "Windella",
+  "garden_type": "Ecological Home Garden",
+  "typology": "Ecological Cottage Garden",
+  "registry_role": "Cluster Seed",
+  "trajectory": "Emerging",
+  "suburb": "Kew East",
+  "state": "VIC",
+  "council": "Boroondara City Council",
+  "ward": "Maranoa",
+  "lga": "Boroondara",
+  "assessment_date": "Apr 2026",
+  "baseline_date": "Apr 2026",
+  "stewards": "Megan and Andrew",
+  "designer": "Gardener & Son",
+  "area_sqm": 200,
+  "target_score": 80,
+  "description": "Designed with resilience, seasonality and ecological beauty in mind, the Windella front garden blends iconic natives, adaptable flowering shrubs and striking foliage. Structure, pollinator support and layered ground coverage create a space that is functional, expressive, and deeply connected to place.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 0,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 32,
+    "indigenous_dominant": false,
+    "structural_layers_current": 0,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Unknown",
+    "weed_pressure_baseline": "Unknown",
+    "species_list": [],
+    "species_proposed": [
+      "Viola labradorica",
+      "Dampiera diversifolia",
+      "Austrodanthonia racemosa",
+      "Wahlenbergia gracilis",
+      "Viola hederacea",
+      "Hardenbergia violacea",
+      "Kennedia prostrata",
+      "Bulbine bulbosa",
+      "Brachyscome Mauve Bliss",
+      "Prostanthera sieberi",
+      "Dichelachne crinita",
+      "Poa labillardieri",
+      "Westringia fruticosa",
+      "Leucadendron laureolum Safari Sunset",
+      "Tetratheca thymifolia",
+      "Atriplex nummularia",
+      "Indigofera australis",
+      "Correa baeuerlenii",
+      "Clematis microphylla",
+      "Grevillea Winpara Gold",
+      "Kunzea leptospermoides",
+      "Acer palmatum Osakazuki",
+      "Doryanthes excelsa",
+      "Eucalyptus corymbia citriodora Dwarf",
+      "Banksia integrifolia Sentinel",
+      "Callistemon viminalis Little John",
+      "Correa reflexa x pulchella",
+      "Chamelaucium x Verticordia Eric John",
+      "Cordyline australis Red Sensation",
+      "Xerochrysum viscosum",
+      "Leptospermum Morrison Burgundy",
+      "Poa labillardieri Eskdale"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 0,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 0,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false
+  },
+  "habitat": {
+    "habitat_nodes": 0,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Ecological planting -- design proposal",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0,
+    "cluster_name": "Boroondara",
+    "cluster": {
+      "name": "Boroondara",
+      "gardens": 6,
+      "area_ha": 0.68,
+      "status": "Forming"
+    }
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Design presented",
+      "date": "Apr 2026",
+      "complete": true
+    },
+    {
+      "title": "Installation begins",
+      "date": "Jun 2025",
+      "complete": false
+    },
+    {
+      "title": "Planting complete",
+      "date": "Jun 2025",
+      "complete": false
+    },
+    {
+      "title": "Ecological baseline",
+      "date": "Aug 2025",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Design presented -- ecological home garden, front",
+      "date": "Apr 2026",
+      "type": "Design",
+      "category": "design",
+      "notes": "Design presented for 40 Windella Avenue, Kew East. Front garden 10x20m, 32 species proposed. Structure anchored by Lemon Scented Gum, Gymea Lily and Cordyline Red Sensation. Installation scheduled June 2025."
+    }
+  ],
+  "rating": {
+    "current": "Basic Garden",
+    "next": "Habitat Garden",
+    "points_to_next": 10
+  },
+  "upgrade_potential": 69,
+  "points_available": 69,
+  "yield": {
+    "eligible": false,
+    "status": "Not yet eligible -- installation pending",
+    "estimated_annual": 0,
+    "potential_annual": 290,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Complete installation and establish planting",
+        "annual_yield_increase": 120
+      },
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 35
+      },
+      {
+        "action": "Achieve corridor node status",
+        "annual_yield_increase": 60
+      },
+      {
+        "action": "Install moisture basin",
+        "annual_yield_increase": 20
+      }
+    ]
+  },
+  "notes": "Design proposal. Installation June 2025. 32 species proposed across front garden 200m2."
+}
