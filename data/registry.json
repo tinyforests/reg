@@ -8,7 +8,7 @@
     "schema_version": "2.0"
   },
   "statistics": {
-    "average_score": 42,
+    "average_score": 46,
     "total_badges_awarded": 37
   },
   "gardens": [
@@ -371,15 +371,15 @@
       "council": "Boroondara City Council",
       "ward": "Maranoa",
       "lga": "Boroondara",
-      "score": 11,
+      "score": 49,
       "rating": {
-        "current": "Basic Garden",
-        "next": "Habitat Garden",
-        "points_to_next": 10
+        "current": "Ecological Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 42
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
-      "status": "Design Proposal",
+      "status": "Active / Establishing",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
@@ -391,7 +391,7 @@
       "data_file": "data/windella.json",
       "registry_role": "Cluster Seed",
       "trajectory": "Emerging",
-      "points_available": 69,
+      "points_available": 51,
       "cluster": {
         "name": "Boroondara",
         "gardens": 6,
