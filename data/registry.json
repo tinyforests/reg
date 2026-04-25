@@ -2,14 +2,14 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Mar 2026",
-    "total_gardens": 9,
+    "total_gardens": 10,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
   },
   "statistics": {
-    "average_score": 46,
-    "total_badges_awarded": 36
+    "average_score": 42,
+    "total_badges_awarded": 37
   },
   "gardens": [
     {
@@ -360,6 +360,44 @@
       "council": "Darebin City Council",
       "ward": "Merri",
       "lga": "Darebin"
+    },
+    {
+      "garden_id": "ER-VIC-BOR-WIN-001",
+      "garden_name": "Windella",
+      "typology": "Ecological Cottage Garden",
+      "type": "Ecological Home Garden",
+      "suburb": "Kew East",
+      "state": "VIC",
+      "council": "Boroondara City Council",
+      "ward": "Maranoa",
+      "lga": "Boroondara",
+      "score": 11,
+      "rating": {
+        "current": "Basic Garden",
+        "next": "Habitat Garden",
+        "points_to_next": 10
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Design Proposal",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Apr 2026",
+      "badge_count": 1,
+      "badges": [
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/windella40/index.html",
+      "data_file": "data/windella.json",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Emerging",
+      "points_available": 69,
+      "cluster": {
+        "name": "Boroondara",
+        "gardens": 6,
+        "area_ha": 0.68,
+        "status": "Forming"
+      }
     }
   ],
   "leaderboard": {
@@ -406,7 +444,7 @@
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
     "yield_status": "Pre-activation -- sponsor model pending",
     "councils": {
-      "Boroondara": 5,
+      "Boroondara": 6,
       "Stonnington": 1,
       "Whitehorse": 2,
       "Darebin": 1

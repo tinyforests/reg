@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Apr 2026",
-    "total_species": 151,
+    "total_species": 160,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -37,7 +37,8 @@
         "arundel",
         "middlesex",
         "evelina",
-        "dewrang"
+        "dewrang",
+        "windella"
       ],
       "notes": ""
     },
@@ -52,7 +53,8 @@
         "montAlbert",
         "evelina",
         "dewrang",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -88,7 +90,8 @@
         "middlesex",
         "montAlbert",
         "dewrang",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -101,7 +104,8 @@
         "parring",
         "montAlbert",
         "dewrang",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -114,7 +118,8 @@
         "parring",
         "dewrang",
         "arundel",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -183,7 +188,8 @@
       "layer": "shrub",
       "family": "Myrtaceae",
       "gardens": [
-        "parring"
+        "parring",
+        "windella"
       ],
       "notes": ""
     },
@@ -298,7 +304,8 @@
       "gardens": [
         "parring",
         "arundel",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -308,7 +315,8 @@
       "layer": "grass",
       "family": "Poaceae",
       "gardens": [
-        "arundel"
+        "arundel",
+        "windella"
       ],
       "notes": ""
     },
@@ -330,7 +338,8 @@
       "gardens": [
         "arundel",
         "montAlbert",
-        "dewrang"
+        "dewrang",
+        "windella"
       ],
       "notes": ""
     },
@@ -341,7 +350,8 @@
       "family": "Campanulaceae",
       "gardens": [
         "arundel",
-        "evelina"
+        "evelina",
+        "windella"
       ],
       "notes": ""
     },
@@ -368,7 +378,8 @@
         "montAlbert",
         "evelina",
         "dewrang",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -392,7 +403,8 @@
         "arundel",
         "middlesex",
         "montAlbert",
-        "parringroad"
+        "parringroad",
+        "windella"
       ],
       "notes": ""
     },
@@ -406,7 +418,8 @@
         "middlesex",
         "montAlbert",
         "evelina",
-        "dewrang"
+        "dewrang",
+        "windella"
       ],
       "notes": ""
     },
@@ -475,7 +488,8 @@
       "gardens": [
         "arundel",
         "evelina",
-        "dewrang"
+        "dewrang",
+        "windella"
       ],
       "notes": ""
     },
@@ -676,7 +690,8 @@
         "montAlbert",
         "evelina",
         "dewrang",
-        "parringroad"
+        "parringroad",
+        "windella"
       ]
     },
     {
@@ -732,7 +747,8 @@
       "family": "Myrtaceae",
       "notes": "",
       "gardens": [
-        "arundel"
+        "arundel",
+        "windella"
       ]
     },
     {
@@ -800,7 +816,8 @@
       "notes": "",
       "gardens": [
         "arundel",
-        "montAlbert"
+        "montAlbert",
+        "windella"
       ]
     },
     {
@@ -1114,7 +1131,8 @@
       "family": "Doryanthaceae",
       "notes": "",
       "gardens": [
-        "nicholson"
+        "nicholson",
+        "windella"
       ]
     },
     {
@@ -1124,7 +1142,8 @@
       "family": "Myrtaceae",
       "notes": "dwarf cultivar",
       "gardens": [
-        "nicholson"
+        "nicholson",
+        "windella"
       ]
     },
     {
@@ -1156,7 +1175,8 @@
       "notes": "",
       "gardens": [
         "nicholson",
-        "dewrang"
+        "dewrang",
+        "windella"
       ]
     },
     {
@@ -1220,7 +1240,8 @@
       "family": "Myrtaceae",
       "notes": "cultivar",
       "gardens": [
-        "montAlbert"
+        "montAlbert",
+        "windella"
       ]
     },
     {
@@ -1601,7 +1622,8 @@
       "family": "Proteaceae",
       "notes": "cultivar",
       "gardens": [
-        "parringroad"
+        "parringroad",
+        "windella"
       ]
     },
     {
@@ -1652,6 +1674,96 @@
       "notes": "cultivar",
       "gardens": [
         "parringroad"
+      ]
+    },
+    {
+      "botanical_name": "Viola labradorica",
+      "common_name": "Alpine Violet",
+      "layer": "groundcover",
+      "family": "Violaceae",
+      "notes": "",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Tetratheca thymifolia",
+      "common_name": "Black Eyed Susan",
+      "layer": "shrub",
+      "family": "Elaeocarpaceae",
+      "notes": "",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Atriplex nummularia",
+      "common_name": "Old Man Saltbush",
+      "layer": "shrub",
+      "family": "Amaranthaceae",
+      "notes": "",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Correa baeuerlenii",
+      "common_name": "Chefs Cap Correa",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "notes": "",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Grevillea Winpara Gold",
+      "common_name": "Grevillea Winpara Gold",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Leucadendron laureolum Safari Sunset",
+      "common_name": "Protea Safari Sunset",
+      "layer": "shrub",
+      "family": "Proteaceae",
+      "notes": "non-indigenous cultivar",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Chamelaucium x Verticordia Eric John",
+      "common_name": "Geraldton Waxflower",
+      "layer": "shrub",
+      "family": "Myrtaceae",
+      "notes": "cultivar",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Cordyline australis Red Sensation",
+      "common_name": "Cordyline Red Sensation",
+      "layer": "small_tree",
+      "family": "Asparagaceae",
+      "notes": "non-indigenous cultivar",
+      "gardens": [
+        "windella"
+      ]
+    },
+    {
+      "botanical_name": "Correa reflexa x pulchella",
+      "common_name": "Correa Dusky Bells",
+      "layer": "shrub",
+      "family": "Rutaceae",
+      "notes": "hybrid",
+      "gardens": [
+        "windella"
       ]
     }
   ]
