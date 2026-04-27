@@ -4,7 +4,7 @@
   "garden_type": "Wild Native Meadow",
   "suburb": "Mont Albert North",
   "state": "VIC",
-  "assessment_date": "Nov 2025",
+  "assessment_date": "27 Apr 2026",
   "baseline_date": "Nov 2025",
   "target_score": 75,
   "stewards": "David & Marlene",
@@ -18,7 +18,7 @@
     "bioregion_code": "VVP"
   },
   "biodiversity": {
-    "indigenous_species_current": 28,
+    "indigenous_species_current": 30,
     "indigenous_species_baseline": 0,
     "indigenous_species_target": 29,
     "indigenous_dominant": true,
@@ -59,11 +59,12 @@
       "Alyogyne huegelii",
       "Anigozanthos Bush Gems",
       "Poa labillardieri",
-      "Calamagrostis x acutiflora Karl Foerster"
+      "Calamagrostis x acutiflora Karl Foerster",
+      "Hardenbergia violacea"
     ]
   },
   "soil_water": {
-    "soil_health_score": 3,
+    "soil_health_score": 4,
     "soil_health_baseline": 1,
     "soil_health_max": 5,
     "water_function_score": 2,
@@ -171,6 +172,14 @@
       "category": "planting",
       "notes": "All 29 species planted with mycorrhizal dip. Hand watered in. Kangaroo paw flowering on planting day.",
       "note_url": "/gardens/evelina23/field-notes/2025-11-28.html"
+    },
+    {
+      "title": "Site visit -- excellent establishment, cutback, scrambler replaced",
+      "date": "27 Apr 2026",
+      "type": "Site Visit",
+      "category": "site_visit",
+      "notes": "Soil health excellent -- upgraded to 4/5. Einadia nutans cutback performed. Dead scrambler replaced with Hardenbergia violacea. Garden in excellent progress for five months post-planting. Irrigation to be reduced.",
+      "note_url": "/gardens/evelina23/field-notes/2026-04-27.html"
     }
   ],
   "notes": "Compact front garden 3x8m. High-density ecological planting. 29 species installed. Habitat logs and igneous rocks provide immediate habitat structure.",
