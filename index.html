@@ -109,7 +109,7 @@
     <div class="flex items-center gap-6 text-sm">
       <a href="/registry.html" class="muted hover:text-current transition-colors hidden md:block">Browse gardens</a>
       <a href="/gardens/rupert14/index.html" class="muted hover:text-current transition-colors hidden md:block">Example</a>
-      <a href="mailto:hello@gardenerandson.com.au" class="btn-outline text-xs px-4 py-2">Register your garden</a>
+      <a href="#" onclick="openRegisterModal();return false;" class="btn-outline text-xs px-4 py-2">Register your garden</a>
       <button id="themeToggle" class="text-xs muted hover:text-current transition-colors">Understory</button>
     </div>
   </div>
@@ -131,7 +131,7 @@
         </p>
         <div class="flex flex-wrap gap-3 mb-8">
           <a href="/gardens/rupert14/index.html" class="btn-primary">See a registered garden</a>
-          <a href="mailto:hello@gardenerandson.com.au" class="btn-outline">Register yours</a>
+          <a href="#" onclick="openRegisterModal();return false;" class="btn-outline">Register yours</a>
         </div>
         <div class="flex flex-wrap gap-x-6 gap-y-2 text-xs muted">
           <span>Free public profile</span>
@@ -513,6 +513,124 @@
   btn.onclick = function() {
     setMode(root.classList.contains('dark') ? 'light' : 'dark');
   };
+</script>
+
+<!-- Register Garden Modal -->
+<div id="registerModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(61,69,53,.85);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem">
+  <div style="background:var(--bg);border:1px solid var(--hair);max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto">
+    <button onclick="closeRegisterModal()" style="position:absolute;top:.75rem;right:.75rem;background:none;border:none;color:var(--fg);opacity:.4;font-size:1.25rem;cursor:pointer;line-height:1;padding:.25rem .4rem">&times;</button>
+    <div style="padding:2rem 2rem 1.5rem">
+      <div style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;opacity:.5;margin-bottom:.75rem">Ecological Registry</div>
+      <h2 style="font-family:'Abril Fatface',serif;font-size:2rem;line-height:1.1;margin-bottom:.75rem">Register your garden</h2>
+      <p style="font-size:.875rem;opacity:.7;line-height:1.6;margin-bottom:1.75rem">Tell us about your garden and we will be in touch to discuss your registration and baseline score.</p>
+
+      <form id="registerForm" onsubmit="submitRegisterForm(event)" style="display:grid;gap:1rem">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div>
+            <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">First name</label>
+            <input name="firstName" required placeholder="Natasha" style="width:100%;background:var(--wash);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none" />
+          </div>
+          <div>
+            <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Last name</label>
+            <input name="lastName" required placeholder="Smith" style="width:100%;background:var(--wash);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none" />
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Phone</label>
+          <input name="phone" type="tel" required placeholder="0400 000 000" style="width:100%;background:var(--wash);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none" />
+        </div>
+
+        <div>
+          <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Email</label>
+          <input name="email" type="email" required placeholder="hello@example.com" style="width:100%;background:var(--wash);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none" />
+        </div>
+
+        <div>
+          <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Garden address</label>
+          <input name="address" required placeholder="12 Example Street, Surrey Hills VIC" style="width:100%;background:var(--wash);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none" />
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div>
+            <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Garden size (approx)</label>
+            <select name="size" style="width:100%;background:var(--bg);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none">
+              <option value="">Select...</option>
+              <option>Under 25m2</option>
+              <option>25-100m2</option>
+              <option>100-300m2</option>
+              <option>300-600m2</option>
+              <option>Over 600m2</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Garden status</label>
+            <select name="gardenStatus" style="width:100%;background:var(--bg);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none">
+              <option value="">Select...</option>
+              <option>Existing garden</option>
+              <option>Recently planted</option>
+              <option>Design stage</option>
+              <option>Bare site</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-bottom:.4rem">Anything else we should know? (optional)</label>
+          <textarea name="notes" rows="3" placeholder="Native plants, existing trees, design goals..." style="width:100%;background:var(--wash);border:1px solid var(--hair);color:var(--fg);padding:.6rem .75rem;font-size:.875rem;font-family:'IBM Plex Sans',sans-serif;outline:none;resize:vertical"></textarea>
+        </div>
+
+        <div style="padding-top:.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem">
+          <p style="font-size:.7rem;opacity:.45;line-height:1.5">We will be in touch within 2 business days to discuss your garden.</p>
+          <button type="submit" id="registerSubmitBtn" class="btn-primary" style="white-space:nowrap;flex-shrink:0">Register &rarr;</button>
+        </div>
+      </form>
+
+      <!-- Success state -->
+      <div id="registerSuccess" style="display:none;text-align:center;padding:2rem 0">
+        <div style="font-size:2rem;margin-bottom:1rem">&#127807;</div>
+        <h3 style="font-family:'Abril Fatface',serif;font-size:1.5rem;margin-bottom:.75rem">Thank you</h3>
+        <p style="font-size:.875rem;opacity:.7;line-height:1.6">We will be in touch within 2 business days to talk through your garden and get your registration started.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ---- Register modal ---- */
+  function openRegisterModal() {
+    var m = document.getElementById('registerModal');
+    m.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeRegisterModal() {
+    var m = document.getElementById('registerModal');
+    m.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  document.getElementById('registerModal').addEventListener('click', function(e) {
+    if (e.target === this) closeRegisterModal();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeRegisterModal();
+  });
+  function submitRegisterForm(e) {
+    e.preventDefault();
+    var form = document.getElementById('registerForm');
+    var btn  = document.getElementById('registerSubmitBtn');
+    var data = new FormData(form);
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    var body = '';
+    data.forEach(function(val, key) { body += key + ': ' + val + '%0A'; });
+    var subject = 'Garden Registration -- ' + (data.get('firstName')||'') + ' ' + (data.get('lastName')||'') + ' -- ' + (data.get('address')||'');
+    window.location.href = 'mailto:hello@gardenerandson.com.au?subject=' + encodeURIComponent(subject) + '&body=' + body;
+    setTimeout(function() {
+      form.style.display = 'none';
+      document.getElementById('registerSuccess').style.display = 'block';
+    }, 800);
+  }
 </script>
 </body>
 </html>
