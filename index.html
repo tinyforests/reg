@@ -619,17 +619,27 @@
     e.preventDefault();
     var form = document.getElementById('registerForm');
     var btn  = document.getElementById('registerSubmitBtn');
-    var data = new FormData(form);
     btn.textContent = 'Sending...';
     btn.disabled = true;
-    var body = '';
-    data.forEach(function(val, key) { body += key + ': ' + val + '%0A'; });
-    var subject = 'Garden Registration -- ' + (data.get('firstName')||'') + ' ' + (data.get('lastName')||'') + ' -- ' + (data.get('address')||'');
-    window.location.href = 'mailto:hello@gardenerandson.com?subject=' + encodeURIComponent(subject) + '&body=' + body;
-    setTimeout(function() {
-      form.style.display = 'none';
-      document.getElementById('registerSuccess').style.display = 'block';
-    }, 800);
+    var data = new FormData(form);
+    fetch('https://formspree.io/f/mdabzgaw', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(res) {
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('registerSuccess').style.display = 'block';
+      } else {
+        btn.textContent = 'Register ?';
+        btn.disabled = false;
+        alert('Something went wrong -- please email hello@gardenerandson.com directly.');
+      }
+    }).catch(function() {
+      btn.textContent = 'Register ?';
+      btn.disabled = false;
+      alert('Something went wrong -- please email hello@gardenerandson.com directly.');
+    });
   }
 </script>
 </body>
