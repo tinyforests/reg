@@ -366,7 +366,7 @@
           <div>-- Upgrade pathway recommended</div>
           <div>-- Annual review available</div>
         </div>
-        <a href="mailto:hello@gardenerandson.com.au?subject=Register my garden" class="btn-primary text-sm">Register your garden</a>
+        <a href="mailto:hello@gardenerandson.com?subject=Register my garden" class="btn-primary text-sm">Register your garden</a>
       </div>
       <div class="border p-8" style="border-color:var(--signal);background:rgba(122,158,95,.06)">
         <div class="chip chip-signal mb-5">Want a new ecological garden</div>
@@ -382,7 +382,7 @@
           <div>-- Registered, scored, and documented from day one</div>
           <div>-- Field notes through the establishment period</div>
         </div>
-        <a href="mailto:hello@gardenerandson.com.au?subject=New ecological garden" class="btn-primary text-sm">Talk to us</a>
+        <a href="mailto:hello@gardenerandson.com?subject=New ecological garden" class="btn-primary text-sm">Talk to us</a>
       </div>
     </div>
   </div>
@@ -473,12 +473,12 @@
       Either way, the score is yours to build.
     </p>
     <div class="flex flex-wrap gap-4 justify-center">
-      <a href="mailto:hello@gardenerandson.com.au?subject=Register my garden"
+      <a href="mailto:hello@gardenerandson.com?subject=Register my garden"
         style="background:var(--bg);color:var(--fg);padding:.875rem 2rem;font-size:.875rem;font-weight:500;display:inline-block;transition:opacity .2s"
         onmouseover="this.style.opacity=.85" onmouseout="this.style.opacity=1">
         Register your garden
       </a>
-      <a href="mailto:hello@gardenerandson.com.au?subject=New ecological garden"
+      <a href="mailto:hello@gardenerandson.com?subject=New ecological garden"
         style="border:1px solid rgba(255,240,220,.25);padding:.875rem 2rem;font-size:.875rem;display:inline-block;color:var(--bg);transition:all .2s"
         onmouseover="this.style.borderColor='rgba(255,240,220,.6)'" onmouseout="this.style.borderColor='rgba(255,240,220,.25)'">
         Install a new garden
@@ -625,7 +625,7 @@
     var body = '';
     data.forEach(function(val, key) { body += key + ': ' + val + '%0A'; });
     var subject = 'Garden Registration -- ' + (data.get('firstName')||'') + ' ' + (data.get('lastName')||'') + ' -- ' + (data.get('address')||'');
-    window.location.href = 'mailto:hello@gardenerandson.com.au?subject=' + encodeURIComponent(subject) + '&body=' + body;
+    window.location.href = 'mailto:hello@gardenerandson.com?subject=' + encodeURIComponent(subject) + '&body=' + body;
     setTimeout(function() {
       form.style.display = 'none';
       document.getElementById('registerSuccess').style.display = 'block';
