@@ -220,6 +220,17 @@ function verificationLabelFromLevel(level) {
   return map[level] || "Unverified";
 }
 
+// Raw pillar sum without calling estimateBaseline — used by estimateBaseline to avoid recursion.
+function _rawScoreTotal(record) {
+  return (
+    scoreBiodiversity(record).score +
+    scoreSoilWater(record).score +
+    scoreHabitat(record).score +
+    scoreConnectivity(record).score +
+    scoreEvidence(record).score
+  );
+}
+
 function estimateBaseline(record) {
   var b  = record.biodiversity || {};
   var sw = record.soil_water   || {};
@@ -272,7 +283,7 @@ function estimateBaseline(record) {
     }
   };
 
-  return scoreEcologicalRegistry(baselineRecord).total;
+  return _rawScoreTotal(baselineRecord);
 }
 
 function buildRecommendations(record) {
@@ -282,7 +293,7 @@ function buildRecommendations(record) {
   var b  = record.biodiversity || {};
   var c  = record.connectivity || {};
 
-  if (!sw.has_moisture_basin)   { recs.push({ action: "Install seasonal moisture basin",         points: 6 }); }
+  if (!sw.has_moisture_basin)   { recs.push({ action: "Install seasonal moisture basin",         points: 2 }); }
   if (!h.has_water_feature)     { recs.push({ action: "Add a small water feature",               points: 3 }); }
   if (!sw.has_rainwater_system) { recs.push({ action: "Add rainwater collection system",         points: 2 }); }
   if (!h.has_rock_refuges)      { recs.push({ action: "Add rock refuge zones",                   points: 2 }); }

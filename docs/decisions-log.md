@@ -20,6 +20,22 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-05-21 — Wire assess.html to canonical engines; fix estimateBaseline recursion; fix moisture basin recommendation; fix adjacent-garden verification
+
+**Decision:** Four related fixes applied together. (1) `assess.html` now loads its scoring and badge logic from `js/reg-score.js` and `js/badge-engine.js` via `<script src>`, replacing an inline copy that had diverged in three places. (2) `estimateBaseline` in `reg-score.js` was causing infinite recursion; a new `_rawScoreTotal` helper breaks the loop. (3) `buildRecommendations` in `reg-score.js` incorrectly reported +6 for "Install seasonal moisture basin"; the actual score impact is +2. (4) `getAdjacentGardens()` in `assess.html` was hardcoding `verified: true` for every adjacent garden regardless of whether the ID exists in `registry.json`; it now checks `_registryIds` (populated when the garden selector loads) and reflects actual registry membership.
+
+**Reason:** (1) A fourth inline copy of the engines meant any change to `js/` silently wouldn't apply to `assess.html`. The copy had the old descending-iteration `nextLvl` bug (fixed in `reg-score.js` on 20 May 2026), the wrong moisture-basin value, and a divergent badge ID (`site_visit_badge` instead of `site_visit`). Wiring to the canonical files eliminates the divergence surface. (2) The recursion would stack-overflow in Node and was a latent browser bug; wiring assess.html to the canonical engine made fixing it necessary. (3) Overstating the moisture basin gain three-fold gave assessors incorrect prioritisation guidance. (4) Auto-verifying any entered ID silently inflated connectivity scores — a scoring integrity issue.
+
+**Files affected:**
+- `/js/reg-score.js` (`_rawScoreTotal` helper added; `estimateBaseline` updated; `buildRecommendations` moisture basin points corrected)
+- `/assess.html` (inline engines replaced with `<script src>`; `renderLive()` API adapted; `getAdjacentGardens()` verification fixed)
+- `/docs/pending-work.md` (five new High priority items added covering these bugs and schema-gap items)
+- `/docs/decisions-log.md` (this entry)
+
+**Notes:** The `estimateBaseline` recursion fix resolves the pending-work item of the same name. The inline-engine divergence and getAdjacentGardens bugs are resolved and can be removed from pending-work. The moisture basin bug covered both the inline copy (now deleted) and `reg-score.js` (now fixed). Schema-gap items for `assess.html` (#6, #8, #11, #12 in the audit) remain in pending-work for a separate session.
+
+---
+
 ## 2026-05-20 — Fix nextLevel() bug; add Victoria Crescent; add Heathy Edge Habitat Garden typology
 
 **Decision:** Three changes in one session. (1) `nextLevel()` in `reg-score.js` now iterates rating tiers in ascending order, returning the immediate next tier instead of the maximum tier above the score. (2) Victoria Crescent (Mont Albert, Whitehorse, score 42) added to the registry as garden #12. (3) "Heathy Edge Habitat Garden" added to the canonical typology vocabulary.
