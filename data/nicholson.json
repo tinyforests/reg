@@ -161,8 +161,8 @@
   "trajectory": "Emerging",
   "rating": {
     "current": "Habitat Garden",
-    "next": "Urban Biodiversity Node",
-    "points_to_next": 62
+    "next": "Ecological Garden",
+    "points_to_next": 12
   },
   "upgrade_potential": 51,
   "points_available": 51,

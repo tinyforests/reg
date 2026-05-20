@@ -189,8 +189,8 @@
   "trajectory": "Emerging",
   "rating": {
     "current": "Basic Garden",
-    "next": "Urban Biodiversity Node",
-    "points_to_next": 80
+    "next": "Habitat Garden",
+    "points_to_next": 10
   },
   "upgrade_potential": 69,
   "points_available": 69,

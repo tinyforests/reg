@@ -20,8 +20,8 @@
       "score": 73,
       "rating": {
         "current": "Registered Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 18
+        "next": "High Habitat Garden",
+        "points_to_next": 8
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -62,8 +62,8 @@
       "score": 29,
       "rating": {
         "current": "Habitat Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 62
+        "next": "Ecological Garden",
+        "points_to_next": 12
       },
       "primary_evc": "Urban Ecological Garden",
       "bioregion": "Inner Melbourne",
@@ -100,8 +100,8 @@
       "score": 50,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 41
+        "next": "Registered Ecological Garden",
+        "points_to_next": 11
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -142,8 +142,8 @@
       "score": 54,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 37
+        "next": "Registered Ecological Garden",
+        "points_to_next": 7
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -207,8 +207,8 @@
       "score": 45,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 46
+        "next": "Registered Ecological Garden",
+        "points_to_next": 16
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -247,8 +247,8 @@
       "score": 50,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 41
+        "next": "Registered Ecological Garden",
+        "points_to_next": 11
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -374,8 +374,8 @@
       "score": 49,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 42
+        "next": "Registered Ecological Garden",
+        "points_to_next": 12
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -412,8 +412,8 @@
       "score": 52,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Urban Biodiversity Node",
-        "points_to_next": 39
+        "next": "Registered Ecological Garden",
+        "points_to_next": 9
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
