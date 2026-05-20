@@ -4,13 +4,19 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+
+### assess.html: schema-gap fields missing from generated JSON
+
+Several fields present in all registry entries are not produced by `assess.html`'s `buildRecordFromForm()`: `typology` (only `garden_type` is output), `registry_role`, `trajectory`, `council`, `ward`, `lga`. Snapshotted output fields (`rating`, `upgrade_potential`, `points_available`, `yield`) are also absent from the generated JSON — a garden pasted from `assess.html` into the data directory will be missing these and requires manual calculation or a build-script run before `registry.json` can be updated. Fix: add the identity fields to the form and output; run the engines and append snapshots as part of the assess-and-save flow.
+
+### assess.html: fauna count not reflected in sightings array; target_score hardcoded
+
+`buildRecordFromForm()` creates at most one `fauna_sightings` entry regardless of the count entered in `f_hab_fauna_count`. Fauna scoring counts sighting objects, so this caps fauna scoring at 1 from `assess.html`. Separately, `target_score` is hardcoded to `82` but varies per garden (York: 75). These are minor simplifications but cause silent data drift.
+
 ### Regenerate rating.next snapshots after nextLevel() fix
 
 `nextLevel()` in `reg-score.js` was fixed 20 May 2026 (iteration order reversed). The engine now returns the correct immediate next tier, but all garden JSON `rating.next` / `rating.points_to_next` snapshots except Rupert and Victoria Crescent still reflect the old buggy output. Fix: for each garden, run `nextLevelFromScore(score)` and update `rating.next` and `rating.points_to_next` in both the garden JSON and the matching `registry.json` entry. Commit all snapshots together.
 
-### estimateBaseline() infinite recursion
-
-`estimateBaseline(record)` in `reg-score.js` calls `scoreEcologicalRegistry(baselineRecord)`, which in turn calls `estimateBaseline` — infinite recursion. This causes an immediate stack overflow in Node. It does not appear to surface in the browser (profile pages likely exit the recursion before stack exhaustion, or the baseline path is not exercised on load), but it is a latent bug. Fix: `estimateBaseline` should call a separate internal scoring function that does not itself invoke `estimateBaseline`, or guard with a `isBaseline` flag passed through the call.
 
 ### Badge engine bugs to fix
 
