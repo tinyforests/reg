@@ -188,8 +188,8 @@
   "trajectory": "Rising",
   "rating": {
     "current": "Ecological Garden",
-    "next": "Urban Biodiversity Node",
-    "points_to_next": 46
+    "next": "Registered Ecological Garden",
+    "points_to_next": 13
   },
   "upgrade_potential": 35,
   "points_available": 35,

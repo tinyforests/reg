@@ -13,10 +13,6 @@ Several fields present in all registry entries are not produced by `assess.html`
 
 `buildRecordFromForm()` creates at most one `fauna_sightings` entry regardless of the count entered in `f_hab_fauna_count`. Fauna scoring counts sighting objects, so this caps fauna scoring at 1 from `assess.html`. Separately, `target_score` is hardcoded to `82` but varies per garden (York: 75). These are minor simplifications but cause silent data drift.
 
-### Regenerate rating.next snapshots after nextLevel() fix
-
-`nextLevel()` in `reg-score.js` was fixed 20 May 2026 (iteration order reversed). The engine now returns the correct immediate next tier, but all garden JSON `rating.next` / `rating.points_to_next` snapshots except Rupert and Victoria Crescent still reflect the old buggy output. Fix: for each garden, run `nextLevelFromScore(score)` and update `rating.next` and `rating.points_to_next` in both the garden JSON and the matching `registry.json` entry. Commit all snapshots together.
-
 
 ### Badge engine bugs to fix
 
