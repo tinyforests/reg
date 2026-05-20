@@ -1,0 +1,3022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gardener & Son — Brand Book · Living Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Serif:ital,wght@0,300;0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Core palette */
+      --green:        #3d4535;
+      --green-deep:   #2a3024;
+      --green-soft:   #4d5743;
+      --beige:        #fff0dc;
+      --beige-warm:   #fde6cd;
+      --beige-pale:   #fff7ea;
+      --ink:          #22251f;
+      --paper:        #fffaf2;
+
+      /* Extended palette */
+      --gold:         #b49a63;
+      --gold-deep:    #8e7843;
+      --clay:         #9a6a4f;
+      --clay-deep:    #6f4630;
+      --moss:         #69735d;
+      --lichen:       #a8b095;
+      --soil:         #4a3a2a;
+      --stone:        #c8b89a;
+
+      /* Functional */
+      --muted:        rgba(34, 37, 31, 0.66);
+      --muted-light:  rgba(34, 37, 31, 0.42);
+      --line:         rgba(61, 69, 53, 0.22);
+      --line-soft:    rgba(61, 69, 53, 0.10);
+      --line-dark:    rgba(255, 240, 220, 0.18);
+      --line-dark-soft: rgba(255, 240, 220, 0.08);
+
+      /* Type */
+      --display: 'Abril Fatface', 'Fraunces', 'Georgia', serif;
+      --serif: 'Fraunces', 'Georgia', 'Times New Roman', serif;
+      --sans:  'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono:  'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    .section, .part-divider, .closing { scroll-margin-top: 70px; }
+
+    body {
+      margin: 0;
+      background: var(--beige);
+      color: var(--green);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      /* Subtle paper grain across the whole document */
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: multiply;
+      opacity: 0.45;
+      background-image:
+        radial-gradient(rgba(61, 69, 53, 0.12) 0.5px, transparent 0.7px),
+        radial-gradient(rgba(180, 154, 99, 0.10) 0.5px, transparent 0.7px);
+      background-size: 3px 3px, 7px 7px;
+      background-position: 0 0, 1px 1px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 240, 220, 0.86);
+      backdrop-filter: blur(18px);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; }
+    .nav-brand-mark {
+      width: 22px; height: 22px;
+    }
+    .nav-brand-mark svg { width: 100%; height: 100%; display: block; }
+    .nav-title { font-weight: 500; letter-spacing: 0.1em; }
+    .nav-center {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: 0;
+      text-transform: none;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .nav-links {
+      display: flex;
+      justify-content: flex-end;
+      gap: 18px;
+    }
+    .nav-links a {
+      opacity: 0.7;
+      transition: opacity .2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT PRIMITIVES
+    ───────────────────────────────────────────── */
+    .section {
+      padding: 96px 7vw;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+    .section.tight { padding: 64px 7vw; }
+    .section.huge  { padding: 130px 7vw; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 7vw;
+      align-items: start;
+    }
+
+    .chapter-label {
+      position: sticky;
+      top: 96px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+      line-height: 1.6;
+    }
+    .chapter-label .num {
+      display: block;
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 64px;
+      letter-spacing: -0.04em;
+      color: rgba(61, 69, 53, 0.4);
+      margin-bottom: 18px;
+      line-height: 0.9;
+    }
+    .chapter-label .dot {
+      display: inline-block;
+      width: 5px; height: 5px;
+      background: var(--clay);
+      border-radius: 50%;
+      vertical-align: middle;
+      margin: 0 8px 2px 0;
+    }
+
+    .stack { display: grid; gap: 36px; }
+
+    h1, h2, h3, h4, h5 {
+      font-family: var(--serif);
+      font-weight: 400;
+      line-height: 0.98;
+      margin: 0;
+      letter-spacing: -0.045em;
+      font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+    }
+    h1 { font-size: clamp(72px, 13vw, 200px); letter-spacing: -0.075em; }
+    h2 { font-size: clamp(48px, 7vw, 108px); letter-spacing: -0.055em; }
+    h3 { font-size: clamp(28px, 3.6vw, 52px); letter-spacing: -0.04em; }
+    h4 { font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.025em; line-height: 1.05; }
+    h5 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(16px, 1.3vw, 19px);
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    p + p { margin-top: 18px; }
+
+    .large-copy {
+      font-family: var(--serif);
+      font-weight: 300;
+      color: var(--green);
+      font-size: clamp(26px, 3.4vw, 48px);
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      max-width: 1100px;
+      font-variation-settings: "opsz" 96, "SOFT" 80, "WONK" 0;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+      margin-bottom: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 22px;
+      height: 1px;
+      background: var(--moss);
+    }
+
+    /* ─────────────────────────────────────────────
+       PART DIVIDERS
+    ───────────────────────────────────────────── */
+    .part-divider {
+      min-height: 78vh;
+      padding: 100px 7vw 80px;
+      background: var(--green);
+      color: var(--beige);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 60px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .part-divider::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(180, 154, 99, 0.18), transparent 32%),
+        radial-gradient(circle at 8% 88%, rgba(154, 106, 79, 0.16), transparent 38%);
+      pointer-events: none;
+    }
+    .part-divider > * { position: relative; z-index: 1; }
+    .part-divider .pd-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 240, 220, 0.55);
+    }
+    .part-divider .pd-number {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(140px, 26vw, 380px);
+      letter-spacing: -0.02em;
+      line-height: 0.84;
+      color: var(--beige);
+    }
+    .part-divider .pd-title {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(48px, 7vw, 110px);
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+      color: var(--beige);
+      max-width: 1200px;
+    }
+    .part-divider .pd-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      padding-top: 40px;
+      border-top: 1px solid var(--line-dark);
+      color: rgba(255, 240, 220, 0.7);
+      font-size: 14px;
+      font-family: var(--sans);
+      max-width: 1100px;
+      line-height: 1.55;
+    }
+    .part-divider .pd-meta strong {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--beige);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    /* ─────────────────────────────────────────────
+       INVERTED (GREEN) SECTIONS
+    ───────────────────────────────────────────── */
+    .green-section {
+      background: var(--green);
+      color: var(--beige);
+    }
+    .green-section h1,
+    .green-section h2,
+    .green-section h3,
+    .green-section h4,
+    .green-section .large-copy { color: var(--beige); }
+    .green-section p,
+    .green-section .eyebrow,
+    .green-section .chapter-label,
+    .green-section h5 { color: rgba(255, 240, 220, 0.72); }
+    .green-section .eyebrow::before { background: rgba(255, 240, 220, 0.55); }
+    .green-section .chapter-label .num { color: rgba(255, 240, 220, 0.32); }
+
+    /* ─────────────────────────────────────────────
+       COVER
+    ───────────────────────────────────────────── */
+    .cover {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 60px 7vw 50px;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(180, 154, 99, 0.22), transparent 32%),
+        radial-gradient(circle at 82% 6%, rgba(61, 69, 53, 0.10), transparent 36%),
+        radial-gradient(circle at 90% 95%, rgba(154, 106, 79, 0.16), transparent 28%),
+        var(--beige);
+      position: relative;
+      border-bottom: 1px solid var(--line);
+    }
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--moss);
+    }
+    .cover-top .right { text-align: right; line-height: 1.7; }
+    .cover-center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 36px;
+      padding: 80px 0;
+    }
+    .cover-title {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(60px, 12vw, 180px);
+      letter-spacing: -0.025em;
+      line-height: 1.04;
+      color: var(--green);
+      max-width: 1500px;
+    }
+    .cover-title em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -0.04em;
+      color: var(--clay);
+      font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+    }
+    .cover-sub {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(22px, 2.6vw, 36px);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: var(--moss);
+      max-width: 900px;
+    }
+    .cover-bottom {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      padding-top: 32px;
+      border-top: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .cover-bottom strong {
+      display: block;
+      color: var(--green);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    /* ─────────────────────────────────────────────
+       TABLE OF CONTENTS
+    ───────────────────────────────────────────── */
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--line);
+      margin-top: 70px;
+    }
+    .toc-part {
+      padding: 32px 28px 36px 0;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .toc-part:nth-child(3n) { border-right: none; }
+    .toc-part-head {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      margin-bottom: 18px;
+      transition: opacity .15s;
+    }
+    .toc-part-head:hover { opacity: 0.65; }
+    .toc-part-head:hover .toc-part-title { color: var(--clay); }
+    .toc-part-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--clay);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .toc-part-title {
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: var(--green);
+      font-weight: 400;
+      transition: color .15s;
+    }
+    .toc-part ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc-part li {
+      border-bottom: 1px dotted var(--line-soft);
+    }
+    .toc-part li a {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      padding: 7px 0;
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .15s, padding .15s;
+    }
+    .toc-part li a::after {
+      content: '→';
+      color: var(--gold);
+      opacity: 0.5;
+      transition: opacity .15s, transform .15s;
+      margin-left: 6px;
+    }
+    .toc-part li a:hover {
+      color: var(--green);
+      padding-left: 6px;
+    }
+    .toc-part li a:hover::after {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    /* ─────────────────────────────────────────────
+       NUMBERED RULES LIST
+    ───────────────────────────────────────────── */
+    .rule-list {
+      display: grid;
+      border-top: 1px solid var(--line);
+      margin-top: 40px;
+    }
+    .rule {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 30px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .rule .num {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: 44px;
+      line-height: 0.9;
+      color: rgba(61, 69, 53, 0.36);
+      font-variation-settings: "opsz" 96, "SOFT" 100, "WONK" 1;
+    }
+    .rule strong {
+      display: block;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 22px;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      color: var(--green);
+    }
+    .rule p { font-size: 16px; }
+    .green-section .rule, .green-section .rule-list { border-color: var(--line-dark); }
+    .green-section .rule strong { color: var(--beige); }
+    .green-section .rule .num { color: rgba(255, 240, 220, 0.32); }
+
+    /* ─────────────────────────────────────────────
+       PILLAR / CARD GRIDS
+    ───────────────────────────────────────────── */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .pillar {
+      background: var(--beige);
+      padding: 36px;
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .pillar h3 { margin-bottom: 18px; }
+    .pillar p { font-size: 16px; }
+    .green-section .pillar { background: rgba(255, 240, 220, 0.045); }
+    .green-section .pillar-grid { background: var(--line-dark); border-color: var(--line-dark); }
+
+    /* ─────────────────────────────────────────────
+       SWATCHES — PRIMARY
+    ───────────────────────────────────────────── */
+    .swatch-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .swatch {
+      min-height: 280px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .swatch .sw-name {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-style: italic;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      line-height: 1.05;
+    }
+    .swatch .sw-meta { display: grid; gap: 4px; opacity: 0.8; }
+    .swatch.green   { background: var(--green); color: var(--beige); }
+    .swatch.beige   { background: var(--beige); color: var(--green); border: 1px solid var(--line); margin: -1px; }
+    .swatch.gold    { background: var(--gold); color: var(--green-deep); }
+    .swatch.clay    { background: var(--clay); color: var(--beige); }
+
+    /* SWATCHES — EXTENDED */
+    .swatch-grid-8 {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 30px;
+    }
+    .mini-swatch {
+      background: var(--beige);
+      padding: 18px 16px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .mini-swatch .name {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      line-height: 1.05;
+    }
+
+    /* ─────────────────────────────────────────────
+       TYPOGRAPHY SPECIMENS
+    ───────────────────────────────────────────── */
+    .type-sample {
+      margin-top: 50px;
+      display: grid;
+      gap: 36px;
+    }
+    .specimen-large {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(60px, 10vw, 160px);
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      color: var(--green);
+    }
+    .specimen-large em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--clay);
+      letter-spacing: -0.04em;
+      font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+    }
+    .specimen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 36px;
+    }
+    .specimen-cell {
+      background: var(--beige);
+      padding: 32px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 24px;
+      min-height: 320px;
+    }
+    .specimen-cell .label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+    }
+    .specimen-cell .sample-display {
+      font-family: var(--display);
+      font-size: 56px;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      color: var(--green);
+      font-weight: 400;
+    }
+    .specimen-cell .sample-serif {
+      font-family: var(--serif);
+      font-size: 52px;
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      color: var(--green);
+      font-weight: 400;
+    }
+    .specimen-cell .sample-serif.italic {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--clay-deep);
+    }
+    .specimen-cell .sample-sans {
+      font-family: var(--sans);
+      font-size: 18px;
+      line-height: 1.4;
+      color: var(--green);
+      font-weight: 400;
+      letter-spacing: -0.015em;
+    }
+    .specimen-cell .sample-mono {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--green);
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+    .specimen-cell .meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted-light);
+    }
+
+    /* ─────────────────────────────────────────────
+       IMAGERY DIRECTION (CSS textures)
+    ───────────────────────────────────────────── */
+    .image-system {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .image-block {
+      min-height: 520px;
+      padding: 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 28% 22%, rgba(105, 115, 93, 0.35), transparent 38%),
+        radial-gradient(circle at 78% 78%, rgba(180, 154, 99, 0.28), transparent 42%),
+        linear-gradient(135deg, rgba(61,69,53,0.10), rgba(255,240,220,0.04)),
+        var(--beige-warm);
+    }
+    .image-block::before {
+      /* Botanical line pattern */
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(78deg, rgba(61, 69, 53, 0.05) 0, rgba(61, 69, 53, 0.05) 1px, transparent 1px, transparent 14px),
+        repeating-linear-gradient(168deg, rgba(154, 106, 79, 0.04) 0, rgba(154, 106, 79, 0.04) 1px, transparent 1px, transparent 22px);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+    .image-block > * { position: relative; z-index: 1; }
+    .image-block.dark {
+      background:
+        radial-gradient(circle at 78% 18%, rgba(180, 154, 99, 0.32), transparent 38%),
+        radial-gradient(circle at 18% 82%, rgba(154, 106, 79, 0.22), transparent 36%),
+        linear-gradient(135deg, rgba(255,240,220,0.06), rgba(61,69,53,0.32)),
+        var(--green);
+      color: var(--beige);
+    }
+    .image-block.dark::before {
+      background-image:
+        repeating-linear-gradient(45deg, rgba(255, 240, 220, 0.06) 0, rgba(255, 240, 220, 0.06) 1px, transparent 1px, transparent 14px),
+        repeating-linear-gradient(135deg, rgba(255, 240, 220, 0.04) 0, rgba(255, 240, 220, 0.04) 1px, transparent 1px, transparent 22px);
+    }
+    .image-block p { font-size: 16px; }
+    .image-block.dark p { color: rgba(255, 240, 220, 0.75); }
+    .image-block.dark h3 { color: var(--beige); }
+
+    /* ─────────────────────────────────────────────
+       VOICE / VOCABULARY TABLE
+    ───────────────────────────────────────────── */
+    .voice-table {
+      display: grid;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .voice-head, .voice-row {
+      display: grid;
+      grid-template-columns: 0.7fr 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+    }
+    .voice-head .voice-cell {
+      background: var(--green);
+      color: var(--beige);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      min-height: auto;
+      padding: 18px 26px;
+    }
+    .voice-cell {
+      background: var(--beige);
+      padding: 26px;
+      min-height: 110px;
+    }
+    .voice-cell strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+    .voice-cell strong.muted {
+      color: var(--clay);
+      font-style: italic;
+      font-weight: 300;
+    }
+    .voice-cell p { font-size: 15px; }
+
+    /* ─────────────────────────────────────────────
+       WORDMARK & MARK SHOWCASE
+    ───────────────────────────────────────────── */
+    .wordmark-display {
+      margin-top: 40px;
+      display: grid;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+    }
+    .wordmark-cell {
+      background: var(--beige);
+      padding: 60px 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      min-height: 240px;
+      justify-content: center;
+    }
+    .wordmark-cell.dark { background: var(--green); }
+    .wordmark-cell .wm-svg svg { max-width: 100%; height: auto; }
+    .wordmark-cell .label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--moss);
+    }
+    .wordmark-cell.dark .label { color: rgba(255, 240, 220, 0.6); }
+
+    .mark-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 40px;
+    }
+    .mark-cell {
+      background: var(--beige);
+      padding: 30px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .mark-cell.dark { background: var(--green); color: var(--beige); }
+    .mark-cell .mark-svg { width: 100%; flex: 1; display: flex; align-items: center; justify-content: center; }
+    .mark-cell .mark-svg svg { max-width: 100px; max-height: 100px; }
+    .mark-cell .mark-name {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    .mark-cell .mark-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted-light);
+    }
+    .mark-cell.dark .mark-meta { color: rgba(255, 240, 220, 0.55); }
+
+    /* ─────────────────────────────────────────────
+       SUB-BRAND DIRECTORY
+    ───────────────────────────────────────────── */
+    .directory {
+      display: grid;
+      border-top: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .dir-row {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr 1.7fr 0.7fr;
+      gap: 30px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: baseline;
+      transition: padding .25s;
+    }
+    .dir-row:hover { padding-left: 12px; }
+    .dir-name {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      color: var(--green);
+    }
+    .dir-name em {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-style: normal;
+      margin-top: 8px;
+    }
+    .dir-role {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 18px;
+      letter-spacing: -0.015em;
+      color: var(--moss);
+      line-height: 1.3;
+    }
+    .dir-desc {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .dir-status {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      text-align: right;
+    }
+
+    /* ─────────────────────────────────────────────
+       PATTERN LIBRARY
+    ───────────────────────────────────────────── */
+    .pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 40px;
+    }
+    .pattern {
+      min-height: 240px;
+      position: relative;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 4px;
+      color: var(--green);
+      overflow: hidden;
+    }
+    .pattern.dark { color: var(--beige); }
+    .pattern .pt-name {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-style: italic;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      position: relative; z-index: 1;
+    }
+    .pattern .pt-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      position: relative; z-index: 1;
+    }
+    .pattern.hairline {
+      background: var(--beige);
+      background-image: repeating-linear-gradient(90deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 14px);
+    }
+    .pattern.field-grid {
+      background: var(--beige);
+      background-image:
+        repeating-linear-gradient(0deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 24px),
+        repeating-linear-gradient(90deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 24px);
+    }
+    .pattern.dots {
+      background: var(--beige);
+      background-image: radial-gradient(rgba(61, 69, 53, 0.5) 1px, transparent 1.5px);
+      background-size: 14px 14px;
+    }
+    .pattern.canopy {
+      background: var(--green);
+      background-image:
+        radial-gradient(circle at 22% 38%, rgba(168, 176, 149, 0.5) 7px, transparent 8px),
+        radial-gradient(circle at 60% 22%, rgba(180, 154, 99, 0.32) 5px, transparent 6px),
+        radial-gradient(circle at 78% 62%, rgba(168, 176, 149, 0.42) 9px, transparent 10px),
+        radial-gradient(circle at 32% 78%, rgba(154, 106, 79, 0.32) 6px, transparent 7px);
+      background-size: 80px 80px;
+    }
+
+    /* ─────────────────────────────────────────────
+       APPLICATION MOCKUPS (CSS rendered)
+    ───────────────────────────────────────────── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .app-tile {
+      background: var(--beige);
+      padding: 30px;
+      min-height: 480px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 22px;
+    }
+    .app-tile .label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--moss);
+    }
+    .app-tile .desc {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .app-tile .preview {
+      flex: 1;
+      min-height: 280px;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Web mock */
+    .preview-web {
+      flex-direction: column;
+      gap: 0;
+      padding: 0;
+    }
+    .preview-web .web-nav {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+    .preview-web .web-hero {
+      padding: 26px 22px 22px;
+      background: var(--beige);
+    }
+    .preview-web .web-hero .h {
+      font-family: var(--serif);
+      font-size: 36px;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: var(--green);
+      max-width: 280px;
+    }
+    .preview-web .web-hero .h em {
+      font-style: italic;
+      color: var(--clay);
+    }
+    .preview-web .web-hero .sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 12px;
+      line-height: 1.5;
+      max-width: 280px;
+    }
+    .preview-web .web-strip {
+      background: var(--green);
+      padding: 12px 22px;
+      color: var(--beige);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      display: flex;
+      gap: 24px;
+      overflow: hidden;
+    }
+
+    /* Print mock */
+    .preview-print {
+      padding: 22px;
+      background: var(--beige-warm);
+      flex-direction: column;
+      gap: 14px;
+    }
+    .preview-print .p-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--clay-deep);
+    }
+    .preview-print .p-title {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 30px;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      color: var(--green);
+      max-width: 280px;
+    }
+    .preview-print .p-rule {
+      height: 1px;
+      background: var(--green);
+      width: 60px;
+    }
+    .preview-print .p-body {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 280px;
+    }
+    .preview-print .p-meta {
+      margin-top: auto;
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Retail mock */
+    .preview-retail {
+      background:
+        linear-gradient(180deg, rgba(61,69,53,0.06) 0%, transparent 50%),
+        var(--beige);
+      padding: 24px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+    }
+    .preview-retail .signage {
+      background: var(--green);
+      color: var(--beige);
+      padding: 14px 18px;
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: 24px;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .preview-retail .signage-sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-top: -4px;
+    }
+    .preview-retail .shelf {
+      height: 8px;
+      background: var(--clay);
+      width: 70%;
+      margin-top: 24px;
+      box-shadow: 0 4px 0 rgba(154, 106, 79, 0.35);
+    }
+    .preview-retail .obj {
+      display: flex; gap: 12px; align-items: flex-end; justify-content: center;
+      width: 70%;
+    }
+    .preview-retail .obj > div { background: var(--gold); border-radius: 2px 2px 0 0; }
+    .preview-retail .obj .o1 { width: 32px; height: 60px; background: var(--clay-deep); border-radius: 16px 16px 4px 4px; }
+    .preview-retail .obj .o2 { width: 24px; height: 78px; background: var(--moss); border-radius: 2px; }
+    .preview-retail .obj .o3 { width: 44px; height: 48px; background: var(--gold); border-radius: 4px 4px 4px 4px; }
+    .preview-retail .obj .o4 { width: 18px; height: 90px; background: var(--soil); border-radius: 9px 9px 2px 2px; }
+
+    /* Tag mock */
+    .preview-tag {
+      background: var(--beige);
+      padding: 30px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    .preview-tag .tag {
+      width: 180px;
+      background: var(--paper);
+      border: 1px solid var(--green);
+      padding: 18px 16px 18px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 4px 6px 0 rgba(61, 69, 53, 0.12);
+    }
+    .preview-tag .tag::before {
+      content: '';
+      position: absolute;
+      top: -6px; left: 50%;
+      transform: translateX(-50%);
+      width: 12px; height: 12px;
+      background: var(--paper);
+      border: 1px solid var(--green);
+      border-radius: 50%;
+    }
+    .preview-tag .tag .t-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--clay);
+    }
+    .preview-tag .tag .t-name {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 19px;
+      line-height: 1;
+      color: var(--green);
+      letter-spacing: -0.02em;
+    }
+    .preview-tag .tag .t-common {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .preview-tag .tag .t-rule { height: 1px; background: var(--line); margin: 4px 0; }
+    .preview-tag .tag .t-meta {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--green);
+      letter-spacing: 0.06em;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────────
+       SYSTEM STACK DIAGRAM
+    ───────────────────────────────────────────── */
+    .stack-diagram {
+      margin-top: 60px;
+      background: var(--green-deep);
+      border: 1px solid var(--line-dark);
+      padding: 56px 46px;
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .stack-diagram::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(0deg, rgba(255, 240, 220, 0.04) 0, rgba(255, 240, 220, 0.04) 1px, transparent 1px, transparent 28px);
+      pointer-events: none;
+    }
+    .stack-diagram svg { width: 100%; max-width: 1100px; display: block; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* ─────────────────────────────────────────────
+       BIG QUOTE
+    ───────────────────────────────────────────── */
+    .quote-section {
+      padding: 130px 7vw;
+      border-bottom: 1px solid var(--line);
+    }
+    .quote {
+      font-family: var(--serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(40px, 6.5vw, 108px);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      max-width: 1280px;
+      color: var(--green);
+      font-variation-settings: "opsz" 144, "SOFT" 80, "WONK" 1;
+    }
+    .quote em {
+      font-style: normal;
+      color: var(--clay);
+    }
+    .green-section .quote { color: var(--beige); }
+    .green-section .quote em { color: var(--gold); }
+    .caption {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-top: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .caption::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--moss);
+    }
+    .green-section .caption { color: rgba(255, 240, 220, 0.6); }
+    .green-section .caption::before { background: rgba(255, 240, 220, 0.55); }
+
+    /* ─────────────────────────────────────────────
+       GLOSSARY
+    ───────────────────────────────────────────── */
+    .glossary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 50px;
+    }
+    .glossary-item {
+      background: var(--beige);
+      padding: 26px 28px;
+      display: grid;
+      gap: 8px;
+    }
+    .glossary-item .term {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-style: italic;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      color: var(--green);
+    }
+    .glossary-item .pron {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--clay);
+    }
+    .glossary-item .def {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ─────────────────────────────────────────────
+       COLOPHON / CLOSING
+    ───────────────────────────────────────────── */
+    .closing {
+      min-height: 92vh;
+      padding: 110px 7vw 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 80px;
+    }
+    .closing .quote { max-width: 1400px; }
+    .colophon {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      padding-top: 50px;
+      border-top: 1px solid var(--line-dark);
+    }
+    .colophon strong {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--beige);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .colophon p {
+      color: rgba(255, 240, 220, 0.65);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    /* ─────────────────────────────────────────────
+       MOBILE
+    ───────────────────────────────────────────── */
+    @media (max-width: 940px) {
+      .nav { grid-template-columns: 1fr auto; padding: 14px 18px; }
+      .nav-links, .nav-center { display: none; }
+      .section { padding: 70px 22px; }
+      .section.huge { padding: 90px 22px; }
+      .part-divider { padding: 60px 22px; min-height: auto; }
+      .part-divider .pd-meta { grid-template-columns: 1fr; gap: 24px; }
+      .two-col, .image-system, .specimen-grid, .pillar-grid { grid-template-columns: 1fr; }
+      .chapter-label { position: static; margin-bottom: 24px; }
+      .swatch-row { grid-template-columns: repeat(2, 1fr); }
+      .swatch-grid-8 { grid-template-columns: repeat(2, 1fr); }
+      .rule { grid-template-columns: 1fr; gap: 12px; }
+      .voice-row, .voice-head { grid-template-columns: 1fr; }
+      .toc { grid-template-columns: 1fr; }
+      .toc-part { border-right: none; }
+      .pattern-grid, .mark-grid { grid-template-columns: repeat(2, 1fr); }
+      .app-grid { grid-template-columns: 1fr; }
+      .cover { padding: 40px 22px; }
+      .cover-bottom { grid-template-columns: 1fr 1fr; gap: 18px; }
+      .dir-row { grid-template-columns: 1fr; gap: 8px; }
+      .glossary { grid-template-columns: 1fr; }
+      .colophon { grid-template-columns: 1fr 1fr; }
+      .closing { padding: 70px 22px; }
+      .quote-section { padding: 80px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       NAV
+  ════════════════════════════════════════════ -->
+  <nav class="nav">
+    <a href="#cover" class="nav-brand">
+      <span class="nav-brand-mark">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="1"/>
+          <path d="M16 4 Q 22 12 16 16 Q 10 20 16 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+          <path d="M10 10 L 16 16 L 22 10" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="nav-title">Gardener & Son</span>
+    </a>
+    <span class="nav-center">Brand Book · Living Edition · v2</span>
+    <div class="nav-links">
+      <a href="#part-01">Foundations</a>
+      <a href="#part-03">Identity</a>
+      <a href="#part-05">Imagery</a>
+      <a href="#part-07">System</a>
+      <a href="#glossary">Index</a>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+       00 · COVER
+  ════════════════════════════════════════════ -->
+  <section id="cover" class="cover">
+    <div class="cover-top">
+      <span>Gardener & Son · Est. Mont Albert</span>
+      <div class="right">
+        <div>Living Edition · v2</div>
+        <div>Internal · Studio · Stewards · Partners</div>
+      </div>
+    </div>
+    <div class="cover-center">
+      <div class="eyebrow">The Brand Book</div>
+      <h1 class="cover-title">Ecological gardens. <em>Heirloom objects.</em><br/>Living systems.</h1>
+      <p class="cover-sub">A field guide to how Gardener & Son thinks, speaks, designs and grows — from a studio in Mont Albert into a global brand for the living world.</p>
+    </div>
+    <div class="cover-bottom">
+      <div><strong>Edition</strong> Living draft · revised seasonally</div>
+      <div><strong>Volume</strong> One — Worldview & System</div>
+      <div><strong>Origin</strong> 2 Churchill St, Mont Albert</div>
+      <div><strong>Stewards</strong> Tyson & Natasha</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CONTENTS
+  ════════════════════════════════════════════ -->
+  <section class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">00</span>
+        <span class="dot"></span>Contents
+      </div>
+      <div class="stack">
+        <h2>A book in nine parts.</h2>
+        <p>Each part stands on its own — read it in order to follow the arc from worldview to system, or open at the section you need. This book is alive. It is updated as the studio evolves, gardens mature, platforms ship and new stewards join.</p>
+
+        <div class="toc">
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-01">
+
+              <div class="toc-part-num">Part 01</div>
+
+              <div class="toc-part-title">Foundations</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-01-1"><span>Manifesto</span><span>01.1</span></a></li>
+              <li><a href="#s-01-2"><span>Origins</span><span>01.2</span></a></li>
+              <li><a href="#s-01-3"><span>Worldview</span><span>01.3</span></a></li>
+              <li><a href="#s-01-4"><span>Ten Principles</span><span>01.4</span></a></li>
+              <li><a href="#s-01-5"><span>Design Intelligence</span><span>01.5</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-02">
+
+              <div class="toc-part-num">Part 02</div>
+
+              <div class="toc-part-title">Structure</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-02-1"><span>The Studios</span><span>02.1</span></a></li>
+              <li><a href="#s-02-2"><span>Brand Architecture</span><span>02.2</span></a></li>
+              <li><a href="#s-02-3"><span>The Three Offerings</span><span>02.3</span></a></li>
+              <li><a href="#s-02-4"><span>Sub-brands</span><span>02.4</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-03">
+
+              <div class="toc-part-num">Part 03</div>
+
+              <div class="toc-part-title">Identity</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-03-1"><span>Wordmark</span><span>03.1</span></a></li>
+              <li><a href="#s-03-2"><span>Marks & Symbols</span><span>03.2</span></a></li>
+              <li><a href="#s-03-3"><span>Colour</span><span>03.3</span></a></li>
+              <li><a href="#s-03-4"><span>Typography</span><span>03.4</span></a></li>
+              <li><a href="#s-03-5"><span>Grid & Pattern</span><span>03.5</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-04">
+
+              <div class="toc-part-num">Part 04</div>
+
+              <div class="toc-part-title">Language</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-04-1"><span>Voice & Tone</span><span>04.1</span></a></li>
+              <li><a href="#s-04-2"><span>Vocabulary</span><span>04.2</span></a></li>
+              <li><a href="#s-04-3"><span>Naming Conventions</span><span>04.3</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-05">
+
+              <div class="toc-part-num">Part 05</div>
+
+              <div class="toc-part-title">Imagery</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-05-1"><span>Photography</span><span>05.1</span></a></li>
+              <li><a href="#s-05-2"><span>Graphic Direction</span><span>05.2</span></a></li>
+              <li><a href="#s-05-3"><span>Field-Guide Aesthetic</span><span>05.3</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-06">
+
+              <div class="toc-part-num">Part 06</div>
+
+              <div class="toc-part-title">Applications</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-06-1"><span>Web</span><span>06.1</span></a></li>
+              <li><a href="#s-06-2"><span>Print</span><span>06.2</span></a></li>
+              <li><a href="#s-06-3"><span>Retail & Wayfinding</span><span>06.3</span></a></li>
+              <li><a href="#s-06-4"><span>Plant Tags & Packaging</span><span>06.4</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-07">
+
+              <div class="toc-part-num">Part 07</div>
+
+              <div class="toc-part-title">The System</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-07-1"><span>The Stack</span><span>07.1</span></a></li>
+              <li><a href="#s-07-2"><span>The Four Roles</span><span>07.2</span></a></li>
+              <li><a href="#s-07-3"><span>Stewardship Model</span><span>07.3</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-08">
+
+              <div class="toc-part-num">Part 08</div>
+
+              <div class="toc-part-title">Behaviour</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-08-1"><span>Conduct</span><span>08.1</span></a></li>
+              <li><a href="#s-08-2"><span>Editorial</span><span>08.2</span></a></li>
+              <li><a href="#s-08-3"><span>Partnerships</span><span>08.3</span></a></li>
+              <li><a href="#s-08-4"><span>Civic Practice</span><span>08.4</span></a></li>
+            </ul>
+          </div>
+          <div class="toc-part">
+            <a class="toc-part-head" href="#part-09">
+
+              <div class="toc-part-num">Part 09</div>
+
+              <div class="toc-part-title">Closing</div>
+
+            </a>
+            <ul>
+              <li><a href="#s-09-1"><span>Living Book Note</span><span>09.1</span></a></li>
+              <li><a href="#glossary"><span>Glossary & Index</span><span>09.2</span></a></li>
+              <li><a href="#colophon"><span>Colophon</span><span>09.3</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 01 — FOUNDATIONS
+  ════════════════════════════════════════════ -->
+  <section id="part-01" class="part-divider">
+    <div class="pd-top">
+      <span>Part One</span>
+      <span>01 · 02 · 03 · 04 · 05</span>
+    </div>
+    <div>
+      <div class="pd-number">01</div>
+      <h2 class="pd-title">Foundations.<br/>What we believe, and why we exist.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Manifesto, origins, worldview, principles, design intelligence. The unchanging core of the brand.</div>
+      <div><strong>Audience</strong> Everyone the studio works with — stewards, staff, partners, councils, suppliers, future hires.</div>
+      <div><strong>Revision</strong> Reviewed annually. Refined slowly. Treat changes with care.</div>
+    </div>
+  </section>
+
+  <!-- 01.1 MANIFESTO -->
+  <section id="s-01-1" class="section huge">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">01.1</span>
+        <span class="dot"></span>Manifesto
+      </div>
+      <div class="stack">
+        <div class="eyebrow">A short statement of belief</div>
+        <p class="large-copy">We believe a garden is the smallest unit of ecological repair — and the most overlooked. We believe private land is public ecological contribution. We believe care should be visible, measurable, and rewarded. We believe the things we keep around us shape the way we live with the rest of the living world.</p>
+        <p>Gardener & Son exists to make ecological beauty desirable, understandable and investable. We design gardens that mature into ecosystems. We gather objects that argue for slower material lives. We build the systems — registries, scores, yields, incentives — that let private care become public infrastructure. We do this from a studio, two doors down from a tram line, in a quiet inner suburb of Melbourne. We do it because nothing else we could spend our lives on matters more.</p>
+        <p>This book is the record of how we work. It is not a rulebook. It is a field guide.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01.2 ORIGINS -->
+  <section id="s-01-2" class="section green-section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">01.2</span>
+        <span class="dot"></span>Origins
+      </div>
+      <div class="stack">
+        <div class="eyebrow">How the studio began</div>
+        <h2>From a single garden, to a studio, to a system.</h2>
+        <p class="large-copy">Gardener & Son began the way the work itself begins: in a particular place, with one garden, two hands, and a long argument with the idea that landscapes are decoration.</p>
+        <p>The studio was founded by Tyson and Natasha — an ecological designer and a plant stylist, partners in life and in practice. The early work was in the gardens of Melbourne's inner east: removing lawns, restoring soil, choosing plants by ecology rather than fashion, and watching what happened over seasons rather than weekends. The work attracted clients who wanted more than a finished image. They wanted a living place.</p>
+        <p>From the gardens came the questions. How do you describe ecological value to a homeowner? How do you record what changes over twenty years? How does a council know which private gardens are doing real ecological work, and which are just looking the part? How does someone choose to be a steward of land they think they own?</p>
+        <p>Those questions became the system. Find Your Ecological Garden. The Ecological Registry. Yield. Plants of Place. Village Rewards. Each platform is a tool for answering one of those questions at the scale of a city, not just a client list. The studio in Mont Albert is the anchor: a workshop, a shop, a discovery centre, a place to come and see what an ecological garden looks like before you commission one. Auburn follows, and others after.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01.3 WORLDVIEW -->
+  <section id="s-01-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">01.3</span>
+        <span class="dot"></span>Worldview
+      </div>
+      <div class="stack">
+        <h2>A garden is not decoration. It is infrastructure for a more living world.</h2>
+        <p class="large-copy">The brand begins with the intimacy of the garden: soil, shade, water, insects, birds, memory, food, fragrance, seasonal change, human repair. But it does not end there.</p>
+        <p>Every garden can become a node in a larger urban ecological network. Every object can carry a slower material culture. Every story can change what people value. Every system can make private ecological care visible, measurable and worth sustaining. The brand is built to hold all of this at once — the soil and the spreadsheet, the seedling and the score.</p>
+        <p>Gardener & Son operates inside a tension we accept rather than resolve: ecological work needs to feel beautiful, intimate and human, while also being legible enough to attract capital, council and policy. We do not pretend these are the same audience. We design for both.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01.4 PRINCIPLES -->
+  <section id="s-01-4" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">01.4</span>
+        <span class="dot"></span>Ten Principles
+      </div>
+      <div class="stack">
+        <h2>Ten things we keep returning to.</h2>
+        <p>These are the principles that shape how we design, how we write, what we sell, what we refuse, and how we decide what to do next. They are not a checklist. They are a temperament.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>Begin with place.</strong><p>Read the land first. Climate, hydrology, indigenous vegetation, soil, history, neighbours, light. Every project shows evidence of having been read, not stamped.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>Design for maturity, not the opening shot.</strong><p>The garden gets more beautiful over twenty years. So does the studio, the object, the relationship. We do not optimise for the photo on day one.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>Beauty under real conditions.</strong><p>Drought. Heat. Possums. Heavy rain. Cats. Real lives, real budgets, real maintenance. Beauty that cannot survive these is not beauty we sell.</p></div></div>
+          <div class="rule"><div class="num">04</div><div><strong>Private land, public contribution.</strong><p>A domestic garden is not a hobby. It is canopy, cooling, habitat, water and soil function. We treat it as a serious ecological layer of the city.</p></div></div>
+          <div class="rule"><div class="num">05</div><div><strong>Stewardship over ownership.</strong><p>Land is not a possession. The people we work with are stewards of soil, water and species that will outlast them. We name them as such.</p></div></div>
+          <div class="rule"><div class="num">06</div><div><strong>Objects belong to the garden.</strong><p>What we sell is not styling. Objects are tools, vessels, fragments of older material cultures. They earn their place by being used and outlasting us.</p></div></div>
+          <div class="rule"><div class="num">07</div><div><strong>Make care visible.</strong><p>If care cannot be seen, recorded or rewarded, it is fragile. The system stack exists so that private ecological care becomes shared civic record.</p></div></div>
+          <div class="rule"><div class="num">08</div><div><strong>Be intelligent, not academic.</strong><p>We can hold a soil-microbiology paper and a child's garden visit in the same hand. We do not over-explain the magic. We let the work carry meaning.</p></div></div>
+          <div class="rule"><div class="num">09</div><div><strong>Honour what was here first.</strong><p>Indigenous plant knowledge, ecological vegetation classes, country and culture come before fashion. Where we use this knowledge, we credit it and learn from those who hold it.</p></div></div>
+          <div class="rule"><div class="num">10</div><div><strong>Scale without becoming hollow.</strong><p>Growth is welcomed only where the principles remain intact. The brand becomes global when the worldview becomes repeatable — not when the aesthetic does.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01.5 DESIGN INTELLIGENCE -->
+  <section id="s-01-5" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">01.5</span>
+        <span class="dot"></span>Design Intelligence
+      </div>
+      <div class="stack">
+        <div class="eyebrow">How the studio thinks</div>
+        <h2>One body of work.</h2>
+        <p class="large-copy">Gardener &amp; Son operates across gardens, objects, stories and systems. These are not separate arms of the studio. They are connected ways of working with living systems — different surfaces of the same body of work.</p>
+        <p>A garden may begin as a private space. Over time it becomes habitat, cultural memory, ecological evidence, a node in a wider civic landscape. The objects in a room can argue for slower material lives. A story can change what a neighbour decides to plant. A registry can change what a council chooses to protect. Each piece feeds the next. The work is one work. We refuse to break it into product categories that would let any single piece become hollow.</p>
+        <p>This is what the system stack expresses outwardly. Design Intelligence is what generates it.</p>
+
+        <h5 style="margin-top: 60px;">The operating minds</h5>
+        <p>The studio works through several lenses at once. Each lens protects something the others might miss. A project that has passed through all of them is harder to make, slower to finish, and far more likely to last.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>The gardener.</strong><p>Protects the living material. Knows the plants by name, knows the season, knows what wants to grow here without being forced. Holds the work to what a real plant in real soil can do.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>The designer.</strong><p>Protects beauty, proportion, and the felt experience of the place. Refuses ugliness as a shortcut to function. Holds the line that ecological work must also be a pleasure to walk through.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>The ecologist.</strong><p>Protects function and place. Reads the vegetation class, the catchment, the soil layer, the canopy gap. Insists the garden be specific to its ground and honest about what belongs.</p></div></div>
+          <div class="rule"><div class="num">04</div><div><strong>The steward.</strong><p>Protects long horizons. Asks what this looks like in twenty years, in fifty, after we are gone. Holds the work accountable to time rather than to the opening photograph.</p></div></div>
+          <div class="rule"><div class="num">05</div><div><strong>The storyteller.</strong><p>Protects meaning. Names what the work is doing and why it matters. Translates between soil science and a person's love for their own back garden, without flattening either.</p></div></div>
+          <div class="rule"><div class="num">06</div><div><strong>The civic thinker.</strong><p>Protects shared value. Asks what this garden contributes beyond its fence — to the street, the suburb, the council ward, the city's ecological future. Refuses the private–public divide as a real boundary.</p></div></div>
+          <div class="rule"><div class="num">07</div><div><strong>The object curator.</strong><p>Protects material culture. Treats tools, vessels, books and old things as evidence of slower ways to live. Brings the texture of human history into a discipline that can otherwise become abstract.</p></div></div>
+          <div class="rule"><div class="num">08</div><div><strong>The systems builder.</strong><p>Protects evidence and scale. Turns private care into public record through registries, scores, yields and incentives. Makes the work legible enough to attract capital, policy and time.</p></div></div>
+        </div>
+
+        <h5 style="margin-top: 60px;">The public expression</h5>
+        <p>Design Intelligence should be felt, not announced. The public encounters it as calmness, clarity, restraint, ecological literacy and material beauty. The reader of a garden profile, the visitor to the studio, the homeowner reading the Registry — none of them should need to understand the operating minds in order to feel that the work is thoughtful, grounded and built on long thinking.</p>
+        <p>We do not over-explain the intelligence behind the work. The work itself is the evidence. The brand book names the lenses so the studio holds itself accountable. Beyond the studio, this intelligence travels as tone, posture, restraint, and the quiet authority of a garden that has been read before it was designed.</p>
+
+        <h5 style="margin-top: 60px;">Influences</h5>
+        <p>The work draws on Australian garden making, ecological design, systems thinking, regenerative practice, material culture, and the long tradition of stewardship in design. Influences include the naturalistic garden, the field guide, pattern language, civic ecology, and the craft of working with stone, soil, water, plants and time. We carry these influences without genuflecting to any one of them. The studio reads widely and quotes sparingly.</p>
+
+        <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line);">
+          <div class="eyebrow" style="margin-bottom: 14px;">A note on what stays internal</div>
+          <p style="font-size: 14px; color: var(--muted); max-width: 640px;">The studio holds a deeper internal operating system — a private register of thinkers, frequencies, and AI working instructions that shapes how the work is generated. That document is for the studio. This page is what we share. The intelligence is the same. The language is calibrated.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIG QUOTE -->
+  <section class="quote-section">
+    <div class="quote">Designing ecological gardens.<br/><em>Building the systems around them.</em></div>
+    <div class="caption">Core positioning line · use sparingly, never alter</div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 02 — STRUCTURE
+  ════════════════════════════════════════════ -->
+  <section id="part-02" class="part-divider">
+    <div class="pd-top">
+      <span>Part Two</span>
+      <span>02</span>
+    </div>
+    <div>
+      <div class="pd-number">02</div>
+      <h2 class="pd-title">Structure.<br/>How the studio is organised.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> The studios, brand architecture, three offerings, a directory of every sub-brand and platform.</div>
+      <div><strong>Audience</strong> Internal teams, partners, anyone needing to understand what fits where.</div>
+      <div><strong>Note</strong> The architecture is deliberately simple at the surface. Depth sits underneath.</div>
+    </div>
+  </section>
+
+  <!-- 02.1 THE STUDIOS -->
+  <section id="s-02-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">02.1</span>
+        <span class="dot"></span>The Studios
+      </div>
+      <div class="stack">
+        <h2>Studios as ecological discovery centres.</h2>
+        <p class="large-copy">Each Gardener & Son studio is more than an office. It is a workshop, a shop, a small library, a quiet place to talk about land, a public-facing door into the system.</p>
+        <p>A studio belongs to its suburb. It is not a chain. The Mont Albert studio carries the gardens of Melbourne's inner east. Auburn carries another catchment. Each future studio carries its own — its ecological vegetation classes, its local plant lists, its trees, its stewards, its civic context. The studios are how the brand stays specific while becoming larger.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar">
+            <h5>Studio · 01</h5>
+            <div>
+              <h3>Mont Albert</h3>
+              <p>The founding studio. 2 Churchill Street. Shop, design office, workshop, garden classroom and traders-association anchor. The home of the Ecological Registry and the original Gardener & Son culture.</p>
+            </div>
+            <p><span class="caption" style="margin-top:0">Catchment · Inner east</span></p>
+          </div>
+          <div class="pillar">
+            <h5>Studio · 02</h5>
+            <div>
+              <h3>Auburn</h3>
+              <p>The second studio. 140 Auburn Road. Same ethos, different catchment — a discovery centre for the gardens, EVCs and stewards of its surrounding suburbs. Each studio is autonomous in voice but shares the system.</p>
+            </div>
+            <p><span class="caption" style="margin-top:0">Catchment · Hawthorn / Glen Iris</span></p>
+          </div>
+          <div class="pillar">
+            <h5>Studio · n</h5>
+            <div>
+              <h3>Future studios</h3>
+              <p>Every new studio must pass three tests: a real local ecological catchment, a steward of the studio who knows that place, and a willingness to keep the brand specific to its ground rather than copying Mont Albert.</p>
+            </div>
+            <p><span class="caption" style="margin-top:0">Pattern · Place-specific</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02.2 BRAND ARCHITECTURE -->
+  <section id="s-02-2" class="section green-section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">02.2</span>
+        <span class="dot"></span>Brand Architecture
+      </div>
+      <div class="stack">
+        <h2>One brand. Three offerings. Many layers.</h2>
+        <p class="large-copy">Gardener & Son is the parent brand. Beneath it sit three offerings — Gardens, Objects, Systems — and beneath them a constellation of sub-brands and platforms, each with its own role and audience.</p>
+        <p>The architecture is deliberately simple at the top so the depth can sit underneath without overwhelming. A homeowner meets Gardener & Son. Then meets a garden. Then meets a shop. Then, perhaps over years, meets the Registry, Yield and the broader system. The order matters. Trust builds outward from the garden.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar">
+            <h5>Offering · 01</h5>
+            <div>
+              <h3>Gardens</h3>
+              <p>Ecological garden design, installation and long-term stewardship. Naturalistic, place-based, plant-led, emotionally resonant.</p>
+            </div>
+            <p><em>The proof. The real-world expression of the worldview.</em></p>
+          </div>
+          <div class="pillar">
+            <h5>Offering · 02</h5>
+            <div>
+              <h3>Objects</h3>
+              <p>Heirloom garden objects, vintage tools, vessels, furniture, books and the indigenous plants of place. The tactile culture of the brand.</p>
+            </div>
+            <p><em>The atmosphere. The material and cultural layer of the brand.</em></p>
+          </div>
+          <div class="pillar">
+            <h5>Offering · 03</h5>
+            <div>
+              <h3>Systems</h3>
+              <p>Discovery tools, the Ecological Registry, Yield, Village Rewards and the broader incentive layer for measurable private ecology.</p>
+            </div>
+            <p><em>The scale. The infrastructure that lets the worldview move beyond the studio.</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02.3 THE THREE OFFERINGS — DEEPER -->
+  <section id="s-02-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">02.3</span>
+        <span class="dot"></span>The Offerings, deeper
+      </div>
+      <div class="stack">
+        <h2>Each offering is a doorway into the same idea.</h2>
+        <p>People enter Gardener & Son from different doors. A young family meets us through a tomato seedling at the shop. A council meets us through a registry document. A landscape architect meets us through a published case study. A philanthropist meets us through Yield. All of these doors open into the same room: ecological care made beautiful, legible and worth sustaining.</p>
+
+        <div class="rule-list">
+          <div class="rule"><div class="num">G</div><div><strong>Gardens — the practice</strong><p>Residential design, restoration, planting, installation, long-term care. Project sizes from courtyards to estates. Always plant-led. Always read the site first. Always documented over time.</p></div></div>
+          <div class="rule"><div class="num">O</div><div><strong>Objects — the culture</strong><p>The Heirloom shop (vintage and curated objects), Plants of Place (indigenous nursery), books, tools, vessels, prints. The shop is editorial: it argues for a way of living, not just supplying it.</p></div></div>
+          <div class="rule"><div class="num">S</div><div><strong>Systems — the scale</strong><p>Find Your Ecological Garden, Find Your EVC, Find My Native Plants, the Ecological Registry, Yield, Village Rewards and the council-facing infrastructure. The system is how the worldview gets bigger without losing its ground.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02.4 SUB-BRAND DIRECTORY -->
+  <section id="s-02-4" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">02.4</span>
+        <span class="dot"></span>Sub-brand Directory
+      </div>
+      <div class="stack">
+        <h2>Every platform, every shop, every imprint.</h2>
+        <p>This is the working directory. Each entry names a sub-brand, the role it plays inside the system, what it does, and where it sits in its current development. The list is alive — new entries arrive, old ones graduate or retire. The directory is canon. If a thing is not on this list, it is not a sub-brand yet.</p>
+
+        <div class="directory">
+          <div class="dir-row">
+            <div class="dir-name">Ecological Registry<em>ecologicalregistry.org</em></div>
+            <div class="dir-role">Civic baseline · Garden record · Score</div>
+            <div class="dir-desc">A public registry of ecological gardens with field-noted baselines, scoring, change logs and verified stewardship. The civic spine of the system.</div>
+            <div class="dir-status">In build</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Yield<em>An economic layer</em></div>
+            <div class="dir-role">Incentive layer · Stewardship income</div>
+            <div class="dir-desc">The economic layer that pays stewards for measurable ecological value. Pipeline: councils, corporate sustainability, philanthropy. Stewardship at scale.</div>
+            <div class="dir-status">Pilot pending</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Heirloom<em>An imprint of G&S</em></div>
+            <div class="dir-role">Object culture · Things worth keeping</div>
+            <div class="dir-desc">Curated vintage and salvaged garden objects with the tagline "Things worth keeping." The atmospheric and material front of the brand.</div>
+            <div class="dir-status">Active</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Plants of Place<em>An imprint of G&S</em></div>
+            <div class="dir-role">Indigenous nursery · Local plants only</div>
+            <div class="dir-desc">A micro-nursery for indigenous plants of each studio's catchment. Restricted by ethic, not by stock. Where the garden begins.</div>
+            <div class="dir-status">Active</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Find Your Ecological Garden<em>fmeg · findmyecologicalgarden.com</em></div>
+            <div class="dir-role">Discovery · Entry point</div>
+            <div class="dir-desc">A free public tool for anyone in Victoria to discover the ecological vegetation class beneath their address and the plants that belong to it.</div>
+            <div class="dir-status">Live</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Find Your EVC<em>fmevc</em></div>
+            <div class="dir-role">Discovery · Companion site</div>
+            <div class="dir-desc">A focused SEO and education layer for EVC discovery. Feeds the same plant lists, plant pages and stewardship pathway as fmeg.</div>
+            <div class="dir-status">Live</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Find My Native Plants<em>fmnp · findmynativeplants.com.au</em></div>
+            <div class="dir-role">Discovery · Plant search</div>
+            <div class="dir-desc">Plant-first entry to the system. Find a plant; meet the ecology it belongs to. Currently being moved to stable hosting and HTTPS.</div>
+            <div class="dir-status">In repair</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Village Rewards<em>A neighbourhood platform</em></div>
+            <div class="dir-role">Local trader loyalty · Spend-based</div>
+            <div class="dir-desc">A spend-based QR loyalty system for independent traders in Melbourne villages. Built with the Mont Albert Traders Association as its anchor.</div>
+            <div class="dir-status">PWA live · Backend pending</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Sardines<em>A laneway wine bar</em></div>
+            <div class="dir-role">Hospitality · Mason Lane</div>
+            <div class="dir-desc">A ten-seat wine bar in a Mason Lane laneway. Tinned conservas, natural wine, high-acid mineral pairings. Crowdfunded. Built slowly.</div>
+            <div class="dir-status">Pozible · Permits</div>
+          </div>
+          <div class="dir-row">
+            <div class="dir-name">Field Guide<em>A living book of practice</em></div>
+            <div class="dir-role">Editorial · Public knowledge</div>
+            <div class="dir-desc">The studio's living book of practice. Twenty-two sections covering soil, water, plant, place, design and stewardship. Updated by season.</div>
+            <div class="dir-status">v1 live</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 03 — IDENTITY
+  ════════════════════════════════════════════ -->
+  <section id="part-03" class="part-divider">
+    <div class="pd-top">
+      <span>Part Three</span>
+      <span>03</span>
+    </div>
+    <div>
+      <div class="pd-number">03</div>
+      <h2 class="pd-title">Identity.<br/>The visible system.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Wordmark, marks, colour, typography, grid, pattern. The visible apparatus of the brand.</div>
+      <div><strong>Audience</strong> Designers, printers, suppliers, web teams, anyone making something with the brand on it.</div>
+      <div><strong>Rule</strong> The identity is a system, not a stamp. It should always feel specific to its application.</div>
+    </div>
+  </section>
+
+  <!-- 03.1 WORDMARK -->
+  <section id="s-03-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">03.1</span>
+        <span class="dot"></span>Wordmark
+      </div>
+      <div class="stack">
+        <h2>Set in Fraunces. Soft, characterful, civic.</h2>
+        <p>The wordmark is set in Fraunces — a variable serif drawn from old-style and slab traditions, with a soft optical-size axis that gives it warmth at display sizes and clarity at small ones. The ampersand is the centrepiece. It is always italic, always the accent.</p>
+
+        <div class="wordmark-display">
+          <div class="wordmark-cell">
+            <div class="wm-svg">
+              <svg viewBox="0 0 900 130" xmlns="http://www.w3.org/2000/svg" aria-label="Gardener & Son">
+                <text x="0" y="100" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="400" fill="#3d4535" letter-spacing="-6">Gardener</text>
+                <text x="555" y="100" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="300" font-style="italic" fill="#9a6a4f" letter-spacing="-4">&amp;</text>
+                <text x="635" y="100" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="400" fill="#3d4535" letter-spacing="-6">Son</text>
+              </svg>
+            </div>
+            <div class="label">Primary wordmark · on beige</div>
+          </div>
+          <div class="wordmark-cell dark">
+            <div class="wm-svg">
+              <svg viewBox="0 0 900 130" xmlns="http://www.w3.org/2000/svg" aria-label="Gardener & Son">
+                <text x="0" y="100" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="400" fill="#fff0dc" letter-spacing="-6">Gardener</text>
+                <text x="555" y="100" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="300" font-style="italic" fill="#b49a63" letter-spacing="-4">&amp;</text>
+                <text x="635" y="100" font-family="Fraunces, Georgia, serif" font-size="120" font-weight="400" fill="#fff0dc" letter-spacing="-6">Son</text>
+              </svg>
+            </div>
+            <div class="label">Primary wordmark · on green · ampersand in brass</div>
+          </div>
+          <div class="wordmark-cell">
+            <div class="wm-svg">
+              <svg viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg" aria-label="G&S monogram">
+                <text x="0" y="48" font-family="Fraunces, Georgia, serif" font-size="56" font-weight="400" fill="#3d4535" letter-spacing="-2">G</text>
+                <text x="48" y="48" font-family="Fraunces, Georgia, serif" font-size="56" font-weight="300" font-style="italic" fill="#9a6a4f" letter-spacing="-1">&amp;</text>
+                <text x="88" y="48" font-family="Fraunces, Georgia, serif" font-size="56" font-weight="400" fill="#3d4535" letter-spacing="-2">S</text>
+                <text x="155" y="48" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="500" fill="#69735d" letter-spacing="2.5">EST. MONT ALBERT</text>
+                <line x1="155" y1="20" x2="290" y2="20" stroke="#69735d" stroke-width="1"/>
+              </svg>
+            </div>
+            <div class="label">Monogram lockup · for compact placements, stamps, embroidery, packaging</div>
+          </div>
+        </div>
+
+        <div class="rule-list">
+          <div class="rule"><div class="num">★</div><div><strong>Always typeset. Never drawn.</strong><p>The wordmark is set live in Fraunces. Do not redraw, condense, italicise or weight-shift the letterforms.</p></div></div>
+          <div class="rule"><div class="num">★</div><div><strong>Ampersand carries the accent.</strong><p>Italic, lighter weight, in clay or brass depending on background. The ampersand is the only place the wordmark allows a second colour.</p></div></div>
+          <div class="rule"><div class="num">★</div><div><strong>Clear space equals the cap height.</strong><p>Reserve clear space on all sides equal to the height of the capital G. Nothing intrudes.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03.2 MARKS & SYMBOLS -->
+  <section id="s-03-2" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">03.2</span>
+        <span class="dot"></span>Marks & Symbols
+      </div>
+      <div class="stack">
+        <h2>A small kit of useful marks.</h2>
+        <p>Beyond the wordmark, the brand uses a tight kit of working marks. Each mark has a job. They are typographic, geometric and ecological in feel — descended from old field guides, civic seals and botanical illustration plates rather than tech-startup iconography.</p>
+
+        <div class="mark-grid">
+          <div class="mark-cell">
+            <div class="mark-svg">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="46" fill="none" stroke="#3d4535" stroke-width="1"/>
+                <circle cx="50" cy="50" r="32" fill="none" stroke="#3d4535" stroke-width="1"/>
+                <path d="M50 14 Q66 38 50 50 Q34 62 50 86" fill="none" stroke="#3d4535" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M30 30 L50 50 L70 30" fill="none" stroke="#9a6a4f" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="mark-name">Studio Seal</div>
+              <div class="mark-meta">Primary mark · stamps & seals</div>
+            </div>
+          </div>
+          <div class="mark-cell">
+            <div class="mark-svg">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect x="8" y="8" width="84" height="84" fill="none" stroke="#3d4535" stroke-width="1"/>
+                <text x="50" y="40" font-family="Fraunces, serif" font-size="22" fill="#3d4535" text-anchor="middle">R</text>
+                <line x1="20" y1="50" x2="80" y2="50" stroke="#3d4535" stroke-width="0.5"/>
+                <text x="50" y="68" font-family="IBM Plex Mono, monospace" font-size="6.5" fill="#69735d" text-anchor="middle" letter-spacing="1.2">REGISTRY</text>
+                <text x="50" y="80" font-family="IBM Plex Mono, monospace" font-size="5.5" fill="#9a6a4f" text-anchor="middle" letter-spacing="1.2">ECO · MAR · 2026</text>
+              </svg>
+            </div>
+            <div>
+              <div class="mark-name">Registry Stamp</div>
+              <div class="mark-meta">Field documents · verifications</div>
+            </div>
+          </div>
+          <div class="mark-cell">
+            <div class="mark-svg">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 12 C 64 12 76 24 76 38 C 76 50 68 58 60 64 C 56 76 56 82 56 88 L 44 88 C 44 82 44 76 40 64 C 32 58 24 50 24 38 C 24 24 36 12 50 12 Z" fill="none" stroke="#3d4535" stroke-width="1"/>
+                <line x1="50" y1="38" x2="50" y2="88" stroke="#3d4535" stroke-width="0.6"/>
+                <line x1="40" y1="50" x2="50" y2="58" stroke="#3d4535" stroke-width="0.6"/>
+                <line x1="60" y1="50" x2="50" y2="58" stroke="#3d4535" stroke-width="0.6"/>
+              </svg>
+            </div>
+            <div>
+              <div class="mark-name">Living Mark</div>
+              <div class="mark-meta">Plants of Place · nursery tags</div>
+            </div>
+          </div>
+          <div class="mark-cell dark">
+            <div class="mark-svg">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="#fff0dc" stroke-width="1"/>
+                <text x="50" y="46" font-family="Fraunces, serif" font-size="32" font-style="italic" fill="#b49a63" text-anchor="middle">Y</text>
+                <line x1="30" y1="60" x2="70" y2="60" stroke="#fff0dc" stroke-width="0.5"/>
+                <text x="50" y="74" font-family="IBM Plex Mono, monospace" font-size="6.5" fill="#fff0dc" text-anchor="middle" letter-spacing="1.5">YIELD</text>
+              </svg>
+            </div>
+            <div>
+              <div class="mark-name">Yield Mark</div>
+              <div class="mark-meta">Stewardship income · economic layer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03.3 COLOUR -->
+  <section id="s-03-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">03.3</span>
+        <span class="dot"></span>Colour
+      </div>
+      <div class="stack">
+        <h2>A palette of soil, paper, shade and patina.</h2>
+        <p>The Gardener & Son palette is descended from an old field guide left on a sunlit table: cool greens, warm beiges, a brass that has weathered, and the clay of an unglazed pot. The palette is dominant-and-accent, not evenly distributed. Green and beige carry the brand. Gold and clay are reserved for the moments that need warmth or emphasis.</p>
+
+        <h5 style="margin-top: 22px;">Primary palette · the four anchors</h5>
+        <div class="swatch-row">
+          <div class="swatch green"><div class="sw-name">Gardener Green</div><div class="sw-meta"><span>#3D4535</span><span>RGB 61 · 69 · 53</span><span>Primary</span></div></div>
+          <div class="swatch beige"><div class="sw-name">Nostalgic Beige</div><div class="sw-meta"><span>#FFF0DC</span><span>RGB 255 · 240 · 220</span><span>Primary</span></div></div>
+          <div class="swatch gold"><div class="sw-name">Dry Grass Brass</div><div class="sw-meta"><span>#B49A63</span><span>RGB 180 · 154 · 99</span><span>Accent</span></div></div>
+          <div class="swatch clay"><div class="sw-name">Weathered Clay</div><div class="sw-meta"><span>#9A6A4F</span><span>RGB 154 · 106 · 79</span><span>Accent</span></div></div>
+        </div>
+
+        <h5 style="margin-top: 50px;">Extended palette · for system, signage, registry, plant tags</h5>
+        <div class="swatch-grid-8">
+          <div class="mini-swatch" style="background:#2a3024; color:#fff0dc;"><div class="name">Deep Green</div><div><div>#2A3024</div><div style="margin-top:4px;">Print body · ink</div></div></div>
+          <div class="mini-swatch" style="background:#4d5743; color:#fff0dc;"><div class="name">Soft Green</div><div><div>#4D5743</div><div style="margin-top:4px;">Hover · second tier</div></div></div>
+          <div class="mini-swatch" style="background:#69735d; color:#fff0dc;"><div class="name">Moss</div><div><div>#69735D</div><div style="margin-top:4px;">Captions · eyebrows</div></div></div>
+          <div class="mini-swatch" style="background:#a8b095; color:#3d4535;"><div class="name">Lichen</div><div><div>#A8B095</div><div style="margin-top:4px;">Pale accent</div></div></div>
+          <div class="mini-swatch" style="background:#fde6cd; color:#3d4535;"><div class="name">Warm Beige</div><div><div>#FDE6CD</div><div style="margin-top:4px;">Page secondary</div></div></div>
+          <div class="mini-swatch" style="background:#fffaf2; color:#3d4535;"><div class="name">Paper</div><div><div>#FFFAF2</div><div style="margin-top:4px;">Card · tag · object</div></div></div>
+          <div class="mini-swatch" style="background:#c8b89a; color:#3d4535;"><div class="name">Stone</div><div><div>#C8B89A</div><div style="margin-top:4px;">Hardscape neutral</div></div></div>
+          <div class="mini-swatch" style="background:#4a3a2a; color:#fff0dc;"><div class="name">Soil</div><div><div>#4A3A2A</div><div style="margin-top:4px;">Anchor · footer</div></div></div>
+        </div>
+
+        <h5 style="margin-top: 50px;">Colour ratios — a rough guide for any composition</h5>
+        <div class="rule-list">
+          <div class="rule"><div class="num">60</div><div><strong>Beige & paper carry the page.</strong><p>Around sixty percent of any composition should be neutral warmth — beige, paper, stone, warm beige. The brand breathes.</p></div></div>
+          <div class="rule"><div class="num">30</div><div><strong>Green carries the brand.</strong><p>Around thirty percent green — gardener green, soft green, deep green, moss. Used for type, anchors, signage and dark blocks.</p></div></div>
+          <div class="rule"><div class="num">10</div><div><strong>Clay & brass carry emphasis.</strong><p>No more than ten percent accent — clay, brass, lichen. Reserved for ampersands, accent lines, hover states, key moments. Never as background floods.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03.4 TYPOGRAPHY -->
+  <section id="s-03-4" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">03.4</span>
+        <span class="dot"></span>Typography
+      </div>
+      <div class="stack">
+        <h2>Four families. One voice.</h2>
+        <p>The typography is built from four families that work as a single, layered voice. A statement-making didone for hero moments. A characterful editorial serif for display and long-form. A clean humanist sans for body. A monospace for civic and registry-style detail. Together they let the brand move between poetry, proposal, registry and retail without changing identity. Each face has exactly one role — and they never appear at the same size.</p>
+
+        <div class="type-sample">
+          <div class="specimen-large">Long horizons. <em>Living texture.</em></div>
+        </div>
+
+        <div class="specimen-grid">
+          <div class="specimen-cell">
+            <div class="label">Hero · Abril Fatface</div>
+            <div class="sample-display">Gardener<br/>&amp; Son</div>
+            <div class="meta">Display only · 64px+ · cover, part numerals, single statements</div>
+          </div>
+          <div class="specimen-cell">
+            <div class="label">Display · Fraunces</div>
+            <div class="sample-serif">A garden is the smallest unit of repair.</div>
+            <div class="meta">Variable · opsz 60–144 · chapters, sub-display, pull quotes</div>
+          </div>
+          <div class="specimen-cell">
+            <div class="label">Display · Fraunces italic</div>
+            <div class="sample-serif italic">Soft. Editorial. Soaked in old field-guides.</div>
+            <div class="meta">Italic 300/400 · accents, pull-quotes, ampersand, em emphasis</div>
+          </div>
+          <div class="specimen-cell">
+            <div class="label">Body · IBM Plex Sans</div>
+            <div class="sample-sans">Plex Sans carries the long copy. It is humanist, neutral, sturdy and quietly Swiss in temperament — clear at every weight, never showy, never austere. It allows the serifs to do the singing while the page stays calm. Use weights 300, 400 and 500.</div>
+            <div class="meta">300 · 400 · 500 · letter-spacing -0.015em on display sizes</div>
+          </div>
+          <div class="specimen-cell" style="grid-column: 1 / -1;">
+            <div class="label">Civic · IBM Plex Mono</div>
+            <div class="sample-mono">REGISTRY · ECO-0427 · MONT ALBERT<br/>EVC 47 · VALLEY GRASSY FOREST<br/>BASELINE — MAR 2026<br/>STEWARDS · TYSON &amp; NATASHA<br/>SCORE · 71 / 100 · TRAJECTORY ↑</div>
+            <div class="meta">Mono for labels, registry data, captions, field-guide rules</div>
+          </div>
+        </div>
+
+        <h5 style="margin-top: 50px;">The hierarchy</h5>
+        <div class="rule-list">
+          <div class="rule"><div class="num">A</div><div><strong>Abril is hero-only.</strong><p>Reserved for cover headlines, part numerals (01–09), the studio wordmark at signage scale, and single statements where the brand needs to speak loudest. Never below 64px. Never as body. Used sparingly — six to ten times across the whole book. If Abril is on every page, it stops being hero.</p></div></div>
+          <div class="rule"><div class="num">B</div><div><strong>Fraunces is the editorial workhorse.</strong><p>Chapter titles, section heads, sub-display, pull quotes, long-form serif voice, the ampersand in the wordmark. The variable optical-size axis means it sits comfortably at 14px footnotes through to 60px chapter titles. This is where the studio sounds like itself in writing.</p></div></div>
+          <div class="rule"><div class="num">C</div><div><strong>The two serifs never meet at the same size.</strong><p>If Abril is at 88px, Fraunces sits at 38–44px. A wide gap so the eye reads them as different registers, not competing siblings. Inside an Abril hero, an italic Fraunces word can carry emphasis — this is the only place they share a line.</p></div></div>
+          <div class="rule"><div class="num">D</div><div><strong>Headlines breathe, body is restrained.</strong><p>Tight tracking on display Fraunces — minus four to minus seven percent. Abril sits tighter still at minus two. IBM Plex Sans at 16–19px for body, line-height 1.55 to 1.6, colour at 60–70% of the green for long-form reading. Never bolded for emphasis — use italic Fraunces inline instead.</p></div></div>
+          <div class="rule"><div class="num">E</div><div><strong>Mono signals system.</strong><p>IBM Plex Mono is the voice of the registry, the field note, the receipt, the plant tag and the public record. Uppercase, letter-spaced 0.12–0.16em. Never decorative — always carrying data.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03.5 GRID & PATTERN -->
+  <section id="s-03-5" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">03.5</span>
+        <span class="dot"></span>Grid & Pattern
+      </div>
+      <div class="stack">
+        <h2>Hairlines, dotted leads, leaf-shadow.</h2>
+        <p>The pattern library is small and deliberate. Every pattern derives from something material: a hairline from a botanical plate, a field grid from a council map, a dotted lead from a contents page, a canopy from looking up. Patterns are used quietly — as backgrounds, dividers, panel textures, packaging and signage detail.</p>
+
+        <div class="pattern-grid">
+          <div class="pattern hairline"><div class="pt-name">Hairline rule</div><div class="pt-meta">Dividers · captions</div></div>
+          <div class="pattern field-grid"><div class="pt-name">Field grid</div><div class="pt-meta">Maps · documents</div></div>
+          <div class="pattern dots"><div class="pt-name">Lead dot</div><div class="pt-meta">Contents · tags</div></div>
+          <div class="pattern canopy dark"><div class="pt-name">Canopy</div><div class="pt-meta">Hero backgrounds</div></div>
+        </div>
+
+        <p style="margin-top: 32px;">The grid is a twelve-column flexible layout for web, and a six-column for print, with hairlines as the dominant divider rather than space. The brand never relies on shadows or rounded corners for emphasis. Borders are 1px, square, in green at 22% opacity. Radius is zero. Always.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 04 — LANGUAGE
+  ════════════════════════════════════════════ -->
+  <section id="part-04" class="part-divider">
+    <div class="pd-top">
+      <span>Part Four</span>
+      <span>04</span>
+    </div>
+    <div>
+      <div class="pd-number">04</div>
+      <h2 class="pd-title">Language.<br/>How the brand speaks.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Voice, tone, vocabulary preferences, naming conventions, writing rules.</div>
+      <div><strong>Audience</strong> Anyone writing on behalf of the brand — copywriters, designers, founders, partners, hosts.</div>
+      <div><strong>Test</strong> Can it be read aloud at a community meeting and in a council document without changing meaning?</div>
+    </div>
+  </section>
+
+  <!-- 04.1 VOICE & TONE -->
+  <section id="s-04-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">04.1</span>
+        <span class="dot"></span>Voice & Tone
+      </div>
+      <div class="stack">
+        <h2>Calm, grounded, intelligent and alive.</h2>
+        <p class="large-copy">Gardener & Son should speak with enough clarity to be trusted, enough warmth to be invited into someone's home, and enough vision to attract collaborators, investors, councils, cultural partners and future buyers.</p>
+        <p>The voice does not change. The tone shifts by context. A garden proposal sounds like a quiet conversation across a table. A council submission sounds like a clear civic argument. A field-guide entry sounds like a careful observation. A shop label sounds like a small confidence. All four come from the same person.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar">
+            <h5>Voice attribute · 01</h5>
+            <div>
+              <h3>Calm</h3>
+              <p>We do not catastrophise. We do not shout. We do not perform urgency. The work is urgent enough on its own — the voice does not need to add to that.</p>
+            </div>
+            <p><em>Trust over alarm.</em></p>
+          </div>
+          <div class="pillar">
+            <h5>Voice attribute · 02</h5>
+            <div>
+              <h3>Grounded</h3>
+              <p>We describe what is on the ground. Real plants, real soil, real budgets, real people. The brand earns the right to large claims by being specific in small ones first.</p>
+            </div>
+            <p><em>Specifics over slogans.</em></p>
+          </div>
+          <div class="pillar">
+            <h5>Voice attribute · 03</h5>
+            <div>
+              <h3>Intelligent</h3>
+              <p>We can use the precise word and trust the reader to follow. We can name ecological vegetation classes and microbiology without softening. We do not hide complexity, we steward it.</p>
+            </div>
+            <p><em>Clarity over simplification.</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04.2 VOCABULARY -->
+  <section id="s-04-2" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">04.2</span>
+        <span class="dot"></span>Vocabulary
+      </div>
+      <div class="stack">
+        <h2>Words we use. Words we avoid.</h2>
+        <p>This is a living list. It exists to keep the language consistent across forty different surfaces — a tag, a proposal, a website, a Substack post, a council letter, an investor deck, a recipe at the wine bar. When a new contributor writes something, this list is the first reference.</p>
+
+        <div class="voice-table">
+          <div class="voice-head">
+            <div class="voice-cell">Avoid</div>
+            <div class="voice-cell">Prefer</div>
+            <div class="voice-cell">Why</div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Luxury landscaping</strong></div>
+            <div class="voice-cell"><strong>Ecological gardens designed to mature over time</strong></div>
+            <div class="voice-cell"><p>The brand is premium but not ornamental or status-led. Value comes from depth, care and long life.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Sustainable design</strong></div>
+            <div class="voice-cell"><strong>Gardens that restore ecological function</strong></div>
+            <div class="voice-cell"><p>More concrete, more measurable, less generic.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Outdoor styling</strong></div>
+            <div class="voice-cell"><strong>Objects with age, use, patina and memory</strong></div>
+            <div class="voice-cell"><p>Objects are a material philosophy, not an accessory category.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Software platform</strong></div>
+            <div class="voice-cell"><strong>A registry and incentive layer for private ecological stewardship</strong></div>
+            <div class="voice-cell"><p>The system should sound civic, ecological and credible — not a tech gimmick.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Homeowner</strong></div>
+            <div class="voice-cell"><strong>Steward</strong></div>
+            <div class="voice-cell"><p>Reframes the legal owner as the temporary caretaker of land, soil, water and species. The emotional core of the brand.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Native plants</strong></div>
+            <div class="voice-cell"><strong>Indigenous plants of place</strong></div>
+            <div class="voice-cell"><p>'Native' is broad and often mistaken. 'Indigenous plants of place' names the specific plants that belong to a specific ecological vegetation class.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Garden makeover</strong></div>
+            <div class="voice-cell"><strong>Restoration · transition · long care</strong></div>
+            <div class="voice-cell"><p>Gardens are not events. They are processes.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Bio-credits / Eco-tokens</strong></div>
+            <div class="voice-cell"><strong>Verified ecological value · stewardship yield</strong></div>
+            <div class="voice-cell"><p>We are building a credible civic instrument, not a speculative one. The language should reflect that.</p></div>
+          </div>
+          <div class="voice-row">
+            <div class="voice-cell"><strong class="muted">Vintage shop</strong></div>
+            <div class="voice-cell"><strong>Heirloom · things worth keeping</strong></div>
+            <div class="voice-cell"><p>The shop is part of the worldview, not a side hustle.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04.3 NAMING CONVENTIONS -->
+  <section id="s-04-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">04.3</span>
+        <span class="dot"></span>Naming
+      </div>
+      <div class="stack">
+        <h2>How we name a thing.</h2>
+        <p>Gardener & Son has a lot of named things — studios, gardens, platforms, products, imprints, events. Naming is one of the most visible expressions of the brand. We try to make it carry meaning rather than novelty.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>Plain language first.</strong><p>Heirloom. Yield. Field Guide. Plants of Place. The Ecological Registry. We prefer names that explain themselves in the title.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>Gardens are named for place or history.</strong><p>Arundel. Evelina. Dewrang. Each garden is named for its street, its previous owner, its tree, its country — never the studio or the client surname unless asked.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>Platforms describe their job.</strong><p>"Find Your Ecological Garden." "Village Rewards." "Ecological Registry." Function is the name. We avoid metaphors and made-up tech words.</p></div></div>
+          <div class="rule"><div class="num">04</div><div><strong>Sub-brands stay underneath.</strong><p>Heirloom is "an imprint of Gardener & Son." Plants of Place is "an imprint of Gardener & Son." Sardines is "a project of Gardener & Son." The parent brand is always present, even when quiet.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 05 — IMAGERY
+  ════════════════════════════════════════════ -->
+  <section id="part-05" class="part-divider">
+    <div class="pd-top">
+      <span>Part Five</span>
+      <span>05</span>
+    </div>
+    <div>
+      <div class="pd-number">05</div>
+      <h2 class="pd-title">Imagery.<br/>How the brand looks at the world.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Photography direction, graphic direction, field-guide aesthetic.</div>
+      <div><strong>Audience</strong> Photographers, graphic designers, web teams, retail signage, content teams.</div>
+      <div><strong>Test</strong> Would this image still feel right printed on uncoated paper, ten years from now?</div>
+    </div>
+  </section>
+
+  <!-- 05.1 PHOTOGRAPHY -->
+  <section id="s-05-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">05.1</span>
+        <span class="dot"></span>Photography
+      </div>
+      <div class="stack">
+        <h2>Document the living process.</h2>
+        <p class="large-copy">Use real gardens, hands, tools, soil, seedlings, water, weather, thresholds, insects, books, objects and imperfect material detail. Avoid over-polished lifestyle imagery that removes evidence of work and life.</p>
+
+        <div class="image-system">
+          <div class="image-block">
+            <div>
+              <div class="eyebrow">Direction · 01</div>
+              <h3>Soft natural light. Real time of day.</h3>
+              <p>Morning, late afternoon, overcast. We do not shoot in flat midday sun. We do not use flash. If a garden looks dull on the day, we come back another day. The light is the photograph.</p>
+            </div>
+          </div>
+          <div class="image-block dark">
+            <div>
+              <div class="eyebrow">Direction · 02</div>
+              <h3>Hands, tools, evidence of work.</h3>
+              <p>Show the work. Soil under nails, secateurs on a bench, a hose coiled, a kneeler dented from use. The brand is a working studio, not a stage set.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>Mid-distance, not aerial.</strong><p>The camera sits where a person sits — eye-level in a garden, near a plant, beside an object. The brand does not perform from a drone.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>Detail before overview.</strong><p>Always lead with a detail — a leaf, a seedhead, a hand on a stem — before showing the whole garden. Intimacy first, scale second.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>Seasonal honesty.</strong><p>The garden in February is dry, in August is wet, in April is patchy. We photograph it across the year and show the truth of each season.</p></div></div>
+          <div class="rule"><div class="num">04</div><div><strong>People with permission.</strong><p>Steward portraits are made with care and consent. We name them. We frame them as caretakers, not clients.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05.2 GRAPHIC DIRECTION -->
+  <section id="s-05-2" class="section green-section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">05.2</span>
+        <span class="dot"></span>Graphic
+      </div>
+      <div class="stack">
+        <h2>Register, field guide, studio wall.</h2>
+        <p class="large-copy">Hairlines, labels, maps, species lists, field notes, scorecards, archive references, botanical fragments and calm blocks of green and beige.</p>
+        <p>The graphic world looks more like an ecological archive than a conventional landscaping brand. Closer to a Victorian botanical plate or a council planning document than a lifestyle magazine. The brand should always feel like it has been printed once, somewhere, on paper that has aged a little.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar">
+            <h5>Element · 01</h5>
+            <div>
+              <h3>Hairlines</h3>
+              <p>1px green hairlines do most of the structural work. Borders, dividers, table edges, registry rules. The brand rarely uses fills as primary structure.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <h5>Element · 02</h5>
+            <div>
+              <h3>Labels & captions</h3>
+              <p>Mono labels in moss, ALL CAPS, letter-spaced 0.14em. They look like museum or registry captions, not UI buttons.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <h5>Element · 03</h5>
+            <div>
+              <h3>Botanical fragments</h3>
+              <p>A leaf silhouette, a section of a seedhead, a single insect drawing. Used quietly, never as full ornament. Lifted from old plates and re-drawn in our hand.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05.3 FIELD GUIDE -->
+  <section id="s-05-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">05.3</span>
+        <span class="dot"></span>Field Guide
+      </div>
+      <div class="stack">
+        <h2>The field-guide as the source code of the look.</h2>
+        <p>Whenever a designer is unsure how something should feel, the answer is in an old field guide. A botanical plate. A council vegetation atlas. A weathered Reader's Digest. A handmade journal of a single year. The colours are honest. The typography is serious. The diagrams are useful. The pages have aged. Everything is in service of the plant, the place, the moment recorded.</p>
+        <p>This is the closest reference we have to the brand. Not a fashion magazine, not a tech site, not a luxury hotel. A field guide. We make for the person who keeps it on a shelf for thirty years and reaches for it every spring.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 06 — APPLICATIONS
+  ════════════════════════════════════════════ -->
+  <section id="part-06" class="part-divider">
+    <div class="pd-top">
+      <span>Part Six</span>
+      <span>06</span>
+    </div>
+    <div>
+      <div class="pd-number">06</div>
+      <h2 class="pd-title">Applications.<br/>How the brand lives in the world.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Web, print, retail, wayfinding, plant tags, packaging.</div>
+      <div><strong>Audience</strong> Designers, web teams, printers, fabricators, signwriters.</div>
+      <div><strong>Rule</strong> Every application should pass for a serious civic document, then earn its warmth.</div>
+    </div>
+  </section>
+
+  <!-- 06.1 WEB -->
+  <section id="s-06-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">06.1</span>
+        <span class="dot"></span>Web
+      </div>
+      <div class="stack">
+        <h2>The web is where the system lives.</h2>
+        <p>The Gardener & Son web standard is anchored by the Village Rewards landing page: a sandwich of dark and light sections, accent-bar cards, scroll-reveal animation, a sticky nav that compresses on scroll, a marquee strip in green, and noise-textured backgrounds. The palette is G&S. Hero typography is Abril Fatface (covers, statements). Display is Fraunces (chapters, sub-display). Body is IBM Plex Sans. Civic data is IBM Plex Mono. Border radius is zero. Border weight is 1px.</p>
+
+        <div class="app-grid">
+          <div class="app-tile">
+            <div class="label">Application · Landing page</div>
+            <div class="preview preview-web">
+              <div class="web-nav"><span>G & S</span><span>Work · Studios · System · Stories</span></div>
+              <div class="web-hero">
+                <div class="h">Ecological gardens. <em>Heirloom objects.</em></div>
+                <div class="sub">A studio, a shop, a registry, a long argument with the idea that landscapes are decoration.</div>
+              </div>
+              <div class="web-strip"><span>Gardens →</span><span>Objects →</span><span>System →</span><span>Field Guide →</span></div>
+            </div>
+            <div class="desc">Hero typography in Fraunces. Italic accent in clay. Strip in green carries the navigation forward. Same DNA across every web surface — Village Rewards, Heirloom, Sardines, fmeg.</div>
+          </div>
+
+          <div class="app-tile">
+            <div class="label">Application · Garden profile</div>
+            <div class="preview preview-print">
+              <div class="p-label">Registry · ECO–0427</div>
+              <div class="p-title">Arundel, Mont Albert</div>
+              <div class="p-rule"></div>
+              <div class="p-body">A long inner-east garden, restored across three seasons. Valley grassy forest assemblage, with a layered understorey and three retained mature eucalypts.</div>
+              <div class="p-meta"><span>EVC 47 · Valley Grassy Forest</span><span>Score 71 / 100 ↑</span></div>
+            </div>
+            <div class="desc">Garden profile pages are the public face of the Registry. They look like museum labels for living places — title, classification, score, narrative, history of change.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06.2 PRINT -->
+  <section id="s-06-2" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">06.2</span>
+        <span class="dot"></span>Print
+      </div>
+      <div class="stack">
+        <h2>Uncoated stock. Long horizontal grids. Hairline rules.</h2>
+        <p>Print is where the brand is most itself. Uncoated paper. Off-white stock with warmth. Soya-based inks where possible. Long generous margins. Page numbers in mono. Captions in mono. Body in Plex serif (for long-form) or Plex sans (for proposals). Display in Fraunces. The page should feel like it could live in a council file or a private library.</p>
+
+        <div class="rule-list">
+          <div class="rule"><div class="num">a</div><div><strong>Proposals.</strong><p>A4 portrait, single column, 9.5pt Plex Sans body, 28pt Fraunces titles. Cover always carries one image, the wordmark, and a single line of contextual mono.</p></div></div>
+          <div class="rule"><div class="num">b</div><div><strong>Field guides.</strong><p>B5 size, two-column body in Plex Serif, generous margin for marginalia and small ink drawings. Section openers full-bleed in green.</p></div></div>
+          <div class="rule"><div class="num">c</div><div><strong>Cards & ephemera.</strong><p>Letterpress where budget allows. Single-colour green ink on cream stock. No varnish. No foil.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06.3 RETAIL & WAYFINDING -->
+  <section id="s-06-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">06.3</span>
+        <span class="dot"></span>Retail
+      </div>
+      <div class="stack">
+        <h2>The studio as a public-facing instrument.</h2>
+        <p>A Gardener & Son studio is part shop, part workshop, part library. The signage system is restrained — a painted green name above the door, an italic word in clay where it matters, mono labels on shelves and plant tags. Inside, the experience should feel honest and human: stacked books, real plants, used tools, a long table, soil dust, daylight.</p>
+
+        <div class="app-grid">
+          <div class="app-tile">
+            <div class="label">Application · Shop signage</div>
+            <div class="preview preview-retail">
+              <div class="signage">Gardener & Son</div>
+              <div class="signage-sub">Est. Mont Albert · Plants · Objects · Field Notes</div>
+              <div class="obj">
+                <div class="o4"></div>
+                <div class="o1"></div>
+                <div class="o2"></div>
+                <div class="o3"></div>
+              </div>
+              <div class="shelf"></div>
+            </div>
+            <div class="desc">Above-door signage in green, with a mono sub-line in moss. Internal shelf signage in mono on cream card. Window decals minimal — the work in the window is the marketing.</div>
+          </div>
+
+          <div class="app-tile">
+            <div class="label">Application · Plant tag</div>
+            <div class="preview preview-tag">
+              <div class="tag">
+                <div class="t-label">Plants of Place · EVC 47</div>
+                <div class="t-name">Themeda triandra</div>
+                <div class="t-common">Kangaroo grass</div>
+                <div class="t-rule"></div>
+                <div class="t-meta">Indigenous to Valley Grassy Forest<br/>Sun · Drought tolerant · 1.0m<br/>Grown at Mont Albert · 2026</div>
+              </div>
+            </div>
+            <div class="desc">Plant tags are small certificates. Botanical name in Fraunces italic. Common name in sans. Provenance in mono. Always state the EVC the plant belongs to.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06.4 PACKAGING -->
+  <section id="s-06-4" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">06.4</span>
+        <span class="dot"></span>Packaging
+      </div>
+      <div class="stack">
+        <h2>Wrap as briefly as possible.</h2>
+        <p>The brand does not love packaging. We avoid it where we can. Where it is required, we use unbleached paper, hessian, twine, cardboard, salvaged crates, glass and reusable cotton. Labels are letterpressed or rubber-stamped where possible. The packaging is part of the object — never a layer to discard.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>No plastic floor in objects.</strong><p>Anything from Heirloom or Plants of Place leaves the studio without plastic where the object permits. Where plastic is required (some plant stages, fragile glass), say so honestly.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>One label, one stamp.</strong><p>Packaging carries one mono label and one studio seal. Not five.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>Reusable by design.</strong><p>The wrap should be useful afterward. Twine for tying tomatoes. Hessian for mulch. Crates for shelves. The brand earns trust by giving twice.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 07 — THE SYSTEM
+  ════════════════════════════════════════════ -->
+  <section id="part-07" class="part-divider">
+    <div class="pd-top">
+      <span>Part Seven</span>
+      <span>07</span>
+    </div>
+    <div>
+      <div class="pd-number">07</div>
+      <h2 class="pd-title">The system.<br/>How private care becomes public infrastructure.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> The full system stack, the four roles, the stewardship model.</div>
+      <div><strong>Audience</strong> Internal builders, councils, philanthropists, investors, partners.</div>
+      <div><strong>Note</strong> This is the layer that makes Gardener & Son more than a studio. Treat it with care.</div>
+    </div>
+  </section>
+
+  <!-- 07.1 THE STACK -->
+  <section id="s-07-1" class="section green-section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">07.1</span>
+        <span class="dot"></span>The Stack
+      </div>
+      <div class="stack">
+        <h2>Culture · Discovery · Registry · Incentives.</h2>
+        <p class="large-copy">The system is four layers. Each layer feeds the next. Each layer is built so it can run on its own, but together they form the route from a single curious homeowner to verified ecological infrastructure paid for at scale.</p>
+
+        <div class="stack-diagram">
+          <svg viewBox="0 0 1100 540" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L6,3 z" fill="#b49a63"/>
+              </marker>
+            </defs>
+            <!-- Vertical guide -->
+            <line x1="550" y1="40" x2="550" y2="500" stroke="rgba(255,240,220,0.15)" stroke-width="1" stroke-dasharray="3,5"/>
+
+            <!-- Layer 1 -->
+            <rect x="80" y="40" width="940" height="100" fill="none" stroke="rgba(255,240,220,0.4)" stroke-width="1"/>
+            <text x="100" y="74" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b49a63" letter-spacing="2">LAYER · 01</text>
+            <text x="100" y="106" font-family="Fraunces, serif" font-size="32" fill="#fff0dc" font-weight="400" letter-spacing="-1">Culture</text>
+            <text x="100" y="128" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="rgba(255,240,220,0.7)">Studios · Field Guide · Heirloom · Plants of Place · Editorial · Events · Sardines</text>
+            <text x="900" y="106" font-family="Fraunces, serif" font-style="italic" font-size="14" fill="#a8b095" text-anchor="end">— the atmosphere people meet first</text>
+
+            <line x1="550" y1="142" x2="550" y2="172" stroke="#b49a63" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+            <!-- Layer 2 -->
+            <rect x="80" y="180" width="940" height="100" fill="none" stroke="rgba(255,240,220,0.4)" stroke-width="1"/>
+            <text x="100" y="214" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b49a63" letter-spacing="2">LAYER · 02</text>
+            <text x="100" y="246" font-family="Fraunces, serif" font-size="32" fill="#fff0dc" font-weight="400" letter-spacing="-1">Discovery</text>
+            <text x="100" y="268" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="rgba(255,240,220,0.7)">Find Your Ecological Garden · Find Your EVC · Find My Native Plants · Plant pages</text>
+            <text x="900" y="246" font-family="Fraunces, serif" font-style="italic" font-size="14" fill="#a8b095" text-anchor="end">— how people learn their place</text>
+
+            <line x1="550" y1="282" x2="550" y2="312" stroke="#b49a63" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+            <!-- Layer 3 -->
+            <rect x="80" y="320" width="940" height="100" fill="none" stroke="rgba(255,240,220,0.4)" stroke-width="1"/>
+            <text x="100" y="354" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b49a63" letter-spacing="2">LAYER · 03</text>
+            <text x="100" y="386" font-family="Fraunces, serif" font-size="32" fill="#fff0dc" font-weight="400" letter-spacing="-1">Registry</text>
+            <text x="100" y="408" font-family="IBM Plex Sans, sans-serif" font-size="13" fill="rgba(255,240,220,0.7)">Ecological Registry · Garden profiles · Field notes · Scoring · Verified stewardship</text>
+            <text x="900" y="386" font-family="Fraunces, serif" font-style="italic" font-size="14" fill="#a8b095" text-anchor="end">— the public record of care</text>
+
+            <line x1="550" y1="422" x2="550" y2="452" stroke="#b49a63" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+            <!-- Layer 4 -->
+            <rect x="80" y="460" width="940" height="60" fill="#b49a63" opacity="0.15"/>
+            <rect x="80" y="460" width="940" height="60" fill="none" stroke="#b49a63" stroke-width="1"/>
+            <text x="100" y="488" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b49a63" letter-spacing="2">LAYER · 04 — THE PAYOFF</text>
+            <text x="100" y="512" font-family="Fraunces, serif" font-size="22" fill="#fff0dc" font-weight="400" letter-spacing="-0.5">Incentives · Yield · Council pilot · Corporate sponsorship · Philanthropy</text>
+          </svg>
+        </div>
+
+        <p style="margin-top: 36px; max-width: 1000px;">A homeowner enters at <em>Culture</em> — they meet the shop, the studio, the field guide. They graduate into <em>Discovery</em> when they want to know what belongs to their land. They become part of the <em>Registry</em> when they take stewardship seriously. They become eligible for <em>Yield</em> when their stewardship is verified at scale. Most people only travel one or two layers. That is enough. The system holds them at every point.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07.2 THE FOUR ROLES -->
+  <section id="s-07-2" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">07.2</span>
+        <span class="dot"></span>The Four Roles
+      </div>
+      <div class="stack">
+        <h2>Who is in the system, and what they are called.</h2>
+        <p>The system has four distinct roles. Each has a specific name, a specific relationship to the Registry, and a specific way the brand speaks to them. Mixing them up — calling a steward a "customer", or a council a "client" — collapses the architecture. Hold the language steady.</p>
+
+        <div class="pillar-grid">
+          <div class="pillar">
+            <h5>Role · 01</h5>
+            <div>
+              <h3>Steward</h3>
+              <p>The person who cares for a piece of land. They may legally own it. They may rent it. They may be a council. What matters is that they are responsible for it across time.</p>
+            </div>
+            <p><em>Treated as: caretaker of soil, water and species.</em></p>
+          </div>
+          <div class="pillar">
+            <h5>Role · 02</h5>
+            <div>
+              <h3>Studio</h3>
+              <p>Us. The designers, plant people, builders, registrars, writers, hosts. The studio works on behalf of the steward and on behalf of the land — sometimes the two need separate advocates.</p>
+            </div>
+            <p><em>Treated as: skilled, accountable, place-specific.</em></p>
+          </div>
+          <div class="pillar">
+            <h5>Role · 03</h5>
+            <div>
+              <h3>Sponsor</h3>
+              <p>The party that pays for ecological value at scale — council, corporate sustainability programme, philanthropic foundation, future biodiversity market. Always specific. Never anonymous.</p>
+            </div>
+            <p><em>Treated as: civic partner, not advertiser.</em></p>
+          </div>
+        </div>
+
+        <div class="rule-list" style="margin-top: 50px;">
+          <div class="rule"><div class="num">04</div><div><strong>Civic — the public record.</strong><p>The fourth role is not a person. It is the public record of ecological care: the registry, the field notes, the score, the verified stewardship document. The civic role is what makes the rest legitimate. Without it, this is just a shop with opinions.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07.3 STEWARDSHIP MODEL -->
+  <section id="s-07-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">07.3</span>
+        <span class="dot"></span>Stewardship
+      </div>
+      <div class="stack">
+        <h2>The emotional core of the brand.</h2>
+        <p class="large-copy">You do not own this land. You are the steward of it for as long as you are here. The plants will outlast you. The soil will outlast you. The water moves through your time and on to the next. We help you do this well.</p>
+        <p>The Stewardship model is what allows Gardener & Son to be a registry and not a real-estate company, an incentive layer and not a token scheme, a shop and not a luxury brand. Stewardship is the difference between a garden as an asset and a garden as a responsibility. We do not soften it. We name it on every garden profile, every steward letter, every printed proposal.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">i</div><div><strong>Legacy is the emotional outcome.</strong><p>The reward for stewardship is not a number. It is the knowledge that you have done well by a piece of land that will outlive you, and that your care has been recorded.</p></div></div>
+          <div class="rule"><div class="num">ii</div><div><strong>Permanence is the cultural argument.</strong><p>The Registry exists so that what you do today is still legible in fifty years. That is what makes the work worth doing slowly.</p></div></div>
+          <div class="rule"><div class="num">iii</div><div><strong>Yield is the financial argument.</strong><p>Where stewardship can be paid for, it should be. Yield is how stewardship survives in a world built for development.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIG QUOTE -->
+  <section class="quote-section green-section">
+    <div class="quote">A garden is the smallest unit of ecological repair. <em>The most overlooked. The most repeatable.</em></div>
+    <div class="caption">From the manifesto · 01.1</div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 08 — BEHAVIOUR
+  ════════════════════════════════════════════ -->
+  <section id="part-08" class="part-divider">
+    <div class="pd-top">
+      <span>Part Eight</span>
+      <span>08</span>
+    </div>
+    <div>
+      <div class="pd-number">08</div>
+      <h2 class="pd-title">Behaviour.<br/>How the brand acts.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Conduct, editorial practice, partnerships, civic engagement.</div>
+      <div><strong>Audience</strong> Anyone making a decision in the brand's name — what to publish, who to partner with, what to refuse.</div>
+      <div><strong>Test</strong> Could a steward read what we just did and trust us more, not less?</div>
+    </div>
+  </section>
+
+  <!-- 08.1 CONDUCT -->
+  <section id="s-08-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">08.1</span>
+        <span class="dot"></span>Conduct
+      </div>
+      <div class="stack">
+        <h2>How we carry ourselves.</h2>
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>Begin with place.</strong><p>The brand must never feel like it has dropped a style onto a site. Every project, post and proposal should show evidence that the land, climate, hydrology and local ecology have been read.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>Keep the human scale.</strong><p>Even when discussing systems, incentives or data, return to ordinary life: a child in a garden, a bird at water, a shady seat, a plant flowering again.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>Do not over-explain the magic.</strong><p>The brand can be intelligent without becoming academic. Let images, field notes, objects and quiet details carry part of the meaning.</p></div></div>
+          <div class="rule"><div class="num">04</div><div><strong>Make ecological value legible.</strong><p>Where possible, translate beauty into function: shade, habitat, soil cover, water logic, biodiversity structure, connectivity, stewardship over time.</p></div></div>
+          <div class="rule"><div class="num">05</div><div><strong>Let objects belong to the system.</strong><p>Retail is not separate from the ecological brand. Objects are how people touch the philosophy before they commission a garden or join the registry.</p></div></div>
+          <div class="rule"><div class="num">06</div><div><strong>Refuse work that hollows the brand.</strong><p>Some commissions, partnerships and platforms cost the brand more than they pay. The discipline to refuse them is what keeps the work credible. Always check against the principles.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08.2 EDITORIAL -->
+  <section id="s-08-2" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">08.2</span>
+        <span class="dot"></span>Editorial
+      </div>
+      <div class="stack">
+        <h2>Publishing as part of the practice.</h2>
+        <p>The brand publishes. Substack essays, garden case studies, field-guide entries, plant profiles, council briefings, steward letters. Publishing is how the worldview travels. It is not marketing. It is the slow public record of the thinking behind the work.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">01</div><div><strong>One subject, fully treated.</strong><p>Each piece holds one subject — a plant, a garden, a question, a decision. Pieces are long enough to do the subject justice and short enough to be read in one sitting.</p></div></div>
+          <div class="rule"><div class="num">02</div><div><strong>Originate, do not aggregate.</strong><p>The brand publishes its own work, its own gardens, its own observations. We do not repackage others' ideas. We cite them generously when we draw on them.</p></div></div>
+          <div class="rule"><div class="num">03</div><div><strong>Slow cadence.</strong><p>Substack: roughly fortnightly. Garden case studies: per project. Field-guide entries: with the seasons. We do not chase a daily algorithm.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08.3 PARTNERSHIPS -->
+  <section id="s-08-3" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">08.3</span>
+        <span class="dot"></span>Partnerships
+      </div>
+      <div class="stack">
+        <h2>Who we work with, and how.</h2>
+        <p>The brand attracts attention from real-estate developers, lifestyle media, eco-credit speculators, fashion partnerships and corporate ESG teams. We are open to partnership. We are not open to capture. The test is whether a partnership strengthens the worldview or dilutes it.</p>
+        <div class="rule-list">
+          <div class="rule"><div class="num">a</div><div><strong>Councils, first.</strong><p>Local government is the most natural partner. Their interests in canopy, biodiversity, water and resilience map directly to the Registry and Yield. We treat councils as the spine of the system.</p></div></div>
+          <div class="rule"><div class="num">b</div><div><strong>Foundations, slowly.</strong><p>Philanthropic partners are welcome where the cause is named and specific. We do not accept money against vague ESG aims.</p></div></div>
+          <div class="rule"><div class="num">c</div><div><strong>Corporate, carefully.</strong><p>Corporate sponsorship is welcome only where the corporate's actual practice aligns. We do not whitewash. We do not lend the brand to claims we cannot stand behind.</p></div></div>
+          <div class="rule"><div class="num">d</div><div><strong>Indigenous partnerships always.</strong><p>The plants we work with belong to Country. We do not name an EVC without naming the Traditional Owners. We work in genuine partnership where invited and pay properly for knowledge shared.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08.4 CIVIC -->
+  <section id="s-08-4" class="section green-section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">08.4</span>
+        <span class="dot"></span>Civic
+      </div>
+      <div class="stack">
+        <h2>Show up locally before behaving globally.</h2>
+        <p class="large-copy">The brand belongs to its street before it belongs to the internet.</p>
+        <p>Sitting on the traders association. Talking to the council planner about a tree replacement. Walking the catchment with a steward. Hosting a meeting for the neighbourhood. Letting school groups visit the studio. These are not extras. They are the brand. Without the local civic layer, the larger system has no ground to stand on.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PART 09 — CLOSING
+  ════════════════════════════════════════════ -->
+  <section id="part-09" class="part-divider">
+    <div class="pd-top">
+      <span>Part Nine</span>
+      <span>09</span>
+    </div>
+    <div>
+      <div class="pd-number">09</div>
+      <h2 class="pd-title">Closing.<br/>A living book.</h2>
+    </div>
+    <div class="pd-meta">
+      <div><strong>Contains</strong> Living book note, glossary, colophon.</div>
+      <div><strong>Audience</strong> Everyone who has read this far. Thank you.</div>
+      <div><strong>Next edition</strong> Reviewed seasonally. Major revisions annually.</div>
+    </div>
+  </section>
+
+  <!-- 09.1 LIVING BOOK -->
+  <section id="s-09-1" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">09.1</span>
+        <span class="dot"></span>Living Book
+      </div>
+      <div class="stack">
+        <h2>This book grows the way the gardens do.</h2>
+        <p>This is a living document. Sections are revised by season. The principles are reviewed once a year. The directory of sub-brands is updated as platforms ship and others retire. Anyone working in or alongside the studio is welcome to propose changes — through the studio, in writing, with a paragraph and a reason. The book is held by Tyson and Natasha as stewards. Major edits are proposed openly and adopted slowly.</p>
+        <p>Brand books that pretend to be finished tend to age badly. This one is built to age well, because it is allowed to keep changing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09.2 GLOSSARY -->
+  <section id="glossary" class="section">
+    <div class="two-col">
+      <div class="chapter-label">
+        <span class="num">09.2</span>
+        <span class="dot"></span>Glossary
+      </div>
+      <div class="stack">
+        <h2>Terms used throughout this book.</h2>
+        <p>A short reference for vocabulary that appears repeatedly. Every entry has a working definition rather than a strict one — the definitions evolve with the practice.</p>
+
+        <div class="glossary">
+          <div class="glossary-item">
+            <div class="term">Steward</div>
+            <div class="pron">noun · stew-erd</div>
+            <div class="def">The person responsible for the care of a piece of land across time. Replaces "homeowner" or "client" in nearly all brand contexts.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">EVC</div>
+            <div class="pron">noun · ee-vee-see</div>
+            <div class="def">Ecological Vegetation Class. The Victorian government's classification of indigenous plant communities by place. The unit beneath every Gardener & Son plant list.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Indigenous plants of place</div>
+            <div class="pron">noun phrase</div>
+            <div class="def">Plants that belong specifically to the ecological vegetation class of a given site. Preferred to the broader and looser term "native plants."</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Yield</div>
+            <div class="pron">noun · sub-brand</div>
+            <div class="def">The economic layer that pays stewards for verified ecological value. Sourced from councils, corporate sustainability programmes, philanthropic foundations and (later) biodiversity markets.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Registry</div>
+            <div class="pron">noun · sub-brand</div>
+            <div class="def">The Ecological Registry. The public record of ecological gardens — profiles, baselines, field notes, scoring and verified stewardship. The civic spine of the system.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Field guide</div>
+            <div class="pron">noun</div>
+            <div class="def">Both a specific publication (the Gardener & Son living book of practice) and an aesthetic reference (the source code of the visual world).</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Yield score</div>
+            <div class="pron">noun</div>
+            <div class="def">A 0–100 score on each garden profile, summarising ecological function across canopy, soil, water, habitat, biodiversity and stewardship trajectory.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Trajectory</div>
+            <div class="pron">noun</div>
+            <div class="def">The direction of a garden's ecological condition over time, expressed alongside its current score. A 71↑ garden matters more than an 82↓ one.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Heirloom</div>
+            <div class="pron">noun · imprint</div>
+            <div class="def">The vintage and curated objects imprint of Gardener & Son. Tagline: "Things worth keeping." Atmospheric front of the brand.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Plants of Place</div>
+            <div class="pron">noun · imprint</div>
+            <div class="def">The indigenous micro-nursery imprint of Gardener & Son. Stock is restricted to plants of the studio's catchment EVCs.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Discovery</div>
+            <div class="pron">noun · system layer</div>
+            <div class="def">The second layer of the system stack. Tools that help a steward learn what belongs to their land: fmeg, fmevc, fmnp, plant pages.</div>
+          </div>
+          <div class="glossary-item">
+            <div class="term">Civic</div>
+            <div class="pron">adjective · system layer</div>
+            <div class="def">The fourth role. The public record of ecological care. What makes the rest of the brand legitimate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09.3 COLOPHON / CLOSING -->
+  <section id="colophon" class="closing green-section">
+    <div>
+      <div class="eyebrow">A closing thought</div>
+      <div class="quote">Gardener & Son is a studio for the living world — <em>designing gardens, gathering objects, telling stories, and building the systems that let ecological care scale.</em></div>
+    </div>
+    <div class="colophon">
+      <div>
+        <strong>The studio</strong>
+        <p>Gardener & Son · 2 Churchill Street, Mont Albert · 140 Auburn Road, Auburn · Melbourne · Founded by Tyson & Natasha</p>
+      </div>
+      <div>
+        <strong>This edition</strong>
+        <p>Brand Book · Living Edition · Volume One — Worldview & System · Revised seasonally · Held by the studio</p>
+      </div>
+      <div>
+        <strong>Type</strong>
+        <p>Hero: Abril Fatface (display didone, statement moments) · Display: Fraunces (variable, soft, characterful) · Body: IBM Plex Sans · Civic: IBM Plex Mono · Designed for uncoated paper and quiet screens</p>
+      </div>
+      <div>
+        <strong>Note</strong>
+        <p>This document is a field guide, not a rulebook. Read it slowly. Annotate it. Argue with it. Then go and read the garden.</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
