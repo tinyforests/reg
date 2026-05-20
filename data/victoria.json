@@ -1,0 +1,190 @@
+{
+  "garden_id": "ER-VIC-WHI-VIC-001",
+  "garden_name": "Victoria Crescent",
+  "garden_type": "Ecological Home Garden",
+  "typology": "Heathy Edge Habitat Garden",
+  "registry_role": "Cluster Seed",
+  "trajectory": "Emerging",
+  "suburb": "Mont Albert",
+  "state": "VIC",
+  "council": "Whitehorse City Council",
+  "ward": "Elgar",
+  "lga": "Whitehorse",
+  "assessment_date": "May 2026",
+  "baseline_date": "May 2026",
+  "stewards": "Sara and Fede",
+  "designer": "Gardener & Son",
+  "area_sqm": 0,
+  "target_score": 75,
+  "description": "Set amongst Ellis Stones-inspired rockwork in Mont Albert, this emerging ecological garden is a small, deeply layered habitat system responding to stone, light and the fragmented ecologies of suburbia. Indigenous grassy-woodland structure is blended with heathy-edge species and select southern-hemisphere cultivars.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 26,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 26,
+    "indigenous_dominant": true,
+    "structural_layers_current": 5,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Low",
+    "species_list": [
+      "Eucalyptus latens Moon Lagoon",
+      "Acacia floribunda",
+      "Agonis flexuosa Burgundy",
+      "Correa alba Coastal Pink",
+      "Callistemon Injune",
+      "Grevillea Pink Midget",
+      "Olearia lirata",
+      "Spyridium parvifolium",
+      "Hakea ulicina",
+      "Leptospermum continentale",
+      "Philotheca Winter Rouge",
+      "Ozothamnus ferrugineus",
+      "Leptospermum Erica Zora's Annie",
+      "Leucadendron Red Devil",
+      "Erica x darleyensis Annie",
+      "Poa labillardierei",
+      "Themeda triandra True Blue",
+      "Dichelachne crinita",
+      "Austrostipa elegantissima",
+      "Wahlenbergia",
+      "Brachyscome multifida",
+      "Linum marginale",
+      "Stylidium graminifolium",
+      "Arthropodium strictum",
+      "Scutellaria humilis",
+      "Ammobium alatum",
+      "Scaevola Mauve Clusters",
+      "Leptorhynchos squamatus",
+      "Hardenbergia violacea",
+      "Kennedia prostrata",
+      "Platylobium obtusangulum",
+      "Desmodium gunnii",
+      "Indigofera australis",
+      "Billardiera scandens",
+      "Goodenia ovata prostrate"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 1,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_type": "Arborist mulch"
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Ecological planting through Ellis Stones-inspired basalt rockwork; layered indigenous grassy-woodland structure with heathy-edge shrubs and scrambling legumes settled into stone edges and fissures",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "cluster_name": "Whitehorse",
+    "cluster_area_ha": 0,
+    "effective_ecological_area_ha": 0,
+    "cluster": {
+      "name": "Whitehorse",
+      "gardens": 4,
+      "area_ha": 0.074,
+      "status": "Forming"
+    }
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Garden installed",
+      "date": "May 2026",
+      "complete": true
+    },
+    {
+      "title": "Ecological baseline",
+      "date": "May 2026",
+      "complete": true
+    },
+    {
+      "title": "First fauna sighting",
+      "date": "2026",
+      "complete": false
+    },
+    {
+      "title": "Field notes published",
+      "date": "2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Garden installed -- layered ecological planting through Ellis Stones rockwork",
+      "date": "May 2026",
+      "type": "Installation",
+      "category": "installation",
+      "notes": "68 plants installed across 35 species, structured into five layers: canopy, shrub, grassland and matrix, groundcover, and climbers. Indigenous grassy-woodland species form the backbone, threaded through basalt rockwork inspired by Ellis Stones. Garden establishing in Mont Albert."
+    }
+  ],
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 19
+  },
+  "upgrade_potential": 58,
+  "points_available": 58,
+  "yield": {
+    "eligible": true,
+    "status": "Pending activation",
+    "estimated_annual": 0,
+    "potential_annual": 250,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Install habitat logs",
+        "annual_yield_increase": 25
+      },
+      {
+        "action": "Add a small water feature",
+        "annual_yield_increase": 35
+      },
+      {
+        "action": "Install moisture basin",
+        "annual_yield_increase": 20
+      },
+      {
+        "action": "Document fauna sightings",
+        "annual_yield_increase": 20
+      },
+      {
+        "action": "Achieve corridor node status",
+        "annual_yield_increase": 60
+      }
+    ]
+  }
+}
