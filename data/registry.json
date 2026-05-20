@@ -1,15 +1,15 @@
 {
   "registry_metadata": {
     "version": "1.0",
-    "last_updated": "Mar 2026",
-    "total_gardens": 11,
+    "last_updated": "May 2026",
+    "total_gardens": 12,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
   },
   "statistics": {
     "average_score": 46,
-    "total_badges_awarded": 42
+    "total_badges_awarded": 46
   },
   "gardens": [
     {
@@ -440,13 +440,54 @@
         "area_ha": 0.074,
         "status": "Forming"
       }
+    },
+    {
+      "garden_id": "ER-VIC-WHI-VIC-001",
+      "garden_name": "Victoria Crescent",
+      "typology": "Heathy Edge Habitat Garden",
+      "type": "Ecological Home Garden",
+      "suburb": "Mont Albert",
+      "state": "VIC",
+      "council": "Whitehorse City Council",
+      "ward": "Elgar",
+      "lga": "Whitehorse",
+      "score": 42,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 19
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "May 2026",
+      "badge_count": 4,
+      "badges": [
+        "gs_verified",
+        "indigenous_dominant",
+        "species_rich_20",
+        "five_layers"
+      ],
+      "profile_url": "/gardens/victoria16/index.html",
+      "data_file": "data/victoria.json",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Emerging",
+      "points_available": 58,
+      "cluster": {
+        "name": "Whitehorse",
+        "gardens": 4,
+        "area_ha": 0.074,
+        "status": "Forming"
+      }
     }
   ],
   "leaderboard": {
     "top_garden": "Arundel",
     "top_score": 73,
     "most_badges": "Arundel",
-    "highest_upgrade_potential": "Nicholson",
+    "highest_upgrade_potential": "Parring Road",
     "rankings": [
       {
         "garden": "Arundel",
@@ -457,6 +498,14 @@
         "score": 54
       },
       {
+        "garden": "Rupert",
+        "score": 52
+      },
+      {
+        "garden": "York Street",
+        "score": 52
+      },
+      {
         "garden": "Parring",
         "score": 50
       },
@@ -465,30 +514,24 @@
         "score": 50
       },
       {
-        "garden": "Evelina",
-        "score": 45
-      },
-      {
-        "garden": "Nicholson",
-        "score": 29
+        "garden": "Windella",
+        "score": 49
       }
     ]
   },
   "network": {
-    "total_area_ha": 1.187,
+    "total_gardens": 12,
     "active_clusters": 6,
-    "gardens_in_establishment": 5,
-    "total_gardens": 7,
-    "avg_score": 50,
-    "total_species": 143,
-    "total_badges": 30,
+    "gardens_in_establishment": 7,
+    "avg_score": 46,
+    "total_badges": 46,
     "total_estimated_yield_aud": 1150,
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
     "yield_status": "Pre-activation -- sponsor model pending",
     "councils": {
       "Boroondara": 6,
       "Stonnington": 1,
-      "Whitehorse": 3,
+      "Whitehorse": 4,
       "Darebin": 1
     },
     "total_councils": 4
