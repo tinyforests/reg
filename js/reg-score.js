@@ -190,12 +190,11 @@ function ratingFromScore(s) {
 
 function nextLevelFromScore(score) {
   var levels = [
-    { min: 91, name: "Urban Biodiversity Node",     benefits: "Maximum ecological recognition and network leadership status." },
-    { min: 81, name: "High Habitat Garden",          benefits: "Advanced habitat verification and corridor-node recognition." },
-    { min: 61, name: "Registered Ecological Garden", benefits: "Full registry benefits and ecological infrastructure status." },
-    { min: 41, name: "Ecological Garden",            benefits: "Recognised ecological function and habitat contribution." },
     { min: 21, name: "Habitat Garden",               benefits: "Basic habitat recognition and scoring system access." },
-    { min: 0,  name: "Basic Garden",                 benefits: "Entry level - opportunity for ecological development." }
+    { min: 41, name: "Ecological Garden",            benefits: "Recognised ecological function and habitat contribution." },
+    { min: 61, name: "Registered Ecological Garden", benefits: "Full registry benefits and ecological infrastructure status." },
+    { min: 81, name: "High Habitat Garden",          benefits: "Advanced habitat verification and corridor-node recognition." },
+    { min: 91, name: "Urban Biodiversity Node",      benefits: "Maximum ecological recognition and network leadership status." }
   ];
   for (var i = 0; i < levels.length; i++) {
     if (score < levels[i].min) {
