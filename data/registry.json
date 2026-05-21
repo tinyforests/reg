@@ -8,8 +8,8 @@
     "schema_version": "2.0"
   },
   "statistics": {
-    "average_score": 46,
-    "total_badges_awarded": 46
+    "average_score": 49,
+    "total_badges_awarded": 47
   },
   "gardens": [
     {
@@ -283,32 +283,33 @@
     },
     {
       "garden_id": "ER-VIC-BAL-PRD-001",
-      "garden_name": "Parring Road",
+      "garden_name": "Parring Stepping Stone",
       "typology": "Connected Habitat Landscape",
       "type": "Connected Ecological System",
       "suburb": "Balwyn",
       "state": "VIC",
-      "score": 11,
+      "score": 42,
       "rating": {
-        "current": "Basic Garden",
-        "next": "Habitat Garden",
-        "points_to_next": 10
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 19
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
-      "status": "Design Proposal",
+      "status": "Active / Establishing",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
-      "last_verified": "Apr 2026",
-      "badge_count": 1,
+      "last_verified": "May 2026",
+      "badge_count": 2,
       "badges": [
-        "gs_verified"
+        "gs_verified",
+        "indigenous_dominant"
       ],
       "profile_url": "/gardens/parringroad17/index.html",
       "data_file": "data/parringroad.json",
       "registry_role": "Connector",
       "trajectory": "Emerging",
-      "points_available": 69,
+      "points_available": 58,
       "cluster": {
         "name": "Balwyn",
         "gardens": 2,
@@ -487,7 +488,7 @@
     "top_garden": "Arundel",
     "top_score": 73,
     "most_badges": "Arundel",
-    "highest_upgrade_potential": "Parring Road",
+    "highest_upgrade_potential": "Parring Stepping Stone",
     "rankings": [
       {
         "garden": "Arundel",
@@ -523,8 +524,8 @@
     "total_gardens": 12,
     "active_clusters": 6,
     "gardens_in_establishment": 7,
-    "avg_score": 46,
-    "total_badges": 46,
+    "avg_score": 49,
+    "total_badges": 47,
     "total_estimated_yield_aud": 1150,
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
     "yield_status": "Pre-activation -- sponsor model pending",

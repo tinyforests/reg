@@ -20,6 +20,25 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-05-21 — Parring Road (4/17) promoted from design proposal to installed; renamed Parring Stepping Stone
+
+**Decision:** `data/parringroad.json` updated from design-proposal placeholder to an installed-garden record for the front bed at 4/17 Parring Road, Balwyn. Garden renamed "Parring Stepping Stone" (`garden_name` only; `garden_id` ER-VIC-BAL-PRD-001 and all file paths unchanged). Score advances from 11 (design-proposal stub) to 42. Rear garden installation remains pending and is not scored.
+
+**Reason:** Front bed installation completed May 2026. 11 species planted, 9 Victorian indigenous (81.8%), establishing groundcover, grass and shrub layers. Habitat rocks and thick mulch applied. The original design-proposal record had all-zero biodiversity, soil and habitat values; those are now replaced with assessed values.
+
+**Key scoring decisions:**
+- `water_function_score: 3` — thick mulch blend in a shallow exposed front bed is a genuine moisture-retention intervention, not cosmetic. Scored at 3/5 rather than 2/5.
+- `indigenous_dominant: true` — 9 of 11 species are Victorian indigenous (81.8% > 70% threshold). *Brachyscome multifida* 'Pink Form' counted on base-species principle, consistent with how cultivars are treated elsewhere in the registry (e.g. *Themeda triandra* 'True Blue'). *Casuarina glauca* prostrate excluded (NSW/QLD coastal, not Victorian indigenous).
+- Adjacent registered garden distance set to 60m (3/11 Parring Road, ER-VIC-BAL-001) — same street, a few doors apart. The Maranoa Gardens park distance (150m) is separate.
+
+**Files affected:**
+- `data/parringroad.json` (full update: values, species list, milestones, activity log, rating, yield, `zones[]` and `species_proposed[]` removed)
+- `gardens/parringroad17/index.html` (title updated)
+- `data/registry.json` (score, rating, status, badges, badge_count, points_available, garden_name, statistics)
+- `docs/decisions-log.md` (this entry)
+
+---
+
 ## 2026-05-21 — Wire assess.html to canonical engines; fix estimateBaseline recursion; fix moisture basin recommendation; fix adjacent-garden verification
 
 **Decision:** Four related fixes applied together. (1) `assess.html` now loads its scoring and badge logic from `js/reg-score.js` and `js/badge-engine.js` via `<script src>`, replacing an inline copy that had diverged in three places. (2) `estimateBaseline` in `reg-score.js` was causing infinite recursion; a new `_rawScoreTotal` helper breaks the loop. (3) `buildRecommendations` in `reg-score.js` incorrectly reported +6 for "Install seasonal moisture basin"; the actual score impact is +2. (4) `getAdjacentGardens()` in `assess.html` was hardcoding `verified: true` for every adjacent garden regardless of whether the ID exists in `registry.json`; it now checks `_registryIds` (populated when the garden selector loads) and reflects actual registry membership.
