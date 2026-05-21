@@ -92,13 +92,13 @@
     "park_distance_m": 45,
     "adjacent_registered_gardens": [
       {
-        "id": "ER-VIC-SH-MH-003",
-        "lat": -37.8251,
-        "lng": 145.0876,
-        "distance_m": 140,
+        "id": "ER-VIC-SH-MID-001",
+        "name": "Middlesex",
+        "distance_m": 350,
         "direction": "south",
-        "verified": true,
-        "name": "Mont Hollis"
+        "lat": -37.8317,
+        "lng": 145.0888,
+        "verified": true
       }
     ],
     "corridor_node_confirmed": false,
