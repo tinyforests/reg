@@ -70,18 +70,24 @@
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 150,
+    "park_lat": -37.8103,
+    "park_lng": 145.0905,
     "adjacent_registered_gardens": [
       {
         "id": "ER-VIC-BAL-001",
         "name": "Parring",
         "distance_m": 60,
-        "verified": true
+        "verified": true,
+        "lat": -37.8123,
+        "lng": 145.0908
       }
     ],
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Balwyn",
+    "lat": -37.8120,
+    "lng": 145.0908,
     "cluster": {
       "name": "Balwyn",
       "gardens": 2,
