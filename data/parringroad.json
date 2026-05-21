@@ -70,12 +70,14 @@
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 150,
+    "park_lat": -37.8103,
+    "park_lng": 145.0905,
     "adjacent_registered_gardens": [
       {
         "id": "ER-VIC-BAL-001",
         "name": "Parring",
         "distance_m": 60,
-        "verified": true
+        "verified": true,
       }
     ],
     "corridor_node_confirmed": false,
