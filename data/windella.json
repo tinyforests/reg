@@ -136,7 +136,9 @@
       "gardens": 6,
       "area_ha": 0.68,
       "status": "Forming"
-    }
+    },
+    "lat": -37.7964,
+    "lng": 145.0503
   },
   "evidence": {
     "has_photos": true,

@@ -104,7 +104,9 @@
       "gardens": 1,
       "area_ha": 0.06,
       "status": "Emerging"
-    }
+    },
+    "lat": -37.8426,
+    "lng": 144.9871
   },
   "evidence": {
     "has_photos": true,

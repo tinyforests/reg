@@ -95,7 +95,9 @@
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0.018,
-    "cluster_name": "Northcote"
+    "cluster_name": "Northcote",
+    "lat": -37.7728,
+    "lng": 145.0009
   },
   "evidence": {
     "has_photos": true,
