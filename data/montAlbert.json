@@ -113,8 +113,8 @@
     "cluster_name": "Canterbury",
     "cluster": {
       "name": "Canterbury",
-      "gardens": 1,
-      "area_ha": 0.02,
+      "gardens": 2,
+      "area_ha": 0.04,
       "status": "Emerging"
     },
   },
