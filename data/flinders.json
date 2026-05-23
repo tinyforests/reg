@@ -1,0 +1,196 @@
+{
+  "garden_id": "ER-VIC-CAN-FLI-001",
+  "garden_name": "Flinders",
+  "garden_type": "Wild Mediterranean Garden",
+  "typology": "Wild Mediterranean Garden",
+  "registry_role": "Cluster Seed",
+  "trajectory": "Emerging",
+  "suburb": "Canterbury",
+  "state": "VIC",
+  "assessment_date": "Sep 2025",
+  "baseline_date": "Sep 2025",
+  "stewards": "Melinda and Seamus",
+  "designer": "Gardener & Son",
+  "area_sqm": 225,
+  "description": "The Wild Mediterranean Garden at 1 Flinders Avenue is a purpose-driven, biophilic and naturalistic garden adapted to the filtered light and microclimate of this site — particularly the shifting dappled shade beneath a mature deciduous Chinese Elm. A layered palette combining Mediterranean structure with dryland meadow softness and local ecological function. Plants selected for resilience, visual rhythm, seasonal interest, and support for pollinators and beneficial insects. New soil, mulch and shaped topography build ecological function from the ground up.",
+  "evc": {
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "GP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 6,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 15,
+    "indigenous_dominant": false,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Unknown",
+    "species_list": [
+      "Achillea millefolium Credo",
+      "Ajuga reptans",
+      "Allium christophii",
+      "Bergenia cordifolia",
+      "Brachyscome Mauve Bliss",
+      "Calamagrostis x acutiflora Karl Foerster",
+      "Carex testacea Prairie Fire",
+      "Cistus pulverulentus Sunset",
+      "Cynara scolymus",
+      "Dampiera stenophylla Hazy Days",
+      "Dichondra repens",
+      "Echium candicans",
+      "Echium virescens",
+      "Lavandula angustifolia",
+      "Erigeron karvinskianus",
+      "Eryngium planum",
+      "Euphorbia myrsinites",
+      "Euphorbia characias wulfenii",
+      "Foeniculum vulgare",
+      "Festuca glauca Elijah Blue",
+      "Ficus carica",
+      "Helleborus orientalis",
+      "Hylotelephium Matrona",
+      "Kniphofia Poco Red",
+      "Laurus nobilis",
+      "Leonotis leonurus",
+      "Limonium perezii",
+      "Melissa officinalis",
+      "Microlaena stipoides",
+      "Miscanthus Flamingo",
+      "Nepeta x faassenii Purrsian Blue",
+      "Ornamental Grape",
+      "Papaver rhoeas",
+      "Pennisetum setaceum Rubrum",
+      "Pycnosorus globosus",
+      "Salvia rosmarinus Prostratus",
+      "Salvia Santa Barbara",
+      "Salvia Indigo Spires",
+      "Santolina chamaecyparissus",
+      "Senecio serpens",
+      "Stachys byzantina",
+      "Teucrium fruticans",
+      "Thymus praecox",
+      "Viola hederacea",
+      "Westringia fruticosa Smokey"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 3,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_type": "Organic mulch"
+  },
+  "habitat": {
+    "habitat_nodes": 1,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": [],
+    "planting_method": "Mediterranean ecological planting -- dappled shade adaptation beneath Chinese Elm"
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Local green corridor",
+    "park_distance_m": 30,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.0225,
+    "cluster_area_ha": 0,
+    "cluster_name": "Canterbury",
+    "lat": -37.8217,
+    "lng": 145.0837,
+    "cluster": {
+      "name": "Canterbury",
+      "gardens": 2,
+      "area_ha": 0.04,
+      "status": "Emerging"
+    }
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Installation complete",
+      "date": "Sep 2025",
+      "complete": true
+    },
+    {
+      "title": "Ecological baseline assessment",
+      "date": "Autumn 2026",
+      "complete": false
+    },
+    {
+      "title": "Ecological Garden rating",
+      "date": "2026",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Installation complete -- Wild Mediterranean Garden",
+      "date": "10 Sep 2025",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Installation complete at 1 Flinders Avenue, Canterbury. 45 species planted across groundcover, grass, shrub and small tree layers beneath a mature deciduous Chinese Elm. New soil and mulch introduced throughout. Igneous habitat rocks placed. Topography reshaped to guide water movement across the site. Six Victorian indigenous species in palette: Brachyscome Mauve Bliss, Dichondra repens, Microlaena stipoides, Pycnosorus globosus, Viola hederacea, Westringia fruticosa Smokey."
+    }
+  ],
+  "rating": {
+    "current": "Habitat Garden",
+    "next": "Ecological Garden",
+    "points_to_next": 2
+  },
+  "upgrade_potential": 61,
+  "points_available": 61,
+  "notes": "Wild Mediterranean Garden. 45 species, 6 Victorian indigenous. Installed September 2025. Note: Foeniculum vulgare (Fennel) is a declared environmental weed in Victoria -- monitor and manage. Two points from Ecological Garden rating.",
+  "yield": {
+    "eligible": false,
+    "status": "Not yet eligible -- score below threshold (39/41)",
+    "estimated_annual": 0,
+    "potential_annual": 150,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Add 6 more Victorian indigenous species (reach 12+)",
+        "annual_yield_increase": 20,
+        "notes": "Crosses scoring band and pushes score to 41+"
+      },
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 35
+      },
+      {
+        "action": "Add embedded logs",
+        "annual_yield_increase": 25
+      },
+      {
+        "action": "Achieve corridor node status",
+        "annual_yield_increase": 40
+      }
+    ]
+  },
+  "target_score": 80,
+  "council": "Boroondara City Council",
+  "ward": "Maranoa",
+  "lga": "Boroondara"
+}

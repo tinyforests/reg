@@ -2,14 +2,14 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "May 2026",
-    "total_gardens": 12,
+    "total_gardens": 13,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
   },
   "statistics": {
-    "average_score": 49,
-    "total_badges_awarded": 47
+    "average_score": 48,
+    "total_badges_awarded": 48
   },
   "gardens": [
     {
@@ -482,13 +482,51 @@
         "area_ha": 0.074,
         "status": "Forming"
       }
+    },
+    {
+      "garden_id": "ER-VIC-CAN-FLI-001",
+      "garden_name": "Flinders",
+      "typology": "Wild Mediterranean Garden",
+      "type": "Wild Mediterranean Garden",
+      "suburb": "Canterbury",
+      "state": "VIC",
+      "score": 39,
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 2
+      },
+      "primary_evc": "Plains Grassy Woodland (EVC 55)",
+      "bioregion": "Gippsland Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Sep 2025",
+      "badge_count": 1,
+      "badges": [
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/flinders1/index.html",
+      "data_file": "data/flinders.json",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Emerging",
+      "points_available": 61,
+      "cluster": {
+        "name": "Canterbury",
+        "gardens": 2,
+        "area_ha": 0.04,
+        "status": "Emerging"
+      },
+      "council": "Boroondara City Council",
+      "ward": "Maranoa",
+      "lga": "Boroondara"
     }
   ],
   "leaderboard": {
     "top_garden": "Arundel",
     "top_score": 73,
     "most_badges": "Arundel",
-    "highest_upgrade_potential": "Parring Stepping Stone",
+    "highest_upgrade_potential": "Flinders",
     "rankings": [
       {
         "garden": "Arundel",
@@ -521,11 +559,11 @@
     ]
   },
   "network": {
-    "total_gardens": 12,
+    "total_gardens": 13,
     "active_clusters": 6,
     "gardens_in_establishment": 7,
-    "avg_score": 49,
-    "total_badges": 47,
+    "avg_score": 48,
+    "total_badges": 48,
     "total_estimated_yield_aud": 1150,
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
     "yield_status": "Pre-activation -- sponsor model pending",
