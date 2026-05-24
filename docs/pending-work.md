@@ -55,7 +55,7 @@ Boroondara is over threshold (six gardens) but Whitehorse is the relationship-fi
 
 ### Scoring engine consolidation
 
-JS and Python implementations should produce identical scores for identical inputs. Periodic audit recommended — write a test harness that runs every garden JSON through both implementations and asserts equality.
+Python engine (`scripts/reg_score.py`) and test harness (`scripts/test_parity.py`) written and passing 13/13. Run `python scripts/test_parity.py` before committing any scoring change.
 
 ### Sponsor pipeline outreach
 
