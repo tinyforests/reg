@@ -108,21 +108,27 @@ Per `reg-score.js` (`ratingFromScore`), six tiers:
 
 The scoring engine also returns a `nextLevel` object on every score result — name of the next tier, the gap in points, percent progress to that tier, and a benefits string — for use on profile pages and steward documents.
 
-**Known bug: `nextLevel()` returns the maximum tier above the score, not the immediate next tier.** The function in `reg-score.js` iterates the levels array in descending order (91, 81, 61, 41, 21) and returns the first match, which is always the highest tier above the score. For a score of 52, the actual next tier is Registered Ecological Garden (61, gap 9), but the function returns Urban Biodiversity Node (91, gap 39). Most garden JSONs and `registry.json` entries reflect this buggy output (Rupert's entry is correctly patched and shows the immediate next tier — evidence of inconsistent fix attempts). To fix: reverse the iteration order so the loop returns the first tier strictly above the score. Then regenerate every garden's `rating.next` and `rating.points_to_next` snapshot.
+`nextLevel()` iterates tiers in ascending order and returns the immediate next tier above the score. For a score of 52 it returns Registered Ecological Garden (61, gap 9). Fixed 2026-05-20.
 
 ## Implementation alignment (JS ↔ Python)
 
-The scoring engine exists in JavaScript (`reg-score.js`, client-side, runs in the browser on profile pages). Per earlier project history, a Python implementation also exists for build scripts. **It has not been audited against this doc.** Next time a scoring change is made, run both implementations on the same garden record and assert equality before committing.
+Two implementations exist:
+
+- **JavaScript** — `js/reg-score.js`, client-side, runs in the browser on profile pages and in `assess.html`
+- **Python** — `scripts/reg_score.py`, for build scripts and server-side use
+
+Both produce identical scores for identical inputs. Run `python scripts/test_parity.py` to verify. The test runs all 13 garden JSONs through both engines and asserts identical pillar scores and totals.
 
 When changing scoring:
 
-1. Update the JavaScript implementation.
-2. Update the Python implementation. They must produce identical scores for identical inputs.
-3. Update the **Pillar point allocations** section above to match.
-4. Recalculate every garden's score and rating (and `score_breakdown` if it's stored — see open question in `/docs/data-schema.md`).
-5. Recalculate `registry.json` statistics.
-6. Add a decision-log entry in `/docs/decisions-log.md`.
-7. Commit all changes in one commit.
+1. Update the JavaScript implementation (`js/reg-score.js`).
+2. Update the Python implementation (`scripts/reg_score.py`) to match.
+3. Run `python scripts/test_parity.py` — must be 13/13 before committing.
+4. Update the **Pillar point allocations** section above to match.
+5. Recalculate every garden's score and rating (and `score_breakdown` if it's stored — see open question in `/docs/data-schema.md`).
+6. Recalculate `registry.json` statistics.
+7. Add a decision-log entry in `/docs/decisions-log.md`.
+8. Commit all changes in one commit.
 
 A drift between JS and Python is a critical bug. Surface it before any other work continues.
 
@@ -165,7 +171,7 @@ Badges are returned in three categorised arrays plus a combined `all_badges`:
 | `full_canopy` | `biodiversity.canopy_cover_pct_current >= 30` | percent |
 | `five_layers` | `biodiversity.structural_layers_current >= 5` | count |
 | `habitat_builder` | `habitat.habitat_nodes >= 3` | count |
-| `amphibian_active` | at least 1 verified fauna sighting (see note) | derived |
+| `amphibian_active` | at least 1 verified fauna sighting — badge name "Fauna Active" (renamed 2026-05-25) | derived |
 | `pollinator_rich` | at least 3 verified fauna sightings | derived |
 | `water_wise` | `soil_water.has_rainwater_system && soil_water.has_moisture_basin` | both booleans |
 | `corridor_node` | `connectivity.corridor_node_confirmed === true` | manual flag |
@@ -189,13 +195,9 @@ Recommendation: rename to `site_visit_badge` everywhere. The reason is that `sit
 | `fauna_record` | at least 1 verified fauna sighting |
 | `full_record` | photos + field notes + species list + fauna record all true |
 
-### Known issues to fix
+### Known issues
 
-Two issues in the current badge engine to flag and address:
-
-1. **`amphibian_active` is mis-triggered.** The badge description says "Verified amphibian sighting recorded in the garden" but the trigger is `verifiedFauna.length >= 1` with no check that the fauna is an amphibian. Today this fires on any verified fauna sighting — identical trigger to `fauna_record`. Either the trigger needs a species-type filter, or the badge should be renamed (e.g. `first_fauna`). Log the chosen fix in `/docs/decisions-log.md`.
-
-2. **`corridor_node` relies on a manual boolean.** `connectivity.corridor_node_confirmed` is set by hand. The intent (per project history) is that this requires functional ecological connectivity, not just adjacency. The badge engine cannot enforce that — the discipline lives in how the boolean is set. See the section below.
+1. **`corridor_node` relies on a manual boolean.** `connectivity.corridor_node_confirmed` is set by hand. The intent (per project history) is that this requires functional ecological connectivity, not just adjacency. The badge engine cannot enforce that — the discipline lives in how the boolean is set. See the section below.
 
 ### Corridor Node — earned, not assumed
 

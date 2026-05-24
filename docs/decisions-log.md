@@ -20,6 +20,24 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-05-25 — Python scoring engine and parity test harness added
+
+**Decision:** `scripts/reg_score.py` written as a full Python port of `js/reg-score.js`. `scripts/test_parity.py` is a test harness that runs every garden JSON through both engines and asserts identical pillar scores and totals. `scripts/score_garden.js` is a Node bridge used by the Python harness to invoke the JS engine. All 13 garden JSONs pass (13/13).
+
+**Reason:** `scoring-methodology.md` specified that a Python implementation should exist alongside the JS engine for build scripts and server-side use, and that both must produce identical scores. No Python file existed in the repo. The test harness ensures any future scoring change cannot silently diverge between the two implementations.
+
+**Files affected:**
+- `scripts/reg_score.py` — Python scoring engine
+- `scripts/score_garden.js` — Node bridge for parity testing
+- `scripts/test_parity.py` — parity test harness
+- `docs/scoring-methodology.md` — updated implementation alignment section, removed stale bug notes (nextLevel fixed 2026-05-20, amphibian_active renamed 2026-05-25)
+- `docs/pending-work.md` — scoring consolidation item updated
+- `docs/decisions-log.md` — this entry
+
+**Notes:** `_js_round()` in `reg_score.py` matches JavaScript's `Math.round` (round half toward +infinity) rather than Python's default banker's rounding. For the current integer-input scoring values (soil 0–5, water 0–5), the rounding paths never hit exactly 0.5 so both behave identically — but the explicit implementation is there for correctness if non-integer inputs are ever introduced.
+
+---
+
 ## 2026-05-25 — assess.html schema gaps fixed; badge engine fauna badge renamed
 
 **Decision:** Seven missing identity fields added to `assess.html` (`typology`, `registry_role`, `trajectory`, `council`, `ward`, `lga`, `target_score`). The output JSON now includes engine-computed snapshot fields (`rating`, `upgrade_potential`, `points_available`, `yield`). `fauna_sightings` now produces N entries when fauna count > 1 (was always producing exactly one). `target_score` field replaces hardcoded value 82. In `badge-engine.js`, the `amphibian_active` badge is renamed "Fauna Active" — the trigger fires on any verified fauna sighting, not specifically amphibians, so the name was misleading.
