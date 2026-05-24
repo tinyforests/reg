@@ -5,22 +5,9 @@ Known unfinished items. Move items out of this file as they complete (and into t
 ## High priority
 
 
-### assess.html: schema-gap fields missing from generated JSON
+### Badge engine — `pollinator_rich` badge threshold not reachable from assess.html
 
-Several fields present in all registry entries are not produced by `assess.html`'s `buildRecordFromForm()`: `typology` (only `garden_type` is output), `registry_role`, `trajectory`, `council`, `ward`, `lga`. Snapshotted output fields (`rating`, `upgrade_potential`, `points_available`, `yield`) are also absent from the generated JSON — a garden pasted from `assess.html` into the data directory will be missing these and requires manual calculation or a build-script run before `registry.json` can be updated. Fix: add the identity fields to the form and output; run the engines and append snapshots as part of the assess-and-save flow.
-
-### assess.html: fauna count not reflected in sightings array; target_score hardcoded
-
-`buildRecordFromForm()` creates at most one `fauna_sightings` entry regardless of the count entered in `f_hab_fauna_count`. Fauna scoring counts sighting objects, so this caps fauna scoring at 1 from `assess.html`. Separately, `target_score` is hardcoded to `82` but varies per garden (York: 75). These are minor simplifications but cause silent data drift.
-
-
-### Badge engine bugs to fix
-
-Two issues identified during the badge-engine reconciliation (see `/docs/decisions-log.md` 2026-05-18 entry).
-
-**`amphibian_active` mis-trigger.** Badge description says "Verified amphibian sighting" but the trigger is `verifiedFauna.length >= 1` with no species-type check. Today it fires on any verified fauna, identical to `fauna_record`. Decide: add a species filter (e.g. check `sighting.type === "amphibian"` on the fauna sighting record), rename the badge to reflect what it actually rewards, or drop it. Log the choice.
-
-**Record shape vs garden JSON schema mismatch.** `badge-engine.js` reads a nested record shape (`record.biodiversity.indigenous_species_current` etc.) that does not match the flat garden JSON schema in `/docs/data-schema.md`. Either there's a normaliser to find, or the schema is divergent. Resolve before doing scoring work.
+`pollinator_rich` requires 3+ verified fauna sightings. `assess.html` now correctly generates N fauna sightings when count > 1, so this is reachable from the form. However, the additional sightings are generated as placeholder entries ("Additional sighting 2") rather than real species names. If pollinator richness needs to be accurate, the fauna section of assess.html should be extended to allow entry of multiple named sightings (future improvement).
 
 ### Image migration — base64 → /assets/ or Cloudinary
 

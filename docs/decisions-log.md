@@ -20,6 +20,22 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-05-25 — assess.html schema gaps fixed; badge engine fauna badge renamed
+
+**Decision:** Seven missing identity fields added to `assess.html` (`typology`, `registry_role`, `trajectory`, `council`, `ward`, `lga`, `target_score`). The output JSON now includes engine-computed snapshot fields (`rating`, `upgrade_potential`, `points_available`, `yield`). `fauna_sightings` now produces N entries when fauna count > 1 (was always producing exactly one). `target_score` field replaces hardcoded value 82. In `badge-engine.js`, the `amphibian_active` badge is renamed "Fauna Active" — the trigger fires on any verified fauna sighting, not specifically amphibians, so the name was misleading.
+
+**Reason:** A garden record pasted from `assess.html` was missing fields required by the registry list page and profile pages, requiring manual calculation before a garden could be added to `data/`. The fauna cap at 1 entry silently undercounted fauna diversity and capped fauna scoring. The badge name "Amphibian Active" implied a species filter that did not exist; renaming to "Fauna Active" makes the actual trigger condition explicit. The `amphibian_active` badge ID is preserved to avoid breaking existing badges arrays in garden JSONs.
+
+**Files affected:**
+- `assess.html` — identity fields added to form and `buildRecordFromForm()`; `populateFormFromRecord()` updated; `renderLive()` augments JSON output with computed snapshot; target display made dynamic
+- `js/badge-engine.js` — `amphibian_active` badge name updated to "Fauna Active", description updated
+- `docs/pending-work.md` — schema-gap items and fauna bug marked resolved; badge engine items updated
+- `docs/decisions-log.md` — this entry
+
+**Notes:** `upgrade_potential` and `points_available` are output as `100 - score`. This is an approximation; the precise figure in garden JSONs sometimes differs slightly from this formula (manually set based on available specific upgrades). The assess tool output is a starting point; values should be reviewed before adding to the registry. The record-shape mismatch listed in pending-work for the badge engine was investigated and found to be a documentation error — the badge engine correctly reads the nested `record.biodiversity.*` shape, which matches all garden JSONs.
+
+---
+
 ## 2026-05-21 — Parring Road (4/17) promoted from design proposal to installed; renamed Parring Stepping Stone
 
 **Decision:** `data/parringroad.json` updated from design-proposal placeholder to an installed-garden record for the front bed at 4/17 Parring Road, Balwyn. Garden renamed "Parring Stepping Stone" (`garden_name` only; `garden_id` ER-VIC-BAL-PRD-001 and all file paths unchanged). Score advances from 11 (design-proposal stub) to 42. Rear garden installation remains pending and is not scored.

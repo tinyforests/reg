@@ -49,8 +49,8 @@ var BADGE_DEFINITIONS = {
     category: "Habitat & Function"
   },
   amphibian_active: {
-    name: "Amphibian Active",
-    description: "Verified amphibian sighting recorded in the garden.",
+    name: "Fauna Active",
+    description: "Verified fauna sighting recorded in the garden.",
     type: "score",
     category: "Habitat & Function"
   },

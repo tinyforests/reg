@@ -225,6 +225,55 @@
               <div class="opacity-50 mb-1">Bioregion Code</div>
               <input type="text" id="f_evc_bioregion_code" placeholder="VVP" />
             </div>
+            <div>
+              <div class="opacity-50 mb-1">Typology</div>
+              <input type="text" id="f_typology" placeholder="Ecological Forest Garden" list="typologyList" />
+              <datalist id="typologyList">
+                <option value="Ecological Forest Garden" />
+                <option value="Ecological Cottage Garden" />
+                <option value="Wild Mediterranean Garden" />
+                <option value="Connected Habitat Landscape" />
+                <option value="Ecological Woodland Garden" />
+              </datalist>
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Registry Role</div>
+              <select id="f_registry_role">
+                <option value="">-- Select --</option>
+                <option value="Cluster Seed">Cluster Seed</option>
+                <option value="Connector">Connector</option>
+                <option value="Performer">Performer</option>
+                <option value="Satellite">Satellite</option>
+                <option value="Anchor">Anchor</option>
+              </select>
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Trajectory</div>
+              <select id="f_trajectory">
+                <option value="">-- Select --</option>
+                <option value="Emerging">Emerging</option>
+                <option value="Forming">Forming</option>
+                <option value="Rising">Rising</option>
+                <option value="Stable">Stable</option>
+                <option value="Established">Established</option>
+              </select>
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Target Score</div>
+              <input type="number" id="f_target_score" min="0" max="100" placeholder="82" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Council</div>
+              <input type="text" id="f_council" placeholder="Boroondara City Council" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Ward</div>
+              <input type="text" id="f_ward" placeholder="Gardiner" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">LGA</div>
+              <input type="text" id="f_lga" placeholder="Boroondara" />
+            </div>
             <div class="col-span-2">
               <div class="opacity-50 mb-1">Description</div>
               <textarea id="f_description" rows="3" style="width:100%;background:transparent;border:1px solid #d7ccb9;padding:.5rem;font-size:.75rem;font-family:inherit;color:inherit;resize:vertical" placeholder="Brief description of the garden..."></textarea>
@@ -519,7 +568,7 @@
           </div>
           <div class="flex justify-between text-xs opacity-50">
             <span>Baseline <span id="liveBaseline">--</span></span>
-            <span>Target 82</span>
+            <span>Target <span id="liveTarget">82</span></span>
           </div>
         </div>
 
@@ -569,23 +618,33 @@ function gc(id) { var e = document.getElementById(id); return e ? e.checked || f
 function buildRecordFromForm() {
   var faunaCount = gn('f_hab_fauna_count');
   var faunaSpecies = gv('f_hab_fauna_species');
-  var fauna_sightings = faunaCount > 0
-    ? [{ species: faunaSpecies || 'Unknown', date: 'Recorded', location: 'Field observation', verified: true }]
-    : [];
+  var fauna_sightings = [];
+  if (faunaCount > 0) {
+    fauna_sightings.push({ species: faunaSpecies || 'Unknown', date: 'Recorded', location: 'Field observation', verified: true });
+    for (var fi = 1; fi < faunaCount; fi++) {
+      fauna_sightings.push({ species: 'Additional sighting ' + (fi + 1), date: 'Recorded', location: 'Field observation', verified: true });
+    }
+  }
   var adjacent_registered_gardens = getAdjacentGardens();
   return {
     garden_id:       gv('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
     garden_name:     gv('f_garden_name') || 'New Garden',
     garden_type:     gv('f_garden_type') || 'Ecological Garden',
+    typology:        gv('f_typology')    || gv('f_garden_type') || 'Ecological Garden',
+    registry_role:   gv('f_registry_role'),
+    trajectory:      gv('f_trajectory'),
     suburb:          gv('f_suburb'),
     state:           gv('f_state'),
     assessment_date: gv('f_assessment_date'),
     baseline_date:   gv('f_baseline_date'),
-    target_score:    82,
+    target_score:    gn('f_target_score') || 82,
     stewards:        gv('f_stewards'),
     designer:        'Gardener & Son',
     area_sqm:        gn('f_area_sqm'),
     description:     gv('f_description'),
+    council:         gv('f_council'),
+    ward:            gv('f_ward'),
+    lga:             gv('f_lga'),
     evc: { name: gv('f_evc_name'), code: gv('f_evc_code'), bioregion: gv('f_evc_bioregion'), bioregion_code: gv('f_evc_bioregion_code') },
     biodiversity: {
       indigenous_species_current:  gn('f_bio_species_current'),
@@ -670,8 +729,15 @@ function populateFormFromRecord(r) {
   sv('f_area_sqm',          r.area_sqm);
   sv('f_evc_name',          r.evc && r.evc.name);
   sv('f_evc_code',          r.evc && r.evc.code);
-  sv('f_garden_type',      r.garden_type || '');
-  sv('f_description',      r.description || '');
+  sv('f_garden_type',       r.garden_type || '');
+  sv('f_typology',          r.typology || '');
+  sv('f_registry_role',     r.registry_role || '');
+  sv('f_trajectory',        r.trajectory || '');
+  sv('f_target_score',      r.target_score || '');
+  sv('f_council',           r.council || '');
+  sv('f_ward',              r.ward || '');
+  sv('f_lga',               r.lga || '');
+  sv('f_description',       r.description || '');
   sv('f_assessment_date',   r.assessment_date);
   sv('f_baseline_date',     r.baseline_date);
   var b = r.biodiversity || {};
@@ -805,9 +871,32 @@ function renderLive() {
     }
   }
 
-  /* JSON output */
+  /* JSON output -- augment with engine-computed snapshot fields */
+  var nextLvl = result.nextLevel || {};
+  var outputRecord = JSON.parse(JSON.stringify(record));
+  outputRecord.rating = {
+    current:       result.rating,
+    next:          nextLvl.name || 'Maximum Level Achieved',
+    points_to_next: nextLvl.gap  || 0
+  };
+  outputRecord.upgrade_potential = 100 - result.total;
+  outputRecord.points_available  = 100 - result.total;
+  outputRecord.yield = {
+    eligible:         result.total >= 41,
+    status:           result.total >= 41
+                        ? 'Active'
+                        : 'Not yet eligible -- score below threshold (' + result.total + '/41)',
+    estimated_annual: 0,
+    potential_annual: 0,
+    currency:         'AUD',
+    formula_note:     'Score x area x connectivity x verification. Formula v1.'
+  };
   var jo = document.getElementById('jsonOutput');
-  if (jo) jo.textContent = JSON.stringify(record, null, 2);
+  if (jo) jo.textContent = JSON.stringify(outputRecord, null, 2);
+
+  /* Update target display */
+  var targetEl = document.getElementById('liveTarget');
+  if (targetEl) targetEl.textContent = record.target_score || 82;
 
   updateDeltas();
 }
