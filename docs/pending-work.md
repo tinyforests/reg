@@ -4,15 +4,11 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
-### Google Sheet access — for reporting dashboard
+### Demand nudges — inject Registry prompts into fmeg/fmevc/fmnp search results
 
-The reporting strategy across fmeg (findmyecologicalgarden.com), fmevc (findmyevc.com), and fmnp (findmynativeplants.com.au) is agreed:
+Demand dashboard built (`demand.html`, `data/evc-demand.json`). 382 lookups, Nov 2025–Feb 2026. 61% within 2km of a registered garden.
 
-1. Dashboard pulling from the existing Google Sheet (500+ rows: timestamp, address, lat/lng, EVC code, EVC name, referrals) via Google Sheets API. Lives on ecologicalregistry.org.
-2. Contextual Registry nudges injected into search results across all three sites.
-3. Public data summary page on ecologicalregistry.org.
-
-**Blocked on:** Google Sheet access credentials. Build cannot proceed until access is granted.
+Next phase: contextual nudges injected into search results on the three fmg sites linking a searcher to their nearest registered garden. Requires changes to the fmeg, fmevc, and fmnp repos — not this one.
 
 ### fmnp HTTPS — broken
 
