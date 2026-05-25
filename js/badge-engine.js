@@ -185,10 +185,12 @@ function awardBadges(record) {
   var all_badges = score_badges.concat(verification_badges).concat(evidence_badges);
 
   return {
-    all_badges: all_badges,
-    score_badges: score_badges,
+    all_badges:          all_badges,
+    score_badges:        score_badges,
     verification_badges: verification_badges,
-    evidence_badges: evidence_badges
+    evidence_badges:     evidence_badges,
+    all:                 all_badges,           // alias used by profile pages
+    vb:                  verification_badges   // alias used by profile pages
   };
 }
 
