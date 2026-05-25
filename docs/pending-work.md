@@ -4,29 +4,6 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
-
-### Badge engine — `pollinator_rich` badge threshold not reachable from assess.html
-
-`pollinator_rich` requires 3+ verified fauna sightings. `assess.html` now correctly generates N fauna sightings when count > 1, so this is reachable from the form. However, the additional sightings are generated as placeholder entries ("Additional sighting 2") rather than real species names. If pollinator richness needs to be accurate, the fauna section of assess.html should be extended to allow entry of multiple named sightings (future improvement).
-
-### Image migration — base64 → /assets/ or Cloudinary
-
-Field notes currently contain inline base64 images. The largest notes are 10MB+. This is a soft scaling problem (GitHub Pages 1GB repo limit, slow page loads, bad diffs).
-
-**Queue:**
-
-1. Notes over 5MB first
-2. Notes 2–5MB next
-3. Smaller notes incrementally
-
-**Known notes to prioritise:**
-
-- 15 Jan 2026 — Arundel baseline (~11MB)
-- 7 Oct 2025 — Arundel aerial
-- 28 Nov 2025 — Evelina planting day
-
-See `/docs/field-notes-method.md` for migration approach.
-
 ### Google Sheet access — for reporting dashboard
 
 The reporting strategy across fmeg (findmyecologicalgarden.com), fmevc (findmyevc.com), and fmnp (findmynativeplants.com.au) is agreed:
@@ -53,10 +30,6 @@ Target: Whitehorse first (home council). Triggered when Whitehorse reaches five 
 
 Boroondara is over threshold (six gardens) but Whitehorse is the relationship-first target.
 
-### Scoring engine consolidation
-
-Python engine (`scripts/reg_score.py`) and test harness (`scripts/test_parity.py`) written and passing 13/13. Run `python scripts/test_parity.py` before committing any scoring change.
-
 ### Sponsor pipeline outreach
 
 For the Yield layer to activate, three sponsor categories need engagement:
@@ -68,6 +41,10 @@ For the Yield layer to activate, three sponsor categories need engagement:
 Status: pipeline exists in conceptual form, no active conversations yet.
 
 ## Low priority / longer term
+
+### assess.html — multiple named fauna sightings
+
+`pollinator_rich` requires 3+ verified fauna sightings. The form currently generates N sighting entries from a count field, but entries 2+ are placeholders ("Additional sighting N") rather than real species names. Extend the fauna section to allow entry of multiple named sightings if accurate pollinator richness data is needed.
 
 ### Public registration path
 
