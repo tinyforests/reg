@@ -88,7 +88,7 @@ var BADGE_DEFINITIONS = {
     type: "verification",
     category: "Verification"
   },
-  site_visit: {
+  site_visit_badge: {
     name: "Site Visit",
     description: "On-site assessment completed by a registry assessor.",
     type: "verification",
@@ -174,7 +174,7 @@ function awardBadges(record) {
     verification_badges.push("gs_verified");
   }
   if (e.verification_level === "site_visit") {
-    verification_badges.push("site_visit");
+    verification_badges.push("site_visit_badge");
   }
 
   // Evidence badges
