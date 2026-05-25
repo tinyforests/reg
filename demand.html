@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demand Intelligence — Ecological Registry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: {
+          serif: ['"Abril Fatface"', "serif"],
+          sans:  ['"IBM Plex Sans"', "system-ui", "sans-serif"],
+          mono:  ['"IBM Plex Mono"', "monospace"],
+        }
+      }}
+    };
+  </script>
+  <style>
+    * { -webkit-font-smoothing: antialiased; border-radius: 0 !important; }
+
+    :root {
+      --bg:     #fff0dc;
+      --fg:     #3d4535;
+      --muted:  rgba(61,69,53,.65);
+      --hair:   rgba(61,69,53,.12);
+      --wash:   rgba(61,69,53,.04);
+      --signal: #7a9e5f;
+    }
+    html.dark {
+      --bg:    #3d4535;
+      --fg:    #fff0dc;
+      --muted: rgba(255,240,220,.7);
+      --hair:  rgba(255,240,220,.12);
+      --wash:  rgba(255,240,220,.05);
+    }
+
+    body { background:var(--bg); color:var(--fg); font-family:"IBM Plex Sans",sans-serif; }
+    .muted  { color: var(--muted); }
+    .hair   { border-color: var(--hair); }
+    .wash   { background: var(--wash); }
+    nav { border-bottom: 1px solid var(--hair); background: var(--bg); }
+    .chip { border:1px solid var(--hair); display:inline-block; padding:.3rem .75rem; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; }
+    .chip-signal { background:var(--signal); color:#fff0dc; border-color:var(--signal); }
+    .rule { border-top: 1px solid var(--hair); }
+    .btn-outline { border:1px solid var(--hair); padding:.75rem 1.75rem; font-size:.875rem; display:inline-block; transition:all .2s; }
+    .btn-outline:hover { background:var(--fg); color:var(--bg); }
+    .gs-badge { position:fixed; bottom:24px; right:24px; z-index:50; background:var(--bg); border:1px solid var(--hair); padding:8px 12px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; opacity:.6; color:var(--fg); text-decoration:none; line-height:1.3; transition:opacity .2s; }
+    .gs-badge:hover { opacity:1; }
+
+    /* Stat boxes */
+    .stat-grid { display:grid; grid-template-columns:repeat(2,1fr); }
+    @media(min-width:768px) { .stat-grid { grid-template-columns:repeat(4,1fr); } }
+    .stat-cell { padding:1.5rem 1.75rem; border:1px solid var(--hair); margin:-1px 0 0 -1px; background:var(--bg); }
+    .stat-num  { font-family:"Abril Fatface",serif; font-size:2.25rem; color:var(--signal); line-height:1; }
+    .stat-label { font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:.4rem; }
+
+    /* EVC table */
+    .evc-row { display:flex; align-items:center; gap:1rem; padding:.55rem 0; border-bottom:1px solid var(--hair); }
+    .evc-bar-track { flex:1; background:var(--hair); height:3px; }
+    .evc-bar-fill  { background:var(--signal); height:3px; transition:width .4s; }
+    .evc-count { font-family:"IBM Plex Mono",monospace; font-size:.75rem; color:var(--muted); min-width:2.5rem; text-align:right; }
+
+    /* Monthly chart */
+    .month-bar-wrap { display:flex; align-items:flex-end; gap:2px; height:80px; }
+    .month-bar { flex:1; background:var(--signal); min-height:3px; transition:opacity .2s; }
+    .month-bar:hover { opacity:.75; }
+    .month-label { font-size:.65rem; text-align:center; color:var(--muted); margin-top:.35rem; font-family:"IBM Plex Mono",monospace; }
+
+    /* Map */
+    #demandMap { width:100%; height:460px; background:var(--wash); }
+    .leaflet-div-icon { background:transparent !important; border:none !important; }
+    #demandMap .leaflet-tile-pane { filter: saturate(0.3) brightness(1.05); }
+
+    /* Garden marker */
+    .g-marker { width:10px; height:10px; background:var(--signal); border:2px solid var(--fg); transform:rotate(45deg); }
+
+    /* Loading state */
+    #mapLoading { display:flex; align-items:center; justify-content:center; height:460px; font-size:.8rem; color:var(--muted); letter-spacing:.05em; }
+  </style>
+</head>
+<body>
+
+<a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">Powered by<br/>Gardener & Son</a>
+
+<!-- NAV -->
+<nav class="sticky top-0 z-40 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+    <a href="/" class="text-xs tracking-[.2em] uppercase font-medium">Ecological Registry</a>
+    <div class="flex items-center gap-6 text-sm">
+      <a href="/registry.html" class="muted hover:text-current transition-colors hidden md:block">Browse gardens</a>
+      <a href="/demand.html" class="text-current transition-colors hidden md:block text-xs font-medium" style="color:var(--signal)">Demand</a>
+      <button id="themeToggle" class="text-xs muted hover:text-current transition-colors">Understory</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="border-b" style="border-color:var(--hair)">
+  <div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <span class="chip chip-signal mb-4 inline-block">Demand Intelligence</span>
+        <h1 class="font-serif text-4xl md:text-5xl leading-tight">Where people are<br/>looking for their EVC.</h1>
+        <p class="mt-3 text-sm muted max-w-xl">EVC lookup requests across findmyecologicalgarden.com, findmyevc.com and findmynativeplants.com.au. Each point is a residential address searching for its ecological community.</p>
+      </div>
+      <div class="text-right">
+        <p class="font-mono text-xs muted" id="dataDate">Loading&hellip;</p>
+        <p class="font-mono text-xs muted mt-1">Source: G&amp;S EVC lookup log</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="border-b" style="border-color:var(--hair)">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <div class="stat-num" id="statTotal">—</div>
+        <div class="stat-label">Total lookups</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num" id="statNearby">—</div>
+        <div class="stat-label">Within 2 km of a garden</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num" id="statTopEvc">—</div>
+        <div class="stat-label">Most searched EVC</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num" id="statMonths">—</div>
+        <div class="stat-label">Months of data</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="border-b" style="border-color:var(--hair)">
+  <div id="mapLoading" class="max-w-full">Loading map&hellip;</div>
+  <div id="demandMap" style="display:none"></div>
+  <div class="max-w-7xl mx-auto px-6 py-3 flex flex-wrap items-center gap-6 text-xs muted">
+    <span class="flex items-center gap-2">
+      <span style="display:inline-block;width:12px;height:12px;background:rgba(255,100,0,.6)"></span>
+      EVC lookup density
+    </span>
+    <span class="flex items-center gap-2">
+      <span style="display:inline-block;width:10px;height:10px;background:var(--signal);transform:rotate(45deg)"></span>
+      Registered garden
+    </span>
+  </div>
+</section>
+
+<!-- EVC TABLE + MONTHLY CHART -->
+<section class="border-b" style="border-color:var(--hair)">
+  <div class="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-2 gap-12">
+
+    <!-- EVC breakdown -->
+    <div>
+      <h2 class="text-xs tracking-[.15em] uppercase font-medium mb-6">Top ecological communities searched</h2>
+      <div id="evcTable"></div>
+    </div>
+
+    <!-- Monthly chart -->
+    <div>
+      <h2 class="text-xs tracking-[.15em] uppercase font-medium mb-6">Lookups by month</h2>
+      <div class="month-bar-wrap" id="monthBars"></div>
+      <div class="flex gap-[2px] mt-1" id="monthLabels"></div>
+      <p class="mt-6 text-xs muted leading-relaxed">November 2025 reflects launch and testing activity across the G&amp;S client network. Ongoing organic use continues into 2026.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- NEARBY SIGNAL -->
+<section class="border-b" style="border-color:var(--hair)">
+  <div class="max-w-7xl mx-auto px-6 py-10">
+    <h2 class="text-xs tracking-[.15em] uppercase font-medium mb-6">Registered gardens within demand clusters</h2>
+    <div id="nearbyTable" class="grid md:grid-cols-2 gap-4"></div>
+    <p class="mt-6 text-xs muted max-w-2xl">Each garden below sits within 2 km of at least one EVC lookup. This is the minimum qualifying condition for the Registry's neighbourhood nudge — a message injected into search results linking a searcher to the nearest registered garden.</p>
+  </div>
+</section>
+
+<!-- FOOTNOTE -->
+<footer class="border-t" style="border-color:var(--hair)">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs muted">
+    <span>Ecological Registry &mdash; Gardener &amp; Son &mdash; <span id="footerRange"></span></span>
+    <span>Data refreshed manually. Run <code class="font-mono">scripts/refresh_demand.py</code> to update.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+<script>
+
+/* ---- REGISTERED GARDENS ---- */
+var GARDENS = [
+  { name:'Arundel',               suburb:'Surrey Hills',        lat:-37.8314,   lng:145.0942,  evc:'Grassy Woodland',        profile:'/gardens/arundel08/index.html' },
+  { name:'Dewrang',               suburb:'Blackburn',           lat:-37.8201,   lng:145.15,    evc:'Grassy Woodland',        profile:'/gardens/dewrang1a/index.html' },
+  { name:'Evelina',               suburb:'Mont Albert North',   lat:-37.8033,   lng:145.1107,  evc:'Grassy Woodland',        profile:'/gardens/evelina23/index.html' },
+  { name:'Flinders',              suburb:'Canterbury',          lat:-37.8217,   lng:145.0837,  evc:'Plains Grassy Woodland', profile:'/gardens/flinders1/index.html' },
+  { name:'Middlesex',             suburb:'Surrey Hills',        lat:-37.831705, lng:145.088767,evc:'Grassy Woodland',        profile:'/gardens/middlesex80/index.html' },
+  { name:'Mont Albert',           suburb:'Canterbury',          lat:-37.8172,   lng:145.0696,  evc:'Grassy Woodland',        profile:'/gardens/montAlbert100/index.html' },
+  { name:'Nicholson',             suburb:'South Yarra',         lat:-37.8426,   lng:144.9871,  evc:'Urban Ecological Garden',profile:'/gardens/nicholson10/index.html' },
+  { name:'Parring',               suburb:'Balwyn',              lat:-37.8123,   lng:145.0908,  evc:'Grassy Woodland',        profile:'/gardens/parring11/index.html' },
+  { name:'Parring Stepping Stone',suburb:'Balwyn',              lat:-37.812,    lng:145.0908,  evc:'Grassy Woodland',        profile:'/gardens/parringroad17/index.html' },
+  { name:'Rupert',                suburb:'Northcote',           lat:-37.7728,   lng:145.0009,  evc:'Wet Sclerophyll Forest', profile:'/gardens/rupert14/index.html' },
+  { name:'Victoria Crescent',     suburb:'Mont Albert',         lat:-37.8171,   lng:145.1048,  evc:'Grassy Woodland',        profile:'/gardens/victoria16/index.html' },
+  { name:'Windella',              suburb:'Kew East',            lat:-37.7964,   lng:145.0503,  evc:'Grassy Woodland',        profile:'/gardens/windella40/index.html' },
+  { name:'York Street',           suburb:'Mont Albert',         lat:-37.818,    lng:145.1011,  evc:'Grassy Woodland',        profile:'/gardens/york12/index.html' }
+];
+
+/* ---- HELPERS ---- */
+function haversine(lat1, lng1, lat2, lng2) {
+  var R = 6371000;
+  var dlat = (lat2 - lat1) * Math.PI / 180;
+  var dlng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dlat/2) * Math.sin(dlat/2) +
+          Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+          Math.sin(dlng/2) * Math.sin(dlng/2);
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+
+function nearestGarden(lat, lng) {
+  var best = null, bestDist = Infinity;
+  for (var i = 0; i < GARDENS.length; i++) {
+    var d = haversine(lat, lng, GARDENS[i].lat, GARDENS[i].lng);
+    if (d < bestDist) { bestDist = d; best = GARDENS[i]; }
+  }
+  return { garden: best, dist: Math.round(bestDist) };
+}
+
+/* ---- THEME TOGGLE ---- */
+var themeBtn = document.getElementById('themeToggle');
+if (themeBtn) {
+  themeBtn.addEventListener('click', function() {
+    var dark = document.documentElement.classList.toggle('dark');
+    themeBtn.textContent = dark ? 'Canopy' : 'Understory';
+  });
+}
+
+/* ---- MAIN ---- */
+fetch('/data/evc-demand.json')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var lookups = data.lookups;
+
+    /* Stats */
+    var nearby = lookups.filter(function(r) {
+      return GARDENS.some(function(g) { return haversine(r.lat, r.lng, g.lat, g.lng) <= 2000; });
+    });
+
+    var evcCounts = {};
+    lookups.forEach(function(r) {
+      var name = r.evc_name || ('EVC ' + r.evc_code);
+      evcCounts[name] = (evcCounts[name] || 0) + 1;
+    });
+    var evcSorted = Object.keys(evcCounts).sort(function(a,b) { return evcCounts[b] - evcCounts[a]; });
+    var topEvc = evcSorted[0];
+    var topCount = evcCounts[topEvc];
+
+    var months = {};
+    lookups.forEach(function(r) {
+      var m = r.date.slice(0,7);
+      months[m] = (months[m] || 0) + 1;
+    });
+    var monthKeys = Object.keys(months).sort();
+
+    document.getElementById('statTotal').textContent   = lookups.length;
+    document.getElementById('statNearby').textContent  = nearby.length;
+    document.getElementById('statTopEvc').textContent  = topEvc.replace('Woodland','WL').replace('Grassy ','').replace('Plains ','');
+    document.getElementById('statMonths').textContent  = monthKeys.length;
+    document.getElementById('dataDate').textContent    = 'Data: ' + data.date_from + ' → ' + data.date_to;
+    document.getElementById('footerRange').textContent = data.date_from + ' to ' + data.date_to;
+
+    /* EVC table */
+    var evcHtml = '';
+    var maxCount = evcCounts[evcSorted[0]];
+    evcSorted.slice(0, 12).forEach(function(name, i) {
+      var count = evcCounts[name];
+      var pct   = Math.round(count / maxCount * 100);
+      evcHtml += '<div class="evc-row">' +
+        '<span class="text-xs" style="min-width:1.5rem;color:var(--muted);font-family:\'IBM Plex Mono\',monospace">' + (i+1) + '</span>' +
+        '<span class="text-sm flex-1">' + name + '</span>' +
+        '<div class="evc-bar-track" style="width:80px"><div class="evc-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<span class="evc-count">' + count + '</span>' +
+        '</div>';
+    });
+    document.getElementById('evcTable').innerHTML = evcHtml;
+
+    /* Monthly chart */
+    var maxMonth = Math.max.apply(null, monthKeys.map(function(k) { return months[k]; }));
+    var barsHtml = '', labelsHtml = '';
+    monthKeys.forEach(function(k) {
+      var h = Math.round(months[k] / maxMonth * 76) + 4;
+      var label = k.slice(5) + '/' + k.slice(2,4);
+      barsHtml  += '<div class="month-bar" style="height:' + h + 'px" title="' + k + ': ' + months[k] + ' lookups"></div>';
+      labelsHtml += '<div class="month-label" style="flex:1">' + label + '</div>';
+    });
+    document.getElementById('monthBars').innerHTML   = barsHtml;
+    document.getElementById('monthLabels').innerHTML = labelsHtml;
+
+    /* Nearby table */
+    var gardenLookups = {};
+    GARDENS.forEach(function(g) { gardenLookups[g.name] = []; });
+    lookups.forEach(function(r) {
+      GARDENS.forEach(function(g) {
+        if (haversine(r.lat, r.lng, g.lat, g.lng) <= 2000) {
+          gardenLookups[g.name].push(r);
+        }
+      });
+    });
+    var nearbyGardens = GARDENS
+      .map(function(g) { return { garden: g, count: gardenLookups[g.name].length }; })
+      .filter(function(x) { return x.count > 0; })
+      .sort(function(a,b) { return b.count - a.count; });
+
+    var nearbyHtml = '';
+    nearbyGardens.forEach(function(x) {
+      var topEvcs = {};
+      gardenLookups[x.garden.name].forEach(function(r) {
+        var n = r.evc_name || ('EVC ' + r.evc_code);
+        topEvcs[n] = (topEvcs[n] || 0) + 1;
+      });
+      var topEvcLocal = Object.keys(topEvcs).sort(function(a,b) { return topEvcs[b]-topEvcs[a]; })[0] || '—';
+      nearbyHtml += '<a href="' + x.garden.profile + '" class="block" style="border:1px solid var(--hair);padding:1rem 1.25rem;background:var(--wash);text-decoration:none;color:inherit;transition:border-color .2s" onmouseover="this.style.borderColor=\'var(--signal)\'" onmouseout="this.style.borderColor=\'var(--hair)\'">' +
+        '<div class="flex items-baseline justify-between gap-2">' +
+          '<span class="font-medium text-sm">' + x.garden.name + '</span>' +
+          '<span class="font-mono text-xs muted">' + x.count + ' nearby</span>' +
+        '</div>' +
+        '<div class="text-xs muted mt-1">' + x.garden.suburb + ' &mdash; top search: ' + topEvcLocal + '</div>' +
+        '</a>';
+    });
+    document.getElementById('nearbyTable').innerHTML = nearbyHtml;
+
+    /* Map */
+    document.getElementById('mapLoading').style.display = 'none';
+    document.getElementById('demandMap').style.display  = 'block';
+
+    var map = L.map('demandMap', { zoomControl: true }).setView([-37.82, 145.07], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    /* Heat layer */
+    var heatData = lookups.map(function(r) { return [r.lat, r.lng, 1]; });
+    L.heatLayer(heatData, {
+      radius:  22,
+      blur:    16,
+      maxZoom: 14,
+      gradient: { 0.2:'#ffe066', 0.5:'#ff8c00', 1.0:'#cc2200' }
+    }).addTo(map);
+
+    /* Garden markers */
+    var gardenIcon = L.divIcon({
+      className: '',
+      html: '<div class="g-marker"></div>',
+      iconSize: [14, 14],
+      iconAnchor: [7, 7]
+    });
+
+    GARDENS.forEach(function(g) {
+      var cnt = gardenLookups[g.name].length;
+      var popupHtml = '<div style="font-family:\'IBM Plex Sans\',sans-serif;font-size:12px;min-width:160px">' +
+        '<strong>' + g.name + '</strong><br/>' +
+        '<span style="opacity:.7">' + g.suburb + '</span><br/>' +
+        '<span style="opacity:.7">' + g.evc + '</span><br/>' +
+        (cnt > 0 ? '<span style="color:#7a9e5f;font-weight:500">' + cnt + ' nearby lookup' + (cnt>1?'s':'') + '</span>' : '<span style="opacity:.5">No nearby lookups</span>') +
+        '</div>';
+      L.marker([g.lat, g.lng], { icon: gardenIcon })
+        .addTo(map)
+        .bindPopup(popupHtml);
+    });
+  })
+  .catch(function(err) {
+    document.getElementById('mapLoading').textContent = 'Could not load demand data.';
+    console.error(err);
+  });
+
+</script>
+</body>
+</html>
