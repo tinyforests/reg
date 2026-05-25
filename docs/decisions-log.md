@@ -20,6 +20,22 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-05-25 — site_visit_badge: standardise badge ID; wire profile pages to canonical engines
+
+**Decision:** Two related changes. (1) Site visit badge ID standardised to `site_visit_badge` in `badge-engine.js`. Previously the badge ID was `site_visit`, identical to the `evidence.verification_level` value it triggers on. (2) All 13 garden profile pages now load `js/reg-score.js` and `js/badge-engine.js` via `<script src>` instead of carrying inline engine copies. Backward-compat aliases (`result.level`, `badges.all`, `badges.vb`) added to the canonical engines so profile page render code needed no changes.
+
+**Reason:** (1) Using the same string for a badge ID and a verification level value creates silent bugs — a lookup for `BADGE_DEFINITIONS['site_visit']` as a badge would resolve to the badge object, but `evidence.verification_level === 'site_visit'` is a separate field. The `_badge` suffix removes this ambiguity. No migration of garden JSON files was needed because no garden currently holds the site_visit badge (all current gardens are `gardener_and_son_verified`). (2) Thirteen inline engine copies meant a bug fix to `js/` had no effect on profile pages, and the inline copies contained two known-bad values: the old descending-order `nextLevel` bug and a moisture basin recommendation value of 6 (should be 2). Wiring to canonical engines fixes both automatically.
+
+**Files affected:**
+- `js/badge-engine.js` — BADGE_DEFINITIONS key and push call: `site_visit` → `site_visit_badge`; `.all` and `.vb` aliases added
+- `js/reg-score.js` — `.level` alias added
+- `gardens/*/index.html` (all 13) — inline engines removed, `<script src>` tags added, `BDEFS[]` replaced with `BADGE_DEFINITIONS[].name`
+- `scripts/wire_profiles.py` — transformation script (kept for reference)
+- `docs/scoring-methodology.md` — site_visit inconsistency resolved; stale bug notes removed
+- `docs/decisions-log.md` — this entry
+
+---
+
 ## 2026-05-25 — Python scoring engine and parity test harness added
 
 **Decision:** `scripts/reg_score.py` written as a full Python port of `js/reg-score.js`. `scripts/test_parity.py` is a test harness that runs every garden JSON through both engines and asserts identical pillar scores and totals. `scripts/score_garden.js` is a Node bridge used by the Python harness to invoke the JS engine. All 13 garden JSONs pass (13/13).

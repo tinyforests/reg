@@ -139,7 +139,7 @@ Per `reg-score.js` (`verificationLabelFromLevel`) and `badge-engine.js`, four `e
 | Level | Display label | Score pts | Badge awarded |
 |---|---|---|---|
 | `gardener_and_son_verified` | G&S Verified | +4 | `gs_verified` |
-| `site_visit` | Site Visit | +3 | `site_visit` |
+| `site_visit` | Site Visit | +3 | `site_visit_badge` |
 | `photo_verified` | Photo Verified | +1 | (none) |
 | `self_reported` | Self Reported | 0 | (none) |
 | (anything else / unset) | Unverified | 0 | (none) |
@@ -182,11 +182,7 @@ Badges are returned in three categorised arrays plus a combined `all_badges`:
 | Badge ID | Trigger |
 |---|---|
 | `gs_verified` | `evidence.verification_level === "gardener_and_son_verified"` |
-| `site_visit` *or* `site_visit_badge` | `evidence.verification_level === "site_visit"` — see note below |
-
-**Site Visit badge ID inconsistency.** The standalone `badge-engine.js` uses the ID `site_visit`. The inline badge engine in the York Street profile uses `site_visit_badge`. This is a real bug — pick one and migrate.
-
-Recommendation: rename to `site_visit_badge` everywhere. The reason is that `site_visit` is already used as a `verification_level` value, and reusing the same string for the badge ID and the level it represents is exactly how confusing data bugs start. The badge has a `_badge` suffix that distinguishes it from the level. Log the rename in `/docs/decisions-log.md` when done.
+| `site_visit_badge` | `evidence.verification_level === "site_visit"` |
 
 ### Evidence
 
