@@ -36,11 +36,13 @@ function scoreEcologicalRegistry(record) {
     { label: "Evidence & Verification", score: scores.evidence.score,     max: 15, notes: scores.evidence.notes }
   ];
 
+  var rating = ratingFromScore(total);
   return {
     total:             total,
     scores:            scores,
     categories:        categories,
-    rating:            ratingFromScore(total),
+    rating:            rating,
+    level:             rating,   // alias used by profile pages
     nextLevel:         nextLevelFromScore(total),
     recommendations:   buildRecommendations(record, scores),
     verificationLabel: verificationLabelFromLevel(record.evidence && record.evidence.verification_level),

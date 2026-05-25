@@ -386,224 +386,10 @@
   </div>
 </footer>
 
+<script src="/js/reg-score.js"></script>
+<script src="/js/badge-engine.js"></script>
 <script>
 /* Ecological Registry - Profile Page */
-
-/* ---- SCORING ENGINE ---- */
-function scoreEcologicalRegistry(r) {
-  var bio = scoreBio(r);
-  var sw  = scoreSW(r);
-  var hab = scoreHab(r);
-  var con = scoreCon(r);
-  var ev  = scoreEv(r);
-  var total = bio.s + sw.s + hab.s + con.s + ev.s;
-  return {
-    total: total,
-    level: ratingFromScore(total),
-    verificationLabel: verLabel(r.evidence && r.evidence.verification_level),
-    nextLevel: nextLevel(total),
-    recommendations: recs(r),
-    baselineScore: baseline(r),
-    categories: [
-      { label: 'Biodiversity Structure',  score: bio.s, max: 25, notes: bio.n },
-      { label: 'Soil & Water Function',   score: sw.s,  max: 20, notes: sw.n  },
-      { label: 'Habitat Complexity',      score: hab.s, max: 20, notes: hab.n },
-      { label: 'Connectivity',            score: con.s, max: 20, notes: con.n },
-      { label: 'Evidence & Verification', score: ev.s,  max: 15, notes: ev.n  }
-    ]
-  };
-}
-
-function scoreBio(r) {
-  var b = r.biodiversity || {}; var s = 0; var n = [];
-  var sp = b.indigenous_species_current || 0;
-  if (sp >= 30) { s += 10; n.push('30+ species'); }
-  else if (sp >= 20) { s += 8; n.push('20-29 species'); }
-  else if (sp >= 12) { s += 6; n.push('12-19 species'); }
-  else if (sp >= 6)  { s += 4; n.push('6-11 species'); }
-  else if (sp >= 1)  { s += 2; n.push('1-5 species'); }
-  if (b.indigenous_dominant) { s += 4; n.push('Indigenous dominant'); }
-  var ly = b.structural_layers_current || 0;
-  if (ly >= 5) { s += 6; } else if (ly >= 4) { s += 5; } else if (ly >= 3) { s += 3; } else if (ly >= 2) { s += 1; }
-  if (ly > 0) { n.push(ly + ' layers'); }
-  var ca = b.canopy_cover_pct_current || 0;
-  if (ca >= 50) { s += 5; } else if (ca >= 30) { s += 4; } else if (ca >= 15) { s += 2; } else if (ca >= 5) { s += 1; }
-  if (ca > 0) { n.push(ca + '% canopy'); }
-  return { s: Math.min(s, 25), n: n };
-}
-
-function scoreSW(r) {
-  var sw = r.soil_water || {}; var s = 0; var n = [];
-  var soil = sw.soil_health_score || 0;
-  s += Math.round((soil / 5) * 8);
-  if (soil > 0) { n.push('Soil ' + soil + '/5'); }
-  var water = sw.water_function_score || 0;
-  s += Math.round((water / 5) * 7);
-  if (water > 0) { n.push('Water ' + water + '/5'); }
-  if (sw.has_rainwater_system) { s += 2; n.push('Rainwater'); }
-  if (sw.has_moisture_basin)   { s += 2; n.push('Basin'); }
-  if (sw.has_swale)            { s += 1; n.push('Swale'); }
-  return { s: Math.min(s, 20), n: n };
-}
-
-function scoreHab(r) {
-  var h = r.habitat || {}; var s = 0; var n = [];
-  var nd = h.habitat_nodes || 0;
-  if (nd >= 5) { s += 6; } else if (nd >= 3) { s += 4; } else if (nd >= 1) { s += 2; }
-  if (nd > 0) { n.push(nd + ' nodes'); }
-  if (h.has_embedded_logs) { s += 3; n.push('Logs'); }
-  if (h.has_rock_refuges)  { s += 2; n.push('Rocks'); }
-  if (h.has_water_feature) { s += 3; n.push('Water feature'); }
-  if (h.has_nest_boxes)    { s += 2; n.push('Nest boxes'); }
-  var fs = h.fauna_sightings || []; var fc = 0;
-  for (var i = 0; i < fs.length; i++) { if (fs[i].verified) { fc++; } }
-  if (fc >= 3) { s += 4; n.push('3+ fauna'); } else if (fc >= 1) { s += 3; n.push(fc + ' fauna'); }
-  return { s: Math.min(s, 20), n: n };
-}
-
-function scoreCon(r) {
-  var c = r.connectivity || {}; var s = 0; var n = [];
-  if (c.adjacent_park) {
-    var d = c.park_distance_m || 999;
-    if (d <= 50) { s += 6; n.push('Park <50m'); }
-    else if (d <= 150) { s += 4; n.push('Park <150m'); }
-    else if (d <= 300) { s += 2; n.push('Park <300m'); }
-  }
-  var al = c.adjacent_registered_gardens || []; var ac = 0;
-  for (var i = 0; i < al.length; i++) { if (al[i].verified) { ac++; } }
-  if (ac >= 3) { s += 6; n.push('3+ adjacent'); }
-  else if (ac >= 2) { s += 4; n.push('2 adjacent'); }
-  else if (ac >= 1) { s += 3; n.push('1 adjacent'); }
-  if (c.corridor_node_confirmed) { s += 5; n.push('Corridor node'); }
-  var ha = c.cluster_area_ha || 0;
-  if (ha >= 2) { s += 3; n.push(ha + 'ha cluster'); }
-  else if (ha >= 1) { s += 1; n.push('Cluster forming'); }
-  return { s: Math.min(s, 20), n: n };
-}
-
-function scoreEv(r) {
-  var e = r.evidence || {}; var s = 0; var n = [];
-  if (e.has_photos)                  { s += 2; n.push('Photos'); }
-  if (e.has_field_notes)             { s += 2; n.push('Field notes'); }
-  if (e.has_species_list)            { s += 2; n.push('Species list'); }
-  if (e.has_fauna_record)            { s += 2; n.push('Fauna record'); }
-  if (e.has_professional_assessment) { s += 3; n.push('Professional'); }
-  var vl = e.verification_level || '';
-  if (vl === 'gardener_and_son_verified') { s += 4; n.push('G&S Verified'); }
-  else if (vl === 'site_visit')           { s += 3; n.push('Site visit'); }
-  else if (vl === 'photo_verified')       { s += 1; n.push('Photo verified'); }
-  return { s: Math.min(s, 15), n: n };
-}
-
-function ratingFromScore(s) {
-  if (s >= 91) return 'Urban Biodiversity Node';
-  if (s >= 81) return 'High Habitat Garden';
-  if (s >= 61) return 'Registered Ecological Garden';
-  if (s >= 41) return 'Ecological Garden';
-  if (s >= 21) return 'Habitat Garden';
-  return 'Basic Garden';
-}
-
-function nextLevel(score) {
-  var levels = [
-    { min: 21, name: 'Habitat Garden' },
-    { min: 41, name: 'Ecological Garden' },
-    { min: 61, name: 'Registered Ecological Garden' },
-    { min: 81, name: 'High Habitat Garden' },
-    { min: 91, name: 'Urban Biodiversity Node' }
-  ];
-  for (var i = 0; i < levels.length; i++) {
-    if (score < levels[i].min) {
-      return { name: levels[i].name, target: levels[i].min, gap: levels[i].min - score, progress: Math.round((score / levels[i].min) * 100) };
-    }
-  }
-  return { name: 'Maximum Level Achieved', target: 100, gap: 0, progress: 100 };
-}
-
-function verLabel(level) {
-  if (level === 'gardener_and_son_verified') return 'G&S Verified';
-  if (level === 'site_visit')   return 'Site Visit';
-  if (level === 'photo_verified') return 'Photo Verified';
-  if (level === 'self_reported')  return 'Self Reported';
-  return 'Unverified';
-}
-
-function _scoreRaw(r) {
-  var bio = scoreBio(r); var s2 = scoreSW(r); var hab = scoreHab(r); var con = scoreCon(r); var ev = scoreEv(r);
-  return bio.s + s2.s + hab.s + con.s + ev.s;
-}
-
-function baseline(r) {
-  var b = r.biodiversity || {}; var sw = r.soil_water || {}; var h = r.habitat || {}; var c = r.connectivity || {};
-  return _scoreRaw({
-    biodiversity: { indigenous_species_current: b.indigenous_species_baseline || 0, indigenous_dominant: false, structural_layers_current: b.structural_layers_baseline || 0, canopy_cover_pct_current: b.canopy_cover_pct_baseline || 0 },
-    soil_water:   { soil_health_score: sw.soil_health_baseline || 0, water_function_score: sw.water_function_baseline || 0, has_rainwater_system: false, has_moisture_basin: false, has_swale: false },
-    habitat:      { habitat_nodes: h.habitat_nodes_baseline || 0, has_embedded_logs: false, has_rock_refuges: false, has_water_feature: false, has_nest_boxes: false, fauna_sightings: [] },
-    connectivity: { adjacent_park: c.adjacent_park || false, park_distance_m: c.park_distance_m || 999, adjacent_registered_gardens: [], corridor_node_confirmed: false, cluster_area_ha: 0 },
-    evidence:     { has_photos: false, has_field_notes: false, has_professional_assessment: false, has_fauna_record: false, has_species_list: false, verification_level: 'self_reported' }
-  });
-}
-
-function recs(r) {
-  var out = [];
-  var sw = r.soil_water || {}; var h = r.habitat || {}; var b = r.biodiversity || {}; var c = r.connectivity || {};
-  if (!sw.has_moisture_basin)   out.push({ action: 'Install seasonal moisture basin', points: 6 });
-  if (!h.has_water_feature)     out.push({ action: 'Add a small water feature',       points: 3 });
-  if (!sw.has_rainwater_system) out.push({ action: 'Add rainwater collection system', points: 2 });
-  if (!h.has_rock_refuges)      out.push({ action: 'Add rock refuge zones',           points: 2 });
-  if (!h.has_nest_boxes)        out.push({ action: 'Install nest boxes',              points: 2 });
-  var gap = (b.indigenous_species_target || 40) - (b.indigenous_species_current || 0);
-  if (gap > 0) out.push({ action: 'Add ' + Math.min(gap, 5) + ' more indigenous species', points: Math.min(gap, 4) });
-  out.sort(function(a, b) { return b.points - a.points; });
-  return out.slice(0, 5);
-}
-
-/* ---- BADGE ENGINE ---- */
-var BDEFS = {
-  indigenous_dominant: 'Indigenous Dominant',
-  species_rich_20:     'Species Rich',
-  species_rich_30:     'Highly Species Rich',
-  full_canopy:         'Canopy Forming',
-  five_layers:         'Five Layer Garden',
-  habitat_builder:     'Habitat Builder',
-  amphibian_active:    'Amphibian Active',
-  pollinator_rich:     'Pollinator Rich',
-  water_wise:          'Water Wise',
-  corridor_node:       'Corridor Node',
-  network_connected:   'Network Connected',
-  gs_verified:         'G&S Verified',
-  site_visit_badge:    'Site Visit',
-  full_record:         'Full Record',
-  fauna_record:        'Fauna Record'
-};
-
-function awardBadges(r) {
-  var b = r.biodiversity || {}; var h = r.habitat || {}; var c = r.connectivity || {}; var e = r.evidence || {}; var sw = r.soil_water || {};
-  var sb = []; var vb = []; var eb = [];
-  if (b.indigenous_dominant)                     sb.push('indigenous_dominant');
-  if ((b.indigenous_species_current || 0) >= 20) sb.push('species_rich_20');
-  if ((b.indigenous_species_current || 0) >= 30) sb.push('species_rich_30');
-  if ((b.canopy_cover_pct_current   || 0) >= 30) sb.push('full_canopy');
-  if ((b.structural_layers_current  || 0) >= 5)  sb.push('five_layers');
-  if ((h.habitat_nodes              || 0) >= 3)  sb.push('habitat_builder');
-  var fs = h.fauna_sightings || []; var fc = 0;
-  for (var i = 0; i < fs.length; i++) { if (fs[i].verified) fc++; }
-  if (fc >= 1) { sb.push('amphibian_active'); eb.push('fauna_record'); }
-  if (fc >= 3)  sb.push('pollinator_rich');
-  if (sw.has_rainwater_system && sw.has_moisture_basin) sb.push('water_wise');
-  if (c.corridor_node_confirmed) sb.push('corridor_node');
-  var al = c.adjacent_registered_gardens || []; var ac = 0;
-  for (var j = 0; j < al.length; j++) { if (al[j].verified) ac++; }
-  if (ac >= 2) sb.push('network_connected');
-  if (e.verification_level === 'gardener_and_son_verified') vb.push('gs_verified');
-  if (e.verification_level === 'site_visit')                vb.push('site_visit_badge');
-  if (e.has_photos && e.has_field_notes && e.has_species_list && e.has_fauna_record) eb.push('full_record');
-  var all = []; var k;
-  for (k = 0; k < sb.length; k++) all.push(sb[k]);
-  for (k = 0; k < vb.length; k++) all.push(vb[k]);
-  for (k = 0; k < eb.length; k++) all.push(eb[k]);
-  return { all: all, vb: vb };
-}
 
 /* ---- GARDEN DATA (loaded from JSON) ---- */
 var G = null;
@@ -668,7 +454,7 @@ function render() {
     var bst = (isN || isV)
       ? 'border-color:rgba(61,69,53,.4);background:rgba(61,69,53,.15);font-weight:600'
       : '';
-    hbh += '<span class="badge-pill" style="' + bst + '">' + (BDEFS[bid] || bid) + '</span>';
+    hbh += '<span class="badge-pill" style="' + bst + '">' + ((BADGE_DEFINITIONS[bid] && BADGE_DEFINITIONS[bid].name) || bid) + '</span>';
   }
   html('heroBadges', hbh);
 
@@ -710,7 +496,7 @@ function render() {
     var isV2 = badges.vb.indexOf(bid2) !== -1;
     var isN2 = bid2 === 'corridor_node';
     var bcls = (isV2 || isN2) ? 'bg-rg text-rb dark:bg-rb dark:text-rg' : 'bg-rs dark:bg-rg';
-    blh += '<span class="text-xs border border-rl dark:border-rdl px-2.5 py-1.5 ' + bcls + '">' + (BDEFS[bid2] || bid2) + '</span> ';
+    blh += '<span class="text-xs border border-rl dark:border-rdl px-2.5 py-1.5 ' + bcls + '">' + ((BADGE_DEFINITIONS[bid2] && BADGE_DEFINITIONS[bid2].name) || bid2) + '</span> ';
   }
   html('badgeList', blh);
 
@@ -991,7 +777,7 @@ function checkBadgeNotifications(gardenId, currentBadges, currentScore, prevScor
   /* Badge notifications -- one at a time, queued */
   for (var j = 0; j < newBadges.length; j++) {
     var bid  = newBadges[j];
-    var name = BDEFS[bid] || bid;
+    var name = (BADGE_DEFINITIONS[bid] && BADGE_DEFINITIONS[bid].name) || bid;
     var desc = BADGE_DESCS[bid] || '';
     queueNotification(
       'Badge earned',
