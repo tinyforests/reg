@@ -4,6 +4,16 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Sir Garnet — assess and add to registry once planted
+
+30 Sir Garnet Road, Surrey Hills. Installing this week (w/c 25 May 2026). Do not add to registry until front garden is in the ground and an on-site assessment can be done.
+
+Notion brief: https://www.notion.so/gardenerandson/30-Sir-Garnet-Road-Surrey-Hills-32562f60b60480ffbdc3e8bda0b72e14
+
+Steward names: Richard & Jenny (per Notion page image filenames — reconfirm at assessment).
+
+Scaffolded files sitting untracked in the repo (`data/sirgarnet.json`, `gardens/sirgarnet30/`) — do not commit until assessment is complete.
+
 ### Demand nudges — inject Registry prompts into fmeg/fmevc/fmnp search results
 
 Demand dashboard built (`demand.html`, `data/evc-demand.json`). 382 lookups, Nov 2025–Feb 2026. 61% within 2km of a registered garden.
