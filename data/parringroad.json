@@ -76,18 +76,18 @@
       {
         "id": "ER-VIC-BAL-001",
         "name": "Parring",
-        "distance_m": 60,
+        "distance_m": 35,
         "verified": true,
-        "lat": -37.8123,
-        "lng": 145.0908
+        "lat": -37.81222,
+        "lng": 145.09056
       }
     ],
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Balwyn",
-    "lat": -37.8120,
-    "lng": 145.0908,
+    "lat": -37.81200,
+    "lng": 145.09019,
     "cluster": {
       "name": "Balwyn",
       "gardens": 2,
