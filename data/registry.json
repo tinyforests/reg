@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "May 2026",
-    "total_gardens": 13,
+    "total_gardens": 14,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
@@ -46,7 +46,7 @@
       "points_available": 19,
       "cluster": {
         "name": "Surrey Hills",
-        "gardens": 2,
+        "gardens": 3,
         "area_ha": 0.48,
         "status": "Forming"
       },
@@ -167,7 +167,45 @@
       "points_available": 36,
       "cluster": {
         "name": "Surrey Hills",
-        "gardens": 2,
+        "gardens": 3,
+        "area_ha": 0.48,
+        "status": "Forming"
+      },
+      "council": "Boroondara City Council",
+      "ward": "Gardiner",
+      "lga": "Boroondara"
+    },
+    {
+      "garden_id": "ER-VIC-SH-SIR-0001",
+      "garden_name": "Sir Garnet",
+      "suburb": "Surrey Hills",
+      "state": "VIC",
+      "score": 50,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 11
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "May 2026",
+      "badge_count": 2,
+      "badges": [
+        "indigenous_dominant",
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/sirgarnet30/index.html",
+      "data_file": "data/sirgarnet.json",
+      "typology": "Native Buffer Garden",
+      "registry_role": "Cluster Member",
+      "trajectory": "Emerging",
+      "points_available": 30,
+      "cluster": {
+        "name": "Surrey Hills",
+        "gardens": 3,
         "area_ha": 0.48,
         "status": "Forming"
       },
@@ -559,7 +597,7 @@
     ]
   },
   "network": {
-    "total_gardens": 13,
+    "total_gardens": 14,
     "active_clusters": 6,
     "gardens_in_establishment": 7,
     "avg_score": 48,
@@ -568,7 +606,7 @@
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
     "yield_status": "Pre-activation -- sponsor model pending",
     "councils": {
-      "Boroondara": 6,
+      "Boroondara": 7,
       "Stonnington": 1,
       "Whitehorse": 4,
       "Darebin": 1

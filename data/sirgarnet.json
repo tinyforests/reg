@@ -1,0 +1,183 @@
+{
+  "garden_id": "ER-VIC-SH-SIR-0001",
+  "garden_name": "Sir Garnet",
+  "garden_type": "Native Buffer Garden",
+  "typology": "Native Buffer Garden",
+  "registry_role": "Cluster Member",
+  "trajectory": "Emerging",
+  "suburb": "Surrey Hills",
+  "state": "VIC",
+  "assessment_date": "May 2026",
+  "baseline_date": "May 2026",
+  "stewards": "Richard & Jenny",
+  "designer": "Gardener & Son",
+  "area_sqm": 5.5,
+  "description": "A 5.5m indigenous buffer strip along the front boundary of a Surrey Hills property — 39 plants across 18 species, 9 strictly local-indigenous, at ~7 plants per square metre. The narrow ribbon connects a planted yard to a council nature strip with mature trees and remnant vegetation; small parcel, dense planting, real corridor function.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 9,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 14,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 15,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Medium",
+    "species_list": [
+      "Grevillea longistyla x johnsonii 'Elegance'",
+      "Casuarina glauca prostrate (Cousin It)",
+      "Chrysocephalum apiculatum (Common Everlasting)",
+      "Eremophila nivea (Silky Emu Bush)",
+      "Themeda triandra 'True Blue' (Kangaroo Grass)",
+      "Correa alba (White Correa)",
+      "Banksia plagiocarpa (Hinchinbrook Banksia)",
+      "Chrysocephalum semipapposum (Clustered Everlasting)",
+      "Anigozanthos 'Landscape Gold' (Kangaroo Paw)",
+      "Calocephalus lacteus (Milky Beauty-heads)",
+      "Xerochrysum viscosum (Sticky Everlasting)",
+      "Banksia spinulosa 'Birthday Candles'",
+      "Lomandra confertifolia 'Little Pal'",
+      "Acacia acinacea (Gold Dust Wattle)",
+      "Xerochrysum bracteatum 'Crimson'",
+      "Xerochrysum 'Dargan Hill Monarch'",
+      "Hardenbergia violacea 'Meema'",
+      "Kennedia prostrata (Running Postman)"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 5,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 5,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 125,
+    "soil_notes": "3-way soil blend, 100-150mm specialised mulch, mycorrhizal inoculation at planting (standard G&S practice). Topographic management — water retained on site."
+  },
+  "habitat": {
+    "habitat_nodes": 1,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "High-density indigenous buffer planting — 39 plants in 5.5m²",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Surrey Hills Council Nature Strip",
+    "park_distance_m": 5,
+    "park_lat": -37.82133,
+    "park_lng": 145.09043,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.00055,
+    "cluster_area_ha": 0.49,
+    "cluster_name": "Surrey Hills",
+    "lat": -37.82143,
+    "lng": 145.09043,
+    "cluster": {
+      "name": "Surrey Hills",
+      "gardens": 3,
+      "area_ha": 0.49,
+      "status": "Forming"
+    }
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Installation complete",
+      "date": "May 2026",
+      "complete": true
+    },
+    {
+      "title": "Baseline assessment",
+      "date": "Jun 2026",
+      "complete": false
+    },
+    {
+      "title": "Photo documentation",
+      "date": "Jun 2026",
+      "complete": false
+    },
+    {
+      "title": "GPS and park coordinates confirmed on site",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Design presented — Silver Native Buffer Garden",
+      "date": "Apr 2026",
+      "type": "Design",
+      "category": "design",
+      "notes": "Front garden: silver indigenous buffer along 5.5m of the front boundary. High-density palette — Grevillea, Banksia, Correa, Eremophila, Acacia, Kangaroo Paw, Everlastings and Kangaroo Grass. 39 plants across 18 species, 9 strictly local-indigenous, at approximately 7 plants per square metre."
+    },
+    {
+      "title": "Installation complete — 39 plants, 18 species, 5.5m buffer",
+      "date": "May 2026",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Front buffer installation complete. 39 plants across 18 species. Nine strictly local-indigenous species including Themeda triandra, Correa alba, Chrysocephalum apiculatum and Acacia acinacea. Habitat rocks placed along the strip. 100-150mm specialised mulch applied. 3-way soil blend with mycorrhizal inoculation at planting. Strip connects planted front yard to council nature strip with remnant mature vegetation."
+    }
+  ],
+  "notes": "Installation baseline, May 2026. 39 plants in 5.5m x 1m front buffer strip. Garden GPS from Google Maps survey — verify on site. Park coordinates (adjacent nature strip, park_lat -37.82133) are approximate — confirm on next site visit.",
+  "target_score": 55,
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 11
+  },
+  "upgrade_potential": 30,
+  "points_available": 30,
+  "yield": {
+    "eligible": false,
+    "status": "Not yet active — yield layer in roadmap",
+    "estimated_annual": 0,
+    "potential_annual": 0,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Achieve Corridor Node status",
+        "annual_yield_increase": 0,
+        "notes": "Yield layer not yet active"
+      },
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 0,
+        "notes": "Yield layer not yet active"
+      },
+      {
+        "action": "Install nest boxes",
+        "annual_yield_increase": 0,
+        "notes": "Yield layer not yet active"
+      }
+    ]
+  },
+  "council": "Boroondara City Council",
+  "ward": "Gardiner",
+  "lga": "Boroondara"
+}
