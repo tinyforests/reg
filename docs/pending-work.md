@@ -79,6 +79,12 @@ All 13 (now 14) gardens store `species_list` as flat string arrays. Per-species 
 
 `network.avg_score`, `network.gardens_in_establishment`, and council counts (e.g. `network.councils.Boroondara`) are manually maintained and drift with each new garden addition. Auto-compute from the gardens array via a build step, or document as known-stale. Each new garden currently requires manual updates to multiple aggregate fields — same drift risk as the Surrey Hills cluster count.
 
+### Yield block honesty audit — pre-Sir-Garnet gardens
+
+All 13 gardens registered before Sir Garnet (Victoria Crescent, Arundel, Middlesex, Mont Albert, Parring, Parring Stepping Stone, Nicholson, Evelina, Dewrang, York, Flinders, Rupert, Windella — confirm full list when audit runs) carry `yield.eligible: true` with non-zero `potential_annual` figures. Per SUPER_MIND doc the yield layer is sponsor-funded and not active. Sir Garnet uses the honest pattern: `eligible: false`, `status: 'Not yet active — yield layer in roadmap'`, annuals: 0. Update all 13 to match Sir Garnet's pattern in a single coordinated audit commit. Do NOT piecemeal-fix.
+
+Also: Victoria Crescent has several other inconsistent steward-facing targets (`indigenous_species_target: 26` while current is 30; `target_score: 75`) that need review at next assessment, not in the yield audit.
+
 ## Out of scope (do not work on without explicit instruction)
 
 - Carbon offsetting methodology — not pursued until biodiversity infrastructure is mature

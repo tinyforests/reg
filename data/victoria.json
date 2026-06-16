@@ -14,7 +14,7 @@
   "baseline_date": "May 2026",
   "stewards": "Sara and Fede",
   "designer": "Gardener & Son",
-  "area_sqm": 0,
+  "area_sqm": 18,
   "target_score": 75,
   "description": "Set amongst Ellis Stones-inspired rockwork in Mont Albert, this emerging ecological garden is a small, deeply layered habitat system responding to stone, light and the fragmented ecologies of suburbia. Indigenous grassy-woodland structure is blended with heathy-edge species and select southern-hemisphere cultivars.",
   "evc": {
@@ -24,7 +24,7 @@
     "bioregion_code": "VVP"
   },
   "biodiversity": {
-    "indigenous_species_current": 26,
+    "indigenous_species_current": 30,
     "indigenous_species_baseline": 0,
     "indigenous_species_target": 26,
     "indigenous_dominant": true,
@@ -69,7 +69,13 @@
       "Desmodium gunnii",
       "Indigofera australis",
       "Billardiera scandens",
-      "Goodenia ovata prostrate"
+      "Goodenia ovata prostrate",
+      "Bulbine bulbosa (Native Leek)",
+      "Dampiera diversifolia",
+      "Goodia lotifolia (Golden Tip)",
+      "Lomandra confertifolia 'Little Pal'",
+      "Olearia ramulosa (Twiggy Daisy-bush)",
+      "Xerochrysum viscosum (Sticky Everlasting)"
     ]
   },
   "soil_water": {
@@ -150,12 +156,19 @@
       "type": "Installation",
       "category": "installation",
       "notes": "68 plants installed across 35 species, structured into five layers: canopy, shrub, grassland and matrix, groundcover, and climbers. Indigenous grassy-woodland species form the backbone, threaded through basalt rockwork inspired by Ellis Stones. Garden establishing in Mont Albert."
+    },
+    {
+      "title": "Part-two planting — 9m² adjacent bed, 22 plants, 14 species",
+      "date": "12 Jun 2026",
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Adjacent 9m² (3m × 3m) bed planted with 22 individuals across 14 species. 6 new species added to species_list: Bulbine bulbosa, Dampiera diversifolia, Goodia lotifolia, Lomandra confertifolia 'Little Pal', Olearia ramulosa, Xerochrysum viscosum. 8 top-up plantings of existing species (Kennedia prostrata, Themeda triandra, Leptospermum continentale, Hardenbergia violacea, Brachyscome multifida, Dichelachne crinata, Poa labillardieri, Ozothamnus ferrugineus). Strict-indigenous additions: 4 (Bulbine, Goodia, Olearia, Xerochrysum). Lomandra and Dampiera recorded but not strictly local-indigenous (cultivar / non-local). Existing record spells 'Dichelachne crinita' — correct spelling is 'crinata' — flagged in pending-work, not fixed in this commit. Total planted area now 18m²."
     }
   ],
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 19
+    "points_to_next": 17
   },
   "upgrade_potential": 58,
   "points_available": 58,
