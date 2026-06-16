@@ -490,11 +490,11 @@
       "council": "Whitehorse City Council",
       "ward": "Elgar",
       "lga": "Whitehorse",
-      "score": 42,
+      "score": 44,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 19
+        "points_to_next": 17
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
