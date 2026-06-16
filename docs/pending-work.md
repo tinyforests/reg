@@ -22,6 +22,17 @@ Next phase: contextual nudges injected into search results on the three fmg site
 
 This is outside the Registry repo but tracked here because it blocks the unified reporting work above.
 
+### Canterbury G02 — registered as baseline 16 Jun 2026, follow-ups pending
+
+G02 / 352–358 Canterbury Road, Surrey Hills. Pre-intervention baseline registered with score 32 (Habitat Garden tier). First non-G&S-install garden in the registry. verification_level: site_visit (will move to gardener_and_son_verified after design intervention is installed; commissioned, expected within 1–3 months).
+
+Follow-ups:
+- Confirm Boroondara ward for Canterbury Road at this location (currently 'TBC — confirm with Boroondara council' in record). Likely Junction, Bellevue, or Cotham — not Gardiner (that's north Surrey Hills, Sir Garnet's ward).
+- Confirm Surrey Park park_lat/park_lng at next site visit (currently approximate -37.8265, 145.096).
+- Confirm mulch_depth_mm and mains_drip_irrigation status at next site visit.
+
+The trajectory recorded from baseline 16 Jun 2026 → post-intervention score will be the registry's first independently-legible before/after evidence for a non-G&S-install garden. Strategic value to the Boroondara council pitch and to AfN-grade methodology.
+
 ## Medium priority
 
 ### Council pilot — first signed pilot
@@ -84,6 +95,14 @@ All 13 (now 14) gardens store `species_list` as flat string arrays. Per-species 
 All 13 gardens registered before Sir Garnet (Victoria Crescent, Arundel, Middlesex, Mont Albert, Parring, Parring Stepping Stone, Nicholson, Evelina, Dewrang, York, Flinders, Rupert, Windella — confirm full list when audit runs) carry `yield.eligible: true` with non-zero `potential_annual` figures. Per SUPER_MIND doc the yield layer is sponsor-funded and not active. Sir Garnet uses the honest pattern: `eligible: false`, `status: 'Not yet active — yield layer in roadmap'`, annuals: 0. Update all 13 to match Sir Garnet's pattern in a single coordinated audit commit. Do NOT piecemeal-fix.
 
 Also: Victoria Crescent has several other inconsistent steward-facing targets (`indigenous_species_target: 26` while current is 30; `target_score: 75`) that need review at next assessment, not in the yield audit.
+
+### Tend customers as continuous-evidence layer
+
+Canterbury G02's baseline registration revealed an unexpected pattern: Tend customers' gardens carry stronger baseline Evidence scores than fresh G&S installs, because multi-visit Tend records ARE field notes (+2 Evidence in the current engine). Sir Garnet at installation had no field notes; Canterbury G02 as a Tend customer does. This means the registry's most evidentially-rich gardens may be the long-term Tend customers, not the freshly-installed projects. Worth a decisions-log entry articulating this; worth considering whether Tend's value proposition could be framed partly as 'continuous ecological documentation' alongside the maintenance-quality story.
+
+### Verification level methodology — note for v0.5 / v1.0
+
+Canterbury G02 is the first registry entry to carry verification_level: site_visit (3 Evidence pts) rather than gardener_and_son_verified (4 pts). It also earned the first 'site_visit_badge' in the registry. The verification level field is now demonstrably meaningful — gardens are no longer uniformly top-marked. When v0.5 or v1.0 introduces Accuracy Level as a separate field (per Methodology Rev 1), verification_level needs careful migration: the gradient from photo_verified → site_visit → gardener_and_son_verified → independent_ecologist_verified is the registry's epistemic spine. Worth capturing in docs/methodology-notes.md the credibility argument: a registry willing to score itself lower when honesty requires it is more credible than one uniformly top-marked.
 
 ## Out of scope (do not work on without explicit instruction)
 

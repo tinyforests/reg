@@ -1,8 +1,8 @@
 {
   "registry_metadata": {
     "version": "1.0",
-    "last_updated": "May 2026",
-    "total_gardens": 14,
+    "last_updated": "Jun 2026",
+    "total_gardens": 15,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0"
@@ -46,7 +46,7 @@
       "points_available": 19,
       "cluster": {
         "name": "Surrey Hills",
-        "gardens": 3,
+        "gardens": 4,
         "area_ha": 0.48,
         "status": "Forming"
       },
@@ -167,7 +167,7 @@
       "points_available": 36,
       "cluster": {
         "name": "Surrey Hills",
-        "gardens": 3,
+        "gardens": 4,
         "area_ha": 0.48,
         "status": "Forming"
       },
@@ -205,12 +205,49 @@
       "points_available": 30,
       "cluster": {
         "name": "Surrey Hills",
-        "gardens": 3,
+        "gardens": 4,
         "area_ha": 0.48,
         "status": "Forming"
       },
       "council": "Boroondara City Council",
       "ward": "Gardiner",
+      "lga": "Boroondara"
+    },
+    {
+      "garden_id": "ER-VIC-SH-CAN-0001",
+      "garden_name": "Canterbury G02",
+      "suburb": "Surrey Hills",
+      "state": "VIC",
+      "score": 32,
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 9
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "site_visit",
+      "verification_label": "Site Visit Verified",
+      "last_verified": "16 Jun 2026",
+      "badge_count": 1,
+      "badges": [
+        "site_visit_badge"
+      ],
+      "profile_url": "/gardens/canterburyg02/index.html",
+      "data_file": "data/canterburyg02.json",
+      "typology": "Maintained Garden (pre-intervention)",
+      "registry_role": "Cluster Member",
+      "trajectory": "Pre-intervention baseline",
+      "points_available": 68,
+      "cluster": {
+        "name": "Surrey Hills",
+        "gardens": 4,
+        "area_ha": 0.48,
+        "status": "Forming"
+      },
+      "council": "Boroondara City Council",
+      "ward": "TBC — confirm with Boroondara council",
       "lga": "Boroondara"
     },
     {
@@ -597,7 +634,7 @@
     ]
   },
   "network": {
-    "total_gardens": 14,
+    "total_gardens": 15,
     "active_clusters": 6,
     "gardens_in_establishment": 7,
     "avg_score": 48,
@@ -606,7 +643,7 @@
     "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
     "yield_status": "Pre-activation -- sponsor model pending",
     "councils": {
-      "Boroondara": 7,
+      "Boroondara": 8,
       "Stonnington": 1,
       "Whitehorse": 4,
       "Darebin": 1
