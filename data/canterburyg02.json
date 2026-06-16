@@ -1,0 +1,168 @@
+{
+  "garden_id": "ER-VIC-SH-CAN-0001",
+  "garden_name": "Canterbury G02",
+  "garden_type": "Maintained Mixed Garden (pre-design)",
+  "typology": "Maintained Garden (pre-intervention)",
+  "registry_role": "Cluster Member",
+  "trajectory": "Pre-intervention baseline",
+  "suburb": "Surrey Hills",
+  "state": "VIC",
+  "council": "Boroondara City Council",
+  "ward": "TBC — confirm with Boroondara council",
+  "lga": "Boroondara",
+  "assessment_date": "16 Jun 2026",
+  "baseline_date": "16 Jun 2026",
+  "stewards": "Kim & Daryl Sodomaco",
+  "designer": "Gardener & Son (planned — design phase commencing within 1-3 months)",
+  "maintainer": "Gardener & Son (via Tend, ongoing)",
+  "area_sqm": 60,
+  "description": "A 60m² raised-bed garden on the northern face of Canterbury Road, Surrey Hills — 11 species across 142 plants, two strictly local-indigenous (Hardenbergia violacea and Lomandra longifolia) among a mixed palette maintained by G&S via Tend. Surrey Park bounds the southern edge. G&S design intervention commissioned — this baseline captures the pre-intervention state; the trajectory from 16 Jun 2026 will be the registry's first independently-legible before/after evidence for a Tend-maintained property.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 2,
+    "indigenous_species_baseline": 2,
+    "indigenous_dominant": false,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 3,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 5,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Low",
+    "biodiversity_notes": "Of 11 species, only Hardenbergia violacea and Lomandra longifolia are strictly local-indigenous to the Surrey Hills Grassy Woodland EVC. A further 4 species are Australian-native but not local (Syzygium smithii, Syzygium australe, Hymenosporum flavum, Banksia ericifolia) — these contribute to fauna habitat but not local ecological function. The remaining 5 species are exotic ornamentals (Dichondra argentea, Anemone hupehensis, Camellia sp., Ficus pumila, Trachelospermum jasminoides).",
+    "species_list": [
+      "Syzygium smithii (Lilly Pilly) x25",
+      "Syzygium australe (susceptible Lilly Pilly) x5",
+      "Hardenbergia violacea x5",
+      "Lomandra longifolia x15",
+      "Dichondra argentea 'Silver Falls' x30",
+      "Hymenosporum flavum (Native Frangipani) x12",
+      "Banksia ericifolia (Candlesticks) x3",
+      "Anemone hupehensis (Japanese Windflower) x30",
+      "Camellia sp. x14",
+      "Ficus pumila x1",
+      "Trachelospermum jasminoides (Chinese Star Jasmine) x2"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 3,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 2,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "soil_notes": "Imported soil in raised beds. Mulch applied by G&S maintenance team. Drainage is poor — beds retain water and have been observed soggy; future design intervention should address subsurface drainage or convert to in-ground planting on the natural soil profile."
+  },
+  "habitat": {
+    "habitat_nodes": 0,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": [],
+    "habitat_notes": "No habitat features currently present. Future design intervention to introduce logs, rocks, and consider nest box / water feature."
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Surrey Park",
+    "park_distance_m": 30,
+    "park_lat": -37.8265,
+    "park_lng": 145.096,
+    "park_description": "Surrey Park, large public park on Canterbury Road, with mature trees and remnant vegetation. Functions as connecting habitat for the garden.",
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0.006,
+    "cluster_area_ha": 0.49,
+    "cluster_name": "Surrey Hills",
+    "lat": -37.826241,
+    "lng": 145.095974,
+    "cluster": {
+      "name": "Surrey Hills",
+      "gardens": 4,
+      "area_ha": 0.49,
+      "status": "Forming"
+    }
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
+    "verification_level": "site_visit",
+    "verification_label": "Site Visit Verified",
+    "assessor": "Gardener & Son (via Tend maintenance)"
+  },
+  "milestones": [
+    {
+      "title": "Baseline assessment and registration",
+      "date": "16 Jun 2026",
+      "complete": true
+    },
+    {
+      "title": "G&S design intervention installed",
+      "date": "TBC (within 1-3 months)",
+      "complete": false
+    },
+    {
+      "title": "Upgrade to G&S Verified after design intervention",
+      "date": "TBC",
+      "complete": false
+    },
+    {
+      "title": "First fauna sighting",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Baseline assessment — pre-intervention registration",
+      "date": "16 Jun 2026",
+      "type": "Assessment",
+      "category": "assessment",
+      "notes": "G&S site assessment of pre-existing garden maintained via Tend. 11 species, 142 plants in 60m² raised-bed area. 2 strictly local-indigenous species (Hardenbergia violacea, Lomandra longifolia). Surrey Park adjacent south of Canterbury Road. G&S design intervention commissioned — baseline captured 16 Jun 2026 for before/after trajectory."
+    }
+  ],
+  "notes": "Pre-intervention baseline, 16 Jun 2026. Garden was not designed or installed by G&S — G&S has maintained via Tend service. Design intervention commissioned, expected within 1-3 months. verification_level will move to gardener_and_son_verified after design intervention is installed. Garden coordinates from Google Maps long-press (6dp precision). Surrey Park coordinates (park_lat -37.8265, park_lng 145.096) are approximate — confirm at next site visit. Ward TBC — confirm with Boroondara council.",
+  "rating": {
+    "current": "Habitat Garden",
+    "next": "Ecological Garden",
+    "points_to_next": 9
+  },
+  "upgrade_potential": 68,
+  "points_available": 68,
+  "yield": {
+    "eligible": false,
+    "status": "Not yet active — yield layer in roadmap",
+    "estimated_annual": 0,
+    "potential_annual": 0,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Increase indigenous species to 12+ via G&S design intervention",
+        "annual_yield_increase": 0,
+        "notes": "Yield layer not yet active"
+      },
+      {
+        "action": "Add habitat logs and rock refuges",
+        "annual_yield_increase": 0,
+        "notes": "Yield layer not yet active"
+      },
+      {
+        "action": "Install water feature",
+        "annual_yield_increase": 0,
+        "notes": "Yield layer not yet active"
+      }
+    ]
+  }
+}
