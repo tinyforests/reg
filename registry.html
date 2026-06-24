@@ -236,11 +236,15 @@ function filterGardens() {
 
 /* ---- RENDER ---- */
 function renderStats(data) {
-  var meta  = data.registry_metadata || {};
-  var stats = data.statistics || {};
-  var total = meta.total_gardens !== undefined ? meta.total_gardens : (data.gardens || []).length;
-  var avg   = stats.average_score !== undefined ? stats.average_score : '--';
-  var bdgs  = stats.total_badges_awarded !== undefined ? stats.total_badges_awarded : '--';
+  var gardens = data.gardens || [];
+  var total = gardens.length;
+  var scoreSum = 0;
+  var bdgs = 0;
+  for (var i = 0; i < gardens.length; i++) {
+    scoreSum += (gardens[i].score || 0);
+    bdgs     += (gardens[i].badge_count || 0);
+  }
+  var avg = total > 0 ? Math.round(scoreSum / total) : '--';
 
   var tg = document.getElementById('statTotalGardens');
   var as = document.getElementById('statAverageScore');
