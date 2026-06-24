@@ -51,6 +51,30 @@ For the Yield layer to activate, three sponsor categories need engagement:
 
 Status: pipeline exists in conceptual form, no active conversations yet.
 
+### Boroondara council count was stored stale — was 8, real is 9
+
+Discovered 24 Jun 2026 during the registry.html aggregate-stats refactor. The stored `network.councils.Boroondara` field reads 8 but the gardens array contains 9 gardens with `lga: 'Boroondara'`. One garden was missed during a prior manual update of the network block. The live-computed value is now correct on registry.html.
+
+Implication: public messaging that used '8 Boroondara gardens' (Penny Coulson call prep, Marnie email already sent, any council pitch material) was technically understated. Future references should use '9 Boroondara gardens.'
+
+To confirm which garden was missed: run the same lga-filter query against the gardens array; cross-reference against the stored Boroondara count from the git history of registry.json to identify which addition didn't update the network block.
+
+### Full network.{} aggregate audit needed
+
+Triggered by the Boroondara 8→9 discovery (24 Jun 2026). All stored `network.{}` aggregates may be stale because they relied on manual maintenance during garden additions, which is now known to be unreliable.
+
+Fields to audit by computing live from the gardens array:
+- `network.total_gardens` (likely correct — 15 matches)
+- `network.active_clusters` (stored 6)
+- `network.gardens_in_establishment` (stored 7)
+- `network.avg_score` (stored 48, live 44 — drift confirmed)
+- `network.councils.Boroondara` (stored 8, live 9 — drift confirmed)
+- `network.councils.Stonnington` (stored 1)
+- `network.councils.Whitehorse` (stored 4)
+- `network.councils.Darebin` (stored 1)
+
+Do as a single coordinated audit commit. Either update the stored values once with notes, or remove the vestigial stored fields entirely after registry.html refactor proves stable for one month. Don't piecemeal-fix.
+
 ### Surrey Hills cluster — area_sqm audit required
 
 Stored area_sqm values are inconsistent with steward-measured actuals: Arundel JSON has 180m² (actual ~800m²); Middlesex JSON has 200m² (actual ~11.25m²); Sir Garnet 5.5m². Cluster area_ha currently 0.48–0.49 across files; correct measured total is ~0.082ha (816m²). Needs coordinated correction across `data/arundel.json`, `data/middlesex.json`, `data/sirgarnet.json`, `data/registry.json` in a single audit commit. Do NOT correct piecemeal.
@@ -86,9 +110,9 @@ The decisions log is starting fresh. Earlier major decisions (scoring rebalance,
 
 All 13 (now 14) gardens store `species_list` as flat string arrays. Per-species objects (`{name, indigenous}`) would require a coordinated template upgrade across all garden profile pages — the rendering loop at ~line 611 of the profile template concatenates species directly as strings. Introduce the structured form across all gardens simultaneously with the template upgrade. Do not introduce piecemeal.
 
-### Network block aggregate fields — drift-prone
+### ~~Network block aggregate fields — drift-prone~~ RESOLVED 24 Jun 2026
 
-`network.avg_score`, `network.gardens_in_establishment`, and council counts (e.g. `network.councils.Boroondara`) are manually maintained and drift with each new garden addition. Auto-compute from the gardens array via a build step, or document as known-stale. Each new garden currently requires manual updates to multiple aggregate fields — same drift risk as the Surrey Hills cluster count.
+Resolved 24 Jun 2026. registry.html now computes Average Score and Badges Awarded client-side from the gardens array. Stored `statistics.average_score` and `statistics.total_badges_awarded` fields retained in registry.json as vestigial fallback for one month, then to be removed in a cleanup commit if computed values remain stable.
 
 ### Yield block honesty audit — pre-Sir-Garnet gardens
 
