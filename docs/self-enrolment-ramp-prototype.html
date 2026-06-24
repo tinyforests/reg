@@ -31,7 +31,7 @@
   --ink-soft:#4A5142;
   --hairline:rgba(26,31,23,.16);
   --hairline-on-dark:rgba(247,245,239,.18);
-  --provisional:#B08A3E; /* distinct from Signal Green — quarantine colour */
+  --provisional:#B49A63; /* Dry Grass Brass — established G&S brand colour, quarantine signal */
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -271,6 +271,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
       <h3 id="consentTitle" style="margin-top:8px">What you're agreeing to</h3>
     </div>
     <div class="modal-body" id="consentItems">
+      <p class="fieldnote" style="margin:0 0 8px;font-size:15px">Stewardship isn't a tickbox. You're agreeing to hold this garden's record across whoever lives here next — the memory belongs to whoever is tending it. You decide what's shared, and you can withdraw any of it at any time.</p>
       <!-- granular items injected -->
     </div>
     <div class="modal-foot">
@@ -350,15 +351,14 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
             <h4>Plants of Place species pack</h4>
             <div class="price">From $— · indigenous micro-nursery</div>
             <p class="cdesc">The EVC-matched species above, grown locally and ready to plant.</p>
-            <button class="btn ghost" onclick="phaseNote(this)">Reserve a pack</button>
-            <div class="phase-note">Phase 1 prototype — checkout wired in Phase 3</div>
+            <!-- TODO Phase 2: pass actual EVC code as query param once baseline form captures it -->
+            <a class="btn ghost" href="https://plantsofplace.com" target="_blank" rel="noopener">Reserve a pack</a>
           </div>
           <div class="card">
             <h4>Tend subscription</h4>
             <div class="price">Seedling · Grove · Canopy</div>
             <p class="cdesc">Ongoing stewardship that keeps the score moving and the record current.</p>
-            <button class="btn ghost" onclick="phaseNote(this)">See Tend tiers</button>
-            <div class="phase-note">Phase 1 prototype — checkout wired in Phase 3</div>
+            <a class="btn ghost" href="https://gardenerandson.com/tend/" target="_blank" rel="noopener">See Tend tiers</a>
           </div>
         </div>
       </div>
@@ -373,20 +373,18 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 
 <script>
 /* ============================================================
-   CONFIG — CONFIRM AGAINST CANONICAL METHODOLOGY BEFORE PHASE 2
-   Two tier anchors are known from the live Registry:
+   CONFIG — matches js/reg-score.js ratingFromScore() exactly.
+   Anchors confirmed from live Registry:
      Canterbury G02 = "Habitat Garden" at score 32
      Sir Garnet      = "Ecological Garden" at score 50
-     Top band        = "Urban Biodiversity Node" (91–100)
-   The middle band names/boundaries below are PLACEHOLDERS.
-   Swap in the real scoring config — do not trust these as truth.
    ============================================================ */
 const TIERS = [
-  {name:"Basic",                  min:0,  max:20},
-  {name:"Habitat Garden",         min:21, max:40},   // anchor: Canterbury G02 @32
-  {name:"Ecological Garden",      min:41, max:60},   // anchor: Sir Garnet @50
-  {name:"Biodiverse Garden",      min:61, max:90},   // PLACEHOLDER — confirm
-  {name:"Urban Biodiversity Node",min:91, max:100}
+  {name:"Basic Garden",                 min:0,  max:20},
+  {name:"Habitat Garden",               min:21, max:40},
+  {name:"Ecological Garden",            min:41, max:60},
+  {name:"Registered Ecological Garden", min:61, max:80},
+  {name:"High Habitat Garden",          min:81, max:90},
+  {name:"Urban Biodiversity Node",      min:91, max:100}
 ];
 
 /* Pillars + lightweight self-report questions.
