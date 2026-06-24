@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecological Registry — Self-Enrolment Ramp · Phase 1 prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ECOLOGICAL REGISTRY — SELF-ENROLMENT RAMP · PHASE 1 PROTOTYPE
+   Static only. No backend, no payment. In-memory state.
+   Design language: locked Registry system.
+   - Signal Green #7A9E5F (locked accent)
+   - Fraunces (editorial headings) · IBM Plex Sans (body)
+   - IBM Plex Mono (labels/data) · Abril Fatface (ceremonial ONLY)
+   - Zero border-radius · hairline 1px rules · noise texture
+   - Canopy (dark) / Understory (light) sandwich
+   - Dual voice: Institutional (system) + Steward (warmth/field notes)
+   ============================================================ */
+
+:root{
+  --signal:#7A9E5F;
+  --signal-deep:#5C7A45;
+  --understory:#F7F5EF;
+  --understory-2:#EFEBE0;
+  --canopy:#1A1F17;
+  --canopy-2:#232A1E;
+  --ink:#1A1F17;
+  --ink-soft:#4A5142;
+  --hairline:rgba(26,31,23,.16);
+  --hairline-on-dark:rgba(247,245,239,.18);
+  --provisional:#B08A3E; /* distinct from Signal Green — quarantine colour */
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;
+  background:var(--understory);
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+/* noise texture */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 24px}
+
+/* ---- mono utility / labels (Institutional voice) ---- */
+.label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.label.on-dark{color:rgba(247,245,239,.6)}
+
+/* ---- progress rail ---- */
+.rail{position:sticky;top:0;z-index:40;background:var(--understory);border-bottom:1px solid var(--hairline)}
+.rail-inner{max-width:880px;margin:0 auto;padding:14px 24px;display:flex;gap:0;align-items:center;flex-wrap:wrap}
+.rail-step{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);opacity:.45;padding:4px 0;margin-right:22px;white-space:nowrap;border-bottom:2px solid transparent;transition:opacity .3s}
+.rail-step .n{color:var(--signal-deep)}
+.rail-step.active{opacity:1;border-bottom-color:var(--signal)}
+.rail-step.done{opacity:.8}
+
+/* ---- screens ---- */
+.screen{display:none;animation:fade .5s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+section.band{padding:72px 0}
+section.canopy{background:var(--canopy);color:var(--understory)}
+section.canopy .label{color:rgba(247,245,239,.6)}
+
+h1,h2,h3{font-family:"Fraunces",serif;font-weight:500;line-height:1.08;letter-spacing:-.01em}
+h1{font-size:clamp(34px,6vw,56px)}
+h2{font-size:clamp(26px,4vw,38px)}
+h3{font-size:20px}
+p.lede{font-size:18px;color:var(--ink-soft);max-width:54ch;margin-top:18px}
+section.canopy p.lede{color:rgba(247,245,239,.72)}
+
+/* field note — Steward voice / warmth layer */
+.fieldnote{font-family:"Fraunces",serif;font-style:italic;font-size:17px;color:var(--signal-deep);border-left:2px solid var(--signal);padding-left:16px;margin:28px 0;max-width:50ch}
+section.canopy .fieldnote{color:var(--signal);border-color:var(--signal)}
+
+/* buttons */
+.btn{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--understory);padding:14px 26px;cursor:pointer;border-radius:0;transition:.18s;display:inline-block}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.primary{background:var(--signal);border-color:var(--signal);color:#fff}
+.btn.primary:hover{background:transparent;color:var(--signal-deep);border-color:var(--signal)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--understory)}
+section.canopy .btn.ghost{color:var(--understory);border-color:var(--understory)}
+section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px;align-items:center}
+
+/* ---- 01 ARRIVE ---- */
+.eyebrow{margin-bottom:22px}
+.arrive-meta{display:flex;gap:34px;margin-top:44px;flex-wrap:wrap;border-top:1px solid var(--hairline);padding-top:24px}
+.arrive-meta div{max-width:24ch}
+.arrive-meta .label{display:block;margin-bottom:6px}
+
+/* ---- 02 BASELINE ---- */
+.pillar{border-top:1px solid var(--hairline);padding:26px 0}
+.pillar:last-of-type{border-bottom:1px solid var(--hairline)}
+.pillar-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px}
+.pillar-head h3{font-size:18px}
+.pillar-max{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft)}
+.q{margin:12px 0}
+.q .qt{font-size:14px;color:var(--ink-soft);margin-bottom:8px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;border:1px solid var(--hairline);background:transparent;padding:9px 14px;cursor:pointer;border-radius:0;transition:.15s;color:var(--ink)}
+.opt:hover{border-color:var(--signal)}
+.opt.sel{background:var(--signal);border-color:var(--signal);color:#fff}
+.running{position:sticky;bottom:0;background:var(--understory-2);border:1px solid var(--hairline);padding:16px 20px;margin-top:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.running .v{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:500}
+
+/* ---- score reveal (Abril Fatface — ceremonial location #1) ---- */
+.reveal{text-align:center;padding:30px 0 10px}
+.score-big{font-family:"Abril Fatface",serif;font-size:clamp(80px,18vw,150px);line-height:.9;color:var(--understory)}
+.score-of{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;color:rgba(247,245,239,.5)}
+.provisional-flag{display:inline-flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--provisional);border:1px dashed var(--provisional);padding:7px 14px;margin-top:18px}
+.dot{width:7px;height:7px;background:var(--provisional);display:inline-block}
+
+/* ---- consent modal ---- */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(26,31,23,.74);display:none;align-items:center;justify-content:center;padding:24px}
+.overlay.open{display:flex}
+.modal{background:var(--understory);max-width:560px;width:100%;border:1px solid var(--ink);max-height:90vh;overflow:auto}
+.modal-head{padding:30px 32px 0}
+.modal-body{padding:18px 32px 8px}
+.modal-foot{padding:18px 32px 30px;position:sticky;bottom:0;background:var(--understory);border-top:1px solid var(--hairline);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.consent-item{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--hairline);cursor:pointer;align-items:flex-start}
+.consent-item:first-child{border-top:none}
+.tick{flex:0 0 22px;height:22px;border:1px solid var(--ink);margin-top:2px;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:13px;color:#fff;transition:.15s}
+.consent-item.on .tick{background:var(--signal);border-color:var(--signal)}
+.consent-item .ct{font-size:14px}
+.consent-item .ct b{font-weight:600}
+.consent-item .ct span{display:block;color:var(--ink-soft);font-size:13px;margin-top:3px}
+.req{color:var(--signal-deep)}
+
+/* ---- 04 THE GAP — signature element ---- */
+.gap-stage{margin-top:40px}
+.meter{position:relative;border:1px solid var(--hairline);background:var(--understory-2)}
+.tier-row{display:flex;align-items:center;gap:0;border-top:1px solid var(--hairline);position:relative}
+.tier-row:first-child{border-top:none}
+.tier-band{flex:0 0 96px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft);padding:14px 12px;border-right:1px solid var(--hairline);text-align:right}
+.tier-fill{flex:1;height:52px;position:relative;overflow:hidden}
+.tier-fill .name{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:"Fraunces",serif;font-size:15px;color:var(--ink-soft);z-index:2}
+.tier-fill .bar{position:absolute;left:0;top:0;bottom:0;background:rgba(122,158,95,.14)}
+.tier-row.current .tier-fill{background:rgba(122,158,95,.06)}
+/* provisional marker — HARD QUARANTINE: hollow, dashed, provisional colour, never solid Signal fill */
+.marker{position:absolute;z-index:5;top:50%;transform:translate(-50%,-50%);}
+.marker .pin{width:18px;height:18px;border:2px dashed var(--provisional);background:var(--understory);border-radius:0;transform:rotate(45deg)}
+.marker .mlab{position:absolute;left:50%;transform:translateX(-50%);top:-30px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--provisional);white-space:nowrap;text-transform:uppercase}
+/* how a VERIFIED marker would render — shown for contrast in the legend */
+.legend{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap}
+.legend div{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft);text-transform:uppercase}
+.leg-prov{width:14px;height:14px;border:2px dashed var(--provisional);background:var(--understory);transform:rotate(45deg)}
+.leg-ver{width:14px;height:14px;background:var(--signal);transform:rotate(45deg)}
+.gap-call{margin-top:40px;border:1px solid var(--signal);background:rgba(122,158,95,.08);padding:26px}
+.gap-call .label{color:var(--signal-deep)}
+.gap-call .dist{font-family:"Fraunces",serif;font-size:26px;margin:8px 0}
+.gap-call .dist b{color:var(--signal-deep);font-weight:600}
+
+/* ---- 05 DEEPEN ---- */
+.deepen-split{display:grid;grid-template-columns:1fr;gap:0;margin-top:36px;border:1px solid var(--hairline)}
+.deepen-col{padding:30px}
+.deepen-col.free{background:var(--understory-2)}
+.deepen-col h3{margin-bottom:6px}
+.deepen-col .sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px}
+.species{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.species span{font-family:"IBM Plex Mono",monospace;font-size:11px;border:1px solid var(--hairline);padding:6px 10px;color:var(--ink-soft)}
+.card{border:1px solid var(--hairline);padding:22px;margin-top:14px;position:relative}
+.card.flagship{border-color:var(--signal);border-width:1px}
+.card.flagship::before{content:"FLAGSHIP";position:absolute;top:-1px;right:-1px;background:var(--signal);color:#fff;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.14em;padding:5px 9px}
+.card h4{font-family:"Fraunces",serif;font-size:17px;font-weight:600;margin-bottom:4px}
+.card .price{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--signal-deep);margin:8px 0}
+.card .cdesc{font-size:13px;color:var(--ink-soft)}
+.card .btn{margin-top:14px;font-size:11px;padding:11px 18px}
+.phase-note{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--provisional);border:1px dashed var(--provisional);padding:4px 10px;display:none;margin-top:10px;letter-spacing:.04em}
+.phase-note.show{display:inline-block}
+
+/* footer / restart */
+.proto-foot{padding:50px 0 70px;text-align:center}
+.proto-foot .btn{font-size:11px}
+.disc{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase;margin-top:18px;opacity:.7}
+
+@media(min-width:720px){
+  .deepen-split{grid-template-columns:1fr 1fr}
+  .deepen-col.free{border-right:1px solid var(--hairline)}
+}
+@media(prefers-reduced-motion:reduce){
+  .screen{animation:none}*{transition:none!important}
+}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- progress rail -->
+<div class="rail">
+  <div class="rail-inner" id="rail">
+    <span class="rail-step" data-step="0"><span class="n">01</span> Arrive</span>
+    <span class="rail-step" data-step="1"><span class="n">02</span> Self-baseline</span>
+    <span class="rail-step" data-step="2"><span class="n">03</span> Consent</span>
+    <span class="rail-step" data-step="3"><span class="n">04</span> The gap</span>
+    <span class="rail-step" data-step="4"><span class="n">05</span> Deepen</span>
+  </div>
+</div>
+
+<!-- ============ 01 ARRIVE ============ -->
+<div class="screen active" id="s0">
+  <section class="band">
+    <div class="wrap">
+      <div class="label eyebrow">Ecological Registry · open enrolment</div>
+      <h1>Add your garden to the&nbsp;Registry.</h1>
+      <p class="lede">The Registry holds the ecological memory of gardens across Boroondara and beyond — what grows there, what lives there, and how it changes over time. You don't need us to have planted it. You only need to be its steward now.</p>
+      <p class="fieldnote">A garden you didn't design is still a garden worth remembering. Start where it is.</p>
+      <div class="arrive-meta">
+        <div><span class="label">Takes</span>About four minutes</div>
+        <div><span class="label">Produces</span>A provisional ecological score</div>
+        <div><span class="label">Costs</span>Nothing to begin</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" onclick="go(1)">Register this garden</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 02 SELF-BASELINE ============ -->
+<div class="screen" id="s1">
+  <section class="band">
+    <div class="wrap">
+      <div class="label eyebrow">Step 02 · self-baseline</div>
+      <h2>Tell us what's there.</h2>
+      <p class="lede">Answer from what you can see today. Inputs are truth — the score is only ever a consequence of them. You can refine any answer later, and a steward visit can confirm them.</p>
+      <div id="pillars"></div>
+      <div class="running">
+        <span class="label">Provisional total · live</span>
+        <span class="v"><span id="liveScore">0</span> / 100 &nbsp;·&nbsp; <span id="liveTier">—</span></span>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" onclick="go(0)">Back</button>
+        <button class="btn primary" onclick="go(2)">Continue to consent</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 03 CONSENT (front door) ============ -->
+<div class="screen" id="s2">
+  <section class="band canopy">
+    <div class="wrap">
+      <div class="label eyebrow">Step 03 · stewardship</div>
+      <h2 style="color:var(--understory)">Accept stewardship of this garden's&nbsp;memory.</h2>
+      <p class="lede">Registering isn't a checkbox — it's a commitment to hold this garden's record. You decide what's shared and you can withdraw any of it at any time. Nothing appears on the public Registry until you open the door.</p>
+      <p class="fieldnote">A garden should not lose its memory when ownership changes. Consent is how the memory stays cared for.</p>
+      <div class="btn-row">
+        <button class="btn ghost" onclick="go(1)">Back</button>
+        <button class="btn primary" onclick="openConsent()">Open the consent agreement</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- consent modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+    <div class="modal-head">
+      <div class="label">Stage 0 consent · revocable</div>
+      <h3 id="consentTitle" style="margin-top:8px">What you're agreeing to</h3>
+    </div>
+    <div class="modal-body" id="consentItems">
+      <!-- granular items injected -->
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeConsent()">Cancel</button>
+      <button class="btn primary" id="consentConfirm" onclick="confirmConsent()" disabled>Accept stewardship</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 04 THE GAP (signature) ============ -->
+<div class="screen" id="s3">
+  <section class="band canopy">
+    <div class="wrap reveal">
+      <div class="label">Provisional score · self-reported</div>
+      <div class="score-big" id="revealScore">0</div>
+      <div class="score-of">OUT OF 100 · <span id="revealTier">—</span></div>
+      <div class="provisional-flag"><span class="dot"></span> Provisional — not yet verified</div>
+    </div>
+  </section>
+  <section class="band">
+    <div class="wrap">
+      <div class="label eyebrow">Step 04 · the gap</div>
+      <h2>Here's the distance to a richer garden.</h2>
+      <p class="lede">Your provisional marker sits where your inputs place it. A verified marker would sit solid and filled — earned through a steward visit. The space between your band and the next is not a deficiency. It's the invitation.</p>
+
+      <div class="gap-stage">
+        <div class="meter" id="meter"></div>
+        <div class="legend">
+          <div><span class="leg-prov"></span> Provisional (self-reported)</div>
+          <div><span class="leg-ver"></span> Verified (steward visit)</div>
+        </div>
+      </div>
+
+      <div class="gap-call">
+        <div class="label">Next threshold</div>
+        <div class="dist">You're <b><span id="gapPoints">0</span> points</b> from <b><span id="gapTier">—</span></b>.</div>
+        <p style="color:var(--ink-soft);font-size:15px;max-width:52ch">The next section shows the ways to close it — some you can do this weekend, some we can do with you.</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn ghost" onclick="go(2)">Back</button>
+        <button class="btn primary" onclick="go(4)">Show me how to close it</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 05 DEEPEN ============ -->
+<div class="screen" id="s4">
+  <section class="band">
+    <div class="wrap">
+      <div class="label eyebrow">Step 05 · deepen</div>
+      <h2>Tend it forward.</h2>
+      <p class="lede">Everything here closes the gap. The free path is yours to walk alone. The verified path is where the garden becomes part of the Registry's evidence base — and where a provisional score becomes real.</p>
+
+      <div class="deepen-split">
+        <div class="deepen-col free">
+          <div class="label">Free · do it yourself</div>
+          <h3>Plant your EVC match</h3>
+          <p class="sub">Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity. (Indicative list — wired to Plants of Place in a later phase.)</p>
+          <div class="species">
+            <span>Themeda triandra</span><span>Bursaria spinosa</span><span>Dianella admixta</span>
+            <span>Microlaena stipoides</span><span>Acacia paradoxa</span><span>Kennedia prostrata</span>
+          </div>
+          <p class="fieldnote" style="margin-top:24px">Six plants in the right place will do more than sixty in the wrong one.</p>
+        </div>
+        <div class="deepen-col">
+          <div class="label">Paid · tend with us</div>
+          <div class="card flagship">
+            <h4>Ecological Garden Health Check</h4>
+            <div class="price">From $—  ·  steward site visit</div>
+            <p class="cdesc">A G&S steward visits, confirms your inputs, and lifts your garden from provisional to verified. This is how the score becomes real — and how the garden joins the Registry's evidence base.</p>
+            <button class="btn primary" onclick="phaseNote(this)">Book a verification visit</button>
+            <div class="phase-note">Phase 1 prototype — checkout wired in Phase 3</div>
+          </div>
+          <div class="card">
+            <h4>Plants of Place species pack</h4>
+            <div class="price">From $— · indigenous micro-nursery</div>
+            <p class="cdesc">The EVC-matched species above, grown locally and ready to plant.</p>
+            <button class="btn ghost" onclick="phaseNote(this)">Reserve a pack</button>
+            <div class="phase-note">Phase 1 prototype — checkout wired in Phase 3</div>
+          </div>
+          <div class="card">
+            <h4>Tend subscription</h4>
+            <div class="price">Seedling · Grove · Canopy</div>
+            <p class="cdesc">Ongoing stewardship that keeps the score moving and the record current.</p>
+            <button class="btn ghost" onclick="phaseNote(this)">See Tend tiers</button>
+            <div class="phase-note">Phase 1 prototype — checkout wired in Phase 3</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proto-foot">
+        <button class="btn ghost" onclick="restart()">Restart prototype</button>
+        <div class="disc">Phase 1 static prototype · no backend · no payment · provisional ≠ verified</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — CONFIRM AGAINST CANONICAL METHODOLOGY BEFORE PHASE 2
+   Two tier anchors are known from the live Registry:
+     Canterbury G02 = "Habitat Garden" at score 32
+     Sir Garnet      = "Ecological Garden" at score 50
+     Top band        = "Urban Biodiversity Node" (91–100)
+   The middle band names/boundaries below are PLACEHOLDERS.
+   Swap in the real scoring config — do not trust these as truth.
+   ============================================================ */
+const TIERS = [
+  {name:"Basic",                  min:0,  max:20},
+  {name:"Habitat Garden",         min:21, max:40},   // anchor: Canterbury G02 @32
+  {name:"Ecological Garden",      min:41, max:60},   // anchor: Sir Garnet @50
+  {name:"Biodiverse Garden",      min:61, max:90},   // PLACEHOLDER — confirm
+  {name:"Urban Biodiversity Node",min:91, max:100}
+];
+
+/* Pillars + lightweight self-report questions.
+   Weights sum to the canonical pillar maxima (25/20/20/20/15 = 100).
+   These questions are a PROTOTYPE proxy, not the real scoring engine. */
+const PILLARS = [
+  {key:"bio", name:"Biodiversity Structure", max:25, qs:[
+    {t:"How many distinct plant species are growing?", opts:[["Few (<10)",4],["Some (10–25)",10],["Many (25–50)",18],["Rich (50+)",25]]}
+  ]},
+  {key:"soil", name:"Soil & Water", max:20, qs:[
+    {t:"Is the soil mulched and the garden water-wise?", opts:[["Neither",3],["One of them",11],["Both, consistently",20]]}
+  ]},
+  {key:"habitat", name:"Habitat Complexity", max:20, qs:[
+    {t:"How many vertical layers are present (ground, shrub, canopy)?", opts:[["One",4],["Two",12],["All three",20]]}
+  ]},
+  {key:"conn", name:"Connectivity", max:20, qs:[
+    {t:"Does planting connect to neighbouring habitat or green corridors?", opts:[["Isolated",3],["Partly",11],["Well connected",20]]}
+  ]},
+  {key:"evid", name:"Evidence", max:15, qs:[
+    {t:"What records do you keep (photos, species lists, observations)?", opts:[["None",2],["Casual",8],["Documented over time",15]]}
+  ]}
+];
+
+const CONSENT = [
+  {req:true,  b:"Hold this garden's record in the Registry", s:"We store its location, species, and ecological score as a stewarded record."},
+  {req:true,  b:"Show a provisional score publicly", s:"Clearly marked as self-reported and unverified — never shown as verified."},
+  {req:false, b:"Contact me about a verification visit", s:"Optional. We'll reach out about confirming your inputs in person."},
+  {req:false, b:"Include this garden in aggregate, de-identified statistics", s:"Optional. Helps councils and partners see neighbourhood biodiversity."}
+];
+
+/* ---- state ---- */
+const answers = {};   // pillarKey -> points
+let consentState = CONSENT.map(c=>c.req); // required pre-implied off until ticked
+
+/* ---- build baseline UI ---- */
+const pillarsEl = document.getElementById('pillars');
+PILLARS.forEach(p=>{
+  const wrap = document.createElement('div');
+  wrap.className='pillar';
+  let qhtml = p.qs.map((q,qi)=>{
+    const opts = q.opts.map((o,oi)=>`<button class="opt" data-p="${p.key}" data-pts="${o[1]}" onclick="pick(this,'${p.key}')">${o[0]}</button>`).join('');
+    return `<div class="q"><div class="qt">${q.t}</div><div class="opts">${opts}</div></div>`;
+  }).join('');
+  wrap.innerHTML = `<div class="pillar-head"><h3>${p.name}</h3><span class="pillar-max">max ${p.max}</span></div>${qhtml}`;
+  pillarsEl.appendChild(wrap);
+});
+
+/* ---- build consent items ---- */
+const ci = document.getElementById('consentItems');
+CONSENT.forEach((c,i)=>{
+  const row=document.createElement('div');
+  row.className='consent-item'+(c.req?'':'');
+  row.onclick=()=>toggleConsent(i,row);
+  row.innerHTML=`<div class="tick">✓</div><div class="ct"><b>${c.b}</b> ${c.req?'<span class="req">Required</span>':'<span>Optional</span>'}<span>${c.s}</span></div>`;
+  ci.appendChild(row);
+});
+
+function pick(btn,key){
+  btn.parentElement.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  answers[key]=parseInt(btn.dataset.pts,10);
+  updateScore();
+}
+function score(){ return Object.values(answers).reduce((a,b)=>a+b,0); }
+function tierFor(s){ return TIERS.find(t=> s>=t.min && s<=t.max) || TIERS[0]; }
+function updateScore(){
+  const s=score(); const t=tierFor(s);
+  document.getElementById('liveScore').textContent=s;
+  document.getElementById('liveTier').textContent=t.name;
+}
+
+/* ---- consent logic ---- */
+function toggleConsent(i,row){
+  consentState[i]=!consentState[i];
+  row.classList.toggle('on',consentState[i]);
+  // confirm enabled only when all REQUIRED items ticked
+  const ok = CONSENT.every((c,idx)=> !c.req || consentState[idx]);
+  document.getElementById('consentConfirm').disabled=!ok;
+}
+function openConsent(){ document.getElementById('overlay').classList.add('open'); }
+function closeConsent(){ document.getElementById('overlay').classList.remove('open'); }
+function confirmConsent(){ closeConsent(); go(3); }
+
+/* ---- build the gap meter (signature) ---- */
+function buildMeter(){
+  const s=score(); const meter=document.getElementById('meter'); meter.innerHTML='';
+  // marker x-position as % across the 0..100 fill area
+  TIERS.forEach(t=>{
+    const row=document.createElement('div');
+    const isCurrent = s>=t.min && s<=t.max;
+    row.className='tier-row'+(isCurrent?' current':'');
+    const span = t.max-t.min+1;
+    row.innerHTML=`<div class="tier-band">${t.min}–${t.max}</div>
+      <div class="tier-fill"><div class="bar" style="width:${isCurrent? ((s-t.min)/span*100):0}%"></div><span class="name">${t.name}</span></div>`;
+    if(isCurrent){
+      const m=document.createElement('div');
+      m.className='marker';
+      m.style.left = ((s-t.min)/span*100) + '%';
+      m.innerHTML='<div class="mlab">You · provisional</div><div class="pin"></div>';
+      row.querySelector('.tier-fill').appendChild(m);
+    }
+    meter.appendChild(row);
+  });
+  // reveal + gap call
+  const t=tierFor(s);
+  document.getElementById('revealScore').textContent=s;
+  document.getElementById('revealTier').textContent=t.name;
+  const next = TIERS.find(x=>x.min>t.max);
+  if(next){
+    document.getElementById('gapPoints').textContent = next.min - s;
+    document.getElementById('gapTier').textContent = next.name;
+  } else {
+    document.getElementById('gapPoints').textContent = 0;
+    document.getElementById('gapTier').textContent = "the top of the Registry";
+  }
+}
+
+/* ---- navigation ---- */
+function go(step){
+  document.querySelectorAll('.screen').forEach((s,i)=> s.classList.toggle('active', i===step));
+  document.querySelectorAll('.rail-step').forEach((r,i)=>{
+    r.classList.toggle('active', i===step);
+    r.classList.toggle('done', i<step);
+  });
+  if(step===3) buildMeter();
+  window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+}
+function phaseNote(btn){ btn.nextElementSibling.classList.add('show'); }
+function restart(){
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
+  consentState=CONSENT.map(c=>c.req);
+  document.querySelectorAll('.consent-item').forEach(r=>r.classList.remove('on'));
+  document.getElementById('consentConfirm').disabled=true;
+  document.querySelectorAll('.phase-note').forEach(n=>n.classList.remove('show'));
+  updateScore(); go(0);
+}
+updateScore();
+</script>
+</body>
+</html>
