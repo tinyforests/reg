@@ -4,6 +4,32 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### G&S shared core library — architectural direction
+
+Identified 25 Jun 2026 during Self-Enrolment Ramp Phase 1.5 design work, surfaced by the realisation that EVC resolution and species list lookup logic is currently duplicated across multiple G&S apps (findyourevc, super-barnacle, registry assess.html, prototype, plantsofplace).
+
+Proposed direction: build a shared core JS module (e.g. g-and-s-core.js, hosted on a CDN or via a known URL) that all G&S apps consume from. Exports canonical implementations of:
+
+- resolveAddressToClassification(address) — currently Victoria-only (Nominatim + Victorian WFS via Turf.js), structured to be expandable to other states' classification systems
+- loadPlantList(classification) — returns the plant palette for a given classification (EVC code in Victoria, equivalent elsewhere later)
+- scoreGarden(record) — the canonical ecological scoring engine (currently in js/reg-score.js, the registry's authoritative version)
+- loadSpeciesDb() — returns the cross-registry species inventory (currently data/species.json)
+
+Benefits:
+- One canonical place for methodology — engine drift across apps becomes impossible
+- Updating a band threshold, fixing a bug, or adding a feature touches one file
+- New G&S apps consume the same logic without re-implementing
+- Sets up cleanly for national expansion (next pending-work entry)
+
+Sequencing direction:
+- Sketch the API surface and module boundaries first (one fresh session, no code)
+- Build the first version exporting just resolveAddressToClassification (the highest-leverage function)
+- Refactor findyourevc to consume from the shared library
+- Then wire the Self-Enrolment Ramp prototype to consume the same
+- Then refactor super-barnacle and assess.html
+
+This work blocks the Phase 1.5 live wiring of the Self-Enrolment Ramp prototype. Phase 1 static prototype shipped via this commit; Phase 1.5 (live wiring) deferred until shared core is in place. This is a deliberate slowdown — the architecture realisation is more valuable than the schedule.
+
 ### Sir Garnet — registered May 2026, GPS and documentation pending
 
 30 Sir Garnet Road, Surrey Hills. Registered May 2026. Score 50, Ecological Garden, tier 3. Front Native Buffer Garden only (rear cottage pollinator garden explicitly excluded). GPS surveyed via Google Maps long-press. Coordinates of adjacent council nature strip (park_lat -37.82133, park_lng 145.09043) approximate — confirm on next site visit. Photo documentation and iNaturalist fauna records are 30-day actions for Richard & Jenny — score will rise when documented.
@@ -127,6 +153,32 @@ Canterbury G02's baseline registration revealed an unexpected pattern: Tend cust
 ### Verification level methodology — note for v0.5 / v1.0
 
 Canterbury G02 is the first registry entry to carry verification_level: site_visit (3 Evidence pts) rather than gardener_and_son_verified (4 pts). It also earned the first 'site_visit_badge' in the registry. The verification level field is now demonstrably meaningful — gardens are no longer uniformly top-marked. When v0.5 or v1.0 introduces Accuracy Level as a separate field (per Methodology Rev 1), verification_level needs careful migration: the gradient from photo_verified → site_visit → gardener_and_son_verified → independent_ecologist_verified is the registry's epistemic spine. Worth capturing in docs/methodology-notes.md the credibility argument: a registry willing to score itself lower when honesty requires it is more credible than one uniformly top-marked.
+
+### National expansion — classification-system-agnostic design
+
+Identified 25 Jun 2026. The Ecological Registry is currently structurally Victorian — every classification field uses EVC (Ecological Vegetation Class), a Victorian Government framework. National expansion (NSW, QLD, WA, SA, TAS, NT, ACT) requires the data model and the methodology to be classification-system-agnostic.
+
+Equivalent state classifications:
+- NSW: Plant Community Types (PCTs) — managed by NSW DPIE BioNet
+- QLD: Regional Ecosystems (REs) — managed by QLD Herbarium
+- WA: Vegetation Complexes — Beard's vegetation map
+- SA: Floristic Vegetation Communities
+- TAS: TasVeg communities
+- NT: Threatened Ecological Communities + community-level mapping
+- ACT: Ecological Communities
+
+Design direction for the registry:
+- The database field 'evc' should be renamed or aliased to 'classification_code' with 'classification_system' tag (e.g. 'EVC-Vic', 'PCT-NSW')
+- The 'evcName' field becomes 'classificationName'
+- Plant palette files should be partitioned by classification system, not assumed to be EVC
+- The resolveAddressToClassification function (see shared library entry) needs to detect state from address/coordinates and route to the appropriate classification API
+
+UI considerations:
+- Public-facing language should evolve from "Your garden's EVC is..." to "Your garden's ecological vegetation community is..." (the universal phrase that maps to EVCs in Vic, PCTs in NSW, etc.)
+- Tier names ('Habitat Garden', 'Ecological Garden' etc.) are nationally portable as-is
+- The acquirer (AfN, GreenCollar, Pollination) values national reach — making this national-ready strengthens the acquisition case meaningfully
+
+Sequencing: this is downstream of the shared library work. National expansion requires the shared library to exist first.
 
 ## Out of scope (do not work on without explicit instruction)
 
