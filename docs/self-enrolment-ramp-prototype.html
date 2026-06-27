@@ -107,6 +107,8 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .pillar-max{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft)}
 .q{margin:12px 0}
 .q .qt{font-size:14px;color:var(--ink-soft);margin-bottom:8px}
+.q .qhelp{font-family:"IBM Plex Sans",sans-serif;font-size:13px;color:var(--ink-soft);margin:6px 0 10px;max-width:54ch;font-style:italic}
+.q .qtype{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal-deep);margin-bottom:8px}
 .opts{display:flex;gap:8px;flex-wrap:wrap}
 .opt{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;border:1px solid var(--hairline);background:transparent;padding:9px 14px;cursor:pointer;border-radius:0;transition:.15s;color:var(--ink)}
 .opt:hover{border-color:var(--signal)}
@@ -354,12 +356,6 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
             <!-- TODO Phase 2: pass actual EVC code as query param once baseline form captures it -->
             <a class="btn ghost" href="https://plantsofplace.com" target="_blank" rel="noopener">Reserve a pack</a>
           </div>
-          <div class="card">
-            <h4>Tend subscription</h4>
-            <div class="price">Seedling · Grove · Canopy</div>
-            <p class="cdesc">Ongoing stewardship that keeps the score moving and the record current.</p>
-            <a class="btn ghost" href="https://gardenerandson.com/tend/" target="_blank" rel="noopener">See Tend tiers</a>
-          </div>
         </div>
       </div>
 
@@ -392,19 +388,158 @@ const TIERS = [
    These questions are a PROTOTYPE proxy, not the real scoring engine. */
 const PILLARS = [
   {key:"bio", name:"Biodiversity Structure", max:25, qs:[
-    {t:"How many distinct plant species are growing?", opts:[["Few (<10)",4],["Some (10–25)",10],["Many (25–50)",18],["Rich (50+)",25]]}
+    {
+      t:"How many strictly local-indigenous plant species are growing in your garden?",
+      help:"Strictly local-indigenous means species native to your specific Ecological Vegetation Class — not Australian natives from other regions. If unsure, count what you're confident about.",
+      type:"single",
+      opts:[
+        ["None (0)",0],
+        ["1 to 5",2],
+        ["6 to 11",4],
+        ["12 to 19",6],
+        ["20 to 29",8],
+        ["30 or more",10]
+      ]
+    },
+    {
+      t:"Roughly, what proportion of plants in your garden are local-indigenous?",
+      help:"Indigenous to the local ecology, not just Australian natives from elsewhere.",
+      type:"single",
+      opts:[
+        ["Less than half",0],
+        ["More than half (indigenous-dominant)",4]
+      ]
+    },
+    {
+      t:"Which planting layers can you see in your garden?",
+      help:"Tick all that are genuinely present and meaningful — not just a single plant in that layer.",
+      type:"multi",
+      opts:[
+        ["Groundcover (creeping or low-growing plants under 30cm)",1],
+        ["Tussock grasses or low tufting plants",1],
+        ["Low shrubs (knee to waist height)",1],
+        ["Mid-storey shrubs and small trees",1],
+        ["Canopy trees (mature trees forming overhead structure)",2]
+      ],
+      cap:6
+    },
+    {
+      t:"If you look up from the middle of your garden, what proportion of the sky is covered by tree canopy?",
+      help:"Be honest about how full or patchy the canopy is. A few small trees won't shade much.",
+      type:"single",
+      opts:[
+        ["Less than 5% (open sky)",0],
+        ["5–14% (light shade)",1],
+        ["15–29% (moderate canopy)",2],
+        ["30–49% (substantial canopy)",4],
+        ["50% or more (closed canopy)",5]
+      ]
+    }
   ]},
+
   {key:"soil", name:"Soil & Water", max:20, qs:[
-    {t:"Is the soil mulched and the garden water-wise?", opts:[["Neither",3],["One of them",11],["Both, consistently",20]]}
+    {
+      t:"How would you describe the soil in your garden?",
+      help:"A handful of soil tells you most of what matters. Don't over-think it.",
+      type:"single",
+      opts:[
+        ["Hard, compacted, eroded, or mostly bare",2],
+        ["Average garden soil, some bare patches",3],
+        ["Mulched in places, some worms, mostly covered",5],
+        ["Healthy crumbly soil, consistently mulched, alive throughout",8]
+      ]
+    },
+    {
+      t:"How well does your garden manage water — drainage, retention, and irrigation?",
+      help:"Includes natural drainage, planting choices that hold moisture, and how you water.",
+      type:"single",
+      opts:[
+        ["Poor drainage, dry soil, or wasteful watering",1],
+        ["Average — mixed drainage and watering practices",3],
+        ["Good — soil holds moisture well, careful watering",6],
+        ["Excellent — water flows through the garden, plants thriving without much irrigation",7]
+      ]
+    },
+    {
+      t:"Which water-management features does your garden have?",
+      help:"Tick all that genuinely exist in your garden — not what you're planning.",
+      type:"multi",
+      opts:[
+        ["Rainwater tank connected to the garden",2],
+        ["Moisture basin or sunken planting bed that captures runoff",2],
+        ["Swale (shallow channel that slows and infiltrates water)",1],
+        ["None of the above",0]
+      ],
+      cap:5
+    }
   ]},
+
   {key:"habitat", name:"Habitat Complexity", max:20, qs:[
-    {t:"How many vertical layers are present (ground, shrub, canopy)?", opts:[["One",4],["Two",12],["All three",20]]}
+    {
+      t:"How many distinct habitat zones can you identify in your garden?",
+      help:"A habitat zone is a deliberate refuge area — like a dense planted thicket, a rock-and-log corner, a wildlife pond area. Not just any patch of garden, but somewhere wildlife could shelter, breed, or feed.",
+      type:"single",
+      opts:[
+        ["None — it's all open garden",0],
+        ["One or two distinct zones",2],
+        ["Three or four zones",4],
+        ["Five or more zones",6]
+      ]
+    },
+    {
+      t:"Which habitat features does your garden have?",
+      help:"Tick only what genuinely exists. A 'log' means a real fallen log at least 1.5m long and 15cm thick, partly buried. 'Rock refuges' means a deliberate pile of rocks animals can shelter in, not a few stones.",
+      type:"multi",
+      opts:[
+        ["Embedded log (1.5m+ long, partly buried)",3],
+        ["Rock refuge or rock pile",2],
+        ["Water feature animals can drink from (pond, dish, birdbath)",3],
+        ["Nest box or bee hotel",2],
+        ["None yet",0]
+      ],
+      cap:10
+    },
+    {
+      t:"Have you observed wildlife visiting your garden over time?",
+      help:"This builds the record. Verified sightings (confirmed during a verification visit) earn habitat points in the engine — your observations now form the basis of that record.",
+      type:"single",
+      opts:[
+        ["Rarely or not really",0],
+        ["Occasionally — some casual observations",1],
+        ["Often — I'd recognise regular visitors",2]
+      ]
+    }
   ]},
+
   {key:"conn", name:"Connectivity", max:20, qs:[
-    {t:"Does planting connect to neighbouring habitat or green corridors?", opts:[["Isolated",3],["Partly",11],["Well connected",20]]}
+    {
+      t:"Is your garden adjacent to or near a park, reserve, or significant natural area?",
+      help:"This is the connectivity question for self-baseline. Other connectivity factors (adjacent registered gardens, recognised wildlife corridors, cluster area) can only be confirmed through verification — they'll add to your score after a steward visit.",
+      type:"single",
+      opts:[
+        ["No park within 300m, or unsure",0],
+        ["Within 300m of a park",2],
+        ["Within 150m of a park",4],
+        ["Within 50m of a park (effectively adjacent)",6]
+      ]
+    }
   ]},
+
   {key:"evid", name:"Evidence", max:15, qs:[
-    {t:"What records do you keep (photos, species lists, observations)?", opts:[["None",2],["Casual",8],["Documented over time",15]]}
+    {
+      t:"Which records do you currently keep about your garden?",
+      help:"Tick everything that genuinely exists. The verification visit can add a professional assessment (worth +3) and upgrade your verification level (worth +3 to +4).",
+      type:"multi",
+      opts:[
+        ["Photos over time",2],
+        ["A species list of what's planted",2],
+        ["Field notes, journal, or written observations",2],
+        ["A record of wildlife seen in the garden",2],
+        ["A professional assessment by a landscape designer or ecologist",3],
+        ["I'm starting now (this registration)",0]
+      ],
+      cap:11
+    }
   ]}
 ];
 
@@ -421,12 +556,18 @@ let consentState = CONSENT.map(c=>c.req); // required pre-implied off until tick
 
 /* ---- build baseline UI ---- */
 const pillarsEl = document.getElementById('pillars');
-PILLARS.forEach(p=>{
+PILLARS.forEach(p => {
   const wrap = document.createElement('div');
-  wrap.className='pillar';
-  let qhtml = p.qs.map((q,qi)=>{
-    const opts = q.opts.map((o,oi)=>`<button class="opt" data-p="${p.key}" data-pts="${o[1]}" onclick="pick(this,'${p.key}')">${o[0]}</button>`).join('');
-    return `<div class="q"><div class="qt">${q.t}</div><div class="opts">${opts}</div></div>`;
+  wrap.className = 'pillar';
+  let qhtml = p.qs.map((q, qi) => {
+    const type = q.type || 'single';
+    const cap = q.cap || 0;
+    const helpHtml = q.help ? `<div class="qhelp">${q.help}</div>` : '';
+    const opts = q.opts.map((o, oi) =>
+      `<button class="opt" data-p="${p.key}" data-qi="${qi}" data-pts="${o[1]}" onclick="pick(this,'${p.key}','${type}',${cap})">${o[0]}</button>`
+    ).join('');
+    const typeNote = type === 'multi' ? '<div class="qtype">Tick all that apply</div>' : '';
+    return `<div class="q"><div class="qt">${q.t}</div>${helpHtml}${typeNote}<div class="opts">${opts}</div></div>`;
   }).join('');
   wrap.innerHTML = `<div class="pillar-head"><h3>${p.name}</h3><span class="pillar-max">max ${p.max}</span></div>${qhtml}`;
   pillarsEl.appendChild(wrap);
@@ -442,10 +583,20 @@ CONSENT.forEach((c,i)=>{
   ci.appendChild(row);
 });
 
-function pick(btn,key){
-  btn.parentElement.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  answers[key]=parseInt(btn.dataset.pts,10);
+function pick(btn, key, type, cap){
+  if(type === 'single'){
+    btn.parentElement.querySelectorAll('.opt').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    answers[key + '_' + btn.dataset.qi] = parseInt(btn.dataset.pts, 10);
+  } else if(type === 'multi'){
+    btn.classList.toggle('sel');
+    var qid = key + '_' + btn.dataset.qi;
+    var picks = Array.from(btn.parentElement.querySelectorAll('.opt.sel'))
+      .map(b => parseInt(b.dataset.pts, 10));
+    var sum = picks.reduce((a,b) => a+b, 0);
+    if(cap && sum > cap) sum = cap;
+    answers[qid] = sum;
+  }
   updateScore();
 }
 function score(){ return Object.values(answers).reduce((a,b)=>a+b,0); }
