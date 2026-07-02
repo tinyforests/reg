@@ -139,6 +139,13 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .consent-item .ct span{display:block;color:var(--ink-soft);font-size:13px;margin-top:3px}
 .req{color:var(--signal-deep)}
 
+/* ---- identity inputs (consent modal) ---- */
+.identity-fields{padding:12px 0;border-bottom:1px solid var(--hairline);margin-bottom:12px}
+.identity-fields label{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:12px 0 4px}
+.identity-fields input{width:100%;font-family:"IBM Plex Sans",sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--hairline);background:var(--understory);color:var(--ink);border-radius:0}
+.identity-fields input:focus{outline:2px solid var(--signal);outline-offset:2px;border-color:var(--signal)}
+.consent-error{color:#c0392b;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;margin-top:8px}
+
 /* ---- 04 THE GAP — signature element ---- */
 .gap-stage{margin-top:40px}
 .meter{position:relative;border:1px solid var(--hairline);background:var(--understory-2)}
@@ -272,9 +279,10 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
       <div class="label">Stage 0 consent · revocable</div>
       <h3 id="consentTitle" style="margin-top:8px">What you're agreeing to</h3>
     </div>
-    <div class="modal-body" id="consentItems">
+    <div class="modal-body">
       <p class="fieldnote" style="margin:0 0 8px;font-size:15px">Stewardship isn't a tickbox. You're agreeing to hold this garden's record across whoever lives here next — the memory belongs to whoever is tending it. You decide what's shared, and you can withdraw any of it at any time.</p>
-      <!-- granular items injected -->
+      <div id="identityFields" class="identity-fields"></div>
+      <div id="consentItems"></div>
     </div>
     <div class="modal-foot">
       <button class="btn ghost" onclick="closeConsent()">Cancel</button>
@@ -368,6 +376,8 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 </div>
 
 <script>
+const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
+
 /* ============================================================
    CONFIG — matches js/reg-score.js ratingFromScore() exactly.
    Anchors confirmed from live Registry:
@@ -543,6 +553,12 @@ const PILLARS = [
   ]}
 ];
 
+const IDENTITY_FIELDS = [
+  {id:'steward_name',    label:'Your name',      type:'text',  placeholder:'Tyson Lundbech',                           required:true},
+  {id:'steward_email',   label:'Email',          type:'email', placeholder:'your@email.com',                           required:true},
+  {id:'garden_address',  label:'Garden address', type:'text',  placeholder:'123 Example Street, Suburb STATE 0000',    required:true}
+];
+
 const CONSENT = [
   {req:true,  b:"Hold this garden's record in the Registry", s:"We store its location, species, and ecological score as a stewarded record."},
   {req:true,  b:"Show a provisional score publicly", s:"Clearly marked as self-reported and unverified — never shown as verified."},
@@ -552,7 +568,7 @@ const CONSENT = [
 
 /* ---- state ---- */
 const answers = {};   // pillarKey -> points
-let consentState = CONSENT.map(c=>c.req); // required pre-implied off until ticked
+let consentState = new Array(CONSENT.length).fill(false);
 
 /* ---- build baseline UI ---- */
 const pillarsEl = document.getElementById('pillars');
@@ -573,11 +589,28 @@ PILLARS.forEach(p => {
   pillarsEl.appendChild(wrap);
 });
 
+/* ---- build identity inputs ---- */
+const idf = document.getElementById('identityFields');
+IDENTITY_FIELDS.forEach(f => {
+  const lbl = document.createElement('label');
+  lbl.setAttribute('for', f.id);
+  lbl.textContent = f.label;
+  const inp = document.createElement('input');
+  inp.type = f.type;
+  inp.id = f.id;
+  inp.placeholder = f.placeholder;
+  inp.required = f.required;
+  inp.autocomplete = f.type === 'email' ? 'email' : 'off';
+  inp.addEventListener('input', checkConsentReady);
+  idf.appendChild(lbl);
+  idf.appendChild(inp);
+});
+
 /* ---- build consent items ---- */
 const ci = document.getElementById('consentItems');
 CONSENT.forEach((c,i)=>{
   const row=document.createElement('div');
-  row.className='consent-item'+(c.req?'':'');
+  row.className='consent-item';
   row.onclick=()=>toggleConsent(i,row);
   row.innerHTML=`<div class="tick">✓</div><div class="ct"><b>${c.b}</b> ${c.req?'<span class="req">Required</span>':'<span>Optional</span>'}<span>${c.s}</span></div>`;
   ci.appendChild(row);
@@ -608,16 +641,86 @@ function updateScore(){
 }
 
 /* ---- consent logic ---- */
+function checkConsentReady(){
+  const consentOk = CONSENT.every((c,idx) => !c.req || consentState[idx]);
+  const identityOk = IDENTITY_FIELDS.every(f => {
+    if(!f.required) return true;
+    const el = document.getElementById(f.id);
+    return el && el.value.trim() !== '';
+  });
+  document.getElementById('consentConfirm').disabled = !(consentOk && identityOk);
+}
 function toggleConsent(i,row){
   consentState[i]=!consentState[i];
   row.classList.toggle('on',consentState[i]);
-  // confirm enabled only when all REQUIRED items ticked
-  const ok = CONSENT.every((c,idx)=> !c.req || consentState[idx]);
-  document.getElementById('consentConfirm').disabled=!ok;
+  checkConsentReady();
 }
 function openConsent(){ document.getElementById('overlay').classList.add('open'); }
 function closeConsent(){ document.getElementById('overlay').classList.remove('open'); }
-function confirmConsent(){ closeConsent(); go(3); }
+async function confirmConsent(){
+  const btn = document.getElementById('consentConfirm');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+
+  const s = score();
+  const t = tierFor(s);
+  const payload = {
+    steward_name:              (document.getElementById('steward_name')   || {}).value || '',
+    steward_email:             (document.getElementById('steward_email')  || {}).value || '',
+    garden_address:            (document.getElementById('garden_address') || {}).value || '',
+    bio_q1_indigenous_species: answers['bio_0']    || 0,
+    bio_q2_indigenous_dominant:answers['bio_1']    || 0,
+    bio_q3_layers:             answers['bio_2']    || 0,
+    bio_q4_canopy:             answers['bio_3']    || 0,
+    soil_q1_condition:         answers['soil_0']   || 0,
+    soil_q2_water:             answers['soil_1']   || 0,
+    soil_q3_features:          answers['soil_2']   || 0,
+    habitat_q1_zones:          answers['habitat_0']|| 0,
+    habitat_q2_features:       answers['habitat_1']|| 0,
+    habitat_q3_wildlife:       answers['habitat_2']|| 0,
+    conn_q1_park:              answers['conn_0']   || 0,
+    evidence_q1_records:       answers['evid_0']   || 0,
+    provisional_score_total:   s,
+    provisional_tier:          t.name,
+    consent_record:              consentState[0] === true,
+    consent_public_score:        consentState[1] === true,
+    consent_contact_about_visit: consentState[2] === true,
+    consent_aggregate_stats:     consentState[3] === true
+  };
+
+  try {
+    const res = await fetch(ENDPOINT_URL, {
+      method:  'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body:    JSON.stringify(payload),
+      redirect:'follow'
+    });
+    const json = await res.json();
+    if(json.ok){
+      closeConsent();
+      go(3);
+    } else {
+      showConsentError('Submission failed: ' + (json.error || 'unknown error'));
+      btn.textContent = 'Accept stewardship';
+      checkConsentReady();
+    }
+  } catch(err){
+    showConsentError('Could not reach the server — please try again.');
+    btn.textContent = 'Accept stewardship';
+    checkConsentReady();
+  }
+}
+function showConsentError(msg){
+  let el = document.getElementById('consentError');
+  if(!el){
+    el = document.createElement('p');
+    el.id = 'consentError';
+    el.className = 'consent-error';
+    const foot = document.querySelector('.modal-foot');
+    foot.insertBefore(el, foot.firstChild);
+  }
+  el.textContent = msg;
+}
 
 /* ---- build the gap meter (signature) ---- */
 function buildMeter(){
@@ -667,8 +770,11 @@ function phaseNote(btn){ btn.nextElementSibling.classList.add('show'); }
 function restart(){
   Object.keys(answers).forEach(k=>delete answers[k]);
   document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
-  consentState=CONSENT.map(c=>c.req);
+  consentState = new Array(CONSENT.length).fill(false);
   document.querySelectorAll('.consent-item').forEach(r=>r.classList.remove('on'));
+  IDENTITY_FIELDS.forEach(f=>{ const el=document.getElementById(f.id); if(el) el.value=''; });
+  const errEl = document.getElementById('consentError');
+  if(errEl) errEl.textContent = '';
   document.getElementById('consentConfirm').disabled=true;
   document.querySelectorAll('.phase-note').forEach(n=>n.classList.remove('show'));
   updateScore(); go(0);

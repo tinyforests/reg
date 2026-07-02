@@ -4,6 +4,23 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Self-Enrolment endpoint hardening — rate limiting and auth
+
+Shipped 29 Jun 2026 with the Phase 1.5 wiring commit. The Apps Script /exec endpoint is currently:
+- Publicly accessible (Anyone access — required for the public form)
+- URL committed to the public GitHub repo (visible to anyone reading the codebase)
+- No shared secret, no rate limiting, no CAPTCHA
+- No email verification loop before Sheet write
+
+Acceptable at current volume (zero real stewards) but must be addressed before any public promotion push. Priorities in likely order:
+
+1. Rate limiting via Apps Script CacheService — limit submissions per IP per hour to something like 3. Cheap, effective against dumb bots.
+2. Shared secret in payload — sent from prototype, checked in doPost. Defends against naive scraping bots. NOT security in a strong sense (secret is in prototype JS which is public), but raises the bar.
+3. Email verification loop — steward gets a 'confirm your submission' email with a token; Sheet row status stays 'unconfirmed' until they click. Genuine defence against fake submissions.
+4. reCAPTCHA v3 on the form — Google's invisible check. Adds real friction to bot traffic.
+
+Order these into the roadmap when public URL promotion is being planned. Do NOT promote to the homepage / share the URL widely / include in any council or press outreach until at least rate limiting + shared secret are in place.
+
 ### G&S shared core library — architectural direction
 
 Identified 25 Jun 2026 during Self-Enrolment Ramp Phase 1.5 design work, surfaced by the realisation that EVC resolution and species list lookup logic is currently duplicated across multiple G&S apps (findyourevc, super-barnacle, registry assess.html, prototype, plantsofplace).
