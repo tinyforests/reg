@@ -67,6 +67,9 @@
     .btn-primary:hover { opacity: .85; }
     .btn-outline { border: 1px solid var(--hair); padding: .75rem 1.75rem; font-size: .875rem; display: inline-block; transition: all .2s; }
     .btn-outline:hover { background: var(--fg); color: var(--bg); }
+    .btn-signal { background: var(--signal); color: #fff0dc; padding: .75rem 1.75rem; font-size: .75rem; font-family: "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; display: inline-block; transition: opacity .2s; }
+    .btn-signal:hover { opacity: .88; }
+    .cta-caption { font-family: "IBM Plex Mono", monospace; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 
     /* Score bar */
     .bar-track { background: rgba(61,69,53,.12); height: 4px; }
@@ -130,9 +133,12 @@
           Register your garden. Get a baseline score. Earn badges as it improves.
           Watch it become part of Melbourne's ecological network.
         </p>
-        <div class="flex flex-wrap gap-3 mb-8">
-          <a href="/gardens/rupert14/index.html" class="btn-primary">See a registered garden</a>
-          <a href="#" onclick="openRegisterModal();return false;" class="btn-outline">Register yours</a>
+        <div class="mb-8">
+          <div class="flex flex-wrap gap-3 mb-3">
+            <a href="/docs/self-enrolment-ramp-prototype.html" class="btn-signal">Register your garden</a>
+            <a href="/gardens/rupert14/index.html" class="btn-outline">See a registered garden</a>
+          </div>
+          <div class="cta-caption">Free to begin · Provisional score in about 4 minutes</div>
         </div>
         <div class="flex flex-wrap gap-x-6 gap-y-2 text-xs muted">
           <span>Free public profile</span>

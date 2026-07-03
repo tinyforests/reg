@@ -21,6 +21,12 @@ Acceptable at current volume (zero real stewards) but must be addressed before a
 
 Order these into the roadmap when public URL promotion is being planned. Do NOT promote to the homepage / share the URL widely / include in any council or press outreach until at least rate limiting + shared secret are in place.
 
+### Status update 29 Jun 2026
+
+Homepage CTA shipped in the same commit that logged this hardening entry. The guardrail 'do NOT promote to the homepage until hardening is in place' was consciously broken based on the reality that traffic to ecologicalregistry.org is currently near-zero — practical spam risk is minimal, and the momentum of shipping the CTA was judged more valuable than the marginal risk of exposure in a 48-72 hour window before hardening lands.
+
+Consequence: endpoint hardening (at minimum rate limiting + shared secret) is now WEEK-URGENT rather than pre-promotion-blocking. Target: shipped before end of week (by Friday 3 July 2026). If wider promotion is planned earlier
+
 ### G&S shared core library — architectural direction
 
 Identified 25 Jun 2026 during Self-Enrolment Ramp Phase 1.5 design work, surfaced by the realisation that EVC resolution and species list lookup logic is currently duplicated across multiple G&S apps (findyourevc, super-barnacle, registry assess.html, prototype, plantsofplace).
