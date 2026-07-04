@@ -112,12 +112,9 @@
               <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="site_visit">Site Visit</button>
               <button class="filter-btn border hl px-3 py-2 text-xs" data-filter="photo_verified">Photo Verified</button>
             </div>
-            <div class="flex flex-wrap gap-2 mt-2">
+            <!-- LGA buttons generated from registry data: single source of truth -->
+            <div id="lgaButtons" class="flex flex-wrap gap-2 mt-2">
               <button class="lga-btn active border hl px-3 py-2 text-xs" data-lga="all">All Councils</button>
-              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Boroondara">Boroondara</button>
-              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Whitehorse">Whitehorse</button>
-              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Stonnington">Stonnington</button>
-              <button class="lga-btn border hl px-3 py-2 text-xs" data-lga="Darebin">Darebin</button>
             </div>
           </div>
           <div>
@@ -235,8 +232,41 @@ function filterGardens() {
 }
 
 /* ---- RENDER ---- */
-function renderStats(data) {
-  var gardens = data.gardens || [];
+/* LGA filter buttons are generated from the gardens array so the
+   council list can never drift from the data. */
+function renderLgaButtons() {
+  var wrap = document.getElementById('lgaButtons');
+  if (!wrap) return;
+  var counts = {};
+  for (var i = 0; i < state.gardens.length; i++) {
+    var lga = state.gardens[i].lga;
+    if (lga) counts[lga] = (counts[lga] || 0) + 1;
+  }
+  var lgas = Object.keys(counts).sort(function(a, b) {
+    return counts[b] - counts[a] || a.localeCompare(b);
+  });
+  for (var j = 0; j < lgas.length; j++) {
+    var btn = document.createElement('button');
+    btn.className = 'lga-btn border hl px-3 py-2 text-xs';
+    btn.dataset.lga = lgas[j];
+    btn.textContent = lgas[j];
+    wrap.appendChild(btn);
+  }
+  var all = wrap.querySelectorAll('.lga-btn');
+  for (var k = 0; k < all.length; k++) {
+    (function(b) {
+      b.addEventListener('click', function() {
+        for (var m = 0; m < all.length; m++) all[m].classList.remove('active');
+        b.classList.add('active');
+        state.lga = b.dataset.lga;
+        renderGardens();
+      });
+    })(all[k]);
+  }
+}
+
+function renderStats() {
+  var gardens = state.gardens; /* already demo-filtered at load */
   var total = gardens.length;
   var scoreSum = 0;
   var bdgs = 0;
@@ -311,7 +341,7 @@ function renderGardens() {
         '<div class="bar-fill h-full" style="width:' + pct + '%;background:#7a9e5f"></div>' +
       '</div>' +
       '<div class="mt-4 grid grid-cols-2 gap-3 text-xs">' +
-        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Rating</div><div class="mu">' + (g.rating || '--') + '</div></div>' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Rating</div><div class="mu">' + ((g.rating && g.rating.current) ? g.rating.current : (typeof g.rating === 'string' ? g.rating : '--')) + '</div></div>' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Verified</div><div class="mu">' + (g.verification_label || g.verification_level || '--') + '</div></div>' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Council</div><div class="mu">' + (g.lga || '--') + '</div></div>' +
         '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">EVC</div><div class="mu">' + (g.primary_evc || '--') + '</div></div>' +
@@ -344,18 +374,6 @@ function setupFilters() {
     })(fBtns[i]);
   }
 
-  var lgaBtns = document.querySelectorAll('.lga-btn');
-  for (var li = 0; li < lgaBtns.length; li++) {
-    (function(btn) {
-      btn.addEventListener('click', function() {
-        for (var lj = 0; lj < lgaBtns.length; lj++) lgaBtns[lj].classList.remove('active');
-        btn.classList.add('active');
-        state.lga = btn.dataset.lga;
-        renderGardens();
-      });
-    })(lgaBtns[li]);
-  }
-
   var sBtns = document.querySelectorAll('.score-btn');
   for (var i = 0; i < sBtns.length; i++) {
     (function(btn) {
@@ -385,8 +403,10 @@ function initRegistry() {
       return r.json();
     })
     .then(function(data) {
-      state.gardens = data.gardens || [];
-      renderStats(data);
+      /* Demo gardens are excluded from all public surfaces */
+      state.gardens = (data.gardens || []).filter(function(g) { return !g.demo; });
+      renderLgaButtons();
+      renderStats();
       renderGardens();
     })
     .catch(function(err) {

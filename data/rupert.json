@@ -162,7 +162,6 @@
     }
   ],
   "notes": "Demo garden. Fictional stewards. Based on typical Northcote backyard conversion near Merri Creek corridor. Score 52 represents a well-established Year 2 ecological garden.",
-  "score": 52,
   "badges": [
     "gs_verified",
     "indigenous_dominant",
@@ -208,5 +207,6 @@
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
     "points_to_next": 5
-  }
+  },
+  "demo": true
 }

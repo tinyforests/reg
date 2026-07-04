@@ -2,14 +2,11 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Jun 2026",
-    "total_gardens": 15,
+    "total_gardens": 14,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
-    "schema_version": "2.0"
-  },
-  "statistics": {
-    "average_score": 48,
-    "total_badges_awarded": 48
+    "schema_version": "2.0",
+    "demo_gardens": 1
   },
   "gardens": [
     {
@@ -279,11 +276,11 @@
       "garden_name": "Evelina",
       "suburb": "Mont Albert North",
       "state": "VIC",
-      "score": 45,
+      "score": 48,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 16
+        "points_to_next": 13
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -402,11 +399,11 @@
       "type": "Urban Ecological Retrofit",
       "suburb": "Northcote",
       "state": "VIC",
-      "score": 52,
+      "score": 56,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 9
+        "points_to_next": 5
       },
       "primary_evc": "Wet Sclerophyll Forest (EVC 38)",
       "bioregion": "Victorian Volcanic Plain",
@@ -435,7 +432,8 @@
       },
       "council": "Darebin City Council",
       "ward": "Merri",
-      "lga": "Darebin"
+      "lga": "Darebin",
+      "demo": true
     },
     {
       "garden_id": "ER-VIC-BOR-WIN-001",
@@ -596,58 +594,5 @@
       "ward": "Maranoa",
       "lga": "Boroondara"
     }
-  ],
-  "leaderboard": {
-    "top_garden": "Arundel",
-    "top_score": 73,
-    "most_badges": "Arundel",
-    "highest_upgrade_potential": "Flinders",
-    "rankings": [
-      {
-        "garden": "Arundel",
-        "score": 73
-      },
-      {
-        "garden": "Middlesex",
-        "score": 54
-      },
-      {
-        "garden": "Rupert",
-        "score": 52
-      },
-      {
-        "garden": "York Street",
-        "score": 52
-      },
-      {
-        "garden": "Parring",
-        "score": 50
-      },
-      {
-        "garden": "Dewrang",
-        "score": 50
-      },
-      {
-        "garden": "Windella",
-        "score": 49
-      }
-    ]
-  },
-  "network": {
-    "total_gardens": 15,
-    "active_clusters": 6,
-    "gardens_in_establishment": 7,
-    "avg_score": 48,
-    "total_badges": 48,
-    "total_estimated_yield_aud": 1150,
-    "yield_note": "Estimated annual yield if sponsor model activated. Formula v1.",
-    "yield_status": "Pre-activation -- sponsor model pending",
-    "councils": {
-      "Boroondara": 8,
-      "Stonnington": 1,
-      "Whitehorse": 4,
-      "Darebin": 1
-    },
-    "total_councils": 4
-  }
+  ]
 }
