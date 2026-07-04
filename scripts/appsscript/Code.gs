@@ -24,6 +24,10 @@ var SHARED_SECRET   = 'er-reg-7f4a2b9d';
 var RATE_GLOBAL_MAX = 20;    // max total submissions per hour (all users)
 var RATE_CACHE_TTL  = 3600;  // cache entry lifetime in seconds (1 hour)
 
+function doGet(e) {
+  return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
+}
+
 function doPost(e) {
   var cache = CacheService.getScriptCache();
 

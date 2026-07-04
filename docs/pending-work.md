@@ -27,6 +27,33 @@ Homepage CTA shipped in the same commit that logged this hardening entry. The gu
 
 Consequence: endpoint hardening (at minimum rate limiting + shared secret) is now WEEK-URGENT rather than pre-promotion-blocking. Target: shipped before end of week (by Friday 3 July 2026). If wider promotion is planned earlier
 
+### Self-Enrolment endpoint troubleshooting — mid-recovery state (Sat 4 Jul 2026 evening)
+
+Endpoint hardening was deployed as Version 2 of the Self-Enrolment Endpoint project at 2:17 PM (commit 5d9bac3 shipped the client-side changes: shared_secret in payload). Subsequent curl testing showed:
+- GET request returns 'Script function not found: doGet' — meaning deployed Code.gs is missing the doGet handler that used to sanity-check the endpoint
+- POST request returns Google Drive 'Page not found' HTML — cause unclear; likely a Google serving-infrastructure inconsistency where Version 2 is 'active' in the Manage Deployments dialog but not actually reachable
+
+During troubleshooting the following also happened:
+- An 'Untitled project' accidentally created at 2:22 PM containing three Web App deployments ('endpoint second try' + two unnamed) and one archived 'ecogarden' deployment. Not damaging anything but should be archived for clarity.
+- The correct 'Self-Enrolment Endpoint' project (2:17 PM) shows Version 2 as active in Manage Deployments with the expected deployment ID (AKfycbywnSUukaw...HR_), matching what the prototype uses.
+
+Fix path (tomorrow or when fresh):
+1. Open the Self-Enrolment Endpoint project
+2. View Code.gs — confirm it has BOTH doPost (with hardening) AND doGet (sanity endpoint)
+3. If doGet is missing, add:
+   function doGet(e) {
+     return ContentService
+       .createTextOutput(JSON.stringify({ status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString() }))
+       .setMimeType(ContentService.MimeType.JSON);
+   }
+4. Save code, then Deploy → Manage deployments → pencil edit on active → Version dropdown → New version (with description 'Restore doGet + verified hardening')
+5. Test with curl (both GET and POST), then browser through the actual prototype form
+6. After confirmed working: archive 'Untitled project' from 2:22 PM
+7. Identify and rename the 25 Oct 2025 'Untitled project' after viewing its Code.gs
+8. Add descriptions to every remaining Apps Script project
+
+The homepage CTA at ecologicalregistry.org is live but currently points at a broken endpoint. Traffic is effectively zero so practical impact is minimal, but this MUST be fixed before any outreach that would drive traffic to the form (Boroondara follow-up, Marnie's newsletter, wider promotion).
+
 ### G&S shared core library — architectural direction
 
 Identified 25 Jun 2026 during Self-Enrolment Ramp Phase 1.5 design work, surfaced by the realisation that EVC resolution and species list lookup logic is currently duplicated across multiple G&S apps (findyourevc, super-barnacle, registry assess.html, prototype, plantsofplace).
