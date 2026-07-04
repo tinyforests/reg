@@ -376,8 +376,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 </div>
 
 <script>
-const ENDPOINT_URL   = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
-const SHARED_SECRET  = 'er-reg-7f4a2b9d';
+const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
 
 /* ============================================================
    CONFIG — matches js/reg-score.js ratingFromScore() exactly.
@@ -686,8 +685,7 @@ async function confirmConsent(){
     consent_record:              consentState[0] === true,
     consent_public_score:        consentState[1] === true,
     consent_contact_about_visit: consentState[2] === true,
-    consent_aggregate_stats:     consentState[3] === true,
-    shared_secret:               SHARED_SECRET
+    consent_aggregate_stats:     consentState[3] === true
   };
 
   try {
