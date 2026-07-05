@@ -4,6 +4,17 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Sitewide mailto: sweep + modal semantic refresh
+
+Homepage Register CTAs unified on the self-enrolment form 4 Jul 2026 (commit 589a219). Card 2 (Two ways in) reuses the Formspree modal that was originally built for registration — modal fields, copy, and function names are semantically stale (labelled 'register' but now serving 'new ecological garden' enquiries).
+
+Deferred work:
+1. Sitewide mailto: sweep — 51 occurrences across 20 files remain. Breakdown:
+   - Garden profile pages (12 files, 3 mailto each = 36): same template repeated. Single design decision applied 12 times.
+   - Other pages (15 occurrences across workshops.html, guide.html, tend.html, contact-hub.html, brand.html, index.html): case-by-case decisions needed.
+2. Modal semantic refresh — rename openRegisterModal to openTalkToUsModal, submitRegisterForm to submitTalkToUsForm; update modal title from 'Register your garden' to 'New ecological garden enquiry'; update field labels and copy to match new intent; consider dropping the 'garden_address' field if it's not relevant to new-build enquiries.
+3. Formspree legacy inbox — check the account associated with the endpoint for any pending registration submissions from before tonight's repurpose. Formspree endpoint URL is in the current submitRegisterForm function.
+
 ### Self-Enrolment endpoint hardening — rate limiting and auth
 
 Shipped 29 Jun 2026 with the Phase 1.5 wiring commit. The Apps Script /exec endpoint is currently:
