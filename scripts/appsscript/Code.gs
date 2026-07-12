@@ -4,23 +4,24 @@
      Execute as: Me
      Who has access: Anyone
 
-   Hardening (Jul 2026):
-   - Shared secret check (same value as SHARED_SECRET in prototype JS)
-   - Global hourly rate limit via CacheService (20 submissions/hr)
-   - Per-email hourly dedup (1 submission per email per hour)
+   Phase B (Jul 2026): notification emails added.
+   - Email 1: submission alert to NOTIFY_EMAIL
+   - Email 2: confirmation to steward
+   Both wrapped in try/catch — email failure does not fail the submission.
+
+   Note: shared_secret check removed. The prototype no longer sends it
+   (reverted in commit d925592). Re-add when hardening is revisited.
 
    Note on IP rate limiting: Apps Script web apps do not expose the
-   client IP address, so per-IP limiting (as originally described in
-   pending-work.md) is not achievable in pure Apps Script. The global
-   hourly cap + per-email dedup is the practical ceiling without a
-   Cloud Run or similar proxy layer.
+   client IP address. Global hourly cap + per-email dedup is the
+   practical ceiling without a Cloud Run or similar proxy layer.
 
-   After editing this file, deploy a NEW version in the Apps Script
-   editor (Deploy → Manage deployments → New version). The /exec URL
-   stays the same; the prototype does not need updating.
+   After editing, deploy a NEW version in the Apps Script editor
+   (Deploy → Manage deployments → New version). The /exec URL stays
+   the same; the prototype does not need updating.
    ============================================================ */
 
-var SHARED_SECRET   = 'er-reg-7f4a2b9d';
+var NOTIFY_EMAIL    = 'hello@lundbech.me';
 var RATE_GLOBAL_MAX = 20;    // max total submissions per hour (all users)
 var RATE_CACHE_TTL  = 3600;  // cache entry lifetime in seconds (1 hour)
 
@@ -33,11 +34,6 @@ function doPost(e) {
 
   try {
     var payload = JSON.parse(e.postData.contents);
-
-    // Shared secret
-    if (payload.shared_secret !== SHARED_SECRET) {
-      return jsonResp({ok: false, error: 'Forbidden'});
-    }
 
     // Global hourly rate limit
     var bucket    = hourBucket();
@@ -56,28 +52,100 @@ function doPost(e) {
       }
     }
 
-    // Write to sheet — strip secret before logging
-    delete payload.shared_secret;
+    // Generate once — threaded through sheet write and both emails
+    var submissionId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+    var submittedAt  = new Date().toISOString();
+    var name    = payload.steward_name            || '';
+    var address = payload.garden_address          || '';
+    var score   = payload.provisional_score_total || 0;
+    var tier    = payload.provisional_tier        || '';
+
+    // Write to sheet — 26 columns matching live sheet structure exactly
+    // A  B             C     D      E        F–Q (pillar answers)  R      S     T–W (consents)  X               Y               Z
     var ss    = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
     sheet.appendRow([
-      new Date().toISOString(),
-      payload.steward_name             || '',
-      payload.steward_email            || '',
-      payload.garden_address           || '',
-      payload.provisional_score_total  || 0,
-      payload.provisional_tier         || '',
-      payload.consent_record           ? 'yes' : 'no',
-      payload.consent_public_score     ? 'yes' : 'no',
-      payload.consent_contact_about_visit ? 'yes' : 'no',
-      payload.consent_aggregate_stats  ? 'yes' : 'no',
-      JSON.stringify(payload)
+      submittedAt,                                   // A  timestamp
+      submissionId,                                  // B  submission_id
+      name,                                          // C  steward_name
+      email,                                         // D  steward_email
+      address,                                       // E  garden_address
+      payload.bio_q1_indigenous_species   || 0,      // F  bio_q1_indigenous_species
+      payload.bio_q2_indigenous_dominant  || 0,      // G  bio_q2_indigenous_dominant
+      payload.bio_q3_layers               || 0,      // H  bio_q3_layers
+      payload.bio_q4_canopy               || 0,      // I  bio_q4_canopy
+      payload.soil_q1_condition           || 0,      // J  soil_q1_condition
+      payload.soil_q2_water               || 0,      // K  soil_q2_water
+      payload.soil_q3_features            || 0,      // L  soil_q3_features
+      payload.habitat_q1_zones            || 0,      // M  habitat_q1_zones
+      payload.habitat_q2_features         || 0,      // N  habitat_q2_features
+      payload.habitat_q3_wildlife         || 0,      // O  habitat_q3_wildlife
+      payload.conn_q1_park                || 0,      // P  conn_q1_park
+      payload.evidence_q1_records         || 0,      // Q  evidence_q1_records
+      score,                                         // R  provisional_score_total
+      tier,                                          // S  provisional_tier
+      payload.consent_record,                        // T  consent_record (boolean)
+      payload.consent_public_score,                  // U  consent_public_score (boolean)
+      payload.consent_contact_about_visit,           // V  consent_contact_about_visit (boolean)
+      payload.consent_aggregate_stats,               // W  consent_aggregate_stats (boolean)
+      'pending',                                     // X  review_status
+      '',                                            // Y  review_notes
+      ''                                             // Z  published_garden_id
     ]);
 
-    // Increment counters after successful write
+    // Increment rate-limit counters
     cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
     if (email) {
       cache.put('email_' + bucket + '_' + email, '1', RATE_CACHE_TTL);
+    }
+
+    // Email 1 — notification to Tyson
+    try {
+      var sheetUrl = ss.getUrl();
+      var notifyBody =
+        'New self-enrolment submission\n' +
+        '\n' +
+        'Steward name:    ' + name         + '\n' +
+        'Steward email:   ' + email        + '\n' +
+        'Garden address:  ' + address      + '\n' +
+        'Score:           ' + score        + '/100\n' +
+        'Tier:            ' + tier         + '\n' +
+        'Submission ID:   ' + submissionId + '\n' +
+        'Submitted:       ' + submittedAt  + '\n' +
+        '\n' +
+        'Review this submission at: ' + sheetUrl;
+      MailApp.sendEmail({
+        to:      NOTIFY_EMAIL,
+        subject: 'New self-enrolment submission: ' + tier + ' · ' + score + '/100',
+        body:    notifyBody
+      });
+    } catch (mailErr) {}
+
+    // Email 2 — confirmation to steward
+    if (email) {
+      try {
+        var stewardBody =
+          'Thank you for registering your garden with the Ecological Registry.\n' +
+          '\n' +
+          'We\'ve received your submission and your provisional ecological score is ' + score + '/100 — tier: ' + tier + '.\n' +
+          '\n' +
+          'Your garden will appear on the public registry as a provisional entry within 48 hours. \'Provisional\' means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one — we\'ll be in touch separately about that pathway if you\'d like to explore it.\n' +
+          '\n' +
+          'Your submission ID is: ' + submissionId + '\n' +
+          '\n' +
+          'If you\'d like to update or withdraw your registration at any time, just reply to this email.\n' +
+          '\n' +
+          'Warmly,\n' +
+          'Tyson Lundbech\n' +
+          'Gardener & Son\n' +
+          'Ecological Registry\n' +
+          'ecologicalregistry.org';
+        MailApp.sendEmail({
+          to:      email,
+          subject: 'Your garden registration was received — Ecological Registry',
+          body:    stewardBody
+        });
+      } catch (mailErr) {}
     }
 
     return jsonResp({ok: true});
