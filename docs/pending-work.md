@@ -4,6 +4,23 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Self-Enrolment review workflow — Phase A + B done, Phase C next
+
+Today (13 Jul 2026) built the human-review + notification layer for self-enrolment. State:
+
+DONE:
+- Phase A: Sheet restructured. 'Sheet1' renamed to 'Submissions' (private, receives writes). New 'Public view' tab added with formulas pulling public-safe columns only (Submitted, Steward name, Suburb, Score, Tier, Status, Submission ID) from Submissions. Suburb is manual entry per review (regex was too brittle for varied AU address formats). Public view published to web as CSV: [the pub?output=csv URL]. Full private data (email, full address) stays in Submissions, never exposed.
+- Phase B: Apps Script (Version 6 deployed, same URL ...HR_) now sends two emails per submission via MailApp: notification to hello@lundbech.me, confirmation to the steward. Both working end-to-end after resolving a script.send_mail scope grant (the whole cause of the email failures — fixed by running authorizeMail() from the editor to force the permission dialog, granting the scope for the whole project including the deployed web app). A 'Debug log' tab in the Sheet captures any future MailApp errors. Email bodies use array-join format (paste-resistant). submissionId threaded consistently through sheet row + both emails. appendRow writes all 26 columns individually with review_status defaulting to 'pending'.
+
+NEXT (Phase C — fresh session):
+- Add a tab to registry.html: 'Registered' (default, existing verified gardens) and 'Provisional' (new). Provisional tab fetches the Public view CSV and renders self-enrolled gardens with Dry Grass Brass (#B49A63) visual quarantine + 'awaiting review' badge. Shows immediately on submission (status pending), never aggregates into verified registry stats.
+- Deletion mechanism: change review_status in the Submissions sheet to remove a provisional garden from the tab.
+- Suburb column in Public view is currently blank for existing rows — fill manually during review, or revisit adding a dedicated suburb field to the form.
+
+Apps Script cleanup still outstanding from 4 Jul: archive the stray 'Untitled project' (2:22 PM) with its extra deployments; identify/rename the 25 Oct 2025 Untitled project.
+
+Also outstanding: endpoint hardening (deferred, real traffic doesn't justify yet); sitewide mailto sweep (51 occurrences, 20 files); Formspree legacy inbox check; Separation Creek submission still 'pending' — first candidate for the review workflow once Phase C ships.
+
 ### Sitewide mailto: sweep + modal semantic refresh
 
 Homepage Register CTAs unified on the self-enrolment form 4 Jul 2026 (commit 589a219). Card 2 (Two ways in) reuses the Formspree modal that was originally built for registration — modal fields, copy, and function names are semantically stale (labelled 'register' but now serving 'new ecological garden' enquiries).
