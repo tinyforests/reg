@@ -39,6 +39,14 @@ function doGet(e) {
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
 
+function authorizeMail() {
+  MailApp.sendEmail({
+    to: 'hello@lundbech.me',
+    subject: 'Auth test -- Self-Enrolment endpoint',
+    body: 'If you received this, MailApp is now authorized.'
+  });
+}
+
 function doPost(e) {
   var cache = CacheService.getScriptCache();
 
