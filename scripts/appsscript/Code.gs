@@ -130,7 +130,10 @@ function doPost(e) {
         body:    notifyBody
       });
     } catch (mailErr) {
-      console.error('Notification email failed: ' + mailErr.message);
+      try {
+        var dbg = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+        dbg.appendRow([new Date().toISOString(), 'notification email', mailErr.message]);
+      } catch (e2) {}
     }
 
     // Email 2 -- confirmation to steward
@@ -159,7 +162,10 @@ function doPost(e) {
           body:    stewardBody
         });
       } catch (mailErr) {
-        console.error('Steward confirmation email failed: ' + mailErr.message);
+        try {
+          var dbg2 = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+          dbg2.appendRow([new Date().toISOString(), 'steward email', mailErr.message]);
+        } catch (e2) {}
       }
     }
 
