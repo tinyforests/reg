@@ -111,18 +111,19 @@ function doPost(e) {
     // Email 1 -- notification to Tyson
     try {
       var sheetUrl = ss.getUrl();
-      var notifyBody =
-        'New self-enrolment submission\n' +
-        '\n' +
-        'Steward name:    ' + name         + '\n' +
-        'Steward email:   ' + email        + '\n' +
-        'Garden address:  ' + address      + '\n' +
-        'Score:           ' + score        + '/100\n' +
-        'Tier:            ' + tier         + '\n' +
-        'Submission ID:   ' + submissionId + '\n' +
-        'Submitted:       ' + submittedAt  + '\n' +
-        '\n' +
-        'Review this submission at: ' + sheetUrl;
+      var notifyBody = [
+        'New self-enrolment submission',
+        '',
+        'Steward name: ' + name,
+        'Steward email: ' + email,
+        'Garden address: ' + address,
+        'Score: ' + score + '/100',
+        'Tier: ' + tier,
+        'Submission ID: ' + submissionId,
+        'Submitted: ' + submittedAt,
+        '',
+        'Review this submission at: ' + sheetUrl
+      ].join('\n');
       MailApp.sendEmail({
         to:      NOTIFY_EMAIL,
         subject: 'New self-enrolment submission: ' + tier + ' - ' + score + '/100',
@@ -135,22 +136,23 @@ function doPost(e) {
     // Email 2 -- confirmation to steward
     if (email) {
       try {
-        var stewardBody =
-          'Thank you for registering your garden with the Ecological Registry.\n' +
-          '\n' +
-          'We\'ve received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.\n' +
-          '\n' +
-          'Your garden will appear on the public registry as a provisional entry within 48 hours. \'Provisional\' means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one -- we\'ll be in touch separately about that pathway if you\'d like to explore it.\n' +
-          '\n' +
-          'Your submission ID is: ' + submissionId + '\n' +
-          '\n' +
-          'If you\'d like to update or withdraw your registration at any time, just reply to this email.\n' +
-          '\n' +
-          'Warmly,\n' +
-          'Tyson Lundbech\n' +
-          'Gardener & Son\n' +
-          'Ecological Registry\n' +
-          'ecologicalregistry.org';
+        var stewardBody = [
+          'Thank you for registering your garden with the Ecological Registry.',
+          '',
+          'We have received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.',
+          '',
+          'Your garden will appear on the public registry as a provisional entry within 48 hours. Provisional means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one. We will be in touch separately about that pathway if you would like to explore it.',
+          '',
+          'Your submission ID is: ' + submissionId,
+          '',
+          'If you would like to update or withdraw your registration at any time, just reply to this email.',
+          '',
+          'Warmly,',
+          'Tyson Lundbech',
+          'Gardener and Son',
+          'Ecological Registry',
+          'ecologicalregistry.org'
+        ].join('\n');
         MailApp.sendEmail({
           to:      email,
           subject: 'Your garden registration was received -- Ecological Registry',
