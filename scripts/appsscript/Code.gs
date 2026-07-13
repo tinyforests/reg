@@ -128,7 +128,9 @@ function doPost(e) {
         subject: 'New self-enrolment submission: ' + tier + ' - ' + score + '/100',
         body:    notifyBody
       });
-    } catch (mailErr) {}
+    } catch (mailErr) {
+      console.error('Notification email failed: ' + mailErr.message);
+    }
 
     // Email 2 -- confirmation to steward
     if (email) {
@@ -154,7 +156,9 @@ function doPost(e) {
           subject: 'Your garden registration was received -- Ecological Registry',
           body:    stewardBody
         });
-      } catch (mailErr) {}
+      } catch (mailErr) {
+        console.error('Steward confirmation email failed: ' + mailErr.message);
+      }
     }
 
     return jsonResp({ok: true});
