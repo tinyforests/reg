@@ -4,21 +4,31 @@
      Execute as: Me
      Who has access: Anyone
 
-   Phase B (Jul 2026): notification emails added.
-   - Email 1: submission alert to NOTIFY_EMAIL
-   - Email 2: confirmation to steward
-   Both wrapped in try/catch — email failure does not fail the submission.
+   Hardening (Jul 2026):
+   - Global hourly rate limit via CacheService (20 submissions/hr)
+   - Per-email hourly dedup (1 submission per email per hour)
 
-   Note: shared_secret check removed. The prototype no longer sends it
-   (reverted in commit d925592). Re-add when hardening is revisited.
+   Note: shared-secret check was added and then reverted 4 Jul 2026
+   (commit d925592) after causing deployment confusion — see
+   pending-work.md 'Self-Enrolment endpoint hardening' entry for
+   full history. Do not re-add without also updating the prototype's
+   payload to send it.
 
    Note on IP rate limiting: Apps Script web apps do not expose the
-   client IP address. Global hourly cap + per-email dedup is the
-   practical ceiling without a Cloud Run or similar proxy layer.
+   client IP address, so per-IP limiting (as originally described in
+   pending-work.md) is not achievable in pure Apps Script. The global
+   hourly cap + per-email dedup is the practical ceiling without a
+   Cloud Run or similar proxy layer.
 
-   After editing, deploy a NEW version in the Apps Script editor
-   (Deploy → Manage deployments → New version). The /exec URL stays
-   the same; the prototype does not need updating.
+   Notifications (Jul 2026):
+   - Email to NOTIFY_EMAIL on every submission
+   - Confirmation email to steward on every submission (if email given)
+   Both non-fatal — a MailApp failure does not block the submission
+   from being recorded.
+
+   After editing this file, deploy a NEW version in the Apps Script
+   editor (Deploy → Manage deployments → New version). The /exec URL
+   stays the same; the prototype does not need updating.
    ============================================================ */
 
 var NOTIFY_EMAIL    = 'hello@lundbech.me';
