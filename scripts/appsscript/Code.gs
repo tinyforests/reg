@@ -1,6 +1,6 @@
 /* ============================================================
-   Ecological Registry — Self-Enrolment Ramp backend
-   Google Apps Script — deploy as Web App:
+   Ecological Registry -- Self-Enrolment Ramp backend
+   Google Apps Script -- deploy as Web App:
      Execute as: Me
      Who has access: Anyone
 
@@ -9,7 +9,7 @@
    - Per-email hourly dedup (1 submission per email per hour)
 
    Note: shared-secret check was added and then reverted 4 Jul 2026
-   (commit d925592) after causing deployment confusion — see
+   (commit d925592) after causing deployment confusion -- see
    pending-work.md 'Self-Enrolment endpoint hardening' entry for
    full history. Do not re-add without also updating the prototype's
    payload to send it.
@@ -23,11 +23,11 @@
    Notifications (Jul 2026):
    - Email to NOTIFY_EMAIL on every submission
    - Confirmation email to steward on every submission (if email given)
-   Both non-fatal — a MailApp failure does not block the submission
+   Both non-fatal -- a MailApp failure does not block the submission
    from being recorded.
 
    After editing this file, deploy a NEW version in the Apps Script
-   editor (Deploy → Manage deployments → New version). The /exec URL
+   editor (Deploy -> Manage deployments -> New version). The /exec URL
    stays the same; the prototype does not need updating.
    ============================================================ */
 
@@ -50,7 +50,7 @@ function doPost(e) {
     var globalKey = 'global_' + bucket;
     var globalCount = parseInt(cache.get(globalKey) || '0', 10);
     if (globalCount >= RATE_GLOBAL_MAX) {
-      return jsonResp({ok: false, error: 'Too many submissions — try again in an hour.'});
+      return jsonResp({ok: false, error: 'Too many submissions -- try again in an hour.'});
     }
 
     // Per-email dedup
@@ -62,7 +62,7 @@ function doPost(e) {
       }
     }
 
-    // Generate once — threaded through sheet write and both emails
+    // Generate once -- threaded through sheet write and both emails
     var submissionId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
     var submittedAt  = new Date().toISOString();
     var name    = payload.steward_name            || '';
@@ -70,8 +70,7 @@ function doPost(e) {
     var score   = payload.provisional_score_total || 0;
     var tier    = payload.provisional_tier        || '';
 
-    // Write to sheet — 26 columns matching live sheet structure exactly
-    // A  B             C     D      E        F–Q (pillar answers)  R      S     T–W (consents)  X               Y               Z
+    // Write to sheet -- 26 columns matching live sheet structure exactly
     var ss    = SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
     sheet.appendRow([
@@ -109,7 +108,7 @@ function doPost(e) {
       cache.put('email_' + bucket + '_' + email, '1', RATE_CACHE_TTL);
     }
 
-    // Email 1 — notification to Tyson
+    // Email 1 -- notification to Tyson
     try {
       var sheetUrl = ss.getUrl();
       var notifyBody =
@@ -126,20 +125,20 @@ function doPost(e) {
         'Review this submission at: ' + sheetUrl;
       MailApp.sendEmail({
         to:      NOTIFY_EMAIL,
-        subject: 'New self-enrolment submission: ' + tier + ' · ' + score + '/100',
+        subject: 'New self-enrolment submission: ' + tier + ' - ' + score + '/100',
         body:    notifyBody
       });
     } catch (mailErr) {}
 
-    // Email 2 — confirmation to steward
+    // Email 2 -- confirmation to steward
     if (email) {
       try {
         var stewardBody =
           'Thank you for registering your garden with the Ecological Registry.\n' +
           '\n' +
-          'We\'ve received your submission and your provisional ecological score is ' + score + '/100 — tier: ' + tier + '.\n' +
+          'We\'ve received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.\n' +
           '\n' +
-          'Your garden will appear on the public registry as a provisional entry within 48 hours. \'Provisional\' means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one — we\'ll be in touch separately about that pathway if you\'d like to explore it.\n' +
+          'Your garden will appear on the public registry as a provisional entry within 48 hours. \'Provisional\' means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one -- we\'ll be in touch separately about that pathway if you\'d like to explore it.\n' +
           '\n' +
           'Your submission ID is: ' + submissionId + '\n' +
           '\n' +
@@ -152,7 +151,7 @@ function doPost(e) {
           'ecologicalregistry.org';
         MailApp.sendEmail({
           to:      email,
-          subject: 'Your garden registration was received — Ecological Registry',
+          subject: 'Your garden registration was received -- Ecological Registry',
           body:    stewardBody
         });
       } catch (mailErr) {}
