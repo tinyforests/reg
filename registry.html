@@ -7,7 +7,7 @@
   <meta name="description" content="Browse registered ecological gardens, their scores, badges, verification status, and ecological context." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -95,6 +95,15 @@
   <!-- Garden directory -->
   <section id="gardens" class="border-b hl">
     <div class="max-w-7xl mx-auto px-6 py-12 md:py-16">
+
+      <!-- Tab toggle -->
+      <div class="flex gap-3 mb-8 pb-6 border-b hl">
+        <button id="tab-registered" class="filter-btn active border hl px-4 py-2 text-sm">Registered</button>
+        <button id="tab-provisional" class="filter-btn border hl px-4 py-2 text-sm">Provisional</button>
+      </div>
+
+      <!-- Registered view -->
+      <div id="registered-section">
       <div class="grid lg:grid-cols-12 gap-8 items-start">
 
         <!-- Filters sidebar -->
@@ -147,6 +156,18 @@
         </div>
 
       </div>
+      </div><!-- /#registered-section -->
+
+      <!-- Provisional view -->
+      <div id="provisional-section" style="display:none">
+        <div class="mb-8">
+          <div class="text-xs tracking-[0.2em] uppercase mu">Provisional Registry</div>
+          <h2 class="font-serif text-3xl md:text-4xl mt-2">Awaiting Review</h2>
+          <p class="mt-3 text-sm mu max-w-2xl">Self-enrolled gardens awaiting steward review. Scores are self-reported and have not been verified by a Gardener and Son steward. These entries are visually quarantined from the verified registry and do not count toward registry totals.</p>
+        </div>
+        <div id="provisionalGrid"></div>
+      </div><!-- /#provisional-section -->
+
     </div>
   </section>
 
@@ -418,7 +439,146 @@ function initRegistry() {
     });
 }
 
+/* ---- PROVISIONAL TAB ---- */
+var provisionalLoaded = false;
+var PROV_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-v90MASzlma0rqxLApLTlMqi1NVHXgfg8AmKy80yXOlogICKA-JGSDxrS_EqnWSCb_QziixcPJHlW/pub?gid=1913340641&single=true&output=csv';
+var PROV_EXCLUDE = ['deleted', 'hidden', 'rejected', 'verified'];
+
+function parseCSV(text) {
+  var rows = [];
+  var raw = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  var i = 0, n = raw.length;
+  while (i <= n) {
+    var fields = [];
+    var reachedEnd = false;
+    while (true) {
+      var f = '';
+      if (i < n && raw[i] === '"') {
+        i++;
+        while (i < n) {
+          if (raw[i] === '"') {
+            i++;
+            if (i < n && raw[i] === '"') { f += '"'; i++; }
+            else { break; }
+          } else { f += raw[i++]; }
+        }
+      } else {
+        while (i < n && raw[i] !== ',' && raw[i] !== '\n') { f += raw[i++]; }
+      }
+      fields.push(f);
+      if (i >= n) { reachedEnd = true; break; }
+      if (raw[i] === '\n') { i++; break; }
+      i++;
+    }
+    if (fields.length > 1 || (fields.length === 1 && fields[0] !== '')) {
+      rows.push(fields);
+    }
+    if (reachedEnd) break;
+  }
+  return rows;
+}
+
+function renderProvisional(rows) {
+  var grid = document.getElementById('provisionalGrid');
+  if (!grid) return;
+
+  var dataRows = rows.length > 1 ? rows.slice(1) : [];
+  var cards = [];
+
+  for (var i = 0; i < dataRows.length; i++) {
+    var row = dataRows[i];
+    var submitted = row[0] || '';
+    var name      = row[1] || '';
+    var suburb    = row[2] || '';
+    var score     = row[3] || '';
+    var tier      = row[4] || '';
+    var status    = (row[5] || '').toLowerCase().trim();
+    var subId     = row[6] || '';
+
+    if (PROV_EXCLUDE.indexOf(status) !== -1) continue;
+
+    var pct = Math.min(100, parseInt(score, 10) || 0);
+    var card = document.createElement('article');
+    card.className = 'card sb p-5 flex flex-col h-full transition';
+    card.style.border = '1px dashed #B49A63';
+    card.innerHTML =
+      '<div class="flex items-start justify-between gap-4">' +
+        '<div>' +
+          '<div class="text-xs uppercase tracking-[0.16em] mu2">' + subId + '</div>' +
+          '<h3 class="font-serif text-2xl mt-1">' + name + '</h3>' +
+          '<div class="mt-1 text-sm mu">' + (suburb || '--') + '</div>' +
+        '</div>' +
+        '<div style="text-align:right;flex-shrink:0">' +
+          '<div class="text-xs uppercase tracking-[0.16em] mu2">Score</div>' +
+          '<div class="font-serif text-4xl font-light">' + (score || '--') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="mt-3 h-1" style="background:rgba(255,240,220,.1)">' +
+        '<div class="bar-fill h-full" style="width:' + pct + '%;background:#B49A63"></div>' +
+      '</div>' +
+      '<div class="mt-4 grid grid-cols-2 gap-3 text-xs">' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Tier</div><div class="mu">' + (tier || '--') + '</div></div>' +
+        '<div><div class="uppercase tracking-[0.14em] mu2 mb-1">Submitted</div><div class="mu">' + submitted + '</div></div>' +
+      '</div>' +
+      '<div class="mt-4 pt-4" style="border-top:1px dashed rgba(180,154,99,0.35)">' +
+        '<span style="display:inline-flex;align-items:center;gap:6px;font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B49A63;border:1px dashed #B49A63;padding:4px 10px">' +
+          '<span style="width:7px;height:7px;background:#B49A63;display:inline-block;flex-shrink:0"></span>' +
+          'Provisional -- awaiting review' +
+        '</span>' +
+      '</div>';
+    cards.push(card);
+  }
+
+  if (!cards.length) {
+    grid.innerHTML = '<div class="border hl p-8 sb"><div class="text-xs uppercase tracking-[0.18em] mu2">No provisional gardens</div><p class="mt-3 text-sm mu">No provisional gardens awaiting review yet.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = '';
+  var wrap = document.createElement('div');
+  wrap.className = 'grid md:grid-cols-2 xl:grid-cols-3 gap-5';
+  for (var j = 0; j < cards.length; j++) wrap.appendChild(cards[j]);
+  grid.appendChild(wrap);
+}
+
+function fetchProvisional() {
+  if (provisionalLoaded) return;
+  provisionalLoaded = true;
+  var grid = document.getElementById('provisionalGrid');
+  if (grid) grid.innerHTML = '<div class="text-sm mu p-4">Loading...</div>';
+  fetch(PROV_CSV, { cache: 'no-store' })
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(function(text) { renderProvisional(parseCSV(text)); })
+    .catch(function(err) {
+      var g = document.getElementById('provisionalGrid');
+      if (g) g.innerHTML = '<div class="border hl p-8 sb"><div class="text-xs uppercase tracking-[0.18em] mu2">Could not load</div><p class="mt-3 text-sm mu">' + err.message + '</p></div>';
+    });
+}
+
+/* ---- TABS ---- */
+function setupTabs() {
+  var tabReg  = document.getElementById('tab-registered');
+  var tabProv = document.getElementById('tab-provisional');
+  var secReg  = document.getElementById('registered-section');
+  var secProv = document.getElementById('provisional-section');
+  if (!tabReg || !tabProv || !secReg || !secProv) return;
+  tabReg.addEventListener('click', function() {
+    tabReg.classList.add('active');
+    tabProv.classList.remove('active');
+    secReg.style.display = '';
+    secProv.style.display = 'none';
+  });
+  tabProv.addEventListener('click', function() {
+    tabProv.classList.add('active');
+    tabReg.classList.remove('active');
+    secReg.style.display = 'none';
+    secProv.style.display = '';
+    fetchProvisional();
+  });
+}
+
 setupFilters();
+setupTabs();
 initRegistry();
 </script>
 </body>
