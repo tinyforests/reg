@@ -37,6 +37,27 @@ NOT YET DONE, decided in conversation but not built:
 
 Also from the same Fable 5 review, still pending: Mont Albert score drift (registry.json stores 0, engine computes 11 live) needs reconciling in sync_registry.py — small isolated fix, hasn't been touched yet.
 
+### Designer attribution + portal access model — scoped, not built
+
+Purpose (from Tyson): the designer portal (designer.html, drafted from a Fable 5 review, not yet wired to anything live) isn't just an internal G&S work queue — it's meant to onboard EXTERNAL designers who add their own client gardens to the registry, then keep managing those gardens over time. When a designer's garden shows an opportunity (e.g. steward wants 4 more indigenous plants), it surfaces to the DESIGNER who has that client relationship, not generically to G&S. This is a retention + revenue mechanism for designers, and a growth mechanism for the registry (every external designer who joins adds gardens for free and has an ongoing reason to keep engaging with the platform).
+
+Decided:
+1. Access model: unique unguessable link per designer (e.g. designer.html?key=<token>), NOT a shared password and NOT full login/account infrastructure. Reasoning: delivers real per-designer privacy (each only sees their own gardens' opportunities) without building a full auth system before there's evidence designers will use this. Revisit real accounts (login + sessions) if/when designer volume outgrows manual link management.
+2. Onboarding: MANUAL for now — Tyson adds each designer himself (mirrors how gardens were added originally), generates their token, shares their link personally. Not self-service yet. Revisit self-registration (mirroring the Self-Enrolment Ramp pattern) if manual onboarding becomes a bottleneck.
+3. Data model:
+   - New data/designers.json: array of { designer_id, name, contact_email, access_token, added_date }
+   - Each garden record gets a managed_by field: { type: 'gs' | 'designer' | 'self', designer_id: <only if type is designer> } — existing 14 G&S gardens get type 'gs', Self-Enrolment Ramp gardens (e.g. Separation Creek) get type 'self', future designer-added gardens get type 'designer' + their designer_id.
+4. Designer portal (designer.html) needs rework once this lands: read the ?key= token from the URL, resolve to a designer_id via designers.json, filter the gardens list to only managed_by.designer_id === that designer. Currently the portal shows ALL gardens with no filtering — that's the main change needed, on top of whatever the delivery-model redesign (see separate pending-work entry) requires for opportunity rendering.
+
+NOT YET DONE:
+- designers.json doesn't exist
+- managed_by field doesn't exist on any garden record
+- designer.html has no token-reading or filtering logic
+- No process yet for HOW a designer actually adds a new garden to the registry (this is presumably a new form/flow, separate from both the G&S-verified path and the Self-Enrolment Ramp — needs its own scoping)
+- No decision yet on what a designer sees/can do beyond viewing opportunities (can they edit garden records? add photos? that's a permissions question not yet addressed)
+
+This sits alongside (and should probably be sequenced together with) the opportunity engine delivery-model redesign (see 'Opportunity engine — landed, unwired, delivery model redesign in progress' entry) — the designer_install delivery path only makes sense once a garden actually has a designer attached to route it to.
+
 ### Sitewide mailto: sweep + modal semantic refresh
 
 Homepage Register CTAs unified on the self-enrolment form 4 Jul 2026 (commit 589a219). Card 2 (Two ways in) reuses the Formspree modal that was originally built for registration — modal fields, copy, and function names are semantically stale (labelled 'register' but now serving 'new ecological garden' enquiries).
