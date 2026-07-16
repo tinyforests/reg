@@ -58,6 +58,16 @@ NOT YET DONE:
 
 This sits alongside (and should probably be sequenced together with) the opportunity engine delivery-model redesign (see 'Opportunity engine — landed, unwired, delivery model redesign in progress' entry) — the designer_install delivery path only makes sense once a garden actually has a designer attached to route it to.
 
+#### How a designer adds a garden — scoped
+
+Submission method: MANUAL for now, same process Tyson already uses for G&S gardens. Designer tells Tyson about the garden (email/call), Tyson creates the garden record and attaches managed_by: { type: 'designer', designer_id: <theirs> }. No new form built yet.
+
+Rationale: a designer knows precise data (exact species count, exact layer structure from their own planting plan) rather than a homeowner's guess — reusing the public Self-Enrolment Ramp form as-is would waste that precision by asking imprecise, homeowner-friendly questions. But building a dedicated professional-precision form is real work worth deferring until the manual process has run a few times and reveals what actually needs asking. Natural evolution once patterns emerge: same 12 pillar fields, relabeled for professional precision (e.g. 'exact indigenous species count from your planting plan' instead of 'roughly how many species would you say').
+
+Trust level: designer-added gardens get NO special trust shortcut. They land as 'pending' in the exact same review workflow as any public steward self-enrolment — same Provisional tab, same visual quarantine, same manual review-and-verify step before appearing on the Registered tab. Rationale: fast-tracking designer submissions to verified without review risks a designer (even unintentionally) inflating their own client's score straight onto the public Registered tab alongside G&S-verified gardens — since 'verified' currently means the same thing everywhere, any credibility gap discovered later would damage trust in every verified garden, not just that one. Personal relationship with a manually-onboarded designer can make review FASTER in practice without needing a coded fast-track tier. Revisit a real trusted-designer tier only if/when a specific designer has an established track record (e.g. multiple gardens reviewed clean with no corrections) — earned by evidence, not granted upfront.
+
+Designer account creation: happens BEFORE any garden submission (confirmed earlier in this entry) — matches the manual-onboarding decision; giving a designer their unique link is also the natural moment to explain how garden submission works.
+
 ### Sitewide mailto: sweep + modal semantic refresh
 
 Homepage Register CTAs unified on the self-enrolment form 4 Jul 2026 (commit 589a219). Card 2 (Two ways in) reuses the Formspree modal that was originally built for registration — modal fields, copy, and function names are semantically stale (labelled 'register' but now serving 'new ecological garden' enquiries).
