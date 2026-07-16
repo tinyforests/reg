@@ -21,6 +21,22 @@ Apps Script cleanup still outstanding from 4 Jul: archive the stray 'Untitled pr
 
 Also outstanding: endpoint hardening (deferred, real traffic doesn't justify yet); sitewide mailto sweep (51 occurrences, 20 files); Formspree legacy inbox check; Separation Creek submission still 'pending' — first candidate for the review workflow once Phase C ships.
 
+### Opportunity engine — landed, unwired, delivery model redesign in progress
+
+js/reg-opportunities.js landed (commit f9b3b29) after review of a Fable 5 design draft. Computes ranked next-step recommendations per garden by cloning the record, applying a candidate change, and re-running scoreEcologicalRegistry() — recommendations can never disagree with the score.
+
+Fixed during landing: pillar scores live at base.scores[p], not base[p] as Fable 5's draft had it — the unfixed version would have made every pillar's weakness-urgency flatten to 1.0, silently disabling the weakness-aware ranking. Caught via test run against real garden data, not review alone.
+
+Also improved: fastest-path-to-next-tier now prefers ecological actions (garden genuinely changes) before falling back to record/verification actions (evidence strengthens, ecology doesn't) — tested against Arundel, Sir Garnet, Evelina, Canterbury G02; in none of the four did the fallback trigger.
+
+NOT YET DONE, decided in conversation but not built:
+1. Delivery model redesign — currently every opportunity has ONE fixed delivery (diy / plants_of_place / gs_install / tend / verification) with ONE cost band, all values invented by Fable 5's draft and not reviewed. Decided: move to a THREE-PATH model where applicable opportunities offer DIY, G&S install, or external-designer install as parallel choices with separate cost bands, letting the steward/designer pick. Verification-type opportunities (corridor-node, professional assessment, verification upgrade) stay single-path professional-only — no DIY option makes sense for those. Nest boxes delivery should move from plants_of_place to gs_install. Soil & Water pillar specifically flagged as needing the three-path treatment (currently all gs_install/$$, unrealistic — several items are DIY-able).
+2. Python port (reg_opportunities.py) + parity test — Fable 5 drafted these against the ORIGINAL unfixed JS. Need rebuilding against our fixed version once the delivery model is finalized, not before (rebuilding twice wastes effort).
+3. Wiring into any page — profiles, assess.html, designer portal — all deliberately NOT done. Wait until delivery model + Python parity are both solid. Land as ONE profile page pilot before all 15.
+4. Designer portal (designer.html) — separate product decision, not started, needs its own scoping conversation about whether/how G&S wants an internal designer tool right now.
+
+Also from the same Fable 5 review, still pending: Mont Albert score drift (registry.json stores 0, engine computes 11 live) needs reconciling in sync_registry.py — small isolated fix, hasn't been touched yet.
+
 ### Sitewide mailto: sweep + modal semantic refresh
 
 Homepage Register CTAs unified on the self-enrolment form 4 Jul 2026 (commit 589a219). Card 2 (Two ways in) reuses the Formspree modal that was originally built for registration — modal fields, copy, and function names are semantically stale (labelled 'register' but now serving 'new ecological garden' enquiries).
