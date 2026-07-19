@@ -600,6 +600,7 @@
   </main>
 
 <script src="/js/reg-score.js"></script>
+<script src="/js/reg-opportunities.js"></script>
 <script src="/js/badge-engine.js"></script>
 
 <script>
@@ -843,14 +844,33 @@ function renderLive() {
   var el = document.getElementById('categoryBars');
   if (el) el.innerHTML = ch;
 
-  /* Recommendations */
-  var rh = '';
-  var rl = result.recommendations;
-  for (var ri = 0; ri < rl.length; ri++) {
-    rh += '<div class="flex justify-between border-b border-rl dark:border-rdl pb-1.5"><span>' + rl[ri].action + '</span><span class="font-mono opacity-60">+' + rl[ri].points + '</span></div>';
-  }
+  /* Recommendations -- opportunity engine, enrolment framing */
   var relEl = document.getElementById('recommendations');
-  if (relEl) relEl.innerHTML = rh || '<span class="opacity-40">No immediate gains</span>';
+  if (relEl) {
+    var oppRes = (typeof buildOpportunities === 'function') ? buildOpportunities(record) : null;
+    if (!oppRes) {
+      relEl.innerHTML = '<span class="opacity-40">--</span>';
+    } else {
+      var OPP_LBL = { diy: 'DIY', plants_of_place: 'Plants of Place', gs_install: 'G&S install', designer_install: 'Designer install', tend: 'Tend', verification: 'Verification' };
+      var oppNames = function (o) { return o.delivery_options.map(function (d) { return OPP_LBL[d.path] || d.path; }).join(' · '); };
+      var oppRow = function (o) {
+        return '<div class="flex justify-between gap-2 border-b border-rl dark:border-rdl pb-1.5">' +
+          '<span>' + o.action + '<span class="opacity-45"> · ' + oppNames(o) + '</span></span>' +
+          '<span class="font-mono opacity-60">+' + o.points + '</span></div>';
+      };
+      var rh = '';
+      var nt = oppRes.summary.nextTier;
+      if (nt) { rh += '<div class="mb-2 opacity-70">' + nt.gap + ' pts to <strong>' + nt.name + '</strong></div>'; }
+      var eco = oppRes.opportunities.filter(function (o) { return o.group === 'ecological'; }).slice(0, 4);
+      var rec = oppRes.opportunities.filter(function (o) { return o.group === 'record'; }).slice(0, 2);
+      for (var ei = 0; ei < eco.length; ei++) { rh += oppRow(eco[ei]); }
+      if (rec.length) {
+        rh += '<div class="text-[0.6rem] uppercase tracking-[0.18em] opacity-45 mt-2 mb-1">Strengthen your record</div>';
+        for (var rj = 0; rj < rec.length; rj++) { rh += oppRow(rec[rj]); }
+      }
+      relEl.innerHTML = rh || '<span class="opacity-40">No immediate gains</span>';
+    }
+  }
 
   /* Badge preview */
   var bp = document.getElementById('badgePreview');
