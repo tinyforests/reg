@@ -403,6 +403,7 @@
 </footer>
 
 <script src="/js/reg-score.js"></script>
+<script src="/js/reg-opportunities.js"></script>
 <script src="/js/badge-engine.js"></script>
 <script>
 /* Ecological Registry - Arundel - Profile Page */
@@ -544,10 +545,24 @@ function render() {
   }
   html('badgeList', blh);
 
+  var oppRes = (typeof buildOpportunities === 'function') ? buildOpportunities(R) : { opportunities: [] };
+  var deliveryNames = function (o) {
+    var LBL = { diy: 'DIY', plants_of_place: 'Plants of Place', gs_install: 'G&S install', designer_install: 'Designer install', tend: 'Tend', verification: 'Verification' };
+    return o.delivery_options.map(function (d) { return LBL[d.path] || d.path; }).join(' · ');
+  };
+  var eco = oppRes.opportunities.filter(function (o) { return o.group === 'ecological'; }).slice(0, 3);
+  var rec = oppRes.opportunities.filter(function (o) { return o.group === 'record'; }).slice(0, 2);
   var oh = '';
-  var rl = result.recommendations.slice(0, 3);
-  for (var ri = 0; ri < rl.length; ri++) {
-    oh += '<div class="border border-rl dark:border-rdl p-3"><div class="text-xs font-medium">' + rl[ri].action + '</div><div class="text-xs opacity-50 mt-1">+' + rl[ri].points + ' points</div></div>';
+  for (var ri = 0; ri < eco.length; ri++) {
+    var o = eco[ri];
+    oh += '<div class="border border-rl dark:border-rdl p-3"><div class="text-xs font-medium">' + o.action + '</div><div class="text-xs opacity-50 mt-1">+' + o.points + ' points · ' + deliveryNames(o) + '</div></div>';
+  }
+  if (rec.length) {
+    oh += '<div class="text-[0.65rem] uppercase tracking-[0.18em] opacity-45 mt-2">Strengthen your record</div>';
+    for (var rj = 0; rj < rec.length; rj++) {
+      var o2 = rec[rj];
+      oh += '<div class="border border-rl dark:border-rdl p-3"><div class="text-xs font-medium">' + o2.action + '</div><div class="text-xs opacity-50 mt-1">+' + o2.points + ' points · ' + deliveryNames(o2) + '</div></div>';
+    }
   }
   html('opportunityList', oh);
 
