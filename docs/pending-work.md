@@ -21,7 +21,7 @@ Apps Script cleanup still outstanding from 4 Jul: archive the stray 'Untitled pr
 
 Also outstanding: endpoint hardening (deferred, real traffic doesn't justify yet); sitewide mailto sweep (51 occurrences, 20 files); Formspree legacy inbox check; Separation Creek submission still 'pending' — first candidate for the review workflow once Phase C ships.
 
-### Opportunity engine — landed, unwired, delivery model redesign in progress
+### Opportunity engine — three-path model shipped, Python parity done, wired to profiles + assess
 
 js/reg-opportunities.js landed (commit f9b3b29) after review of a Fable 5 design draft. Computes ranked next-step recommendations per garden by cloning the record, applying a candidate change, and re-running scoreEcologicalRegistry() — recommendations can never disagree with the score.
 
@@ -29,11 +29,15 @@ Fixed during landing: pillar scores live at base.scores[p], not base[p] as Fable
 
 Also improved: fastest-path-to-next-tier now prefers ecological actions (garden genuinely changes) before falling back to record/verification actions (evidence strengthens, ecology doesn't) — tested against Arundel, Sir Garnet, Evelina, Canterbury G02; in none of the four did the fallback trigger.
 
-NOT YET DONE, decided in conversation but not built:
-1. Delivery model redesign — currently every opportunity has ONE fixed delivery (diy / plants_of_place / gs_install / tend / verification) with ONE cost band, all values invented by Fable 5's draft and not reviewed. Decided: move to a THREE-PATH model where applicable opportunities offer DIY, G&S install, or external-designer install as parallel choices with separate cost bands, letting the steward/designer pick. Verification-type opportunities (corridor-node, professional assessment, verification upgrade) stay single-path professional-only — no DIY option makes sense for those. Nest boxes delivery should move from plants_of_place to gs_install. Soil & Water pillar specifically flagged as needing the three-path treatment (currently all gs_install/$$, unrealistic — several items are DIY-able).
-2. Python port (reg_opportunities.py) + parity test — Fable 5 drafted these against the ORIGINAL unfixed JS. Need rebuilding against our fixed version once the delivery model is finalized, not before (rebuilding twice wastes effort).
-3. Wiring into any page — profiles, assess.html, designer portal — all deliberately NOT done. Wait until delivery model + Python parity are both solid. Land as ONE profile page pilot before all 15.
-4. Designer portal (designer.html) — separate product decision, not started, needs its own scoping conversation about whether/how G&S wants an internal designer tool right now.
+DONE:
+1. Delivery model redesign — shipped (commit b66e728). Every opportunity now carries a delivery_options array of { path, cost }; applicable moves offer DIY / G&S install / designer_install as parallel choices with separate cost bands. Verification-type moves (corridor-node, assessment, verification upgrade) stay single-path. designer_install options are filtered out at build time unless the garden carries managed_by.type === 'designer'.
+2. Python port (reg_opportunities.py) + parity test — DONE (commit 6714648), rebuilt against the fixed three-path JS. test_opportunities_parity.py cross-checks JS vs Python across all 15 gardens on points/group/effort/pillar/delivery/priority, plus a synthetic managed_by=designer fixture that keeps the designer_install branch under test. 16/16 pass.
+3. Wiring — DONE for profiles + assess.html (commit 99d0974). Piloted on Arundel, then rolled the identical template change to the other 14 profiles. Profiles lead with ecological moves + a 'Strengthen your record' group; assess.html uses enrolment framing (pts-to-next-tier + ranked moves). Delivery routes shown by LABEL ONLY — no cost on either public surface. designer_install stays dormant until managed_by lands.
+
+STILL TO DO:
+4. Designer portal (designer.html) — still NOT built on main and NOT wired. Separate product decision; needs its own scoping conversation before it exists. This is the one surface where cost bands and designer-filtered gardens are meant to appear, so it pairs with the designer-attribution build below.
+
+Small follow-up noticed during wiring: the engine's own renderOpportunities(_, 'steward') helper includes cost in its delivery line, which contradicts the no-cost-on-public decision. The wired profiles/assess do NOT use that helper (they render inline, cost-free), so nothing leaks today — but the helper itself should be reconciled (drop cost from steward mode) before anything else consumes it.
 
 Also from the same Fable 5 review, still pending: Mont Albert score drift (registry.json stores 0, engine computes 11 live) needs reconciling in sync_registry.py — small isolated fix, hasn't been touched yet.
 
