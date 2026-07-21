@@ -556,6 +556,9 @@
       <!-- -- RIGHT: Live score + JSON -- -->
       <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-20 lg:self-start">
 
+        <!-- Assessment mode banner (self = provisional, assessor = verified-capable) -->
+        <div id="modeBanner" class="border p-3 text-xs leading-relaxed" style="display:none"></div>
+
         <!-- Live score -->
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-6">
           <div class="section-label mb-4" style="color:inherit;opacity:0.6">Live Score</div>
@@ -1510,6 +1513,60 @@ document.getElementById('gardenSelector').addEventListener('change', function() 
 loadGardenSelector();
 loadSpeciesDb();
 renderLive();
+
+/* ---- Assessment mode: self (provisional) vs assessor (verified-capable) ----
+   Default = self mode. ?key=<ASSESSOR_KEY> unlocks assessor mode.
+   SOFT gate: the repo is public, so the key is not a secret — assessor mode is
+   effectively "anyone with the link". The real safety boundary is that this page
+   is only a calculator; nothing it computes is canonical until it passes through
+   the enrolment / verification workflow. Self mode additionally locks the
+   verified inputs and visually quarantines the score, per the ramp rule that a
+   provisional score must never look verified. For real gating, move assessor
+   mode behind the Apps Script backend. */
+(function () {
+  var ASSESSOR_KEY = 'gs-assessor-2026'; // not a secret on a public repo — rotate as needed
+  var isAssessor = new URLSearchParams(location.search).get('key') === ASSESSOR_KEY;
+  var banner = document.getElementById('modeBanner');
+  var scoreEl = document.getElementById('liveScore');
+  var scoreCard = scoreEl ? scoreEl.closest('.border') : null;
+  var byId = function (id) { return document.getElementById(id); };
+
+  if (isAssessor) {
+    if (banner) {
+      banner.style.display = 'block';
+      banner.style.borderColor = 'rgba(120,158,95,0.6)';
+      banner.style.background = 'rgba(120,158,95,0.10)';
+      banner.innerHTML = '<strong>Assessor mode.</strong> Verification levels unlocked. A score becomes canonical only once recorded through the verification workflow.';
+    }
+    return;
+  }
+
+  /* --- self / provisional mode --- */
+  // 1. Lock verification level to self_reported (no self-awarding site visits / G&S verified).
+  var sel = byId('f_ev_verification');
+  if (sel) {
+    var keep = sel.querySelector('option[value="self_reported"]');
+    sel.innerHTML = '';
+    sel.appendChild(keep || new Option('Self Reported', 'self_reported'));
+    sel.value = 'self_reported';
+    sel.disabled = true;
+  }
+  // 2. Remove third-party claims a self-assessor can't make.
+  var prof = byId('f_ev_professional');
+  if (prof) { prof.checked = false; prof.disabled = true; var pl = prof.closest('label'); if (pl) pl.style.opacity = '0.4'; }
+  var asr = byId('f_ev_assessor');
+  if (asr) { var aw = asr.closest('div'); if (aw) aw.style.display = 'none'; }
+  // 3. Quarantine the score — provisional must never look verified.
+  if (banner) {
+    banner.style.display = 'block';
+    banner.style.borderColor = '#c9a24b';
+    banner.style.background = 'rgba(201,162,75,0.12)';
+    banner.innerHTML = '<strong>Provisional — self-assessed.</strong> An unverified estimate. Book an Ecological Garden Health Check to have it verified and registered.';
+  }
+  if (scoreCard) { scoreCard.style.borderStyle = 'dashed'; scoreCard.style.borderWidth = '2px'; scoreCard.style.borderColor = '#c9a24b'; }
+
+  renderLive(); // recompute now that verified inputs are locked out
+})();
 
 </script>
 </body>
