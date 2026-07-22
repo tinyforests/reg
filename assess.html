@@ -1564,6 +1564,10 @@ renderLive();
     banner.innerHTML = '<strong>Provisional — self-assessed.</strong> An unverified estimate. Book an Ecological Garden Health Check to have it verified and registered.';
   }
   if (scoreCard) { scoreCard.style.borderStyle = 'dashed'; scoreCard.style.borderWidth = '2px'; scoreCard.style.borderColor = '#c9a24b'; }
+  // 4. Hide the raw-JSON export — an assessor/dev affordance a self-user can't use
+  //    and shouldn't see (their capture path is the enrolment ramp, not copy-paste).
+  var copyTop = byId('copyBtn'); if (copyTop) copyTop.style.display = 'none';
+  var jsonOut = byId('jsonOutput'); if (jsonOut) { var jsonPanel = jsonOut.closest('.border'); if (jsonPanel) jsonPanel.style.display = 'none'; }
 
   renderLive(); // recompute now that verified inputs are locked out
 })();
