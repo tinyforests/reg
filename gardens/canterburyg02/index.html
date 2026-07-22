@@ -404,6 +404,7 @@
 
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
+<script src="/js/reg-claims.js"></script>
 <script src="/js/badge-engine.js"></script>
 <script>
 /* Ecological Registry - Profile Page */
@@ -554,16 +555,17 @@ function render() {
   var oh = '';
   for (var ri = 0; ri < eco.length; ri++) {
     var o = eco[ri];
-    oh += '<div class="border border-rl dark:border-rdl p-3"><div class="text-xs font-medium">' + o.action + '</div><div class="text-xs opacity-50 mt-1">+' + o.points + ' points · ' + deliveryNames(o) + '</div></div>';
+    oh += '<div class="border border-rl dark:border-rdl p-3" data-opp-id="' + o.id + '" data-opp-action="' + String(o.action).replace(/"/g, '&quot;') + '" data-opp-points="' + o.points + '"><div class="text-xs font-medium">' + o.action + '</div><div class="text-xs opacity-50 mt-1">+' + o.points + ' points · ' + deliveryNames(o) + '</div></div>';
   }
   if (rec.length) {
     oh += '<div class="text-[0.65rem] uppercase tracking-[0.18em] opacity-45 mt-2">Strengthen your record</div>';
     for (var rj = 0; rj < rec.length; rj++) {
       var o2 = rec[rj];
-      oh += '<div class="border border-rl dark:border-rdl p-3"><div class="text-xs font-medium">' + o2.action + '</div><div class="text-xs opacity-50 mt-1">+' + o2.points + ' points · ' + deliveryNames(o2) + '</div></div>';
+      oh += '<div class="border border-rl dark:border-rdl p-3" data-opp-id="' + o2.id + '" data-opp-action="' + String(o2.action).replace(/"/g, '&quot;') + '" data-opp-points="' + o2.points + '"><div class="text-xs font-medium">' + o2.action + '</div><div class="text-xs opacity-50 mt-1">+' + o2.points + ' points · ' + deliveryNames(o2) + '</div></div>';
     }
   }
   html('opportunityList', oh);
+  if (typeof attachClaims === 'function') attachClaims(R);
 
   txt('networkMapLabel', 'Corridor Map - ' + c.cluster_name);
   txt('svgGardenName',   R.garden_name);
