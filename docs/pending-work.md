@@ -41,6 +41,49 @@ Small follow-up noticed during wiring: the engine's own renderOpportunities(_, '
 
 Also from the same Fable 5 review, still pending: Mont Albert score drift (registry.json stores 0, engine computes 11 live) needs reconciling in sync_registry.py — small isolated fix, hasn't been touched yet.
 
+### Steward opportunity claims — SHIPPED and live end-to-end (22 Jul 2026)
+
+The opportunity engine recommended moves but nothing could act on them. That loop is now closed.
+
+A steward opens their garden profile, sees a ranked opportunity, and taps "I've done this". It submits a CLAIM. It never awards points.
+
+Why claim-only: the canonical principle is "the inputs are the truth, the score is the consequence". A click is not an input — a water bowl is. Sir Garnet is gardener_and_son_verified; if a click moved its score, a verified record would have silently absorbed an unverified claim, which is the first thing an AfN diligence pass would find.
+
+Shipped:
+1. js/reg-claims.js (commit a90df80) — claim UI on all 15 profiles. Claimable is an explicit ALLOWLIST, not an inferred rule, because gaming risk isn't uniform. Included: discrete physical additions confirmable from a photo (water feature, rocks, logs, nest boxes, habitat nodes, moisture basin, rainwater, swale, first fauna sighting) plus self-held documentation (photos, field notes, species list, fauna record). Excluded on purpose: species counts / canopy / indigenous-dominant (need botanical ID — a photo can't prove them), corridor node / assessment / verification upgrade (someone else confirms by definition), adjacent gardens (depends on another property registering).
+2. Apps Script Code.gs Version 7 — claim handling merged into the existing self-enrolment backend. Routed BEFORE the enrolment rate limits on purpose: the per-email dedup permits one submission per email per hour, correct for enrolment but wrong for claims (a steward may claim several completed items in one sitting). Claims have their own caps (CLAIM_RATE_MAX 40/hr global, CLAIM_EMAIL_MAX 10/hr per email, as counters not booleans). Writes to a separate 'Claims' tab; the 26-column Submissions sheet is untouched. Dedup is on the sheet, not the clock: same garden + opportunity + steward still 'pending'. Same /exec URL and deployment ID retained.
+3. scripts/apply_claims.py (commit 883cc97) — the review loop. Mark Review Status = confirmed in the Claims tab, run the script, and the matching INPUT flips in the garden record, then sync_registry.py regenerates. Idempotent (already-applied claims are skipped, so there's no 'applied' state to maintain in the sheet). Drift guard: asks the engine what each move is worth before applying and checks the actual delta after — a mismatch means the field mapping diverged from the engine, and it refuses that row. Matches CSV header names, not column positions.
+
+Verified end-to-end 22 Jul: real claim submitted from the Sir Garnet profile, landed in the Claims tab, notification email received. apply_claims.py tested against a mock sheet — Sir Garnet water_feature 50 -> 53 matching the engine's promised +3, sync re-rated it to Ecological Garden, pending rows ignored, bad garden id flagged, second run skipped as already applied.
+
+Open on this track:
+- The Sir Garnet test claim is a UI test, not a real water bowl. Set that row back to pending or clear it before running apply_claims.py for real, and delete any TEST-001 rows from the curl testing.
+- "Confirmed" is a judgement call, not a checkbox. The mechanism can't tell a real completion from a false one — the rigour lives in the human. Once someone other than Tyson does verifications (a 90-day target), that standard needs writing down rather than being held in his head.
+- Photo evidence is deferred. The claim captures name/email/note only; base64 image upload through Apps Script was judged too much to bet the loop on given the endpoint's history. Photos are requested in the confirmation reply instead.
+
+### assess.html — dual-mode, safe for self-assessors, still unlinked
+
+assess.html was built as an assessor tool. It is now safe to point at post-enrolment self-assessors, because provisional is quarantined from verified per the ramp brief's hard rule.
+
+- Default = SELF mode: verification level locked to self_reported (disabled select), professional-assessment claim and assessor-name field removed, raw-JSON export ('Copy JSON' button + 'Output JSON' panel) hidden — an assessor/dev affordance a self-user can't use. Score card gets a dashed amber 'Provisional — self-assessed' treatment plus a banner steering to the Ecological Garden Health Check.
+- ?key=<ASSESSOR_KEY> = ASSESSOR mode: full verification dropdown, JSON export, no provisional styling.
+- The lock has teeth: gv() reads the disabled select's value, so a self-assessed record carries self_reported and the engine denies the +4 verified uplift (Arundel 69 vs 73). A homeowner cannot self-award a verified score.
+
+STILL TO DO:
+- The ?key= gate is SOFT. The repo is public, so the key isn't a secret — assessor mode is effectively "anyone with the link". The real boundary is that this page is only a calculator; nothing it computes is canonical until it passes through the verification workflow. For real gating, assessor mode must move behind the Apps Script backend.
+- assess.html has NO inbound link from any page. It's reachable only by URL. The entry point belongs at the ramp's Deepen step ("assess your garden in full" -> self/provisional mode -> opportunity next steps -> upsell the Health Check). Blocked on deciding where the Deepen screen lives — this repo or the Apps Script enrolment flow.
+- Self mode has no submission path. A steward can self-assess and see a provisional score and next steps, but nothing sends it anywhere, so the funnel dead-ends. Two options: soft close (link out to Health Check booking / enrolment ramp, no new backend) or hard close (self mode posts a provisional record to the Apps Script sheet as a pending entry).
+
+### Unwired / orphaned surfaces — audit 22 Jul 2026
+
+All JS modules (reg-score, reg-opportunities, reg-claims, badge-engine) are loaded where they should be, and no <script src> points at a missing file. What is NOT wired:
+- assess.html — zero inbound links (see entry above).
+- designer-invite.html — an "An Invitation to Designers" page exists but nothing links to it, and it has no token, no portal link, and no managed_by awareness. It predates the access model and pairs with the designer-attribution build.
+- designer_install delivery paths — built, parity-tested, and dormant. Invisible until a garden carries managed_by.
+- data/badge-definitions.json — DEAD. badge-engine.js embeds its definitions inline instead, so this JSON is an unread duplicate and a drift risk. Safe to delete.
+- data/gardens.json — appears superseded by registry.json, which is what every surface actually reads. Safe to delete after a check.
+- Legacy orphans (index-old.html, profile.html, score.html, badges.html, yield-demo.html, nicholson-field-report001.html) — mostly intentional standalones, low priority, deliberately untouched.
+
 ### Designer attribution + portal access model — scoped, not built
 
 Purpose (from Tyson): the designer portal (designer.html, drafted from a Fable 5 review, not yet wired to anything live) isn't just an internal G&S work queue — it's meant to onboard EXTERNAL designers who add their own client gardens to the registry, then keep managing those gardens over time. When a designer's garden shows an opportunity (e.g. steward wants 4 more indigenous plants), it surfaces to the DESIGNER who has that client relationship, not generically to G&S. This is a retention + revenue mechanism for designers, and a growth mechanism for the registry (every external designer who joins adds gardens for free and has an ongoing reason to keep engaging with the platform).
