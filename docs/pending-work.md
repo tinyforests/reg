@@ -57,6 +57,7 @@ Shipped:
 Verified end-to-end 22 Jul: real claim submitted from the Sir Garnet profile, landed in the Claims tab, notification email received. apply_claims.py tested against a mock sheet — Sir Garnet water_feature 50 -> 53 matching the engine's promised +3, sync re-rated it to Ecological Garden, pending rows ignored, bad garden id flagged, second run skipped as already applied.
 
 Open on this track:
+- Code.gs Version 9 pending deploy — adds columns AA (evc_code) and AB (evc_name) to the Submissions sheet write. No functional breakage until deployed; EVC data from the discovery handover URL just won't be captured. Paste updated scripts/appsscript/Code.gs and deploy new version when convenient.
 - The Sir Garnet test claim is a UI test, not a real water bowl. Set that row back to pending or clear it before running apply_claims.py for real, and delete any TEST-001 rows from the curl testing.
 - "Confirmed" is a judgement call, not a checkbox. The mechanism can't tell a real completion from a false one — the rigour lives in the human. Once someone other than Tyson does verifications (a 90-day target), that standard needs writing down rather than being held in his head.
 - Photo evidence is deferred. The claim captures name/email/note only; base64 image upload through Apps Script was judged too much to bet the loop on given the endpoint's history. Photos are requested in the confirmation reply instead.

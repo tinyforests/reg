@@ -1,5 +1,5 @@
 {
-  "garden_id": "ER-VIC-SH-ARU-0001",
+  "garden_id": "ER-AU-VIC-SH-ARU-0001",
   "garden_name": "Arundel",
   "garden_type": "Ecological Forest Garden",
   "suburb": "Surrey Hills",
@@ -92,7 +92,7 @@
     "park_distance_m": 45,
     "adjacent_registered_gardens": [
       {
-        "id": "ER-VIC-SH-MID-001",
+        "id": "ER-AU-VIC-SH-MID-001",
         "name": "Middlesex",
         "distance_m": 350,
         "direction": "south",

@@ -179,7 +179,7 @@
             </div>
             <div>
               <div class="opacity-50 mb-1">Garden ID</div>
-              <input type="text" id="f_garden_id" placeholder="ER-VIC-SH-ARU-0001" />
+              <input type="text" id="f_garden_id" placeholder="ER-AU-VIC-SH-ARU-0001" />
             </div>
             <div>
               <div class="opacity-50 mb-1">Suburb</div>
@@ -631,7 +631,7 @@ function buildRecordFromForm() {
   }
   var adjacent_registered_gardens = getAdjacentGardens();
   return {
-    garden_id:       gv('f_garden_id')   || 'ER-VIC-XX-XXX-0001',
+    garden_id:       gv('f_garden_id')   || 'ER-AU-VIC-XX-XXX-0001',
     garden_name:     gv('f_garden_name') || 'New Garden',
     garden_type:     gv('f_garden_type') || 'Ecological Garden',
     typology:        gv('f_typology')    || gv('f_garden_type') || 'Ecological Garden',
@@ -1076,7 +1076,7 @@ function addAdjacentGarden(prefill) {
     '</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem">' +
       '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Registry ID</div>' +
-        '<input type="text" id="adj_id_' + idx + '" placeholder="ER-VIC-SH-XXX-000" /></div>' +
+        '<input type="text" id="adj_id_' + idx + '" placeholder="ER-AU-VIC-SH-XXX-000" /></div>' +
       '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Garden name</div>' +
         '<input type="text" id="adj_name_' + idx + '" placeholder="Garden name" /></div>' +
       '<div><div class="opacity-50" style="font-size:.65rem;margin-bottom:.2rem">Distance (m)</div>' +

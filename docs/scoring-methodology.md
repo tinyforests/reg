@@ -255,6 +255,51 @@ The `cluster` object on each garden tracks the local network. A cluster is a geo
 
 Cluster status thresholds are advisory — the meaningful number is `gardens`. Three or more gardens in one LGA is the credibility floor for a council pitch.
 
+## Open Methodology Questions v1.0
+
+These are known gaps in the current methodology. They are documented here rather than hidden because a registry that acknowledges its limitations is more credible than one that doesn't. Each item names the gap, states why it matters, and — where the answer is known — describes the intended resolution.
+
+### (a) "Indigenous to this place" is undefined by the engine
+
+The Biodiversity Structure pillar awards points for `indigenous_species_current` — a steward-reported count of strictly local-indigenous species. The engine accepts this count at face value. It does not hold a reference list of species that are indigenous to any specific location, and it does not check the count against one.
+
+This means: a steward could report a species as indigenous when it is a native from a different bioregion, or a cultivar of an indigenous species, or genuinely local — and the engine would treat all three identically.
+
+The current guard is the verification visit: a G&S steward confirms the species list in person. For `gardener_and_son_verified` gardens this is the practical floor. For self-reported and provisional gardens, no such check exists.
+
+The long-term resolution requires integrating a reference species list keyed to each garden's ecological community (EVC in Victoria; equivalent for other states). That check belongs in the verification workflow and, eventually, in an automated layer that cross-references submitted species lists against a curated community palette. Neither is built yet.
+
+Until it is: the engine's species count is a steward claim. The trust level is set by `evidence.verification_level`, not by the count itself.
+
+### (b) Verification independence — the Verra analogy
+
+Verra (the carbon credit registry) separates the methodology author, the project developer, and the auditor into three distinct roles. No single party can both design the rules and verify compliance with them. This separation is the credibility mechanism.
+
+The Ecological Registry currently does not have it. Gardener and Son both develops the scoring methodology and conducts the verifications. A garden can receive `gardener_and_son_verified` status through a visit by the same organisation that wrote the rules that verification is supposed to confirm.
+
+This is a reasonable position at founding scale — every registry starts with its founders as verifiers — but it is a known limitation that will matter to any serious buyer of biodiversity credits, council partner, or philanthropic funder doing diligence. The AfN framework explicitly requires third-party auditing above a certain credit size.
+
+The intended resolution is a tiered verification structure: self-reported → photo-verified → independent site visit (by a qualified ecologist not affiliated with G&S) → G&S lead verification. The `gardener_and_son_verified` tier would then represent a co-verified outcome, not a solo one. Building that tier requires an external verifier network, which is a product and relationship problem, not a code problem. It is not scheduled.
+
+Until it is: the methodology notes the limitation and the verification label is specific enough (`gardener_and_son_verified`) that a reviewer understands exactly who did the verification.
+
+### (c) Verified scores are time-stamped claims — expiry not yet implemented
+
+A verified score is a claim that the garden met the scored criteria at the time of verification. Gardens change. A score verified in April 2025 may no longer reflect the garden in April 2028 — species may have died, features may have been removed, canopy may have closed or opened.
+
+The current data model has no `as_at` date on a verification and no expiry. A `gardener_and_son_verified` score sits in the record indefinitely with no signal that it may be stale.
+
+**Intended resolution (scope only — not yet built):**
+
+Two new fields under `evidence`:
+
+- `evidence.as_at` — ISO 8601 date of the most recent verification visit (e.g. `"2025-04-15"`)
+- `evidence.expires` — ISO 8601 date after which the score should be treated as unconfirmed (e.g. `"2027-04-15"`)
+
+A verification would be valid for two years by default. After expiry, the display tier would revert to `site_visit` level in the rendered output, prompting renewal. The score itself would not change — only the trust signal.
+
+These fields are not added to any garden record until the expiry logic is built and the display consequences are wired. Adding `as_at` without the display consequence is cosmetic. Adding `expires` without a renewal prompt is noise. Build both together or neither.
+
 ## Registry roles and trajectory
 
 Two qualitative fields on every garden:

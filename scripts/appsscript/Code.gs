@@ -4,186 +4,323 @@
      Execute as: Me
      Who has access: Anyone
 
-   Hardening (Jul 2026):
+   Handles two submission types, routed on payload.submission_type:
+     (no type / 'enrolment') -> handleEnrolment()  -> Submissions sheet
+     'opportunity_claim'     -> handleClaim()       -> Claims sheet
+
+   Claims are routed BEFORE enrolment rate limits because a steward
+   may legitimately claim several completed items in one sitting, and
+   the per-email enrolment dedup (1/hr) would incorrectly block that.
+
+   Enrolment hardening:
    - Global hourly rate limit via CacheService (20 submissions/hr)
    - Per-email hourly dedup (1 submission per email per hour)
 
+   Claim hardening:
+   - Separate global cap (40 claims/hr)
+   - Per-email cap (10 claims/hr)
+   - Sheet dedup: same garden + opportunity + steward still 'pending'
+     is rejected regardless of time elapsed
+
    Note: shared-secret check was added and then reverted 4 Jul 2026
    (commit d925592) after causing deployment confusion -- see
-   pending-work.md 'Self-Enrolment endpoint hardening' entry for
-   full history. Do not re-add without also updating the prototype's
-   payload to send it.
+   pending-work.md 'Self-Enrolment endpoint hardening' for history.
+   Do not re-add without also updating the prototype payload to send it.
 
    Note on IP rate limiting: Apps Script web apps do not expose the
-   client IP address, so per-IP limiting (as originally described in
-   pending-work.md) is not achievable in pure Apps Script. The global
-   hourly cap + per-email dedup is the practical ceiling without a
-   Cloud Run or similar proxy layer.
-
-   Notifications (Jul 2026):
-   - Email to NOTIFY_EMAIL on every submission
-   - Confirmation email to steward on every submission (if email given)
-   Both non-fatal -- a MailApp failure does not block the submission
-   from being recorded.
+   client IP address, so per-IP limiting is not achievable in pure
+   Apps Script. The global hourly cap + per-email dedup is the
+   practical ceiling without a Cloud Run or similar proxy layer.
 
    After editing this file, deploy a NEW version in the Apps Script
    editor (Deploy -> Manage deployments -> New version). The /exec URL
-   stays the same; the prototype does not need updating.
+   stays the same; no client changes needed.
    ============================================================ */
 
-var NOTIFY_EMAIL    = 'hello@lundbech.me';
-var RATE_GLOBAL_MAX = 20;    // max total submissions per hour (all users)
-var RATE_CACHE_TTL  = 3600;  // cache entry lifetime in seconds (1 hour)
+var NOTIFY_EMAIL     = 'hello@lundbech.me';
+var RATE_GLOBAL_MAX  = 20;   // max enrolment submissions per hour (all users)
+var CLAIM_RATE_MAX   = 40;   // max claims per hour (all users)
+var CLAIM_EMAIL_MAX  = 10;   // max claims per email per hour
+var RATE_CACHE_TTL   = 3600; // cache entry lifetime in seconds (1 hour)
 
+/* ---- Health check ---- */
 function doGet(e) {
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
 
+/* ---- Auth helper (run once from editor to grant MailApp scope) ---- */
 function authorizeMail() {
   MailApp.sendEmail({
-    to: 'hello@lundbech.me',
+    to:      NOTIFY_EMAIL,
     subject: 'Auth test -- Self-Enrolment endpoint',
-    body: 'If you received this, MailApp is now authorized.'
+    body:    'If you received this, MailApp is now authorized.'
   });
 }
 
+/* ---- Router ---- */
 function doPost(e) {
   var cache = CacheService.getScriptCache();
 
   try {
     var payload = JSON.parse(e.postData.contents);
 
-    // Global hourly rate limit
-    var bucket    = hourBucket();
-    var globalKey = 'global_' + bucket;
-    var globalCount = parseInt(cache.get(globalKey) || '0', 10);
-    if (globalCount >= RATE_GLOBAL_MAX) {
-      return jsonResp({ok: false, error: 'Too many submissions -- try again in an hour.'});
+    // Claims bypass enrolment rate limits -- route first.
+    if (payload.submission_type === 'opportunity_claim') {
+      return handleClaim(payload, cache);
     }
 
-    // Per-email dedup
-    var email = (payload.steward_email || '').toLowerCase().trim();
-    if (email) {
-      var emailKey = 'email_' + bucket + '_' + email;
-      if (cache.get(emailKey)) {
-        return jsonResp({ok: false, error: 'A submission from this email was already received this hour.'});
-      }
-    }
-
-    // Generate once -- threaded through sheet write and both emails
-    var submissionId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-    var submittedAt  = new Date().toISOString();
-    var name    = payload.steward_name            || '';
-    var address = payload.garden_address          || '';
-    var score   = payload.provisional_score_total || 0;
-    var tier    = payload.provisional_tier        || '';
-
-    // Write to sheet -- 26 columns matching live sheet structure exactly
-    var ss    = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
-    sheet.appendRow([
-      submittedAt,                                   // A  timestamp
-      submissionId,                                  // B  submission_id
-      name,                                          // C  steward_name
-      email,                                         // D  steward_email
-      address,                                       // E  garden_address
-      payload.bio_q1_indigenous_species   || 0,      // F  bio_q1_indigenous_species
-      payload.bio_q2_indigenous_dominant  || 0,      // G  bio_q2_indigenous_dominant
-      payload.bio_q3_layers               || 0,      // H  bio_q3_layers
-      payload.bio_q4_canopy               || 0,      // I  bio_q4_canopy
-      payload.soil_q1_condition           || 0,      // J  soil_q1_condition
-      payload.soil_q2_water               || 0,      // K  soil_q2_water
-      payload.soil_q3_features            || 0,      // L  soil_q3_features
-      payload.habitat_q1_zones            || 0,      // M  habitat_q1_zones
-      payload.habitat_q2_features         || 0,      // N  habitat_q2_features
-      payload.habitat_q3_wildlife         || 0,      // O  habitat_q3_wildlife
-      payload.conn_q1_park                || 0,      // P  conn_q1_park
-      payload.evidence_q1_records         || 0,      // Q  evidence_q1_records
-      score,                                         // R  provisional_score_total
-      tier,                                          // S  provisional_tier
-      payload.consent_record,                        // T  consent_record (boolean)
-      payload.consent_public_score,                  // U  consent_public_score (boolean)
-      payload.consent_contact_about_visit,           // V  consent_contact_about_visit (boolean)
-      payload.consent_aggregate_stats,               // W  consent_aggregate_stats (boolean)
-      'pending',                                     // X  review_status
-      '',                                            // Y  review_notes
-      ''                                             // Z  published_garden_id
-    ]);
-
-    // Increment rate-limit counters
-    cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
-    if (email) {
-      cache.put('email_' + bucket + '_' + email, '1', RATE_CACHE_TTL);
-    }
-
-    // Email 1 -- notification to Tyson
-    try {
-      var sheetUrl = ss.getUrl();
-      var notifyBody = [
-        'New self-enrolment submission',
-        '',
-        'Steward name: ' + name,
-        'Steward email: ' + email,
-        'Garden address: ' + address,
-        'Score: ' + score + '/100',
-        'Tier: ' + tier,
-        'Submission ID: ' + submissionId,
-        'Submitted: ' + submittedAt,
-        '',
-        'Review this submission at: ' + sheetUrl
-      ].join('\n');
-      MailApp.sendEmail({
-        to:      NOTIFY_EMAIL,
-        subject: 'New self-enrolment submission: ' + tier + ' - ' + score + '/100',
-        body:    notifyBody
-      });
-    } catch (mailErr) {
-      try {
-        var dbg = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
-        dbg.appendRow([new Date().toISOString(), 'notification email', mailErr.message]);
-      } catch (e2) {}
-    }
-
-    // Email 2 -- confirmation to steward
-    if (email) {
-      try {
-        var stewardBody = [
-          'Thank you for registering your garden with the Ecological Registry.',
-          '',
-          'We have received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.',
-          '',
-          'Your garden will appear on the public registry as a provisional entry within 48 hours. Provisional means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one. We will be in touch separately about that pathway if you would like to explore it.',
-          '',
-          'Your submission ID is: ' + submissionId,
-          '',
-          'If you would like to update or withdraw your registration at any time, just reply to this email.',
-          '',
-          'Warmly,',
-          'Tyson Lundbech',
-          'Gardener and Son',
-          'Ecological Registry',
-          'ecologicalregistry.org'
-        ].join('\n');
-        MailApp.sendEmail({
-          to:      email,
-          subject: 'Your garden registration was received -- Ecological Registry',
-          body:    stewardBody
-        });
-      } catch (mailErr) {
-        try {
-          var dbg2 = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
-          dbg2.appendRow([new Date().toISOString(), 'steward email', mailErr.message]);
-        } catch (e2) {}
-      }
-    }
-
-    return jsonResp({ok: true});
+    return handleEnrolment(payload, cache);
 
   } catch (err) {
     return jsonResp({ok: false, error: 'Server error: ' + err.message});
   }
 }
 
+/* ---- Enrolment handler ---- */
+function handleEnrolment(payload, cache) {
+  var bucket      = hourBucket();
+  var globalKey   = 'global_' + bucket;
+  var globalCount = parseInt(cache.get(globalKey) || '0', 10);
+
+  if (globalCount >= RATE_GLOBAL_MAX) {
+    return jsonResp({ok: false, error: 'Too many submissions -- try again in an hour.'});
+  }
+
+  var email = (payload.steward_email || '').toLowerCase().trim();
+  if (email) {
+    var emailKey = 'email_' + bucket + '_' + email;
+    if (cache.get(emailKey)) {
+      return jsonResp({ok: false, error: 'A submission from this email was already received this hour.'});
+    }
+  }
+
+  var submissionId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+  var submittedAt  = new Date().toISOString();
+  var name    = payload.steward_name            || '';
+  var address = payload.garden_address          || '';
+  var score   = payload.provisional_score_total || 0;
+  var tier    = payload.provisional_tier        || '';
+
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
+
+  sheet.appendRow([
+    submittedAt,                                   // A  timestamp
+    submissionId,                                  // B  submission_id
+    name,                                          // C  steward_name
+    email,                                         // D  steward_email
+    address,                                       // E  garden_address
+    payload.bio_q1_indigenous_species   || 0,      // F  bio_q1_indigenous_species
+    payload.bio_q2_indigenous_dominant  || 0,      // G  bio_q2_indigenous_dominant
+    payload.bio_q3_layers               || 0,      // H  bio_q3_layers
+    payload.bio_q4_canopy               || 0,      // I  bio_q4_canopy
+    payload.soil_q1_condition           || 0,      // J  soil_q1_condition
+    payload.soil_q2_water               || 0,      // K  soil_q2_water
+    payload.soil_q3_features            || 0,      // L  soil_q3_features
+    payload.habitat_q1_zones            || 0,      // M  habitat_q1_zones
+    payload.habitat_q2_features         || 0,      // N  habitat_q2_features
+    payload.habitat_q3_wildlife         || 0,      // O  habitat_q3_wildlife
+    payload.conn_q1_park                || 0,      // P  conn_q1_park
+    payload.evidence_q1_records         || 0,      // Q  evidence_q1_records
+    score,                                         // R  provisional_score_total
+    tier,                                          // S  provisional_tier
+    payload.consent_record,                        // T  consent_record (boolean)
+    payload.consent_public_score,                  // U  consent_public_score (boolean)
+    payload.consent_contact_about_visit,           // V  consent_contact_about_visit (boolean)
+    payload.consent_aggregate_stats,               // W  consent_aggregate_stats (boolean)
+    'pending',                                     // X  review_status
+    '',                                            // Y  review_notes
+    '',                                            // Z  published_garden_id
+    payload.evc_code || '',                        // AA evc_code
+    payload.evc_name || '',                        // AB evc_name
+    payload.garden_country || '',                  // AC garden_country
+    payload.garden_region  || ''                   // AD garden_region
+  ]);
+
+  cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
+  if (email) {
+    cache.put('email_' + bucket + '_' + email, '1', RATE_CACHE_TTL);
+  }
+
+  // Notification to Tyson
+  try {
+    var sheetUrl    = ss.getUrl();
+    var notifyBody  = [
+      'New self-enrolment submission',
+      '',
+      'Steward name:    ' + name,
+      'Steward email:   ' + email,
+      'Garden address:  ' + address,
+      'Score:           ' + score + '/100',
+      'Tier:            ' + tier,
+      'Submission ID:   ' + submissionId,
+      'Submitted:       ' + submittedAt,
+      '',
+      'Review at: ' + sheetUrl
+    ].join('\n');
+    MailApp.sendEmail({
+      to:      NOTIFY_EMAIL,
+      subject: 'New self-enrolment: ' + tier + ' - ' + score + '/100',
+      body:    notifyBody
+    });
+  } catch (mailErr) {
+    try {
+      var dbg = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+      dbg.appendRow([new Date().toISOString(), 'enrolment notification email', mailErr.message]);
+    } catch (e2) {}
+  }
+
+  // Confirmation to steward
+  if (email) {
+    try {
+      var stewardBody = [
+        'Thank you for registering your garden with the Ecological Registry.',
+        '',
+        'We have received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.',
+        '',
+        'Your garden will appear on the public registry as a provisional entry within 48 hours. Provisional means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one. We will be in touch separately about that pathway if you would like to explore it.',
+        '',
+        'Your submission ID is: ' + submissionId,
+        '',
+        'If you would like to update or withdraw your registration at any time, just reply to this email.',
+        '',
+        'Warmly,',
+        'Tyson Lundbech',
+        'Gardener and Son',
+        'Ecological Registry',
+        'ecologicalregistry.org'
+      ].join('\n');
+      MailApp.sendEmail({
+        to:      email,
+        subject: 'Your garden registration was received -- Ecological Registry',
+        body:    stewardBody
+      });
+    } catch (mailErr) {
+      try {
+        var dbg2 = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+        dbg2.appendRow([new Date().toISOString(), 'enrolment steward email', mailErr.message]);
+      } catch (e2) {}
+    }
+  }
+
+  return jsonResp({ok: true});
+}
+
+/* ---- Claim handler ---- */
+
+var CLAIM_HEADERS = [
+  'timestamp', 'garden_id', 'garden_name', 'opportunity_id',
+  'opportunity_action', 'opportunity_points', 'steward_name',
+  'steward_email', 'note', 'claimed_at', 'review_status'
+];
+
+function handleClaim(payload, cache) {
+  var bucket   = hourBucket();
+  var email    = (payload.steward_email  || '').toLowerCase().trim();
+  var gardenId = (payload.garden_id      || '').trim();
+  var oppId    = (payload.opportunity_id || '').trim();
+
+  if (!gardenId || !oppId) {
+    return jsonResp({ok: false, error: 'garden_id and opportunity_id are required.'});
+  }
+
+  // Global claim rate limit
+  var cGlobalKey   = 'claim_global_' + bucket;
+  var cGlobalCount = parseInt(cache.get(cGlobalKey) || '0', 10);
+  if (cGlobalCount >= CLAIM_RATE_MAX) {
+    return jsonResp({ok: false, error: 'Too many claims -- try again in an hour.'});
+  }
+
+  // Per-email claim rate limit
+  var cEmailCount = 0;
+  if (email) {
+    var cEmailKey = 'claim_email_' + bucket + '_' + email;
+    cEmailCount   = parseInt(cache.get(cEmailKey) || '0', 10);
+    if (cEmailCount >= CLAIM_EMAIL_MAX) {
+      return jsonResp({ok: false, error: 'Too many claims from this email -- try again in an hour.'});
+    }
+  }
+
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var claims = ss.getSheetByName('Claims');
+
+  // Create sheet with headers on first use
+  if (!claims) {
+    claims = ss.insertSheet('Claims');
+    claims.appendRow(CLAIM_HEADERS);
+  } else if (claims.getLastRow() === 0) {
+    claims.appendRow(CLAIM_HEADERS);
+  }
+
+  // Sheet dedup: same garden + opportunity + steward with review_status = 'pending'
+  var lastRow = claims.getLastRow();
+  if (lastRow > 1) {
+    var data      = claims.getRange(2, 1, lastRow - 1, CLAIM_HEADERS.length).getValues();
+    var iGarden   = CLAIM_HEADERS.indexOf('garden_id');
+    var iOpp      = CLAIM_HEADERS.indexOf('opportunity_id');
+    var iEmail    = CLAIM_HEADERS.indexOf('steward_email');
+    var iStatus   = CLAIM_HEADERS.indexOf('review_status');
+    for (var i = 0; i < data.length; i++) {
+      var row = data[i];
+      if (String(row[iGarden]).toLowerCase() === gardenId.toLowerCase() &&
+          String(row[iOpp]).toLowerCase()    === oppId.toLowerCase()    &&
+          String(row[iEmail]).toLowerCase()  === email                  &&
+          String(row[iStatus]).toLowerCase() === 'pending') {
+        return jsonResp({ok: false, error: 'This claim is already pending review.'});
+      }
+    }
+  }
+
+  var now = new Date().toISOString();
+  claims.appendRow([
+    now,                               // timestamp
+    gardenId,                          // garden_id
+    payload.garden_name       || '',   // garden_name
+    oppId,                             // opportunity_id
+    payload.opportunity_action || '',  // opportunity_action
+    payload.opportunity_points || '',  // opportunity_points
+    payload.steward_name      || '',   // steward_name
+    email,                             // steward_email
+    payload.note              || '',   // note
+    payload.claimed_at        || now,  // claimed_at
+    'pending'                          // review_status
+  ]);
+
+  // Increment rate-limit counters
+  cache.put(cGlobalKey, String(cGlobalCount + 1), RATE_CACHE_TTL);
+  if (email) {
+    cache.put('claim_email_' + bucket + '_' + email, String(cEmailCount + 1), RATE_CACHE_TTL);
+  }
+
+  // Non-fatal notification
+  try {
+    MailApp.sendEmail({
+      to:      NOTIFY_EMAIL,
+      subject: 'Claim: ' + (payload.opportunity_action || oppId) + ' -- ' + (payload.garden_name || gardenId),
+      body: [
+        'New opportunity claim',
+        '',
+        'Garden:      ' + (payload.garden_name || gardenId) + ' (' + gardenId + ')',
+        'Opportunity: ' + (payload.opportunity_action || oppId) + ' (' + oppId + ')',
+        'Points:      ' + (payload.opportunity_points || '--'),
+        'Steward:     ' + (payload.steward_name || '') + ' <' + email + '>',
+        'Note:        ' + (payload.note || '--'),
+        'Claimed at:  ' + (payload.claimed_at || now),
+        '',
+        'Review in the Claims tab.'
+      ].join('\n')
+    });
+  } catch (mailErr) {
+    try {
+      var dbg3 = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+      dbg3.appendRow([new Date().toISOString(), 'claim notification email', mailErr.message]);
+    } catch (e2) {}
+  }
+
+  return jsonResp({ok: true});
+}
+
+/* ---- Utilities ---- */
 function hourBucket() {
   var d = new Date();
   return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' +
