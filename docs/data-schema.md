@@ -46,7 +46,7 @@ Shape taken from `york.json`. Fields are grouped by purpose.
 ### Identity (top level)
 
 ```jsonc
-"garden_id":        "ER-VIC-WHI-YRK-001",   // Format: ER-VIC-{LGA3}-{NAME3}-{NNN}
+"garden_id":        "ER-AU-VIC-WHI-YRK-001",   // Format: ER-{COUNTRY}-{SUBDIVISION}-{REGION3}-{NAME3}-{NNN}  e.g. ER-AU-VIC-WHI-YRK-001
 "garden_name":      "York Street",
 "garden_type":      "Ecological Home Garden",   // Free-text descriptor, displayed in hero
 "typology":         "Urban Ecological Retrofit", // Strategic typology — see typology values below
@@ -138,7 +138,7 @@ Shape taken from `york.json`. Fields are grouped by purpose.
   "park_lng":                     145.106,
   "adjacent_registered_gardens": [
     {
-      "id":          "ER-VIC-WHI-EVE-001",
+      "id":          "ER-AU-VIC-WHI-EVE-001",
       "name":        "Evelina",
       "distance_m":  340,
       "direction":   "NE",
@@ -288,7 +288,7 @@ This is a curated, editorial list. New typologies should not be invented per-gar
   },
   "gardens": [
     {
-      "garden_id":          "ER-VIC-WHI-YRK-001",
+      "garden_id":          "ER-AU-VIC-WHI-YRK-001",
       "garden_name":        "York Street",
       "typology":           "Urban Ecological Retrofit",
       "type":               "Ecological Home Garden",     // Legacy field — present on some entries

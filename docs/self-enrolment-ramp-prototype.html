@@ -378,6 +378,23 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 <script>
 const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
 
+/* ---- URL param intake: ?evc_code, ?evc_name, ?species ----
+   Passed by the discovery tool (findmyecologicalgarden.com) when linking here.
+   ?species is a comma-separated list of botanical names for the EVC.
+   When present, bio_0 renders as a species checklist instead of count bands.
+   TODO: loadPlantList(evcCode) is a g-and-s-core.js candidate — extract when >1 consumer */
+const _p = new URLSearchParams(window.location.search);
+const evcCode     = _p.get('evc_code') || '';
+const evcName     = _p.get('evc_name') || '';
+const speciesList = _p.get('species')
+  ? _p.get('species').split(',').map(s => s.trim()).filter(Boolean)
+  : [];
+
+function _esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 /* ============================================================
    CONFIG — matches js/reg-score.js ratingFromScore() exactly.
    Anchors confirmed from live Registry:
@@ -400,7 +417,7 @@ const PILLARS = [
   {key:"bio", name:"Biodiversity Structure", max:25, qs:[
     {
       t:"How many strictly local-indigenous plant species are growing in your garden?",
-      help:"Strictly local-indigenous means species native to your specific Ecological Vegetation Class — not Australian natives from other regions. If unsure, count what you're confident about.",
+      help:"Strictly local-indigenous means species native to your specific local ecological community — not natives from other regions. If unsure, count what you're confident about.",
       type:"single",
       opts:[
         ["None (0)",0],
@@ -554,9 +571,11 @@ const PILLARS = [
 ];
 
 const IDENTITY_FIELDS = [
-  {id:'steward_name',    label:'Your name',      type:'text',  placeholder:'Your full name',                           required:true},
-  {id:'steward_email',   label:'Email',          type:'email', placeholder:'your@email.com',                           required:true},
-  {id:'garden_address',  label:'Garden address', type:'text',  placeholder:'123 Example Street, Suburb STATE 0000',    required:true}
+  {id:'steward_name',    label:'Your name',       type:'text',  placeholder:'Your full name',          required:true},
+  {id:'steward_email',   label:'Email',           type:'email', placeholder:'your@email.com',          required:true},
+  {id:'garden_address',  label:'Garden address',  type:'text',  placeholder:'Street address',          required:true},
+  {id:'garden_country',  label:'Country',         type:'text',  placeholder:'e.g. Australia, UK, US',  required:true},
+  {id:'garden_region',   label:'State / region',  type:'text',  placeholder:'e.g. Victoria, Yorkshire', required:false}
 ];
 
 const CONSENT = [
@@ -578,6 +597,19 @@ PILLARS.forEach(p => {
   let qhtml = p.qs.map((q, qi) => {
     const type = q.type || 'single';
     const cap = q.cap || 0;
+    // bio_0: species checklist when ?species URL param is present
+    if (p.key === 'bio' && qi === 0 && speciesList.length > 0) {
+      const help = evcName
+        ? 'These are species native to your ' + _esc(evcName) + ' — tick those already growing in your garden. Any not yet present appear as your gap list below.'
+        : q.help;
+      const items = speciesList.map(s =>
+        '<button class="opt" data-species="' + _esc(s) + '" onclick="pickSpecies(this)">' + _esc(s) + '</button>'
+      ).join('');
+      return '<div class="q"><div class="qt">' + q.t + '</div>' +
+        (help ? '<div class="qhelp">' + help + '</div>' : '') +
+        '<div class="opts" id="bio0_opts">' + items + '</div>' +
+        '<div id="bio0_gap" style="display:none;margin-top:10px"></div></div>';
+    }
     const helpHtml = q.help ? `<div class="qhelp">${q.help}</div>` : '';
     const opts = q.opts.map((o, oi) =>
       `<button class="opt" data-p="${p.key}" data-qi="${qi}" data-pts="${o[1]}" onclick="pick(this,'${p.key}','${type}',${cap})">${o[0]}</button>`
@@ -632,6 +664,35 @@ function pick(btn, key, type, cap){
   }
   updateScore();
 }
+let tickedSpecies = [];
+
+function bio0Pts(n) {
+  if (n === 0) return 0;
+  if (n <= 5)  return 2;
+  if (n <= 11) return 4;
+  if (n <= 19) return 6;
+  if (n <= 29) return 8;
+  return 10;
+}
+
+function pickSpecies(btn) {
+  btn.classList.toggle('sel');
+  tickedSpecies = Array.from(document.querySelectorAll('#bio0_opts .opt.sel'))
+    .map(b => b.dataset.species);
+  answers['bio_0'] = bio0Pts(tickedSpecies.length);
+  var unticked = speciesList.filter(function(s) { return tickedSpecies.indexOf(s) === -1; });
+  var gapEl = document.getElementById('bio0_gap');
+  if (gapEl) {
+    if (unticked.length > 0) {
+      gapEl.style.display = '';
+      gapEl.innerHTML = '<div class="qhelp"><em>Not yet present — your gap list:</em> ' + unticked.map(_esc).join(', ') + '</div>';
+    } else {
+      gapEl.style.display = 'none';
+    }
+  }
+  updateScore();
+}
+
 function score(){ return Object.values(answers).reduce((a,b)=>a+b,0); }
 function tierFor(s){ return TIERS.find(t=> s>=t.min && s<=t.max) || TIERS[0]; }
 function updateScore(){
@@ -665,9 +726,11 @@ async function confirmConsent(){
   const s = score();
   const t = tierFor(s);
   const payload = {
-    steward_name:              (document.getElementById('steward_name')   || {}).value || '',
-    steward_email:             (document.getElementById('steward_email')  || {}).value || '',
-    garden_address:            (document.getElementById('garden_address') || {}).value || '',
+    steward_name:              (document.getElementById('steward_name')    || {}).value || '',
+    steward_email:             (document.getElementById('steward_email')   || {}).value || '',
+    garden_address:            (document.getElementById('garden_address')  || {}).value || '',
+    garden_country:            (document.getElementById('garden_country')  || {}).value || '',
+    garden_region:             (document.getElementById('garden_region')   || {}).value || '',
     bio_q1_indigenous_species: answers['bio_0']    || 0,
     bio_q2_indigenous_dominant:answers['bio_1']    || 0,
     bio_q3_layers:             answers['bio_2']    || 0,
@@ -685,7 +748,10 @@ async function confirmConsent(){
     consent_record:              consentState[0] === true,
     consent_public_score:        consentState[1] === true,
     consent_contact_about_visit: consentState[2] === true,
-    consent_aggregate_stats:     consentState[3] === true
+    consent_aggregate_stats:     consentState[3] === true,
+    evc_code:                    evcCode,
+    evc_name:                    evcName,
+    has_species_list:            tickedSpecies.length > 0
   };
 
   try {
@@ -769,6 +835,9 @@ function go(step){
 function phaseNote(btn){ btn.nextElementSibling.classList.add('show'); }
 function restart(){
   Object.keys(answers).forEach(k=>delete answers[k]);
+  tickedSpecies = [];
+  const gapEl = document.getElementById('bio0_gap');
+  if (gapEl) { gapEl.style.display = 'none'; gapEl.innerHTML = ''; }
   document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
   consentState = new Array(CONSENT.length).fill(false);
   document.querySelectorAll('.consent-item').forEach(r=>r.classList.remove('on'));

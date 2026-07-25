@@ -1,5 +1,5 @@
 {
-  "garden_id": "ER-VIC-BAL-PRD-001",
+  "garden_id": "ER-AU-VIC-BAL-PRD-001",
   "garden_name": "Parring Stepping Stone",
   "garden_type": "Connected Ecological System",
   "typology": "Connected Habitat Landscape",
@@ -74,7 +74,7 @@
     "park_lng": 145.0905,
     "adjacent_registered_gardens": [
       {
-        "id": "ER-VIC-BAL-001",
+        "id": "ER-AU-VIC-BAL-001",
         "name": "Parring",
         "distance_m": 35,
         "verified": true,

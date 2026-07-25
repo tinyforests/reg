@@ -63,9 +63,10 @@ gardens.forEach(function (garden) {
   console.log('\n' + hr);
   console.log('TOP 5 OPPORTUNITIES (ranked by priority):');
   result.opportunities.slice(0, 5).forEach(function (o, i) {
-    console.log('  ' + (i + 1) + '. [' + o.pillar + '] ' + o.action);
+    var delivStr = o.delivery_options.map(function (d) { return d.path + ' ' + d.cost; }).join(' | ');
+    console.log('  ' + (i + 1) + '. [' + o.pillar + '] [' + o.group + '] ' + o.action);
     console.log('     +' + o.points + ' pts  effort:' + o.effort +
-                '  cost:' + o.cost + '  delivery:' + o.delivery +
+                '  delivery:[' + delivStr + ']' +
                 '  priority:' + o.priority);
   });
 

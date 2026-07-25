@@ -1,5 +1,5 @@
 {
-  "garden_id": "ER-VIC-SH-MID-001",
+  "garden_id": "ER-AU-VIC-SH-MID-001",
   "garden_name": "Middlesex",
   "garden_type": "Habitat Garden",
   "suburb": "Surrey Hills",
@@ -84,7 +84,7 @@
     "park_lng": 145.093412,
     "adjacent_registered_gardens": [
       {
-        "id": "ER-VIC-SH-ARU-0001",
+        "id": "ER-AU-VIC-SH-ARU-0001",
         "name": "Arundel",
         "distance_m": 350,
         "direction": "north",

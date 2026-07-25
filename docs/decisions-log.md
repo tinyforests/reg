@@ -72,14 +72,14 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ## 2026-05-21 — Parring Road (4/17) promoted from design proposal to installed; renamed Parring Stepping Stone
 
-**Decision:** `data/parringroad.json` updated from design-proposal placeholder to an installed-garden record for the front bed at 4/17 Parring Road, Balwyn. Garden renamed "Parring Stepping Stone" (`garden_name` only; `garden_id` ER-VIC-BAL-PRD-001 and all file paths unchanged). Score advances from 11 (design-proposal stub) to 42. Rear garden installation remains pending and is not scored.
+**Decision:** `data/parringroad.json` updated from design-proposal placeholder to an installed-garden record for the front bed at 4/17 Parring Road, Balwyn. Garden renamed "Parring Stepping Stone" (`garden_name` only; `garden_id` ER-AU-VIC-BAL-PRD-001 and all file paths unchanged). Score advances from 11 (design-proposal stub) to 42. Rear garden installation remains pending and is not scored.
 
 **Reason:** Front bed installation completed May 2026. 11 species planted, 9 Victorian indigenous (81.8%), establishing groundcover, grass and shrub layers. Habitat rocks and thick mulch applied. The original design-proposal record had all-zero biodiversity, soil and habitat values; those are now replaced with assessed values.
 
 **Key scoring decisions:**
 - `water_function_score: 3` — thick mulch blend in a shallow exposed front bed is a genuine moisture-retention intervention, not cosmetic. Scored at 3/5 rather than 2/5.
 - `indigenous_dominant: true` — 9 of 11 species are Victorian indigenous (81.8% > 70% threshold). *Brachyscome multifida* 'Pink Form' counted on base-species principle, consistent with how cultivars are treated elsewhere in the registry (e.g. *Themeda triandra* 'True Blue'). *Casuarina glauca* prostrate excluded (NSW/QLD coastal, not Victorian indigenous).
-- Adjacent registered garden distance set to 60m (3/11 Parring Road, ER-VIC-BAL-001) — same street, a few doors apart. The Maranoa Gardens park distance (150m) is separate.
+- Adjacent registered garden distance set to 60m (3/11 Parring Road, ER-AU-VIC-BAL-001) — same street, a few doors apart. The Maranoa Gardens park distance (150m) is separate.
 
 **Files affected:**
 - `data/parringroad.json` (full update: values, species list, milestones, activity log, rating, yield, `zones[]` and `species_proposed[]` removed)

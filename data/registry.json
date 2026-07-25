@@ -10,7 +10,7 @@
   },
   "gardens": [
     {
-      "garden_id": "ER-VIC-SH-ARU-0001",
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
       "garden_name": "Arundel",
       "suburb": "Surrey Hills",
       "state": "VIC",
@@ -52,7 +52,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-SY-NIC-0002",
+      "garden_id": "ER-AU-VIC-SY-NIC-0002",
       "garden_name": "Nicholson",
       "suburb": "South Yarra",
       "state": "VIC",
@@ -90,7 +90,7 @@
       "lga": "Stonnington"
     },
     {
-      "garden_id": "ER-VIC-BAL-001",
+      "garden_id": "ER-AU-VIC-BAL-001",
       "garden_name": "Parring",
       "suburb": "Balwyn",
       "state": "VIC",
@@ -132,7 +132,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-SH-MID-001",
+      "garden_id": "ER-AU-VIC-SH-MID-001",
       "garden_name": "Middlesex",
       "suburb": "Surrey Hills",
       "state": "VIC",
@@ -173,7 +173,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-SH-SIR-0001",
+      "garden_id": "ER-AU-VIC-SH-SIR-0001",
       "garden_name": "Sir Garnet",
       "suburb": "Surrey Hills",
       "state": "VIC",
@@ -211,7 +211,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-SH-CAN-0001",
+      "garden_id": "ER-AU-VIC-SH-CAN-0001",
       "garden_name": "Canterbury G02",
       "suburb": "Surrey Hills",
       "state": "VIC",
@@ -248,7 +248,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-CAN-MON-001",
+      "garden_id": "ER-AU-VIC-CAN-MON-001",
       "garden_name": "Mont Albert",
       "type": "Ecological Cottage Garden",
       "suburb": "Canterbury",
@@ -272,7 +272,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-MAN-EVE-001",
+      "garden_id": "ER-AU-VIC-MAN-EVE-001",
       "garden_name": "Evelina",
       "suburb": "Mont Albert North",
       "state": "VIC",
@@ -312,7 +312,7 @@
       "lga": "Whitehorse"
     },
     {
-      "garden_id": "ER-VIC-BLA-DEW-001",
+      "garden_id": "ER-AU-VIC-BLA-DEW-001",
       "garden_name": "Dewrang",
       "suburb": "Blackburn",
       "state": "VIC",
@@ -354,7 +354,7 @@
       "lga": "Whitehorse"
     },
     {
-      "garden_id": "ER-VIC-BAL-PRD-001",
+      "garden_id": "ER-AU-VIC-BAL-PRD-001",
       "garden_name": "Parring Stepping Stone",
       "typology": "Connected Habitat Landscape",
       "type": "Connected Ecological System",
@@ -393,7 +393,7 @@
       "lga": "Boroondara"
     },
     {
-      "garden_id": "ER-VIC-NTH-RUP-001",
+      "garden_id": "ER-AU-VIC-NTH-RUP-001",
       "garden_name": "Rupert",
       "typology": "Urban Ecological Retrofit",
       "type": "Urban Ecological Retrofit",
@@ -436,7 +436,7 @@
       "demo": true
     },
     {
-      "garden_id": "ER-VIC-BOR-WIN-001",
+      "garden_id": "ER-AU-VIC-BOR-WIN-001",
       "garden_name": "Windella",
       "typology": "Ecological Cottage Garden",
       "type": "Ecological Home Garden",
@@ -474,7 +474,7 @@
       }
     },
     {
-      "garden_id": "ER-VIC-WHI-YRK-001",
+      "garden_id": "ER-AU-VIC-WHI-YRK-001",
       "garden_name": "York Street",
       "typology": "Urban Ecological Retrofit",
       "type": "Ecological Home Garden",
@@ -516,7 +516,7 @@
       }
     },
     {
-      "garden_id": "ER-VIC-WHI-VIC-001",
+      "garden_id": "ER-AU-VIC-WHI-VIC-001",
       "garden_name": "Victoria Crescent",
       "typology": "Heathy Edge Habitat Garden",
       "type": "Ecological Home Garden",
@@ -557,7 +557,7 @@
       }
     },
     {
-      "garden_id": "ER-VIC-CAN-FLI-001",
+      "garden_id": "ER-AU-VIC-CAN-FLI-001",
       "garden_name": "Flinders",
       "typology": "Wild Mediterranean Garden",
       "type": "Wild Mediterranean Garden",

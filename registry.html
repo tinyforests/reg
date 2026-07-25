@@ -77,11 +77,12 @@
       </div>
       <div class="lg:col-span-5 grid sm:grid-cols-3 lg:grid-cols-1 gap-4">
         <div class="sb border hl p-5">
-          <div class="text-xs uppercase tracking-[0.2em] mu2">Registered Gardens</div>
-          <div id="statTotalGardens" class="font-serif text-5xl mt-3 font-light">--</div>
+          <div class="text-xs uppercase tracking-[0.2em] mu2">Verified · Registered</div>
+          <div id="statVerifiedGardens" class="font-serif text-5xl mt-3 font-light">--</div>
+          <div class="text-xs mu2 mt-2"><span id="statTotalGardens">--</span> registered</div>
         </div>
         <div class="sb border hl p-5">
-          <div class="text-xs uppercase tracking-[0.2em] mu2">Average Score</div>
+          <div class="text-xs uppercase tracking-[0.2em] mu2">Avg Score · Verified</div>
           <div id="statAverageScore" class="font-serif text-5xl mt-3 font-light">--</div>
         </div>
         <div class="sb border hl p-5">
@@ -288,19 +289,24 @@ function renderLgaButtons() {
 
 function renderStats() {
   var gardens = state.gardens; /* already demo-filtered at load */
-  var total = gardens.length;
+  var VERIFIED_LEVELS = ['gardener_and_son_verified', 'site_visit'];
+  var verified = gardens.filter(function(g) {
+    return VERIFIED_LEVELS.indexOf(g.verification_level) !== -1;
+  });
   var scoreSum = 0;
   var bdgs = 0;
-  for (var i = 0; i < gardens.length; i++) {
-    scoreSum += (gardens[i].score || 0);
-    bdgs     += (gardens[i].badge_count || 0);
+  for (var i = 0; i < verified.length; i++) {
+    scoreSum += (verified[i].score || 0);
+    bdgs     += (verified[i].badge_count || 0);
   }
-  var avg = total > 0 ? Math.round(scoreSum / total) : '--';
+  var avg = verified.length > 0 ? Math.round(scoreSum / verified.length) : '--';
 
+  var sv = document.getElementById('statVerifiedGardens');
   var tg = document.getElementById('statTotalGardens');
   var as = document.getElementById('statAverageScore');
   var tb = document.getElementById('statTotalBadges');
-  if (tg) tg.textContent = total;
+  if (sv) sv.textContent = verified.length;
+  if (tg) tg.textContent = gardens.length;
   if (as) as.textContent = avg;
   if (tb) tb.textContent = bdgs;
 }
