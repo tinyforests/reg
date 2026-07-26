@@ -76,6 +76,20 @@ function doPost(e) {
   }
 }
 
+/* ---- Payload sanitisation ---- */
+
+// Strips leading formula-injection characters from a string cell value.
+function safeStr(v, maxLen) {
+  var s = String(v == null ? '' : v).trim();
+  if (s.length > (maxLen || 500)) s = s.slice(0, maxLen || 500);
+  return /^[=+\-@|]/.test(s) ? ("'" + s) : s;
+}
+
+var KNOWN_TIERS = [
+  'Basic Garden', 'Habitat Garden', 'Ecological Garden',
+  'Registered Ecological Garden', 'High Habitat Garden', 'Urban Biodiversity Node'
+];
+
 /* ---- Enrolment handler ---- */
 function handleEnrolment(payload, cache) {
   var bucket      = hourBucket();
@@ -86,7 +100,10 @@ function handleEnrolment(payload, cache) {
     return jsonResp({ok: false, error: 'Too many submissions -- try again in an hour.'});
   }
 
-  var email = (payload.steward_email || '').toLowerCase().trim();
+  var email = safeStr((payload.steward_email || '').toLowerCase(), 254);
+  if (!email) {
+    return jsonResp({ok: false, error: 'steward_email is required.'});
+  }
   if (email) {
     var emailKey = 'email_' + bucket + '_' + email;
     if (cache.get(emailKey)) {
@@ -94,12 +111,20 @@ function handleEnrolment(payload, cache) {
     }
   }
 
+  var name    = safeStr(payload.steward_name    || '', 120);
+  var address = safeStr(payload.garden_address  || '', 200);
+  if (!name)    return jsonResp({ok: false, error: 'steward_name is required.'});
+  if (!address) return jsonResp({ok: false, error: 'garden_address is required.'});
+
+  // Accept client score only if it is a reasonable integer in range; discard otherwise.
+  var rawScore = parseInt(payload.provisional_score_total, 10);
+  var score    = (isNaN(rawScore) || rawScore < 0 || rawScore > 100) ? 0 : rawScore;
+  // Accept client tier only if it is one of the known tier strings.
+  var tier     = (KNOWN_TIERS.indexOf(payload.provisional_tier) !== -1)
+                 ? payload.provisional_tier : '';
+
   var submissionId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
   var submittedAt  = new Date().toISOString();
-  var name    = payload.steward_name            || '';
-  var address = payload.garden_address          || '';
-  var score   = payload.provisional_score_total || 0;
-  var tier    = payload.provisional_tier        || '';
 
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
@@ -110,18 +135,18 @@ function handleEnrolment(payload, cache) {
     name,                                          // C  steward_name
     email,                                         // D  steward_email
     address,                                       // E  garden_address
-    payload.bio_q1_indigenous_species   || 0,      // F  bio_q1_indigenous_species
-    payload.bio_q2_indigenous_dominant  || 0,      // G  bio_q2_indigenous_dominant
-    payload.bio_q3_layers               || 0,      // H  bio_q3_layers
-    payload.bio_q4_canopy               || 0,      // I  bio_q4_canopy
-    payload.soil_q1_condition           || 0,      // J  soil_q1_condition
-    payload.soil_q2_water               || 0,      // K  soil_q2_water
-    payload.soil_q3_features            || 0,      // L  soil_q3_features
-    payload.habitat_q1_zones            || 0,      // M  habitat_q1_zones
-    payload.habitat_q2_features         || 0,      // N  habitat_q2_features
-    payload.habitat_q3_wildlife         || 0,      // O  habitat_q3_wildlife
-    payload.conn_q1_park                || 0,      // P  conn_q1_park
-    payload.evidence_q1_records         || 0,      // Q  evidence_q1_records
+    parseInt(payload.bio_q1_indigenous_species,  10) || 0,  // F  bio_q1_indigenous_species
+    parseInt(payload.bio_q2_indigenous_dominant, 10) || 0,  // G  bio_q2_indigenous_dominant
+    parseInt(payload.bio_q3_layers,              10) || 0,  // H  bio_q3_layers
+    parseInt(payload.bio_q4_canopy,              10) || 0,  // I  bio_q4_canopy
+    parseInt(payload.soil_q1_condition,          10) || 0,  // J  soil_q1_condition
+    parseInt(payload.soil_q2_water,              10) || 0,  // K  soil_q2_water
+    parseInt(payload.soil_q3_features,           10) || 0,  // L  soil_q3_features
+    parseInt(payload.habitat_q1_zones,           10) || 0,  // M  habitat_q1_zones
+    parseInt(payload.habitat_q2_features,        10) || 0,  // N  habitat_q2_features
+    parseInt(payload.habitat_q3_wildlife,        10) || 0,  // O  habitat_q3_wildlife
+    parseInt(payload.conn_q1_park,               10) || 0,  // P  conn_q1_park
+    parseInt(payload.evidence_q1_records,        10) || 0,  // Q  evidence_q1_records
     score,                                         // R  provisional_score_total
     tier,                                          // S  provisional_tier
     payload.consent_record,                        // T  consent_record (boolean)
@@ -131,10 +156,10 @@ function handleEnrolment(payload, cache) {
     'pending',                                     // X  review_status
     '',                                            // Y  review_notes
     '',                                            // Z  published_garden_id
-    payload.evc_code || '',                        // AA evc_code
-    payload.evc_name || '',                        // AB evc_name
-    payload.garden_country || '',                  // AC garden_country
-    payload.garden_region  || ''                   // AD garden_region
+    safeStr(payload.evc_code      || '', 50),      // AA evc_code
+    safeStr(payload.evc_name      || '', 120),     // AB evc_name
+    safeStr(payload.garden_country || '', 80),     // AC garden_country
+    safeStr(payload.garden_region  || '', 80)      // AD garden_region
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -216,9 +241,9 @@ var CLAIM_HEADERS = [
 
 function handleClaim(payload, cache) {
   var bucket   = hourBucket();
-  var email    = (payload.steward_email  || '').toLowerCase().trim();
-  var gardenId = (payload.garden_id      || '').trim();
-  var oppId    = (payload.opportunity_id || '').trim();
+  var email    = safeStr((payload.steward_email  || '').toLowerCase(), 254);
+  var gardenId = safeStr((payload.garden_id      || '').trim(), 40);
+  var oppId    = safeStr((payload.opportunity_id || '').trim(), 60);
 
   if (!gardenId || !oppId) {
     return jsonResp({ok: false, error: 'garden_id and opportunity_id are required.'});
@@ -273,17 +298,17 @@ function handleClaim(payload, cache) {
 
   var now = new Date().toISOString();
   claims.appendRow([
-    now,                               // timestamp
-    gardenId,                          // garden_id
-    payload.garden_name       || '',   // garden_name
-    oppId,                             // opportunity_id
-    payload.opportunity_action || '',  // opportunity_action
-    payload.opportunity_points || '',  // opportunity_points
-    payload.steward_name      || '',   // steward_name
-    email,                             // steward_email
-    payload.note              || '',   // note
-    payload.claimed_at        || now,  // claimed_at
-    'pending'                          // review_status
+    now,                                              // timestamp
+    safeStr(gardenId, 40),                            // garden_id
+    safeStr(payload.garden_name       || '', 120),    // garden_name
+    safeStr(oppId, 60),                               // opportunity_id
+    safeStr(payload.opportunity_action || '', 200),   // opportunity_action
+    parseInt(payload.opportunity_points, 10) || '',   // opportunity_points
+    safeStr(payload.steward_name      || '', 120),    // steward_name
+    email,                                            // steward_email (already safeStr'd)
+    safeStr(payload.note              || '', 500),    // note
+    payload.claimed_at        || now,                 // claimed_at
+    'pending'                                         // review_status
   ]);
 
   // Increment rate-limit counters
