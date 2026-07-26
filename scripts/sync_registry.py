@@ -71,6 +71,62 @@ def rating_object(score):
     return {"current": current, "next": None, "points_to_next": 0}
 
 
+def award_badges(record):
+    """Python port of awardBadges() in js/badge-engine.js.
+    Returns a list of badge IDs in the same order as the JS engine.
+    Keep in lockstep with badge-engine.js — if the JS changes, update here."""
+    b  = record.get('biodiversity') or {}
+    h  = record.get('habitat')      or {}
+    c  = record.get('connectivity') or {}
+    e  = record.get('evidence')     or {}
+    sw = record.get('soil_water')   or {}
+
+    score_badges        = []
+    verification_badges = []
+    evidence_badges     = []
+
+    if b.get('indigenous_dominant'):
+        score_badges.append('indigenous_dominant')
+    if (b.get('indigenous_species_current') or 0) >= 20:
+        score_badges.append('species_rich_20')
+    if (b.get('indigenous_species_current') or 0) >= 30:
+        score_badges.append('species_rich_30')
+    if (b.get('canopy_cover_pct_current') or 0) >= 30:
+        score_badges.append('full_canopy')
+    if (b.get('structural_layers_current') or 0) >= 5:
+        score_badges.append('five_layers')
+
+    if (h.get('habitat_nodes') or 0) >= 3:
+        score_badges.append('habitat_builder')
+
+    verified_fauna = [s for s in (h.get('fauna_sightings') or []) if s.get('verified')]
+    if len(verified_fauna) >= 1:
+        score_badges.append('amphibian_active')
+        evidence_badges.append('fauna_record')
+    if len(verified_fauna) >= 3:
+        score_badges.append('pollinator_rich')
+
+    if sw.get('has_rainwater_system') and sw.get('has_moisture_basin'):
+        score_badges.append('water_wise')
+
+    if c.get('corridor_node_confirmed'):
+        score_badges.append('corridor_node')
+    adj_verified = len([g for g in (c.get('adjacent_registered_gardens') or []) if g.get('verified')])
+    if adj_verified >= 2:
+        score_badges.append('network_connected')
+
+    if e.get('verification_level') == 'gardener_and_son_verified':
+        verification_badges.append('gs_verified')
+    if e.get('verification_level') == 'site_visit':
+        verification_badges.append('site_visit_badge')
+
+    if (e.get('has_photos') and e.get('has_field_notes') and
+            e.get('has_species_list') and e.get('has_fauna_record')):
+        evidence_badges.append('full_record')
+
+    return score_badges + verification_badges + evidence_badges
+
+
 def sync(check_only=False):
     with open(REGISTRY) as f:
         registry = json.load(f)
@@ -120,11 +176,19 @@ def sync(check_only=False):
                     new_rating['points_to_next']))
                 g['rating'] = new_rating
 
-        # badge_count must equal the badges array.
-        badges = g.get('badges') or []
-        if g.get('badge_count') != len(badges):
-            changes.append("%s: badge_count %s -> %s" % (gid, g.get('badge_count'), len(badges)))
-            g['badge_count'] = len(badges)
+        # Derive badges from canonical engine; stored array is the output, not the input.
+        if g.get('status') not in PRE_INSTALL_STATUSES:
+            new_badges = award_badges(record)
+            old_badges = g.get('badges') or []
+            if new_badges != old_badges:
+                added   = [b for b in new_badges if b not in old_badges]
+                removed = [b for b in old_badges if b not in new_badges]
+                changes.append("%s: badges +%s -%s" % (gid, added, removed))
+                g['badges'] = new_badges
+            new_count = len(new_badges)
+            if g.get('badge_count') != new_count:
+                changes.append("%s: badge_count %s -> %s" % (gid, g.get('badge_count'), new_count))
+                g['badge_count'] = new_count
 
     # Metadata: counts derived live, demo gardens excluded from the
     # public total but reported separately.
