@@ -26,12 +26,13 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 6,
+      "badge_count": 7,
       "badges": [
-        "gs_verified",
         "species_rich_20",
+        "five_layers",
         "habitat_builder",
         "amphibian_active",
+        "gs_verified",
         "fauna_record",
         "full_record"
       ],
@@ -70,8 +71,8 @@
       "last_verified": "Feb 2026",
       "badge_count": 2,
       "badges": [
-        "gs_verified",
-        "species_rich_20"
+        "species_rich_20",
+        "gs_verified"
       ],
       "profile_url": "/gardens/nicholson10/index.html",
       "data_file": "data/nicholson.json",
@@ -106,14 +107,15 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 6,
+      "badge_count": 7,
       "badges": [
-        "gs_verified",
         "indigenous_dominant",
         "species_rich_20",
         "habitat_builder",
         "amphibian_active",
-        "fauna_record"
+        "gs_verified",
+        "fauna_record",
+        "full_record"
       ],
       "profile_url": "/gardens/parring11/index.html",
       "data_file": "data/parring.json",
@@ -148,13 +150,12 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 5,
+      "badge_count": 4,
       "badges": [
-        "gs_verified",
         "indigenous_dominant",
         "species_rich_20",
         "habitat_builder",
-        "full_record"
+        "gs_verified"
       ],
       "profile_url": "/gardens/middlesex80/index.html",
       "data_file": "data/middlesex.json",
@@ -288,12 +289,13 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 4,
+      "badge_count": 5,
       "badges": [
-        "gs_verified",
         "indigenous_dominant",
         "species_rich_20",
-        "habitat_builder"
+        "species_rich_30",
+        "habitat_builder",
+        "gs_verified"
       ],
       "profile_url": "/gardens/evelina23/index.html",
       "data_file": "data/evelina.json",
@@ -328,14 +330,13 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Nov 2025",
-      "badge_count": 6,
+      "badge_count": 5,
       "badges": [
-        "gs_verified",
         "indigenous_dominant",
         "species_rich_20",
         "species_rich_30",
         "habitat_builder",
-        "five_layers"
+        "gs_verified"
       ],
       "profile_url": "/gardens/dewrang1a/index.html",
       "data_file": "data/dewrang.json",
@@ -374,8 +375,8 @@
       "last_verified": "May 2026",
       "badge_count": 2,
       "badges": [
-        "gs_verified",
-        "indigenous_dominant"
+        "indigenous_dominant",
+        "gs_verified"
       ],
       "profile_url": "/gardens/parringroad17/index.html",
       "data_file": "data/parringroad.json",
@@ -411,13 +412,14 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Jan 2026",
-      "badge_count": 5,
+      "badge_count": 6,
       "badges": [
         "indigenous_dominant",
         "species_rich_20",
         "habitat_builder",
-        "gs_verified",
-        "fauna_record"
+        "water_wise",
+        "corridor_node",
+        "gs_verified"
       ],
       "profile_url": "/gardens/rupert14/index.html",
       "data_file": "data/rupert.json",
@@ -457,8 +459,12 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 1,
+      "badge_count": 5,
       "badges": [
+        "indigenous_dominant",
+        "species_rich_20",
+        "species_rich_30",
+        "habitat_builder",
         "gs_verified"
       ],
       "profile_url": "/gardens/windella40/index.html",
@@ -497,10 +503,10 @@
       "last_verified": "Apr 2026",
       "badge_count": 5,
       "badges": [
-        "gs_verified",
         "indigenous_dominant",
         "habitat_builder",
         "amphibian_active",
+        "gs_verified",
         "fauna_record"
       ],
       "profile_url": "/gardens/york12/index.html",
@@ -537,12 +543,13 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "May 2026",
-      "badge_count": 4,
+      "badge_count": 5,
       "badges": [
-        "gs_verified",
         "indigenous_dominant",
         "species_rich_20",
-        "five_layers"
+        "species_rich_30",
+        "five_layers",
+        "gs_verified"
       ],
       "profile_url": "/gardens/victoria16/index.html",
       "data_file": "data/victoria.json",
