@@ -70,8 +70,8 @@ def parse_rows(raw_rows):
             skipped += 1
             continue
         try:
-            lat = round(float(lat_s), 5)
-            lng = round(float(lng_s), 5)
+            lat = round(float(lat_s), 3)
+            lng = round(float(lng_s), 3)
         except ValueError:
             skipped += 1
             continue

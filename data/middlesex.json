@@ -78,8 +78,8 @@
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
     "park_distance_m": 120,
-    "park_lat": -37.833187,
-    "park_lng": 145.093412,
+    "park_lat": -37.833,
+    "park_lng": 145.093,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-SH-ARU-0001",

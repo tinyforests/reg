@@ -103,8 +103,8 @@
     "effective_ecological_area_ha": 0.4,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills",
-    "park_lat": -37.8221,
-    "park_lng": 145.0895,
+    "park_lat": -37.822,
+    "park_lng": 145.089,
     "cluster": {
       "name": "Surrey Hills",
       "gardens": 2,

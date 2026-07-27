@@ -70,8 +70,8 @@
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 150,
-    "park_lat": -37.8103,
-    "park_lng": 145.0905,
+    "park_lat": -37.81,
+    "park_lng": 145.09,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-BAL-001",
