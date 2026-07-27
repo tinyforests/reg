@@ -499,13 +499,16 @@ function renderProvisional(rows) {
 
   for (var i = 0; i < dataRows.length; i++) {
     var row = dataRows[i];
-    var submitted = _esc(row[0] || '');
-    var name      = _esc(row[1] || '');
-    var suburb    = _esc(row[2] || '');
-    var score     = _esc(row[3] || '');
-    var tier      = _esc(row[4] || '');
-    var status    = (row[5] || '').toLowerCase().trim();
-    var subId     = _esc(row[6] || '');
+    // Submissions sheet column layout (A=0 … AD=29):
+    // A=timestamp B=submission_id C=steward_name D=steward_email E=garden_address
+    // R(17)=score S(18)=tier X(23)=review_status
+    var submitted = _esc(row[0]  || '');   // A: timestamp
+    var name      = _esc(row[2]  || '');   // C: steward_name
+    var suburb    = _esc(row[4]  || '');   // E: garden_address
+    var score     = _esc(row[17] || '');   // R: provisional_score_total
+    var tier      = _esc(row[18] || '');   // S: provisional_tier
+    var status    = (row[23] || '').toLowerCase().trim();  // X: review_status
+    var subId     = _esc(row[1]  || '');   // B: submission_id
 
     if (PROV_EXCLUDE.indexOf(status) !== -1) continue;
 
