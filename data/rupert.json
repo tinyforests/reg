@@ -96,8 +96,8 @@
     "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0.018,
     "cluster_name": "Northcote",
-    "lat": -37.7728,
-    "lng": 145.0009
+    "lat": -37.773,
+    "lng": 145.001
   },
   "evidence": {
     "has_photos": true,

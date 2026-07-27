@@ -96,8 +96,8 @@
         "name": "Middlesex",
         "distance_m": 350,
         "direction": "south",
-        "lat": -37.8317,
-        "lng": 145.0888,
+        "lat": -37.832,
+        "lng": 145.089,
         "verified": true
       }
     ],
@@ -105,10 +105,10 @@
     "effective_ecological_area_ha": 0.4,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills",
-    "lat": -37.8314,
-    "lng": 145.0942,
-    "park_lat": -37.8221,
-    "park_lng": 145.0895,
+    "lat": -37.831,
+    "lng": 145.094,
+    "park_lat": -37.822,
+    "park_lng": 145.089,
     "cluster": {
       "name": "Surrey Hills",
       "gardens": 2,

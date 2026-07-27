@@ -109,8 +109,8 @@
     "effective_ecological_area_ha": 0.0225,
     "cluster_area_ha": 0,
     "cluster_name": "Canterbury",
-    "lat": -37.8217,
-    "lng": 145.0837,
+    "lat": -37.822,
+    "lng": 145.084,
     "cluster": {
       "name": "Canterbury",
       "gardens": 2,
