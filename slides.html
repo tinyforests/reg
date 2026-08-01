@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ecological Registry — City of Boroondara, 14 August 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#3d4535;
+  --beige:#fff0dc;
+  --signal:#7C9A52;
+  --brass:#B49A63;
+  --ink:#2b3126;
+  --stage-w:1920px;
+  --stage-h:1080px;
+}
+*{box-sizing:border-box;border-radius:0;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#1d211a}
+body{
+  font-family:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- stage: fixed 1920x1080, scaled to fit any display ---------- */
+#viewport{position:fixed;inset:0;display:grid;place-items:center}
+#stage{
+  width:var(--stage-w);height:var(--stage-h);
+  position:relative;overflow:hidden;
+  transform:scale(var(--s,1));
+  transform-origin:center center;
+  box-shadow:0 0 120px rgba(0,0,0,.45);
+}
+
+/* ---------- slides ---------- */
+.slide{
+  position:absolute;inset:0;
+  padding:96px 150px 110px 150px;
+  display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;
+  transform:translateY(14px);
+  transition:opacity .42s ease,transform .42s ease,visibility .42s;
+}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.light{background:var(--beige);color:var(--ink)}
+.slide.dark{background:var(--green);color:var(--beige)}
+
+/* paper noise */
+.slide::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.16'/></svg>");
+  mix-blend-mode:multiply;
+}
+.slide.dark::after{mix-blend-mode:soft-light;opacity:.5}
+
+/* ---------- the ledger rail (signature) ---------- */
+.rail{
+  position:absolute;left:64px;top:96px;bottom:96px;width:1px;
+  background:rgba(61,69,53,.22);
+}
+.slide.dark .rail{background:rgba(255,240,220,.24)}
+.rail-label{
+  position:absolute;left:64px;bottom:96px;
+  transform:rotate(180deg);writing-mode:vertical-rl;
+  font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.24em;
+  text-transform:uppercase;opacity:.5;padding-bottom:14px;
+}
+.rail-tick{
+  position:absolute;left:57px;width:15px;height:1px;
+  background:var(--signal);transition:top .42s ease;
+}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.3em;
+  text-transform:uppercase;opacity:.62;margin-bottom:38px;
+  display:flex;gap:22px;align-items:center;
+}
+.eyebrow .num{color:var(--signal);opacity:1}
+.slide.light .eyebrow .num{color:#5f7a3c}
+h1{
+  font-family:"Abril Fatface",Georgia,serif;font-weight:400;
+  font-size:132px;line-height:.94;letter-spacing:-.015em;
+}
+h2{
+  font-family:"Fraunces",Georgia,serif;font-weight:400;
+  font-size:88px;line-height:1.02;letter-spacing:-.02em;max-width:23ch;
+}
+h2 em{font-style:italic;color:var(--signal)}
+.slide.light h2 em{color:#5f7a3c}
+h3{
+  font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:40px;
+  line-height:1.12;letter-spacing:-.01em;
+}
+.lede{font-size:34px;line-height:1.5;max-width:46ch;font-weight:300;margin-top:36px;opacity:.9}
+.lede.tight{margin-top:26px}
+p.body{font-size:27px;line-height:1.55;max-width:52ch;font-weight:300}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+.pull{
+  font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:300;
+  font-size:76px;line-height:1.18;letter-spacing:-.015em;max-width:24ch;
+}
+.attrib{
+  font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.22em;
+  text-transform:uppercase;opacity:.55;margin-top:46px;
+}
+
+/* ---------- lists ---------- */
+ul.rules{list-style:none;margin-top:44px;max-width:60ch}
+ul.rules li{
+  font-size:27px;line-height:1.45;font-weight:300;
+  padding:22px 0 22px 34px;position:relative;
+  border-top:1px solid rgba(61,69,53,.18);
+}
+.slide.dark ul.rules li{border-top-color:rgba(255,240,220,.2)}
+ul.rules li:last-child{border-bottom:1px solid rgba(61,69,53,.18)}
+.slide.dark ul.rules li:last-child{border-bottom-color:rgba(255,240,220,.2)}
+ul.rules li::before{
+  content:"";position:absolute;left:0;top:35px;width:14px;height:1px;background:var(--brass);
+}
+.slide.dark ul.rules li::before{background:var(--signal)}
+ul.rules li strong{font-weight:500}
+
+/* ---------- columns ---------- */
+.cols{display:grid;gap:40px;margin-top:56px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr)}
+.c5{grid-template-columns:repeat(5,1fr);gap:26px}
+
+.card{padding-top:24px;border-top:2px solid var(--brass)}
+.slide.dark .card{border-top-color:var(--signal)}
+.card .k{
+  font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.24em;
+  opacity:.55;text-transform:uppercase;margin-bottom:16px;
+}
+.card h3{margin-bottom:14px;font-size:34px}
+.card p{font-size:21px;line-height:1.5;font-weight:300;opacity:.85}
+
+/* two-tone language panel */
+.panel{padding:34px 38px}
+.panel.use{background:rgba(124,154,82,.14);border-left:3px solid var(--signal)}
+.panel.avoid{background:rgba(61,69,53,.07);border-left:3px solid rgba(61,69,53,.3)}
+.slide.dark .panel.avoid{background:rgba(255,240,220,.07);border-left-color:rgba(255,240,220,.3)}
+.panel .k{
+  font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.24em;
+  text-transform:uppercase;margin-bottom:22px;opacity:.7;
+}
+.panel ul{list-style:none}
+.panel li{font-size:25px;line-height:1.9;font-weight:300}
+.panel.avoid li{opacity:.55;text-decoration:line-through;text-decoration-thickness:1px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;margin-top:60px}
+.stat .n{
+  font-family:"Fraunces",Georgia,serif;font-size:104px;line-height:1;
+  letter-spacing:-.03em;color:var(--signal);
+}
+.slide.light .stat .n{color:#5f7a3c}
+.stat .l{
+  font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.2em;
+  text-transform:uppercase;opacity:.6;margin-top:18px;line-height:1.5;
+}
+
+/* score scale */
+.scale{margin-top:64px;max-width:1300px}
+.scale-bar{position:relative;height:2px;background:rgba(255,240,220,.28)}
+.scale .tick{position:absolute;top:-9px;width:1px;height:20px;background:rgba(255,240,220,.5)}
+.scale .band{
+  position:absolute;top:-46px;font-family:"IBM Plex Mono",monospace;
+  font-size:15px;letter-spacing:.16em;text-transform:uppercase;opacity:.72;
+  transform:translateX(-50%);white-space:nowrap;
+}
+.scale .marker{position:absolute;top:-7px;width:14px;height:14px;background:var(--signal);transform:translateX(-50%) rotate(45deg)}
+.scale .marker-l{
+  position:absolute;top:26px;transform:translateX(-50%);white-space:nowrap;
+  font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.14em;color:var(--signal);
+}
+.scale .ends{display:flex;justify-content:space-between;margin-top:58px;font-family:"IBM Plex Mono",monospace;font-size:16px;opacity:.5}
+
+/* stepping stones diagram */
+.diagram{margin-top:34px}
+.diagram svg{width:100%;height:auto;max-height:430px;display:block}
+.dash{stroke-dasharray:7 9;opacity:.5}
+
+/* pilot steps */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:64px;border-top:1px solid rgba(255,240,220,.25)}
+.step{padding:32px 26px 0 0;position:relative}
+.step .n{font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.2em;color:var(--signal);margin-bottom:18px}
+.step p{font-size:22px;line-height:1.45;font-weight:300;padding-right:20px}
+.step::before{content:"";position:absolute;top:-1px;left:0;width:36px;height:3px;background:var(--signal)}
+
+/* ask slide */
+.ask{
+  margin-top:52px;padding:52px 56px;background:rgba(124,154,82,.16);
+  border-left:4px solid var(--signal);max-width:1180px;
+}
+.ask p{font-family:"Fraunces",Georgia,serif;font-size:46px;line-height:1.28;font-weight:300;font-style:italic}
+
+/* q&a */
+.qa{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:44px 60px}
+.qa .q{font-family:"Fraunces",Georgia,serif;font-size:30px;line-height:1.2;margin-bottom:14px}
+.qa .a{font-size:21px;line-height:1.5;font-weight:300;opacity:.85;max-width:44ch}
+
+/* closing */
+.contact{
+  margin-top:auto;padding-top:44px;display:flex;gap:70px;
+  font-family:"IBM Plex Mono",monospace;font-size:18px;letter-spacing:.1em;opacity:.7;
+}
+
+/* title slide */
+.title-meta{
+  margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;
+  font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.16em;
+  text-transform:uppercase;opacity:.72;padding-top:60px;
+  border-top:1px solid rgba(255,240,220,.25);
+}
+.wordmark{
+  font-family:"Fraunces",Georgia,serif;font-size:30px;letter-spacing:0;
+  text-transform:none;opacity:1;
+}
+.wordmark em{font-style:italic;color:var(--signal)}
+
+/* ---------- chrome ---------- */
+#progress{position:absolute;left:0;top:0;height:2px;background:var(--signal);width:0;transition:width .42s ease;z-index:5}
+#counter{
+  position:absolute;right:64px;bottom:52px;z-index:5;
+  font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.2em;opacity:.45;
+}
+#help{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.18em;
+  color:var(--beige);opacity:.3;text-transform:uppercase;z-index:20;
+  transition:opacity .4s ease;pointer-events:none;
+}
+#help.hide{opacity:0}
+#blackout{position:fixed;inset:0;background:#000;z-index:50;opacity:0;visibility:hidden;transition:opacity .25s}
+#blackout.on{opacity:1;visibility:visible}
+
+@media (prefers-reduced-motion:reduce){
+  .slide{transition:opacity .12s linear}
+  #progress,.rail-tick{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <div id="progress"></div>
+
+    <!-- 01 TITLE -->
+    <section class="slide dark on">
+      <div class="rail"></div><div class="rail-label">Ecological Registry · Rec. 01</div>
+      <div style="margin-top:auto">
+        <div class="eyebrow" style="margin-bottom:52px"><span class="num">01</span><span>A record for private gardens</span></div>
+        <h1>The Ecological<br>Registry</h1>
+        <p class="lede" style="max-width:40ch">Private gardens already do ecological work. Almost none of it is recorded, and most of it disappears when a property changes hands.</p>
+      </div>
+      <div class="title-meta">
+        <span class="wordmark">Gardener <em>&amp;</em> Son</span>
+        <span>City of Boroondara · 14 August 2026</span>
+        <span>140 Auburn Road, Hawthorn</span>
+      </div>
+    </section>
+
+    <!-- 02 CORE MESSAGE -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">The proposition · Rec. 02</div>
+      <div class="eyebrow"><span class="num">02</span><span>The proposition</span></div>
+      <h2>The Registry recognises private gardens as <em>ecological assets</em>.</h2>
+      <p class="lede">Habitat, canopy, soil health, water absorption and connectivity are all being created in backyards across Boroondara. That value is rarely measured, and almost never carried forward. The Registry creates a lasting record of it.</p>
+    </section>
+
+    <!-- 03 THE GAP -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">The gap · Rec. 03</div>
+      <div class="eyebrow"><span class="num">03</span><span>What is missing</span></div>
+      <h3 style="font-size:46px;max-width:26ch">Most of the city's private land is doing ecological work off the record.</h3>
+      <ul class="rules">
+        <li>A large proportion of urban land is <strong>privately owned</strong> — council cannot reach biodiversity and canopy goals through public land alone.</li>
+        <li>Many residents are already improving habitat, soil, water and planting structure.</li>
+        <li>That contribution is <strong>mostly invisible</strong> in existing council reporting.</li>
+        <li>Valuable ecological knowledge is lost when a house is sold.</li>
+        <li>Gardens are judged aesthetically far more often than by ecological function.</li>
+      </ul>
+      <p class="body mono" style="margin-top:46px;font-size:22px;letter-spacing:.04em;opacity:.75;max-width:64ch">Council already invests in education, plants, grants and biodiversity programs. The Registry helps preserve the evidence of what those efforts create.</p>
+    </section>
+
+    <!-- 04 WHAT IT RECORDS -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Method · Rec. 04</div>
+      <div class="eyebrow"><span class="num">04</span><span>What each garden record holds</span></div>
+      <h3 style="font-size:46px">Five areas, assessed at the property level.</h3>
+      <div class="cols c5">
+        <div class="card"><div class="k">01</div><h3>Biodiversity structure</h3><p>Ground layer, shrubs, understorey, canopy, plant diversity, indigenous dominance.</p></div>
+        <div class="card"><div class="k">02</div><h3>Soil &amp; water</h3><p>Soil protection, organic matter, infiltration, passive irrigation, retention, reduced runoff.</p></div>
+        <div class="card"><div class="k">03</div><h3>Habitat complexity</h3><p>Logs, rocks, hollows, leaf litter, water, nesting opportunities, shelter.</p></div>
+        <div class="card"><div class="k">04</div><h3>Connectivity</h3><p>Proximity to parks, remnant vegetation, waterways, street trees, nearby habitat gardens.</p></div>
+        <div class="card"><div class="k">05</div><h3>Evidence &amp; stewardship</h3><p>Photographs, field notes, plant records, observations, change over time, verification.</p></div>
+      </div>
+    </section>
+
+    <!-- 05 PULL QUOTE -->
+    <section class="slide dark" style="justify-content:center">
+      <div class="rail"></div><div class="rail-label">Principle · Rec. 05</div>
+      <div class="eyebrow"><span class="num">05</span><span>The governing principle</span></div>
+      <p class="pull">The inputs are the truth.<br>The score is the <em style="color:var(--signal)">consequence</em>.</p>
+      <p class="attrib">Recorded observations produce the score — never the reverse</p>
+    </section>
+
+    <!-- 06 WHAT THE SCORE MEANS -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">Scoring · Rec. 06</div>
+      <div class="eyebrow"><span class="num">06</span><span>A scale, not a scoreboard</span></div>
+      <h3 style="font-size:44px;max-width:30ch">A garden does not need to score highly to be worth recording. A baseline is what gives a household somewhere to begin.</h3>
+      <div class="scale">
+        <div class="scale-bar">
+          <span class="tick" style="left:0"></span>
+          <span class="tick" style="left:32%"></span>
+          <span class="tick" style="left:50%"></span>
+          <span class="tick" style="left:91%"></span>
+          <span class="tick" style="left:100%"></span>
+          <span class="band" style="left:32%">Habitat garden</span>
+          <span class="band" style="left:50%">Ecological garden</span>
+          <span class="band" style="left:93%">Urban biodiversity node</span>
+          <span class="marker" style="left:44%"></span>
+          <span class="marker-l" style="left:44%">44 — current registry average</span>
+        </div>
+        <div class="ends"><span>0</span><span>100</span></div>
+      </div>
+      <p class="body" style="margin-top:76px;opacity:.85">A garden at 50 is not a failed garden. It is a garden with measurable ecological function and a visible pathway for improvement.</p>
+    </section>
+
+    <!-- 07 LANGUAGE -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Framing · Rec. 07</div>
+      <div class="eyebrow"><span class="num">07</span><span>How we talk about a record</span></div>
+      <h3 style="font-size:46px">Recognition, not regulation.</h3>
+      <div class="cols c2" style="margin-top:48px">
+        <div class="panel use">
+          <div class="k">Language we use</div>
+          <ul><li>Baseline</li><li>Ecological function</li><li>Current condition</li><li>Improvement pathway</li><li>Recognised contribution</li></ul>
+        </div>
+        <div class="panel avoid">
+          <div class="k">Language we avoid</div>
+          <ul><li>Winner / best garden</li><li>Certification</li><li>Compliant / non-compliant</li><li>Pass / fail</li><li>Leaderboard</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 WHAT IT IS NOT -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">Boundaries · Rec. 08</div>
+      <div class="eyebrow"><span class="num">08</span><span>What the Registry is not</span></div>
+      <div class="cols c3" style="margin-top:20px">
+        <div class="card"><h3>Not a plant finder</h3><p>Plant-selection tools help people decide what to plant. The Registry records what was actually created.</p></div>
+        <div class="card"><h3>Not citizen science</h3><p>Species observations tell us what has visited a garden. We record the ecological asset that is there to support them.</p></div>
+        <div class="card"><h3>Not a certification scheme</h3><p>No regulatory claims and no certifying authority. A transparent, evidence-based record.</p></div>
+      </div>
+      <div class="cols c3" style="margin-top:52px">
+        <div class="card"><h3>Not a council database</h3><p>It can complement council programs without requiring council to own or maintain the platform.</p></div>
+        <div class="card"><h3>Not an address directory</h3><p>Precise residential addresses are not published. Public profiles are deliberately privacy-conscious.</p></div>
+        <div class="card"><h3>Not carbon accounting</h3><p>Focused on biodiversity, habitat, soil, water and connectivity — not credits or offsets.</p></div>
+      </div>
+    </section>
+
+    <!-- 09 PRIVACY -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Privacy · Rec. 09</div>
+      <div class="eyebrow"><span class="num">09</span><span>Privacy position</span></div>
+      <h2 style="font-size:76px">Recognition without <em>unnecessary exposure</em>.</h2>
+      <ul class="rules" style="margin-top:40px">
+        <li>Public profiles do not reveal a precise residential address — locations generalise to suburb, neighbourhood or a masked map area.</li>
+        <li>Owners control which evidence is displayed publicly.</li>
+        <li>Self-reported and independently verified records are clearly distinguished, and neither is treated as invalid.</li>
+        <li>Participation is <strong>voluntary</strong>, and consent governs household information.</li>
+      </ul>
+    </section>
+
+    <!-- 10 PERMANENCE -->
+    <section class="slide dark" style="justify-content:center">
+      <div class="rail"></div><div class="rail-label">Permanence · Rec. 10</div>
+      <div class="eyebrow"><span class="num">10</span><span>The permanence argument</span></div>
+      <p class="pull">A garden should not lose its <em style="color:var(--signal)">memory</em> when ownership changes.</p>
+      <p class="body" style="margin-top:52px;opacity:.85">Ecological work can take decades to mature, but the record of it is scattered across invoices, planting plans, photographs and individual recollection. We sometimes describe the Registry as a land title for ecological value — not a legal title, but a persistent record that survives a change of owner.</p>
+    </section>
+
+    <!-- 11 NETWORK -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Network · Rec. 11</div>
+      <div class="eyebrow"><span class="num">11</span><span>The missing middle</span></div>
+      <h3 style="font-size:44px;max-width:34ch">One garden is small. A cluster near a reserve, creek or street-tree corridor becomes ecological infrastructure.</h3>
+      <div class="diagram">
+        <svg viewBox="0 0 1560 300" role="img" aria-label="Diagram: private gardens forming stepping stones between two public reserves">
+          <g fill="none" stroke="#B49A63" stroke-width="1.5">
+            <path class="dash" d="M250 150 H1310"/>
+          </g>
+          <g>
+            <rect x="40" y="70" width="210" height="160" fill="#3d4535" opacity=".9"/>
+            <rect x="1310" y="70" width="210" height="160" fill="#3d4535" opacity=".9"/>
+            <text x="145" y="158" text-anchor="middle" fill="#fff0dc" font-family="IBM Plex Mono, monospace" font-size="17" letter-spacing="2">RESERVE</text>
+            <text x="1415" y="158" text-anchor="middle" fill="#fff0dc" font-family="IBM Plex Mono, monospace" font-size="17" letter-spacing="2">REMNANT</text>
+          </g>
+          <g fill="#7C9A52">
+            <rect x="380" y="122" width="56" height="56"/>
+            <rect x="600" y="122" width="56" height="56"/>
+            <rect x="820" y="122" width="56" height="56"/>
+            <rect x="1040" y="122" width="56" height="56"/>
+          </g>
+          <g fill="#3d4535" font-family="IBM Plex Mono, monospace" font-size="15" letter-spacing="1.5" text-anchor="middle" opacity=".65">
+            <text x="408" y="228">GARDEN</text>
+            <text x="628" y="228">GARDEN</text>
+            <text x="848" y="228">GARDEN</text>
+            <text x="1068" y="228">GARDEN</text>
+          </g>
+          <text x="738" y="66" text-anchor="middle" fill="#3d4535" font-family="IBM Plex Mono, monospace" font-size="15" letter-spacing="3" opacity=".55">PRIVATE LAND — THE SPACE BETWEEN FORMAL RESERVES</text>
+        </svg>
+      </div>
+      <p class="body" style="margin-top:26px;max-width:70ch">Public reserves are vital, but the land between them matters too. The Registry makes those stepping stones visible — moving from individual good intentions to a recorded habitat network.</p>
+    </section>
+
+    <!-- 12 WHY COUNCIL -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">Council value · Rec. 12</div>
+      <div class="eyebrow"><span class="num">12</span><span>Why this may be useful to Boroondara</span></div>
+      <h3 style="font-size:44px;max-width:30ch">A biodiversity strategy describes the network at a municipal scale. The Registry helps make the individual properties within it visible.</h3>
+      <div class="cols c3" style="margin-top:48px">
+        <div class="card"><h3 style="font-size:29px">See where habitat already exists</h3><p>Identify clusters of habitat gardens and where private land strengthens existing corridors.</p></div>
+        <div class="card"><h3 style="font-size:29px">Target support where it counts</h3><p>Direct education, plants and incentives toward the gaps that aggregated records reveal.</p></div>
+        <div class="card"><h3 style="font-size:29px">Keep the evidence</h3><p>Retain records of outcomes beyond the life of a single grant, giveaway or program.</p></div>
+      </div>
+    </section>
+
+    <!-- 13 FIT -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Fit · Rec. 13</div>
+      <div class="eyebrow"><span class="num">13</span><span>How it sits with existing work</span></div>
+      <h2 style="font-size:74px">Council programs may initiate the change. The Registry helps <em>remember</em> it.</h2>
+      <p class="lede">Designed to complement indigenous plant giveaways, Gardens for Wildlife, the Backyard Biodiversity Project, canopy strategies and citizen-science initiatives. We are not duplicating council expertise or asking council to replace anything — we are creating a record that can sit underneath many different programs and preserve their outcomes.</p>
+    </section>
+
+    <!-- 14 EVIDENCE -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">Evidence · Rec. 14</div>
+      <div class="eyebrow"><span class="num">14</span><span>Where the Registry is today</span></div>
+      <h3 style="font-size:44px;max-width:30ch">We have deliberately started small, so the method can be tested against real gardens before it scales.</h3>
+      <div class="stats">
+        <div class="stat"><div class="n">15</div><div class="l">Registered gardens</div></div>
+        <div class="stat"><div class="n">9</div><div class="l">Within the City of Boroondara</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">In a single Surrey Hills cluster</div></div>
+        <div class="stat"><div class="n">44</div><div class="l">Average recorded score</div></div>
+      </div>
+      <p class="body" style="margin-top:56px;max-width:72ch;opacity:.85">Profiles carry photographs, field notes, ecological context and improvement targets. Gardens are recorded at baseline and revisited over time. The first garden registered by someone other than us was enrolled last month.</p>
+    </section>
+
+    <!-- 15 PILOT -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">Pilot · Rec. 15</div>
+      <div class="eyebrow"><span class="num">15</span><span>A sensible pilot</span></div>
+      <h3 style="font-size:46px">10–20 voluntary gardens, in one neighbourhood or beside an existing corridor.</h3>
+      <div class="steps">
+        <div class="step"><div class="n">01</div><p>Select willing residents — existing biodiversity-program participants are the natural starting point.</p></div>
+        <div class="step"><div class="n">02</div><p>Establish a baseline for each garden across the five areas.</p></div>
+        <div class="step"><div class="n">03</div><p>Protect exact residential locations throughout.</p></div>
+        <div class="step"><div class="n">04</div><p>Revisit the gardens after an agreed period.</p></div>
+        <div class="step"><div class="n">05</div><p>Report in aggregate — strengths, gaps and opportunities, no household exposed.</p></div>
+      </div>
+      <p class="body mono" style="margin-top:56px;font-size:21px;letter-spacing:.04em;opacity:.7;max-width:76ch">Possible outputs: habitat features recorded · indigenous plant structure · canopy and understorey gaps · water-sensitive features · proximity to public habitat · before-and-after records</p>
+    </section>
+
+    <!-- 16 THE ASK -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">The ask · Rec. 16</div>
+      <div class="eyebrow"><span class="num">16</span><span>What we are asking today</span></div>
+      <h2 style="font-size:72px">We are not asking council to adopt a platform.</h2>
+      <div class="ask"><p>We are asking whether there is a useful small experiment we can undertake together.</p></div>
+      <p class="body" style="margin-top:44px;opacity:.8">Helpful alternatives: feedback on how the Registry could complement current programs · help identifying one suburb or corridor for a pilot · introductions to coordinators of existing backyard-biodiversity work · residents who would voluntarily like their garden recorded.</p>
+    </section>
+
+    <!-- 17 CLOSE -->
+    <section class="slide dark">
+      <div class="rail"></div><div class="rail-label">Next step · Rec. 17</div>
+      <div class="eyebrow"><span class="num">17</span><span>The next step</span></div>
+      <p class="pull" style="font-size:64px;max-width:28ch">Could we arrange a second session with the relevant biodiversity and sustainability officers, to look at a small pilot area and the information council would find most useful?</p>
+      <div class="contact">
+        <span class="wordmark">Gardener <em>&amp;</em> Son</span>
+        <span>ecologicalregistry.org</span>
+        <span>140 Auburn Road, Hawthorn</span>
+      </div>
+    </section>
+
+    <!-- 18 APPENDIX A -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Appendix · Rec. 18</div>
+      <div class="eyebrow"><span class="num">A</span><span>Questions we expect — method and data</span></div>
+      <div class="qa">
+        <div><div class="q">Who verifies the information?</div><div class="a">Each record carries its verification level. Some are self-reported; others are reviewed through photographs, documentation or an on-site assessment. We do not hide that distinction, and provisional records are quarantined from verified reporting.</div></div>
+        <div><div class="q">Is the score scientifically validated?</div><div class="a">It is a structured ecological assessment framework, not a substitute for formal ecological surveying. We want to work with ecologists, councils and practitioners to improve the method over time.</div></div>
+        <div><div class="q">Could people game the score?</div><div class="a">The score is tied to recorded inputs and supporting evidence. Verification levels stay visible, and unsupported claims can be quarantined.</div></div>
+        <div><div class="q">Who owns the data?</div><div class="a">Household information remains governed by clear consent and privacy rules. Public-facing information is separated from internal assessment data.</div></div>
+      </div>
+    </section>
+
+    <!-- 19 APPENDIX B -->
+    <section class="slide light">
+      <div class="rail"></div><div class="rail-label">Appendix · Rec. 19</div>
+      <div class="eyebrow"><span class="num">B</span><span>Questions we expect — role and reach</span></div>
+      <div class="qa">
+        <div><div class="q">Is this a regulatory tool?</div><div class="a">No. It is voluntary and recognition-based.</div></div>
+        <div><div class="q">Does council have to maintain it?</div><div class="a">No. The Registry operates independently and can provide agreed, aggregated information back to council.</div></div>
+        <div><div class="q">What happens when someone sells?</div><div class="a">The ecological record stays attached to the garden profile, while personal ownership information changes or is removed.</div></div>
+        <div><div class="q">Does it favour wealthy households?</div><div class="a">An important risk, and one the method is built to resist: it recognises ecological function, not garden expense. Logs, leaf litter, indigenous groundcovers, water retention and reduced chemical use are highly valuable and cost very little.</div></div>
+        <div><div class="q">What about renters and apartments?</div><div class="a">The framework can extend to renters, shared gardens, body-corporate landscapes and nature strips. The first version establishes a reliable property-level method.</div></div>
+        <div><div class="q">Will precise property locations be visible?</div><div class="a">No. Public profiles mask the address and display only a general area.</div></div>
+      </div>
+    </section>
+
+    <div id="counter"></div>
+    <div class="rail-tick" id="tick" style="top:96px"></div>
+  </div>
+</div>
+<div id="blackout"></div>
+<div id="help">← → navigate · F fullscreen · B blackout</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  var counter = document.getElementById('counter');
+  var progress = document.getElementById('progress');
+  var tick = document.getElementById('tick');
+  var help = document.getElementById('help');
+  var blackout = document.getElementById('blackout');
+
+  function pad(n){ return (n<10?'0':'')+n; }
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach(function(s,k){ s.classList.toggle('on', k===i); });
+    counter.textContent = pad(i+1) + ' / ' + pad(slides.length);
+    progress.style.width = ((i)/(slides.length-1)*100) + '%';
+    var railTop = 96, railH = 1080 - 192;
+    tick.style.top = (railTop + (i/(slides.length-1))*railH) + 'px';
+  }
+
+  function fit(){
+    var s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+    document.getElementById('stage').style.setProperty('--s', s);
+  }
+  window.addEventListener('resize', fit); fit(); show(0);
+
+  var hideTimer;
+  function nudgeHelp(){
+    help.classList.remove('hide');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function(){ help.classList.add('hide'); }, 2600);
+  }
+  nudgeHelp();
+
+  document.addEventListener('keydown', function(e){
+    var k = e.key;
+    if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'){ e.preventDefault(); show(i+1); }
+    else if(k==='ArrowLeft'||k==='PageUp'){ e.preventDefault(); show(i-1); }
+    else if(k==='Home'){ show(0); }
+    else if(k==='End'){ show(slides.length-1); }
+    else if(k==='f'||k==='F'){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+    else if(k==='b'||k==='B'){ blackout.classList.toggle('on'); }
+    nudgeHelp();
+  });
+
+  document.addEventListener('click', function(e){
+    if(blackout.classList.contains('on')){ blackout.classList.remove('on'); return; }
+    show(e.clientX < window.innerWidth*0.25 ? i-1 : i+1);
+    nudgeHelp();
+  });
+  document.addEventListener('mousemove', nudgeHelp);
+})();
+</script>
+</body>
+</html>
