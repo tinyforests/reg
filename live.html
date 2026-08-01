@@ -332,7 +332,7 @@ function referralSource(addr){
 let RAW=[];  // cleaned base rows (test dropped, studio flagged)
 
 async function load(){
-  if(CONFIG.API_KEY==='AIzaSyBzhuJsiruU1uzO6OtU1tXFc1xepZJ9QUc') return showSetup();
+  if(CONFIG.API_KEY==='YOUR_API_KEY') return showSetup();
   const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.RANGE)}?key=${CONFIG.API_KEY}`;
   let json;
   try{
@@ -521,7 +521,7 @@ function showError(msg){
 /* boot */
 (function(){
   // build UI shell first so tiles exist, then load (unless setup/err replaces it)
-  if(CONFIG.API_KEY==='AIzaSyBzhuJsiruU1uzO6OtU1tXFc1xepZJ9QUc'){showSetup();return;}
+  if(CONFIG.API_KEY==='YOUR_API_KEY'){showSetup();return;}
   mount();
   load().then(()=>{ if(RAW.length){} }).catch(e=>showError(e.message));
 })();
