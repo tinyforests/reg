@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demand Signal · Ecological Registry</title>
+
+<!-- ============================================================
+     CONFIG  —  edit these three values, then deploy.
+     Setup (one-time):
+       1. console.cloud.google.com → enable "Google Sheets API"
+       2. Create an API key. For production, restrict it to the
+          Sheets API and add an HTTP-referrer restriction for
+          ecologicalregistry.org (leave unrestricted while testing
+          from a local file, or the preview origin will be blocked).
+       3. Open the log sheet → Share → "Anyone with the link:
+          Viewer". The key can only read a link-viewable sheet.
+     ============================================================ -->
+<script>
+  const CONFIG = {
+    SHEET_ID: '1Em5FvJhUyCIVLOFYtcmjXUFK--6QZDh452F6NcXDAiQ',
+    RANGE:    'A:G',                 // first tab, all seven columns
+    API_KEY:  'AIzaSyBzhuJsiruU1uzO6OtU1tXFc1xepZJ9QUc',        // ← paste your restricted key here
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+  :root{
+    --green:#3d4535;      /* Gardener Green — primary ink        */
+    --beige:#fff0dc;      /* Nostalgic Beige — ground            */
+    --signal:#7A9E5F;     /* Signal Green — data / accent        */
+    --brass:#B49A63;      /* Dry Grass Brass — dividers ONLY     */
+    --ink-soft:#6a7060;   /* muted green for secondary text      */
+    --line:rgba(180,154,99,.45);   /* brass hairline              */
+    --line-dark:rgba(255,240,220,.18);
+  }
+  *{box-sizing:border-box;border-radius:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--beige);color:var(--green);
+    font-family:"IBM Plex Sans",sans-serif;font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* noise overlay */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;
+    opacity:.04;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* labels / mono */
+  .mono{font-family:"IBM Plex Mono",monospace}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-soft);
+  }
+  h2.section{
+    font-family:"Fraunces",serif;font-weight:500;font-size:26px;line-height:1.1;
+    margin:0 0 4px;letter-spacing:-.01em;
+  }
+  .section-note{color:var(--ink-soft);font-size:14px;margin:0 0 22px}
+
+  /* ---------- HERO (dark inverted surface) ---------- */
+  .hero{background:var(--green);color:var(--beige);padding:64px 0 56px;position:relative;overflow:hidden}
+  .hero .rings{position:absolute;right:-140px;top:-120px;width:460px;height:460px;opacity:.16}
+  .hero .rings circle{fill:none;stroke:var(--signal);stroke-width:1}
+  .hero .eyebrow{color:var(--brass)}
+  .hero h1{
+    font-family:"Abril Fatface",serif;font-weight:400;
+    font-size:clamp(38px,7vw,74px);line-height:.98;margin:14px 0 18px;letter-spacing:-.01em;
+  }
+  .hero p.lede{max-width:46ch;color:rgba(255,240,220,.82);font-size:17px;margin:0}
+  .hero .meta{
+    display:flex;gap:28px;flex-wrap:wrap;margin-top:30px;padding-top:22px;
+    border-top:1px solid var(--line-dark);
+  }
+  .hero .meta div{font-family:"IBM Plex Mono",monospace;font-size:12px;color:rgba(255,240,220,.7)}
+  .hero .meta b{display:block;font-size:19px;color:var(--beige);font-weight:500;margin-top:3px}
+  .live-dot{display:inline-block;width:7px;height:7px;background:var(--signal);margin-right:7px;vertical-align:middle;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ---------- STAT TILES ---------- */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);margin-top:0}
+  .tile{padding:26px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .tile:last-child{border-right:none}
+  .tile .n{font-family:"IBM Plex Mono",monospace;font-size:38px;line-height:1;font-weight:500;letter-spacing:-.02em}
+  .tile .k{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:10px}
+  .tile .sub{font-size:12px;color:var(--ink-soft);margin-top:4px}
+
+  section{padding:52px 0;border-bottom:1px solid var(--line)}
+
+  /* ---------- month trend ---------- */
+  .chart{width:100%}
+  .bar-row{display:flex;align-items:flex-end;gap:6px;height:200px;border-bottom:1px solid var(--line);padding-bottom:0}
+  .bar{flex:1;background:var(--signal);min-height:2px;position:relative;transition:height .6s cubic-bezier(.2,.8,.2,1)}
+  .bar:hover{background:var(--green)}
+  .bar .v{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft);white-space:nowrap}
+  .bar-labels{display:flex;gap:6px;margin-top:8px}
+  .bar-labels span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-soft);letter-spacing:.02em}
+
+  /* ---------- horizontal ranked bars ---------- */
+  .rank{list-style:none;margin:0;padding:0}
+  .rank li{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(180,154,99,.22)}
+  .rank li:last-child{border-bottom:none}
+  .rank .code{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--signal)}
+  .rank .track{position:relative;height:22px;background:rgba(122,158,95,.13)}
+  .rank .fill{position:absolute;left:0;top:0;bottom:0;background:var(--signal);transition:width .7s cubic-bezier(.2,.8,.2,1)}
+  .rank .name{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--green);white-space:nowrap;overflow:hidden;max-width:calc(100% - 18px);text-overflow:ellipsis}
+  .rank .ct{font-family:"IBM Plex Mono",monospace;font-size:13px;min-width:34px;text-align:right}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:52px}
+
+  /* ---------- channel split ---------- */
+  .split{display:flex;height:44px;border:1px solid var(--line);margin:8px 0 18px}
+  .split .seg{display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--beige);transition:flex-basis .7s ease}
+  .seg.direct{background:var(--green)}
+  .seg.referral{background:var(--signal);color:var(--green)}
+  .legend{display:flex;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft)}
+  .legend i{display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:middle}
+
+  /* ---------- map ---------- */
+  #map{height:440px;width:100%;border:1px solid var(--line);background:#e9e2d3;filter:saturate(.85)}
+  .map-note{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);margin-top:12px}
+  .leaflet-container{font-family:"IBM Plex Mono",monospace;background:#e9e2d3}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{border-radius:0;background:var(--green);color:var(--beige)}
+  .leaflet-popup-content{font-family:"IBM Plex Mono",monospace;font-size:12px;margin:12px 14px}
+
+  /* ---------- controls / footer ---------- */
+  .controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .toggle{display:inline-flex;align-items:center;gap:9px;cursor:pointer;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--green);user-select:none}
+  .toggle input{position:absolute;opacity:0}
+  .toggle .box{width:34px;height:18px;border:1px solid var(--green);position:relative;transition:background .2s}
+  .toggle .box::after{content:"";position:absolute;top:1px;left:1px;width:14px;height:14px;background:var(--green);transition:transform .2s}
+  .toggle input:checked + .box{background:var(--signal);border-color:var(--signal)}
+  .toggle input:checked + .box::after{transform:translateX(16px);background:var(--beige)}
+  .hidden-count{color:var(--ink-soft)}
+
+  footer{padding:40px 0 64px;color:var(--ink-soft);font-size:13px}
+  footer .rule{height:1px;background:var(--line);margin-bottom:22px}
+  footer .mono{font-size:11px;letter-spacing:.04em;line-height:1.8}
+  footer a{color:var(--signal)}
+
+  /* ---------- states ---------- */
+  .state{padding:80px 0;text-align:center}
+  .state h2{font-family:"Fraunces",serif;font-weight:500;font-size:24px;margin:0 0 12px}
+  .state p{color:var(--ink-soft);max-width:52ch;margin:0 auto 8px}
+  .setup{max-width:640px;margin:26px auto 0;text-align:left;border:1px solid var(--line);padding:26px}
+  .setup ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9}
+  .setup code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;background:rgba(122,158,95,.14);padding:2px 5px}
+  .skeleton{animation:sk 1.3s infinite;background:rgba(61,69,53,.08)}
+  @keyframes sk{0%,100%{opacity:.5}50%{opacity:1}}
+  .err{color:#8a3a2f}
+
+  @media(max-width:820px){
+    .tiles{grid-template-columns:repeat(2,1fr)}
+    .tile:nth-child(2){border-right:none}
+    .two-col{grid-template-columns:1fr;gap:40px}
+    .hero .rings{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <svg class="rings" viewBox="0 0 460 460" aria-hidden="true">
+    <circle cx="230" cy="230" r="60"/><circle cx="230" cy="230" r="110"/>
+    <circle cx="230" cy="230" r="160"/><circle cx="230" cy="230" r="210"/>
+  </svg>
+  <div class="wrap">
+    <div class="eyebrow">Ecological Registry · Public Data</div>
+    <h1>Where Melbourne<br>is looking.</h1>
+    <p class="lede">Every ecological vegetation class lookup across the Find My EVC network, mapped as it happens. A live read on where the appetite for indigenous planting is growing.</p>
+    <div class="meta">
+      <div><span class="live-dot"></span>Status<b id="m-status">Connecting…</b></div>
+      <div>Logging since<b id="m-since">—</b></div>
+      <div>Last lookup<b id="m-last">—</b></div>
+      <div>Refreshed<b id="m-refreshed" class="mono">—</b></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== APP ===================== -->
+<main id="app">
+  <div class="state" id="loading">
+    <div class="wrap">
+      <h2>Reading the registry…</h2>
+      <p>Pulling the lookup log from Google Sheets.</p>
+    </div>
+  </div>
+</main>
+
+<template id="tpl-dash">
+  <!-- tiles -->
+  <div class="wrap">
+    <div class="tiles">
+      <div class="tile"><div class="n mono" data-t="total">—</div><div class="k">Organic lookups</div><div class="sub" data-t="totalsub"></div></div>
+      <div class="tile"><div class="n mono" data-t="direct">—</div><div class="k">Direct searches</div><div class="sub" data-t="directsub"></div></div>
+      <div class="tile"><div class="n mono" data-t="evcs">—</div><div class="k">Distinct EVCs</div><div class="sub">of ~300 statewide</div></div>
+      <div class="tile"><div class="n mono" data-t="lgas">—</div><div class="k">LGAs reached</div><div class="sub" data-t="lgasub"></div></div>
+    </div>
+  </div>
+
+  <!-- controls -->
+  <section style="padding:22px 0;border-bottom:none">
+    <div class="wrap controls">
+      <label class="toggle">
+        <input type="checkbox" id="filter-studio" checked>
+        <span class="box"></span>
+        Exclude studio &amp; test pings
+      </label>
+      <span class="hidden-count mono" id="hidden-count"></span>
+    </div>
+  </section>
+
+  <!-- month trend -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Volume</div>
+      <h2 class="section">Lookups over time</h2>
+      <p class="section-note">Monthly organic lookups. The early months skew low once studio calibration pings are removed.</p>
+      <div class="chart">
+        <div class="bar-row" data-c="bars"></div>
+        <div class="bar-labels" data-c="labels"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- two-col: EVC + LGA -->
+  <section>
+    <div class="wrap two-col">
+      <div>
+        <div class="eyebrow">Habitat</div>
+        <h2 class="section">Most-searched EVCs</h2>
+        <p class="section-note">Which vegetation communities people are looking up.</p>
+        <ul class="rank" data-c="evc"></ul>
+      </div>
+      <div>
+        <div class="eyebrow">Geography</div>
+        <h2 class="section">Reach by council</h2>
+        <p class="section-note">Local government areas parsed from geocoded lookups.</p>
+        <ul class="rank" data-c="lga"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- channel split -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Where they came from</div>
+      <h2 class="section">Direct vs referral</h2>
+      <p class="section-note">Direct searches versus lookups routed in from the Find My EVC and Find My Native Plants tools.</p>
+      <div class="split" data-c="split"></div>
+      <div class="legend">
+        <span><i style="background:var(--green)"></i>Direct <b class="mono" data-c="ld"></b></span>
+        <span><i style="background:var(--signal)"></i>Referral <b class="mono" data-c="lr"></b></span>
+      </div>
+      <ul class="rank" data-c="sources" style="margin-top:22px;max-width:520px"></ul>
+    </div>
+  </section>
+
+  <!-- map -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Demand map</div>
+      <h2 class="section">Every located lookup</h2>
+      <p class="section-note">Rings scale with lookup volume at each point — the Registry's concentric geometry, drawn from the data.</p>
+      <div id="map"></div>
+      <p class="map-note" data-c="mapnote"></p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="rule"></div>
+      <p class="mono" data-c="foot"></p>
+      <p class="mono">Source · Find My EVC lookup log &nbsp;|&nbsp; Ecological Registry · ecologicalregistry.org<br>
+      Test rows and repeated studio-calibration pings are excluded from all figures above by default.</p>
+    </div>
+  </footer>
+</template>
+
+<script>
+/* ============================================================
+   Studio / dev clusters to exclude (organic-demand filter).
+   These two points each repeat dozens of times — calibration,
+   not organic traffic. Proximity in metres. 'test' rows always drop.
+   ============================================================ */
+const STUDIO_CLUSTERS = [
+  {lat:-37.8060, lng:145.0830, r:150},  // Balwyn Rd / Nungerner cluster
+  {lat:-37.8229, lng:145.0449, r:150},  // Auburn Rd, Hawthorn studio
+];
+
+const fmt = n => n.toLocaleString('en-AU');
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function haversine(a,b,c,d){
+  const R=6371000,t=x=>x*Math.PI/180;
+  const dLat=t(c-a),dLng=t(d-b);
+  const s=Math.sin(dLat/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(s));
+}
+function isStudio(lat,lng){
+  if(!isFinite(lat)||!isFinite(lng))return false;
+  return STUDIO_CLUSTERS.some(c=>haversine(lat,lng,c.lat,c.lng)<=c.r);
+}
+function parseDate(s){
+  const m=String(s).match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);
+  if(!m)return null;
+  return new Date(+m[3],+m[1]-1,+m[2],+m[4],+m[5],+m[6]);
+}
+function parseCouncil(addr){
+  const m=String(addr).match(/(?:City|Shire|Rural City|Borough) of ([^,]+)/);
+  return m?m[1].trim():null;
+}
+function referralSource(addr){
+  const a=String(addr).toLowerCase();
+  if(a.includes('findmynativeplants'))return'Find My Native Plants';
+  if(a.includes('findmyevc'))return'Find My EVC';
+  if(a.includes('referral'))return'Other referral';
+  return null;
+}
+
+let RAW=[];  // cleaned base rows (test dropped, studio flagged)
+
+async function load(){
+  if(CONFIG.API_KEY==='AIzaSyBzhuJsiruU1uzO6OtU1tXFc1xepZJ9QUc') return showSetup();
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.RANGE)}?key=${CONFIG.API_KEY}`;
+  let json;
+  try{
+    const res=await fetch(url);
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||('HTTP '+res.status));}
+    json=await res.json();
+  }catch(err){return showError(err.message);}
+
+  const rows=(json.values||[]).slice(1); // drop header
+  RAW=rows.map(r=>{
+    const [ts,addr='',lat='',lng='',code='',name='',src='']=r;
+    const d=parseDate(ts);
+    const la=parseFloat(lat), ln=parseFloat(lng);
+    const isTest=String(addr).toLowerCase()==='test'||String(lat).toLowerCase()==='test';
+    const ref=referralSource(addr)||(String(src).toLowerCase().includes('referral')?referralSource(src):null);
+    return {
+      date:d, addr, lat:la, lng:ln,
+      hasGeo:isFinite(la)&&isFinite(ln),
+      code:String(code).trim(), name:String(name).trim(),
+      src:String(src).trim().toLowerCase(),
+      isTest, isReferral:!!ref, refSource:ref,
+      council:parseCouncil(addr),
+      month:d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):null,
+    };
+  }).filter(r=>r.date && !r.isTest && (r.code||r.hasGeo));
+
+  RAW.forEach(r=>r.isStudio=isStudio(r.lat,r.lng));
+  render();
+}
+
+function render(){
+  const excludeStudio=document.getElementById('filter-studio')?.checked ?? true;
+  const rows=RAW.filter(r=>excludeStudio ? !r.isStudio : true);
+  const hidden=RAW.length-rows.length;
+
+  // meta
+  const dates=RAW.map(r=>r.date).sort((a,b)=>a-b);
+  document.getElementById('m-status').textContent='Live';
+  document.getElementById('m-since').textContent=dates[0]?.toLocaleDateString('en-AU',{month:'short',year:'numeric'})||'—';
+  document.getElementById('m-last').textContent=dates.at(-1)?.toLocaleDateString('en-AU',{day:'numeric',month:'short'})||'—';
+  document.getElementById('m-refreshed').textContent=new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+
+  const direct=rows.filter(r=>!r.isReferral);
+  const referral=rows.filter(r=>r.isReferral);
+  const evcSet=new Set(rows.filter(r=>r.code).map(r=>r.code));
+  const lgaSet=new Set(rows.filter(r=>r.council).map(r=>r.council));
+
+  set('total',fmt(rows.length));
+  set('totalsub',hidden?`${fmt(hidden)} studio/test hidden`:'unfiltered');
+  set('direct',fmt(direct.length));
+  set('directsub',`${Math.round(direct.length/rows.length*100)||0}% of volume`);
+  set('evcs',fmt(evcSet.size));
+  set('lgas',fmt(lgaSet.size));
+  set('lgasub',`${fmt(rows.filter(r=>r.council).length)} geocoded`);
+
+  document.getElementById('hidden-count').textContent =
+    excludeStudio ? `— ${fmt(hidden)} calibration & test rows hidden` : '— showing all rows including studio pings';
+
+  // month trend
+  const byMonth={};
+  rows.forEach(r=>{if(r.month)byMonth[r.month]=(byMonth[r.month]||0)+1;});
+  const months=Object.keys(byMonth).sort();
+  const max=Math.max(1,...Object.values(byMonth));
+  const bars=q('[data-c="bars"]'), labels=q('[data-c="labels"]');
+  bars.innerHTML='';labels.innerHTML='';
+  months.forEach(m=>{
+    const [y,mo]=m.split('-');
+    const b=document.createElement('div');b.className='bar';
+    b.style.height='2px';
+    b.innerHTML=`<span class="v">${byMonth[m]}</span>`;
+    bars.appendChild(b);
+    requestAnimationFrame(()=>b.style.height=(byMonth[m]/max*100)+'%');
+    const l=document.createElement('span');
+    l.textContent=MONTHS[+mo-1]+(mo==='01'?" '"+y.slice(2):'');
+    labels.appendChild(l);
+  });
+
+  rankList('[data-c="evc"]', tally(rows.filter(r=>r.code),r=>r.code,r=>r.name), true);
+  rankList('[data-c="lga"]', tally(rows.filter(r=>r.council),r=>r.council), false);
+
+  // channel split
+  const dc=direct.length, rc=referral.length, tot=dc+rc||1;
+  const split=q('[data-c="split"]');
+  split.innerHTML=`<div class="seg direct" style="flex-basis:${dc/tot*100}%">${Math.round(dc/tot*100)}%</div>
+                   <div class="seg referral" style="flex-basis:${rc/tot*100}%">${Math.round(rc/tot*100)}%</div>`;
+  q('[data-c="ld"]').textContent=fmt(dc);
+  q('[data-c="lr"]').textContent=fmt(rc);
+  rankList('[data-c="sources"]', tally(referral,r=>r.refSource||'Untagged'), false);
+
+  // map
+  drawMap(rows.filter(r=>r.hasGeo));
+  const noGeo=referral.length;
+  q('[data-c="mapnote"]').textContent=
+    `${fmt(rows.filter(r=>r.hasGeo).length)} located lookups plotted · ${fmt(noGeo)} referral lookups carry an EVC but no coordinates, so they’re counted in the channel panel but not shown here.`;
+
+  q('[data-c="foot"]').textContent=
+    `${fmt(RAW.length)} total logged rows · ${fmt(rows.length)} organic after filtering · ${fmt(evcSet.size)} EVCs · ${fmt(lgaSet.size)} LGAs`;
+}
+
+/* helpers */
+function tally(arr,keyFn,nameFn){
+  const m={};
+  arr.forEach(r=>{const k=keyFn(r);if(!k)return;(m[k]=m[k]||{ct:0,name:nameFn?nameFn(r):''}).ct++;});
+  return Object.entries(m).map(([k,v])=>({k,ct:v.ct,name:v.name})).sort((a,b)=>b.ct-a.ct);
+}
+function rankList(sel,data,showCode){
+  const el=q(sel);el.innerHTML='';
+  const top=data.slice(0,8), max=Math.max(1,...top.map(d=>d.ct));
+  top.forEach(d=>{
+    const li=document.createElement('li');
+    li.innerHTML=`${showCode?`<span class="code">EVC ${d.k}</span>`:`<span></span>`}
+      <div class="track"><div class="fill" style="width:0"></div><span class="name">${showCode?d.name:d.k}</span></div>
+      <span class="ct">${d.ct}</span>`;
+    el.appendChild(li);
+    const fill=li.querySelector('.fill');
+    requestAnimationFrame(()=>fill.style.width=(d.ct/max*100)+'%');
+  });
+  if(!top.length)el.innerHTML='<li style="grid-template-columns:1fr;color:var(--ink-soft)">No data in this view.</li>';
+}
+
+let MAP,LAYER;
+function drawMap(rows){
+  if(!MAP){
+    MAP=L.map('map',{scrollWheelZoom:false,attributionControl:true}).setView([-37.9,145.05],9);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{
+      attribution:'© OpenStreetMap · © CARTO',subdomains:'abcd',maxZoom:19
+    }).addTo(MAP);
+  }
+  if(LAYER)MAP.removeLayer(LAYER);
+  LAYER=L.layerGroup().addTo(MAP);
+  // cluster by rounded coord
+  const cl={};
+  rows.forEach(r=>{
+    const k=r.lat.toFixed(3)+','+r.lng.toFixed(3);
+    (cl[k]=cl[k]||{lat:+r.lat.toFixed(3),lng:+r.lng.toFixed(3),ct:0,name:r.name}).ct++;
+  });
+  const pts=Object.values(cl);
+  const max=Math.max(1,...pts.map(p=>p.ct));
+  pts.forEach(p=>{
+    const base=6+Math.log(p.ct+1)/Math.log(max+1)*22;
+    [base,base*0.62,base*0.3].forEach((rad,i)=>{
+      L.circleMarker([p.lat,p.lng],{
+        radius:rad,color:'#7A9E5F',weight:1,
+        fillColor:'#7A9E5F',fillOpacity:i===2?0.5:0.06
+      }).addTo(LAYER);
+    });
+    L.circleMarker([p.lat,p.lng],{radius:base,color:'transparent',fillOpacity:0})
+      .bindPopup(`<b>${p.ct} lookup${p.ct>1?'s':''}</b><br>${p.name||'—'}<br>${p.lat}, ${p.lng}`)
+      .addTo(LAYER);
+  });
+}
+
+/* state swaps */
+function mount(){
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  app.appendChild(document.getElementById('tpl-dash').content.cloneNode(true));
+  document.getElementById('filter-studio').addEventListener('change',render);
+}
+function q(s){return document.querySelector(s);}
+function set(t,v){const el=q(`[data-t="${t}"]`);if(el)el.textContent=v;}
+function showSetup(){
+  document.getElementById('m-status').textContent='Setup needed';
+  document.getElementById('app').innerHTML=`
+    <div class="state"><div class="wrap">
+      <h2>Add your API key to go live</h2>
+      <p>The dashboard is wired to the lookup sheet — it just needs read access.</p>
+      <div class="setup"><ol>
+        <li>In <code>console.cloud.google.com</code>, enable the <b>Google Sheets API</b>.</li>
+        <li>Create an API key. Restrict it to the Sheets API, and (for production) add an HTTP-referrer rule for <code>ecologicalregistry.org</code>.</li>
+        <li>Open the log sheet → <b>Share → Anyone with the link: Viewer</b>.</li>
+        <li>Paste the key into <code>CONFIG.API_KEY</code> at the top of this file and reload.</li>
+      </ol></div>
+    </div></div>`;
+}
+function showError(msg){
+  document.getElementById('m-status').textContent='Error';
+  document.getElementById('app').innerHTML=`
+    <div class="state"><div class="wrap">
+      <h2 class="err">Couldn’t read the sheet</h2>
+      <p class="err mono">${msg}</p>
+      <p>Check that the API key is valid, the Sheets API is enabled, and the sheet is shared as “Anyone with the link: Viewer”.</p>
+    </div></div>`;
+}
+
+/* boot */
+(function(){
+  // build UI shell first so tiles exist, then load (unless setup/err replaces it)
+  if(CONFIG.API_KEY==='AIzaSyBzhuJsiruU1uzO6OtU1tXFc1xepZJ9QUc'){showSetup();return;}
+  mount();
+  load().then(()=>{ if(RAW.length){} }).catch(e=>showError(e.message));
+})();
+// re-mount then render once data lands (load() populates RAW then calls render)
+</script>
+</body>
+</html>
