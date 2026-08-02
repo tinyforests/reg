@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YIELD — Concept Portal · Ecological Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#3d4535; --beige:#fff0dc; --signal:#7C9A52; --brass:#B49A63; --clay:#9A6A4F;
+    --line:rgba(255,240,220,.16); --line-dark:rgba(61,69,53,.14); --panel:#2b3227;
+  }
+  *{box-sizing:border-box; border-radius:0!important; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--beige); color:var(--green); font-family:'IBM Plex Sans',sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .noise{position:fixed; inset:0; pointer-events:none; opacity:.035; z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .wrap{max-width:1160px; margin:0 auto; padding:0 32px;}
+  #progress{position:fixed; top:0; left:0; height:2px; background:var(--signal); z-index:60; width:0;}
+
+  .concept{background:var(--clay); color:var(--beige); padding:11px 32px; text-align:center;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.11em; text-transform:uppercase; line-height:1.6;}
+
+  nav{position:sticky; top:0; z-index:50; background:rgba(255,240,220,.9); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line-dark); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; transition:padding .3s, box-shadow .3s;}
+  nav.scrolled{padding:11px 32px; box-shadow:0 10px 26px -16px rgba(61,69,53,.3);}
+  .wordmark{font-family:'Abril Fatface',serif; font-size:20px; letter-spacing:.02em;}
+  .wordmark span{font-style:italic; color:var(--signal); font-family:'Fraunces',serif; font-size:15px; letter-spacing:0;}
+  .navlinks{display:flex; gap:20px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;}
+  .navlinks a{text-decoration:none; color:var(--green); opacity:.6; transition:opacity .2s,color .2s;}
+  .navlinks a:hover{opacity:1; color:var(--signal);}
+  .toggle{display:flex; border:1px solid var(--brass);}
+  .toggle button{background:none; border:none; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; padding:7px 13px; cursor:pointer; color:var(--clay); transition:background .25s,color .25s;}
+  .toggle button.on{background:var(--brass); color:var(--green);}
+  .live-dot{width:7px;height:7px;background:var(--signal);border-radius:50%!important;display:inline-block;animation:pd 1.8s ease-in-out infinite;}
+  @keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(124,154,82,.5)}50%{opacity:.5;box-shadow:0 0 0 6px rgba(124,154,82,0)}}
+
+  .hero{background:var(--green); color:var(--beige); padding:76px 0 0; position:relative; overflow:hidden;}
+  .glow{position:absolute; top:-200px; right:-160px; width:540px; height:540px; border-radius:50%!important;
+    background:radial-gradient(circle,rgba(124,154,82,.26) 0%,rgba(124,154,82,0) 70%);}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--signal); margin-bottom:18px; display:flex; align-items:center; gap:10px;}
+  h1{font-family:'Fraunces',serif; font-weight:500; font-size:46px; line-height:1.15; max-width:790px; margin-bottom:18px; position:relative;}
+  h1 em{font-style:italic; color:var(--signal);}
+  .hero p{max-width:620px; font-size:16.5px; line-height:1.65; opacity:.85; position:relative;}
+  .strip{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); margin-top:52px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .stat{padding:26px 6px 22px; transition:background .3s;}
+  .stat:hover{background:rgba(124,154,82,.08);}
+  .stat .num{font-family:'IBM Plex Mono',monospace; font-size:36px; font-weight:500; color:var(--signal); line-height:1; font-variant-numeric:tabular-nums;}
+  .stat .num .suf{font-size:15px; opacity:.7;}
+  .stat .label{font-size:11.5px; margin-top:10px; opacity:.75; line-height:1.45; max-width:190px;}
+
+  section{padding:76px 0;}
+  .alt{background:rgba(124,154,82,.05); border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);}
+  .dark{background:var(--green); color:var(--beige);}
+  .sh{display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:36px; border-bottom:1px solid var(--brass); padding-bottom:16px; flex-wrap:wrap;}
+  .sh h2{font-family:'Fraunces',serif; font-weight:500; font-size:27px;}
+  .sh .n{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--clay); letter-spacing:.08em; text-transform:uppercase;}
+  .dark .sh{border-color:rgba(180,154,99,.5);} .dark .sh .n{color:var(--brass);}
+  .lede{max-width:680px; font-size:15px; line-height:1.65; opacity:.82; margin-bottom:32px;}
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1);}
+  .reveal.vis{opacity:1; transform:translateY(0);}
+
+  /* flow diagram */
+  .flow{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .fstep{background:var(--green); color:var(--beige); padding:28px 24px; position:relative;}
+  .fstep .i{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--brass); letter-spacing:.08em; margin-bottom:14px;}
+  .fstep h4{font-family:'Fraunces',serif; font-size:18px; font-weight:500; margin-bottom:10px;}
+  .fstep p{font-size:12.5px; line-height:1.6; opacity:.75;}
+  .fstep .arrow{position:absolute; right:-9px; top:50%; transform:translateY(-50%); color:var(--signal); font-size:14px; z-index:2;}
+
+  /* unit ladder */
+  .ladder{display:grid; gap:2px;}
+  .rung{display:grid; grid-template-columns:180px 1fr 130px; gap:22px; align-items:center; padding:16px 0; border-bottom:1px solid var(--line-dark);}
+  .rung .nm{font-size:14px; font-weight:500;}
+  .rung .nm small{display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--clay); font-weight:400; margin-top:3px;}
+  .track{height:20px; background:rgba(61,69,53,.08);}
+  .fill{height:100%; background:var(--signal); width:0; transition:width 1.2s cubic-bezier(.2,.8,.3,1);}
+  .fill.brass{background:var(--brass);}
+  .rung .val{font-family:'IBM Plex Mono',monospace; font-size:13px; text-align:right;}
+  .rung .val em{font-style:normal; opacity:.45; font-size:11px;}
+
+  /* estimator */
+  .model{display:grid; grid-template-columns:340px 1fr; gap:50px; align-items:start;}
+  .controls{border:1px solid var(--line); padding:28px 26px;}
+  .ctl{margin-bottom:24px;} .ctl:last-child{margin-bottom:0;}
+  .ctl label{display:flex; justify-content:space-between; align-items:baseline; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; margin-bottom:10px; color:var(--brass);}
+  .ctl label b{font-weight:500; color:var(--signal); font-size:14px;}
+  input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:2px; background:rgba(255,240,220,.25); outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:14px; height:14px; background:var(--signal); cursor:pointer; border:none;}
+  input[type=range]::-moz-range-thumb{width:14px; height:14px; background:var(--signal); cursor:pointer; border:none; border-radius:0;}
+  input[type=range]:focus-visible{outline:2px solid var(--brass); outline-offset:6px;}
+  .presets{display:flex; gap:8px; margin-top:24px; flex-wrap:wrap;}
+  .presets button{background:none; border:1px solid var(--brass); color:var(--brass); font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; padding:7px 12px; cursor:pointer; transition:background .25s,color .25s;}
+  .presets button:hover,.presets button.on{background:var(--brass); color:var(--green);}
+  .outputs{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .out{background:var(--green); padding:26px 24px;}
+  .out .k{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-bottom:12px;}
+  .out .v{font-family:'IBM Plex Mono',monospace; font-size:31px; color:var(--signal); line-height:1; font-variant-numeric:tabular-nums;}
+  .out .v .suf{font-size:14px; opacity:.7; margin-left:3px;}
+  .out .sub{font-size:12px; opacity:.68; margin-top:11px; line-height:1.55;}
+
+  /* cards */
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .mgrid.two-up{grid-template-columns:repeat(2,1fr);}
+  .mcard{border:1px solid var(--line-dark); padding:26px 24px; transition:transform .35s, box-shadow .35s;}
+  .mcard:hover{transform:translateY(-5px); box-shadow:0 18px 36px -22px rgba(61,69,53,.4);}
+  .dark .mcard{border-color:var(--line);}
+  .mcard .top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:14px;}
+  .mcard h4{font-family:'Fraunces',serif; font-size:16px; font-weight:500;}
+  .mcard .big{font-family:'IBM Plex Mono',monospace; font-size:33px; color:var(--signal); line-height:1; font-variant-numeric:tabular-nums;}
+  .mcard .big .suf{font-size:14px; opacity:.7;}
+  .mcard p{font-size:12.5px; line-height:1.6; opacity:.75; margin-top:12px;}
+  .mcard .assume{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--clay); margin-top:13px; padding-top:12px; border-top:1px dashed var(--line-dark); line-height:1.6;}
+  .dark .mcard .assume{color:var(--brass); border-color:rgba(180,154,99,.3);}
+  .tg2{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; padding:3px 7px; border:1px solid currentColor;}
+  .t-m{color:var(--signal);} .t-d{color:var(--brass);} .t-x{color:var(--clay);}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  thead th{text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--clay); padding:0 12px 12px; border-bottom:1px solid var(--brass); font-weight:500;}
+  tbody td{padding:15px 12px; border-bottom:1px solid var(--line-dark); vertical-align:top;}
+  tbody tr{transition:background .25s;}
+  tbody tr td:first-child{border-left:2px solid transparent; transition:border-color .25s;}
+  tbody tr:hover{background:rgba(122,154,82,.07);}
+  tbody tr:hover td:first-child{border-left-color:var(--signal);}
+  .pill{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:4px 8px; border:1px solid currentColor;}
+  .pv{color:var(--signal);} .pp{color:var(--clay); opacity:.8;} .pn{color:var(--brass);}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .note{font-size:12px; color:var(--clay); margin-top:14px; font-style:italic; line-height:1.65;}
+  .dark .note{color:var(--brass);}
+
+  .callout{border:1px solid var(--brass); padding:28px; font-family:'Fraunces',serif; font-size:18px; line-height:1.55; font-style:italic;}
+  .callout .at{font-family:'IBM Plex Mono',monospace; font-style:normal; font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--clay); margin-top:15px; display:block;}
+  .dark .callout .at{color:var(--brass);}
+  .mlist{list-style:none;}
+  .mlist li{padding:15px 0; border-bottom:1px solid var(--line-dark); font-size:14px; line-height:1.6; display:flex; gap:15px; transition:padding-left .3s;}
+  .mlist li:hover{padding-left:8px;}
+  .mlist li::before{content:'—'; color:var(--signal); flex-shrink:0;}
+  .two{display:grid; grid-template-columns:1.12fr .88fr; gap:50px; align-items:start;}
+
+  /* open questions */
+  .q{border-left:2px solid var(--clay); padding:18px 0 18px 24px; margin-bottom:22px;}
+  .q h4{font-family:'Fraunces',serif; font-size:17px; font-weight:500; margin-bottom:8px;}
+  .q p{font-size:13.5px; line-height:1.65; opacity:.8;}
+
+  footer{background:var(--green); color:var(--beige); padding:52px 0; border-top:1px solid var(--line);}
+  .frow{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px;}
+  footer h3{font-family:'Fraunces',serif; font-size:21px; font-weight:500; max-width:480px; line-height:1.45;}
+  footer .meta{font-family:'IBM Plex Mono',monospace; font-size:11.5px; opacity:.7; text-align:right; line-height:1.85;}
+
+  @media (max-width:900px){
+    .navlinks{display:none;} .strip{grid-template-columns:repeat(2,1fr);}
+    .flow{grid-template-columns:1fr;} .fstep .arrow{display:none;}
+    .mgrid,.mgrid.two-up{grid-template-columns:1fr;}
+    .model{grid-template-columns:1fr;} .outputs{grid-template-columns:1fr;}
+    .two{grid-template-columns:1fr;} .rung{grid-template-columns:1fr; gap:8px;} .rung .val{text-align:left;}
+    h1{font-size:30px;} .wrap{padding:0 20px;}
+    thead th:nth-child(3),tbody td:nth-child(3){display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="noise"></div><div id="progress"></div>
+
+<div class="concept">Concept — not built, not offered, not a financial product · every figure illustrative · nothing here is a return you can rely on</div>
+
+<nav id="nav">
+  <div class="wordmark">YIELD <span>Ecological Registry</span></div>
+  <div class="navlinks">
+    <a href="#how">How it works</a><a href="#units">Units</a><a href="#estimator">Estimator</a>
+    <a href="#integrity">Integrity</a><a href="#open">Open questions</a>
+  </div>
+  <div class="toggle"><button class="on" data-v="steward">Steward view</button><button data-v="sponsor">Sponsor view</button></div>
+</nav>
+
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="eyebrow"><span class="live-dot"></span>Economic activation layer — concept</div>
+    <h1>The garden already does the work. <em>YIELD is the question of who pays for it.</em></h1>
+    <p>A registered garden holds water, carries a corridor, shelters fauna and builds soil — services a city would otherwise fund through infrastructure. YIELD asks whether the households doing that work can be paid for it, by the organisations that need the outcome. This portal sets out how that could function, and where it might not.</p>
+    <div class="strip">
+      <div class="stat"><div class="num" data-count="15">0</div><div class="label">Verified gardens — the current supply side</div></div>
+      <div class="stat"><div class="num" data-count="44">0</div><div class="label">Average score across the network</div></div>
+      <div class="stat"><div class="num" data-count="0">0</div><div class="label">Sponsors contracted to date</div></div>
+      <div class="stat"><div class="num" data-count="0">0</div><div class="label">Dollars paid to stewards to date</div></div>
+    </div>
+  </div>
+</div>
+
+<section id="how" class="reveal">
+  <div class="wrap">
+    <div class="sh"><h2>How it would work</h2><div class="n">Four parties, one ledger</div></div>
+    <p class="lede">YIELD does not create a new measurement. It attaches a payment to a measurement that already exists — the verified Registry score, produced independently of anyone buying anything. That separation is the whole design: the assessor never knows what a garden is worth to a sponsor.</p>
+
+    <div class="flow" style="background:var(--line)">
+      <div class="fstep"><div class="i">01</div><h4>Garden is verified</h4><p>An independent site assessment produces a score across five pillars. This happens whether or not YIELD exists, and is never adjusted for value.</p><span class="arrow">→</span></div>
+      <div class="fstep"><div class="i">02</div><h4>Function becomes units</h4><p>Verified ecological function converts to units on a published, fixed conversion. Units track the garden's actual condition, and fall if it declines.</p><span class="arrow">→</span></div>
+      <div class="fstep"><div class="i">03</div><h4>A sponsor contracts</h4><p>A council, developer, water authority or corporate program contracts units against a stated obligation or commitment. Contracts are multi-year.</p><span class="arrow">→</span></div>
+      <div class="fstep"><div class="i">04</div><h4>The steward is paid</h4><p>Payment flows to the household holding the garden, on condition of continued verification. Non-verification stops payment.</p></div>
+    </div>
+
+    <div class="mgrid" style="margin-top:44px">
+      <div class="mcard"><div class="top"><h4>Who holds the risk</h4><span class="tg2 t-x">Design intent</span></div>
+        <p>The steward is paid for condition maintained, not for a promise. If a garden's verified score falls, units fall with it — the ledger has no mechanism to pay for function that is not there.</p></div>
+      <div class="mcard"><div class="top"><h4>What a sponsor buys</h4><span class="tg2 t-x">Design intent</span></div>
+        <p>A contracted claim on verified private-land ecological function, in a named locality, auditable to individual properties, with a documented methodology behind it.</p></div>
+      <div class="mcard"><div class="top"><h4>What G&amp;S takes</h4><span class="tg2 t-x">Undecided</span></div>
+        <p>A platform margin on contracted units, structured so the Registry earns from throughput rather than from any garden scoring higher. The rate is not set.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="units" class="alt reveal">
+  <div class="wrap">
+    <div class="sh"><h2>What generates a unit</h2><div class="n">Illustrative conversion</div></div>
+    <p class="lede">Units derive from the same five pillars that produce the score — no separate assessment, no parallel methodology. The weighting shown here is a working sketch: it deliberately favours the functions a sponsor can point to in a report and a steward can actually influence.</p>
+
+    <div class="ladder">
+      <div class="rung"><div class="nm">Canopy and structure<small>Mature crown · vertical layers</small></div>
+        <div class="track"><div class="fill" data-pct="82"></div></div><div class="val">High <em>weight</em></div></div>
+      <div class="rung"><div class="nm">Water retained<small>Soil sponge · basins · infiltration</small></div>
+        <div class="track"><div class="fill" data-pct="74"></div></div><div class="val">High <em>weight</em></div></div>
+      <div class="rung"><div class="nm">Indigenous composition<small>Species belonging to the property's EVC</small></div>
+        <div class="track"><div class="fill" data-pct="68"></div></div><div class="val">Med-high <em>weight</em></div></div>
+      <div class="rung"><div class="nm">Habitat complexity<small>Nodes · logs · rocks · water features</small></div>
+        <div class="track"><div class="fill" data-pct="55"></div></div><div class="val">Medium <em>weight</em></div></div>
+      <div class="rung"><div class="nm">Corridor position<small>Adjacency to parks and registered neighbours</small></div>
+        <div class="track"><div class="fill brass" data-pct="48"></div></div><div class="val">Multiplier</div></div>
+    </div>
+    <div class="note"><span class="tg2 t-x">Modelled</span> Weightings are a working sketch, not a published conversion. Corridor position operates as a multiplier rather than an additive term because connectivity value is relational — a garden's contribution depends on what sits around it. This is the part of the design most likely to change.</div>
+  </div>
+</section>
+
+<section id="estimator" class="dark reveal">
+  <div class="wrap">
+    <div class="sh"><h2>Estimator</h2><div class="n">Interactive — every assumption exposed</div></div>
+    <p class="lede">This is the only honest way to show YIELD economics: as a sensitivity model with no fixed price in it. The unit rate is the single most uncertain input in the entire concept, so it sits on a slider rather than in a headline. Move it and see the whole proposition change.</p>
+
+    <div class="model">
+      <div class="controls">
+        <div class="ctl"><label>Garden score <b id="lScore">62</b></label>
+          <input type="range" id="sScore" min="20" max="100" value="62" step="1" aria-label="Garden score"></div>
+        <div class="ctl"><label>Garden area <b id="lArea">420 m²</b></label>
+          <input type="range" id="sArea" min="80" max="1200" value="420" step="10" aria-label="Garden area"></div>
+        <div class="ctl"><label>Corridor multiplier <b id="lCorr">1.2×</b></label>
+          <input type="range" id="sCorr" min="100" max="200" value="120" step="5" aria-label="Corridor multiplier"></div>
+        <div class="ctl"><label>Unit rate — unknown <b id="lRate">$0.55</b></label>
+          <input type="range" id="sRate" min="10" max="300" value="55" step="5" aria-label="Unit rate in dollars"></div>
+        <div class="ctl"><label>Contract term <b id="lTerm">5 yrs</b></label>
+          <input type="range" id="sTerm" min="1" max="25" value="5" step="1" aria-label="Contract term in years"></div>
+        <div class="ctl"><label>Platform margin <b id="lMar">15%</b></label>
+          <input type="range" id="sMar" min="0" max="40" value="15" step="1" aria-label="Platform margin percentage"></div>
+        <div class="presets">
+          <button data-s="32" data-a="250" class="">Habitat garden</button>
+          <button data-s="62" data-a="420" class="on">Ecological garden</button>
+          <button data-s="94" data-a="700">Biodiversity node</button>
+        </div>
+      </div>
+
+      <div class="outputs">
+        <div class="out"><div class="k">Units generated</div><div class="v"><span id="oUnits">1,562</span></div>
+          <div class="sub">Annual units from verified function, before any price is attached. This figure exists whether or not a sponsor ever contracts it.</div></div>
+        <div class="out"><div class="k">Illustrative annual payment</div><div class="v">$<span id="oAnnual">730</span></div>
+          <div class="sub">To the steward, net of platform margin, at the unit rate set on the left. Not an offer, not a forecast, not a rate anyone has agreed to.</div></div>
+        <div class="out"><div class="k">Over the contract term</div><div class="v">$<span id="oTotal">3,650</span></div>
+          <div class="sub">Assumes verified condition is held for the full term. A score decline reduces units and therefore payment.</div></div>
+        <div class="out"><div class="k">Against installation cost</div><div class="v"><span id="oPct">—</span><span class="suf">%</span></div>
+          <div class="sub">Share of a <span id="oInstall">$25,000</span> ecological garden installation recovered across the term. This is the number that decides whether YIELD changes anyone's behaviour.</div></div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:24px">
+      <span class="tg2 t-x">Modelled</span> Units computed as score × area ÷ 10 × corridor multiplier. Installation baseline fixed at $25,000 for comparison only. No sponsor has contracted units at any price; the rate slider spans a range chosen to show sensitivity, not to suggest a market. If the recovery percentage looks too small to motivate a household, that is a real finding about the concept, not a display error.
+    </div>
+  </div>
+</section>
+
+<section id="integrity" class="reveal">
+  <div class="wrap">
+    <div class="sh"><h2>What stops this being greenwashing</h2><div class="n">Integrity constraints</div></div>
+    <p class="lede">Every voluntary environmental market has been damaged by the same failures: unverifiable claims, additionality that was never real, and measurement paid for by the party who benefits from a high number. YIELD is only worth building if it is designed against those failures from the start.</p>
+    <div class="two">
+      <ul class="mlist">
+        <li>Measurement is separated from sale. The verified score is produced by an assessment process that has no visibility of what a garden is worth to any sponsor, and no figure is ever reverse-engineered to reach a target.</li>
+        <li>Payment is conditional on re-verification, not on a one-off assessment. Function that lapses stops earning.</li>
+        <li>Self-reported gardens generate no units under any circumstances. Only site-visit-verified condition enters the ledger.</li>
+        <li>Units are not offsets and must not be sold as a licence to damage elsewhere. If sponsors want offsets, this is the wrong instrument and they should be told so.</li>
+        <li>Additionality is the unresolved problem, stated plainly: paying for a garden that would have existed anyway buys nothing real. Any credible version of YIELD needs a defensible answer here, and does not yet have one.</li>
+        <li>The methodology is published, versioned, and open to being audited against Accounting for Nature's framework. A ledger nobody can inspect is worth nothing.</li>
+      </ul>
+      <div>
+        <div class="callout">The inputs are the truth, the score is the consequence — and the price is a separate conversation that must never reach back into either.<span class="at">The constraint YIELD has to hold</span></div>
+        <div class="mcard" style="margin-top:26px"><div class="top"><h4>Sequence</h4><span class="tg2 t-m">Current position</span></div>
+          <p>The honest revenue order is Steward Review first, council pilot second, YIELD at scale third. YIELD sits furthest out deliberately — it needs a verified ledger of real depth and institutional citation behind it before any payment mechanism is credible. Building it early would discredit the ledger it depends on.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="open" class="alt reveal">
+  <div class="wrap">
+    <div class="sh"><h2>Open questions</h2><div class="n">Unresolved by design</div></div>
+    <p class="lede">These are the questions that decide whether YIELD is a real instrument or a nice idea. They are listed here rather than hidden because a concept that only shows its strengths is not a concept, it is a pitch.</p>
+
+    <div class="mgrid two-up">
+      <div>
+        <div class="q"><h4>Who actually pays, and under what obligation?</h4>
+          <p>Voluntary corporate spend is fragile and first to be cut. Obligation-driven demand — offset requirements, water authority targets, developer conditions — is durable but brings regulatory scrutiny this methodology has not yet faced.</p></div>
+        <div class="q"><h4>Can additionality be demonstrated?</h4>
+          <p>Most registered gardens were built because their owners wanted them, not because of a payment. Paying for what would have happened anyway is the failure mode that has discredited every market like this one.</p></div>
+        <div class="q"><h4>Is the payment large enough to matter?</h4>
+          <p>Run the estimator at any plausible rate. If a household recovers a small fraction of installation cost over five years, YIELD is recognition rather than incentive — which may still be worth building, but is a different product.</p></div>
+      </div>
+      <div>
+        <div class="q"><h4>What happens when a property sells?</h4>
+          <p>Contracts run for years; households move sooner. Either the obligation travels with the title, or the ledger accepts churn — both have consequences for what a sponsor is actually buying.</p></div>
+        <div class="q"><h4>Who verifies at scale?</h4>
+          <p>A ledger verified by the same studio that designs and installs the gardens cannot support a payment mechanism. Independent verification capacity is a precondition, not a later refinement.</p></div>
+        <div class="q"><h4>Does the money change the gardens?</h4>
+          <p>The moment function has a price, the incentive to optimise for the metric rather than the ecology appears. Every scoring pillar becomes a target, and targets distort. This one has no clean solution.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><div class="frow">
+    <h3>A concept portal, published to be argued with. Nothing here has been built, contracted, or offered to anyone.</h3>
+    <div class="meta">Gardener &amp; Son<br>140 Auburn Road, Hawthorn<br>ecologicalregistry.org</div>
+  </div></div>
+</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const nf = n => n.toLocaleString('en-AU');
+
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  $('#progress').style.width = (h.scrollTop/(h.scrollHeight-h.clientHeight)*100) + '%';
+  $('#nav').classList.toggle('scrolled', h.scrollTop > 40);
+}, {passive:true});
+
+const rio = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('vis'); rio.unobserve(e.target); }
+}), {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => rio.observe(el));
+
+const done = new WeakSet();
+const cio = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting || done.has(e.target)) return;
+  done.add(e.target);
+  const el = e.target, target = +el.dataset.count;
+  const suf = el.querySelector('.suf'), sufHTML = suf ? suf.outerHTML : '';
+  const t0 = performance.now();
+  (function tick(now){
+    const p = Math.min(1,(now-t0)/1200), k = 1-Math.pow(1-p,3);
+    el.innerHTML = nf(Math.round(k*target)) + sufHTML;
+    if (p<1) requestAnimationFrame(tick);
+  })(t0);
+}), {threshold:.6});
+document.querySelectorAll('.num[data-count]').forEach(n => cio.observe(n));
+
+const bio = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.style.width = e.target.dataset.pct + '%'; bio.unobserve(e.target); }
+}), {threshold:.4});
+document.querySelectorAll('.fill').forEach(f => bio.observe(f));
+
+/* view toggle — reframes copy, same ledger */
+const copy = {
+  steward: {
+    h1: 'The garden already does the work. <em>YIELD is the question of who pays for it.</em>',
+    p: 'A registered garden holds water, carries a corridor, shelters fauna and builds soil — services a city would otherwise fund through infrastructure. YIELD asks whether the households doing that work can be paid for it, by the organisations that need the outcome. This portal sets out how that could function, and where it might not.'
+  },
+  sponsor: {
+    h1: 'Private land is where the ecological function is. <em>YIELD is how you contract it.</em>',
+    p: 'Councils, water authorities and corporate programs need verified ecological outcomes in named localities. Most of the available land is privately held and currently unmeasured. YIELD is a route to contract verified function on that land — auditable to individual properties, against a published methodology.'
+  }
+};
+document.querySelectorAll('.toggle button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.toggle button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  const c = copy[b.dataset.v];
+  document.querySelector('h1').innerHTML = c.h1;
+  document.querySelector('.hero p').textContent = c.p;
+}));
+
+/* estimator */
+const S = {s:'#sScore', a:'#sArea', c:'#sCorr', r:'#sRate', t:'#sTerm', m:'#sMar'};
+const INSTALL = 25000;
+function compute(){
+  const sc = +$(S.s).value, ar = +$(S.a).value, co = +$(S.c).value/100,
+        rt = +$(S.r).value/100, tm = +$(S.t).value, mr = +$(S.m).value/100;
+
+  $('#lScore').textContent = sc;
+  $('#lArea').textContent = nf(ar) + ' m²';
+  $('#lCorr').textContent = co.toFixed(2) + '×';
+  $('#lRate').textContent = '$' + rt.toFixed(2);
+  $('#lTerm').textContent = tm + (tm === 1 ? ' yr' : ' yrs');
+  $('#lMar').textContent = Math.round(mr*100) + '%';
+
+  const units = Math.round(sc * ar / 10 * co);
+  const gross = units * rt;
+  const annual = gross * (1 - mr);
+  const total = annual * tm;
+
+  $('#oUnits').textContent = nf(units);
+  $('#oAnnual').textContent = nf(Math.round(annual));
+  $('#oTotal').textContent = nf(Math.round(total));
+  $('#oPct').textContent = (total / INSTALL * 100).toFixed(1);
+  $('#oInstall').textContent = '$' + nf(INSTALL);
+}
+Object.values(S).forEach(sel => $(sel).addEventListener('input', () => {
+  document.querySelectorAll('.presets button').forEach(x => x.classList.remove('on'));
+  compute();
+}));
+document.querySelectorAll('.presets button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.presets button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  $(S.s).value = b.dataset.s; $(S.a).value = b.dataset.a;
+  compute();
+}));
+compute();
+</script>
+</body>
+</html>
