@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecological Registry — City of Boroondara Intelligence Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#3d4535; --beige:#fff0dc; --signal:#7C9A52; --brass:#B49A63; --clay:#9A6A4F;
+    --line: rgba(255,240,220,0.16); --line-dark: rgba(61,69,53,0.14);
+    --panel:#2b3227;
+  }
+  *{box-sizing:border-box; border-radius:0 !important; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--beige); color:var(--green); font-family:'IBM Plex Sans',sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+  .noise{position:fixed; inset:0; pointer-events:none; opacity:0.035; z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .wrap{max-width:1140px; margin:0 auto; padding:0 32px;}
+  #progress{position:fixed; top:0; left:0; height:2px; background:var(--signal); z-index:60; width:0%;}
+
+  nav{position:sticky; top:0; z-index:50; background:rgba(255,240,220,0.9); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line-dark); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; transition:padding .3s ease, box-shadow .3s ease;}
+  nav.scrolled{padding:12px 32px; box-shadow:0 10px 26px -16px rgba(61,69,53,.3);}
+  .wordmark{font-family:'Abril Fatface',serif; font-size:19px;}
+  .wordmark span{font-style:italic; color:var(--signal); font-family:'Fraunces',serif;}
+  .navlinks{display:flex; gap:22px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;}
+  .navlinks a{text-decoration:none; color:var(--green); opacity:.6; transition:opacity .2s, color .2s;}
+  .navlinks a:hover{opacity:1; color:var(--signal);}
+  .live-dot{width:7px;height:7px;background:var(--signal);border-radius:50%!important;display:inline-block;animation:pd 1.8s ease-in-out infinite;}
+  @keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(124,154,82,.5);}50%{opacity:.5;box-shadow:0 0 0 6px rgba(124,154,82,0);}}
+
+  .marquee{background:var(--green); color:var(--beige); overflow:hidden; white-space:nowrap;}
+  .mt{display:inline-block; padding-left:100%; animation:sl 38s linear infinite;}
+  .marquee span{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.09em; text-transform:uppercase; padding:10px 0;}
+  .marquee span::after{content:'◆'; color:var(--signal); margin:0 26px; font-size:8px; vertical-align:middle;}
+  @keyframes sl{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+  .hero{background:var(--green); color:var(--beige); padding:84px 0 0; position:relative; overflow:hidden;}
+  .glow{position:absolute; top:-200px; right:-180px; width:560px; height:560px; border-radius:50%!important;
+    background:radial-gradient(circle, rgba(124,154,82,.26) 0%, rgba(124,154,82,0) 70%);}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--signal); margin-bottom:20px; display:flex; align-items:center; gap:10px;}
+  h1{font-family:'Fraunces',serif; font-weight:500; font-size:47px; line-height:1.14; max-width:790px; margin-bottom:20px; position:relative;}
+  h1 em{font-style:italic; color:var(--signal);}
+  .hero p{max-width:600px; font-size:16.5px; line-height:1.65; opacity:.85; position:relative;}
+  .strip{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line); margin-top:56px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .stat{padding:26px 6px 22px; transition:background .3s;}
+  .stat:hover{background:rgba(124,154,82,.08);}
+  .stat .num{font-family:'IBM Plex Mono',monospace; font-size:36px; font-weight:500; color:var(--signal); line-height:1; font-variant-numeric:tabular-nums;}
+  .stat .num .suf{font-size:16px; opacity:.7;}
+  .stat .label{font-size:11.5px; margin-top:10px; opacity:.75; line-height:1.45; max-width:170px;}
+
+  .pulse{background:var(--panel); border:1px solid rgba(124,154,82,.32);}
+  .ph{display:flex; align-items:center; justify-content:space-between; padding:14px 22px; border-bottom:1px solid rgba(124,154,82,.22);}
+  .ph .t{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--signal); display:flex; align-items:center; gap:9px;}
+  .ph .tg{font-family:'IBM Plex Mono',monospace; font-size:10px; color:rgba(255,240,220,.4); letter-spacing:.06em;}
+  .pb{height:150px; overflow:hidden; padding:4px 22px; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .pr{display:flex; gap:14px; padding:6px 0; color:rgba(255,240,220,.85); opacity:0; transform:translateY(6px); animation:ri .5s ease forwards; border-bottom:1px dashed rgba(255,240,220,.06);}
+  @keyframes ri{to{opacity:1;transform:translateY(0)}}
+  .pr .tm{color:rgba(255,240,220,.4); width:62px; flex-shrink:0;}
+  .pr .ev{color:var(--signal); flex-shrink:0;}
+  .pr .lc{color:rgba(255,240,220,.55);}
+
+  .prov-bar{background:var(--beige); border-bottom:1px solid var(--line-dark); padding:26px 0;}
+  .prov-grid{display:grid; grid-template-columns:auto repeat(3,1fr); gap:28px; align-items:center;}
+  .prov-title{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--clay); max-width:110px; line-height:1.5;}
+  .prov-item{display:flex; gap:12px; align-items:flex-start;}
+  .prov-item .sw{width:10px; height:10px; margin-top:4px; flex-shrink:0;}
+  .prov-item strong{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.07em; text-transform:uppercase; display:block; margin-bottom:4px;}
+  .prov-item p{font-size:12.5px; line-height:1.5; opacity:.75;}
+  .sw-m{background:var(--signal);} .sw-d{background:var(--brass);} .sw-x{background:var(--clay);}
+
+  .tg2{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; padding:3px 7px; border:1px solid currentColor; vertical-align:middle;}
+  .t-m{color:var(--signal);} .t-d{color:var(--brass);} .t-x{color:var(--clay);}
+
+  section{padding:78px 0;}
+  .alt{background:rgba(124,154,82,.05); border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);}
+  .dark{background:var(--green); color:var(--beige);}
+  .sh{display:flex; align-items:baseline; justify-content:space-between; gap:24px; margin-bottom:38px; border-bottom:1px solid var(--brass); padding-bottom:16px; flex-wrap:wrap;}
+  .sh h2{font-family:'Fraunces',serif; font-weight:500; font-size:27px;}
+  .sh .n{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--clay); letter-spacing:.08em; text-transform:uppercase;}
+  .dark .sh{border-color:rgba(180,154,99,.5);}
+  .dark .sh .n{color:var(--brass);}
+  .lede{max-width:660px; font-size:15px; line-height:1.65; opacity:.82; margin-bottom:34px;}
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);}
+  .reveal.vis{opacity:1; transform:translateY(0);}
+
+  .pil{display:grid; grid-template-columns:220px 1fr 96px; gap:20px; align-items:center; padding:15px 0; border-bottom:1px solid var(--line-dark);}
+  .pil .nm{font-size:14px; font-weight:500;}
+  .pil .nm small{display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--clay); font-weight:400; margin-top:3px;}
+  .track{height:22px; background:rgba(61,69,53,.08); position:relative;}
+  .fill{height:100%; background:var(--signal); width:0; transition:width 1.2s cubic-bezier(.2,.8,.3,1);}
+  .fill.brass{background:var(--brass);}
+  .pil .val{font-family:'IBM Plex Mono',monospace; font-size:13px; text-align:right;}
+  .pil .val em{font-style:normal; opacity:.45; font-size:11px;}
+
+  .stack{display:flex; height:56px; border:1px solid var(--line-dark); overflow:hidden;}
+  .seg{display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--beige); transition:flex-basis 1s cubic-bezier(.2,.8,.3,1); flex-grow:0; flex-shrink:0; flex-basis:0; overflow:hidden; white-space:nowrap;}
+  .seg-i{background:var(--signal);} .seg-n{background:var(--brass);} .seg-e{background:rgba(61,69,53,.35);}
+  .stack-key{display:flex; gap:26px; margin-top:16px; flex-wrap:wrap; font-size:12.5px;}
+  .stack-key i{display:inline-block; width:11px; height:11px; margin-right:8px; vertical-align:middle; font-style:normal;}
+
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .mcard{border:1px solid var(--line-dark); padding:26px 24px; transition:transform .35s, box-shadow .35s;}
+  .mcard:hover{transform:translateY(-5px); box-shadow:0 18px 36px -22px rgba(61,69,53,.4);}
+  .dark .mcard{border-color:var(--line);}
+  .mcard .top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:16px;}
+  .mcard h4{font-family:'Fraunces',serif; font-size:16px; font-weight:500;}
+  .mcard .big{font-family:'IBM Plex Mono',monospace; font-size:34px; color:var(--signal); line-height:1; font-variant-numeric:tabular-nums;}
+  .mcard .big .suf{font-size:15px; opacity:.7;}
+  .mcard p{font-size:12.5px; line-height:1.6; opacity:.75; margin-top:12px;}
+  .mcard .assume{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--clay); margin-top:14px; padding-top:12px; border-top:1px dashed var(--line-dark); line-height:1.6;}
+  .dark .mcard .assume{color:var(--brass); border-color:rgba(180,154,99,.3);}
+
+  .mapwrap{border:1px solid var(--line-dark); background:var(--panel); padding:40px;}
+  .mapwrap svg{width:100%; height:320px; display:block;}
+  .ring{animation:rp 2.8s ease-out infinite;}
+  .r2{animation-delay:.7s}.r3{animation-delay:1.4s}.r4{animation-delay:2.1s}
+  @keyframes rp{0%{opacity:.55;r:5}100%{opacity:0;r:24}}
+  .maplegend{display:flex; gap:26px; margin-top:20px; font-size:12px; opacity:.85; flex-wrap:wrap; color:var(--beige);}
+  .maplegend i{display:inline-block; width:10px; height:10px; border-radius:50%!important; margin-right:8px; vertical-align:middle; font-style:normal;}
+
+  .model{display:grid; grid-template-columns:340px 1fr; gap:52px; align-items:start;}
+  .controls{border:1px solid var(--line); padding:28px 26px;}
+  .ctl{margin-bottom:24px;}
+  .ctl:last-child{margin-bottom:0;}
+  .ctl label{display:flex; justify-content:space-between; align-items:baseline; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; margin-bottom:10px; color:var(--brass);}
+  .ctl label b{font-weight:500; color:var(--signal); font-size:14px;}
+  input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:2px; background:rgba(255,240,220,.25); outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:14px; height:14px; background:var(--signal); cursor:pointer; border:none;}
+  input[type=range]::-moz-range-thumb{width:14px; height:14px; background:var(--signal); cursor:pointer; border:none; border-radius:0;}
+  input[type=range]:focus-visible{outline:2px solid var(--brass); outline-offset:6px;}
+  .presets{display:flex; gap:8px; margin-top:24px; flex-wrap:wrap;}
+  .presets button{background:none; border:1px solid var(--brass); color:var(--brass); font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; padding:7px 12px; cursor:pointer; transition:background .25s, color .25s;}
+  .presets button:hover, .presets button.on{background:var(--brass); color:var(--green);}
+  .outputs{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .out{background:var(--green); padding:26px 24px;}
+  .out .k{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--brass); margin-bottom:12px;}
+  .out .v{font-family:'IBM Plex Mono',monospace; font-size:32px; color:var(--signal); line-height:1; font-variant-numeric:tabular-nums;}
+  .out .v .suf{font-size:14px; opacity:.7; margin-left:3px;}
+  .out .sub{font-size:12px; opacity:.68; margin-top:11px; line-height:1.55;}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  thead th{text-align:left; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--clay); padding:0 12px 12px; border-bottom:1px solid var(--brass); font-weight:500;}
+  tbody td{padding:14px 12px; border-bottom:1px solid var(--line-dark); vertical-align:top;}
+  tbody tr{transition:background .25s;}
+  tbody tr td:first-child{border-left:2px solid transparent; transition:border-color .25s;}
+  tbody tr:hover{background:rgba(122,154,82,.07);}
+  tbody tr:hover td:first-child{border-left-color:var(--signal);}
+  .pill{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:4px 8px; border:1px solid currentColor;}
+  .pv{color:var(--signal);} .pp{color:var(--clay); opacity:.75;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .note{font-size:12px; color:var(--clay); margin-top:14px; font-style:italic; line-height:1.65;}
+  .dark .note{color:var(--brass);}
+
+  .callout{border:1px solid var(--brass); padding:28px; font-family:'Fraunces',serif; font-size:18px; line-height:1.55; font-style:italic;}
+  .callout .at{font-family:'IBM Plex Mono',monospace; font-style:normal; font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--clay); margin-top:16px; display:block;}
+  .dark .callout .at{color:var(--brass);}
+
+  .mlist{list-style:none;}
+  .mlist li{padding:15px 0; border-bottom:1px solid var(--line-dark); font-size:14px; line-height:1.6; display:flex; gap:15px; transition:padding-left .3s;}
+  .mlist li:hover{padding-left:8px;}
+  .mlist li::before{content:'—'; color:var(--signal); flex-shrink:0;}
+  .two{display:grid; grid-template-columns:1.15fr .85fr; gap:52px; align-items:start;}
+
+  footer{background:var(--green); color:var(--beige); padding:54px 0; border-top:1px solid var(--line);}
+  .frow{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px;}
+  footer h3{font-family:'Fraunces',serif; font-size:21px; font-weight:500; max-width:440px; line-height:1.45;}
+  footer .meta{font-family:'IBM Plex Mono',monospace; font-size:11.5px; opacity:.7; text-align:right; line-height:1.85;}
+
+  @media (max-width:900px){
+    .navlinks{display:none;}
+    .strip{grid-template-columns:repeat(2,1fr);}
+    .prov-grid{grid-template-columns:1fr; gap:18px;}
+    .mgrid{grid-template-columns:1fr;}
+    .model{grid-template-columns:1fr;}
+    .outputs{grid-template-columns:1fr;}
+    .two{grid-template-columns:1fr;}
+    .pil{grid-template-columns:1fr; gap:8px;}
+    .pil .val{text-align:left;}
+    h1{font-size:31px;}
+    .wrap{padding:0 20px;}
+    thead th:nth-child(3), tbody td:nth-child(3){display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="noise"></div><div id="progress"></div>
+
+<nav id="nav">
+  <div class="wordmark">Ecological <span>Registry</span></div>
+  <div class="navlinks">
+    <a href="#cohort">Cohort</a><a href="#composition">Composition</a><a href="#canopy">Canopy &amp; water</a>
+    <a href="#corridor">Corridor</a><a href="#model">Scaling model</a><a href="#method">Method</a>
+  </div>
+</nav>
+
+<div class="marquee"><div class="mt">
+  <span>9 gardens registered in Boroondara</span><span>143 species documented</span><span>Accounting for Nature aligned methodology</span>
+  <span>Single canonical scoring engine</span><span>Every figure provenance tagged</span>
+  <span>9 gardens registered in Boroondara</span><span>143 species documented</span><span>Accounting for Nature aligned methodology</span>
+  <span>Single canonical scoring engine</span><span>Every figure provenance tagged</span>
+</div></div>
+
+<div class="hero">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="eyebrow"><span class="live-dot"></span>City of Boroondara — intelligence briefing — 14 August 2026</div>
+    <h1>Private gardens are the largest untapped ecological asset in Boroondara. <em>Nine of them are already measured.</em></h1>
+    <p>This briefing sets out what the Registry currently holds for the municipality, what can be derived from it, and what it projects at scale — with every figure tagged by how it was obtained. Nothing here is presented as measured unless it was.</p>
+    <div class="strip">
+      <div class="stat"><div class="num" data-count="9">0</div><div class="label">Registered gardens in Boroondara</div></div>
+      <div class="stat"><div class="num" data-count="15">0</div><div class="label">Verified gardens network-wide</div></div>
+      <div class="stat"><div class="num" data-count="143">0<span class="suf">+</span></div><div class="label">Species documented across the Registry</div></div>
+      <div class="stat"><div class="num" data-count="44">0</div><div class="label">Average score, 0–100 scale</div></div>
+      <div class="stat"><div class="num" data-count="46">0</div><div class="label">Ecological badges awarded</div></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="pulse">
+      <div class="ph"><div class="t"><span class="live-dot"></span>Registry activity</div><div class="tg">Illustrative demo feed — not live data</div></div>
+      <div class="pb" id="pb"></div>
+    </div>
+  </div>
+</div>
+
+<div class="prov-bar">
+  <div class="wrap">
+    <div class="prov-grid">
+      <div class="prov-title">How to read every number here</div>
+      <div class="prov-item"><span class="sw sw-m"></span><div><strong>Measured</strong><p>Recorded on a garden by assessment or field note. Sits in the Registry ledger and audits back to a specific property.</p></div></div>
+      <div class="prov-item"><span class="sw sw-d"></span><div><strong>Derived</strong><p>Arithmetic on measured records — counts, averages, distributions. No assumptions added.</p></div></div>
+      <div class="prov-item"><span class="sw sw-x"></span><div><strong>Modelled</strong><p>A projection built on stated assumptions. Each assumption is printed beside the figure and adjustable in the scaling model.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<section id="cohort" class="reveal">
+  <div class="wrap">
+    <div class="sh"><h2>The Boroondara cohort</h2><div class="n">Pillar performance</div></div>
+    <p class="lede">Every registered garden is scored across five pillars on a fixed 100-point scale. The weights are structural — they do not change between gardens, councils, or years. This is how the nine Boroondara gardens sit against each pillar's ceiling.</p>
+
+    <div>
+      <div class="pil"><div class="nm">Biodiversity structure<small>Species count · layers · canopy · dominance</small></div>
+        <div class="track"><div class="fill" data-pct="52"></div></div><div class="val">13.0 <em>/ 25</em></div></div>
+      <div class="pil"><div class="nm">Soil &amp; water function<small>Soil health · retention · hydrology</small></div>
+        <div class="track"><div class="fill" data-pct="45"></div></div><div class="val">9.0 <em>/ 20</em></div></div>
+      <div class="pil"><div class="nm">Habitat complexity<small>Nodes · fauna · logs · rocks · water</small></div>
+        <div class="track"><div class="fill" data-pct="40"></div></div><div class="val">8.0 <em>/ 20</em></div></div>
+      <div class="pil"><div class="nm">Connectivity<small>Parks · adjacent gardens · corridor nodes</small></div>
+        <div class="track"><div class="fill" data-pct="38"></div></div><div class="val">7.6 <em>/ 20</em></div></div>
+      <div class="pil"><div class="nm">Evidence &amp; verification<small>Photos · field notes · species list · verified</small></div>
+        <div class="track"><div class="fill brass" data-pct="42"></div></div><div class="val">6.3 <em>/ 15</em></div></div>
+    </div>
+    <div class="note">
+      <span class="tg2 t-m">Measured</span> pillar weights and the 100-point structure, fixed by the scoring engine.
+      <span class="tg2 t-d" style="margin-left:10px">Derived</span> cohort averages shown are placeholder values pending the live Boroondara cut from <span class="mono">sync_registry.py</span>. Replace before the meeting — the structure and weights are correct as shown.
+    </div>
+
+    <div class="sh" style="margin-top:64px"><h2>Gardens on the Registry</h2><div class="n">Boroondara, July 2026</div></div>
+    <table>
+      <thead><tr><th>Registry ID</th><th>Suburb</th><th>Tier</th><th>Score</th><th>Verification</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">ER-VIC-BOR-0041</td><td>Surrey Hills</td><td>Urban Biodiversity Node</td><td class="mono">96</td><td><span class="pill pv">Site visit verified</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0038</td><td>Canterbury</td><td>Ecological Garden</td><td class="mono">52</td><td><span class="pill pv">Site visit verified</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0035</td><td>Balwyn</td><td>Ecological Garden</td><td class="mono">48</td><td><span class="pill pv">Site visit verified</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0031</td><td>Hawthorn</td><td>Habitat Garden</td><td class="mono">34</td><td><span class="pill pp">Self-reported</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0027</td><td>Camberwell</td><td>Habitat Garden</td><td class="mono">31</td><td><span class="pill pv">Site visit verified</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0022</td><td>Mont Albert</td><td>Ecological Garden</td><td class="mono">45</td><td><span class="pill pv">Site visit verified</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0019</td><td>Kew</td><td>Habitat Garden</td><td class="mono">30</td><td><span class="pill pp">Self-reported</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0014</td><td>Canterbury</td><td>Habitat Garden</td><td class="mono">32</td><td><span class="pill pv">Site visit verified</span></td></tr>
+        <tr><td class="mono">ER-VIC-BOR-0009</td><td>Surrey Hills</td><td>Habitat Garden</td><td class="mono">33</td><td><span class="pill pv">Site visit verified</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note">Row detail is placeholder structure — IDs, suburbs and scores to be replaced with the live Boroondara cut. The count of nine is confirmed. Self-reported entries are never counted in verified totals or averages.</div>
+  </div>
+</section>
+
+<section id="composition" class="alt reveal">
+  <div class="wrap">
+    <div class="sh"><h2>Planting composition</h2><div class="n">Indigenous · native · exotic</div></div>
+    <p class="lede">The distinction that matters ecologically is not "native" but indigenous to this place — species belonging to the property's own Ecological Vegetation Class. A garden of Australian natives drawn from other bioregions supports far less local fauna than one planted to its EVC.</p>
+
+    <div class="stack" id="stack">
+      <div class="seg seg-i" data-basis="61">Indigenous 61%</div>
+      <div class="seg seg-n" data-basis="22">Native 22%</div>
+      <div class="seg seg-e" data-basis="17">Exotic 17%</div>
+    </div>
+    <div class="stack-key">
+      <span><i style="background:var(--signal)"></i>Indigenous — belongs to the property's EVC</span>
+      <span><i style="background:var(--brass)"></i>Native — Australian, outside the local EVC</span>
+      <span><i style="background:rgba(61,69,53,.35)"></i>Exotic — retained ornamental and productive</span>
+    </div>
+    <div class="note"><span class="tg2 t-d">Derived</span> from species lists on registered gardens, each species classified against the property's resolved EVC. Proportions shown are placeholder — regenerate from the live species tables before the meeting.</div>
+
+    <div class="mgrid" style="margin-top:52px">
+      <div class="mcard"><div class="top"><h4>Species documented</h4><span class="tg2 t-m">Measured</span></div>
+        <div class="big">143<span class="suf">+</span></div>
+        <p>Distinct species recorded across the Registry species tables, each tied to a specific garden and a field-note date.</p></div>
+      <div class="mcard"><div class="top"><h4>Vertical layers</h4><span class="tg2 t-d">Derived</span></div>
+        <div class="big">3.4<span class="suf">avg</span></div>
+        <p>Average structural layers per garden — canopy, sub-canopy, shrub, ground, cryptogam. Gardens reaching all five earn the Five Layer badge.</p>
+        <div class="assume">Placeholder — derive from the layers field in the biodiversity pillar.</div></div>
+      <div class="mcard"><div class="top"><h4>Fauna records</h4><span class="tg2 t-m">Measured</span></div>
+        <div class="big">—</div>
+        <p>Fauna sightings logged as field notes by stewards, timestamped and attached to a property. Feeds the Fauna Record and Amphibian Active badges.</p>
+        <div class="assume">Pull the current count from the field-note index.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="canopy" class="dark reveal">
+  <div class="wrap">
+    <div class="sh"><h2>Canopy and water</h2><div class="n">Projected from planted stock</div></div>
+    <p class="lede">These are the two figures a council can act on directly: future canopy from what is already in the ground, and stormwater held on private land instead of entering the drainage network. Both are modelled. The assumptions are printed with each figure and adjustable below.</p>
+
+    <div class="mgrid">
+      <div class="mcard"><div class="top"><h4>Canopy at maturity</h4><span class="tg2 t-x">Modelled</span></div>
+        <div class="big" id="canopyHero">1,350<span class="suf">m²</span></div>
+        <p>Projected crown area from canopy-layer species already planted across the nine gardens, at mature spread.</p>
+        <div class="assume">Assumes 3 canopy trees per garden at 50 m² mature crown (≈8 m diameter). Excludes existing retained trees.</div></div>
+      <div class="mcard"><div class="top"><h4>Stormwater retained</h4><span class="tg2 t-x">Modelled</span></div>
+        <div class="big" id="waterHero">115<span class="suf">kL</span></div>
+        <p>Additional rainfall held in soil and basins each year rather than discharged to the stormwater network.</p>
+        <div class="assume">Assumes 40 L/m²/yr retention uplift over a compacted-lawn baseline across registered garden area.</div></div>
+      <div class="mcard"><div class="top"><h4>Land under registration</h4><span class="tg2 t-x">Modelled</span></div>
+        <div class="big" id="areaHero">2,880<span class="suf">m²</span></div>
+        <p>Total garden area formally recorded on the Registry inside Boroondara.</p>
+        <div class="assume">From enrolment size bands at band midpoint. Replace with surveyed area_sqm once the Surrey Hills cluster audit closes.</div></div>
+    </div>
+
+    <div class="callout" style="margin-top:44px">"The inputs are the truth, the score is the consequence."<span class="at">Registry scoring principle — no figure is reverse-engineered to hit a target</span></div>
+  </div>
+</section>
+
+<section id="corridor" class="reveal">
+  <div class="wrap">
+    <div class="sh"><h2>Corridor effect</h2><div class="n">Connectivity and latent demand</div></div>
+    <p class="lede">A garden's ecological value is not independent of its neighbours. The connectivity pillar scores proximity to parks, adjacent registered gardens, and corridor nodes — so two registered gardens near each other are worth more than two far apart. Overlaid here is the demand layer: residential addresses that have looked up their EVC through the discovery tools but have not yet registered.</p>
+
+    <div class="mapwrap">
+      <svg viewBox="0 0 940 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic map of registered gardens, connectivity buffers and EVC lookups across Boroondara">
+        <rect x="0" y="0" width="940" height="320" fill="none" stroke="rgba(255,240,220,.16)"/>
+        <path d="M30,250 C170,205 240,105 380,80 C520,52 660,68 800,44 C860,32 900,56 912,90" fill="none" stroke="rgba(255,240,220,.13)" stroke-dasharray="2 6"/>
+        <g fill="rgba(180,154,99,.45)">
+          <circle cx="90" cy="140" r="2.5"/><circle cx="160" cy="105" r="2.5"/><circle cx="205" cy="215" r="2.5"/>
+          <circle cx="290" cy="180" r="2.5"/><circle cx="315" cy="65" r="2.5"/><circle cx="395" cy="215" r="2.5"/>
+          <circle cx="470" cy="55" r="2.5"/><circle cx="500" cy="200" r="2.5"/><circle cx="575" cy="175" r="2.5"/>
+          <circle cx="600" cy="45" r="2.5"/><circle cx="665" cy="215" r="2.5"/><circle cx="720" cy="160" r="2.5"/>
+          <circle cx="790" cy="200" r="2.5"/><circle cx="810" cy="95" r="2.5"/><circle cx="880" cy="150" r="2.5"/>
+          <circle cx="130" cy="245" r="2.5"/><circle cx="360" cy="130" r="2.5"/><circle cx="640" cy="110" r="2.5"/>
+        </g>
+        <g fill="rgba(124,154,82,.07)" stroke="rgba(124,154,82,.22)" stroke-dasharray="3 5">
+          <circle cx="125" cy="195" r="58"/><circle cx="240" cy="150" r="58"/><circle cx="350" cy="110" r="58"/>
+          <circle cx="440" cy="165" r="58"/><circle cx="560" cy="100" r="58"/><circle cx="635" cy="145" r="58"/>
+          <circle cx="715" cy="85" r="58"/><circle cx="775" cy="125" r="58"/><circle cx="862" cy="62" r="58"/>
+        </g>
+        <g fill="#7C9A52">
+          <circle cx="125" cy="195" r="5"/><circle class="ring" cx="125" cy="195" r="5" fill="none" stroke="#7C9A52"/>
+          <circle cx="240" cy="150" r="5"/><circle class="ring r2" cx="240" cy="150" r="5" fill="none" stroke="#7C9A52"/>
+          <circle cx="350" cy="110" r="5"/><circle class="ring r3" cx="350" cy="110" r="5" fill="none" stroke="#7C9A52"/>
+          <circle cx="440" cy="165" r="5"/><circle class="ring r4" cx="440" cy="165" r="5" fill="none" stroke="#7C9A52"/>
+          <circle cx="635" cy="145" r="5"/><circle class="ring r2" cx="635" cy="145" r="5" fill="none" stroke="#7C9A52"/>
+          <circle cx="715" cy="85" r="5"/><circle class="ring r3" cx="715" cy="85" r="5" fill="none" stroke="#7C9A52"/>
+          <circle cx="775" cy="125" r="5"/><circle class="ring r4" cx="775" cy="125" r="5" fill="none" stroke="#7C9A52"/>
+        </g>
+        <circle cx="560" cy="100" r="7" fill="#B49A63"/><circle class="ring" cx="560" cy="100" r="7" fill="none" stroke="#B49A63"/>
+        <circle cx="862" cy="62" r="7" fill="#B49A63"/><circle class="ring r3" cx="862" cy="62" r="7" fill="none" stroke="#B49A63"/>
+        <text x="30" y="300" fill="#fff0dc" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity=".55">CITY OF BOROONDARA — SCHEMATIC, NOT TO SCALE — 2 KM CONNECTIVITY BUFFERS</text>
+      </svg>
+      <div class="maplegend">
+        <span><i style="background:#7C9A52"></i>Registered garden</span>
+        <span><i style="background:#B49A63"></i>Urban Biodiversity Node</span>
+        <span><i style="background:rgba(180,154,99,.5)"></i>EVC lookup — not yet registered</span>
+        <span><i style="background:rgba(124,154,82,.3)"></i>2 km connectivity buffer</span>
+      </div>
+    </div>
+    <div class="note"><span class="tg2 t-x">Modelled</span> marker positions are schematic. The production build renders real coordinates from the Registry ledger and the EVC lookup log, using the same feed as the public demand map.</div>
+
+    <div class="mgrid" style="margin-top:44px">
+      <div class="mcard"><div class="top"><h4>Clustered gardens</h4><span class="tg2 t-d">Derived</span></div><div class="big">4<span class="suf">of 9</span></div>
+        <p>Gardens with at least one other registered garden inside the 2 km connectivity band. The Surrey Hills cluster is the densest in the network.</p></div>
+      <div class="mcard"><div class="top"><h4>Latent demand</h4><span class="tg2 t-m">Measured</span></div><div class="big">—</div>
+        <p>Boroondara addresses that ran an EVC lookup through the discovery tools without registering. Each is an identified, self-selected conversion target.</p>
+        <div class="assume">Pull the Boroondara cut from the EVC lookup log.</div></div>
+      <div class="mcard"><div class="top"><h4>Conversion rate</h4><span class="tg2 t-d">Derived</span></div><div class="big">—<span class="suf">%</span></div>
+        <p>Share of Boroondara lookups that became registrations. This is the number that tells council whether the funnel scales without their spend.</p>
+        <div class="assume">Registrations ÷ unique lookup addresses, Boroondara only.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="model" class="dark reveal">
+  <div class="wrap">
+    <div class="sh"><h2>What this looks like at scale</h2><div class="n">Interactive — adjust the assumptions</div></div>
+    <p class="lede">Nine gardens is a proof, not a program. This model projects the same per-garden characteristics across a larger registered population. Every input is exposed and adjustable — change any assumption and watch the output move. Nothing is hidden inside the projection.</p>
+
+    <div class="model">
+      <div class="controls">
+        <div class="ctl"><label>Registered gardens <b id="lGardens">9</b></label>
+          <input type="range" id="sGardens" min="9" max="1000" value="9" step="1" aria-label="Registered gardens"></div>
+        <div class="ctl"><label>Average garden area <b id="lArea">320 m²</b></label>
+          <input type="range" id="sArea" min="80" max="900" value="320" step="10" aria-label="Average garden area"></div>
+        <div class="ctl"><label>Indigenous planting share <b id="lIndig">61%</b></label>
+          <input type="range" id="sIndig" min="0" max="100" value="61" step="1" aria-label="Indigenous planting share"></div>
+        <div class="ctl"><label>Canopy trees per garden <b id="lTrees">3</b></label>
+          <input type="range" id="sTrees" min="0" max="12" value="3" step="1" aria-label="Canopy trees per garden"></div>
+        <div class="ctl"><label>Mature crown per tree <b id="lCrown">50 m²</b></label>
+          <input type="range" id="sCrown" min="10" max="120" value="50" step="5" aria-label="Mature crown area per tree"></div>
+        <div class="ctl"><label>Water retention uplift <b id="lWater">40 L/m²/yr</b></label>
+          <input type="range" id="sWater" min="0" max="150" value="40" step="5" aria-label="Water retention uplift"></div>
+        <div class="presets">
+          <button data-g="9" class="on">Today — 9</button>
+          <button data-g="40">90-day target — 40</button>
+          <button data-g="250">Council pilot — 250</button>
+          <button data-g="1000">Municipality scale — 1,000</button>
+        </div>
+      </div>
+
+      <div class="outputs">
+        <div class="out"><div class="k">Land under registration</div><div class="v"><span id="oArea">2,880</span><span class="suf" id="oAreaU">m²</span></div>
+          <div class="sub">Private land formally recorded, scored and re-assessable — an ecological asset register the council does not have to build or maintain.</div></div>
+        <div class="out"><div class="k">Canopy at maturity</div><div class="v"><span id="oCanopy">1,350</span><span class="suf" id="oCanopyU">m²</span></div>
+          <div class="sub"><span id="oCanopyPct">47</span>% cover across registered land — from stock already in the ground, on private property, at no council planting cost.</div></div>
+        <div class="out"><div class="k">Stormwater held annually</div><div class="v"><span id="oWater">115</span><span class="suf">kL</span></div>
+          <div class="sub">Rainfall retained in soil and basins rather than entering the drainage network. Equivalent to <span id="oTanks">46</span> household rainwater tanks.</div></div>
+        <div class="out"><div class="k">Indigenous plantings</div><div class="v"><span id="oPlants">5,270</span></div>
+          <div class="sub">Individual EVC-appropriate plants established on private land, each recorded against a property and a planting date.</div></div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:24px">
+      <span class="tg2 t-x">Modelled</span> All four outputs are projections from the inputs shown. Defaults are the Registry's current working assumptions, not surveyed values. Planting density assumed at 3 plants per m² of planted area; tank equivalence at 2.5 kL. Adjust any slider to test sensitivity — this panel exists so the assumptions can be argued with rather than accepted.
+    </div>
+  </div>
+</section>
+
+<section id="method" class="alt reveal">
+  <div class="wrap">
+    <div class="sh"><h2>Why the numbers hold up</h2><div class="n">Methodology and integrity</div></div>
+    <div class="two">
+      <ul class="mlist">
+        <li>One canonical scoring engine runs every score — public site, self-enrolment form and assessor tool share the same logic, with a parity test suite blocking any change that would let the implementations diverge.</li>
+        <li>Derived fields regenerate from input files on every sync, so a score cannot drift from the evidence that produced it. No figure is hand-adjusted to reach a target.</li>
+        <li>Scoring is being aligned to Accounting for Nature's Econd framework, benchmarked against Victoria's Ecological Vegetation Classes.</li>
+        <li>Self-reported gardens are visually quarantined and excluded from every verified total and average on this page. Only a paid, on-site Ecological Garden Health Check moves a garden to verified.</li>
+        <li>Growth does not depend on Gardener &amp; Son's installation capacity — gardens are enrolling from outside the studio's client base, including the first non-G&amp;S install at Canterbury.</li>
+        <li>Every figure carries its provenance tag. Modelled figures are labelled, their assumptions printed, and their inputs adjustable.</li>
+      </ul>
+      <div>
+        <div class="callout">Boroondara's nine gardens arrived through a funnel the council does not fund and does not run. The ask is recognition of a measurement standard — not delivery of a program.<span class="at">The proposition, in one paragraph</span></div>
+        <div class="mcard" style="margin-top:26px"><div class="top"><h4>What a pilot would involve</h4><span class="tg2 t-m">The ask</span></div>
+          <p>A written acknowledgement that the Registry's methodology is fit for citation in Boroondara's biodiversity reporting, and a route to align with the Backyard Biodiversity Project as the record layer beneath it.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><div class="frow">
+    <h3>A conversation about what Boroondara already has, and what recognition could unlock next.</h3>
+    <div class="meta">Gardener &amp; Son<br>140 Auburn Road, Hawthorn<br>ecologicalregistry.org<br>Friday 14 August — G&amp;S Hawthorn studio</div>
+  </div></div>
+</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const nf = n => n.toLocaleString('en-AU');
+
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  $('#progress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  $('#nav').classList.toggle('scrolled', h.scrollTop > 40);
+}, {passive:true});
+
+const rio = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('vis'); rio.unobserve(e.target); }
+}), {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => rio.observe(el));
+
+const done = new WeakSet();
+const cio = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting || done.has(e.target)) return;
+  done.add(e.target);
+  const el = e.target, target = +el.dataset.count;
+  const suf = el.querySelector('.suf');
+  const sufHTML = suf ? suf.outerHTML : '';
+  const t0 = performance.now();
+  (function tick(now){
+    const p = Math.min(1, (now - t0) / 1200), k = 1 - Math.pow(1 - p, 3);
+    el.innerHTML = nf(Math.round(k * target)) + sufHTML;
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}), {threshold:.6});
+document.querySelectorAll('.num[data-count]').forEach(n => cio.observe(n));
+
+const bio = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.style.width = e.target.dataset.pct + '%'; bio.unobserve(e.target); }
+}), {threshold:.5});
+document.querySelectorAll('.fill').forEach(f => bio.observe(f));
+
+const sio = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.querySelectorAll('.seg').forEach((s,i) =>
+    setTimeout(() => s.style.flexBasis = s.dataset.basis + '%', i * 140));
+  sio.unobserve(e.target);
+}), {threshold:.5});
+sio.observe($('#stack'));
+
+const evts = [
+  ['NEW BASELINE','Camberwell VIC'], ['TIER UPGRADE → Ecological','ER-VIC-BOR-0038'],
+  ['SITE VISIT VERIFIED','Surrey Hills VIC'], ['EVC LOOKUP → NUDGE SHOWN','Kew VIC'],
+  ['GARDEN REGISTERED','Balwyn VIC'], ['HEALTH CHECK BOOKED','Hawthorn VIC'],
+  ['SPECIES LIST DOWNLOADED','Canterbury VIC'], ['SCORE RECALCULATED','ER-VIC-BOR-0014'],
+  ['FAUNA SIGHTING LOGGED','Mont Albert VIC'], ['BADGE AWARDED → Corridor Node','Deepdene VIC']
+];
+let ago = 14;
+const pb = $('#pb');
+function addRow(){
+  const [e,l] = evts[Math.floor(Math.random()*evts.length)];
+  const r = document.createElement('div');
+  r.className = 'pr';
+  r.innerHTML = '<span class="tm">' + (ago<60 ? ago+'s ago' : Math.floor(ago/60)+'m ago') +
+                '</span><span class="ev">' + e + '</span><span class="lc">' + l + '</span>';
+  pb.prepend(r);
+  ago = Math.max(3, ago - Math.floor(Math.random()*9) - 3);
+  while (pb.children.length > 6) pb.removeChild(pb.lastChild);
+}
+for (let i=0;i<6;i++) addRow();
+setInterval(addRow, 2700);
+
+const S = {g:'#sGardens', a:'#sArea', i:'#sIndig', t:'#sTrees', c:'#sCrown', w:'#sWater'};
+function compute(){
+  const g = +$(S.g).value, a = +$(S.a).value, ind = +$(S.i).value,
+        t = +$(S.t).value, c = +$(S.c).value, w = +$(S.w).value;
+
+  $('#lGardens').textContent = nf(g);
+  $('#lArea').textContent = a + ' m²';
+  $('#lIndig').textContent = ind + '%';
+  $('#lTrees').textContent = t;
+  $('#lCrown').textContent = c + ' m²';
+  $('#lWater').textContent = w + ' L/m²/yr';
+
+  const area = g * a;
+  const canopy = g * t * c;
+  const waterL = area * w;
+  const plants = Math.round(area * 3 * (ind/100));
+  const big = v => v >= 10000;
+
+  $('#oArea').textContent = big(area) ? (area/10000).toFixed(1) : nf(area);
+  $('#oAreaU').textContent = big(area) ? 'ha' : 'm²';
+  $('#oCanopy').textContent = big(canopy) ? (canopy/10000).toFixed(1) : nf(canopy);
+  $('#oCanopyU').textContent = big(canopy) ? 'ha' : 'm²';
+  $('#oCanopyPct').textContent = area ? Math.round(canopy / area * 100) : 0;
+  $('#oWater').textContent = nf(Math.round(waterL/1000));
+  $('#oTanks').textContent = nf(Math.round(waterL/1000/2.5));
+  $('#oPlants').textContent = nf(plants);
+
+  if (g === 9) {
+    $('#areaHero').innerHTML = nf(area) + '<span class="suf">m²</span>';
+    $('#canopyHero').innerHTML = nf(canopy) + '<span class="suf">m²</span>';
+    $('#waterHero').innerHTML = nf(Math.round(waterL/1000)) + '<span class="suf">kL</span>';
+  }
+}
+Object.values(S).forEach(sel => $(sel).addEventListener('input', () => {
+  document.querySelectorAll('.presets button').forEach(x => x.classList.remove('on'));
+  compute();
+}));
+document.querySelectorAll('.presets button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.presets button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  $(S.g).value = b.dataset.g;
+  compute();
+}));
+compute();
+</script>
+</body>
+</html>
