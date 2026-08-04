@@ -15,6 +15,9 @@
   "baseline_date": "Aug 2026",
   "stewards": "Sam Cox and Lisa Cox",
   "designer": "Sam Cox (Sam Cox Landscape)",
+  "designer_id": "sam-cox-landscape",
+  "enroller": "Gardener & Son",
+  "verifier": null,
   "area_sqm": null,
   "description": "A 27-year designed ecological garden in Wattle Glen. Planted for foliage greens and greys across canopy, midstorey and dense understorey, the garden functions as a haven for small birds. No irrigation has been used since establishment. Directly adjoins 11 acres of Trust for Nature covenanted bush. First registry garden in Nillumbik.",
   "evc": {
@@ -89,7 +92,7 @@
     "has_field_notes": false,
     "has_species_list": false,
     "has_fauna_record": false,
-    "has_professional_assessment": true,
+    "has_professional_assessment": false,
     "verification_level": "self_reported",
     "verification_label": "Self Reported",
     "assessor": "Gardener & Son"

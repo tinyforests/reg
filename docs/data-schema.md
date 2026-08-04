@@ -60,7 +60,10 @@ Shape taken from `york.json`. Fields are grouped by purpose.
 "assessment_date":  "Apr 2026",              // Latest assessment
 "baseline_date":    "2025",                  // Registration / baseline year — sometimes a year only
 "stewards":         "Gentile and Effy",
-"designer":         "Gardener & Son",
+"designer":         "Gardener & Son",        // Display name of the designer or design practice
+"designer_id":      "gardener-and-son",      // Stable slug — survives name changes; links to designer registry
+"enroller":         "Gardener & Son",        // Who submitted this record to the registry (distinct from designer and verifier)
+"verifier":         null,                    // Who independently confirmed the inputs; null until third-party audit exists
 "area_sqm":         0,                       // Note: 0 is permitted when area is unmeasured
 "target_score":     75,
 "description":      "Approx 320 chars compressed prose. No marketing language."

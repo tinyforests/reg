@@ -9,6 +9,9 @@
   "target_score": 80,
   "stewards": "Gardener & Son",
   "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": null,
   "area_sqm": 256,
   "description": "A design proposal for the Gardener & Son studio at 2 Churchill Street. The garden connects the studio with the street and is designed to demonstrate what ecological function looks like in a commercial context -- visible, legible, and alive.",
   "evc": {

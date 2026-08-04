@@ -608,11 +608,11 @@
       "council": "Nillumbik Shire Council",
       "ward": null,
       "lga": "Nillumbik",
-      "score": 21,
+      "score": 18,
       "rating": {
-        "current": "Habitat Garden",
-        "next": "Ecological Garden",
-        "points_to_next": 20
+        "current": "Basic Garden",
+        "next": "Habitat Garden",
+        "points_to_next": 3
       },
       "primary_evc": null,
       "bioregion": null,
