@@ -262,10 +262,8 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 1,
-      "badges": [
-        "gs_verified"
-      ],
+      "badge_count": 0,
+      "badges": [],
       "profile_url": "/gardens/montAlbert100/index.html",
       "data_file": "data/montAlbert.json",
       "council": "Boroondara City Council",
@@ -610,11 +608,11 @@
       "council": "Nillumbik Shire Council",
       "ward": null,
       "lga": "Nillumbik",
-      "score": 36,
+      "score": 21,
       "rating": {
         "current": "Habitat Garden",
         "next": "Ecological Garden",
-        "points_to_next": 5
+        "points_to_next": 20
       },
       "primary_evc": null,
       "bioregion": null,
@@ -622,11 +620,8 @@
       "verification_level": "photo_verified",
       "verification_label": "Photo Verified",
       "last_verified": "Aug 2026",
-      "badge_count": 2,
-      "badges": [
-        "indigenous_dominant",
-        "habitat_builder"
-      ],
+      "badge_count": 0,
+      "badges": [],
       "profile_url": null,
       "data_file": "data/lorimer.json",
       "registry_role": "Prototype",
