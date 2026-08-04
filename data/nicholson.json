@@ -9,6 +9,9 @@
   "target_score": 80,
   "stewards": "Gardener & Son",
   "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": null,
   "area_sqm": 60,
   "description": "A calm, immersive garden where cottage softness meets Japanese restraint. Layered canopy, sculptural natives and seasonal planting create structure and habitat. Permeable surfaces improve drainage and flow, while groundcovers stabilise soil -- forming a resilient, low-maintenance garden for daily life.",
   "evc": {
