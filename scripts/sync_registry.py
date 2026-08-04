@@ -48,6 +48,10 @@ RATING_BANDS = [
 # Statuses whose gardens are documented but not yet installed.
 PRE_INSTALL_STATUSES = {"Design Proposal"}
 
+# Statuses whose gardens must not be awarded badges.
+# Provisional gardens have unverified inputs -- no badge until assessment complete.
+NO_BADGE_STATUSES = {"Design Proposal", "Provisional"}
+
 # Blocks of stored derived data that must not live in registry.json.
 FORBIDDEN_BLOCKS = ("statistics", "leaderboard", "network")
 
@@ -177,7 +181,15 @@ def sync(check_only=False):
                 g['rating'] = new_rating
 
         # Derive badges from canonical engine; stored array is the output, not the input.
-        if g.get('status') not in PRE_INSTALL_STATUSES:
+        # Provisional gardens do not award badges -- inputs are unverified.
+        if g.get('status') in NO_BADGE_STATUSES:
+            if g.get('badges'):
+                changes.append("%s: badges cleared (status=%s)" % (gid, g['status']))
+                g['badges'] = []
+            if g.get('badge_count', 0) != 0:
+                changes.append("%s: badge_count -> 0 (status=%s)" % (gid, g['status']))
+                g['badge_count'] = 0
+        else:
             new_badges = award_badges(record)
             old_badges = g.get('badges') or []
             if new_badges != old_badges:

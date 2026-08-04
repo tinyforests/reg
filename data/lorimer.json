@@ -37,14 +37,14 @@
     "species_list": []
   },
   "soil_water": {
-    "soil_health_score": 4,
+    "soil_health_score": null,
     "soil_health_baseline": null,
     "soil_health_max": 5,
-    "water_function_score": 4,
+    "water_function_score": null,
     "water_function_baseline": null,
     "water_function_max": 5,
     "has_rainwater_system": false,
-    "has_moisture_basin": true,
+    "has_moisture_basin": false,
     "has_swale": false,
     "mulch_type": "Recovered timber (pallets and untreated fencing -- waste stream)"
   },
@@ -90,8 +90,8 @@
     "has_species_list": false,
     "has_fauna_record": false,
     "has_professional_assessment": true,
-    "verification_level": "photo_verified",
-    "verification_label": "Photo Verified",
+    "verification_level": "self_reported",
+    "verification_label": "Self Reported",
     "assessor": "Gardener & Son"
   },
   "milestones": [
