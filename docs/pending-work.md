@@ -353,6 +353,18 @@ UI considerations:
 
 Sequencing: this is downstream of the shared library work. National expansion requires the shared library to exist first.
 
+### VERIFY DESIGNER BACKFILL
+
+The three fields (designer_id, enroller, verifier) were inserted into all 16 files by script and may have been blanket-filled with identical values. Lorimer must be designer "Sam Cox Landscape" / designer_id "sam-cox-landscape" / enroller "Gardener & Son". Canterbury G02 and Separation Creek are not G&S designs — check what they got. Fix any that were blanket-filled.
+
+### area_sqm: 0 IS NOT "UNMEASURED"
+
+schema doc (commit 2750f08) now states 0 is permitted for unmeasured area. Zero is a value; absent is null. Anything dividing by area — density, canopy %, cluster.area_ha — breaks or silently produces garbage. Change the schema doc and any 0-valued area fields to null.
+
+### PROFILE PAGE BADGE GATE
+
+gardens/*/index.html call awardBadges() live via badge-engine.js, bypassing NO_BADGE_STATUSES. Currently inert only because profile_url is null on all provisional records. Must be gated before any provisional garden gets a profile page — Lorimer is the most likely next one.
+
 ## Out of scope (do not work on without explicit instruction)
 
 - Carbon offsetting methodology — not pursued until biodiversity infrastructure is mature
