@@ -111,8 +111,9 @@ function handleEnrolment(payload, cache) {
     }
   }
 
-  var name    = safeStr(payload.steward_name    || '', 120);
-  var address = safeStr(payload.garden_address  || '', 200);
+  var name        = safeStr(payload.steward_name    || '', 120);
+  var address     = safeStr(payload.garden_address  || '', 200);
+  var gardenName  = safeStr(payload.garden_name     || '', 120);
   if (!name)    return jsonResp({ok: false, error: 'steward_name is required.'});
   if (!address) return jsonResp({ok: false, error: 'garden_address is required.'});
 
@@ -159,7 +160,8 @@ function handleEnrolment(payload, cache) {
     safeStr(payload.evc_code      || '', 50),      // AA evc_code
     safeStr(payload.evc_name      || '', 120),     // AB evc_name
     safeStr(payload.garden_country || '', 80),     // AC garden_country
-    safeStr(payload.garden_region  || '', 80)      // AD garden_region
+    safeStr(payload.garden_region  || '', 80),     // AD garden_region
+    gardenName                                     // AE garden_name
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -176,6 +178,7 @@ function handleEnrolment(payload, cache) {
       'Steward name:    ' + name,
       'Steward email:   ' + email,
       'Garden address:  ' + address,
+      'Garden name:     ' + (gardenName || '(not provided)'),
       'Score:           ' + score + '/100',
       'Tier:            ' + tier,
       'Submission ID:   ' + submissionId,
