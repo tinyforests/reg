@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Jun 2026",
-    "total_gardens": 15,
+    "total_gardens": 14,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0",
@@ -598,41 +598,6 @@
       "council": "Boroondara City Council",
       "ward": "Maranoa",
       "lga": "Boroondara"
-    },
-    {
-      "garden_id": "ER-AU-VIC-WGL-LOR-001",
-      "garden_name": "Lorimer",
-      "typology": "Ecological Forest Garden",
-      "suburb": "Wattle Glen",
-      "state": "VIC",
-      "council": "Nillumbik Shire Council",
-      "ward": null,
-      "lga": "Nillumbik",
-      "score": 18,
-      "rating": {
-        "current": "Basic Garden",
-        "next": "Habitat Garden",
-        "points_to_next": 3
-      },
-      "primary_evc": null,
-      "bioregion": null,
-      "status": "Provisional",
-      "verification_level": "photo_verified",
-      "verification_label": "Photo Verified",
-      "last_verified": "Aug 2026",
-      "badge_count": 0,
-      "badges": [],
-      "profile_url": null,
-      "data_file": "data/lorimer.json",
-      "registry_role": "Prototype",
-      "trajectory": "Emerging",
-      "points_available": 100,
-      "cluster": {
-        "name": "Nillumbik",
-        "gardens": 1,
-        "area_ha": 0,
-        "status": "Emerging"
-      }
     }
   ]
 }
