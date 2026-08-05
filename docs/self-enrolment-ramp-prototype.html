@@ -130,14 +130,25 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .modal-head{padding:30px 32px 0}
 .modal-body{padding:18px 32px 8px}
 .modal-foot{padding:18px 32px 30px;position:sticky;bottom:0;background:var(--understory);border-top:1px solid var(--hairline);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
-.consent-item{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--hairline);cursor:pointer;align-items:flex-start}
-.consent-item:first-child{border-top:none}
-.tick{flex:0 0 22px;height:22px;border:1px solid var(--ink);margin-top:2px;display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;font-size:13px;color:#fff;transition:.15s}
-.consent-item.on .tick{background:var(--signal);border-color:var(--signal)}
-.consent-item .ct{font-size:14px}
-.consent-item .ct b{font-weight:600}
-.consent-item .ct span{display:block;color:var(--ink-soft);font-size:13px;margin-top:3px}
 .req{color:var(--signal-deep)}
+/* ---- consent stepper ---- */
+.cstep-progress{height:2px;background:var(--hairline);margin:4px 0 24px;overflow:hidden}
+.cstep-fill{height:100%;background:var(--signal);width:0;transition:width .4s ease}
+.cstep-wrap{min-height:160px;overflow:hidden}
+.cstep{display:none}
+.cstep.active{display:block}
+@keyframes cExit{to{opacity:0;transform:translateX(-20px)}}
+@keyframes cEnter{from{opacity:0;transform:translateX(20px)}}
+.cstep.exit{animation:cExit .18s ease forwards}
+.cstep.enter{animation:cEnter .22s ease forwards}
+.cstep-num{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
+.cstep-title{font-family:"Fraunces",serif;font-size:21px;line-height:1.25;margin-bottom:10px}
+.cstep-desc{font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:18px}
+.cstep-tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;margin-bottom:20px}
+.cstep-tag.req{color:var(--signal-deep);border:1px solid var(--signal-deep)}
+.cstep-tag.opt{color:var(--ink-soft);border:1px solid var(--hairline)}
+.cstep-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cstep-done{padding:20px 0;font-size:14px;color:var(--ink-soft)}
 
 /* ---- identity inputs (consent modal) ---- */
 .identity-fields{padding:12px 0;border-bottom:1px solid var(--hairline);margin-bottom:12px}
@@ -282,7 +293,8 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <div class="modal-body">
       <p class="fieldnote" style="margin:0 0 8px;font-size:15px">Stewardship isn't a tickbox. You're agreeing to hold this garden's record across whoever lives here next — the memory belongs to whoever is tending it. You decide what's shared, and you can withdraw any of it at any time.</p>
       <div id="identityFields" class="identity-fields"></div>
-      <div id="consentItems"></div>
+      <div class="cstep-progress"><div class="cstep-fill" id="cstepFill"></div></div>
+      <div class="cstep-wrap" id="cstepWrap"></div>
     </div>
     <div class="modal-foot">
       <button class="btn ghost" onclick="closeConsent()">Cancel</button>
@@ -573,7 +585,8 @@ const PILLARS = [
 const IDENTITY_FIELDS = [
   {id:'steward_name',    label:'Your name',       type:'text',  placeholder:'Your full name',                          required:true},
   {id:'steward_email',   label:'Email',           type:'email', placeholder:'your@email.com',                          required:true},
-  {id:'garden_address',  label:'Garden address',  type:'text',  placeholder:'Street address',                          required:true},
+  {id:'garden_address',  label:'Street address',  type:'text',  placeholder:'e.g. 12 Lorimer Rd',                      required:true},
+  {id:'garden_suburb',   label:'Suburb',          type:'text',  placeholder:'e.g. Wattle Glen',                        required:true},
   {id:'garden_name',     label:'Garden name',     type:'text',  placeholder:'e.g. The Wattle Glen Refuge (optional)',  required:false},
   {id:'garden_country',  label:'Country',         type:'text',  placeholder:'e.g. Australia, UK, US',                  required:true},
   {id:'garden_region',   label:'State / region',  type:'text',  placeholder:'e.g. Victoria, Yorkshire',                required:false}
@@ -588,7 +601,8 @@ const CONSENT = [
 
 /* ---- state ---- */
 const answers = {};   // pillarKey -> points
-let consentState = new Array(CONSENT.length).fill(false);
+let consentState = new Array(CONSENT.length).fill(null);
+let consentStep  = 0;
 
 /* ---- build baseline UI ---- */
 const pillarsEl = document.getElementById('pillars');
@@ -639,15 +653,22 @@ IDENTITY_FIELDS.forEach(f => {
   idf.appendChild(inp);
 });
 
-/* ---- build consent items ---- */
-const ci = document.getElementById('consentItems');
-CONSENT.forEach((c,i)=>{
-  const row=document.createElement('div');
-  row.className='consent-item';
-  row.onclick=()=>toggleConsent(i,row);
-  row.innerHTML=`<div class="tick">✓</div><div class="ct"><b>${c.b}</b> ${c.req?'<span class="req">Required</span>':'<span>Optional</span>'}<span>${c.s}</span></div>`;
-  ci.appendChild(row);
-});
+/* ---- build consent stepper ---- */
+function buildConsentStepper() {
+  const wrap = document.getElementById('cstepWrap');
+  wrap.innerHTML = '';
+  CONSENT.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'cstep' + (i === 0 ? ' active' : '');
+    div.id = 'cstep-' + i;
+    const actions = c.req
+      ? `<button class="btn primary" onclick="consentAgree(${i})">I agree →</button>`
+      : `<button class="btn primary" onclick="consentAgree(${i})">Yes please →</button><button class="btn ghost" onclick="consentSkip(${i})">Skip →</button>`;
+    div.innerHTML = `<div class="cstep-num">${i + 1} of ${CONSENT.length}</div><div class="cstep-title">${c.b}</div><div class="cstep-desc">${c.s}</div><span class="cstep-tag ${c.req ? 'req' : 'opt'}">${c.req ? 'Required' : 'Optional'}</span><div class="cstep-actions">${actions}</div>`;
+    wrap.appendChild(div);
+  });
+}
+buildConsentStepper();
 
 function pick(btn, key, type, cap){
   if(type === 'single'){
@@ -702,20 +723,50 @@ function updateScore(){
   document.getElementById('liveTier').textContent=t.name;
 }
 
-/* ---- consent logic ---- */
-function checkConsentReady(){
-  const consentOk = CONSENT.every((c,idx) => !c.req || consentState[idx]);
-  const identityOk = IDENTITY_FIELDS.every(f => {
-    if(!f.required) return true;
+/* ---- consent stepper logic ---- */
+function updateConsentProgress() {
+  const answered = consentState.filter(s => s !== null).length;
+  const fill = document.getElementById('cstepFill');
+  if (fill) fill.style.width = ((answered / CONSENT.length) * 100) + '%';
+}
+function advanceConsent(idx, agreed) {
+  consentState[idx] = agreed;
+  updateConsentProgress();
+  const cur = document.getElementById('cstep-' + idx);
+  const nxt = document.getElementById('cstep-' + (idx + 1));
+  if (nxt) {
+    cur.classList.add('exit');
+    setTimeout(() => {
+      cur.classList.remove('active', 'exit');
+      nxt.classList.add('active', 'enter');
+      setTimeout(() => nxt.classList.remove('enter'), 250);
+      consentStep = idx + 1;
+    }, 180);
+  } else {
+    cur.classList.add('exit');
+    setTimeout(() => {
+      cur.classList.remove('active', 'exit');
+      const done = document.createElement('div');
+      done.className = 'cstep-done';
+      done.textContent = 'All set — ready to accept stewardship.';
+      document.getElementById('cstepWrap').appendChild(done);
+      consentStep = CONSENT.length;
+      checkConsentReady();
+    }, 180);
+  }
+  checkConsentReady();
+}
+function consentAgree(i) { advanceConsent(i, true); }
+function consentSkip(i)  { advanceConsent(i, false); }
+function checkConsentReady() {
+  const consentOk  = CONSENT.every((c, idx) => !c.req || consentState[idx] === true);
+  const allAnswered = consentState.every(s => s !== null);
+  const identityOk  = IDENTITY_FIELDS.every(f => {
+    if (!f.required) return true;
     const el = document.getElementById(f.id);
     return el && el.value.trim() !== '';
   });
-  document.getElementById('consentConfirm').disabled = !(consentOk && identityOk);
-}
-function toggleConsent(i,row){
-  consentState[i]=!consentState[i];
-  row.classList.toggle('on',consentState[i]);
-  checkConsentReady();
+  document.getElementById('consentConfirm').disabled = !(consentOk && allAnswered && identityOk);
 }
 function openConsent(){ document.getElementById('overlay').classList.add('open'); }
 function closeConsent(){ document.getElementById('overlay').classList.remove('open'); }
@@ -730,6 +781,7 @@ async function confirmConsent(){
     steward_name:              (document.getElementById('steward_name')    || {}).value || '',
     steward_email:             (document.getElementById('steward_email')   || {}).value || '',
     garden_address:            (document.getElementById('garden_address')  || {}).value || '',
+    garden_suburb:             (document.getElementById('garden_suburb')   || {}).value || '',
     garden_name:               (document.getElementById('garden_name')     || {}).value || '',
     garden_country:            (document.getElementById('garden_country')  || {}).value || '',
     garden_region:             (document.getElementById('garden_region')   || {}).value || '',
