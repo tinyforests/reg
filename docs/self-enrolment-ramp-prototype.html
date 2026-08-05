@@ -571,11 +571,12 @@ const PILLARS = [
 ];
 
 const IDENTITY_FIELDS = [
-  {id:'steward_name',    label:'Your name',       type:'text',  placeholder:'Your full name',          required:true},
-  {id:'steward_email',   label:'Email',           type:'email', placeholder:'your@email.com',          required:true},
-  {id:'garden_address',  label:'Garden address',  type:'text',  placeholder:'Street address',          required:true},
-  {id:'garden_country',  label:'Country',         type:'text',  placeholder:'e.g. Australia, UK, US',  required:true},
-  {id:'garden_region',   label:'State / region',  type:'text',  placeholder:'e.g. Victoria, Yorkshire', required:false}
+  {id:'steward_name',    label:'Your name',       type:'text',  placeholder:'Your full name',                          required:true},
+  {id:'steward_email',   label:'Email',           type:'email', placeholder:'your@email.com',                          required:true},
+  {id:'garden_address',  label:'Garden address',  type:'text',  placeholder:'Street address',                          required:true},
+  {id:'garden_name',     label:'Garden name',     type:'text',  placeholder:'e.g. The Wattle Glen Refuge (optional)',  required:false},
+  {id:'garden_country',  label:'Country',         type:'text',  placeholder:'e.g. Australia, UK, US',                  required:true},
+  {id:'garden_region',   label:'State / region',  type:'text',  placeholder:'e.g. Victoria, Yorkshire',                required:false}
 ];
 
 const CONSENT = [
@@ -729,6 +730,7 @@ async function confirmConsent(){
     steward_name:              (document.getElementById('steward_name')    || {}).value || '',
     steward_email:             (document.getElementById('steward_email')   || {}).value || '',
     garden_address:            (document.getElementById('garden_address')  || {}).value || '',
+    garden_name:               (document.getElementById('garden_name')     || {}).value || '',
     garden_country:            (document.getElementById('garden_country')  || {}).value || '',
     garden_region:             (document.getElementById('garden_region')   || {}).value || '',
     bio_q1_indigenous_species: answers['bio_0']    || 0,
