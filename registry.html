@@ -490,6 +490,14 @@ function _esc(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function streetFromAddress(addr) {
+  if (!addr) return '';
+  var street = addr.split(',')[0].trim();
+  // Strip leading house/unit number (e.g. "12 ", "12A ", "1/12 ", "12-14 ")
+  street = street.replace(/^\d[\d\-\/A-Za-z]*\s+/, '');
+  return street;
+}
+
 function renderProvisional(rows) {
   var grid = document.getElementById('provisionalGrid');
   if (!grid) return;
@@ -503,8 +511,8 @@ function renderProvisional(rows) {
     // A=timestamp B=submission_id C=steward_name D=steward_email E=garden_address
     // R(17)=score S(18)=tier X(23)=review_status
     var submitted = _esc(row[0]  || '');   // A: timestamp
-    var name      = _esc(row[2]  || '');   // C: steward_name
-    var suburb    = _esc(row[4]  || '');   // E: garden_address
+    var name      = _esc((row[2] || '').split(' ')[0]);          // first name only
+    var suburb    = _esc(streetFromAddress(row[4] || ''));        // street name only
     var score     = _esc(row[17] || '');   // R: provisional_score_total
     var tier      = _esc(row[18] || '');   // S: provisional_tier
     var status    = (row[23] || '').toLowerCase().trim();  // X: review_status
