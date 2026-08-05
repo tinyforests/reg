@@ -17,8 +17,14 @@
   "enroller": "Self-enrolled",
   "verifier": "Gardener & Son",
   "area_sqm": null,
+  "target_score": 60,
   "description": "Self-enrolled garden at 140 Auburn Road, Hawthorn. Registered via the Ecological Registry self-enrolment form. Submission ID: SUB-1785922832618-DG3CE.",
-  "evc": null,
+  "evc": {
+    "name": "Not assessed",
+    "code": "TBC",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
   "biodiversity": {
     "indigenous_species_current": 8,
     "indigenous_species_baseline": 8,
@@ -27,7 +33,8 @@
     "structural_layers_baseline": 3,
     "canopy_cover_pct_current": 20,
     "canopy_cover_pct_baseline": 20,
-    "weed_pressure": "Low"
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Low"
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -47,6 +54,7 @@
     "has_rock_refuges": true,
     "has_water_feature": false,
     "has_nest_boxes": false,
+    "planting_method": "Self-enrolled — details unverified",
     "fauna_sightings": []
   },
   "connectivity": {
@@ -55,6 +63,9 @@
     "park_distance_m": 200,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0,
+    "cluster_area_ha": 0,
+    "cluster_name": "Hawthorn",
   },
   "evidence": {
     "has_photos": true,
