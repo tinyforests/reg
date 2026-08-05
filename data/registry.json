@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Jun 2026",
-    "total_gardens": 14,
+    "total_gardens": 15,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0",
@@ -597,6 +597,37 @@
       },
       "council": "Boroondara City Council",
       "ward": "Maranoa",
+      "lga": "Boroondara"
+    },
+    {
+      "garden_id": "ER-AU-VIC-HW-AUB-0001",
+      "garden_name": "The Auburn Test",
+      "suburb": "Hawthorn",
+      "state": "VIC",
+      "score": 35,
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 6
+      },
+      "primary_evc": null,
+      "bioregion": null,
+      "status": "Active / Establishing",
+      "verification_level": "site_visit",
+      "verification_label": "Site Visit Verified",
+      "last_verified": "Aug 2026",
+      "badge_count": 2,
+      "badges": [
+        "indigenous_dominant",
+        "site_visit_badge"
+      ],
+      "profile_url": null,
+      "data_file": "data/auburn_test.json",
+      "typology": "Self-Enrolled Garden",
+      "registry_role": "Participant",
+      "trajectory": "Establishing",
+      "points_available": 65,
+      "council": "Boroondara City Council",
       "lga": "Boroondara"
     }
   ]

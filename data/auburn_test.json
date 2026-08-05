@@ -1,0 +1,91 @@
+{
+  "garden_id": "ER-AU-VIC-HW-AUB-0001",
+  "garden_name": "The Auburn Test",
+  "garden_type": "Self-Enrolled Garden",
+  "typology": "Self-Enrolled Garden",
+  "registry_role": "Participant",
+  "trajectory": "Establishing",
+  "suburb": "Hawthorn",
+  "state": "VIC",
+  "council": "Boroondara City Council",
+  "lga": "Boroondara",
+  "assessment_date": "Aug 2026",
+  "baseline_date": "Aug 2026",
+  "stewards": "Test Steward",
+  "designer": null,
+  "designer_id": null,
+  "enroller": "Self-enrolled",
+  "verifier": "Gardener & Son",
+  "area_sqm": null,
+  "description": "Self-enrolled garden at 140 Auburn Road, Hawthorn. Registered via the Ecological Registry self-enrolment form. Submission ID: SUB-1785922832618-DG3CE.",
+  "evc": null,
+  "biodiversity": {
+    "indigenous_species_current": 8,
+    "indigenous_species_baseline": 8,
+    "indigenous_dominant": true,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 3,
+    "canopy_cover_pct_current": 20,
+    "canopy_cover_pct_baseline": 20,
+    "weed_pressure": "Low"
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 3,
+    "soil_health_max": 5,
+    "water_function_score": 3,
+    "water_function_baseline": 3,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": true,
+    "has_swale": false
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "habitat_nodes_baseline": 2,
+    "has_embedded_logs": false,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Local park",
+    "park_distance_m": 200,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_species_list": false,
+    "has_fauna_record": false,
+    "has_professional_assessment": false,
+    "verification_level": "site_visit",
+    "verification_label": "Site Visit Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Self-enrolment submitted",
+      "date": "Aug 2026",
+      "complete": true
+    },
+    {
+      "title": "Site visit completed",
+      "date": "Aug 2026",
+      "complete": true
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Self-enrolment submission received",
+      "date": "Aug 2026",
+      "type": "Enrolment",
+      "category": "assessment",
+      "notes": "Submitted via self-enrolment form. Score 34/100, Habitat Garden. Submission ID: SUB-1785922832618-DG3CE."
+    }
+  ],
+  "notes": "Test garden created to validate the self-enrolment to registered pipeline. Raw field values derived from form submission scores."
+}
