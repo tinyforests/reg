@@ -115,6 +115,8 @@ function handleEnrolment(payload, cache) {
   var address     = safeStr(payload.garden_address  || '', 200);
   var suburb      = safeStr(payload.garden_suburb   || '', 120);
   var gardenName  = safeStr(payload.garden_name     || '', 120);
+  var gardenLat   = safeStr(payload.garden_lat      || '', 20);
+  var gardenLng   = safeStr(payload.garden_lng      || '', 20);
   if (!name)    return jsonResp({ok: false, error: 'steward_name is required.'});
   if (!address) return jsonResp({ok: false, error: 'garden_address is required.'});
 
@@ -163,7 +165,9 @@ function handleEnrolment(payload, cache) {
     safeStr(payload.garden_country || '', 80),     // AC garden_country
     safeStr(payload.garden_region  || '', 80),     // AD garden_region
     gardenName,                                    // AE garden_name
-    suburb                                         // AF garden_suburb
+    suburb,                                        // AF garden_suburb
+    gardenLat,                                     // AG garden_lat
+    gardenLng                                      // AH garden_lng
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -182,6 +186,8 @@ function handleEnrolment(payload, cache) {
       'Garden address:  ' + address,
       'Garden name:     ' + (gardenName || '(not provided)'),
       'Suburb:          ' + (suburb || '(not provided)'),
+      'Coordinates:     ' + (gardenLat && gardenLng ? gardenLat + ', ' + gardenLng : '(not resolved)'),
+      'EVC:             ' + (safeStr(payload.evc_code || '', 50) || '(not resolved)') + ' ' + (safeStr(payload.evc_name || '', 120) || ''),
       'Score:           ' + score + '/100',
       'Tier:            ' + tier,
       'Submission ID:   ' + submissionId,

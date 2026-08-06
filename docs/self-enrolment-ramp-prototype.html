@@ -387,6 +387,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
   </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 <script>
 const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
 
@@ -396,11 +397,103 @@ const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTS
    When present, bio_0 renders as a species checklist instead of count bands.
    TODO: loadPlantList(evcCode) is a g-and-s-core.js candidate — extract when >1 consumer */
 const _p = new URLSearchParams(window.location.search);
-const evcCode     = _p.get('evc_code') || '';
-const evcName     = _p.get('evc_name') || '';
+let evcCode     = _p.get('evc_code') || '';
+let evcName     = _p.get('evc_name') || '';
+let gardenLat   = '';
+let gardenLng   = '';
 const speciesList = _p.get('species')
   ? _p.get('species').split(',').map(s => s.trim()).filter(Boolean)
   : [];
+
+/* ---- EVC auto-resolution ----
+   Fires on blur of suburb field (after address + suburb are both present).
+   Geocodes via Nominatim → queries VIC WFS → point-in-polygon via Turf.js.
+   Populates evcCode, evcName, gardenLat, gardenLng silently.
+   Non-blocking: submission proceeds with blanks if lookup fails. */
+const _VIC_WFS   = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
+const _EVC_LAYER = 'open-data-platform:nv2005_evcbcs';
+
+function _setEvcStatus(msg, ok) {
+  const el = document.getElementById('evc-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = ok ? '#7a9e5f' : 'rgba(61,69,53,.5)';
+}
+
+async function resolveEvc() {
+  const address = (document.getElementById('garden_address') || {}).value || '';
+  const suburb  = (document.getElementById('garden_suburb')  || {}).value || '';
+  if (!address || !suburb) return;
+
+  _setEvcStatus('Resolving your EVC…', false);
+
+  try {
+    /* 1. Geocode */
+    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q='
+               + encodeURIComponent(address + ', ' + suburb + ', Victoria, Australia');
+    const gRes  = await fetch(gUrl, { headers: { 'Accept-Language': 'en' } });
+    const gData = await gRes.json();
+    if (!gData || !gData.length) { _setEvcStatus('Address not found — EVC will be blank', false); return; }
+
+    const lat = parseFloat(gData[0].lat);
+    const lng = parseFloat(gData[0].lon);
+    gardenLat = lat.toFixed(6);
+    gardenLng = lng.toFixed(6);
+
+    /* 2. WFS query */
+    const d    = 0.02;
+    const bbox = (lng - d) + ',' + (lat - d) + ',' + (lng + d) + ',' + (lat + d) + ',EPSG:4326';
+    const wUrl = _VIC_WFS + '?service=WFS&version=1.0.0&request=GetFeature'
+               + '&typeName=' + encodeURIComponent(_EVC_LAYER)
+               + '&bbox=' + bbox + '&outputFormat=application%2Fjson';
+    const wRes  = await fetch(wUrl);
+    const wData = await wRes.json();
+    if (!wData.features || !wData.features.length) { _setEvcStatus('No EVC data for this location', false); return; }
+
+    /* 3. Point-in-polygon (exact), then closest-centroid fallback */
+    const pt = turf.point([lng, lat]);
+    let match = null;
+    for (const f of wData.features) {
+      try {
+        const geom = f.geometry.type === 'Polygon'
+          ? turf.polygon(f.geometry.coordinates)
+          : null;
+        if (geom && turf.booleanPointInPolygon(pt, geom)) { match = f; break; }
+      } catch(e) {}
+    }
+    if (!match) {
+      for (const f of wData.features) {
+        try {
+          for (const ring of (f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : [])) {
+            if (turf.booleanPointInPolygon(pt, turf.polygon(ring))) { match = f; break; }
+          }
+          if (match) break;
+        } catch(e) {}
+      }
+    }
+    if (!match) {
+      let best = Infinity;
+      for (const f of wData.features) {
+        try {
+          const g = f.geometry.type === 'Polygon'
+            ? turf.polygon(f.geometry.coordinates)
+            : turf.multiPolygon(f.geometry.coordinates);
+          const d2 = turf.distance(pt, turf.centroid(g));
+          if (d2 < best) { best = d2; match = f; }
+        } catch(e) {}
+      }
+    }
+    if (!match) { _setEvcStatus('EVC could not be resolved', false); return; }
+
+    const p  = match.properties;
+    evcCode  = 'EVC ' + (p.evc || p.evc_no || '');
+    evcName  = p.x_evcname || p.evc_name || '';
+    _setEvcStatus(evcName + ' · ' + evcCode, true);
+
+  } catch(err) {
+    _setEvcStatus('EVC lookup failed — will submit without', false);
+  }
+}
 
 function _esc(s) {
   return String(s == null ? '' : s)
@@ -649,8 +742,17 @@ IDENTITY_FIELDS.forEach(f => {
   inp.required = f.required;
   inp.autocomplete = f.type === 'email' ? 'email' : 'off';
   inp.addEventListener('input', checkConsentReady);
+  if (f.id === 'garden_address' || f.id === 'garden_suburb') {
+    inp.addEventListener('blur', resolveEvc);
+  }
   idf.appendChild(lbl);
   idf.appendChild(inp);
+  if (f.id === 'garden_suburb') {
+    const statusEl = document.createElement('div');
+    statusEl.id = 'evc-status';
+    statusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:-.1rem;margin-bottom:.4rem;';
+    idf.appendChild(statusEl);
+  }
 });
 
 /* ---- build consent stepper ---- */
@@ -805,6 +907,8 @@ async function confirmConsent(){
     consent_aggregate_stats:     consentState[3] === true,
     evc_code:                    evcCode,
     evc_name:                    evcName,
+    garden_lat:                  gardenLat,
+    garden_lng:                  gardenLng,
     has_species_list:            tickedSpecies.length > 0
   };
 
