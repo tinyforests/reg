@@ -145,12 +145,14 @@ def _haversine_m(lat1, lng1, lat2, lng2):
     return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
 
-def build_adjacency(coord_index):
+def build_adjacency(coord_index, name_index=None):
     """Given {garden_id: (lat, lng, verified)}, return {garden_id: [neighbour_dict, ...]}.
-    Each neighbour dict matches the shape the scoring engine expects:
-      {"garden_id": str, "verified": bool, "distance_m": int}"""
+    Each neighbour dict is compatible with both the scoring engine and profile map:
+      {"id": str, "garden_id": str, "name": str, "lat": float, "lng": float,
+       "verified": bool, "distance_m": int}"""
     ids = list(coord_index.keys())
     adjacency = {gid: [] for gid in ids}
+    name_index = name_index or {}
     for i, a in enumerate(ids):
         lat_a, lng_a, _ = coord_index[a]
         for b in ids[i + 1:]:
@@ -158,9 +160,15 @@ def build_adjacency(coord_index):
             dist = _haversine_m(lat_a, lng_a, lat_b, lng_b)
             if dist <= ADJACENCY_RADIUS_M:
                 _, _, verified_a = coord_index[a]
-                adjacency[a].append({"garden_id": b, "verified": verified_b,
+                adjacency[a].append({"id": b, "garden_id": b,
+                                     "name": name_index.get(b, b),
+                                     "lat": lat_b, "lng": lng_b,
+                                     "verified": verified_b,
                                      "distance_m": int(dist)})
-                adjacency[b].append({"garden_id": a, "verified": verified_a,
+                adjacency[b].append({"id": a, "garden_id": a,
+                                     "name": name_index.get(a, a),
+                                     "lat": lat_a, "lng": lng_a,
+                                     "verified": verified_a,
                                      "distance_m": int(dist)})
     return adjacency
 
@@ -195,7 +203,9 @@ def sync(check_only=False):
             is_verified = g.get('status') not in PRE_INSTALL_STATUSES | {'Provisional'}
             coord_index[gid] = (float(lat), float(lng), is_verified)
 
-    adjacency = build_adjacency(coord_index)
+    name_index = {g.get('garden_id'): g.get('garden_name', '')
+                  for g in registry['gardens'] if g.get('garden_id')}
+    adjacency = build_adjacency(coord_index, name_index)
 
     for g in registry['gardens']:
         gid = g.get('garden_id', '?')
