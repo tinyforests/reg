@@ -413,6 +413,10 @@ let evcCode     = _p.get('evc_code') || '';
 let evcName     = _p.get('evc_name') || '';
 let gardenLat   = '';
 let gardenLng   = '';
+let parkName    = '';
+let parkLat     = '';
+let parkLng     = '';
+let parkDistM   = null;
 const speciesList = _p.get('species')
   ? _p.get('species').split(',').map(s => s.trim()).filter(Boolean)
   : [];
@@ -502,8 +506,56 @@ async function resolveEvc() {
     evcName  = p.x_evcname || p.evc_name || '';
     _setEvcStatus(evcName + ' · ' + evcCode, true);
 
+    /* 4. Nearest greenspace (non-blocking, runs in parallel with EVC display) */
+    resolveNearestPark(lat, lng);
+
   } catch(err) {
     _setEvcStatus('EVC lookup failed — will submit without', false);
+  }
+}
+
+/* ---- Nearest park / greenspace lookup ----
+   Queries OSM Overpass for parks, reserves, and greenways within 600m.
+   Picks the closest by centroid. Populates parkName/parkLat/parkLng/parkDistM.
+   Non-blocking: submission proceeds with blanks if lookup fails. */
+const _OVERPASS = 'https://overpass-api.de/api/interpreter';
+
+async function resolveNearestPark(lat, lng) {
+  parkName = ''; parkLat = ''; parkLng = ''; parkDistM = null;
+  const r = 600;
+  const query = `[out:json][timeout:10];
+(
+  way["leisure"="park"](around:${r},${lat},${lng});
+  way["leisure"="nature_reserve"](around:${r},${lat},${lng});
+  way["leisure"="garden"]["access"!="private"](around:${r},${lat},${lng});
+  way["landuse"="grass"](around:${r},${lat},${lng});
+  way["landuse"="meadow"](around:${r},${lat},${lng});
+  relation["leisure"="park"](around:${r},${lat},${lng});
+  relation["leisure"="nature_reserve"](around:${r},${lat},${lng});
+);
+out center tags;`;
+  try {
+    const res  = await fetch(_OVERPASS, { method: 'POST', body: 'data=' + encodeURIComponent(query) });
+    const data = await res.json();
+    if (!data.elements || !data.elements.length) return;
+
+    const pt = turf.point([lng, lat]);
+    let best = Infinity, bestEl = null;
+    for (const el of data.elements) {
+      const clat = el.center ? el.center.lat : el.lat;
+      const clng = el.center ? el.center.lon : el.lon;
+      if (!clat || !clng) continue;
+      const d = turf.distance(pt, turf.point([clng, clat]), { units: 'meters' });
+      if (d < best) { best = d; bestEl = el; bestEl._clat = clat; bestEl._clng = clng; }
+    }
+    if (!bestEl) return;
+
+    parkName  = bestEl.tags && bestEl.tags.name ? bestEl.tags.name : 'Unnamed park';
+    parkLat   = bestEl._clat.toFixed(6);
+    parkLng   = bestEl._clng.toFixed(6);
+    parkDistM = Math.round(best);
+  } catch(err) {
+    /* non-fatal */
   }
 }
 
@@ -976,6 +1028,10 @@ async function confirmConsent(){
     evc_name:                    evcName,
     garden_lat:                  gardenLat,
     garden_lng:                  gardenLng,
+    park_name:                   parkName,
+    park_lat:                    parkLat,
+    park_lng:                    parkLng,
+    park_distance_m:             parkDistM !== null ? String(parkDistM) : '',
     has_species_list:            tickedSpecies.length > 0
   };
 

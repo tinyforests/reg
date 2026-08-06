@@ -95,11 +95,11 @@
       "garden_name": "Parring",
       "suburb": "Balwyn",
       "state": "VIC",
-      "score": 50,
+      "score": 53,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 11
+        "points_to_next": 8
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -131,7 +131,10 @@
       },
       "council": "Boroondara City Council",
       "ward": "Gardiner",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-BAL-PRD-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-SH-MID-001",
@@ -389,7 +392,10 @@
       },
       "council": "Boroondara City Council",
       "ward": "Gardiner",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-BAL-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-NTH-RUP-001",
