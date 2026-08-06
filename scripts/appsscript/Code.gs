@@ -117,6 +117,10 @@ function handleEnrolment(payload, cache) {
   var gardenName  = safeStr(payload.garden_name     || '', 120);
   var gardenLat   = safeStr(payload.garden_lat      || '', 20);
   var gardenLng   = safeStr(payload.garden_lng      || '', 20);
+  var parkName    = safeStr(payload.park_name       || '', 120);
+  var parkLat     = safeStr(payload.park_lat        || '', 20);
+  var parkLng     = safeStr(payload.park_lng        || '', 20);
+  var parkDistM   = safeStr(payload.park_distance_m || '', 10);
   if (!name)    return jsonResp({ok: false, error: 'steward_name is required.'});
   if (!address) return jsonResp({ok: false, error: 'garden_address is required.'});
 
@@ -167,7 +171,11 @@ function handleEnrolment(payload, cache) {
     gardenName,                                    // AE garden_name
     suburb,                                        // AF garden_suburb
     gardenLat,                                     // AG garden_lat
-    gardenLng                                      // AH garden_lng
+    gardenLng,                                     // AH garden_lng
+    parkName,                                      // AI park_name
+    parkLat,                                       // AJ park_lat
+    parkLng,                                       // AK park_lng
+    parkDistM                                      // AL park_distance_m
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -188,6 +196,7 @@ function handleEnrolment(payload, cache) {
       'Suburb:          ' + (suburb || '(not provided)'),
       'Coordinates:     ' + (gardenLat && gardenLng ? gardenLat + ', ' + gardenLng : '(not resolved)'),
       'EVC:             ' + (safeStr(payload.evc_code || '', 50) || '(not resolved)') + ' ' + (safeStr(payload.evc_name || '', 120) || ''),
+      'Nearest park:    ' + (parkName || '(not resolved)') + (parkDistM ? ' · ' + parkDistM + 'm' : ''),
       'Score:           ' + score + '/100',
       'Tier:            ' + tier,
       'Submission ID:   ' + submissionId,

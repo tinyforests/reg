@@ -24,6 +24,7 @@ Usage:
 """
 
 import json
+import math
 import os
 import shutil
 import sys
@@ -131,6 +132,39 @@ def award_badges(record):
     return score_badges + verification_badges + evidence_badges
 
 
+ADJACENCY_RADIUS_M = 300  # gardens within this distance are considered adjacent
+
+
+def _haversine_m(lat1, lng1, lat2, lng2):
+    """Great-circle distance in metres between two WGS-84 points."""
+    R = 6_371_000
+    φ1, φ2 = math.radians(lat1), math.radians(lat2)
+    dφ = math.radians(lat2 - lat1)
+    dλ = math.radians(lng2 - lng1)
+    a = math.sin(dφ / 2) ** 2 + math.cos(φ1) * math.cos(φ2) * math.sin(dλ / 2) ** 2
+    return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def build_adjacency(coord_index):
+    """Given {garden_id: (lat, lng, verified)}, return {garden_id: [neighbour_dict, ...]}.
+    Each neighbour dict matches the shape the scoring engine expects:
+      {"garden_id": str, "verified": bool, "distance_m": int}"""
+    ids = list(coord_index.keys())
+    adjacency = {gid: [] for gid in ids}
+    for i, a in enumerate(ids):
+        lat_a, lng_a, _ = coord_index[a]
+        for b in ids[i + 1:]:
+            lat_b, lng_b, verified_b = coord_index[b]
+            dist = _haversine_m(lat_a, lng_a, lat_b, lng_b)
+            if dist <= ADJACENCY_RADIUS_M:
+                _, _, verified_a = coord_index[a]
+                adjacency[a].append({"garden_id": b, "verified": verified_b,
+                                     "distance_m": int(dist)})
+                adjacency[b].append({"garden_id": a, "verified": verified_a,
+                                     "distance_m": int(dist)})
+    return adjacency
+
+
 def sync(check_only=False):
     with open(REGISTRY) as f:
         registry = json.load(f)
@@ -142,6 +176,27 @@ def sync(check_only=False):
             changes.append("removed stored derived block: %s" % block)
             del registry[block]
 
+    # Pass 1: build coordinate index for adjacency computation.
+    # Format: {garden_id: (lat, lng, is_verified)} — only gardens with coordinates.
+    coord_index = {}
+    _records = {}  # cache loaded records to avoid re-reading in pass 2
+    for g in registry['gardens']:
+        gid = g.get('garden_id', '?')
+        data_file = (g.get('data_file') or '').lstrip('/')
+        path = os.path.join(REPO_ROOT, data_file)
+        if not os.path.exists(path):
+            continue
+        with open(path) as f:
+            record = json.load(f)
+        _records[gid] = record
+        c = record.get('connectivity') or {}
+        lat, lng = c.get('lat'), c.get('lng')
+        if lat is not None and lng is not None:
+            is_verified = g.get('status') not in PRE_INSTALL_STATUSES | {'Provisional'}
+            coord_index[gid] = (float(lat), float(lng), is_verified)
+
+    adjacency = build_adjacency(coord_index)
+
     for g in registry['gardens']:
         gid = g.get('garden_id', '?')
         data_file = (g.get('data_file') or '').lstrip('/')
@@ -149,8 +204,24 @@ def sync(check_only=False):
         if not os.path.exists(path):
             print("WARN %s: missing data_file %s — skipped" % (gid, data_file))
             continue
-        with open(path) as f:
-            record = json.load(f)
+        record = _records.get(gid)
+        if record is None:
+            with open(path) as f:
+                record = json.load(f)
+
+        # Inject computed adjacency so scoring engine sees real neighbours.
+        if gid in adjacency and adjacency[gid]:
+            record.setdefault('connectivity', {})['adjacent_registered_gardens'] = adjacency[gid]
+
+        # Store neighbour IDs in the registry entry for profile page map.
+        adj_ids = [n['garden_id'] for n in adjacency.get(gid, [])]
+        old_adj  = g.get('adjacent_garden_ids') or []
+        if adj_ids != old_adj:
+            changes.append("%s: adjacent_garden_ids %s -> %s" % (gid, old_adj, adj_ids))
+            if adj_ids:
+                g['adjacent_garden_ids'] = adj_ids
+            elif 'adjacent_garden_ids' in g:
+                del g['adjacent_garden_ids']
 
         # Demo flag: input file is authoritative.
         demo = bool(record.get('demo')) or bool(g.get('demo'))
