@@ -353,6 +353,14 @@ UI considerations:
 
 Sequencing: this is downstream of the shared library work. National expansion requires the shared library to exist first.
 
+### Map coordinates in self-enrolled gardens — park pins missing
+
+Self-enrolled garden JSONs don't have `lat`/`lng` (garden location) or `park_lat`/`park_lng` (adjacent park). Without them the profile map shows no park marker and the dashed connectivity line.
+
+**Current fix (manual):** after a submission is approved, look up both points on Google Maps and add them to the garden JSON before committing. Make this an explicit step in the review checklist alongside setting `verified` in the sheet.
+
+**Long-term direction:** map picker in the self-enrolment form — Leaflet map auto-centred on the typed address (via geocode), steward confirms/moves their garden pin and optionally drops a park pin. Passes `lat`, `lng`, `park_lat`, `park_lng` through the payload to the sheet and into the JSON. Meaningful build: requires address geocoding and a two-pin UX inside the form modal.
+
 ### VERIFY DESIGNER BACKFILL
 
 The three fields (designer_id, enroller, verifier) were inserted into all 16 files by script and may have been blanket-filled with identical values. Lorimer must be designer "Sam Cox Landscape" / designer_id "sam-cox-landscape" / enroller "Gardener & Son". Canterbury G02 and Separation Creek are not G&S designs — check what they got. Fix any that were blanket-filled.
