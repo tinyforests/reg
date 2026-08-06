@@ -353,6 +353,20 @@ UI considerations:
 
 Sequencing: this is downstream of the shared library work. National expansion requires the shared library to exist first.
 
+### Auto-resolve EVC in self-enrolment form from typed address
+
+The form already accepts `?evc_code` and `?evc_name` via URL params when a steward arrives via the findmyevc handover link. A steward who enrolls directly gets no EVC auto-fill — those fields are either empty or manually entered.
+
+**Proposed:** after the steward types their address + suburb, the form geocodes the address (Nominatim, same as findmyevc) and queries the Victorian WFS to resolve evc_code and evc_name, then silently populates the payload. No visible EVC UI needed — it just flows through to the sheet as AA/AB columns.
+
+**Implementation notes:**
+- resolveAddressToClassification(address) already exists in the shared-library pending-work entry as the canonical function to build. This is one of its consumers.
+- The WFS query is already working in findmyevc — pull the same pattern, don't reinvent it.
+- Geocoding is async; EVC lookup is async. Fire both after the address field loses focus (onblur on garden_suburb or garden_address). Non-blocking — if the lookup fails (address not in Victoria, WFS down), submission still proceeds with evc_code blank.
+- Victoria-only for now. The national-expansion entry covers what happens when WA, NSW etc. are added.
+
+Pairs with the map-coordinates pending entry — if we're geocoding the address anyway, we get lat/lng for free at the same moment.
+
 ### Map coordinates in self-enrolled gardens — park pins missing
 
 Self-enrolled garden JSONs don't have `lat`/`lng` (garden location) or `park_lat`/`park_lng` (adjacent park). Without them the profile map shows no park marker and the dashed connectivity line.
