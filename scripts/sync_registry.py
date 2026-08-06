@@ -132,7 +132,7 @@ def award_badges(record):
     return score_badges + verification_badges + evidence_badges
 
 
-ADJACENCY_RADIUS_M = 300  # gardens within this distance are considered adjacent
+ADJACENCY_RADIUS_M = 500  # gardens within this distance are considered adjacent
 
 
 def _haversine_m(lat1, lng1, lat2, lng2):
