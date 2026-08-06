@@ -50,7 +50,10 @@
       },
       "council": "Boroondara City Council",
       "ward": "Gardiner",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-SH-MID-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-SY-NIC-0002",
@@ -174,7 +177,10 @@
       },
       "council": "Boroondara City Council",
       "ward": "Gardiner",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-SH-ARU-0001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-SH-SIR-0001",
@@ -493,11 +499,11 @@
       "council": "Whitehorse City Council",
       "ward": "Elgar",
       "lga": "Whitehorse",
-      "score": 52,
+      "score": 55,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 9
+        "points_to_next": 6
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -523,7 +529,10 @@
         "gardens": 3,
         "area_ha": 0.074,
         "status": "Forming"
-      }
+      },
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-WHI-VIC-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-WHI-VIC-001",
@@ -535,11 +544,11 @@
       "council": "Whitehorse City Council",
       "ward": "Elgar",
       "lga": "Whitehorse",
-      "score": 44,
+      "score": 47,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 17
+        "points_to_next": 14
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -565,7 +574,10 @@
         "gardens": 4,
         "area_ha": 0.074,
         "status": "Forming"
-      }
+      },
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-WHI-YRK-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-CAN-FLI-001",
