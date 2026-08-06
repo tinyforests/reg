@@ -137,10 +137,23 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .cstep-wrap{min-height:160px;overflow:hidden}
 .cstep{display:none}
 .cstep.active{display:block}
-@keyframes cExit{to{opacity:0;transform:translateX(-20px)}}
-@keyframes cEnter{from{opacity:0;transform:translateX(20px)}}
-.cstep.exit{animation:cExit .18s ease forwards}
-.cstep.enter{animation:cEnter .22s ease forwards}
+@keyframes cExit    {to  {opacity:0;transform:translateX(-20px)}}
+@keyframes cEnter   {from{opacity:0;transform:translateX(20px)}}
+@keyframes cExitRev {to  {opacity:0;transform:translateX(20px)}}
+@keyframes cEnterRev{from{opacity:0;transform:translateX(-20px)}}
+.cstep.exit     {animation:cExit     .18s ease forwards}
+.cstep.enter    {animation:cEnter    .22s ease forwards}
+.cstep.exit-rev {animation:cExitRev  .18s ease forwards}
+.cstep.enter-rev{animation:cEnterRev .22s ease forwards}
+/* consent items (step 3) */
+.consent-item{border:1px solid var(--hairline);padding:14px 16px;display:flex;align-items:flex-start;gap:14px;margin-bottom:8px;cursor:pointer;user-select:none}
+.consent-item.required{cursor:default}
+.consent-item.checked{border-color:var(--signal)}
+.ci-check{width:16px;height:16px;border:1.5px solid var(--hairline);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:3px}
+.consent-item.checked .ci-check{border-color:var(--signal);background:var(--signal);color:#fff}
+.ci-body{flex:1}
+.ci-title{font-size:14px;font-weight:500;line-height:1.3;margin-bottom:4px}
+.ci-desc{font-size:12px;color:var(--ink-soft);line-height:1.5}
 .cstep-num{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
 .cstep-title{font-family:"Fraunces",serif;font-size:21px;line-height:1.25;margin-bottom:10px}
 .cstep-desc{font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:18px}
@@ -283,22 +296,21 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
   </section>
 </div>
 
-<!-- consent modal -->
+<!-- enrolment modal -->
 <div class="overlay" id="overlay">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fstepTitle">
     <div class="modal-head">
-      <div class="label">Stage 0 consent · revocable</div>
-      <h3 id="consentTitle" style="margin-top:8px">What you're agreeing to</h3>
+      <div class="label" id="fstepLabel">Step 1 of 3</div>
+      <h3 id="fstepTitle" style="margin-top:8px">Your garden</h3>
     </div>
     <div class="modal-body">
-      <p class="fieldnote" style="margin:0 0 8px;font-size:15px">Stewardship isn't a tickbox. You're agreeing to hold this garden's record across whoever lives here next — the memory belongs to whoever is tending it. You decide what's shared, and you can withdraw any of it at any time.</p>
-      <div id="identityFields" class="identity-fields"></div>
-      <div class="cstep-progress"><div class="cstep-fill" id="cstepFill"></div></div>
-      <div class="cstep-wrap" id="cstepWrap"></div>
+      <div class="cstep-progress"><div class="cstep-fill" id="fstepFill"></div></div>
+      <div class="cstep-wrap" id="fstepWrap"></div>
     </div>
     <div class="modal-foot">
       <button class="btn ghost" onclick="closeConsent()">Cancel</button>
-      <button class="btn primary" id="consentConfirm" onclick="confirmConsent()" disabled>Accept stewardship</button>
+      <button class="btn ghost" id="fstepBackBtn" onclick="formStepBack()" style="display:none">← Back</button>
+      <button class="btn primary" id="fstepNextBtn" onclick="formStepNext()" disabled>Continue →</button>
     </div>
   </div>
 </div>
@@ -695,7 +707,7 @@ const CONSENT = [
 /* ---- state ---- */
 const answers = {};   // pillarKey -> points
 let consentState = new Array(CONSENT.length).fill(null);
-let consentStep  = 0;
+let formStep     = 0;
 
 /* ---- build baseline UI ---- */
 const pillarsEl = document.getElementById('pillars');
@@ -729,48 +741,141 @@ PILLARS.forEach(p => {
   pillarsEl.appendChild(wrap);
 });
 
-/* ---- build identity inputs ---- */
-const idf = document.getElementById('identityFields');
-IDENTITY_FIELDS.forEach(f => {
-  const lbl = document.createElement('label');
-  lbl.setAttribute('for', f.id);
-  lbl.textContent = f.label;
-  const inp = document.createElement('input');
-  inp.type = f.type;
-  inp.id = f.id;
-  inp.placeholder = f.placeholder;
-  inp.required = f.required;
-  inp.autocomplete = f.type === 'email' ? 'email' : 'off';
-  inp.addEventListener('input', checkConsentReady);
-  if (f.id === 'garden_address' || f.id === 'garden_suburb') {
-    inp.addEventListener('blur', resolveEvc);
-  }
-  idf.appendChild(lbl);
-  idf.appendChild(inp);
-  if (f.id === 'garden_suburb') {
-    const statusEl = document.createElement('div');
-    statusEl.id = 'evc-status';
-    statusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:-.1rem;margin-bottom:.4rem;';
-    idf.appendChild(statusEl);
-  }
-});
+/* ---- multi-step enrolment form ---- */
+const FORM_STEP_FIELDS = [
+  ['garden_name', 'steward_name', 'steward_email'],
+  ['garden_address', 'garden_suburb', 'garden_region', 'garden_country']
+];
+const FORM_STEP_TITLES = ['Your garden', 'Location', 'Agree to stewardship'];
 
-/* ---- build consent stepper ---- */
-function buildConsentStepper() {
-  const wrap = document.getElementById('cstepWrap');
+function buildFormSteps() {
+  const wrap = document.getElementById('fstepWrap');
   wrap.innerHTML = '';
-  CONSENT.forEach((c, i) => {
+  // Steps 0 and 1: field groups
+  FORM_STEP_FIELDS.forEach((fieldIds, si) => {
     const div = document.createElement('div');
-    div.className = 'cstep' + (i === 0 ? ' active' : '');
-    div.id = 'cstep-' + i;
-    const actions = c.req
-      ? `<button class="btn primary" onclick="consentAgree(${i})">I agree →</button>`
-      : `<button class="btn primary" onclick="consentAgree(${i})">Yes please →</button><button class="btn ghost" onclick="consentSkip(${i})">Skip →</button>`;
-    div.innerHTML = `<div class="cstep-num">${i + 1} of ${CONSENT.length}</div><div class="cstep-title">${c.b}</div><div class="cstep-desc">${c.s}</div><span class="cstep-tag ${c.req ? 'req' : 'opt'}">${c.req ? 'Required' : 'Optional'}</span><div class="cstep-actions">${actions}</div>`;
+    div.className = 'cstep' + (si === 0 ? ' active' : '');
+    div.id = 'fstep-' + si;
+    const idfWrap = document.createElement('div');
+    idfWrap.className = 'identity-fields';
+    fieldIds.forEach(fid => {
+      const f = IDENTITY_FIELDS.find(x => x.id === fid);
+      if (!f) return;
+      const lbl = document.createElement('label');
+      lbl.setAttribute('for', fid);
+      lbl.textContent = f.label;
+      const inp = document.createElement('input');
+      inp.type = f.type;
+      inp.id = fid;
+      inp.placeholder = f.placeholder;
+      inp.required = !!f.required;
+      inp.autocomplete = f.type === 'email' ? 'email' : 'off';
+      inp.addEventListener('input', updateStepNext);
+      if (fid === 'garden_address' || fid === 'garden_suburb') {
+        inp.addEventListener('blur', resolveEvc);
+      }
+      idfWrap.appendChild(lbl);
+      idfWrap.appendChild(inp);
+      if (fid === 'garden_suburb') {
+        const statusEl = document.createElement('div');
+        statusEl.id = 'evc-status';
+        statusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:.25rem;';
+        idfWrap.appendChild(statusEl);
+      }
+    });
+    div.appendChild(idfWrap);
     wrap.appendChild(div);
   });
+  // Step 2: consent (all items together)
+  const consentDiv = document.createElement('div');
+  consentDiv.className = 'cstep';
+  consentDiv.id = 'fstep-2';
+  let chtml = '<p style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 16px">The record belongs to whoever is tending this garden. You decide what\'s shared and can withdraw at any time.</p>';
+  CONSENT.forEach((c, i) => {
+    consentState[i] = c.req ? true : null;
+    chtml += `<div class="consent-item${c.req ? ' checked required' : ''}" id="ci-${i}"${!c.req ? ` onclick="toggleConsent(${i})"` : ''}>` +
+      `<div class="ci-check" id="ci-check-${i}">${c.req ? '✓' : ''}</div>` +
+      `<div class="ci-body"><div class="ci-title">${c.b}</div><div class="ci-desc">${c.s}</div></div>` +
+      `<div class="cstep-tag ${c.req ? 'req' : 'opt'}">${c.req ? 'Required' : 'Optional'}</div>` +
+      `</div>`;
+  });
+  consentDiv.innerHTML = chtml;
+  wrap.appendChild(consentDiv);
+  updateStepUI();
 }
-buildConsentStepper();
+buildFormSteps();
+
+function _slideStep(fromId, toId, forward) {
+  const from = document.getElementById(fromId);
+  const to   = document.getElementById(toId);
+  const exitCls  = forward ? 'exit'      : 'exit-rev';
+  const enterCls = forward ? 'enter'     : 'enter-rev';
+  from.classList.add(exitCls);
+  setTimeout(() => {
+    from.classList.remove('active', exitCls);
+    to.classList.add('active', enterCls);
+    setTimeout(() => to.classList.remove(enterCls), 250);
+  }, 180);
+}
+
+function updateStepUI() {
+  const label   = document.getElementById('fstepLabel');
+  const title   = document.getElementById('fstepTitle');
+  const backBtn = document.getElementById('fstepBackBtn');
+  const nextBtn = document.getElementById('fstepNextBtn');
+  const fill    = document.getElementById('fstepFill');
+  if (label)   label.textContent  = 'Step ' + (formStep + 1) + ' of 3';
+  if (title)   title.textContent  = FORM_STEP_TITLES[formStep];
+  if (backBtn) backBtn.style.display = formStep > 0 ? '' : 'none';
+  if (nextBtn) nextBtn.textContent = formStep === 2 ? 'Accept stewardship' : 'Continue →';
+  if (fill)    fill.style.width   = ((formStep / 3) * 100) + '%';
+  updateStepNext();
+}
+
+function updateStepNext() {
+  const btn = document.getElementById('fstepNextBtn');
+  if (!btn) return;
+  if (formStep < 2) {
+    const fieldIds = FORM_STEP_FIELDS[formStep] || [];
+    const ok = IDENTITY_FIELDS
+      .filter(f => fieldIds.includes(f.id) && f.required)
+      .every(f => { const el = document.getElementById(f.id); return el && el.value.trim(); });
+    btn.disabled = !ok;
+  } else {
+    btn.disabled = !CONSENT.every((c, i) => !c.req || consentState[i] === true);
+  }
+}
+
+function formStepNext() {
+  if (formStep === 2) { confirmConsent(); return; }
+  const next = formStep + 1;
+  _slideStep('fstep-' + formStep, 'fstep-' + next, true);
+  formStep = next;
+  updateStepUI();
+}
+
+function formStepBack() {
+  if (formStep === 0) return;
+  const prev = formStep - 1;
+  _slideStep('fstep-' + formStep, 'fstep-' + prev, false);
+  formStep = prev;
+  updateStepUI();
+}
+
+function toggleConsent(i) {
+  if (CONSENT[i].req) return;
+  consentState[i] = consentState[i] !== true ? true : false;
+  const item  = document.getElementById('ci-' + i);
+  const check = document.getElementById('ci-check-' + i);
+  if (consentState[i]) {
+    item.classList.add('checked');
+    if (check) check.textContent = '✓';
+  } else {
+    item.classList.remove('checked');
+    if (check) check.textContent = '';
+  }
+  updateStepNext();
+}
 
 function pick(btn, key, type, cap){
   if(type === 'single'){
@@ -825,55 +930,17 @@ function updateScore(){
   document.getElementById('liveTier').textContent=t.name;
 }
 
-/* ---- consent stepper logic ---- */
-function updateConsentProgress() {
-  const answered = consentState.filter(s => s !== null).length;
-  const fill = document.getElementById('cstepFill');
-  if (fill) fill.style.width = ((answered / CONSENT.length) * 100) + '%';
+/* ---- consent/form helpers ---- */
+function checkConsentReady() { updateStepNext(); }
+function openConsent() {
+  formStep = 0;
+  consentState = new Array(CONSENT.length).fill(null);
+  buildFormSteps();
+  document.getElementById('overlay').classList.add('open');
 }
-function advanceConsent(idx, agreed) {
-  consentState[idx] = agreed;
-  updateConsentProgress();
-  const cur = document.getElementById('cstep-' + idx);
-  const nxt = document.getElementById('cstep-' + (idx + 1));
-  if (nxt) {
-    cur.classList.add('exit');
-    setTimeout(() => {
-      cur.classList.remove('active', 'exit');
-      nxt.classList.add('active', 'enter');
-      setTimeout(() => nxt.classList.remove('enter'), 250);
-      consentStep = idx + 1;
-    }, 180);
-  } else {
-    cur.classList.add('exit');
-    setTimeout(() => {
-      cur.classList.remove('active', 'exit');
-      const done = document.createElement('div');
-      done.className = 'cstep-done';
-      done.textContent = 'All set — ready to accept stewardship.';
-      document.getElementById('cstepWrap').appendChild(done);
-      consentStep = CONSENT.length;
-      checkConsentReady();
-    }, 180);
-  }
-  checkConsentReady();
-}
-function consentAgree(i) { advanceConsent(i, true); }
-function consentSkip(i)  { advanceConsent(i, false); }
-function checkConsentReady() {
-  const consentOk  = CONSENT.every((c, idx) => !c.req || consentState[idx] === true);
-  const allAnswered = consentState.every(s => s !== null);
-  const identityOk  = IDENTITY_FIELDS.every(f => {
-    if (!f.required) return true;
-    const el = document.getElementById(f.id);
-    return el && el.value.trim() !== '';
-  });
-  document.getElementById('consentConfirm').disabled = !(consentOk && allAnswered && identityOk);
-}
-function openConsent(){ document.getElementById('overlay').classList.add('open'); }
 function closeConsent(){ document.getElementById('overlay').classList.remove('open'); }
 async function confirmConsent(){
-  const btn = document.getElementById('consentConfirm');
+  const btn = document.getElementById('fstepNextBtn');
   btn.textContent = 'Submitting…';
   btn.disabled = true;
 
@@ -997,12 +1064,9 @@ function restart(){
   const gapEl = document.getElementById('bio0_gap');
   if (gapEl) { gapEl.style.display = 'none'; gapEl.innerHTML = ''; }
   document.querySelectorAll('.opt.sel').forEach(o=>o.classList.remove('sel'));
-  consentState = new Array(CONSENT.length).fill(false);
-  document.querySelectorAll('.consent-item').forEach(r=>r.classList.remove('on'));
-  IDENTITY_FIELDS.forEach(f=>{ const el=document.getElementById(f.id); if(el) el.value=''; });
+  consentState = new Array(CONSENT.length).fill(null);
   const errEl = document.getElementById('consentError');
   if(errEl) errEl.textContent = '';
-  document.getElementById('consentConfirm').disabled=true;
   document.querySelectorAll('.phase-note').forEach(n=>n.classList.remove('show'));
   updateScore(); go(0);
 }
