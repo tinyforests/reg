@@ -219,12 +219,30 @@ def sync(check_only=False):
             with open(path) as f:
                 record = json.load(f)
 
-        # Inject computed adjacency so scoring engine sees real neighbours.
-        if gid in adjacency and adjacency[gid]:
-            record.setdefault('connectivity', {})['adjacent_registered_gardens'] = adjacency[gid]
+        # Computed adjacency is the authority for gardens with coordinates.
+        # Always inject into in-memory record for scoring.
+        # Write back to data file if the neighbour set changed, so profile
+        # maps stay correct without manual maintenance.
+        computed_adj = adjacency.get(gid, [])
+        if gid in coord_index:
+            def _adj_sig(entries):
+                return sorted((e.get('id') or e.get('garden_id'), e.get('verified'))
+                              for e in entries)
+            file_adj = (record.get('connectivity') or {}).get('adjacent_registered_gardens') or []
+            # Always update in-memory record so score is computed with adjacency.
+            record.setdefault('connectivity', {})['adjacent_registered_gardens'] = computed_adj
+            if _adj_sig(computed_adj) != _adj_sig(file_adj):
+                changes.append("%s: adjacency %s -> %s" % (
+                    gid,
+                    [e.get('id') or e.get('garden_id') for e in file_adj],
+                    [e['garden_id'] for e in computed_adj]))
+                if not check_only:
+                    with open(path, 'w') as wf:
+                        json.dump(record, wf, indent=2, ensure_ascii=False)
+                        wf.write('\n')
 
         # Store neighbour IDs in the registry entry for profile page map.
-        adj_ids = [n['garden_id'] for n in adjacency.get(gid, [])]
+        adj_ids = [n['garden_id'] for n in computed_adj]
         old_adj  = g.get('adjacent_garden_ids') or []
         if adj_ids != old_adj:
             changes.append("%s: adjacent_garden_ids %s -> %s" % (gid, old_adj, adj_ids))

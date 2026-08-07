@@ -118,7 +118,15 @@
   "connectivity": {
     "adjacent_park": false,
     "park_distance_m": 0,
-    "adjacent_registered_gardens": [],
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-WHI-VIC-001",
+        "garden_id": "ER-AU-VIC-WHI-VIC-001",
+        "name": "Victoria Crescent",
+        "verified": true,
+        "distance_m": 368
+      }
+    ],
     "corridor_node_confirmed": false,
     "cluster_area_ha": 0,
     "cluster_name": "Whitehorse",

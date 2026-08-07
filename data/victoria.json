@@ -106,7 +106,15 @@
   "connectivity": {
     "adjacent_park": false,
     "park_distance_m": 0,
-    "adjacent_registered_gardens": [],
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-WHI-YRK-001",
+        "garden_id": "ER-AU-VIC-WHI-YRK-001",
+        "name": "York Street",
+        "verified": true,
+        "distance_m": 368
+      }
+    ],
     "corridor_node_confirmed": false,
     "cluster_name": "Whitehorse",
     "cluster_area_ha": 0,
