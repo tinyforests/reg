@@ -456,7 +456,10 @@ async function resolveEvc() {
     gardenLat = lat.toFixed(6);
     gardenLng = lng.toFixed(6);
 
-    /* 2. WFS query */
+    /* 2. Nearest park — fire immediately after geocode, independent of EVC */
+    resolveNearestPark(lat, lng);
+
+    /* 3. WFS query */
     const d    = 0.02;
     const bbox = (lng - d) + ',' + (lat - d) + ',' + (lng + d) + ',' + (lat + d) + ',EPSG:4326';
     const wUrl = _VIC_WFS + '?service=WFS&version=1.0.0&request=GetFeature'
@@ -506,8 +509,7 @@ async function resolveEvc() {
     evcName  = p.x_evcname || p.evc_name || '';
     _setEvcStatus(evcName + ' · ' + evcCode, true);
 
-    /* 4. Nearest greenspace (non-blocking, runs in parallel with EVC display) */
-    resolveNearestPark(lat, lng);
+    /* 4. EVC display (park already resolving in background) */
 
   } catch(err) {
     _setEvcStatus('EVC lookup failed — will submit without', false);
@@ -520,8 +522,16 @@ async function resolveEvc() {
    Non-blocking: submission proceeds with blanks if lookup fails. */
 const _OVERPASS = 'https://overpass-api.de/api/interpreter';
 
+function _setParkStatus(msg, ok) {
+  const el = document.getElementById('park-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = ok ? '#7a9e5f' : 'rgba(61,69,53,.5)';
+}
+
 async function resolveNearestPark(lat, lng) {
   parkName = ''; parkLat = ''; parkLng = ''; parkDistM = null;
+  _setParkStatus('Finding nearest park…', false);
   const r = 600;
   const query = `[out:json][timeout:10];
 (
@@ -537,7 +547,10 @@ out center tags;`;
   try {
     const res  = await fetch(_OVERPASS, { method: 'POST', body: 'data=' + encodeURIComponent(query) });
     const data = await res.json();
-    if (!data.elements || !data.elements.length) return;
+    if (!data.elements || !data.elements.length) {
+      _setParkStatus('No park found within 600m', false);
+      return;
+    }
 
     const pt = turf.point([lng, lat]);
     let best = Infinity, bestEl = null;
@@ -548,14 +561,15 @@ out center tags;`;
       const d = turf.distance(pt, turf.point([clng, clat]), { units: 'meters' });
       if (d < best) { best = d; bestEl = el; bestEl._clat = clat; bestEl._clng = clng; }
     }
-    if (!bestEl) return;
+    if (!bestEl) { _setParkStatus('No park found within 600m', false); return; }
 
     parkName  = bestEl.tags && bestEl.tags.name ? bestEl.tags.name : 'Unnamed park';
     parkLat   = bestEl._clat.toFixed(6);
     parkLng   = bestEl._clng.toFixed(6);
     parkDistM = Math.round(best);
+    _setParkStatus(parkName + ' · ' + parkDistM + 'm', true);
   } catch(err) {
-    /* non-fatal */
+    _setParkStatus('Park lookup failed — will submit without', false);
   }
 }
 
@@ -833,6 +847,10 @@ function buildFormSteps() {
         statusEl.id = 'evc-status';
         statusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:.25rem;';
         idfWrap.appendChild(statusEl);
+        const parkStatusEl = document.createElement('div');
+        parkStatusEl.id = 'park-status';
+        parkStatusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:.15rem;';
+        idfWrap.appendChild(parkStatusEl);
       }
     });
     div.appendChild(idfWrap);
