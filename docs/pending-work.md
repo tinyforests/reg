@@ -205,7 +205,9 @@ This work blocks the Phase 1.5 live wiring of the Self-Enrolment Ramp prototype.
 
 ### Sir Garnet — registered May 2026, GPS and documentation pending
 
-30 Sir Garnet Road, Surrey Hills. Registered May 2026. Score 50, Ecological Garden, tier 3. Front Native Buffer Garden only (rear cottage pollinator garden explicitly excluded). GPS surveyed via Google Maps long-press. Coordinates of adjacent council nature strip (park_lat -37.82133, park_lng 145.09043) approximate — confirm on next site visit. Photo documentation and iNaturalist fauna records are 30-day actions for Richard & Jenny — score will rise when documented.
+30 Sir Garnet Road, Surrey Hills. Registered May 2026. Score 50, Ecological Garden, tier 3. Front Native Buffer Garden only (rear cottage pollinator garden explicitly excluded). GPS surveyed via Google Maps long-press. Photo documentation and iNaturalist fauna records are 30-day actions for Richard & Jenny — score will rise when documented.
+
+Park pin issue: park_lat/park_lng are currently identical to garden lat/lng (0m distance) — the adjacent greenspace is a council nature strip immediately out front, which has no meaningful separate centroid in OSM. sync_registry.py's Overpass auto-resolve won't help here (it looks for named parks/reserves). Needs manual fix: either set park_lat/lng to the road centreline coordinates (~10m offset toward the street), or confirm the nature strip is mapped in OSM and has a centroid to use.
 
 ### Demand nudges — inject Registry prompts into fmeg/fmevc/fmnp search results
 
@@ -227,8 +229,8 @@ G02 / 352–358 Canterbury Road, Surrey Hills. Pre-intervention baseline registe
 
 Follow-ups:
 - Confirm Boroondara ward for Canterbury Road at this location (currently 'TBC — confirm with Boroondara council' in record). Likely Junction, Bellevue, or Cotham — not Gardiner (that's north Surrey Hills, Sir Garnet's ward).
-- Confirm Surrey Park park_lat/park_lng at next site visit (currently approximate -37.8265, 145.096).
 - Confirm mulch_depth_mm and mains_drip_irrigation status at next site visit.
+- Surrey Park park_lat/park_lng: previously approximate, now auto-resolved via sync_registry.py Overpass lookup. Verify pin position looks correct on next visit.
 
 The trajectory recorded from baseline 16 Jun 2026 → post-intervention score will be the registry's first independently-legible before/after evidence for a non-G&S-install garden. Strategic value to the Boroondara council pitch and to AfN-grade methodology.
 
@@ -353,27 +355,20 @@ UI considerations:
 
 Sequencing: this is downstream of the shared library work. National expansion requires the shared library to exist first.
 
-### Auto-resolve EVC in self-enrolment form from typed address
+### ~~Auto-resolve EVC in self-enrolment form from typed address~~ DONE (Aug 2026)
 
-The form already accepts `?evc_code` and `?evc_name` via URL params when a steward arrives via the findmyevc handover link. A steward who enrolls directly gets no EVC auto-fill — those fields are either empty or manually entered.
+Shipped in Code.gs Version 14 / prototype commit 0038bdd. On blur of the suburb field, the form geocodes the address via Nominatim → queries VIC WFS → resolves evc_code and evc_name via Turf.js point-in-polygon. garden_lat and garden_lng captured as a side-effect. All four values flow through to the sheet (AA/AB/AG/AH). Non-blocking — submission proceeds with blanks if lookup fails.
 
-**Proposed:** after the steward types their address + suburb, the form geocodes the address (Nominatim, same as findmyevc) and queries the Victorian WFS to resolve evc_code and evc_name, then silently populates the payload. No visible EVC UI needed — it just flows through to the sheet as AA/AB columns.
+### ~~Map coordinates in self-enrolled gardens — park pins missing~~ RESOLVED (Aug 2026)
 
-**Implementation notes:**
-- resolveAddressToClassification(address) already exists in the shared-library pending-work entry as the canonical function to build. This is one of its consumers.
-- The WFS query is already working in findmyevc — pull the same pattern, don't reinvent it.
-- Geocoding is async; EVC lookup is async. Fire both after the address field loses focus (onblur on garden_suburb or garden_address). Non-blocking — if the lookup fails (address not in Victoria, WFS down), submission still proceeds with evc_code blank.
-- Victoria-only for now. The national-expansion entry covers what happens when WA, NSW etc. are added.
+Both garden coordinates and park coordinates are now auto-resolved:
 
-Pairs with the map-coordinates pending entry — if we're geocoding the address anyway, we get lat/lng for free at the same moment.
+- **Garden lat/lng**: Nominatim geocoding fires on address blur in the enrolment form. Lands in sheet columns AG/AH.
+- **Nearest park**: OSM Overpass query fires immediately after geocoding. Finds nearest park/reserve/greenway within 600m. Lands in sheet columns AI–AL (park_name, park_lat, park_lng, park_distance_m).
+- **Backfill for existing gardens**: `sync_registry.py` now auto-resolves park_lat/park_lng via Overpass for any garden with `adjacent_park: true` but no pin. Writes back to the data file. Runs on every sync.
+- **Garden-to-garden adjacency**: also auto-maintained by `sync_registry.py` — haversine check across all coordinated gardens, 500m radius, writes `adjacent_registered_gardens` back to data files.
 
-### Map coordinates in self-enrolled gardens — park pins missing
-
-Self-enrolled garden JSONs don't have `lat`/`lng` (garden location) or `park_lat`/`park_lng` (adjacent park). Without them the profile map shows no park marker and the dashed connectivity line.
-
-**Current fix (manual):** after a submission is approved, look up both points on Google Maps and add them to the garden JSON before committing. Make this an explicit step in the review checklist alongside setting `verified` in the sheet.
-
-**Long-term direction:** map picker in the self-enrolment form — Leaflet map auto-centred on the typed address (via geocode), steward confirms/moves their garden pin and optionally drops a park pin. Passes `lat`, `lng`, `park_lat`, `park_lng` through the payload to the sheet and into the JSON. Meaningful build: requires address geocoding and a two-pin UX inside the form modal.
+Remaining gap: the review step of copying park fields from the submission sheet into the new garden's data JSON is still manual. Could be further automated as part of a Phase C review pipeline. Map picker (steward confirms/corrects pin position) still a long-term direction if accuracy matters more than convenience.
 
 ### VERIFY DESIGNER BACKFILL
 
