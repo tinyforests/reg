@@ -28,6 +28,9 @@ import math
 import os
 import shutil
 import sys
+import time
+import urllib.parse
+import urllib.request
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY = os.path.join(REPO_ROOT, 'data', 'registry.json')
@@ -173,6 +176,53 @@ def build_adjacency(coord_index, name_index=None):
     return adjacency
 
 
+_OVERPASS_URL = 'https://overpass-api.de/api/interpreter'
+_PARK_RADIUS_M = 600
+_PARK_TAGS = [
+    'way["leisure"="park"]',
+    'way["leisure"="nature_reserve"]',
+    'way["leisure"="garden"]["access"!="private"]',
+    'way["landuse"="grass"]',
+    'way["landuse"="meadow"]',
+    'relation["leisure"="park"]',
+    'relation["leisure"="nature_reserve"]',
+]
+
+
+def resolve_nearest_park(lat, lng):
+    """Query Overpass for the nearest greenspace within _PARK_RADIUS_M metres.
+    Returns (name, park_lat, park_lng, distance_m) or None if not found."""
+    tag_block = ''.join(
+        '  %s(around:%d,%.6f,%.6f);\n' % (tag, _PARK_RADIUS_M, lat, lng)
+        for tag in _PARK_TAGS
+    )
+    query = '[out:json][timeout:15];\n(\n%s);\nout center tags;' % tag_block
+    try:
+        data = urllib.parse.urlencode({'data': query}).encode()
+        req  = urllib.request.Request(_OVERPASS_URL, data=data,
+                                      headers={'User-Agent': 'ecological-registry/1.0'})
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            result = json.loads(resp.read())
+    except Exception as e:
+        print("  WARN park lookup failed: %s" % e)
+        return None
+
+    best_dist, best = float('inf'), None
+    for el in result.get('elements', []):
+        c = el.get('center') or {}
+        clat, clng = c.get('lat'), c.get('lon')
+        if clat is None or clng is None:
+            continue
+        d = _haversine_m(lat, lng, clat, clng)
+        if d < best_dist:
+            best_dist, best = d, (el.get('tags', {}).get('name') or '', clat, clng)
+
+    if best is None:
+        return None
+    name, plat, plng = best
+    return (name or 'Unnamed park', round(plat, 6), round(plng, 6), int(best_dist))
+
+
 def sync(check_only=False):
     with open(REGISTRY) as f:
         registry = json.load(f)
@@ -250,6 +300,32 @@ def sync(check_only=False):
                 g['adjacent_garden_ids'] = adj_ids
             elif 'adjacent_garden_ids' in g:
                 del g['adjacent_garden_ids']
+
+        # Park resolution: auto-fill park_lat/park_lng via Overpass for any
+        # garden with coordinates but missing park pin.
+        # park_distance_m is only set if absent — preserves manually-entered
+        # boundary distances (Overpass gives centroid distance).
+        # Skipped in check_only mode to avoid HTTP calls on every check run.
+        if not check_only and gid in coord_index:
+            c_block = record.get('connectivity') or {}
+            if c_block.get('adjacent_park') and (
+                    c_block.get('park_lat') is None or c_block.get('park_lng') is None):
+                glat, glng, _ = coord_index[gid]
+                print("  resolving park for %s…" % gid)
+                time.sleep(1)  # be polite to Overpass
+                park = resolve_nearest_park(glat, glng)
+                if park:
+                    pname, plat, plng, pdist = park
+                    c_block['park_name'] = c_block.get('park_name') or pname
+                    c_block['park_lat']  = plat
+                    c_block['park_lng']  = plng
+                    if c_block.get('park_distance_m') is None:
+                        c_block['park_distance_m'] = pdist
+                    changes.append("%s: park resolved -> %s (%.4f, %.4f)" % (
+                        gid, c_block['park_name'], plat, plng))
+                    with open(path, 'w') as wf:
+                        json.dump(record, wf, indent=2, ensure_ascii=False)
+                        wf.write('\n')
 
         # Demo flag: input file is authoritative.
         demo = bool(record.get('demo')) or bool(g.get('demo'))

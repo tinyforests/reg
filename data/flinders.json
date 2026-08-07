@@ -119,7 +119,9 @@
       "gardens": 2,
       "area_ha": 0.04,
       "status": "Emerging"
-    }
+    },
+    "park_lat": -37.821874,
+    "park_lng": 145.083018
   },
   "evidence": {
     "has_photos": true,
