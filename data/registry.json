@@ -653,7 +653,8 @@
       "garden_name": "Kate's Forest Hill Garden",
       "suburb": "Forest Hill",
       "state": "VIC",
-      "score": 21,
+      "score": null,
+      "provisional": true,
       "rating": {
         "current": "Habitat Garden",
         "next": "Ecological Garden",
