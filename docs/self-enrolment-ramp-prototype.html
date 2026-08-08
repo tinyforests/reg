@@ -444,55 +444,24 @@ function _setGeoResult(row, msg, ok) {
 function _setEvcStatus(msg, ok)  { _setGeoResult('evc',  msg, ok); }
 function _setParkStatus(msg, ok) { _setGeoResult('park', msg, ok); }
 
-async function resolveEvc() {
-  const address = (document.getElementById('garden_address') || {}).value || '';
-  if (!address) return;
-
-  _setEvcStatus('Looking up your area…', false);
-  _setParkStatus('Finding nearest green space…', false);
-
+/* Shared coord-based resolution — called after geocoding OR after autocomplete selection */
+async function _resolveFromCoords(lat, lng) {
+  resolveNearestPark(lat, lng);
   try {
-    /* 1. Geocode */
-    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q='
-               + encodeURIComponent(address + ', Australia');
-    const gRes  = await fetch(gUrl, { headers: { 'Accept-Language': 'en' } });
-    const gData = await gRes.json();
-    if (!gData || !gData.length) {
-      _setEvcStatus('Address not found — try including suburb', false);
-      _setParkStatus('', false);
-      return;
-    }
-
-    const lat  = parseFloat(gData[0].lat);
-    const lng  = parseFloat(gData[0].lon);
-    const addr = gData[0].address || {};
-    gardenLat     = lat.toFixed(6);
-    gardenLng     = lng.toFixed(6);
-    gardenSuburb  = addr.suburb || addr.town || addr.city_district || addr.city || '';
-    gardenRegion  = addr.state  || '';
-    gardenCountry = addr.country || '';
-
-    /* 2. Nearest park — fire immediately after geocode, independent of EVC */
-    resolveNearestPark(lat, lng);
-
-    /* 3. WFS query */
     const d    = 0.02;
-    const bbox = (lng - d) + ',' + (lat - d) + ',' + (lng + d) + ',' + (lat + d) + ',EPSG:4326';
+    const bbox = (lng-d)+','+(lat-d)+','+(lng+d)+','+(lat+d)+',EPSG:4326';
     const wUrl = _VIC_WFS + '?service=WFS&version=1.0.0&request=GetFeature'
                + '&typeName=' + encodeURIComponent(_EVC_LAYER)
                + '&bbox=' + bbox + '&outputFormat=application%2Fjson';
-    const wRes  = await fetch(wUrl);
-    const wData = await wRes.json();
-    if (!wData.features || !wData.features.length) { _setEvcStatus('No vegetation class found for this location', false); return; }
-
-    /* 3. Point-in-polygon (exact), then closest-centroid fallback */
+    const wData = await (await fetch(wUrl)).json();
+    if (!wData.features || !wData.features.length) {
+      _setEvcStatus('No vegetation class found for this location', false); return;
+    }
     const pt = turf.point([lng, lat]);
     let match = null;
     for (const f of wData.features) {
       try {
-        const geom = f.geometry.type === 'Polygon'
-          ? turf.polygon(f.geometry.coordinates)
-          : null;
+        const geom = f.geometry.type === 'Polygon' ? turf.polygon(f.geometry.coordinates) : null;
         if (geom && turf.booleanPointInPolygon(pt, geom)) { match = f; break; }
       } catch(e) {}
     }
@@ -519,16 +488,99 @@ async function resolveEvc() {
       }
     }
     if (!match) { _setEvcStatus('Vegetation class not resolved', false); return; }
-
-    const p  = match.properties;
-    evcCode  = 'EVC ' + (p.evc || p.evc_no || '');
-    evcName  = p.x_evcname || p.evc_name || '';
+    const p = match.properties;
+    evcCode = 'EVC ' + (p.evc || p.evc_no || '');
+    evcName = p.x_evcname || p.evc_name || '';
     _setEvcStatus(evcName + ' · ' + evcCode, true);
-
   } catch(err) {
     _setEvcStatus('Vegetation class lookup failed', false);
   }
 }
+
+/* Fallback: geocode address then resolve — used when typing without selecting a suggestion */
+async function resolveEvc() {
+  const address = (document.getElementById('garden_address') || {}).value || '';
+  if (!address) return;
+  _setEvcStatus('Looking up your area…', false);
+  _setParkStatus('Finding nearest green space…', false);
+  try {
+    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q='
+               + encodeURIComponent(address + ', Australia');
+    const gData = await (await fetch(gUrl, { headers: { 'Accept-Language': 'en' } })).json();
+    if (!gData || !gData.length) {
+      _setEvcStatus('Address not found — try including suburb', false);
+      _setParkStatus('', false); return;
+    }
+    const lat = parseFloat(gData[0].lat), lng = parseFloat(gData[0].lon);
+    const a   = gData[0].address || {};
+    gardenLat     = lat.toFixed(6);
+    gardenLng     = lng.toFixed(6);
+    gardenSuburb  = a.suburb || a.town || a.city_district || a.city || '';
+    gardenRegion  = a.state  || '';
+    gardenCountry = a.country || '';
+    _resolveFromCoords(lat, lng);
+  } catch(err) {
+    _setEvcStatus('Lookup failed — try again', false);
+  }
+}
+
+/* ---- Address autocomplete ---- */
+function _debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+function _fmtSuggestion(r) {
+  const a = r.address || {};
+  return [[a.house_number, a.road].filter(Boolean).join(' '),
+           a.suburb || a.city_district || a.town || a.city,
+           a.state].filter(Boolean).join(', ') || r.display_name;
+}
+
+function _hideAddrDrop() { const el = document.getElementById('addr-drop'); if (el) el.remove(); }
+
+function _showAddrDrop(results) {
+  _hideAddrDrop();
+  const inp = document.getElementById('garden_address');
+  if (!inp || !results.length) return;
+  const ul = document.createElement('ul');
+  ul.id = 'addr-drop';
+  ul.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:300;background:var(--bg,#fafaf7);border:1px solid var(--rl,#d6d9cf);border-radius:6px;margin:3px 0 0;padding:0;list-style:none;box-shadow:0 6px 18px rgba(0,0,0,.1);max-height:220px;overflow-y:auto';
+  results.forEach(r => {
+    const li = document.createElement('li');
+    li.style.cssText = 'padding:9px 13px;font-size:12.5px;cursor:pointer;border-bottom:1px solid var(--hairline);line-height:1.4';
+    li.textContent = _fmtSuggestion(r);
+    li.addEventListener('mouseover', () => li.style.background = 'var(--surface-raised,#f0f0eb)');
+    li.addEventListener('mouseout',  () => li.style.background = '');
+    li.addEventListener('mousedown', e => {
+      e.preventDefault();
+      inp.value = _fmtSuggestion(r);
+      const a = r.address || {};
+      gardenLat     = parseFloat(r.lat).toFixed(6);
+      gardenLng     = parseFloat(r.lon).toFixed(6);
+      gardenSuburb  = a.suburb || a.town || a.city_district || a.city || '';
+      gardenRegion  = a.state  || '';
+      gardenCountry = a.country || '';
+      _hideAddrDrop();
+      _setEvcStatus('Looking up vegetation class…', false);
+      _setParkStatus('Finding nearest green space…', false);
+      updateStepNext();
+      _resolveFromCoords(parseFloat(r.lat), parseFloat(r.lon));
+    });
+    ul.appendChild(li);
+  });
+  const wrap = inp.closest('.identity-fields') || inp.parentElement;
+  const inputWrap = inp.parentElement;
+  inputWrap.style.position = 'relative';
+  inputWrap.appendChild(ul);
+}
+
+const _fetchAddrSuggestions = _debounce(async q => {
+  if (q.length < 4) { _hideAddrDrop(); return; }
+  try {
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=au&q='
+              + encodeURIComponent(q);
+    const data = await (await fetch(url, { headers: { 'Accept-Language': 'en' } })).json();
+    _showAddrDrop(data);
+  } catch(e) {}
+}, 380);
 
 /* ---- Nearest park / greenspace lookup ----
    Queries OSM Overpass for parks, reserves, and greenways within 600m.
@@ -855,7 +907,11 @@ function buildFormSteps() {
       inp.required = !!f.required;
       inp.autocomplete = fid === 'steward_email' ? 'email' : 'street-address';
       inp.addEventListener('input', updateStepNext);
-      if (fid === 'garden_address') inp.addEventListener('blur', resolveEvc);
+      if (fid === 'garden_address') {
+        inp.addEventListener('input',  () => _fetchAddrSuggestions(inp.value));
+        inp.addEventListener('blur',   () => { setTimeout(_hideAddrDrop, 150); resolveEvc(); });
+        inp.addEventListener('keydown', e => { if (e.key === 'Escape') _hideAddrDrop(); });
+      }
       idfWrap.appendChild(lbl);
       idfWrap.appendChild(inp);
     });
