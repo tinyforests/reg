@@ -1,0 +1,210 @@
+{
+  "garden_id": "ER-AU-VIC-WHI-KTE-001",
+  "garden_name": "Kate's Forest Hill Garden",
+  "garden_type": "Wildlife Garden",
+  "typology": "Council-Assessed Wildlife Garden",
+  "registry_role": "Performer",
+  "trajectory": "Emerging",
+  "suburb": "Forest Hill",
+  "state": "VIC",
+  "council": "Whitehorse City Council",
+  "ward": null,
+  "lga": "Whitehorse",
+  "assessment_date": "30 Oct 2025",
+  "baseline_date": "2025",
+  "stewards": "Kate",
+  "designer": null,
+  "designer_id": null,
+  "enroller": "Whitehorse City Council — Gardens for Wildlife",
+  "verifier": "Lynne, Gay — Gardens for Wildlife, Whitehorse City Council",
+  "area_sqm": null,
+  "target_score": null,
+  "description": "An old, well-established garden in Forest Hill with east/west orientation and mature canopy. A mix of exotic and native planting with an active Banksia and a Sticky Wattle overhanging the nature strip. Middle storey largely absent. Actively visited by possums, king parrots, and insects. G4W-assessed 30 Oct 2025 by Whitehorse City Council.",
+  "data_source": {
+    "type": "council_gfw_report",
+    "program": "Gardens for Wildlife",
+    "council": "Whitehorse City Council",
+    "voucher": "2569",
+    "visit_date": "2025-10-30",
+    "assessors": ["Lynne", "Gay"],
+    "report_ref": "Garden Report #2569 — Kate, Forest Hill",
+    "note": "Record created from G4W visit report. Fields marked null require follow-up with the steward or council."
+  },
+  "evc": {
+    "name": null,
+    "code": null,
+    "bioregion": null,
+    "bioregion_code": null,
+    "note": "EVC not determined from report. Forest Hill likely Damp Forest or Grassy Dry Forest — requires site lookup."
+  },
+  "biodiversity": {
+    "indigenous_species_current": 3,
+    "indigenous_dominant": false,
+    "structural_layers_current": 2,
+    "canopy_cover_pct_current": null,
+    "indigenous_species_baseline": 3,
+    "indigenous_species_target": null,
+    "structural_layers_baseline": 2,
+    "canopy_cover_pct_baseline": null,
+    "weed_pressure": "High",
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Acacia howitti",
+      "Banksia sp.",
+      "Grevillea sp."
+    ],
+    "species_note": "Only confirmed-present indigenous species listed. Report recommendations not included. Full species inventory requires steward follow-up.",
+    "weeds_identified": [
+      "Asparagus densiflorus (Boston Fern)",
+      "Monstera deliciosa (Fruit Salad Plant)",
+      "Lonicera japonica (Japanese Honeysuckle)",
+      "Erigeron karvinskianus (Seaside Daisy)",
+      "Viola odorata (European Violet)",
+      "Chlorophytum comosum (Spider Plant)"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": null,
+    "water_function_score": null,
+    "has_rainwater_system": null,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "soil_health_baseline": null,
+    "soil_health_max": 5,
+    "water_function_baseline": null,
+    "water_function_max": 5,
+    "mulch_type": "Pea straw and general mulch",
+    "mulch_note": "Mulch in active use — noted by assessors as good practice for lizard and insect habitat."
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "fauna_sightings": [
+      {
+        "species": "Common Brushtail Possum",
+        "verified": true,
+        "date": "2025-10-30",
+        "notes": "Confirmed by G4W garden guides during on-site visit"
+      },
+      {
+        "species": "Australian King Parrot",
+        "verified": true,
+        "date": "2025-10-30",
+        "notes": "Regular visitor — mature neighbourhood canopy noted as likely draw by assessors"
+      },
+      {
+        "species": "Insects (unspecified)",
+        "verified": true,
+        "date": "2025-10-30",
+        "notes": "Insect activity confirmed. Mulch habitat noted as contributing factor."
+      }
+    ],
+    "habitat_nodes_baseline": 2,
+    "planting_method": "Established garden, predominantly exotic and native mix. Mature canopy present (Banksia, Acacia howitti). Middle storey absent — identified by assessors as the key structural gap.",
+    "assessor_recommendations": [
+      "Back garden: establish small bird friendly area using Bursaria spinosa, Hakea decurrens, Acacia acinacea, Correa glabra, Correa reflexa",
+      "Replace Boston fern (multiple locations) with indigenous alternatives",
+      "Install bird baths at canopy, shrub, and ground level",
+      "Add rock piles and embedded logs as lizard refuges",
+      "Reduce Monstera deliciosa — provides no habitat value and risks sheltering vermin",
+      "Nature strip: plant with Rhyidosperma geniculatum (Kneed Wallaby Grass)",
+      "Remove Lonicera japonica (Japanese Honeysuckle) from entrance bed",
+      "Scattered nectar planting to support smaller birds and discourage territorial larger species"
+    ]
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_distance_m": null,
+    "nearest_reserves": [
+      "Stephens' Reserve",
+      "Davey Lane Reserve",
+      "Healesville Reserve",
+      "Koomba Park"
+    ],
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "cluster_area_ha": null,
+    "cluster_name": "Whitehorse",
+    "effective_ecological_area_ha": null,
+    "cluster": {
+      "name": "Whitehorse",
+      "gardens": 0,
+      "area_ha": null,
+      "status": "Potential"
+    },
+    "lat": null,
+    "lng": null,
+    "lat_note": "Suburb only in G4W report. Full address required from steward or council for geo-lookup."
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_species_list": false,
+    "has_fauna_record": true,
+    "has_professional_assessment": true,
+    "verification_level": "council_garden_guide_verified",
+    "verification_label": "Council Verified",
+    "assessor": "Lynne, Gay — Gardens for Wildlife, Whitehorse City Council",
+    "verification_date": "2025-10-30",
+    "verification_program": "Gardens for Wildlife, Whitehorse City Council",
+    "verification_voucher": "2569"
+  },
+  "milestones": [
+    {
+      "title": "G4W on-site visit — Whitehorse City Council",
+      "date": "30 Oct 2025",
+      "complete": true
+    },
+    {
+      "title": "Registry record created from G4W report",
+      "date": "Aug 2026",
+      "complete": true
+    },
+    {
+      "title": "Steward enrolment — address, area, full species inventory",
+      "date": null,
+      "complete": false
+    },
+    {
+      "title": "Middle storey planting installed",
+      "date": null,
+      "complete": false
+    },
+    {
+      "title": "Weed reduction — Boston fern and Japanese Honeysuckle priority",
+      "date": null,
+      "complete": false
+    },
+    {
+      "title": "Bird baths installed",
+      "date": null,
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "G4W on-site assessment — Whitehorse City Council",
+      "date": "30 Oct 2025",
+      "type": "Verification",
+      "category": "verification",
+      "notes": "On-site visit by Lynne and Gay (Gardens for Wildlife garden guides, Whitehorse City Council). Voucher #2569. Garden assessed as well-established with mature Banksia and Acacia howitti (Sticky Wattle) on nature strip. Possums, king parrots, and insects confirmed present. Key gaps identified: absent middle storey, no bird baths, six environmental weeds present. Area-specific planting recommendations made for back garden, side gardens, front garden, and nature strip."
+    }
+  ],
+  "rating": {
+    "current": "Wildlife Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": null
+  },
+  "upgrade_potential": null,
+  "points_available": null,
+  "yield": {
+    "eligible": false,
+    "status": "Incomplete record — full address and area required",
+    "estimated_annual": 0,
+    "potential_annual": null,
+    "currency": "AUD"
+  }
+}
