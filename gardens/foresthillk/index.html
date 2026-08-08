@@ -40,7 +40,7 @@
     @media(min-width:1024px){ .signal-grid{grid-template-columns:repeat(6,1fr)} }
     .delta-up   { color:#7a9e5f; font-weight:600; }
     .delta-same { opacity:.45; }
-    .delta-down { color:#c0392b; font-weight:600; }
+    .delta-down { color:#b49a63; font-weight:600; }
     .stagger > * { opacity:0; transform:translateY(12px); animation:fadeUp 0.5s ease forwards; }
     .stagger > *:nth-child(1){animation-delay:.05s}
     .stagger > *:nth-child(2){animation-delay:.1s}
@@ -518,6 +518,7 @@
 
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
+<script src="/js/reg-claims.js"></script>
 <script src="/js/badge-engine.js"></script>
 <script>
 
@@ -641,17 +642,23 @@ function render() {
     var oppEl = el('opportunityGrid');
     if (oppEl && typeof buildOpportunities === 'function') {
       var oppRes = buildOpportunities(R);
+      var DLBL = { diy: 'DIY', plants_of_place: 'Plants of Place', gs_install: 'G&S install', designer_install: 'Designer install', tend: 'Tend', verification: 'Verification' };
+      var deliveryStr = function(o) { return (o.delivery_options || []).map(function(d){ return DLBL[d.path] || d.path; }).join(' · '); };
       var opps = (oppRes.opportunities || []).slice(0, 6);
       var oh = '';
       for (var oi = 0; oi < opps.length; oi++) {
         var o = opps[oi];
-        oh += '<div class="opp-item bg-white dark:bg-rdp">' +
+        oh += '<div class="opp-item bg-white dark:bg-rdp"' +
+          ' data-opp-id="' + o.id + '"' +
+          ' data-opp-action="' + String(o.action).replace(/"/g, '&quot;') + '"' +
+          ' data-opp-points="' + o.points + '">' +
           '<div class="text-xs font-medium mb-1">' + o.action + '</div>' +
-          '<div class="text-xl font-serif mb-2">+' + o.points + '</div>' +
-          '<div class="text-xs opacity-50">points</div>' +
+          '<div class="text-xl font-serif mb-1">+' + o.points + '</div>' +
+          '<div class="text-xs opacity-50">' + (deliveryStr(o) || 'points') + '</div>' +
           '</div>';
       }
       oppEl.innerHTML = oh || '<div class="text-sm opacity-40">No opportunities calculated — address required.</div>';
+      if (typeof attachClaims === 'function') attachClaims(R);
     }
 
     txt('signalDates', 'Baseline · ' + R.baseline_date);
