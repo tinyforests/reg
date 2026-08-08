@@ -132,7 +132,8 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .modal-foot{padding:18px 32px 30px;position:sticky;bottom:0;background:var(--understory);border-top:1px solid var(--hairline);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
 .req{color:var(--signal-deep)}
 /* ---- consent stepper ---- */
-.cstep-progress{height:2px;background:var(--hairline);margin:4px 0 24px;overflow:hidden}
+.cstep-progress{height:2px;background:var(--hairline);margin:4px 0 20px;overflow:hidden}
+.geo-step-hint{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0 0 14px}
 .cstep-fill{height:100%;background:var(--signal);width:0;transition:width .4s ease}
 .cstep-wrap{min-height:160px;overflow:hidden}
 .cstep{display:none}
@@ -412,7 +413,10 @@ const _p = new URLSearchParams(window.location.search);
 let evcCode     = _p.get('evc_code') || '';
 let evcName     = _p.get('evc_name') || '';
 let gardenLat   = '';
-let gardenLng   = '';
+let gardenLng     = '';
+let gardenSuburb  = '';
+let gardenRegion  = '';
+let gardenCountry = '';
 let parkName    = '';
 let parkLat     = '';
 let parkLng     = '';
@@ -421,40 +425,52 @@ const speciesList = _p.get('species')
   ? _p.get('species').split(',').map(s => s.trim()).filter(Boolean)
   : [];
 
-/* ---- EVC auto-resolution ----
-   Fires on blur of suburb field (after address + suburb are both present).
-   Geocodes via Nominatim → queries VIC WFS → point-in-polygon via Turf.js.
-   Populates evcCode, evcName, gardenLat, gardenLng silently.
-   Non-blocking: submission proceeds with blanks if lookup fails. */
+/* ---- Location resolution ----
+   Fires on blur of garden_address. Geocodes via Nominatim → extracts
+   suburb/region/country → queries VIC WFS for EVC → Overpass for park.
+   Populates gardenLat/Lng/Suburb/Region/Country, evcCode/Name, park* vars.
+   Non-blocking: submission proceeds with blanks if any lookup fails. */
 const _VIC_WFS   = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
 const _EVC_LAYER = 'open-data-platform:nv2005_evcbcs';
 
-function _setEvcStatus(msg, ok) {
-  const el = document.getElementById('evc-status');
+function _setGeoResult(row, msg, ok) {
+  const el = document.getElementById('geo-val-' + row);
   if (!el) return;
   el.textContent = msg;
-  el.style.color = ok ? '#7a9e5f' : 'rgba(61,69,53,.5)';
+  el.style.color = ok ? 'var(--ink)' : 'rgba(61,69,53,.45)';
+  const wrap = document.getElementById('geo-results');
+  if (wrap) wrap.style.display = '';
 }
+function _setEvcStatus(msg, ok)  { _setGeoResult('evc',  msg, ok); }
+function _setParkStatus(msg, ok) { _setGeoResult('park', msg, ok); }
 
 async function resolveEvc() {
   const address = (document.getElementById('garden_address') || {}).value || '';
-  const suburb  = (document.getElementById('garden_suburb')  || {}).value || '';
-  if (!address || !suburb) return;
+  if (!address) return;
 
-  _setEvcStatus('Resolving your EVC…', false);
+  _setEvcStatus('Looking up your area…', false);
+  _setParkStatus('Finding nearest green space…', false);
 
   try {
     /* 1. Geocode */
-    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q='
-               + encodeURIComponent(address + ', ' + suburb + ', Victoria, Australia');
+    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q='
+               + encodeURIComponent(address + ', Australia');
     const gRes  = await fetch(gUrl, { headers: { 'Accept-Language': 'en' } });
     const gData = await gRes.json();
-    if (!gData || !gData.length) { _setEvcStatus('Address not found — EVC will be blank', false); return; }
+    if (!gData || !gData.length) {
+      _setEvcStatus('Address not found — try including suburb', false);
+      _setParkStatus('', false);
+      return;
+    }
 
-    const lat = parseFloat(gData[0].lat);
-    const lng = parseFloat(gData[0].lon);
-    gardenLat = lat.toFixed(6);
-    gardenLng = lng.toFixed(6);
+    const lat  = parseFloat(gData[0].lat);
+    const lng  = parseFloat(gData[0].lon);
+    const addr = gData[0].address || {};
+    gardenLat     = lat.toFixed(6);
+    gardenLng     = lng.toFixed(6);
+    gardenSuburb  = addr.suburb || addr.town || addr.city_district || addr.city || '';
+    gardenRegion  = addr.state  || '';
+    gardenCountry = addr.country || '';
 
     /* 2. Nearest park — fire immediately after geocode, independent of EVC */
     resolveNearestPark(lat, lng);
@@ -467,7 +483,7 @@ async function resolveEvc() {
                + '&bbox=' + bbox + '&outputFormat=application%2Fjson';
     const wRes  = await fetch(wUrl);
     const wData = await wRes.json();
-    if (!wData.features || !wData.features.length) { _setEvcStatus('No EVC data for this location', false); return; }
+    if (!wData.features || !wData.features.length) { _setEvcStatus('No vegetation class found for this location', false); return; }
 
     /* 3. Point-in-polygon (exact), then closest-centroid fallback */
     const pt = turf.point([lng, lat]);
@@ -502,17 +518,15 @@ async function resolveEvc() {
         } catch(e) {}
       }
     }
-    if (!match) { _setEvcStatus('EVC could not be resolved', false); return; }
+    if (!match) { _setEvcStatus('Vegetation class not resolved', false); return; }
 
     const p  = match.properties;
     evcCode  = 'EVC ' + (p.evc || p.evc_no || '');
     evcName  = p.x_evcname || p.evc_name || '';
     _setEvcStatus(evcName + ' · ' + evcCode, true);
 
-    /* 4. EVC display (park already resolving in background) */
-
   } catch(err) {
-    _setEvcStatus('EVC lookup failed — will submit without', false);
+    _setEvcStatus('Vegetation class lookup failed', false);
   }
 }
 
@@ -814,9 +828,9 @@ PILLARS.forEach(p => {
 /* ---- multi-step enrolment form ---- */
 const FORM_STEP_FIELDS = [
   ['garden_name', 'steward_name', 'steward_email'],
-  ['garden_address', 'garden_suburb', 'garden_region', 'garden_country']
+  ['garden_address']
 ];
-const FORM_STEP_TITLES = ['Your garden', 'Location', 'Agree to stewardship'];
+const FORM_STEP_TITLES = ['Your garden', 'Your location', 'Agree to stewardship'];
 
 function buildFormSteps() {
   const wrap = document.getElementById('fstepWrap');
@@ -839,24 +853,32 @@ function buildFormSteps() {
       inp.id = fid;
       inp.placeholder = f.placeholder;
       inp.required = !!f.required;
-      inp.autocomplete = f.type === 'email' ? 'email' : 'off';
+      inp.autocomplete = fid === 'steward_email' ? 'email' : 'street-address';
       inp.addEventListener('input', updateStepNext);
-      if (fid === 'garden_address' || fid === 'garden_suburb') {
-        inp.addEventListener('blur', resolveEvc);
-      }
+      if (fid === 'garden_address') inp.addEventListener('blur', resolveEvc);
       idfWrap.appendChild(lbl);
       idfWrap.appendChild(inp);
-      if (fid === 'garden_suburb') {
-        const statusEl = document.createElement('div');
-        statusEl.id = 'evc-status';
-        statusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:.25rem;';
-        idfWrap.appendChild(statusEl);
-        const parkStatusEl = document.createElement('div');
-        parkStatusEl.id = 'park-status';
-        parkStatusEl.style.cssText = 'font-size:.7rem;min-height:1.1em;margin-top:.15rem;';
-        idfWrap.appendChild(parkStatusEl);
-      }
     });
+    // Location step: subtitle + geo-results card
+    if (si === 1) {
+      const hint = document.createElement('p');
+      hint.className = 'geo-step-hint';
+      hint.textContent = 'We\'ll look up your local vegetation class and nearest green space automatically.';
+      idfWrap.insertBefore(hint, idfWrap.firstChild);
+      const card = document.createElement('div');
+      card.id = 'geo-results';
+      card.style.cssText = 'display:none;margin-top:16px;border:1px solid var(--rl,#d6d9cf);border-radius:8px;overflow:hidden;';
+      card.innerHTML =
+        '<div style="padding:10px 14px;border-bottom:1px solid var(--rl,#d6d9cf)">' +
+          '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Vegetation class</div>' +
+          '<div id="geo-val-evc" style="font-size:.8rem;color:rgba(61,69,53,.45)">Type your address above to look up your EVC</div>' +
+        '</div>' +
+        '<div style="padding:10px 14px">' +
+          '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Nearest green space</div>' +
+          '<div id="geo-val-park" style="font-size:.8rem;color:rgba(61,69,53,.45)">—</div>' +
+        '</div>';
+      idfWrap.appendChild(card);
+    }
     div.appendChild(idfWrap);
     wrap.appendChild(div);
   });
@@ -1024,10 +1046,10 @@ async function confirmConsent(){
     steward_name:              (document.getElementById('steward_name')    || {}).value || '',
     steward_email:             (document.getElementById('steward_email')   || {}).value || '',
     garden_address:            (document.getElementById('garden_address')  || {}).value || '',
-    garden_suburb:             (document.getElementById('garden_suburb')   || {}).value || '',
+    garden_suburb:             gardenSuburb,
     garden_name:               (document.getElementById('garden_name')     || {}).value || '',
-    garden_country:            (document.getElementById('garden_country')  || {}).value || '',
-    garden_region:             (document.getElementById('garden_region')   || {}).value || '',
+    garden_country:            gardenCountry,
+    garden_region:             gardenRegion,
     bio_q1_indigenous_species: answers['bio_0']    || 0,
     bio_q2_indigenous_dominant:answers['bio_1']    || 0,
     bio_q3_layers:             answers['bio_2']    || 0,
