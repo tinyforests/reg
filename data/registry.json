@@ -1,8 +1,8 @@
 {
   "registry_metadata": {
     "version": "1.0",
-    "last_updated": "Jun 2026",
-    "total_gardens": 15,
+    "last_updated": "Aug 2026",
+    "total_gardens": 16,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0",
@@ -647,6 +647,44 @@
       "points_available": 65,
       "council": "Boroondara City Council",
       "lga": "Boroondara"
+    },
+    {
+      "garden_id": "ER-AU-VIC-WHI-KTE-001",
+      "garden_name": "Kate's Forest Hill Garden",
+      "suburb": "Forest Hill",
+      "state": "VIC",
+      "score": 21,
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 20
+      },
+      "primary_evc": "To be confirmed",
+      "bioregion": "Whitehorse",
+      "status": "Council Assessed — record active",
+      "verification_level": "council_garden_guide_verified",
+      "verification_label": "Council Verified",
+      "last_verified": "30 Oct 2025",
+      "badge_count": 3,
+      "badges": [
+        "amphibian_active",
+        "pollinator_rich",
+        "fauna_record"
+      ],
+      "profile_url": "/gardens/foresthillk/index.html",
+      "data_file": "data/foresthillk.json",
+      "typology": "Council-Assessed Wildlife Garden",
+      "registry_role": "Performer",
+      "trajectory": "Emerging",
+      "points_available": 20,
+      "council": "Whitehorse City Council",
+      "lga": "Whitehorse",
+      "cluster": {
+        "name": "Whitehorse",
+        "gardens": 0,
+        "area_ha": null,
+        "status": "Potential"
+      }
     }
   ]
 }
