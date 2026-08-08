@@ -151,8 +151,15 @@
       <div class="lg:col-span-4 flex flex-col gap-4">
         <div class="border p-6 flex-1 flex flex-col justify-between" style="background:#7a9e5f;color:#3d4535;border-color:rgba(61,69,53,.25)">
           <div class="section-label mb-6" style="color:inherit;opacity:.6">Ecological Function</div>
-          <div id="heroScorePanel" class="mb-5">
-            <!-- Populated by JS — numeric score or provisional state -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">
+              <div class="font-serif" style="font-size:4.5rem;line-height:1" id="heroScore">--</div>
+              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">score</div>
+            </div>
+            <div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">
+              <div class="font-serif" style="font-size:4.5rem;line-height:1" id="heroBadgeCount">--</div>
+              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">badges</div>
+            </div>
           </div>
           <div>
             <div style="margin-bottom:.75rem">
@@ -191,6 +198,14 @@
             <dt class="opacity-60">Council</dt>
             <dd class="font-medium text-right" id="provenanceCouncil"></dd>
           </div>
+          <div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-3">
+            <dt class="opacity-60">Assessors</dt>
+            <dd class="font-medium text-right" id="provenanceAssessors"></dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-3">
+            <dt class="opacity-60">Voucher</dt>
+            <dd class="font-mono text-right" id="provenanceVoucher"></dd>
+          </div>
           <div class="flex justify-between gap-4">
             <dt class="opacity-60">Visit date</dt>
             <dd class="font-medium text-right" id="provenanceVisitDate"></dd>
@@ -201,7 +216,7 @@
         <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-5">
           <div class="section-label mb-3" style="color:inherit;opacity:.6">What this record closes</div>
           <p class="text-sm leading-relaxed opacity-90 mb-4">This record was created directly from a Whitehorse City Council Gardens for Wildlife visit report — no additional data entry by the steward required.</p>
-          <p class="text-sm leading-relaxed opacity-90">The <strong>verifier</strong> field is populated by council garden guides. This is a first-class verification event: trained third parties, on-site, recorded date, linked program.</p>
+          <p class="text-sm leading-relaxed opacity-90">The <strong>verifier</strong> field is populated by named council assessors. This is a first-class verification event: trained third parties, on-site, recorded date, linked program.</p>
         </div>
         <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
           <div class="section-label mb-3">Fields requiring follow-up</div>
@@ -226,18 +241,16 @@
 
   <!-- SCORE -->
   <section id="score" class="stagger">
-    <div class="section-label mb-1">Record Completion</div>
-    <h2 class="font-serif text-4xl mb-6">Score Status</h2>
+    <div class="section-label mb-1">Performance</div>
+    <h2 class="font-serif text-4xl mb-6">Score Breakdown</h2>
     <div class="grid lg:grid-cols-3 gap-6">
       <div class="lg:col-span-2 border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
         <div class="flex items-center justify-between mb-6">
-          <div class="section-label">Input Completion</div>
-          <div class="text-sm font-mono opacity-60" id="overallPct">--</div>
+          <div class="section-label">Category Scores</div>
+          <div class="text-2xl font-light" id="overallPct">--</div>
         </div>
         <div class="space-y-5" id="categoryBars"></div>
-        <div class="mt-6 pt-5 border-t border-rl dark:border-rdl">
-          <p class="text-xs opacity-60 leading-relaxed">This record is unscored — not a low score. Four inputs (address, area, EVC, soil) are outstanding. A score will be calculated once the steward claims this record and completes enrolment.</p>
-        </div>
+        <p class="text-xs opacity-50 mt-6 leading-relaxed">Score is provisional. Null inputs (area, EVC, soil) are treated as zero by the scoring engine. Score will rise as the record is completed with steward input.</p>
       </div>
       <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
         <div class="section-label mb-4">Assessor Recommendations</div>
@@ -251,17 +264,24 @@
     <div class="section-label mb-1">Environmental Weeds</div>
     <h2 class="font-serif text-4xl mb-6">Weeds Identified</h2>
     <div class="grid lg:grid-cols-2 gap-6">
+      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp">
+        <div class="px-6 py-4 border-b border-rl dark:border-rdl">
+          <div class="text-sm font-medium">Weeds recorded on-site — 30 Oct 2025</div>
+          <div class="text-xs opacity-50 mt-1">Identified by Whitehorse City Council G4W garden guides</div>
+        </div>
+        <div id="weedList"></div>
+      </div>
       <div class="space-y-4">
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Nearest Reserves</div>
+          <div class="text-xs opacity-60 mb-3 leading-relaxed">Recorded in G4W visit report. These are the reserves assessors identified as closest to this garden.</div>
+          <div id="reserveList" class="space-y-2"></div>
+        </div>
         <div class="border border-rl dark:border-rdl bg-rs dark:bg-rdp p-5">
           <div class="section-label mb-2">Weed pressure rating</div>
           <div class="text-2xl font-light mb-2" id="weedPressure">--</div>
-          <p class="text-xs opacity-60 leading-relaxed">Environmental weeds identified across garden during G4W visit. Species detail is held in the steward record.</p>
+          <p class="text-xs opacity-60 leading-relaxed">Six environmental weed species identified across garden. Priority removal: <em>Lonicera japonica</em> (Japanese Honeysuckle) and <em>Asparagus densiflorus</em> (Boston Fern).</p>
         </div>
-      </div>
-      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
-        <div class="section-label mb-3">Nearest Reserves</div>
-        <div class="text-xs opacity-60 mb-3 leading-relaxed">Recorded in G4W visit report. These are the reserves assessors identified as closest to this garden.</div>
-        <div id="reserveList" class="space-y-2"></div>
       </div>
     </div>
   </section>
@@ -326,8 +346,8 @@
       <div class="text-xs opacity-50">Private ecological infrastructure for cities</div>
     </div>
     <div class="text-xs opacity-50 max-w-sm leading-relaxed text-right">
-      Record created from a Whitehorse City Council Gardens for Wildlife visit report.<br>
-      Verified by council garden guides · 30 Oct 2025.
+      Record created from Whitehorse City Council G4W visit report #2569.<br>
+      Verifier: Lynne, Gay — Gardens for Wildlife.
     </div>
   </div>
 </footer>
@@ -422,46 +442,7 @@ function render() {
       '<span class="text-xs border px-3 py-1.5 font-medium" style="background:#7a9e5f;color:#3d4535;border-color:rgba(61,69,53,.25)">Council Verified — ' + R.assessment_date + '</span>'
     );
 
-    /* Hero score panel — provisional vs scored */
-    var SCORE_INPUTS = [
-      { v: b.indigenous_species_current,  label: 'Indigenous species' },
-      { v: b.structural_layers_current,   label: 'Structural layers' },
-      { v: b.weed_pressure,               label: 'Weed pressure' },
-      { v: G.biodiversity.canopy_cover_pct_current, label: 'Canopy cover' },
-      { v: G.soil_water.soil_health_score,  label: 'Soil health' },
-      { v: G.soil_water.water_function_score, label: 'Water function' },
-      { v: G.area_sqm || null,            label: 'Garden area' },
-      { v: G.evc && G.evc.name,          label: 'EVC' },
-      { v: G.connectivity.park_distance_m, label: 'Park distance' },
-      { v: h.habitat_nodes,              label: 'Habitat nodes' },
-      { v: fauna.length > 0 ? true : null, label: 'Fauna record' }
-    ];
-    var inputsRecorded = SCORE_INPUTS.filter(function(s) { return s.v != null && s.v !== 0 && s.v !== ''; }).length;
-    var inputsTotal = SCORE_INPUTS.length;
-
-    if (G.provisional) {
-      html('heroScorePanel',
-        '<div style="border:1px solid rgba(61,69,53,.25);padding:1.25rem 1rem;text-align:center">' +
-          '<div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;opacity:.55;margin-bottom:.5rem">Provisional</div>' +
-          '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:1.5rem;line-height:1;margin-bottom:.4rem">' + inputsRecorded + ' / ' + inputsTotal + '</div>' +
-          '<div style="font-size:.6rem;opacity:.5">inputs recorded</div>' +
-        '</div>'
-      );
-    } else {
-      html('heroScorePanel',
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">' +
-          '<div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">' +
-            '<div style="font-family:\'Abril Fatface\',serif;font-size:4.5rem;line-height:1" id="heroScore">' + result.total + '</div>' +
-            '<div style="font-size:.65rem;opacity:.5;margin-top:.3rem">score</div>' +
-          '</div>' +
-          '<div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">' +
-            '<div style="font-family:\'Abril Fatface\',serif;font-size:4.5rem;line-height:1">' + (badges.all || []).length + '</div>' +
-            '<div style="font-size:.65rem;opacity:.5;margin-top:.3rem">badges</div>' +
-          '</div>' +
-        '</div>'
-      );
-    }
-
+    txt('heroBadgeCount', (badges.all || []).length);
     var bh = '';
     for (var i = 0; i < (badges.all || []).length; i++) {
       var bid = badges.all[i];
@@ -470,10 +451,12 @@ function render() {
     html('heroBadges', bh || '<span style="font-size:.7rem;opacity:.5">Completing record</span>');
 
     /* Provenance */
-    txt('provenanceVerifier',  'Whitehorse City Council Gardens for Wildlife garden guides');
+    txt('provenanceVerifier',  ev.assessor);
     txt('provenanceDate',      'On-site visit · ' + ev.verification_date);
     txt('provenanceProgram',   ds.program);
     txt('provenanceCouncil',   ds.council);
+    txt('provenanceAssessors', (ds.assessors || []).join(', '));
+    txt('provenanceVoucher',   '#' + ds.voucher);
     txt('provenanceVisitDate', ds.visit_date);
 
     html('nullFieldList',
@@ -504,26 +487,15 @@ function render() {
       sigCell('Area', '<span class="null-field">Unknown</span>', '<span class="text-xs opacity-40">Needs follow-up</span>')
     );
 
-    /* Score / provisional completion */
-    txt('overallPct', G.provisional ? 'Provisional · ' + inputsRecorded + ' of ' + inputsTotal + ' inputs' : result.total + ' / 100');
+    /* Score */
+    txt('overallPct', result.total + ' / 100');
     var ch = '';
-    if (G.provisional) {
-      for (var ci = 0; ci < SCORE_INPUTS.length; ci++) {
-        var inp = SCORE_INPUTS[ci];
-        var known = inp.v != null && inp.v !== 0 && inp.v !== '';
-        ch += '<div><div class="flex justify-between text-sm mb-1">' +
-          '<span class="' + (known ? 'font-medium' : 'opacity-40') + '">' + inp.label + '</span>' +
-          '<span class="font-mono text-xs ' + (known ? 'delta-up' : 'opacity-30') + '">' + (known ? 'recorded' : 'outstanding') + '</span></div>' +
-          '<div class="h-1.5 bg-rs dark:bg-rb/10"><div class="bar-fill h-full ' + (known ? 'bg-rg dark:bg-rb' : 'bg-rl dark:bg-rdl') + '" style="width:' + (known ? '100' : '0') + '%"></div></div></div>';
-      }
-    } else {
-      for (var ci = 0; ci < (result.categories || []).length; ci++) {
-        var cat = result.categories[ci];
-        var pct = cat.max > 0 ? Math.round(cat.score / cat.max * 100) : 0;
-        ch += '<div><div class="flex justify-between text-sm mb-2"><span class="font-medium">' + cat.label + '</span><span class="font-mono text-xs">' + cat.score + ' / ' + cat.max + '</span></div>' +
-          '<div class="h-2 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:' + pct + '%"></div></div>' +
-          (cat.notes && cat.notes.length ? '<div class="text-xs opacity-40 mt-1">' + cat.notes.join(' · ') + '</div>' : '') + '</div>';
-      }
+    for (var ci = 0; ci < (result.categories || []).length; ci++) {
+      var cat = result.categories[ci];
+      var pct = cat.max > 0 ? Math.round(cat.score / cat.max * 100) : 0;
+      ch += '<div><div class="flex justify-between text-sm mb-2"><span class="font-medium">' + cat.label + '</span><span class="font-mono text-xs">' + cat.score + ' / ' + cat.max + '</span></div>' +
+        '<div class="h-2 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:' + pct + '%"></div></div>' +
+        (cat.notes && cat.notes.length ? '<div class="text-xs opacity-40 mt-1">' + cat.notes.join(' · ') + '</div>' : '') + '</div>';
     }
     html('categoryBars', ch);
 
@@ -535,7 +507,13 @@ function render() {
     }
     html('recList', rh || '<p class="text-xs opacity-40">No recommendations on file.</p>');
 
-    /* Weeds — species list held in steward record, pressure rating only public */
+    /* Weeds */
+    var weeds = b.weeds_identified || [];
+    var wh = '';
+    for (var wi = 0; wi < weeds.length; wi++) {
+      wh += '<div class="weed-item"><div class="weed-dot"></div><span>' + weeds[wi] + '</span></div>';
+    }
+    html('weedList', wh);
     txt('weedPressure', b.weed_pressure);
 
     /* Reserves */
