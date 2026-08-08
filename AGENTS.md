@@ -8,10 +8,11 @@ Read in this sequence before any change. Each layer informs the next.
 
 1. **`/SUPER_MIND.md`** — what the work is for. The strategic, ecological, and cultural frame across all Gardener & Son properties. Read first, every session.
 2. **`/AI_CONTEXT.md`** — the quick-start companion. Tone, canonical colours, the five practical-rule questions.
-3. **`/AGENTS.md`** (this file) — the repo-specific engineering brief. Non-negotiables, before-editing checklist, docs index.
-4. **`/docs/[relevant].md`** — subsystem detail for the area you're touching.
+3. **`/VISION.md`** — Registry-specific strategic positioning. The method vs register distinction, the three moves, the two gaps that disqualify a standard. Read before any work that touches copy, UX, or product direction.
+4. **`/AGENTS.md`** (this file) — the repo-specific engineering brief. Non-negotiables, before-editing checklist, docs index.
+5. **`/docs/[relevant].md`** — subsystem detail for the area you're touching.
 
-If SUPER_MIND.md or AI_CONTEXT.md disagree with anything here, the senior documents win on intent and tone; this file wins on engineering invariants (schema shape, field names, build steps).
+If SUPER_MIND.md, AI_CONTEXT.md, or VISION.md disagree with anything here, the senior documents win on intent and tone; this file wins on engineering invariants (schema shape, field names, build steps).
 
 ---
 

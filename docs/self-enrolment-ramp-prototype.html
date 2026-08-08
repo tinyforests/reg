@@ -168,7 +168,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .identity-fields{padding:12px 0;border-bottom:1px solid var(--hairline);margin-bottom:12px}
 .identity-fields label{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:12px 0 4px}
 .identity-fields input{width:100%;font-family:"IBM Plex Sans",sans-serif;font-size:14px;padding:10px 12px;border:1px solid var(--hairline);background:var(--understory);color:var(--ink);border-radius:0}
-.identity-fields input:focus{outline:2px solid var(--signal);outline-offset:2px;border-color:var(--signal)}
+.identity-fields input:focus{outline:none;border:2px solid var(--signal);padding:9px 11px}
 .consent-error{color:#c0392b;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;margin-top:8px}
 
 /* ---- 04 THE GAP — signature element ---- */
@@ -247,15 +247,14 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <div class="wrap">
       <div class="label eyebrow">Ecological Registry · open enrolment</div>
       <h1>Add your garden to the&nbsp;Registry.</h1>
-      <p class="lede">The Registry holds the ecological memory of gardens across Boroondara and beyond — what grows there, what lives there, and how it changes over time. You don't need us to have planted it. You only need to be its steward now.</p>
-      <p class="fieldnote">A garden you didn't design is still a garden worth remembering. Start where it is.</p>
+      <p class="lede">The Registry holds the ecological memory of gardens across Wurundjeri and beyond — what grows there, what lives there, and how it changes over time. You don't need us to have planted it. You only need to be its steward now.</p>
       <div class="arrive-meta">
         <div><span class="label">Takes</span>About four minutes</div>
         <div><span class="label">Produces</span>A provisional ecological score</div>
         <div><span class="label">Costs</span>Nothing to begin</div>
       </div>
       <div class="btn-row">
-        <button class="btn primary" onclick="go(1)">Register this garden</button>
+        <button class="btn primary" onclick="openConsent()">REGISTER YOUR GARDEN</button>
       </div>
     </div>
   </section>
@@ -281,17 +280,22 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
   </section>
 </div>
 
-<!-- ============ 03 CONSENT (front door) ============ -->
+<!-- ============ 03 CONSENT ============ -->
 <div class="screen" id="s2">
   <section class="band canopy">
     <div class="wrap">
       <div class="label eyebrow">Step 03 · stewardship</div>
       <h2 style="color:var(--understory)">Accept stewardship of this garden's&nbsp;memory.</h2>
-      <p class="lede">Registering isn't a checkbox — it's a commitment to hold this garden's record. You decide what's shared and you can withdraw any of it at any time. Nothing appears on the public Registry until you open the door.</p>
-      <p class="fieldnote">A garden should not lose its memory when ownership changes. Consent is how the memory stays cared for.</p>
+      <p class="lede" style="color:var(--understory-2)">Registering isn't a checkbox — it's a commitment to hold this garden's record. You decide what's shared and you can withdraw any of it at any time. Nothing appears on the public Registry until you open the door.</p>
+      <p class="fieldnote" style="color:rgba(247,245,239,.55)">A garden should not lose its memory when ownership changes. Consent is how the memory stays cared for.</p>
+    </div>
+  </section>
+  <section class="band">
+    <div class="wrap">
+      <div id="consent-items"></div>
       <div class="btn-row">
         <button class="btn ghost" onclick="go(1)">Back</button>
-        <button class="btn primary" onclick="openConsent()">Open the consent agreement</button>
+        <button class="btn primary" id="registerBtn" onclick="confirmConsent()">Register my garden</button>
       </div>
     </div>
   </section>
@@ -586,33 +590,38 @@ const _fetchAddrSuggestions = _debounce(async q => {
    Queries OSM Overpass for parks, reserves, and greenways within 600m.
    Picks the closest by centroid. Populates parkName/parkLat/parkLng/parkDistM.
    Non-blocking: submission proceeds with blanks if lookup fails. */
-const _OVERPASS = 'https://overpass-api.de/api/interpreter';
+const _OVERPASS_MIRRORS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
+];
 
-function _setParkStatus(msg, ok) {
-  const el = document.getElementById('park-status');
-  if (!el) return;
-  el.textContent = msg;
-  el.style.color = ok ? '#7a9e5f' : 'rgba(61,69,53,.5)';
+async function _overpassFetch(query) {
+  const encoded = '?data=' + encodeURIComponent(query);
+  const ac = new AbortController();
+  return Promise.any(_OVERPASS_MIRRORS.map(ep =>
+    fetch(ep + encoded, { signal: ac.signal })
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(d => { ac.abort(); return d; })
+  ));
 }
 
-async function resolveNearestPark(lat, lng) {
-  parkName = ''; parkLat = ''; parkLng = ''; parkDistM = null;
-  _setParkStatus('Finding nearest park…', false);
+async function resolveNearestPark(lat, lng, _attempt) {
+  if (_attempt === undefined) {
+    parkName = ''; parkLat = ''; parkLng = ''; parkDistM = null;
+    _setParkStatus('Finding nearest park…', false);
+    _attempt = 0;
+  }
   const r = 600;
   const query = `[out:json][timeout:10];
 (
   way["leisure"="park"](around:${r},${lat},${lng});
   way["leisure"="nature_reserve"](around:${r},${lat},${lng});
   way["leisure"="garden"]["access"!="private"](around:${r},${lat},${lng});
-  way["landuse"="grass"](around:${r},${lat},${lng});
-  way["landuse"="meadow"](around:${r},${lat},${lng});
   relation["leisure"="park"](around:${r},${lat},${lng});
-  relation["leisure"="nature_reserve"](around:${r},${lat},${lng});
 );
 out center tags;`;
   try {
-    const res  = await fetch(_OVERPASS + '?data=' + encodeURIComponent(query));
-    const data = await res.json();
+    const data = await _overpassFetch(query);
     if (!data.elements || !data.elements.length) {
       _setParkStatus('No park found within 600m', false);
       return;
@@ -635,7 +644,11 @@ out center tags;`;
     parkDistM = Math.round(best);
     _setParkStatus(parkName + ' · ' + parkDistM + 'm', true);
   } catch(err) {
-    _setParkStatus('Park lookup failed — will submit without', false);
+    if (_attempt < 1) {
+      setTimeout(() => resolveNearestPark(lat, lng, _attempt + 1), 2500);
+    } else {
+      _setParkStatus('No park found within 600m', false);
+    }
   }
 }
 
@@ -801,10 +814,10 @@ const PILLARS = [
     }
   ]},
 
-  {key:"evid", name:"Evidence", max:15, qs:[
+  {key:"evid", name:"Evidence", max:11, qs:[
     {
       t:"Which records do you currently keep about your garden?",
-      help:"Tick everything that genuinely exists. The verification visit can add a professional assessment (worth +3) and upgrade your verification level (worth +3 to +4).",
+      help:"Tick everything that genuinely exists. A verification visit adds up to 4 more points through your verification level — bringing the pillar total to 15.",
       type:"multi",
       opts:[
         ["Photos over time",2],
@@ -840,6 +853,24 @@ const CONSENT = [
 const answers = {};   // pillarKey -> points
 let consentState = new Array(CONSENT.length).fill(null);
 let formStep     = 0;
+
+/* ---- build consent items into s2 at page load ---- */
+(function buildConsentScreen() {
+  const wrap = document.getElementById('consent-items');
+  if (!wrap) return;
+  CONSENT.forEach((c, i) => {
+    consentState[i] = c.req ? true : null;
+    const div = document.createElement('div');
+    div.className = 'consent-item' + (c.req ? ' checked required' : '');
+    div.id = 'ci-' + i;
+    if (!c.req) div.onclick = () => toggleConsent(i);
+    div.innerHTML =
+      `<div class="ci-check" id="ci-check-${i}">${c.req ? '✓' : ''}</div>` +
+      `<div class="ci-body"><div class="ci-title">${c.b}</div><div class="ci-desc" style="font-size:12.5px;color:var(--ink-soft);margin-top:2px">${c.s}</div></div>` +
+      `<div class="cstep-tag ${c.req ? 'req' : 'opt'}">${c.req ? 'Required' : 'Optional'}</div>`;
+    wrap.appendChild(div);
+  });
+})();
 
 /* ---- build baseline UI ---- */
 const pillarsEl = document.getElementById('pillars');
@@ -878,7 +909,7 @@ const FORM_STEP_FIELDS = [
   ['garden_name', 'steward_name', 'steward_email'],
   ['garden_address']
 ];
-const FORM_STEP_TITLES = ['Your garden', 'Your location', 'Agree to stewardship'];
+const FORM_STEP_TITLES = ['You & Your Garden', 'Your location'];
 
 function buildFormSteps() {
   const wrap = document.getElementById('fstepWrap');
@@ -905,11 +936,63 @@ function buildFormSteps() {
       inp.addEventListener('input', updateStepNext);
       if (fid === 'garden_address') {
         inp.addEventListener('input',  () => _fetchAddrSuggestions(inp.value));
-        inp.addEventListener('blur',   () => { setTimeout(_hideAddrDrop, 150); resolveEvc(); });
+        inp.addEventListener('blur',   () => { setTimeout(_hideAddrDrop, 150); if (!gardenLat) resolveEvc(); });
         inp.addEventListener('keydown', e => { if (e.key === 'Escape') _hideAddrDrop(); });
       }
       idfWrap.appendChild(lbl);
       idfWrap.appendChild(inp);
+      if (fid === 'garden_name') {
+        const echo = document.createElement('p');
+        echo.style.cssText = 'display:none;margin:8px 0 0;font-family:"Fraunces",serif;font-style:italic;font-size:14px;color:var(--signal-deep);line-height:1.5';
+        const _gardenPhrases = [
+          v => v + ' — the Registry will hold this name.',
+          v => 'A garden called ' + v + '. Welcome to the record.',
+          v => v + ' — added to ecological memory.',
+          v => 'Every garden deserves a name. ' + v + ' is a good one.',
+          v => 'That\'s a fine name. The Registry will remember ' + v + '.',
+        ];
+        inp.addEventListener('blur', () => {
+          const v = inp.value.trim();
+          if (!v) { echo.style.display = 'none'; return; }
+          echo.textContent = _gardenPhrases[Math.floor(Math.random() * _gardenPhrases.length)](v);
+          echo.style.display = '';
+        });
+        inp.addEventListener('input', () => { echo.style.display = 'none'; });
+        idfWrap.appendChild(echo);
+      }
+      if (fid === 'steward_name') {
+        const echo = document.createElement('p');
+        echo.style.cssText = 'display:none;margin:8px 0 0;font-family:"Fraunces",serif;font-style:italic;font-size:14px;color:var(--signal-deep);line-height:1.5';
+        const _stewardPhrases = [
+          n => 'Welcome to the Registry, ' + n + '.',
+          n => 'Thanks, ' + n + '. Good to have you here.',
+          n => n + ' — steward noted.',
+          n => 'The Registry is glad to have you, ' + n + '.',
+          n => 'Good to meet you, ' + n + '.',
+        ];
+        inp.addEventListener('blur', () => {
+          const v = inp.value.trim();
+          if (!v) { echo.style.display = 'none'; return; }
+          const firstName = v.split(' ')[0];
+          echo.textContent = _stewardPhrases[Math.floor(Math.random() * _stewardPhrases.length)](firstName);
+          echo.style.display = '';
+        });
+        inp.addEventListener('input', () => { echo.style.display = 'none'; });
+        idfWrap.appendChild(echo);
+      }
+      if (fid === 'steward_email') {
+        const err = document.createElement('p');
+        err.style.cssText = 'display:none;margin:6px 0 0;font-family:"IBM Plex Mono",monospace;font-size:11px;color:#b94040;letter-spacing:.03em';
+        err.textContent = 'Please enter a valid email address.';
+        inp.addEventListener('blur', () => {
+          const v = inp.value.trim();
+          const valid = !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+          err.style.display = valid ? 'none' : '';
+          updateStepNext();
+        });
+        inp.addEventListener('input', () => { err.style.display = 'none'; updateStepNext(); });
+        idfWrap.appendChild(err);
+      }
     });
     // Location step: subtitle + geo-results card
     if (si === 1) {
@@ -934,21 +1017,6 @@ function buildFormSteps() {
     div.appendChild(idfWrap);
     wrap.appendChild(div);
   });
-  // Step 2: consent (all items together)
-  const consentDiv = document.createElement('div');
-  consentDiv.className = 'cstep';
-  consentDiv.id = 'fstep-2';
-  let chtml = '<p style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 16px">The record belongs to whoever is tending this garden. You decide what\'s shared and can withdraw at any time.</p>';
-  CONSENT.forEach((c, i) => {
-    consentState[i] = c.req ? true : null;
-    chtml += `<div class="consent-item${c.req ? ' checked required' : ''}" id="ci-${i}"${!c.req ? ` onclick="toggleConsent(${i})"` : ''}>` +
-      `<div class="ci-check" id="ci-check-${i}">${c.req ? '✓' : ''}</div>` +
-      `<div class="ci-body"><div class="ci-title">${c.b}</div><div class="ci-desc">${c.s}</div></div>` +
-      `<div class="cstep-tag ${c.req ? 'req' : 'opt'}">${c.req ? 'Required' : 'Optional'}</div>` +
-      `</div>`;
-  });
-  consentDiv.innerHTML = chtml;
-  wrap.appendChild(consentDiv);
   updateStepUI();
 }
 buildFormSteps();
@@ -972,30 +1040,31 @@ function updateStepUI() {
   const backBtn = document.getElementById('fstepBackBtn');
   const nextBtn = document.getElementById('fstepNextBtn');
   const fill    = document.getElementById('fstepFill');
-  if (label)   label.textContent  = 'Step ' + (formStep + 1) + ' of 3';
+  if (label)   label.textContent  = 'Step ' + (formStep + 1) + ' of 2';
   if (title)   title.textContent  = FORM_STEP_TITLES[formStep];
   if (backBtn) backBtn.style.display = formStep > 0 ? '' : 'none';
-  if (nextBtn) nextBtn.textContent = formStep === 2 ? 'Accept stewardship' : 'Continue →';
-  if (fill)    fill.style.width   = ((formStep / 3) * 100) + '%';
+  if (nextBtn) nextBtn.textContent = 'Continue →';
+  if (fill)    fill.style.width   = ((formStep + 1) / 3 * 100) + '%';
   updateStepNext();
 }
 
 function updateStepNext() {
   const btn = document.getElementById('fstepNextBtn');
   if (!btn) return;
-  if (formStep < 2) {
-    const fieldIds = FORM_STEP_FIELDS[formStep] || [];
-    const ok = IDENTITY_FIELDS
-      .filter(f => fieldIds.includes(f.id) && f.required)
-      .every(f => { const el = document.getElementById(f.id); return el && el.value.trim(); });
-    btn.disabled = !ok;
-  } else {
-    btn.disabled = !CONSENT.every((c, i) => !c.req || consentState[i] === true);
-  }
+  const fieldIds = FORM_STEP_FIELDS[formStep] || [];
+  const ok = IDENTITY_FIELDS
+    .filter(f => fieldIds.includes(f.id) && f.required)
+    .every(f => {
+      const el = document.getElementById(f.id);
+      if (!el || !el.value.trim()) return false;
+      if (f.id === 'steward_email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+      return true;
+    });
+  btn.disabled = !ok;
 }
 
 function formStepNext() {
-  if (formStep === 2) { confirmConsent(); return; }
+  if (formStep === FORM_STEP_FIELDS.length - 1) { closeConsent(); go(1); return; }
   const next = formStep + 1;
   _slideStep('fstep-' + formStep, 'fstep-' + next, true);
   formStep = next;
@@ -1023,6 +1092,7 @@ function toggleConsent(i) {
     if (check) check.textContent = '';
   }
   updateStepNext();
+  updateRegisterBtn();
 }
 
 function pick(btn, key, type, cap){
@@ -1080,17 +1150,20 @@ function updateScore(){
 
 /* ---- consent/form helpers ---- */
 function checkConsentReady() { updateStepNext(); }
+function updateRegisterBtn() {
+  const btn = document.getElementById('registerBtn');
+  if (!btn) return;
+  btn.disabled = !CONSENT.every((c, i) => !c.req || consentState[i] === true);
+}
 function openConsent() {
   formStep = 0;
-  consentState = new Array(CONSENT.length).fill(null);
   buildFormSteps();
   document.getElementById('overlay').classList.add('open');
 }
 function closeConsent(){ document.getElementById('overlay').classList.remove('open'); }
 async function confirmConsent(){
-  const btn = document.getElementById('fstepNextBtn');
-  btn.textContent = 'Submitting…';
-  btn.disabled = true;
+  const btn = document.getElementById('registerBtn');
+  if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
 
   const s = score();
   const t = tierFor(s);
@@ -1144,13 +1217,11 @@ async function confirmConsent(){
       go(3);
     } else {
       showConsentError('Submission failed: ' + (json.error || 'unknown error'));
-      btn.textContent = 'Accept stewardship';
-      checkConsentReady();
+      if (btn) { btn.textContent = 'Register my garden'; btn.disabled = false; }
     }
   } catch(err){
     showConsentError('Could not reach the server — please try again.');
-    btn.textContent = 'Accept stewardship';
-    checkConsentReady();
+    if (btn) { btn.textContent = 'Register my garden'; btn.disabled = false; }
   }
 }
 function showConsentError(msg){
@@ -1159,8 +1230,8 @@ function showConsentError(msg){
     el = document.createElement('p');
     el.id = 'consentError';
     el.className = 'consent-error';
-    const foot = document.querySelector('.modal-foot');
-    foot.insertBefore(el, foot.firstChild);
+    const btnRow = document.getElementById('registerBtn')?.closest('.btn-row');
+    if (btnRow) btnRow.parentElement.insertBefore(el, btnRow);
   }
   el.textContent = msg;
 }
