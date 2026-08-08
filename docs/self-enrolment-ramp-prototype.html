@@ -545,7 +545,11 @@ async function resolveNearestPark(lat, lng) {
 );
 out center tags;`;
   try {
-    const res  = await fetch(_OVERPASS, { method: 'POST', body: 'data=' + encodeURIComponent(query) });
+    const res  = await fetch(_OVERPASS, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body:    'data=' + encodeURIComponent(query)
+    });
     const data = await res.json();
     if (!data.elements || !data.elements.length) {
       _setParkStatus('No park found within 600m', false);
