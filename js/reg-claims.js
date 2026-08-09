@@ -205,6 +205,7 @@
       steward_email: email,
       note: note,
       claimed_at: new Date().toISOString(),
+      device_id: (typeof getDeviceId === 'function' ? getDeviceId() : ''),
       status: 'pending_review'
     };
 
@@ -222,6 +223,7 @@
         .then(function (json) {
           if (json && json.ok) {
             markClaimed(gardenId, oppId);
+            if (typeof markSteward === 'function') markSteward(gardenId, email);
             var c = btn.closest('[data-opp-id]');
             var form = btn.closest('div').parentNode;
             if (form && form.parentNode) form.parentNode.removeChild(form);

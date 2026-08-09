@@ -404,6 +404,7 @@
 
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
+<script src="/js/reg-identity.js"></script>
 <script src="/js/reg-claims.js"></script>
 <script src="/js/badge-engine.js"></script>
 <script>
@@ -489,7 +490,7 @@ function render() {
   txt('heroBadgeCount', badges.all.length);
 
   txt('heroBadgeCount', badges.all.length);
-  erCheckNotifications(R.garden_id, badges.all, result.total);
+  if (typeof isSteward !== "function" || isSteward(R.garden_id)) erCheckNotifications(R.garden_id, badges.all, result.total);
   txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';

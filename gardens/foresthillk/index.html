@@ -522,6 +522,7 @@
 
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
+<script src="/js/reg-identity.js"></script>
 <script src="/js/reg-claims.js"></script>
 <script src="/js/badge-engine.js"></script>
 <script>
@@ -1035,6 +1036,7 @@ function emailPlantList() {
   lines.push('Bring your Whitehorse City Council G4W voucher to the nursery.');
   lines.push('Ecological Registry · ' + (G.garden_id || ''));
   var body = lines.join('\n');
+  if (typeof markSteward === 'function') markSteward(G.garden_id, email);
   window.location.href = 'mailto:' + email + '?subject=Your G4W planting list — ' + (G.garden_name || 'Forest Hill') + '&body=' + encodeURIComponent(body);
 }
 
