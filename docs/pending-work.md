@@ -4,6 +4,26 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Self-Enrolment ramp → assess.html bootstrap — TOP PRIORITY
+
+The self-enrolment ramp and assess.html are disconnected tools. A steward self-enrols → G&S gets a provisional signal → someone manually re-enters everything into assess.html to produce the canonical JSON. The ramp should bootstrap the assess form, removing that manual handoff.
+
+Agreed approach (Aug 2026): **Option B — full selection tracking, high-fidelity pre-fill via URL param.**
+
+At the Deepen step (step 5, s4) of the ramp, add an "Open in Assessment Tool →" CTA. On click:
+1. Encode the full ramp state as a base64 JSON `prefill` param and navigate to `/assess.html?prefill=…`
+2. assess.html detects the param at boot and calls `prefillFromRamp()` to pre-populate the form
+3. A dismissable banner in assess: "Pre-filled from your self-assessment — review and refine each field before saving."
+
+Mapping decisions:
+- **Full selection tracking in the ramp**: the `pick()` function gets a parallel `selections` object (`{ pillarKey_qi: [optionIndex, ...] }`) alongside `answers`. Every ticked option is recorded individually, not just the summed points. This is what enables checkbox-level fidelity for water features (rainwater/basin/swale), habitat features (logs/rocks/water/nest), structural layers, and evidence.
+- **Banded → approximate numeric**: species count, canopy %, soil score, water score, habitat nodes convert via midpoint of the band (e.g. "6–11 species" → 8). These are estimates the assessor can correct — the pre-fill label makes this visible.
+- **Layer count**: reconstructed by counting the number of opts selected in the bio_2 question (each opt = one layer), not from summed points.
+- **Identity fields pass cleanly**: garden_name, suburb, state, evc_code, evc_name, lat, lng, park_name, park_lat, park_lng, park_dist_m, steward_name all available without approximation.
+- **Fields left blank**: garden_id, baseline_date, target_score, council, ward, lga, description, mulch_depth_mm, planting_method, cluster — an assessor fills these from knowledge.
+
+Files to touch: `docs/self-enrolment-ramp-prototype.html` (add selection tracking + Deepen CTA), `assess.html` (add prefill detection + `prefillFromRamp()`).
+
 ### Self-Enrolment review workflow — Phase A + B done, Phase C next
 
 Today (13 Jul 2026) built the human-review + notification layer for self-enrolment. State:

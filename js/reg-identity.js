@@ -66,7 +66,7 @@
   function mountStewardUnlock(gardenId) {
     if (!gardenId || isSteward(gardenId)) return;
     if (document.getElementById('er-steward-unlock')) return;
-    try { if (sessionStorage.getItem('er_unlock_dismissed') === '1') return; } catch (e) {}
+    try { if (sessionStorage.getItem('er_unlock_dismissed:' + gardenId) === '1') return; } catch (e) {}
 
     var bar = document.createElement('div');
     bar.id = 'er-steward-unlock';
@@ -96,7 +96,7 @@
 
     document.getElementById('er-unlock-dismiss').onclick = function () {
       bar.parentNode && bar.parentNode.removeChild(bar);
-      try { sessionStorage.setItem('er_unlock_dismissed', '1'); } catch (e) {}
+      try { sessionStorage.setItem('er_unlock_dismissed:' + gardenId, '1'); } catch (e) {}
     };
 
     document.getElementById('er-unlock-btn').onclick = function () {
