@@ -43,9 +43,50 @@ var CLAIM_RATE_MAX   = 40;   // max claims per hour (all users)
 var CLAIM_EMAIL_MAX  = 10;   // max claims per email per hour
 var RATE_CACHE_TTL   = 3600; // cache entry lifetime in seconds (1 hour)
 
-/* ---- Health check ---- */
+/* ---- Health check + steward verification ---- */
 function doGet(e) {
+  var params = (e && e.parameter) ? e.parameter : {};
+
+  if (params.action === 'verify_steward') {
+    return handleVerifySteward(params);
+  }
+
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
+}
+
+/*
+ * Checks whether an email has a claim record for a garden.
+ * Used by reg-identity.js to re-link a steward on a new device.
+ * Returns {ok:true} if found, {ok:false, error:...} otherwise.
+ * Deliberately returns no data beyond ok/not-ok to avoid enumeration.
+ */
+function handleVerifySteward(params) {
+  var email    = safeStr((params.email     || '').toLowerCase().trim(), 254);
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+
+  if (!email || !gardenId) {
+    return jsonResp({ok: false, error: 'email and garden_id are required.'});
+  }
+
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var claims = ss.getSheetByName('Claims');
+
+  if (!claims || claims.getLastRow() <= 1) {
+    return jsonResp({ok: false, error: 'No claim found for this email on this garden.'});
+  }
+
+  var data    = claims.getRange(2, 1, claims.getLastRow() - 1, claims.getLastColumn()).getValues();
+  var iGarden = CLAIM_HEADERS.indexOf('garden_id');
+  var iEmail  = CLAIM_HEADERS.indexOf('steward_email');
+
+  for (var i = 0; i < data.length; i++) {
+    if (String(data[i][iGarden]).toLowerCase() === gardenId.toLowerCase() &&
+        String(data[i][iEmail]).toLowerCase()  === email) {
+      return jsonResp({ok: true});
+    }
+  }
+
+  return jsonResp({ok: false, error: 'No claim found for this email on this garden.'});
 }
 
 /* ---- Auth helper (run once from editor to grant MailApp scope) ---- */

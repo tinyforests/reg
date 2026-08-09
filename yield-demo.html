@@ -768,6 +768,7 @@ function render() {
 
   txt('heroBadgeCount', badges.all.length);
   if (typeof isSteward !== 'function' || isSteward(R.garden_id)) erCheckNotifications(R.garden_id, badges.all, result.total);
+  if (typeof mountStewardUnlock === 'function') mountStewardUnlock(R.garden_id);
   txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
