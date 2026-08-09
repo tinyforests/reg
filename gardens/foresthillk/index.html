@@ -93,6 +93,10 @@
     .dark .rec-item { border-color:rgba(255,240,220,.08); }
     .rec-item:last-child { border-bottom:none; }
     .rec-num { font-family:"IBM Plex Mono",monospace; font-size:.6rem; opacity:.4; flex-shrink:0; padding-top:1px; }
+    .rec-item > div { flex:1; min-width:0; }
+    .rec-opp-link { display:inline-block; margin-top:.3rem; font-size:.68rem; color:#7a9e5f; text-decoration:underline; text-underline-offset:2px; }
+    .claimed-tag { display:inline-block; margin-top:.3rem; font-size:.68rem; font-weight:600; color:#7a9e5f; }
+    .rec-opp-badge { margin-top:.45rem; font-size:.67rem; font-weight:600; color:#7a9e5f; letter-spacing:.01em; }
 
     /* Level track */
     .level-track { display:flex; align-items:center; margin:1.4rem 0 .25rem; }
@@ -318,7 +322,7 @@
   <section id="opportunities" class="stagger">
     <div class="section-label mb-1">Grow the record</div>
     <h2 class="font-serif text-4xl mb-6">Biggest Opportunities</h2>
-    <div class="grid lg:grid-cols-3 gap-4" id="opportunityGrid"></div>
+    <div class="grid lg:grid-cols-3 gap-4" id="opportunityList"></div>
   </section>
 
   <!-- WEEDS -->
@@ -638,8 +642,20 @@ function render() {
     txt('voucherSeasonNote', pl.season_note || '');
     txt('vmSeasonNoteOut', pl.season_note || '');
 
+    /* Opportunity ↔ Recommendation cross-links (indices into assessor_recommendations[]) */
+    var refreshRecClaims = null; /* defined below, called after recs render */
+    var REC_OPP_MAP = { water_feature: [2], rocks: [3], logs: [3] };
+    var OPP_REC_MAP = {};
+    for (var _rk in REC_OPP_MAP) {
+      var _ri2 = REC_OPP_MAP[_rk];
+      for (var _ii = 0; _ii < _ri2.length; _ii++) {
+        if (!OPP_REC_MAP[_ri2[_ii]]) OPP_REC_MAP[_ri2[_ii]] = [];
+        OPP_REC_MAP[_ri2[_ii]].push(_rk);
+      }
+    }
+
     /* Opportunities */
-    var oppEl = el('opportunityGrid');
+    var oppEl = el('opportunityList');
     if (oppEl && typeof buildOpportunities === 'function') {
       var oppRes = buildOpportunities(R);
       var DLBL = { diy: 'DIY', plants_of_place: 'Plants of Place', gs_install: 'G&S install', designer_install: 'Designer install', tend: 'Tend', verification: 'Verification' };
@@ -648,6 +664,7 @@ function render() {
       var oh = '';
       for (var oi = 0; oi < opps.length; oi++) {
         var o = opps[oi];
+        var recIdxs = REC_OPP_MAP[o.id] || [];
         oh += '<div class="opp-item bg-white dark:bg-rdp"' +
           ' data-opp-id="' + o.id + '"' +
           ' data-opp-action="' + String(o.action).replace(/"/g, '&quot;') + '"' +
@@ -655,10 +672,28 @@ function render() {
           '<div class="text-xs font-medium mb-1">' + o.action + '</div>' +
           '<div class="text-xl font-serif mb-1">+' + o.points + '</div>' +
           '<div class="text-xs opacity-50">' + (deliveryStr(o) || 'points') + '</div>' +
+          (recIdxs.length ? '<div class="rec-opp-badge">Council recommended</div>' : '') +
           '</div>';
       }
       oppEl.innerHTML = oh || '<div class="text-sm opacity-40">No opportunities calculated — address required.</div>';
       if (typeof attachClaims === 'function') attachClaims(R);
+
+      refreshRecClaims = function() {
+        for (var oppId in REC_OPP_MAP) {
+          var isCl = false;
+          try { isCl = sessionStorage.getItem('erclaim:' + (R.garden_id || '') + ':' + oppId) === '1'; } catch(e) {}
+          if (isCl) {
+            var ridxs = REC_OPP_MAP[oppId];
+            for (var _i = 0; _i < ridxs.length; _i++) {
+              var st = document.getElementById('rec-status-' + ridxs[_i]);
+              if (st && !st.querySelector('.claimed-tag')) {
+                st.innerHTML = '<span class="claimed-tag">✓ Claimed — pending review</span>';
+              }
+            }
+          }
+        }
+      };
+      new MutationObserver(refreshRecClaims).observe(oppEl, { subtree: true, childList: true, characterData: true });
     }
 
     txt('signalDates', 'Baseline · ' + R.baseline_date);
@@ -697,9 +732,17 @@ function render() {
     var recs = h.assessor_recommendations || [];
     var rh = '';
     for (var ri = 0; ri < recs.length; ri++) {
-      rh += '<div class="rec-item"><span class="rec-num">0' + (ri+1) + '</span><span>' + recs[ri] + '</span></div>';
+      var mappedOpps = OPP_REC_MAP[ri] || [];
+      rh += '<div class="rec-item">' +
+        '<span class="rec-num">0' + (ri+1) + '</span>' +
+        '<div><span>' + recs[ri] + '</span>' +
+        '<div id="rec-status-' + ri + '">' +
+        (mappedOpps.length ? '<a href="#opportunities" class="rec-opp-link">→ Earn points for this</a>' : '') +
+        '</div></div>' +
+        '</div>';
     }
     html('recList', rh || '<p class="text-xs opacity-40">No recommendations on file.</p>');
+    if (typeof refreshRecClaims === 'function') refreshRecClaims();
 
     /* Weeds */
     var weeds = b.weeds_identified || [];
