@@ -252,12 +252,42 @@ function handleEnrolment(payload, cache) {
   return jsonResp({ok: true});
 }
 
+/* ---- Claim photo storage ---- */
+
+var CLAIM_PHOTO_FOLDER = 'Ecological Registry — Claim Photos';
+
+/*
+ * Decodes a canvas data URL (data:image/jpeg;base64,...) and saves it
+ * to a Drive folder. Returns the view URL, or '' on any failure.
+ * Only accepts data:image/* URLs — rejects anything else before touching Drive.
+ */
+function saveClaimPhoto(dataUrl, gardenId, oppId) {
+  try {
+    if (!dataUrl || dataUrl.indexOf('data:image/') !== 0) return '';
+    var comma = dataUrl.indexOf(',');
+    if (comma === -1) return '';
+    var base64 = dataUrl.slice(comma + 1);
+    var blob = Utilities.newBlob(
+      Utilities.base64Decode(base64),
+      'image/jpeg',
+      safeStr(gardenId, 40) + '_' + safeStr(oppId, 60) + '_' + Date.now() + '.jpg'
+    );
+    var folders = DriveApp.getFoldersByName(CLAIM_PHOTO_FOLDER);
+    var folder  = folders.hasNext() ? folders.next() : DriveApp.createFolder(CLAIM_PHOTO_FOLDER);
+    var file    = folder.createFile(blob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return file.getUrl();
+  } catch (e) {
+    return '';
+  }
+}
+
 /* ---- Claim handler ---- */
 
 var CLAIM_HEADERS = [
   'timestamp', 'garden_id', 'garden_name', 'opportunity_id',
   'opportunity_action', 'opportunity_points', 'steward_name',
-  'steward_email', 'note', 'claimed_at', 'review_status'
+  'steward_email', 'note', 'claimed_at', 'review_status', 'photo_url'
 ];
 
 function handleClaim(payload, cache) {
@@ -290,18 +320,20 @@ function handleClaim(payload, cache) {
   var ss     = SpreadsheetApp.getActiveSpreadsheet();
   var claims = ss.getSheetByName('Claims');
 
-  // Create sheet with headers on first use
+  // Create sheet with headers on first use; backfill photo_url header if missing
   if (!claims) {
     claims = ss.insertSheet('Claims');
     claims.appendRow(CLAIM_HEADERS);
   } else if (claims.getLastRow() === 0) {
     claims.appendRow(CLAIM_HEADERS);
+  } else if (claims.getLastColumn() < CLAIM_HEADERS.length) {
+    claims.getRange(1, CLAIM_HEADERS.length).setValue('photo_url');
   }
 
   // Sheet dedup: same garden + opportunity + steward with review_status = 'pending'
   var lastRow = claims.getLastRow();
   if (lastRow > 1) {
-    var data      = claims.getRange(2, 1, lastRow - 1, CLAIM_HEADERS.length).getValues();
+    var data      = claims.getRange(2, 1, lastRow - 1, claims.getLastColumn()).getValues();
     var iGarden   = CLAIM_HEADERS.indexOf('garden_id');
     var iOpp      = CLAIM_HEADERS.indexOf('opportunity_id');
     var iEmail    = CLAIM_HEADERS.indexOf('steward_email');
@@ -318,6 +350,13 @@ function handleClaim(payload, cache) {
   }
 
   var now = new Date().toISOString();
+
+  // Save photo to Drive before writing the row (non-fatal — empty string if it fails)
+  var photoUrl = '';
+  if (payload.photo_base64 && String(payload.photo_base64).indexOf('data:image/') === 0) {
+    photoUrl = saveClaimPhoto(payload.photo_base64, gardenId, oppId);
+  }
+
   claims.appendRow([
     now,                                              // timestamp
     safeStr(gardenId, 40),                            // garden_id
@@ -329,7 +368,8 @@ function handleClaim(payload, cache) {
     email,                                            // steward_email (already safeStr'd)
     safeStr(payload.note              || '', 500),    // note
     payload.claimed_at        || now,                 // claimed_at
-    'pending'                                         // review_status
+    'pending',                                        // review_status
+    photoUrl                                          // photo_url (Drive view link or '')
   ]);
 
   // Increment rate-limit counters
@@ -352,6 +392,7 @@ function handleClaim(payload, cache) {
         'Steward:     ' + (payload.steward_name || '') + ' <' + email + '>',
         'Note:        ' + (payload.note || '--'),
         'Claimed at:  ' + (payload.claimed_at || now),
+        'Photo:       ' + (photoUrl || 'none'),
         '',
         'Review in the Claims tab.'
       ].join('\n')
