@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry -- Field Note #001 (Design) -- Arundel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{fontFamily:{serif:['"Abril Fatface"',"serif"],sans:['"IBM Plex Sans"',"system-ui","sans-serif"]}}}}</script>
+  <style>
+    *{-webkit-font-smoothing:antialiased;border-radius:0!important}
+    :root{--bg:#3d4535;--fg:#fff0dc;--muted:rgba(255,240,220,.78);--hair:rgba(255,240,220,.10);--wash:rgba(255,240,220,.06)}
+    html.light{--bg:#fff0dc;--fg:#3d4535;--muted:rgba(61,69,53,.72);--hair:rgba(61,69,53,.10);--wash:rgba(61,69,53,.05)}
+    body{background:var(--bg);color:var(--fg);font-family:"IBM Plex Sans",sans-serif;transition:background-color .25s,color .25s}
+    .muted{color:var(--muted)}.chip{border:1px solid var(--hair)}
+    .nav-border{border-bottom:1px solid var(--hair)}.bg-subtle{background:var(--wash)}
+    .border-subtle{border-color:var(--hair)}.border-strong{border-color:var(--hair)}
+    .mono{font-family:ui-monospace,"Courier New",monospace}
+    .gs-badge{position:fixed;bottom:24px;right:24px;z-index:50;background:var(--bg);border:1px solid var(--hair);padding:8px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;color:var(--fg);text-decoration:none;line-height:1.2}
+    .gs-badge:hover{opacity:1}
+    .theme-toggle{position:fixed;bottom:24px;left:24px;z-index:50;background:var(--bg);border:1px solid var(--hair);padding:8px 12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.65;color:var(--fg);cursor:pointer;line-height:1.2}
+    .theme-toggle:hover{opacity:1}
+    .layer-img{width:100%;display:block;transition:opacity .2s}
+    .layer-img:hover{opacity:.95}
+  </style>
+</head>
+<body>
+  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">Powered by<br/>Gardener &amp; Son</a>
+  <button id="themeToggle" class="theme-toggle">Light</button>
+
+  <header class="sticky top-0 z-40 backdrop-blur nav-border" style="background:var(--bg)">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="/" class="w-9 h-9 grid place-items-center font-semibold hover:opacity-90" style="background:#fff0dc;color:#3d4535">ER</a>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-80">Field Note</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/gardens/arundel/field-notes/000.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle">Field Note #000</a>
+        <a href="/gardens/arundel/index.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle">Arundel Profile</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+
+    <!-- Header -->
+    <div class="border border-strong bg-subtle p-5 md:p-7 mb-6">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h1 class="font-serif text-3xl md:text-4xl leading-tight">Field Note #001</h1>
+          <div class="mt-2 text-sm opacity-85"><span class="font-medium">Arundel</span> -- Surrey Hills, VIC</div>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs">
+            <span class="chip px-2.5 py-1">Design presentation</span>
+            <span class="chip px-2.5 py-1">Layered planting</span>
+            <span class="chip px-2.5 py-1">Plant matrix</span>
+            <span class="chip px-2.5 py-1">Form &amp; elements</span>
+          </div>
+          <h2 class="mt-5 text-lg font-semibold">Design presented -- layered ecological planting system</h2>
+          <p class="mt-2 text-sm leading-relaxed opacity-90">
+            Full ecological design presented to Andrew and Elizabeth. The design introduces a five-layer planting system across the 475m2 rear garden -- canopy, sub-canopy, shrub, ground layer, and swale -- drawing directly from the pre-1770 Grassy Woodland EVC confirmed in the site analysis. Form and element strategy documents the waterway and habitat structure approach that underpins the whole design.
+          </p>
+        </div>
+        <div class="shrink-0 text-right">
+          <div class="inline-flex flex-col items-end gap-2">
+            <span class="chip px-3 py-1.5 text-xs" style="background:rgba(122,158,95,.2);border-color:#7a9e5f">Design</span>
+            <div class="text-xs opacity-80">19 Dec 2025</div>
+            <div class="text-xs opacity-80">Gardener &amp; Son</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+        <div class="chip p-3">
+          <div class="text-xs opacity-70">Garden area</div>
+          <div class="font-medium">475 m2</div>
+        </div>
+        <div class="chip p-3">
+          <div class="text-xs opacity-70">Canopy trees</div>
+          <div class="font-medium">~32 trees</div>
+        </div>
+        <div class="chip p-3">
+          <div class="text-xs opacity-70">Shrubs</div>
+          <div class="font-medium">~262 plants</div>
+        </div>
+        <div class="chip p-3">
+          <div class="text-xs opacity-70">Ground layer</div>
+          <div class="font-medium">~714 plants</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layers animation -->
+    <div class="border border-strong bg-subtle overflow-hidden mb-4">
+      <img src="/assets/arundel/001-01.gif"
+        alt="Layered planting system animation -- Arundel design"
+        class="layer-img" style="background:#f5ede0" />
+      <div class="p-4 flex items-start justify-between gap-4">
+        <div>
+          <div class="text-sm font-medium">Layered planting system -- all layers</div>
+          <div class="text-xs opacity-60 mt-1">Animated sequence showing ground, shrub, sub-canopy and canopy layers building from base to canopy</div>
+        </div>
+        <span class="chip px-2.5 py-1 text-xs flex-shrink-0" style="background:rgba(122,158,95,.2);border-color:#7a9e5f">Full system</span>
+      </div>
+    </div>
+
+    <!-- Form & Elements -->
+    <div class="border border-strong bg-subtle overflow-hidden mb-4">
+      <img src="/assets/arundel/001-02.png"
+        alt="Form and Elements -- Waterways, Swales, Habitat Rocks and Logs -- Arundel"
+        class="layer-img" style="background:#f5ede0" />
+      <div class="p-4">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <div class="text-xs opacity-60 uppercase tracking-wide mb-2">Waterways &amp; Swales</div>
+            <p class="text-sm leading-relaxed opacity-85">
+              Water is one of the quiet architects of an ecological garden. By shaping the land with gentle swales, contour-led channels, and slow-moving waterways, rainfall is captured rather than lost. These forms hold moisture in the soil, reduce runoff, and create pockets of microclimate where plants thrive with less intervention. Swales also guide the eye and the body through the landscape, becoming subtle pathways of movement and seasonal change. This approach reconnects the garden to its natural hydrology, restoring patterns that once shaped local ecologies.
+            </p>
+          </div>
+          <div>
+            <div class="text-xs opacity-60 uppercase tracking-wide mb-2">Habitat Rocks &amp; Logs</div>
+            <p class="text-sm leading-relaxed opacity-85">
+              Habitat elements such as rocks and fallen logs provide the structure, complexity, and shelter that wildlife depends on. Strategically placed boulders create thermal mass for lizards, insects, and soil life, while hollow logs and decaying timber offer refuge for skinks, microbats, beetles, and fungi. These materials anchor the garden in place and add a timeless, grounded presence to the design. More than aesthetic accents, they operate as miniature ecosystems -- stabilising soil, supporting moisture retention, and forming the essential building blocks for biodiversity.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canopy -->
+    <div class="border border-strong bg-subtle overflow-hidden mb-4">
+      <img src="/assets/arundel/001-03.png"
+        alt="Plant Matrix -- Canopy Layer -- Arundel"
+        class="layer-img" style="background:#f5ede0" />
+      <div class="p-4">
+        <div class="text-xs opacity-60 uppercase tracking-wide mb-2">Canopy Layer</div>
+        <p class="text-sm leading-relaxed opacity-85 max-w-3xl">
+          The canopy layer is the long-term architecture of the garden -- the tallest trees that anchor the design, shape the microclimate, and link the property to the broader green corridor of South Surrey Park. At Arundel, the canopy comprises 3% of the planting density, with approximately 32 canopy trees distributed carefully across the 475m2 space. Their spacing allows them to mature without crowding while still creating an interconnected canopy that supports bird movement and enhances biodiversity. These trees form the garden's upper frame -- a gesture of reciprocity to the parkland beyond the fence and a long-term ecological investment that will define the garden for decades.
+        </p>
+      </div>
+    </div>
+
+    <!-- Sub-Canopy -->
+    <div class="border border-strong bg-subtle overflow-hidden mb-4">
+      <img src="/assets/arundel/001-04.png"
+        alt="Plant Matrix -- Sub-Canopy Layer -- Arundel"
+        class="layer-img" style="background:#f5ede0" />
+      <div class="p-4">
+        <div class="text-xs opacity-60 uppercase tracking-wide mb-2">Sub-Canopy Layer</div>
+        <p class="text-sm leading-relaxed opacity-85 max-w-3xl">
+          The sub-canopy layer is the woodland heart of the garden -- the 3-6 metre trees and large shrubs that provide dappled shade, structure, and vertical variation. This layer regulates temperature, slows wind, enriches soil through leaf litter, and forms a protective envelope under which the ground layer thrives. At Arundel, this layer represents 4% of the total planting, adding approximately 42 sub-canopy trees across the rear garden. Spaced to create alternating pools of light and shade, they ensure the dense Miyawaki-inspired underplanting can establish vigorously. Their placement reinforces the natural topography -- gathering around swales, stretching along slope lines, and framing the internal forest rooms.
+        </p>
+      </div>
+    </div>
+
+    <!-- Shrub -->
+    <div class="border border-strong bg-subtle overflow-hidden mb-4">
+      <img src="/assets/arundel/001-05.png"
+        alt="Plant Matrix -- Shrub Layer -- Arundel"
+        class="layer-img" style="background:#f5ede0" />
+      <div class="p-4">
+        <div class="text-xs opacity-60 uppercase tracking-wide mb-2">Shrub Layer</div>
+        <p class="text-sm leading-relaxed opacity-85 max-w-3xl">
+          The shrub layer provides the garden with structure, rhythm, and habitat complexity. These mid-storey species introduce seasonal colour, flowering pulses, density for small birds, and layered textures that soften the transitions between ground and canopy. Ecologically, shrubs offer shelter, nesting opportunities, and nectar sources that support insects and birds throughout the year. At Arundel, this layer accounts for 25% of the planting density, contributing around 262 shrubs across the site. Placed in naturalistic clusters, they define movement corridors, frame views toward South Surrey Park, and create pockets of enclosure along the meandering paths.
+        </p>
+      </div>
+    </div>
+
+    <!-- Ground Layer -->
+    <div class="border border-strong bg-subtle overflow-hidden mb-6">
+      <img src="/assets/arundel/001-06.png"
+        alt="Plant Matrix -- Ground Layer -- Arundel"
+        class="layer-img" style="background:#f5ede0" />
+      <div class="p-4">
+        <div class="text-xs opacity-60 uppercase tracking-wide mb-2">Ground Layer</div>
+        <p class="text-sm leading-relaxed opacity-85 max-w-3xl">
+          The ground layer is the living fabric of the garden -- the continuous weave of grasses, sedges, herbs, and forbs that drives most of the ecological function. This layer stabilises soil, cools the microclimate, suppresses weeds, and supports insect life at an extraordinary scale. At Arundel, this layer forms the foundation of the forested rear garden. With an ecological density of 3 plants per m2, the ground layer contributes approximately 714 plants across the site -- a thick, species-rich understorey that quickly knits the soil surface together. These plants occupy every microclimate shaped by the site's contours: sunny rises, cooler swales, and moisture-holding depressions. In ecological design, the ground layer is not filler -- it is the engine room.
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer note -->
+    <div class="border border-strong bg-subtle p-5 text-sm">
+      <div class="grid md:grid-cols-3 gap-4 opacity-70">
+        <div><span class="opacity-60 text-xs uppercase tracking-wide block mb-1">Next</span>Ground contouring and soil preparation -- Feb 2026</div>
+        <div><span class="opacity-60 text-xs uppercase tracking-wide block mb-1">Registry ID</span>ER-AU-VIC-SH-ARU-0001</div>
+        <div><span class="opacity-60 text-xs uppercase tracking-wide block mb-1">Stewards</span>Andrew &amp; Elizabeth</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    var root = document.documentElement;
+    var btn  = document.getElementById('themeToggle');
+    function setMode(mode) {
+      if (mode === 'light') { root.classList.add('light'); btn.textContent = 'Dark'; try{localStorage.setItem('reg_mode','light')}catch(e){} }
+      else { root.classList.remove('light'); btn.textContent = 'Light'; try{localStorage.setItem('reg_mode','dark')}catch(e){} }
+    }
+    var saved = ''; try{saved=localStorage.getItem('reg_mode')||''}catch(e){}
+    setMode(saved === 'light' ? 'light' : 'dark');
+    btn.onclick = function() { setMode(root.classList.contains('light') ? 'dark' : 'light'); };
+  </script>
+</body>
+</html>

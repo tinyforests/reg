@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecological Registry -- 1 Apr 2026 -- Parring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: {
+          serif: ['"Abril Fatface"', "serif"],
+          sans: ['"IBM Plex Sans"', "system-ui", "sans-serif"],
+        },
+        colors: { gsGreen: "#3d4535", gsBeige: "#fff0dc" }
+      }}
+    };
+  </script>
+  <style>
+    * { -webkit-font-smoothing: antialiased; border-radius: 0 !important; }
+    :root { --bg:#3d4535; --fg:#fff0dc; --muted:rgba(255,240,220,.78); --hair:rgba(255,240,220,.10); --wash:rgba(255,240,220,.06); }
+    html.light { --bg:#fff0dc; --fg:#3d4535; --muted:rgba(61,69,53,.72); --hair:rgba(61,69,53,.10); --wash:rgba(61,69,53,.05); }
+    body { background:var(--bg); color:var(--fg); font-family:"IBM Plex Sans",sans-serif; transition:background-color .25s ease, color .25s ease; }
+    .muted { color:var(--muted); }
+    .hairline { border-color:var(--hair); }
+    .chip { border:1px solid var(--hair); }
+    .nav-border { border-bottom:1px solid var(--hair); }
+    .bg-subtle { background:var(--wash); }
+    .border-subtle { border-color:var(--hair); }
+    .border-subtle-strong { border-color:var(--hair); }
+    .mono { font-family:ui-monospace, "Courier New", monospace; }
+    .gs-badge { position:fixed; bottom:24px; right:24px; z-index:50; background:var(--bg); border:1px solid var(--hair); padding:8px 12px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; opacity:.65; color:var(--fg); text-decoration:none; line-height:1.2; }
+    .gs-badge:hover { opacity:1; }
+    .theme-toggle { position:fixed; bottom:24px; left:24px; z-index:50; background:var(--bg); border:1px solid var(--hair); padding:8px 12px; font-size:10px; letter-spacing:.1em; text-transform:uppercase; opacity:.65; color:var(--fg); cursor:pointer; line-height:1.2; }
+    .theme-toggle:hover { opacity:1; }
+  </style>
+</head>
+
+<body>
+  <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">Powered by<br/>Gardener & Son</a>
+  <button id="themeToggle" class="theme-toggle">Light</button>
+
+  <header class="sticky top-0 z-40 backdrop-blur nav-border" style="background:var(--bg)">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="/" class="w-9 h-9 bg-gsBeige text-gsGreen grid place-items-center font-semibold hover:opacity-90 transition-opacity">ER</a>
+        <div class="leading-tight">
+          <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+          <div class="text-xs opacity-80">Field Note</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/gardens/parring/field-notes/001.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle">2026-04-01</a>
+        <a href="/gardens/parring/index.html" class="chip px-3 py-1.5 text-sm hover:bg-subtle">Parring Profile</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 md:py-10">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <div class="lg:col-span-8">
+        <div class="border border-subtle-strong bg-subtle p-5 md:p-7">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h1 class="font-serif text-3xl md:text-4xl leading-tight">1 Apr 2026</h1>
+              <div class="mt-2 text-sm opacity-85">
+                <span class="font-medium">Parring</span> -- Balwyn, VIC
+              </div>
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
+                <span class="chip px-2.5 py-1">Planting</span>
+                <span class="chip px-2.5 py-1">Mycorrhiza</span>
+                <span class="chip px-2.5 py-1">Mulch</span>
+                <span class="chip px-2.5 py-1">Irrigation</span>
+                <span class="chip px-2.5 py-1">Establishment</span>
+                <span class="chip px-2.5 py-1">Handmade Habitats</span>
+              </div>
+              <h2 class="mt-5 text-lg font-semibold">Planting, mycorrhiza inoculant, mulch and irrigation</h2>
+              <p class="mt-2 text-sm leading-relaxed opacity-90">
+                Full planting installation completed today across the garden beds. All 31 documented species planted with mycorrhiza inoculant applied at root zone. Finishing mulch layer installed. Drip irrigation system connected and tested. All plants hand watered in to settle the root zone and establish early soil contact.
+              </p>
+            </div>
+            <div class="shrink-0 text-right">
+              <div class="inline-flex flex-col items-end gap-2">
+                <span class="chip px-3 py-1.5 text-xs" style="background:rgba(122,158,95,.2);border-color:#7a9e5f">Verified</span>
+                <div class="text-xs opacity-80">1 Apr 2026</div>
+                <div class="text-xs opacity-80">Observer: <span class="font-medium">Gardener &amp; Son</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Species installed</div>
+              <div class="font-medium">31 indigenous species</div>
+              <div class="text-xs opacity-70 mt-1">Full documented palette in ground</div>
+            </div>
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Inoculant</div>
+              <div class="font-medium">Mycorrhiza applied at root zone</div>
+              <div class="text-xs opacity-70 mt-1">Supports fungal network establishment</div>
+            </div>
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Mulch</div>
+              <div class="font-medium">Finishing layer installed</div>
+              <div class="text-xs opacity-70 mt-1">Moisture retention, weed suppression</div>
+            </div>
+            <div class="chip p-3">
+              <div class="text-xs opacity-70">Irrigation</div>
+              <div class="font-medium">Drip system installed and tested</div>
+              <div class="text-xs opacity-70 mt-1">Hand watered in on installation</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="border border-subtle-strong bg-subtle overflow-hidden">
+            <img src="/assets/parring/2026-04-01-01.jpg"
+              alt="Billardiera climbing habitat rock after rain -- Parring, 1 Apr 2026"
+              style="width:100%;display:block;height:280px;object-fit:cover;object-position:center" />
+            <div class="p-3">
+              <div class="text-xs font-medium">Billardiera -- habitat rock interaction</div>
+              <div class="text-xs opacity-60 mt-0.5">Day one after rain -- natural habitat integration</div>
+            </div>
+          </div>
+          <div class="border border-subtle-strong bg-subtle overflow-hidden">
+            <img src="/assets/parring/2026-04-01-02.jpg"
+              alt="Grass and shrub layer freshly planted -- Parring, 1 Apr 2026"
+              style="width:100%;display:block;height:280px;object-fit:cover;object-position:center 40%" />
+            <div class="p-3">
+              <div class="text-xs font-medium">Ground and shrub layer -- day one</div>
+              <div class="text-xs opacity-60 mt-0.5">Grass and shrub species freshly installed in rain</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 border border-subtle-strong bg-subtle p-5 md:p-7">
+          <h3 class="text-lg font-semibold">Why this matters</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>-- Mycorrhiza inoculant at planting establishes fungal networks from day one, dramatically improving drought resilience, nutrient uptake and establishment success without synthetic inputs.</li>
+            <li>-- Finishing mulch seals moisture into the soil profile, reduces surface temperature, suppresses weed competition, and begins building organic matter as it breaks down.</li>
+            <li>-- Drip irrigation delivers water directly to the root zone, reducing evaporation and ensuring consistent moisture during the critical first establishment period.</li>
+            <li>-- Hand watering in collapses air pockets around roots, initiates soil contact, and gives each plant the best possible start in its new microclimate.</li>
+          </ul>
+
+          <h3 class="mt-6 text-lg font-semibold">Next steps</h3>
+          <ul class="mt-3 space-y-2 text-sm opacity-90">
+            <li>-- Monitor establishment over the first 4-6 weeks, particularly through autumn into cooler conditions.</li>
+            <li>-- Fauna monitoring to commence -- skink presence confirmed on site from 2026-04-01.</li>
+            <li>-- Score reassessment at 6 months once structural layers and canopy begin to establish.</li>
+            <li>-- Species list to be updated to reflect installed count once confirmed on site.</li>
+          </ul>
+
+          <h3 class="mt-6 text-lg font-semibold">Handmade Habitats</h3>
+          <p class="mt-2 text-sm leading-relaxed opacity-90">
+            Habitat elements sourced from Handmade Habitats, a local craft producer creating structures from hollowed logs, sticks, dried grasses, native seeds and natural botanical materials. Each piece is set half into the ground -- creating a bridge between the soil layer and the above-ground environment, and providing nesting opportunity, insect refuge and lizard shelter from day one. The cavities and packed natural fibres attract native bees, beetles and small fauna, while the embedded base creates a moist, stable microclimate below. Dried eucalyptus leaves and paper daisies are woven through the structure -- the daisies closed in the rain on installation day, a quiet signal that the garden is already responding to its environment.
+          </p>
+        </div>
+
+        <div class="mt-4 border border-subtle-strong bg-subtle overflow-hidden">
+          <img src="/assets/parring/2026-04-01-03.jpg"
+            alt="Handmade Habitats hollowed log with natural materials -- Parring, 1 Apr 2026"
+            style="width:100%;display:block;max-height:440px;object-fit:cover;object-position:center 55%" />
+          <div class="p-4 flex items-start justify-between gap-4">
+            <div>
+              <div class="text-sm font-medium">Handmade Habitats -- hollowed log element</div>
+              <div class="text-xs opacity-60 mt-1">Dried grass, gum nuts, native seeds, paper daisies -- 1 Apr 2026</div>
+            </div>
+            <span class="chip px-2.5 py-1 text-xs flex-shrink-0" style="background:rgba(122,158,95,.2);border-color:#7a9e5f">Habitat evidence</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4 space-y-6">
+        <div class="border border-subtle-strong bg-subtle p-5">
+          <div class="text-sm font-semibold">Score Impact</div>
+          <div class="mt-4 space-y-2 text-sm">
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Biodiversity Structure</span><span class="chip px-2 py-1 text-xs">+16 pts</span></div>
+            <div class="flex items-center justify-between gap-4"><span class="opacity-80">Soil & Water Function</span><span class="chip px-2 py-1 text-xs">+2 pts</span></div>
+          </div>
+          <div class="flex items-center justify-between gap-4"><span class="opacity-80">Habitat Complexity</span><span class="chip px-2 py-1 text-xs">+2 pts</span></div>
+          <div class="mt-3 text-xs opacity-60">Handmade Habitats elements installed. Full species palette in ground. Score updated to 50.</div>
+        </div>
+
+        <div class="border border-subtle-strong bg-subtle p-5">
+          <div class="text-sm font-semibold">Garden Context</div>
+          <dl class="mt-4 space-y-2 text-xs">
+            <div class="flex justify-between gap-4"><dt class="opacity-60">Registry ID</dt><dd class="font-medium">ER-AU-VIC-BAL-001</dd></div>
+            <div class="flex justify-between gap-4"><dt class="opacity-60">EVC</dt><dd class="font-medium">Grassy Woodland (175)</dd></div>
+            <div class="flex justify-between gap-4"><dt class="opacity-60">Area</dt><dd class="font-medium">120m2</dd></div>
+            <div class="flex justify-between gap-4"><dt class="opacity-60">Species installed</dt><dd class="font-medium">31</dd></div>
+            <div class="flex justify-between gap-4"><dt class="opacity-60">Proximity to park</dt><dd class="font-medium">Maranoa Gardens 200m</dd></div>
+            <div class="flex justify-between gap-4"><dt class="opacity-60">Previous field note</dt><dd class="font-medium"><a href="/gardens/parring/field-notes/001.html" style="text-decoration:underline;text-underline-offset:2px">2026-04-01</a></dd></div>
+          </dl>
+        </div>
+
+        <div class="border border-subtle-strong bg-subtle p-5">
+          <div class="text-sm font-semibold">Record Schema</div>
+          <pre class="mt-3 p-3 bg-subtle text-xs mono overflow-auto border border-subtle"><code>{
+  "garden_id": "ER-AU-VIC-BAL-001",
+  "note_id": "002",
+  "date": "2026-04-01",
+  "type": "Installed",
+  "category": "planting",
+  "observer": "Gardener & Son",
+  "verification": "verified",
+  "tags": [
+    "planting",
+    "mycorrhiza",
+    "mulch",
+    "irrigation",
+    "establishment"
+  ]
+}</code></pre>
+        </div>
+      </aside>
+
+    </section>
+  </main>
+
+  <script>
+    var root = document.documentElement;
+    var btn  = document.getElementById('themeToggle');
+
+    function setMode(mode) {
+      if (mode === 'light') {
+        root.classList.add('light');
+        btn.textContent = 'Dark';
+        try { localStorage.setItem('reg_mode', 'light'); } catch(e) {}
+      } else {
+        root.classList.remove('light');
+        btn.textContent = 'Light';
+        try { localStorage.setItem('reg_mode', 'dark'); } catch(e) {}
+      }
+    }
+
+    var saved = '';
+    try { saved = localStorage.getItem('reg_mode') || ''; } catch(e) {}
+    setMode(saved === 'light' ? 'light' : 'dark');
+
+    btn.onclick = function() {
+      setMode(root.classList.contains('light') ? 'dark' : 'light');
+    };
+  </script>
+</body>
+</html>

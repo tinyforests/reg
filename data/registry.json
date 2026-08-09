@@ -36,7 +36,7 @@
         "fauna_record",
         "full_record"
       ],
-      "profile_url": "/gardens/arundel08/index.html",
+      "profile_url": "/gardens/arundel/index.html",
       "data_file": "data/arundel.json",
       "typology": "Ecological Forest Garden",
       "registry_role": "Performer",
@@ -77,7 +77,7 @@
         "species_rich_20",
         "gs_verified"
       ],
-      "profile_url": "/gardens/nicholson10/index.html",
+      "profile_url": "/gardens/nicholson/index.html",
       "data_file": "data/nicholson.json",
       "typology": "Urban Ecological Retrofit",
       "registry_role": "Cluster Seed",
@@ -120,7 +120,7 @@
         "fauna_record",
         "full_record"
       ],
-      "profile_url": "/gardens/parring11/index.html",
+      "profile_url": "/gardens/parring/index.html",
       "data_file": "data/parring.json",
       "typology": "Ecological Cottage Garden",
       "registry_role": "Connector",
@@ -163,7 +163,7 @@
         "habitat_builder",
         "gs_verified"
       ],
-      "profile_url": "/gardens/middlesex80/index.html",
+      "profile_url": "/gardens/middlesex/index.html",
       "data_file": "data/middlesex.json",
       "typology": "Connected Habitat Landscape",
       "registry_role": "Connector",
@@ -241,7 +241,7 @@
       "badges": [
         "site_visit_badge"
       ],
-      "profile_url": "/gardens/canterburyg02/index.html",
+      "profile_url": "/gardens/canterbury/index.html",
       "data_file": "data/canterburyg02.json",
       "typology": "Maintained Garden (pre-intervention)",
       "registry_role": "Cluster Member",
@@ -273,7 +273,7 @@
       "last_verified": "Mar 2026",
       "badge_count": 0,
       "badges": [],
-      "profile_url": "/gardens/montAlbert100/index.html",
+      "profile_url": "/gardens/montalbert/index.html",
       "data_file": "data/montAlbert.json",
       "council": "Boroondara City Council",
       "ward": "Maranoa",
@@ -304,7 +304,7 @@
         "habitat_builder",
         "gs_verified"
       ],
-      "profile_url": "/gardens/evelina23/index.html",
+      "profile_url": "/gardens/evelina/index.html",
       "data_file": "data/evelina.json",
       "typology": "Wild Native Meadow",
       "registry_role": "Cluster Seed",
@@ -345,7 +345,7 @@
         "habitat_builder",
         "gs_verified"
       ],
-      "profile_url": "/gardens/dewrang1a/index.html",
+      "profile_url": "/gardens/dewrang/index.html",
       "data_file": "data/dewrang.json",
       "typology": "Multi-Zone Ecological Garden",
       "registry_role": "Cluster Seed",
@@ -385,7 +385,7 @@
         "indigenous_dominant",
         "gs_verified"
       ],
-      "profile_url": "/gardens/parringroad17/index.html",
+      "profile_url": "/gardens/parringstep/index.html",
       "data_file": "data/parringroad.json",
       "registry_role": "Connector",
       "trajectory": "Emerging",
@@ -431,7 +431,7 @@
         "corridor_node",
         "gs_verified"
       ],
-      "profile_url": "/gardens/rupert14/index.html",
+      "profile_url": "/gardens/rupert/index.html",
       "data_file": "data/rupert.json",
       "registry_role": "Prototype",
       "trajectory": "Rising",
@@ -477,7 +477,7 @@
         "habitat_builder",
         "gs_verified"
       ],
-      "profile_url": "/gardens/windella40/index.html",
+      "profile_url": "/gardens/windella/index.html",
       "data_file": "data/windella.json",
       "registry_role": "Cluster Seed",
       "trajectory": "Emerging",
@@ -519,7 +519,7 @@
         "gs_verified",
         "fauna_record"
       ],
-      "profile_url": "/gardens/york12/index.html",
+      "profile_url": "/gardens/yorkstreet/index.html",
       "data_file": "data/york.json",
       "registry_role": "Cluster Seed",
       "trajectory": "Rising",
@@ -564,7 +564,7 @@
         "five_layers",
         "gs_verified"
       ],
-      "profile_url": "/gardens/victoria16/index.html",
+      "profile_url": "/gardens/victoria/index.html",
       "data_file": "data/victoria.json",
       "registry_role": "Cluster Seed",
       "trajectory": "Emerging",
@@ -602,7 +602,7 @@
       "badges": [
         "gs_verified"
       ],
-      "profile_url": "/gardens/flinders1/index.html",
+      "profile_url": "/gardens/flinders/index.html",
       "data_file": "data/flinders.json",
       "registry_role": "Cluster Seed",
       "trajectory": "Emerging",
@@ -639,7 +639,7 @@
         "indigenous_dominant",
         "site_visit_badge"
       ],
-      "profile_url": "/gardens/auburn0/index.html",
+      "profile_url": "/gardens/auburn/index.html",
       "data_file": "data/auburn_test.json",
       "typology": "Self-Enrolled Garden",
       "registry_role": "Participant",
@@ -708,7 +708,7 @@
         "five_layers",
         "gs_verified"
       ],
-      "profile_url": "/gardens/york42/index.html",
+      "profile_url": "/gardens/sensorygarden/index.html",
       "data_file": "data/york42.json",
       "typology": "Biodiversity Design \u2014 Real Estate",
       "registry_role": "Designed Record",
