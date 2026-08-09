@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Aug 2026",
-    "total_gardens": 16,
+    "total_gardens": 18,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0",
@@ -254,7 +254,7 @@
         "status": "Forming"
       },
       "council": "Boroondara City Council",
-      "ward": "TBC — confirm with Boroondara council",
+      "ward": "TBC \u2014 confirm with Boroondara council",
       "lga": "Boroondara"
     },
     {
@@ -661,7 +661,7 @@
       },
       "primary_evc": "To be confirmed",
       "bioregion": "Whitehorse",
-      "status": "Council Assessed — record active",
+      "status": "Council Assessed \u2014 record active",
       "verification_level": "council_garden_guide_verified",
       "verification_label": "Council Verified",
       "last_verified": "30 Oct 2025",
@@ -685,6 +685,45 @@
         "area_ha": null,
         "status": "Potential"
       }
+    },
+    {
+      "garden_id": "ER-AU-VIC-WHI-YRK-002",
+      "garden_name": "Sensory Garden",
+      "suburb": "Mont Albert",
+      "state": "VIC",
+      "score": 26,
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 15
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Installed \u2014 design record active",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Jul 2026",
+      "badge_count": 2,
+      "badges": [
+        "five_layers",
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/york42/index.html",
+      "data_file": "data/york42.json",
+      "typology": "Biodiversity Design \u2014 Real Estate",
+      "registry_role": "Designed Record",
+      "trajectory": "Installed",
+      "points_available": 55,
+      "cluster": {
+        "name": "Whitehorse",
+        "gardens": 4,
+        "area_ha": 0.1,
+        "status": "Forming"
+      },
+      "council": "Whitehorse City Council",
+      "ward": "Elgar",
+      "lga": "Whitehorse",
+      "adjacent_garden_ids": []
     }
   ]
 }
