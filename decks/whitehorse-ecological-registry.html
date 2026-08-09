@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Ecological Registry — Whitehorse + Gardens for Wildlife</title>
+<title>The Ecological Registry — Whitehorse City Council</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
@@ -82,7 +82,7 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
 .title-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:34px;max-width:1120px}
 .title-wrap h1{font-size:132px}
 .byline{display:flex;gap:38px;align-items:baseline;font-family:var(--mono);font-size:17px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
-.net-bg{position:absolute;right:-140px;top:50%;transform:translateY(-50%);width:900px;height:900px;opacity:.16;z-index:0}
+.net-bg{position:absolute;right:-140px;top:50%;transform:translateY(-50%);width:900px;height:900px;opacity:.3;z-index:0}
 
 /* ---------- known / unknown blocks ---------- */
 .known{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -231,39 +231,6 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
 .closing h2{font-size:96px}
 .closing .sub{font-family:var(--editorial);font-style:italic;font-size:40px;font-weight:300;color:var(--signal)}
 
-
-/* ---------- final vision slides ---------- */
-.rebuild-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;flex:1;align-items:center}
-.rebuild-list{display:flex;flex-direction:column;gap:18px}
-.rebuild-item{font-family:var(--editorial);font-size:32px;font-weight:300;line-height:1.24;padding-left:22px;border-left:2px solid var(--signal)}
-.comparison{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1;align-items:stretch;margin-top:24px;border-top:1px solid rgba(61,69,53,.18);border-bottom:1px solid rgba(61,69,53,.18)}
-.comparison .side{padding:56px 48px;display:flex;flex-direction:column;justify-content:center;gap:20px;border-left:1px solid rgba(61,69,53,.18)}
-.comparison .side:first-child{border-left:0}
-.comparison .label{font-family:var(--mono);font-size:15px;letter-spacing:.22em;text-transform:uppercase;opacity:.58}
-.comparison .big{font-family:var(--display);font-size:78px;line-height:1}
-.comparison ul{list-style:none;display:flex;flex-direction:column;gap:12px;font-size:24px;line-height:1.35;font-weight:300;opacity:.78}
-.dark .comparison{border-color:rgba(255,240,220,.22)}
-.dark .comparison .side{border-color:rgba(255,240,220,.22)}
-.rating-question{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:34px}
-.rating-question h2{font-size:104px;max-width:12ch}
-.rating-question .questions{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;width:100%;max-width:1180px;margin-top:10px}
-.rating-question .questions div{font-family:var(--editorial);font-size:28px;line-height:1.22;font-weight:300;border-top:2px solid var(--signal);padding-top:18px}
-.lifecycle{display:flex;align-items:stretch;gap:0;flex:1;margin-top:34px;border-top:1px solid rgba(255,240,220,.2);border-bottom:1px solid rgba(255,240,220,.2)}
-.life-step{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:32px 28px;border-left:1px solid rgba(255,240,220,.2)}
-.life-step:first-child{border-left:0}
-.life-step .n{font-family:var(--mono);font-size:13px;letter-spacing:.2em;color:var(--signal)}
-.life-step .t{font-family:var(--editorial);font-size:31px;line-height:1.12;font-weight:400}
-.life-step .s{font-size:17px;line-height:1.45;font-weight:300;opacity:.72}
-.std-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;flex:1;margin-top:36px;border-top:1px solid rgba(61,69,53,.2);border-bottom:1px solid rgba(61,69,53,.2)}
-.std-cell{padding:42px 30px;display:flex;flex-direction:column;justify-content:center;gap:16px;border-left:1px solid rgba(61,69,53,.2)}
-.std-cell:first-child{border-left:0}
-.std-cell .k{font-family:var(--mono);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--signal)}
-.std-cell .v{font-family:var(--editorial);font-size:29px;line-height:1.16;font-weight:300}
-.final-vision{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:28px}
-.final-vision h2{font-size:104px;max-width:12ch}
-.final-vision .vision-line{font-family:var(--editorial);font-size:44px;line-height:1.28;font-weight:300;max-width:24ch;color:var(--signal)}
-.final-vision .closing-script{font-size:28px;line-height:1.5;font-weight:300;max-width:46ch;opacity:.82}
-
 /* ---------- chrome UI (deck controls) ---------- */
 #bar{position:fixed;top:0;left:0;height:3px;background:var(--signal);z-index:60;transition:width .45s cubic-bezier(.4,0,.2,1)}
 #hud{position:fixed;bottom:18px;right:22px;z-index:60;display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:rgba(255,240,220,.75);mix-blend-mode:difference}
@@ -278,6 +245,85 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
 #notes.on{transform:translateY(0)}
 #notes h6{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--signal);margin-bottom:10px}
 #notes p{max-width:100ch;margin-bottom:8px}
+
+/* ---------- acknowledgement of country ---------- */
+.aoc{flex:1;display:flex;align-items:center;gap:80px;padding:20px 0}
+.aoc-lead{
+  flex:0 0 620px;font-family:var(--editorial);font-weight:300;font-size:34px;line-height:1.44;
+}
+.aoc-rest{flex:1;display:flex;flex-direction:column;gap:26px;border-left:1px solid rgba(255,240,220,.28);padding-left:56px}
+.aoc-rest p{font-size:23px;line-height:1.62;font-weight:300;opacity:.88}
+.aoc-turn{
+  font-family:var(--editorial);font-style:italic;font-size:30px !important;line-height:1.4 !important;
+  color:var(--signal);opacity:1 !important;
+}
+
+/* ---------- proof slide ---------- */
+.proof{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1;align-items:stretch;margin:12px 0}
+.proof-l{padding-right:56px;display:flex;flex-direction:column;justify-content:center;gap:24px}
+.proof-r{border-left:1px solid rgba(61,69,53,.22);padding-left:52px;display:flex;flex-direction:column;justify-content:center;gap:0}
+.prow{display:flex;gap:20px;padding:15px 0;border-bottom:1px solid rgba(61,69,53,.14);align-items:baseline}
+.prow:last-child{border-bottom:0}
+.prow .k{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.55;flex:0 0 168px}
+.prow .v{font-size:19px;font-weight:300;line-height:1.45;flex:1}
+.stampline{display:flex;align-items:center;gap:16px}
+.stamp{
+  font-family:var(--mono);font-size:14px;letter-spacing:.2em;text-transform:uppercase;
+  border:2px solid var(--signal);color:var(--signal);padding:11px 18px;
+}
+
+/* ---------- trio blocks ---------- */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1;align-items:stretch;margin:8px 0}
+.tblock{border:1px solid rgba(61,69,53,.28);padding:34px 30px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.tblock .k{font-family:var(--mono);font-size:14px;letter-spacing:.18em;text-transform:uppercase;opacity:.62}
+.tblock .v{font-family:var(--editorial);font-size:33px;font-weight:400;line-height:1.25}
+.tblock.own{background:var(--green);color:var(--beige);border-color:var(--green)}
+.tblock.own .v{color:var(--signal)}
+.tblock.sum{background:var(--brass);color:#2b3125;border-color:var(--brass)}
+
+/* ---------- evidence chain ---------- */
+.chain{display:flex;align-items:center;gap:0;margin:6px 0}
+.chain span{font-family:var(--mono);font-size:16px;letter-spacing:.16em;text-transform:uppercase;padding:13px 20px;border:1px solid rgba(61,69,53,.3)}
+.dark .chain span,.deep .chain span{border-color:rgba(255,240,220,.3)}
+.chain em{font-style:normal;color:var(--signal);padding:0 12px;font-size:18px}
+
+/* ---------- ask columns ---------- */
+.doing{display:grid;grid-template-columns:repeat(3,1fr);gap:0;flex:1;align-items:stretch;margin:14px 0}
+.do{padding:40px 34px;border-left:1px solid rgba(255,240,220,.22);display:flex;flex-direction:column;gap:18px;justify-content:center}
+.do:first-child{border-left:0;padding-left:0}
+.do .k{font-family:var(--mono);font-size:14px;letter-spacing:.22em;color:var(--signal)}
+.do .v{font-family:var(--editorial);font-size:32px;font-weight:400;line-height:1.22}
+.do p{font-size:17px;line-height:1.55;font-weight:300;opacity:.72}
+
+/* ---------- presenter / display modes ---------- */
+body.presenter{background:#101309}
+body.presenter #stage{transform-origin:0 0;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+body.presenter #notes,body.presenter #hud{display:none}
+body.display #hud{display:none}
+body.display.idle{cursor:none}
+
+#presenter{
+  display:none;position:fixed;top:0;right:0;bottom:0;width:46vw;z-index:80;
+  background:#14180f;border-left:2px solid var(--signal);color:#e8e2d4;
+  padding:26px 30px;flex-direction:column;gap:18px;overflow:auto;
+}
+body.presenter #presenter{display:flex}
+#presenter .prow2{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+#presenter .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--signal)}
+#presenter .count{font-family:var(--mono);font-size:13px;letter-spacing:.16em;opacity:.6}
+#pTimer{font-family:var(--mono);font-size:34px;letter-spacing:.06em;line-height:1}
+#pTitle{font-family:var(--editorial);font-size:30px;font-weight:400;line-height:1.2}
+#pNow{font-size:19px;line-height:1.62;font-weight:300;white-space:pre-wrap}
+#pNext{border-top:1px solid rgba(255,240,220,.18);padding-top:16px;opacity:.6;display:flex;flex-direction:column;gap:8px}
+#pNextTitle{font-family:var(--editorial);font-size:21px;line-height:1.25}
+#pNextNote{font-size:15px;line-height:1.55;font-weight:300}
+#presenter .pbtns{display:flex;gap:10px;margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,240,220,.18)}
+#presenter .pbtns button{
+  background:none;border:1px solid rgba(255,240,220,.35);color:inherit;
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;padding:9px 14px;cursor:pointer;
+}
+#presenter .pbtns button:hover{border-color:var(--signal);color:var(--signal)}
+#pLink{font-family:var(--mono);font-size:11px;letter-spacing:.1em;opacity:.45}
 
 /* ---------- animation ---------- */
 .anim{opacity:0;transform:translateY(16px)}
@@ -304,7 +350,7 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
 <div id="stage">
 
 <!-- 1 · TITLE -->
-<section class="slide deep is-active" data-notes="Open here. Thank them for the time. One line: we're a two-person ecological design studio in Mont Albert and Hawthorn. We design and build gardens, and we've been developing a way to record what private gardens give back over time. Today we want to explore how that might sit alongside work Whitehorse already does.">
+<section class="slide deep is-active" data-notes="Open here. Thank them for the time. One line: we're a two-person ecological design studio in Mont Albert and Hawthorn — we design and build gardens, and we've built a way to record what they give back.">
   <svg class="net-bg" id="netBgSvg" viewBox="0 0 900 900" aria-hidden="true"></svg>
   <div class="head anim"><span class="eyebrow">Gardener &amp; Son · Presented to Whitehorse City Council</span></div>
   <div class="title-wrap">
@@ -318,8 +364,24 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
   </div>
 </section>
 
-<!-- 2 · EVERY GARDEN MATTERS -->
-<section class="slide" data-notes="Start with common ground, not a revelation. Whitehorse already understands private gardens as part of a wider habitat network through Gardens for Wildlife. Say: 'This is where our thinking overlaps with yours — a private garden is not an isolated patch. It can be part of a much larger living system.'">
+<!-- 2 · ACKNOWLEDGEMENT OF COUNTRY -->
+<section class="slide deep" data-notes="Read this, don't paraphrase it. Slow. Pause at the end before moving on — it isn't a run-up to the next slide.">
+  <div class="head anim"><span class="eyebrow">Acknowledgement of Country</span></div>
+  <div class="aoc">
+    <p class="aoc-lead anim">At Gardener &amp; Son, we acknowledge the Wurundjeri Woi Wurrung people of the Kulin Nation, the Traditional Custodians of the land on which we live and work.</p>
+    <div class="aoc-rest">
+      <p class="anim">We honour their enduring connection to Country — and the grasslands, woodlands, and wetlands that once flourished here through generations of care and balance.</p>
+      <p class="anim aoc-turn">These living systems were not lost to time, but to disconnection.</p>
+      <p class="anim">Our work seeks to rekindle that relationship, restoring native ecologies and weaving biodiversity back into the urban fabric — each garden a quiet act of remembrance and renewal.</p>
+    </div>
+  </div>
+  <div class="bottom anim">
+    <div class="rule"></div>
+  </div>
+</section>
+
+<!-- 3 · EVERY GARDEN MATTERS -->
+<section class="slide" data-notes="Say: 'You already understand this better than most councils. Gardens for Wildlife recognises that a single garden can contribute to a much larger habitat network — the Small Birds Project works on exactly that connectivity between Blackburn Lake and the Creeklands. The Registry grew from the same belief.' Beside them, not teaching them.">
   <div class="head anim"><span class="eyebrow">01 · The premise</span></div>
   <div class="spread">
     <div class="col">
@@ -328,94 +390,83 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
     </div>
     <div class="col">
       <p class="body anim">Thousands of private gardens already support birds, insects, reptiles, frogs and healthy soils.</p>
-      <p class="body anim">Together, they can strengthen habitat between reserves, streets and neighbourhoods.</p>
-      <p class="body anim" style="font-family:var(--editorial);font-size:34px;font-weight:400;line-height:1.35;color:var(--signal)">The question is how we recognise that contribution over time.</p>
+      <p class="body anim">Together they form one of Australia's largest ecological networks.</p>
+      <p class="body anim" style="font-family:var(--editorial);font-size:34px;font-weight:400;line-height:1.35;color:var(--signal)">Yet almost none of them are recognised.</p>
     </div>
   </div>
 </section>
 
-<!-- 3 · YOU ARE ALREADY DOING THE WORK -->
-<section class="slide" data-notes="This is the important shift. Do not position the Registry as another garden assessment service. Say: 'When we looked closely at Whitehorse Gardens for Wildlife, we realised you are already doing the trusted on-ground work — visiting gardens, understanding habitat and helping residents act. We do not want to duplicate that.'">
+<!-- 4 · YOU'RE ALREADY DOING THE WORK -->
+<section class="slide dark" data-notes="The pivot. Say: 'When we looked more closely at Gardens for Wildlife, something became clear to us. We shouldn't be proposing another garden assessment. You already have trusted people visiting gardens, understanding their habitat and helping residents improve them.' Registrations are currently closed until the end of the year because demand is high — say that as a compliment, and CHECK IT IS STILL TRUE the week before.">
   <div class="head anim">
-    <span class="eyebrow">02 · Start with what exists</span>
-    <h2>You are already<br>doing the work.</h2>
+    <span class="eyebrow">02 · Gardens for Wildlife</span>
+    <h2>You're already<br>doing the work.</h2>
   </div>
-  <div class="spread" style="align-items:stretch;margin-top:18px">
-    <div class="col anim" style="justify-content:center;border-right:1px solid rgba(61,69,53,.22);padding-right:42px">
-      <span class="eyebrow" style="opacity:.6">01 · Visit</span>
-      <h3>Trusted people enter the garden.</h3>
-      <p class="body" style="font-size:21px">Garden Guides and council officers meet residents on site.</p>
-    </div>
-    <div class="col anim" style="justify-content:center;border-right:1px solid rgba(61,69,53,.22);padding:0 42px">
-      <span class="eyebrow" style="opacity:.6">02 · Understand</span>
-      <h3>Habitat is seen in context.</h3>
-      <p class="body" style="font-size:21px">Existing vegetation, habitat values and opportunities are discussed.</p>
-    </div>
-    <div class="col anim" style="justify-content:center;padding-left:42px">
-      <span class="eyebrow" style="opacity:.6">03 · Support</span>
-      <h3>Residents are helped to act.</h3>
-      <p class="body" style="font-size:21px">Advice and a garden report turn observation into practical change.</p>
-    </div>
+  <div class="doing anim">
+    <div class="do"><span class="k">Visit</span><span class="v">Garden Guides visit private gardens</span><p>Volunteers and council officers, on site, in pairs.</p></div>
+    <div class="do"><span class="k">Understand</span><span class="v">Habitat values and opportunities are assessed</span><p>A conversation about what the garden already offers.</p></div>
+    <div class="do"><span class="k">Support</span><span class="v">Residents receive advice, a report and encouragement</span><p>And they keep coming — registrations are full.</p></div>
   </div>
   <div class="bottom anim">
-    <p class="lede" style="max-width:52ch;font-size:31px">The Registry should <em>support this work</em> — not recreate it.</p>
+    <p class="lede" style="max-width:54ch;font-size:30px">Gardens for Wildlife already helps turn private gardens into <em>ecological assets.</em></p>
   </div>
 </section>
 
-<!-- 4 · WHAT HAPPENS AFTER THE VISIT -->
-<section class="slide dark" data-notes="This is the gap, framed carefully. Existing reports are useful and valuable. The question is whether some of that evidence can also become a structured longitudinal record. Mention the Mumaw &amp; Bekessy research only verbally if useful: monitoring ecological contribution and scalability were identified as ongoing challenges.">
+<!-- 5 · WHAT HAPPENS AFTER THE VISIT -->
+<section class="slide" data-notes="This is the gap slide now — asked as a question, not asserted. Say aloud: 'Interestingly, research into the original Knox program identified measurement, monitoring and scalability as one of the next challenges.' Don't put the paper on the screen.">
   <div class="head anim">
-    <span class="eyebrow">03 · The opportunity</span>
+    <span class="eyebrow">03 · The question</span>
     <h2>What happens<br>after the visit?</h2>
   </div>
-  <div class="spread" style="margin-top:18px">
-    <div class="col anim" style="padding-right:52px;border-right:1px solid rgba(255,240,220,.24)">
-      <span class="eyebrow">Today</span>
-      <p class="lede" style="font-size:34px;max-width:26ch">The visit creates knowledge that helps a resident understand and improve their garden.</p>
-      <div class="stack" style="margin-top:8px;font-family:var(--mono);font-size:16px;letter-spacing:.08em;opacity:.7">
-        <span>OBSERVATION</span><span>→ ADVICE</span><span>→ REPORT</span><span>→ ACTION</span>
+  <div class="spread">
+    <div class="col anim">
+      <div class="known" style="grid-template-columns:1fr">
+        <div>A garden is visited</div>
+        <div>Habitat is understood</div>
+        <div>Advice is given</div>
+        <div>A report is prepared</div>
       </div>
     </div>
-    <div class="col anim" style="padding-left:18px">
-      <span class="eyebrow">The Registry adds</span>
-      <p class="lede" style="font-size:34px;max-width:25ch">A persistent ecological baseline that can be revisited, evidenced and carried forward.</p>
-      <div class="stack" style="margin-top:8px;font-family:var(--mono);font-size:16px;letter-spacing:.08em;color:var(--signal)">
-        <span>BASELINE</span><span>→ EVIDENCE</span><span>→ CHANGE</span><span>→ MEMORY</span>
+    <div class="col anim">
+      <p class="lede" style="font-size:40px">Could that also become a <em>living ecological record?</em></p>
+      <div class="chain">
+        <span>Baseline</span><em>→</em><span>Evidence</span><em>→</em><span>Change</span><em>→</em><span>Time</span>
       </div>
     </div>
-  </div>
-  <div class="bottom anim">
-    <p class="lede" style="font-size:30px;max-width:46ch">Not another assessment. <em>A longer life for the information.</em></p>
-  </div>
-</section>
-
-<!-- 5 · RECORD FIRST SCORE SECOND -->
-<section class="slide" data-notes="This is the method slide, but keep it conceptual. Say: 'The Registry records the evidence first. The score is derived from those inputs.' The important idea for Council is provenance: where did an observation come from, when was it captured, and what confidence do we place in it? A council garden visit could become one recognised evidence source in a future pilot — but we would co-design that, not assume equivalence.">
-  <div class="head anim">
-    <span class="eyebrow">04 · The method</span>
-    <h2>Record first.<br>Score second.</h2>
-  </div>
-  <p class="body anim" style="font-size:25px;max-width:58ch;margin-top:8px">The Registry keeps the underlying observations, evidence source and date. A score is then derived from those inputs — not the other way around.</p>
-  <div class="spine anim">
-    <div class="rec"><span class="dot"></span><span class="k">01</span><span class="v">Garden structure</span></div>
-    <div class="rec"><span class="dot"></span><span class="k">02</span><span class="v">Soil &amp; water</span></div>
-    <div class="rec"><span class="dot"></span><span class="k">03</span><span class="v">Habitat features</span></div>
-    <div class="rec"><span class="dot"></span><span class="k">04</span><span class="v">Connectivity</span></div>
-    <div class="rec"><span class="dot"></span><span class="k">05</span><span class="v">Evidence provenance</span></div>
   </div>
   <div class="rule brass anim"></div>
-  <div class="bottom anim" style="margin-top:26px">
-    <p class="lede" style="max-width:48ch">Steward submission · designer record · site visit — <em>the source stays attached.</em></p>
+  <div class="bottom anim" style="margin-top:22px">
+    <p class="lede" style="max-width:56ch;font-size:31px">Not another assessment. <em>A record of what that assessment reveals.</em></p>
   </div>
 </section>
 
-<!-- 6 · MORE THAN A SCORE -->
-<section class="slide dark" data-notes="This is the emotional centre. A garden is years of decisions, growth and stewardship. The Registry should preserve that ecological memory through time and ownership change. Keep this human — it is what separates a living record from a one-off report.">
+<!-- 6 · FIVE PILLARS -->
+<section class="slide dark" data-notes="Method slide — keep it light out loud; they don't need to leave knowing the scoring algorithm. The key line if anyone pushes: the Registry is evidence-source agnostic — a Garden Guide visit, a Registry field visit, a steward submission or a designer's records can all feed it, as long as we know where the evidence came from and record it honestly. Evidence is scored separately from ecology on purpose. Mention Accounting for Nature alignment only if asked about rigour.">
+  <div class="head anim">
+    <span class="eyebrow">04 · The method</span>
+    <h2>Making the invisible visible</h2>
+  </div>
+  <p class="body anim" style="max-width:64ch;font-size:24px;opacity:.8;margin-top:8px">The Registry translates evidence about a garden into a consistent ecological record — held across five areas.</p>
+  <div class="pillars anim">
+    <div class="pillar"><span class="num">P1</span><div class="bar"></div><h4>Biodiversity structure</h4><p>Indigenous species count, layers, and provenance of planting.</p></div>
+    <div class="pillar"><span class="num">P2</span><div class="bar"></div><h4>Soil &amp; water</h4><p>Soil health, mulch, permeability, water capture and retention.</p></div>
+    <div class="pillar"><span class="num">P3</span><div class="bar"></div><h4>Habitat complexity</h4><p>Logs, rocks, hollows, ponds, leaf litter, nesting resources.</p></div>
+    <div class="pillar"><span class="num">P4</span><div class="bar"></div><h4>Ecological connectivity</h4><p>Distance to reserves, corridors and neighbouring habitat.</p></div>
+    <div class="pillar"><span class="num">P5</span><div class="bar"></div><h4>Supporting evidence</h4><p>Photographs, field notes, observations — scored separately.</p></div>
+  </div>
+  <div class="bottom anim">
+    <p class="lede" style="font-size:30px;max-width:40ch">Because what we measure, <em>we value.</em></p>
+    <span class="eyebrow" style="max-width:380px">Evidence source recorded · Verification status retained</span>
+  </div>
+</section>
+
+<!-- 7 · MORE THAN A SCORE -->
+<section class="slide" data-notes="This is the emotional centre of the pitch. A garden is 20 years of decisions and it's forgotten in one settlement. The Registry is the garden's memory.">
   <div class="head anim">
     <span class="eyebrow">05 · The record</span>
     <h2>More than a score</h2>
   </div>
-  <p class="body anim" style="font-size:25px;max-width:56ch;margin-top:6px;opacity:.82">Every registered garden becomes a living record — held, updated and carried forward.</p>
+  <p class="body anim" style="font-size:25px;max-width:56ch;margin-top:6px">Every registered garden becomes a living record — held, updated and carried forward.</p>
   <div class="spine anim">
     <div class="rec"><span class="dot"></span><span class="k">01</span><span class="v">Photographs</span></div>
     <div class="rec"><span class="dot"></span><span class="k">02</span><span class="v">Field notes</span></div>
@@ -429,10 +480,10 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
   </div>
 </section>
 
-<!-- 7 · LIVE PAGE -->
-<section class="slide dark" data-notes="Switch to the browser here if the room has internet — ecologicalregistry.org. Otherwise this render is faithful. Point out that the Registry already stores evidence source and verification status. The scalable principle is provenance: the record should always say where its evidence came from. CHECK THESE NUMBERS AGAINST THE LIVE SITE BEFORE PRESENTING.">
+<!-- 8 · LIVE PAGE -->
+<section class="slide dark" data-notes="Switch to the browser here if the room has internet — ecologicalregistry.org. Otherwise this render is faithful. Say: 'The Registry is evidence-source agnostic. What matters is that we know where the evidence came from.' That is the sentence that makes a Gardens for Wildlife visit usable without pretending it is the same as ours. CHECK THESE NUMBERS AGAINST THE LIVE SITE BEFORE PRESENTING.">
   <div class="head anim" style="margin-bottom:20px">
-    <span class="eyebrow">06 · Live now · ecologicalregistry.org</span>
+    <span class="eyebrow">06 · The Registry today · ecologicalregistry.org</span>
   </div>
   <div class="chrome anim">
     <div class="chrome-bar"><div class="lights"><i></i><i></i><i></i></div><div class="chrome-url">https://ecologicalregistry.org/registry.html</div></div>
@@ -483,62 +534,76 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
   </div>
   <div class="bottom anim" style="margin-top:22px">
     <span class="eyebrow">This is running today — not a concept</span>
-    <span class="eyebrow" style="opacity:.5">Every entry keeps its evidence source and verification status</span>
+    <span class="eyebrow" style="opacity:.5">Evidence source agnostic · Every entry traceable to its source</span>
   </div>
 </section>
 
-<!-- 8 · THE OPPORTUNITY FOR WHITEHORSE -->
-<section class="slide" data-notes="Now make the relationship explicit. Whitehorse does not need the Registry to teach residents how to wildlife garden. The value is in connecting existing engagement and evidence to a persistent record and, eventually, an aggregate private-land picture.">
+<!-- 9 · WHY WHITEHORSE -->
+<section class="slide" data-notes="This is almost the entire proposition on one slide. Whitehorse already has the relationships, the knowledge and the Garden Guide network. We're offering a measurement layer alongside that — not instead of it. Four Whitehorse gardens are already on the register with no promotion at all; that's the proof of appetite.">
   <div class="head anim">
-    <span class="eyebrow">07 · The fit</span>
-    <h2>The opportunity<br>for Whitehorse</h2>
+    <span class="eyebrow">07 · The proposition</span>
+    <h2>The opportunity for Whitehorse</h2>
   </div>
-  <div class="spread" style="align-items:stretch;margin-top:20px">
-    <div class="col anim" style="justify-content:center;border-right:1px solid rgba(61,69,53,.22);padding-right:40px">
-      <span class="eyebrow" style="opacity:.6">Gardens for Wildlife</span>
-      <h3>Engage.<br>Advise.<br>Improve.</h3>
-      <p class="body" style="font-size:20px">Trusted relationships and practical action in individual gardens.</p>
-    </div>
-    <div class="col anim" style="justify-content:center;border-right:1px solid rgba(61,69,53,.22);padding:0 40px">
-      <span class="eyebrow" style="opacity:.6">Ecological Registry</span>
-      <h3>Record.<br>Measure.<br>Remember.</h3>
-      <p class="body" style="font-size:20px">A persistent property-level record with evidence and trajectory.</p>
-    </div>
-    <div class="col anim" style="justify-content:center;padding-left:40px">
-      <span class="eyebrow" style="opacity:.6">Council view</span>
-      <h3>See the<br>collective<br>picture.</h3>
-      <p class="body" style="font-size:20px">Patterns across private land without publishing precise household locations.</p>
-    </div>
+  <p class="body anim" style="max-width:74ch;font-size:24px;margin-top:4px">Whitehorse already has the relationships, the knowledge and the Garden Guide network. The Registry could add a persistent measurement layer alongside that work.</p>
+  <div class="trio anim">
+    <div class="tblock"><span class="k">Gardens for Wildlife</span><span class="v">Engage<br>Advise<br>Improve</span></div>
+    <div class="tblock own"><span class="k">Ecological Registry</span><span class="v">Record<br>Measure<br>Remember</span></div>
+    <div class="tblock sum"><span class="k">Whitehorse</span><span class="v">See the collective picture</span></div>
   </div>
   <div class="stats light anim">
-    <div class="stat"><div class="n">4</div><div class="l">Whitehorse gardens already on the Registry</div></div>
-    <div class="stat"><div class="n">1</div><div class="l">Shared question: what is private land giving back?</div></div>
-    <div class="stat"><div class="n">0</div><div class="l">Duplicate visits required in the proposed pilot</div></div>
+    <div class="stat"><div class="n">4</div><div class="l">Whitehorse gardens already registered</div></div>
+    <div class="stat"><div class="n">100%</div><div class="l">Voluntary participation</div></div>
   </div>
 </section>
 
-<!-- 9 · ONE VISIT LONGER LIFE -->
-<section class="slide dark" data-notes="This is the core operational idea. Do not claim Whitehorse data can simply flow into the Registry today. Say: 'We would like to co-design a small evidence set that could be captured during an existing visit without turning the visit into a compliance exercise.' The point is to test whether one visit can serve the resident now and create a useful longitudinal baseline for later.">
+<!-- 10 · INTEGRATION -->
+<section class="slide dark" data-notes="Commercially the most important slide. Say the bottom line out loud: the Registry does not need to create another visit. Be careful to frame this as something to test — we are NOT claiming existing G4W reports can simply be imported. What gets captured and how is exactly what a pilot would work out together.">
   <div class="head anim">
-    <span class="eyebrow">08 · A possible workflow</span>
+    <span class="eyebrow">08 · The fit</span>
     <h2>One visit.<br>A longer life for the information.</h2>
   </div>
   <div class="path anim">
-    <div class="step"><span class="n">01</span><span class="t">Existing visit</span><span class="s">Gardens for Wildlife engagement and advice</span></div>
-    <div class="step"><span class="n">02</span><span class="t">Evidence set</span><span class="s">A small agreed set of photographs and observations</span></div>
-    <div class="step"><span class="n">03</span><span class="t">Registry baseline</span><span class="s">Property record created with source and date retained</span></div>
-    <div class="step"><span class="n">04</span><span class="t">Steward updates</span><span class="s">Changes and new evidence added over time</span></div>
-    <div class="step final"><span class="n">05</span><span class="t">Collective picture</span><span class="s">Patterns, trajectory and habitat connections</span></div>
+    <div class="step"><span class="n">01</span><span class="t">Gardens for Wildlife visit</span><span class="s">The existing garden assessment, unchanged</span></div>
+    <div class="step"><span class="n">02</span><span class="t">Evidence captured</span><span class="s">An agreed set of photographs and observations</span></div>
+    <div class="step"><span class="n">03</span><span class="t">Registry record</span><span class="s">Baseline created, evidence source recorded</span></div>
+    <div class="step"><span class="n">04</span><span class="t">Steward updates</span><span class="s">Changes recorded by the household over time</span></div>
+    <div class="step final"><span class="n">05</span><span class="t">Municipal picture</span><span class="s">Patterns, progress and connectivity</span></div>
   </div>
-  <div class="bottom anim">
-    <p class="lede" style="max-width:48ch;font-size:30px">The pilot tests the integration — <em>not another garden visit.</em></p>
+  <div class="rule anim"></div>
+  <div class="bottom anim" style="margin-top:24px">
+    <p class="lede" style="max-width:52ch;font-size:34px">The Registry does not need to create <em>another visit.</em></p>
+    <span class="eyebrow" style="max-width:320px;opacity:.45">And we've already done it once</span>
   </div>
 </section>
 
-<!-- 10 · DASHBOARD MOCKUP -->
-<section class="slide deep flush" data-notes="Be explicit that this is a mockup with indicative figures — it's what a council view could look like after a pilot year. The honest framing: council sees the aggregate picture; individual steward data stays with the steward unless they consent to share it.">
+<!-- 11 · PROOF -->
+<section class="slide" data-notes="The whole pitch rests on this slide. Say 'third-party evidence', never 'council verified' — Council supplied the assessment, they have not verified the Registry score, and blurring that in the room would be the fastest way to lose them. NOTE: the live Forest Hill page currently reads COUNCIL VERIFIED and names the two guides — change that before anyone from Whitehorse opens the site. Also: get the steward's consent to show her garden, and tell Council in advance that you used one of their reports.">
+  <div class="head anim">
+    <span class="eyebrow">09 · Already done</span>
+    <h2>We've already built one.</h2>
+  </div>
+  <div class="proof">
+    <div class="proof-l">
+      <p class="body anim" style="font-size:25px;max-width:36ch">A Whitehorse Gardens for Wildlife report contained enough information to create a substantial Registry record — without another site visit or household data entry.</p>
+      <div class="stampline anim">
+        <span class="stamp">Third-party evidence</span>
+        <span class="eyebrow" style="opacity:.6">Source · Whitehorse G4W assessment</span>
+      </div>
+      <p class="lede anim" style="font-size:29px;max-width:32ch">The report already contained <em>almost everything the record needed.</em></p>
+    </div>
+    <div class="proof-r anim">
+      <div class="prow"><span class="k">Source</span><span class="v">Whitehorse Gardens for Wildlife visit report · October 2025</span></div>
+      <div class="prow"><span class="k">Garden</span><span class="v">Forest Hill · steward-held</span></div>
+      <div class="prow"><span class="k">Evidence</span><span class="v">Indigenous flora · habitat · connectivity · weeds · recommendations</span></div>
+      <div class="prow"><span class="k">Registry status</span><span class="v">Provisional where evidence remains incomplete — area, EVC and soil still open</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · DASHBOARD MOCKUP -->
+<section class="slide deep flush" data-notes="This slide answers 'so what does Council eventually get back?' — it comes after the integration story on purpose, so it reads as an outcome rather than a software pitch. Be explicit that the figures are indicative, at roughly the scale of one pilot year. Say aloud: 'Individual garden records belong to their stewards. But together, with appropriate privacy protections, they begin to reveal something we don't currently have — a picture of ecological function across private land.'">
   <div style="padding:34px 44px 16px;display:flex;justify-content:space-between;align-items:flex-end">
-    <div class="head anim"><span class="eyebrow">09 · What council could see</span><h3 style="color:var(--beige);font-size:33px;margin-top:12px">A private-land ecological picture</h3></div>
+    <div class="head anim"><span class="eyebrow">10 · What council eventually gets back</span><h3 style="color:var(--beige);font-size:33px;margin-top:12px">The private-land ecological picture</h3></div>
     <span class="eyebrow anim" style="opacity:.5">Mockup · indicative data</span>
   </div>
   <div style="padding:0 44px 34px;flex:1;display:flex" class="anim">
@@ -546,7 +611,7 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
     <div class="chrome-bar"><div class="lights"><i></i><i></i><i></i></div><div class="chrome-url">https://ecologicalregistry.org/council/whitehorse</div></div>
     <div class="dash">
       <div class="dash-top">
-        <div class="l"><b>Whitehorse City Council</b><span>Ecological Registry · Private-land view</span></div>
+        <div class="l"><b>Whitehorse City Council</b><span>Private-land ecological picture</span></div>
         <div class="r"><span>Pilot year one</span><span class="tag">27 gardens</span><span>Updated 6 Aug 2026</span></div>
       </div>
       <div class="kpis">
@@ -609,146 +674,95 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
   </div>
 </section>
 
-<!-- 11 · THE PILOT -->
-<section class="slide" data-notes="Keep the ask small and practical before we zoom out. We are not asking for procurement, a policy change or a city-wide rollout today. We are asking whether Whitehorse would be willing to co-design and test this with a small existing or upcoming Gardens for Wildlife cohort.">
+<!-- 13 · THE BIGGER IDEA -->
+<section class="slide" data-notes="Say: 'There's a larger idea behind what we're building. Over time we've become accustomed to understanding how buildings perform. Energy efficiency was once largely invisible — measurement made it visible and gave us something we could improve. We wonder whether ecological function could follow a similar path. Could we reach a point where we understand not only the performance of the building on a property, but what the land around it is giving back?' Then add: 'We're not suggesting regulation. We're suggesting that before anything else can happen, the ecological value of private land has to become visible.' That's enough. Do not mention developers.">
   <div class="head anim">
-    <span class="eyebrow">10 · The ask</span>
+    <span class="eyebrow">11 · The bigger idea</span>
+    <h2>What if we measured the land<br>around the building too?</h2>
+  </div>
+  <div class="trio anim" style="grid-template-columns:1fr 1fr">
+    <div class="tblock">
+      <span class="k">Buildings</span>
+      <span class="v" style="font-size:30px">Energy<br>Water<br>Efficiency</span>
+      <span class="eyebrow" style="font-size:13px;opacity:.45">Once invisible · now measured as a matter of course</span>
+    </div>
+    <div class="tblock own">
+      <span class="k">Private land</span>
+      <span class="v" style="font-size:30px">Habitat<br>Canopy<br>Soil &amp; water<br>Connectivity<br>Change over time</span>
+    </div>
+  </div>
+  <div class="rule brass anim"></div>
+  <div class="bottom anim" style="margin-top:24px">
+    <p class="lede" style="max-width:52ch;font-size:36px">Beyond the sustainable home: <em>the ecological property.</em></p>
+  </div>
+</section>
+
+<!-- 14 · TEN YEARS -->
+<section class="slide deep" data-notes="Take a breath before this one. The network graphic is one point per garden — say that out loud. Then the bridge: 'And at sufficient scale, this stops being a collection of individual garden records. It begins to become a picture of how the living landscape itself is changing.'">
+  <svg class="net-bg" id="netSvg" viewBox="0 0 900 900" style="opacity:.5;right:-60px" aria-hidden="true"></svg>
+  <div class="head anim"><span class="eyebrow">12 · The long view</span></div>
+  <div class="tenwrap">
+    <div class="tenlist">
+      <h2 class="anim" style="margin-bottom:16px;font-size:62px">Imagine ten<br>years from now</h2>
+      <div class="anim">Thousands of gardens. Thousands of habitat records.</div>
+      <div class="anim">A living record of Whitehorse's ecological recovery.</div>
+      <div class="anim">Ecological change on private land becoming visible over time.</div>
+      <div class="anim">Neighbourhoods connected through habitat rather than fences.</div>
+      <div class="anim">Gardens carrying their ecological memory between generations.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 · THE PILOT -->
+<section class="slide" data-notes="The ask. Lead with what we are NOT asking for: no new program, no new visit, no policy change. The easy yes here is 'let's test whether this is useful' — not 'please adopt our Registry.' Land on the last row of the table: does the record add useful longitudinal information for Council?">
+  <div class="head anim">
+    <span class="eyebrow">13 · The ask</span>
     <h2>A small integration pilot</h2>
   </div>
   <div class="ask">
     <div class="ask-l">
-      <p class="body anim" style="font-size:25px">We're not asking Whitehorse to establish another program.</p>
+      <p class="body anim" style="font-size:25px">We're not asking Whitehorse to establish another program — or to send anyone back to a garden you've already visited.</p>
       <div class="nots anim">
         <span class="not">No duplicate visit</span>
         <span class="not">No regulation</span>
         <span class="not">No obligation on residents</span>
       </div>
-      <p class="lede anim" style="font-size:29px;max-width:34ch">Simply testing whether an existing visit can also create a <em>longer-lived ecological record.</em></p>
+      <p class="lede anim" style="font-size:30px;max-width:32ch">One question, tested honestly: <em>is the record useful?</em></p>
     </div>
     <div class="ask-r anim">
-      <div class="ask-row"><span class="k">Cohort</span><span class="v">10–15 gardens</span></div>
-      <div class="ask-row"><span class="k">Visit</span><span class="v">Existing G4W visit</span></div>
-      <div class="ask-row"><span class="k">Registry addition</span><span class="v">Small evidence set</span></div>
-      <div class="ask-row"><span class="k">Baseline</span><span class="v">Living record</span></div>
-      <div class="ask-row"><span class="k">Follow-up</span><span class="v">12-month update</span></div>
-      <div class="ask-row"><span class="k">Question</span><span class="v">Is it useful?</span></div>
+      <div class="ask-row"><span class="k">Cohort</span><span class="v">10–20 G4W gardens</span></div>
+      <div class="ask-row"><span class="k">Visit</span><span class="v">The existing one</span></div>
+      <div class="ask-row"><span class="k">Registry addition</span><span class="v">Small agreed evidence set</span></div>
+      <div class="ask-row"><span class="k">Baseline</span><span class="v">Registry record created</span></div>
+      <div class="ask-row"><span class="k">Follow-up</span><span class="v">Steward update at 12 months</span></div>
+      <div class="ask-row"><span class="k">The question</span><span class="v" style="font-size:25px;color:var(--signal);max-width:19ch;text-align:right">Does it add useful longitudinal information?</span></div>
     </div>
   </div>
 </section>
 
-<!-- 12 · URBAN BIODIVERSITY -->
-<section class="slide deep" data-notes="This is the zoom-out. Say: 'This is the larger reason this matters. Urban biodiversity cannot be rebuilt through reserves alone. It will be rebuilt through the spaces between them — private gardens, nature strips, schools, small developments, courtyards and streets — all becoming more ecologically functional and more connected.'">
-  <div class="head anim"><span class="eyebrow">11 · The bigger picture</span></div>
-  <div class="rebuild-grid">
+<!-- 15 · OUR VISION -->
+<section class="slide dark" data-notes="Say it verbally rather than putting it on the slide: 'The twentieth century became extraordinarily good at measuring what we built. We think the twenty-first century will also need to become much better at measuring what we restore.' Pause. Then: 'And perhaps something as ordinary as a garden is where that begins.'">
+  <div class="head anim"><span class="eyebrow">14 · Our vision</span></div>
+  <div class="spread">
     <div class="col">
-      <h2 class="anim" style="font-size:76px">This is how biodiversity is rebuilt in cities.</h2>
-      <div class="rule anim"></div>
-      <p class="lede anim" style="max-width:24ch">Not one enormous reserve. Thousands of small places becoming <em>living systems.</em></p>
+      <h2 class="anim">Private gardens are not<br>separate from nature.</h2>
+      <p class="lede anim" style="max-width:36ch">They are where our urban landscapes are <em>being renewed.</em></p>
     </div>
-    <div class="rebuild-list anim">
-      <div class="rebuild-item">A front garden.</div>
-      <div class="rebuild-item">A backyard.</div>
-      <div class="rebuild-item">A nature strip.</div>
-      <div class="rebuild-item">A school ground.</div>
-      <div class="rebuild-item">A development site.</div>
-      <div class="rebuild-item">A council reserve.</div>
+    <div class="col anim" style="flex:0 0 400px;border-left:1px solid rgba(255,240,220,.25);padding-left:48px;gap:22px">
+      <div style="font-family:var(--editorial);font-size:38px;line-height:1.3;font-weight:300">One household.<br>One habitat.<br>One generation<br>at a time.</div>
     </div>
   </div>
-  <div class="bottom anim">
-    <p class="lede" style="font-size:30px;max-width:50ch">Each one small. Together, an urban ecological network.</p>
-  </div>
+  <div class="rule anim"></div>
 </section>
 
-<!-- 13 · BUILDING PERFORMANCE -->
-<section class="slide" data-notes="Use the building-efficiency analogy here. Everyone understands that a building has performance. Now ask: why don't we have an equivalent shared understanding for the ecological performance of the land around that building? Let the closing line land and pause — it is the sentence people remember.">
-  <div class="head anim">
-    <span class="eyebrow">12 · The standard we don't yet have</span>
-    <h2>We already measure what we build.</h2>
-  </div>
-  <div class="comparison anim">
-    <div class="side">
-      <span class="label">Buildings</span>
-      <div class="big">Measured</div>
-      <ul>
-        <li>Energy efficiency</li>
-        <li>Water performance</li>
-        <li>Thermal comfort</li>
-        <li>Safety and access</li>
-      </ul>
-    </div>
-    <div class="side">
-      <span class="label">Land</span>
-      <div class="big" style="color:var(--signal)">Mostly invisible</div>
-      <ul>
-        <li>Canopy retained or lost</li>
-        <li>Habitat removed or rebuilt</li>
-        <li>Soil and water function</li>
-        <li>Contribution to the wider landscape</li>
-      </ul>
-    </div>
-  </div>
-  <div class="bottom anim" style="margin-top:26px">
-    <p class="lede" style="font-size:30px;max-width:54ch">For a century we've measured what we build on a block. We've never measured <em>what was underneath it.</em></p>
-  </div>
-</section>
-
-<!-- 14 · ECOLOGICAL RATING -->
-<section class="slide dark" data-notes="This is the question we want them to keep thinking about. Do not over-explain it. Let the question land. Then say: 'We think one day this should be normal information about a property.'">
-  <div class="rating-question">
-    <span class="eyebrow anim">13 · The future question</span>
-    <h2 class="anim">What if gardens had an ecological rating?</h2>
-    <div class="rule anim"></div>
-    <div class="questions anim">
-      <div>What did this land lose?</div>
-      <div>What is it giving back?</div>
-      <div>Is it improving over time?</div>
-    </div>
-  </div>
-</section>
-
-<!-- 15 · DEVELOPMENT LIFECYCLE -->
-<section class="slide deep" data-notes="This brings the idea into development and property change without sounding regulatory. The key point is step 01: nobody records what was on a block before it is cleared, so there is nothing to compare the finished garden against. The Registry could begin with voluntary gardens and council programs, but the larger possibility is a common ecological record through development, establishment, stewardship and ownership transfer.">
-  <div class="head anim">
-    <span class="eyebrow">14 · From cleared block to living system</span>
-    <h2 style="font-size:68px">A record that follows the land.</h2>
-  </div>
-  <div class="lifecycle anim">
-    <div class="life-step"><span class="n">01</span><span class="t">Before development</span><span class="s">Canopy, vegetation, habitat and soil condition — recorded before the machines arrive.</span></div>
-    <div class="life-step"><span class="n">02</span><span class="t">During design</span><span class="s">An ecological target for what the property should give back.</span></div>
-    <div class="life-step"><span class="n">03</span><span class="t">After construction</span><span class="s">The garden is established and evidence is recorded.</span></div>
-    <div class="life-step"><span class="n">04</span><span class="t">Three years later</span><span class="s">The living system is measured again as it grows.</span></div>
-    <div class="life-step"><span class="n">05</span><span class="t">Property transfer</span><span class="s">The ecological record travels with the garden.</span></div>
-  </div>
-  <div class="bottom anim" style="margin-top:28px">
-    <p class="lede" style="font-size:30px;max-width:44ch">The score is not the important part. <em>The record is.</em></p>
-  </div>
-</section>
-
-<!-- 16 · COMMON LANGUAGE -->
-<section class="slide" data-notes="This is where the Registry becomes a standard, but phrase it as an ambition rather than a claim. Say: 'Our long-term ambition is for the ecological contribution of private land to become something that can be measured consistently, in the same way we have developed common ways of understanding building performance.' The method itself is published openly and free for anyone to apply — we are not asking Whitehorse to adopt a proprietary standard. If asked where this ends up — ratings, requirements, regulation — answer plainly and without pitching: councils and state government will eventually want to know whether private land is recovering, and someone has to be keeping the record before that question gets asked. We would rather it was a record built with councils than one imposed on them.">
-  <div class="head anim">
-    <span class="eyebrow">15 · The long-term ambition</span>
-    <h2>A common language for private-land ecology.</h2>
-  </div>
-  <div class="std-grid anim">
-    <div class="std-cell"><span class="k">Homeowners</span><span class="v">Understand what their garden contributes.</span></div>
-    <div class="std-cell"><span class="k">Designers &amp; developers</span><span class="v">Set a measurable ecological target.</span></div>
-    <div class="std-cell"><span class="k">Councils</span><span class="v">See private-land contribution at municipal scale.</span></div>
-    <div class="std-cell"><span class="k">Future owners</span><span class="v">Inherit the garden's ecological memory.</span></div>
-  </div>
-  <div class="bottom anim" style="margin-top:28px">
-    <p class="lede" style="font-size:30px;max-width:56ch">One methodology, published openly and free to apply. One evidence standard. <em>A record that survives programs, projects and ownership.</em></p>
-  </div>
-</section>
-
-<!-- 17 · CLOSE -->
-<section class="slide deep" data-notes="Final spoken close: 'Gardens for Wildlife proves that residents want to participate. Councils already understand that private land is critical to urban biodiversity. What is missing is the common record that allows us to understand what all of those individual gardens add up to. Perhaps it begins with ten gardens in Whitehorse. But the larger idea is that one day, when a block is developed, when a garden is created, when a property changes hands, we don't only know what was built. We know what that land is giving back. Because what we measure, we value. And what we value, we improve. And what we improve shapes the future.' Then stop.">
+<!-- 16 · CLOSE -->
+<section class="slide deep" data-notes="Read the three lines, then finish: 'We'd love Whitehorse to become one of the first councils to explore what this could become.' Then stop. Let them speak first.">
   <div class="head anim"><span class="eyebrow">Thank you</span></div>
-  <div class="final-vision">
-    <h2 class="anim">The vision is simple.</h2>
-    <div class="vision-line anim">Every garden recognised for the life that it supports.</div>
-    <div class="rule anim" style="margin:4px auto"></div>
-    <p class="closing-script anim">A shared ecological record for private land — so we know not only what was built, but what the land is giving back.</p>
+  <div class="closing">
+    <h2 class="anim">The Ecological Registry</h2>
+    <div class="sub anim">Making the invisible visible.</div>
+    <div class="rule anim" style="margin:6px auto"></div>
+    <p class="anim" style="max-width:40ch;text-align:center;font-family:var(--editorial);font-size:29px;font-weight:300;line-height:1.5;opacity:.88">Because what we measure, we value.<br>And what we value, we improve.<br>And what we improve shapes the future.</p>
   </div>
   <div class="bottom anim">
     <div class="byline"><span>Tyson &amp; Natasha Lundbech</span><span>Gardener &amp; Son</span></div>
@@ -758,11 +772,31 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
 
 </div><!-- /stage -->
 
+<div id="presenter" aria-hidden="true">
+  <div class="prow2"><span class="lbl">Presenting</span><span class="count" id="pCount">1 / 17</span></div>
+  <div class="prow2"><div id="pTimer">00:00</div><span class="count" id="pLink">display window connected</span></div>
+  <div id="pTitle">—</div>
+  <div class="lbl">Speaker note</div>
+  <div id="pNow">—</div>
+  <div id="pNext">
+    <div class="lbl" style="color:rgba(255,240,220,.5)">Next</div>
+    <div id="pNextTitle">—</div>
+    <div id="pNextNote">—</div>
+  </div>
+  <div class="pbtns">
+    <button id="pPrev">← Back</button>
+    <button id="pNextBtn">Next →</button>
+    <button id="pReset">Reset timer</button>
+    <button id="pFocus">Focus screen</button>
+  </div>
+</div>
+
 <div id="hud">
   <button id="prev" aria-label="Previous slide">←</button>
-  <span id="count">1 / 17</span>
+  <span id="count">1 / 13</span>
   <button id="next" aria-label="Next slide">→</button>
   <button id="notesBtn">Notes (S)</button>
+  <button id="presentBtn">Presenter (P)</button>
   <button id="fsBtn">Full screen (F)</button>
 </div>
 
@@ -774,22 +808,114 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
   var slides=[].slice.call(document.querySelectorAll('.slide'));
   var i=0;
 
+  /* ---- two-window sync ---------------------------------------------------
+     One file, two roles. The laptop window is the presenter; it opens a second
+     window with #display which goes on the big screen. Messages travel both
+     ways over window.postMessage (works from file://) and, when the deck is
+     served over http, also over BroadcastChannel as a belt-and-braces path. */
+  var mode = location.hash.indexOf('display') > -1 ? 'display' : 'control';
+  var displayWin=null, remote=false, tStart=null;
+  var bc=null; try{ bc=new BroadcastChannel('er-deck'); }catch(e){}
+
+  function post(msg){
+    try{ if(displayWin && !displayWin.closed) displayWin.postMessage(msg,'*'); }catch(e){}
+    try{ if(window.opener && !window.opener.closed) window.opener.postMessage(msg,'*'); }catch(e){}
+    if(bc){ try{ bc.postMessage(msg); }catch(e){} }
+  }
+  function receive(d){
+    if(!d) return;
+    if(d.t==='hello'){ post({t:'go',i:i}); return; }
+    if(d.t==='go' && d.i!==i){ remote=true; go(d.i); remote=false; }
+  }
+  window.addEventListener('message',function(e){ receive(e.data); });
+  if(bc) bc.onmessage=function(e){ receive(e.data); };
+
+  if(mode==='display'){
+    document.body.classList.add('display');
+    try{ if(window.opener) window.opener.postMessage({t:'hello'},'*'); }catch(e){}
+    if(bc) post({t:'hello'});
+    var idle;
+    document.addEventListener('mousemove',function(){
+      document.body.classList.remove('idle');
+      clearTimeout(idle); idle=setTimeout(function(){document.body.classList.add('idle')},2200);
+    });
+  }
+
   function fit(){
-    var s=Math.min(window.innerWidth/1600, window.innerHeight/900);
-    stage.style.transform='translate(-50%,-50%) scale('+s+')';
+    if(document.body.classList.contains('presenter')){
+      var boxW=window.innerWidth*0.54-56, boxH=window.innerHeight-72;
+      var s=Math.min(boxW/1600, boxH/900);
+      stage.style.top='28px'; stage.style.left='28px';
+      stage.style.transform='scale('+s+')';
+    } else {
+      stage.style.top='50%'; stage.style.left='50%';
+      stage.style.transform='translate(-50%,-50%) scale('+Math.min(window.innerWidth/1600, window.innerHeight/900)+')';
+    }
   }
   window.addEventListener('resize',fit); fit();
+
+  function slideTitle(n){
+    var s=slides[n]; if(!s) return 'End of deck';
+    var h=s.querySelector('h1,h2,h3');
+    if(h) return h.textContent.replace(/\s+/g,' ').trim();
+    var e=s.querySelector('.eyebrow');
+    return e ? e.textContent.replace(/\s+/g,' ').trim() : 'Slide '+(n+1);
+  }
+  function noteOf(n){ return slides[n] ? (slides[n].getAttribute('data-notes')||'—') : '—'; }
+
+  function renderPresenter(){
+    if(!document.body.classList.contains('presenter')) return;
+    document.getElementById('pCount').textContent=(i+1)+' / '+slides.length;
+    document.getElementById('pTitle').textContent=slideTitle(i);
+    document.getElementById('pNow').textContent=noteOf(i);
+    document.getElementById('pNextTitle').textContent = i+1<slides.length ? slideTitle(i+1) : 'End of deck';
+    document.getElementById('pNextNote').textContent = i+1<slides.length ? noteOf(i+1) : '';
+    document.getElementById('pLink').textContent =
+      (displayWin && !displayWin.closed) ? 'display window connected' : 'display window closed — press P';
+  }
 
   function render(){
     slides.forEach(function(s,n){ s.classList.toggle('is-active', n===i); });
     document.getElementById('bar').style.width=((i)/(slides.length-1)*100)+'%';
     document.getElementById('count').textContent=(i+1)+' / '+slides.length;
-    document.getElementById('noteText').textContent=slides[i].getAttribute('data-notes')||'—';
+    document.getElementById('noteText').textContent=noteOf(i);
+    renderPresenter();
   }
-  function go(n){ i=Math.max(0,Math.min(slides.length-1,n)); render(); }
+  function go(n){
+    var was=i;
+    i=Math.max(0,Math.min(slides.length-1,n));
+    render();
+    if(!remote && i!==was) post({t:'go',i:i});
+    if(!tStart && i>0) tStart=Date.now();
+  }
+
+  function openDisplay(){
+    if(displayWin && !displayWin.closed){ displayWin.focus(); return; }
+    var url=location.href.split('#')[0]+'#display';
+    displayWin=window.open(url,'erDisplay','width=1280,height=720');
+    if(!displayWin){ alert('Your browser blocked the second window. Allow pop-ups for this page, then press P again.'); return; }
+    document.body.classList.add('presenter');
+    document.getElementById('presenter').setAttribute('aria-hidden','false');
+    tStart=tStart||Date.now();
+    fit(); render();
+    setTimeout(function(){ post({t:'go',i:i}); },600);
+  }
+
+  setInterval(function(){
+    if(!document.body.classList.contains('presenter')) return;
+    var ms = tStart ? Date.now()-tStart : 0, s=Math.floor(ms/1000);
+    document.getElementById('pTimer').textContent=
+      ('0'+Math.floor(s/60)).slice(-2)+':'+('0'+(s%60)).slice(-2);
+    if(displayWin && displayWin.closed) renderPresenter();
+  },1000);
 
   document.getElementById('next').addEventListener('click',function(e){e.stopPropagation();go(i+1)});
   document.getElementById('prev').addEventListener('click',function(e){e.stopPropagation();go(i-1)});
+  document.getElementById('pNextBtn').addEventListener('click',function(e){e.stopPropagation();go(i+1)});
+  document.getElementById('pPrev').addEventListener('click',function(e){e.stopPropagation();go(i-1)});
+  document.getElementById('pReset').addEventListener('click',function(e){e.stopPropagation();tStart=Date.now()});
+  document.getElementById('pFocus').addEventListener('click',function(e){e.stopPropagation();if(displayWin&&!displayWin.closed)displayWin.focus()});
+  document.getElementById('presentBtn').addEventListener('click',function(e){e.stopPropagation();openDisplay()});
   document.getElementById('notesBtn').addEventListener('click',function(e){e.stopPropagation();document.getElementById('notes').classList.toggle('on')});
   document.getElementById('fsBtn').addEventListener('click',function(e){e.stopPropagation();toggleFs()});
 
@@ -805,6 +931,7 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
     else if(k==='Home'){go(0)}
     else if(k==='End'){go(slides.length-1)}
     else if(k==='f'||k==='F'){toggleFs()}
+    else if(k==='p'||k==='P'){ if(mode==='control') openDisplay(); }
     else if(k==='s'||k==='S'){document.getElementById('notes').classList.toggle('on')}
     else if(k==='Escape'){document.getElementById('notes').classList.remove('on')}
   });
@@ -814,27 +941,167 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
     go(i+1);
   });
 
-  /* ---- habitat network graphic (deterministic) ---- */
+  /* ---- aerial suburb graphic (deterministic) ---- */
   var seed=7;
   function rnd(){ seed=(seed*1664525+1013904223)%4294967296; return seed/4294967296; }
-  function buildNet(svg,cols,rows,size){
-    if(!svg) return;
-    var pts=[],gap=size/(cols+1),html='';
-    for(var c=0;c<cols;c++){for(var r=0;r<rows;r++){
-      pts.push({x:gap*(c+1)+(rnd()-.5)*gap*.65, y:gap*(r+1)+(rnd()-.5)*gap*.65, on:rnd()>.62});
-    }}
-    for(var a=0;a<pts.length;a++){for(var b=a+1;b<pts.length;b++){
-      var dx=pts[a].x-pts[b].x,dy=pts[a].y-pts[b].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<gap*1.25&&(pts[a].on||pts[b].on)){
-        html+='<line x1="'+pts[a].x.toFixed(1)+'" y1="'+pts[a].y.toFixed(1)+'" x2="'+pts[b].x.toFixed(1)+'" y2="'+pts[b].y.toFixed(1)+'" stroke="#7C9A52" stroke-width="1" opacity="'+(pts[a].on&&pts[b].on?.55:.2)+'"/>';
+
+  function buildAerial(svg,size,density){
+    var h='', pale='#fff0dc', gardens=[], reserve=null;
+    var xs=[-40,118,352,533,772,size+40];
+    var ys=[-40,146,331,566,748,size+40];
+    var road=15;
+
+    // road carriageways
+    var k,a,b;
+    var mainY=ys[3];
+    for(k=1;k<ys.length-1;k++){
+      var isMain=(ys[k]===mainY);
+      h+='<line x1="-40" y1="'+ys[k]+'" x2="'+(size+40)+'" y2="'+ys[k]+'" stroke="'+pale+'" stroke-width="'+(isMain?26:10)+'" opacity="'+(isMain?.22:.15)+'"/>';
+      h+='<line x1="-40" y1="'+ys[k]+'" x2="'+(size+40)+'" y2="'+ys[k]+'" stroke="'+pale+'" stroke-width="1.2" opacity=".34"/>';
+      if(isMain){
+        h+='<line x1="-40" y1="'+ys[k]+'" x2="'+(size+40)+'" y2="'+ys[k]+'" stroke="'+pale+'" stroke-width="1" stroke-dasharray="20 18" opacity=".42"/>';
       }
-    }}
-    pts.forEach(function(p){
-      html+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+(p.on?5:2.6)+'" fill="'+(p.on?'#7C9A52':'#fff0dc')+'" opacity="'+(p.on?1:.42)+'"/>';
+    }
+    for(k=1;k<xs.length-1;k++){
+      h+='<line x1="'+xs[k]+'" y1="-40" x2="'+xs[k]+'" y2="'+(size+40)+'" stroke="'+pale+'" stroke-width="10" opacity=".15"/>';
+      h+='<line x1="'+xs[k]+'" y1="-40" x2="'+xs[k]+'" y2="'+(size+40)+'" stroke="'+pale+'" stroke-width="1.2" opacity=".34"/>';
+    }
+    // a curved crescent, because no Melbourne suburb is a pure grid
+    h+='<path d="M120 555 C 210 620, 300 640, 330 765" fill="none" stroke="'+pale+'" stroke-width="10" opacity=".15"/>';
+    h+='<path d="M120 555 C 210 620, 300 640, 330 765" fill="none" stroke="'+pale+'" stroke-width="1.2" opacity=".32"/>';
+
+    // blocks: lots facing the street, houses at the front, gardens behind
+    for(var r=0;r<ys.length-1;r++){
+      for(var c=0;c<xs.length-1;c++){
+        var x0=xs[c]+road, x1=xs[c+1]-road, y0=ys[r]+road, y1=ys[r+1]-road;
+        var bw=x1-x0, bh=y1-y0;
+        if(bw<40||bh<40) continue;
+
+        // one block is a reserve rather than housing
+        if(r===1&&c===3){
+          var pts=[], steps=9, cxr=(x0+x1)/2, cyr=(y0+y1)/2;
+          for(k=0;k<steps;k++){
+            var ang=k/steps*Math.PI*2, rad=(0.36+rnd()*0.16);
+            pts.push(((cxr+Math.cos(ang)*bw*rad).toFixed(1))+','+((cyr+Math.sin(ang)*bh*rad).toFixed(1)));
+          }
+          h+='<polygon points="'+pts.join(' ')+'" fill="#7C9A52" opacity=".18"/>';
+          reserve={x:cxr, y:cyr, rx:bw*0.44, ry:bh*0.44};
+          for(k=0;k<18;k++){
+            h+='<circle cx="'+(cxr+(rnd()-.5)*bw*.72).toFixed(1)+'" cy="'+(cyr+(rnd()-.5)*bh*.72).toFixed(1)+'" r="'+(6+rnd()*10).toFixed(1)+'" fill="#7C9A52" opacity="'+(.22+rnd()*.22).toFixed(2)+'"/>';
+          }
+          continue;
+        }
+
+        // irregular subdivision: lots vary in width the way real titles do
+        var n=Math.max(2,Math.round(bw/64)), widths=[], total=0;
+        for(k=0;k<n;k++){ var wgt=0.72+rnd()*0.66; widths.push(wgt); total+=wgt; }
+        var midY=y0+bh*(0.44+rnd()*0.12);
+        h+='<line x1="'+x0+'" y1="'+midY.toFixed(1)+'" x2="'+x1+'" y2="'+midY.toFixed(1)+'" stroke="'+pale+'" stroke-width=".8" opacity=".20"/>';
+
+        var cur=x0;
+        for(k=0;k<n;k++){
+          var lw=bw*widths[k]/total, cx=cur+lw/2;
+          h+='<line x1="'+cur.toFixed(1)+'" y1="'+y0+'" x2="'+cur.toFixed(1)+'" y2="'+y1+'" stroke="'+pale+'" stroke-width=".8" opacity=".26"/>';
+
+          // house footprints: varied size, set back a varied distance from the street
+          var fwT=lw*(0.42+rnd()*0.3), fhT=bh*(0.11+rnd()*0.1), setT=bh*(0.04+rnd()*0.07);
+          var fwB=lw*(0.42+rnd()*0.3), fhB=bh*(0.11+rnd()*0.1), setB=bh*(0.04+rnd()*0.07);
+          var jT=(rnd()-.5)*lw*0.16, jB=(rnd()-.5)*lw*0.16;
+          h+='<rect x="'+(cx+jT-fwT/2).toFixed(1)+'" y="'+(y0+setT).toFixed(1)+'" width="'+fwT.toFixed(1)+'" height="'+fhT.toFixed(1)+'" fill="'+pale+'" opacity="'+(.15+rnd()*.09).toFixed(2)+'"/>';
+          h+='<rect x="'+(cx+jB-fwB/2).toFixed(1)+'" y="'+(y1-setB-fhB).toFixed(1)+'" width="'+fwB.toFixed(1)+'" height="'+fhB.toFixed(1)+'" fill="'+pale+'" opacity="'+(.15+rnd()*.09).toFixed(2)+'"/>';
+
+          // back gardens meet along the middle of the block
+          if(rnd()<density) gardens.push({x:cx+jT*.5, y:midY-bh*(0.1+rnd()*0.1), tier:(function(){var q=rnd();return q>0.88?2:(q>0.58?1:0);})()});
+          if(rnd()<density) gardens.push({x:cx+jB*.5, y:midY+bh*(0.1+rnd()*0.1), tier:(function(){var q=rnd();return q>0.88?2:(q>0.58?1:0);})()});
+          cur+=lw;
+        }
+        h+='<line x1="'+x1+'" y1="'+y0+'" x2="'+x1+'" y2="'+y1+'" stroke="'+pale+'" stroke-width=".8" opacity=".26"/>';
+      }
+    }
+
+    // a cul-de-sac off the third street
+    h+='<line x1="672" y1="'+ys[2]+'" x2="672" y2="452" stroke="'+pale+'" stroke-width="10" opacity=".15"/>';
+    h+='<circle cx="672" cy="470" r="26" fill="'+pale+'" opacity=".13"/>';
+    h+='<circle cx="672" cy="470" r="26" fill="none" stroke="'+pale+'" stroke-width="1.2" opacity=".32"/>';
+    h+='<line x1="672" y1="'+ys[2]+'" x2="672" y2="452" stroke="'+pale+'" stroke-width="1.2" opacity=".3"/>';
+
+    // roundabout where the main road meets a cross street
+    h+='<circle cx="'+xs[2]+'" cy="'+mainY+'" r="34" fill="none" stroke="'+pale+'" stroke-width="15" opacity=".18"/>';
+    h+='<circle cx="'+xs[2]+'" cy="'+mainY+'" r="41.5" fill="none" stroke="'+pale+'" stroke-width="1.2" opacity=".32"/>';
+    h+='<circle cx="'+xs[2]+'" cy="'+mainY+'" r="26.5" fill="none" stroke="'+pale+'" stroke-width="1.2" opacity=".32"/>';
+    h+='<circle cx="'+xs[2]+'" cy="'+mainY+'" r="24" fill="#7C9A52" opacity=".34"/>';
+    for(k=0;k<5;k++){
+      h+='<circle cx="'+(xs[2]+(rnd()-.5)*28).toFixed(1)+'" cy="'+(mainY+(rnd()-.5)*28).toFixed(1)+'" r="'+(4+rnd()*6).toFixed(1)+'" fill="#7C9A52" opacity=".45"/>';
+    }
+
+    // habitat links between nearby gardens
+    for(a=0;a<gardens.length;a++){
+      for(b=a+1;b<gardens.length;b++){
+        var dx=gardens[a].x-gardens[b].x, dy=gardens[a].y-gardens[b].y;
+        if(Math.sqrt(dx*dx+dy*dy)<125){
+          h+='<line x1="'+gardens[a].x.toFixed(1)+'" y1="'+gardens[a].y.toFixed(1)+'" x2="'+gardens[b].x.toFixed(1)+'" y2="'+gardens[b].y.toFixed(1)+'" stroke="#B49A63" stroke-width="1.3" opacity=".55"/>';
+        }
+      }
+    }
+    // a habitat corridor running out of the reserve: nearest garden first,
+    // then a greedy walk outward — this is the connectivity argument, drawn
+    if(reserve && gardens.length){
+      var used={}, chain=[], from=reserve, hops=0, dir=null;
+      function distTo(g,o){ var dx=g.x-o.x, dy=g.y-o.y; return Math.sqrt(dx*dx+dy*dy); }
+      while(hops<9){
+        var best=-1, bestScore=1e9;
+        for(a=0;a<gardens.length;a++){
+          if(used[a]) continue;
+          var d=distTo(gardens[a],from);
+          if(d>250) continue;
+          // step outward, never back toward the reserve
+          if(chain.length && distTo(gardens[a],reserve) < distTo(from,reserve)) continue;
+          // and prefer holding a heading, so the corridor sweeps instead of staggering
+          var pen=0;
+          if(dir){
+            var vx=(gardens[a].x-from.x)/d, vy=(gardens[a].y-from.y)/d;
+            pen=(1-(vx*dir.x+vy*dir.y))*190;
+          }
+          if(d+pen<bestScore){ bestScore=d+pen; best=a; }
+        }
+        if(best<0) break;
+        var nd=distTo(gardens[best],from);
+        dir={x:(gardens[best].x-from.x)/nd, y:(gardens[best].y-from.y)/nd};
+        used[best]=1; chain.push(gardens[best]);
+        gardens[best].tier=Math.max(gardens[best].tier, hops===0?2:1);
+        gardens[best].corridor=true;
+        from=gardens[best]; hops++;
+      }
+      if(chain.length){
+        var path='M'+reserve.x.toFixed(1)+' '+reserve.y.toFixed(1);
+        chain.forEach(function(g){ path+=' L'+g.x.toFixed(1)+' '+g.y.toFixed(1); });
+        h+='<path d="'+path+'" fill="none" stroke="#7C9A52" stroke-width="13" opacity=".16" stroke-linejoin="round" stroke-linecap="round"/>';
+        h+='<path d="'+path+'" fill="none" stroke="#A8C87A" stroke-width="2.2" opacity=".85" stroke-linejoin="round" stroke-linecap="round"/>';
+      }
+    }
+
+    // the registry marker, one per garden
+    gardens.forEach(function(p){
+      var x=p.x.toFixed(1), y=p.y.toFixed(1), t=p.tier;
+      if(t===2){            // a node: bigger, brighter, more rings
+        h+='<circle cx="'+x+'" cy="'+y+'" r="27" fill="none" stroke="#A8C87A" stroke-width="1" opacity=".4"/>';
+        h+='<circle cx="'+x+'" cy="'+y+'" r="19" fill="none" stroke="#A8C87A" stroke-width="1.2" opacity=".7"/>';
+        h+='<circle cx="'+x+'" cy="'+y+'" r="11.5" fill="none" stroke="#A8C87A" stroke-width="1.8"/>';
+        h+='<circle cx="'+x+'" cy="'+y+'" r="5" fill="#C3DD97"/>';
+      } else if(t===1){
+        h+='<circle cx="'+x+'" cy="'+y+'" r="16" fill="none" stroke="#7C9A52" stroke-width="1" opacity=".55"/>';
+        h+='<circle cx="'+x+'" cy="'+y+'" r="9.5" fill="none" stroke="#8FAF63" stroke-width="1.5"/>';
+        h+='<circle cx="'+x+'" cy="'+y+'" r="3.8" fill="#8FAF63"/>';
+      } else {
+        h+='<circle cx="'+x+'" cy="'+y+'" r="7.5" fill="none" stroke="#7C9A52" stroke-width="1.2" opacity=".8"/>';
+        h+='<circle cx="'+x+'" cy="'+y+'" r="2.8" fill="#7C9A52"/>';
+      }
     });
-    svg.innerHTML=html;
+    svg.innerHTML=h;
   }
-  buildNet(document.getElementById('netBgSvg'),9,9,900);
+  buildAerial(document.getElementById('netBgSvg'),900,0.3);
+  seed=23;
+  buildAerial(document.getElementById('netSvg'),900,0.62);
 
   /* ---- dashboard map ---- */
   (function(){
@@ -861,8 +1128,8 @@ p.body{font-size:26px;line-height:1.6;font-weight:300;max-width:30ch}
       if(d<58){ h+='<line x1="'+g[a].x.toFixed(1)+'" y1="'+g[a].y.toFixed(1)+'" x2="'+g[b].x.toFixed(1)+'" y2="'+g[b].y.toFixed(1)+'" stroke="#B49A63" stroke-width="1.2" opacity=".8"/>'; }
     }}
     g.forEach(function(p){
-      h+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="9" fill="#7C9A52" opacity=".16"/>';
-      h+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="4.2" fill="#7C9A52"/>';
+      h+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="8.5" fill="none" stroke="#7C9A52" stroke-width="1.2"/>';
+      h+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="3.4" fill="#7C9A52"/>';
     });
     svg.innerHTML=h;
   })();
