@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ecological Registry — Self-Enrolment Ramp · Phase 1 prototype</title>
+<title>Ecological Registry — Self-Enrolment Ramp</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -210,13 +210,6 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .card .price{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--signal-deep);margin:8px 0}
 .card .cdesc{font-size:13px;color:var(--ink-soft)}
 .card .btn{margin-top:14px;font-size:11px;padding:11px 18px}
-.phase-note{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--provisional);border:1px dashed var(--provisional);padding:4px 10px;display:none;margin-top:10px;letter-spacing:.04em}
-.phase-note.show{display:inline-block}
-
-/* footer / restart */
-.proto-foot{padding:50px 0 70px;text-align:center}
-.proto-foot .btn{font-size:11px}
-.disc{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft);text-transform:uppercase;margin-top:18px;opacity:.7}
 
 @media(min-width:720px){
   .deepen-split{grid-template-columns:1fr 1fr}
@@ -369,36 +362,26 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
       <div class="deepen-split">
         <div class="deepen-col free">
           <div class="label">Free · do it yourself</div>
-          <h3>Plant your EVC match</h3>
-          <p class="sub">Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity. (Indicative list — wired to Plants of Place in a later phase.)</p>
-          <div class="species">
-            <span>Themeda triandra</span><span>Bursaria spinosa</span><span>Dianella admixta</span>
-            <span>Microlaena stipoides</span><span>Acacia paradoxa</span><span>Kennedia prostrata</span>
-          </div>
+          <h3 id="deepenEvcHeading">Plant your EVC match</h3>
+          <p class="sub" id="deepenEvcSub">Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity.</p>
+          <div id="deepenSpecies" style="margin-top:14px"><div style="font-size:13px;color:var(--ink-soft);opacity:.5">Loading species…</div></div>
           <p class="fieldnote" style="margin-top:24px">Six plants in the right place will do more than sixty in the wrong one.</p>
         </div>
         <div class="deepen-col">
           <div class="label">Paid · tend with us</div>
           <div class="card flagship">
             <h4>Ecological Garden Health Check</h4>
-            <div class="price">From $—  ·  steward site visit</div>
+            <div class="price">$240 · Melbourne area · steward site visit</div>
             <p class="cdesc">A G&S steward visits, confirms your inputs, and lifts your garden from provisional to verified. This is how the score becomes real — and how the garden joins the Registry's evidence base.</p>
-            <button class="btn primary" onclick="phaseNote(this)">Book a verification visit</button>
-            <div class="phase-note">Phase 1 prototype — checkout wired in Phase 3</div>
+            <a class="btn primary" id="bookVisitBtn" href="mailto:hello@lundbech.me">Book a verification visit</a>
           </div>
           <div class="card">
             <h4>Plants of Place species pack</h4>
             <div class="price">From $— · indigenous micro-nursery</div>
             <p class="cdesc">The EVC-matched species above, grown locally and ready to plant.</p>
-            <!-- TODO Phase 2: pass actual EVC code as query param once baseline form captures it -->
-            <a class="btn ghost" href="https://plantsofplace.com" target="_blank" rel="noopener">Reserve a pack</a>
+            <a class="btn ghost" id="popLink" href="https://plantsofplace.com.au" target="_blank" rel="noopener">Reserve a pack</a>
           </div>
         </div>
-      </div>
-
-      <div class="proto-foot">
-        <button class="btn ghost" onclick="restart()">Restart prototype</button>
-        <div class="disc">Phase 1 static prototype · no backend · no payment · provisional ≠ verified</div>
       </div>
     </div>
   </section>
@@ -1270,6 +1253,106 @@ function buildMeter(){
   }
 }
 
+/* ---- Deepen panel: EVC species by layer ---- */
+let _deepenDb = [];
+
+const LAYER_GROUPS = [
+  { label: 'Groundcovers & Forbs', keys: ['groundcover', 'forb', 'sedge'] },
+  { label: 'Grasses',              keys: ['grass'] },
+  { label: 'Shrubs',               keys: ['shrub'] },
+  { label: 'Small Trees',          keys: ['small_tree', 'climber'] },
+  { label: 'Trees',                keys: ['tree', 'canopy'] }
+];
+
+function loadDeepenDb(cb) {
+  if (_deepenDb.length) { if (cb) cb(); return; }
+  fetch('/data/species.json')
+    .then(r => r.json())
+    .then(d => { _deepenDb = d.species || []; if (cb) cb(); })
+    .catch(() => { if (cb) cb(); });
+}
+
+function buildDeepenSpecies() {
+  const container = document.getElementById('deepenSpecies');
+  if (!container) return;
+
+  const heading = document.getElementById('deepenEvcHeading');
+  if (heading) heading.textContent = evcName ? 'Plant your ' + evcName + ' match' : 'Plant your EVC match';
+
+  const sub = document.getElementById('deepenEvcSub');
+  if (sub) sub.textContent = evcName
+    ? 'Species local to ' + evcName + (evcCode ? ' (' + evcCode + ')' : '') + '. Each one lifts Biodiversity Structure and strengthens your connection to local ecology.'
+    : 'Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity.';
+
+  // Build species pool: gap list if available, else 2-per-layer sample from DB
+  let pool = [];
+  if (speciesList.length > 0) {
+    const gap = speciesList.filter(s => tickedSpecies.indexOf(s) === -1);
+    pool = gap.map(name => {
+      const db = _deepenDb.find(s => s.botanical_name === name);
+      return { name, common: db ? db.common_name : '', layer: db ? db.layer : '' };
+    });
+  } else {
+    LAYER_GROUPS.forEach(grp => {
+      const candidates = _deepenDb.filter(s => grp.keys.includes(s.layer));
+      candidates.slice(0, 2).forEach(s => pool.push({ name: s.botanical_name, common: s.common_name, layer: s.layer }));
+    });
+  }
+
+  if (!pool.length) {
+    container.innerHTML = '<p style="font-size:13px;color:var(--ink-soft)">All EVC species already present — no gap to close.</p>';
+    return;
+  }
+
+  let html = '';
+  LAYER_GROUPS.forEach(grp => {
+    const members = pool.filter(s => grp.keys.includes(s.layer));
+    if (!members.length) return;
+    html += `<div style="margin-bottom:14px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal-deep);margin-bottom:7px">${grp.label}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">`;
+    members.forEach(sp => {
+      html += `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;border:1px solid var(--hairline);padding:5px 10px;color:var(--ink-soft)"><em>${sp.name}</em>${sp.common ? ' <span style="opacity:.55">· ' + sp.common + '</span>' : ''}</span>`;
+    });
+    html += `</div></div>`;
+  });
+
+  // Any ungrouped species (no layer match)
+  const ungrouped = pool.filter(s => !LAYER_GROUPS.some(g => g.keys.includes(s.layer)));
+  if (ungrouped.length) {
+    html += `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">`;
+    ungrouped.forEach(sp => {
+      html += `<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;border:1px solid var(--hairline);padding:5px 10px;color:var(--ink-soft)"><em>${sp.name}</em>${sp.common ? ' <span style="opacity:.55">· ' + sp.common + '</span>' : ''}</span>`;
+    });
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function buildDeepenPanel() {
+  // Update booking mailto with context
+  const bookBtn = document.getElementById('bookVisitBtn');
+  if (bookBtn) {
+    const suburb = gardenSuburb || (document.getElementById('garden_suburb') || {}).value || '';
+    const lines = [
+      suburb   ? 'Suburb: ' + suburb           : '',
+      evcName  ? 'Vegetation class: ' + evcName : '',
+      'Provisional score: ' + score() + '/100',
+    ].filter(Boolean).join('\n');
+    bookBtn.href = 'mailto:hello@lundbech.me?subject='
+      + encodeURIComponent('Ecological Garden Health Check — ' + (suburb || 'enquiry'))
+      + '&body=' + encodeURIComponent(lines);
+  }
+  // Update Plants of Place link with EVC code
+  const popLink = document.getElementById('popLink');
+  if (popLink && evcCode) {
+    popLink.href = 'https://plantsofplace.com.au/?evc=' + encodeURIComponent(evcCode);
+  }
+  // Render species
+  loadDeepenDb(buildDeepenSpecies);
+}
+
 /* ---- navigation ---- */
 function go(step){
   document.querySelectorAll('.screen').forEach((s,i)=> s.classList.toggle('active', i===step));
@@ -1278,9 +1361,9 @@ function go(step){
     r.classList.toggle('done', i<step);
   });
   if(step===3) buildMeter();
+  if(step===4) buildDeepenPanel();
   window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
 }
-function phaseNote(btn){ btn.nextElementSibling.classList.add('show'); }
 function restart(){
   Object.keys(answers).forEach(k=>delete answers[k]);
   tickedSpecies = [];
@@ -1290,7 +1373,6 @@ function restart(){
   consentState = new Array(CONSENT.length).fill(null);
   const errEl = document.getElementById('consentError');
   if(errEl) errEl.textContent = '';
-  document.querySelectorAll('.phase-note').forEach(n=>n.classList.remove('show'));
   updateScore(); go(0);
 }
 updateScore();
