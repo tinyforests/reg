@@ -66,8 +66,30 @@
     try { sessionStorage.setItem(claimKey(gardenId, oppId), '1'); } catch (e) { /* storage blocked — fine */ }
   }
 
-  function pendingNotice() {
-    return '<div class="text-xs mt-2" style="opacity:.75">Claim submitted · pending review</div>';
+  function pendingNotice(hasPhoto) {
+    return '<div class="text-xs mt-2" style="opacity:.75">Claim submitted · pending review' +
+      (hasPhoto ? ' · photo attached' : '') + '</div>';
+  }
+
+  /* Resize a photo to maxPx on the longest side, encode as JPEG at quality 0–1, cb(dataUrl|null) */
+  function resizePhoto(file, maxPx, quality, cb) {
+    var reader = new FileReader();
+    reader.onerror = function () { cb(null); };
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onerror = function () { cb(null); };
+      img.onload = function () {
+        var w = img.width, h = img.height;
+        var scale = Math.min(1, maxPx / Math.max(w, h));
+        var canvas = document.createElement('canvas');
+        canvas.width  = Math.round(w * scale);
+        canvas.height = Math.round(h * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        cb(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   function formHtml(oppId) {
@@ -78,6 +100,9 @@
       '<input id="' + i + '_name"  type="text"  placeholder="Your name" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit" />' +
       '<input id="' + i + '_email" type="email" placeholder="Email" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit" />' +
       '<textarea id="' + i + '_note" rows="2" placeholder="Anything worth noting (optional)" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit;resize:vertical"></textarea>' +
+      '<label class="text-xs block mb-1" style="opacity:.6">Add a photo as evidence (optional)</label>' +
+      '<input id="' + i + '_photo" type="file" accept="image/*" capture="environment" class="w-full text-xs mb-2" style="color:inherit" />' +
+      '<div id="' + i + '_preview" style="display:none;margin-bottom:.5rem"><img alt="" style="max-width:100%;max-height:100px;display:block;border:1px solid rgba(128,128,128,.2)" /></div>' +
       '<div class="flex gap-2">' +
         '<button type="button" data-claim-submit="' + esc(oppId) + '" class="text-xs px-3 py-1.5" style="border:1px solid currentColor">Submit claim</button>' +
         '<button type="button" data-claim-cancel="' + esc(oppId) + '" class="text-xs px-3 py-1.5" style="opacity:.6">Cancel</button>' +
@@ -107,6 +132,21 @@
 
     if (list.getAttribute('data-claims-bound') === '1') return;
     list.setAttribute('data-claims-bound', '1');
+
+    list.addEventListener('change', function (e) {
+      var t = e.target;
+      if (t.type !== 'file' || !t.id || !t.id.endsWith('_photo')) return;
+      var file = t.files && t.files[0];
+      var preview = document.getElementById(t.id.replace('_photo', '_preview'));
+      if (!preview) return;
+      if (!file) { preview.style.display = 'none'; return; }
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        preview.querySelector('img').src = ev.target.result;
+        preview.style.display = '';
+      };
+      reader.readAsDataURL(file);
+    });
 
     list.addEventListener('click', function (e) {
       var open = e.target.closest('[data-claim-open]');
@@ -140,6 +180,8 @@
     var g = function (suffix) { var el = document.getElementById(i + suffix); return el ? el.value.trim() : ''; };
     var msg = document.getElementById(i + '_msg');
     var name = g('_name'), email = g('_email'), note = g('_note');
+    var photoInput = document.getElementById(i + '_photo');
+    var photoFile = photoInput && photoInput.files && photoInput.files[0];
 
     var show = function (text, ok) {
       if (!msg) return;
@@ -167,33 +209,48 @@
     };
 
     btn.disabled = true;
-    btn.textContent = 'Submitting…';
+    btn.textContent = photoFile ? 'Uploading photo…' : 'Submitting…';
 
-    fetch(ENDPOINT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
-      redirect: 'follow'
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (json) {
-        if (json && json.ok) {
-          markClaimed(gardenId, oppId);
-          var c = btn.closest('[data-opp-id]');
-          var form = btn.closest('div').parentNode;
-          if (form && form.parentNode) form.parentNode.removeChild(form);
-          var opener = c.querySelector('[data-claim-open]');
-          if (opener && opener.parentNode) opener.parentNode.removeChild(opener);
-          c.insertAdjacentHTML('beforeend', pendingNotice());
-        } else {
-          btn.disabled = false; btn.textContent = 'Submit claim';
-          show('Could not submit: ' + ((json && json.error) || 'unknown error'), false);
-        }
+    function doPost(p) {
+      fetch(ENDPOINT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(p),
+        redirect: 'follow'
       })
-      .catch(function () {
-        btn.disabled = false; btn.textContent = 'Submit claim';
-        show('Could not reach the server. Please try again later.', false);
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.ok) {
+            markClaimed(gardenId, oppId);
+            var c = btn.closest('[data-opp-id]');
+            var form = btn.closest('div').parentNode;
+            if (form && form.parentNode) form.parentNode.removeChild(form);
+            var opener = c.querySelector('[data-claim-open]');
+            if (opener && opener.parentNode) opener.parentNode.removeChild(opener);
+            c.insertAdjacentHTML('beforeend', pendingNotice(!!p.photo_base64));
+          } else {
+            btn.disabled = false; btn.textContent = 'Submit claim';
+            show('Could not submit: ' + ((json && json.error) || 'unknown error'), false);
+          }
+        })
+        .catch(function () {
+          btn.disabled = false; btn.textContent = 'Submit claim';
+          show('Could not reach the server. Please try again later.', false);
+        });
+    }
+
+    if (photoFile) {
+      resizePhoto(photoFile, 1200, 0.75, function (dataUrl) {
+        if (dataUrl) {
+          payload.photo_base64  = dataUrl;
+          payload.photo_filename = photoFile.name;
+        }
+        btn.textContent = 'Submitting…';
+        doPost(payload);
       });
+    } else {
+      doPost(payload);
+    }
   }
 
   var api = { attachClaims: attachClaims, CLAIMABLE: CLAIMABLE, ENDPOINT_URL: ENDPOINT_URL };
