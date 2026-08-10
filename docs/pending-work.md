@@ -4,6 +4,16 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Admin: garden ID → address mapping
+
+Garden names and URL slugs must never encode a street address or house number (e.g. "88 Windella" → renamed to "Smokebush", `/gardens/windella88/` → `/gardens/smokebush/`). G&S still needs to know the physical address behind each `garden_id` for site visits, verification, and records.
+
+**Needed**: a private admin page (password-gated or assessor-key-gated) that lists `garden_id → steward name → street address → council` for internal use. Could live at `/admin/gardens.html` reading from a separate `data/garden-addresses.json` not committed to the public repo, or using an assessor key to show a hidden column in assess.html.
+
+No public surface should ever display or derive a physical address from a garden name or URL slug.
+
+
+
 ### Self-Enrolment ramp → assess.html bootstrap — TOP PRIORITY
 
 The self-enrolment ramp and assess.html are disconnected tools. A steward self-enrols → G&S gets a provisional signal → someone manually re-enters everything into assess.html to produce the canonical JSON. The ramp should bootstrap the assess form, removing that manual handoff.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecological Registry - 88 Windella</title>
+  <title>Ecological Registry - Smokebush</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -871,7 +871,7 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem('reg-theme', isDark ? 'dark' : 'light');
 });
 
-fetch('/data/windella88.json')
+fetch('/data/smokebush.json')
   .then(function(r) {
     if (!r.ok) { throw new Error('HTTP ' + r.status); }
     return r.json();
@@ -884,7 +884,7 @@ fetch('/data/windella88.json')
     console.error('Could not load garden data:', err);
     document.getElementById('heroName').textContent = 'Data unavailable';
     document.getElementById('heroScore').textContent = '--';
-    document.getElementById('heroLevel').textContent = 'Check /data/windella88.json';
+    document.getElementById('heroLevel').textContent = 'Check /data/smokebush.json';
   });
 
   /* ---- Notification engine ---- */
