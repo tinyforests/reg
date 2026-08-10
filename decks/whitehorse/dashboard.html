@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whitehorse · Private-land ecological picture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gardener:#3d4535;
+  --beige:#fff0dc;
+  --signal:#7C9A52;
+  --brass:#B49A63;
+  --clay:#9A6A4F;
+
+  /* Canopy (dark) — default */
+  --bg:#181d14;
+  --panel:#20261b;
+  --panel-2:#262d20;
+  --line:rgba(255,240,220,.14);
+  --line-soft:rgba(255,240,220,.07);
+  --text:#f2e8d6;
+  --text-dim:rgba(242,232,214,.62);
+  --text-faint:rgba(242,232,214,.38);
+  --map-ground:#1c2218;
+  --map-road:rgba(255,240,220,.10);
+  --map-road-major:rgba(255,240,220,.18);
+  --reserve:#37452c;
+  --reserve-line:rgba(124,154,82,.55);
+}
+html[data-theme="understory"]{
+  --bg:#fff0dc;
+  --panel:#f7e6cd;
+  --panel-2:#f2dfc3;
+  --line:rgba(61,69,53,.20);
+  --line-soft:rgba(61,69,53,.10);
+  --text:#2b3125;
+  --text-dim:rgba(43,49,37,.68);
+  --text-faint:rgba(43,49,37,.42);
+  --map-ground:#f4e2c7;
+  --map-road:rgba(61,69,53,.14);
+  --map-road-major:rgba(61,69,53,.26);
+  --reserve:#dfe6c9;
+  --reserve-line:rgba(97,124,60,.65);
+}
+*{box-sizing:border-box;border-radius:0}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  transition:background .45s ease,color .45s ease;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.30;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.5'/></svg>");
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.label{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.20em;text-transform:uppercase;
+  color:var(--text-faint);
+}
+h1,h2,h3{margin:0;font-weight:400}
+
+/* ————— top bar ————— */
+header{
+  position:sticky;top:0;z-index:50;
+  background:var(--panel);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:stretch;flex-wrap:wrap;
+}
+.crest{
+  display:flex;align-items:center;gap:14px;padding:14px 22px;
+  border-right:1px solid var(--line);flex:1 1 320px;min-width:0;
+}
+.crest svg{flex:none}
+.crest .t1{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.crest .t2{font-family:"Fraunces","Georgia",serif;font-size:19px;letter-spacing:-.01em;line-height:1.15;font-weight:400}
+.ctrl{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--line)}
+.ctrl:last-child{border-right:0}
+.ctrl .label{margin-right:4px}
+button{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  background:transparent;color:var(--text-dim);border:1px solid var(--line);
+  padding:7px 11px;cursor:pointer;transition:all .18s ease;
+}
+button:hover{color:var(--text);border-color:var(--brass)}
+button[aria-pressed="true"],button.on{background:var(--signal);border-color:var(--signal);color:#10150c}
+html[data-theme="understory"] button[aria-pressed="true"],html[data-theme="understory"] button.on{color:#fff6e6}
+button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.mockflag{
+  padding:12px 18px;display:flex;align-items:center;gap:9px;
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--brass);border-left:1px solid var(--line);
+}
+.mockflag i{width:7px;height:7px;background:var(--brass);display:block;flex:none}
+
+/* ————— stat band ————— */
+.band{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line);background:var(--panel-2)}
+.stat{padding:20px 20px 18px;border-right:1px solid var(--line-soft);position:relative;overflow:hidden}
+.stat:last-child{border-right:0}
+.stat .n{font-family:"IBM Plex Mono",monospace;font-size:38px;line-height:1;font-weight:400;letter-spacing:-.02em;color:var(--text)}
+.stat .n small{font-size:15px;color:var(--text-faint);letter-spacing:0}
+.stat .k{margin-top:9px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--text-faint);line-height:1.5}
+.stat .d{margin-top:5px;font-size:11.5px;color:var(--signal);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.stat::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--brass);opacity:.45;transform:scaleX(var(--fill,0));transform-origin:left;transition:transform 1.1s cubic-bezier(.22,.8,.28,1)}
+
+/* ————— layout ————— */
+main{padding:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;border-bottom:1px solid var(--line)}
+.pane{border-right:1px solid var(--line);min-width:0}
+.pane:last-child{border-right:0}
+.phead{
+  padding:16px 22px 14px;border-bottom:1px solid var(--line);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.phead h2{font-family:"Fraunces",Georgia,serif;font-size:20px;letter-spacing:-.01em}
+.phead p{margin:5px 0 0;font-size:12.5px;color:var(--text-dim);max-width:62ch}
+.phead .label{white-space:nowrap}
+
+/* ————— map ————— */
+.mapwrap{position:relative;background:var(--map-ground)}
+#map{display:block;width:100%;height:auto}
+.maptools{
+  position:absolute;left:18px;top:18px;background:var(--panel);border:1px solid var(--line);
+  padding:14px 15px;width:212px;backdrop-filter:blur(3px);
+}
+.maptools .label{display:block;margin-bottom:9px}
+.lay{display:flex;align-items:center;gap:9px;padding:5px 0;cursor:pointer;font-size:12px;color:var(--text-dim);user-select:none}
+.lay:hover{color:var(--text)}
+.lay input{appearance:none;width:12px;height:12px;border:1px solid var(--text-faint);flex:none;cursor:pointer;margin:0}
+.lay input:checked{background:var(--signal);border-color:var(--signal)}
+.lay input:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.slider{margin-top:14px;padding-top:13px;border-top:1px solid var(--line-soft)}
+.slider .v{font-family:"IBM Plex Mono",monospace;font-size:19px;color:var(--text);margin:3px 0 6px}
+.slider .v small{font-size:11px;color:var(--text-faint)}
+input[type=range]{width:100%;appearance:none;height:2px;background:var(--line);margin:6px 0 0}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;background:var(--signal);cursor:pointer;border:0}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;background:var(--signal);cursor:pointer;border:0;border-radius:0}
+input[type=range]:focus-visible{outline:2px solid var(--brass);outline-offset:4px}
+.readout{
+  position:absolute;right:18px;top:18px;background:var(--panel);border:1px solid var(--line);padding:14px 16px;width:236px;
+}
+.readout .row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--line-soft);font-size:11.5px;color:var(--text-dim)}
+.readout .row:last-child{border-bottom:0}
+.readout .row b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:15px;color:var(--text)}
+.readout .cap{font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.45}
+.scalebar{position:absolute;left:18px;bottom:18px;display:flex;align-items:center;gap:8px}
+.scalebar .bar{height:1px;background:var(--text-faint);position:relative}
+.scalebar .bar::before,.scalebar .bar::after{content:"";position:absolute;width:1px;height:6px;background:var(--text-faint);top:-3px}
+.scalebar .bar::before{left:0}.scalebar .bar::after{right:0}
+
+/* ————— side column ————— */
+.side{display:flex;flex-direction:column}
+.card{padding:18px 22px;border-bottom:1px solid var(--line)}
+.card:last-child{border-bottom:0}
+.card h3{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.19em;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px}
+.prov{display:flex;flex-direction:column;gap:11px}
+.prov .p{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:baseline}
+.prov .nm{font-size:12.5px;color:var(--text)}
+.prov .ct{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--text-dim)}
+.prov .track{grid-column:1/-1;height:4px;background:var(--line-soft)}
+.prov .track i{display:block;height:100%;transition:width .7s cubic-bezier(.22,.8,.28,1)}
+.prov .sub{grid-column:1/-1;font-size:10.5px;color:var(--text-faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.05em}
+.note{font-size:11.5px;color:var(--text-dim);line-height:1.55;border-left:2px solid var(--brass);padding-left:11px;margin-top:14px}
+.weed{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:12.5px}
+.weed:last-child{border-bottom:0}
+.weed span{color:var(--text-dim)}
+.weed i{font-style:italic;color:var(--text-faint);font-size:11px}
+.weed b{font-family:"IBM Plex Mono",monospace;font-weight:400;color:var(--clay)}
+html[data-theme="canopy"] .weed b{color:#c98f6b}
+
+/* selected garden */
+#detail{background:var(--panel-2)}
+#detail .rid{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--brass)}
+#detail .nm{font-family:"Fraunces",Georgia,serif;font-size:22px;margin:4px 0 2px;letter-spacing:-.01em}
+#detail .sb{font-size:12px;color:var(--text-dim)}
+#detail .scorewrap{display:flex;align-items:flex-end;gap:14px;margin:16px 0 6px}
+#detail .score{font-family:"IBM Plex Mono",monospace;font-size:46px;line-height:.9;color:var(--signal)}
+#detail .tier{font-size:12.5px;color:var(--text-dim);padding-bottom:5px}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;border:1px solid;margin:2px 4px 2px 0}
+.pill.verified{color:var(--signal);border-color:var(--signal)}
+.pill.third{color:var(--brass);border-color:var(--brass)}
+.pill.prov{color:var(--text-faint);border-color:var(--text-faint);border-style:dashed}
+.pillars{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.pillars .pr{display:grid;grid-template-columns:96px 1fr 30px;gap:10px;align-items:center;font-size:11px;color:var(--text-dim)}
+.pillars .bar{height:6px;background:var(--line-soft)}
+.pillars .bar i{display:block;height:100%;background:var(--signal);transition:width .6s ease}
+.pillars .vv{font-family:"IBM Plex Mono",monospace;text-align:right;color:var(--text)}
+.emptystate{color:var(--text-faint);font-size:12.5px;line-height:1.6}
+
+/* ————— lower sections ————— */
+.tri{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.tri > section{border-right:1px solid var(--line);padding:22px}
+.tri > section:last-child{border-right:0}
+.tri h2{font-family:"Fraunces",Georgia,serif;font-size:18px;margin-bottom:3px}
+.tri .sub{font-size:12px;color:var(--text-dim);margin-bottom:20px;line-height:1.5}
+
+.pbar{display:grid;grid-template-columns:118px 1fr 42px;gap:12px;align-items:center;margin-bottom:13px;font-size:12px}
+.pbar .track{height:12px;background:var(--line-soft);position:relative}
+.pbar .track i{display:block;height:100%;background:var(--signal)}
+.pbar .track .bm{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--brass)}
+.pbar .num{font-family:"IBM Plex Mono",monospace;text-align:right;color:var(--text)}
+.pbar .nmp{color:var(--text-dim)}
+
+.sub-bars .sb{display:grid;grid-template-columns:1fr auto;gap:3px;margin-bottom:11px}
+.sub-bars .nm{font-size:12px;color:var(--text-dim)}
+.sub-bars .ct{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text)}
+.sub-bars .tr{grid-column:1/-1;height:5px;background:var(--line-soft)}
+.sub-bars .tr i{display:block;height:100%;background:var(--brass);transition:width .8s ease}
+
+.funnel{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.fstep{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:12px;color:var(--text-dim)}
+.fstep:last-child{border-bottom:0}
+.fstep b{font-family:"IBM Plex Mono",monospace;font-weight:400;color:var(--text);font-size:14px}
+.fstep .pc{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--text-faint);margin-left:9px}
+
+.trend{width:100%;height:auto;display:block;margin-top:6px}
+
+/* footer */
+footer{padding:26px 22px 40px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end}
+footer .quote{font-family:"Fraunces",Georgia,serif;font-size:17px;font-style:italic;color:var(--text-dim);max-width:52ch;line-height:1.5}
+footer .sig{text-align:right}
+footer .sig .a{font-family:"Abril Fatface",Georgia,serif;font-size:22px;letter-spacing:-.01em}
+footer .sig .a em{font-style:normal;color:var(--signal)}
+footer .sig .b{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-faint);margin-top:5px}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.8,.28,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:1180px){
+  .grid{grid-template-columns:1fr}
+  .pane{border-right:0;border-bottom:1px solid var(--line)}
+  .band{grid-template-columns:repeat(3,1fr)}
+  .stat{border-bottom:1px solid var(--line-soft)}
+  .tri{grid-template-columns:1fr}
+  .tri > section{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:720px){
+  .band{grid-template-columns:repeat(2,1fr)}
+  .stat .n{font-size:29px}
+  .maptools,.readout{position:static;width:auto;border:0;border-bottom:1px solid var(--line)}
+  .mapwrap{display:flex;flex-direction:column-reverse}
+  .scalebar{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body data-scenario="today">
+
+<header>
+  <div class="crest">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <circle cx="17" cy="17" r="16" fill="none" stroke="currentColor" stroke-width="1" opacity=".28"/>
+      <circle cx="17" cy="17" r="10.5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
+      <circle cx="17" cy="17" r="5" fill="#7C9A52"/>
+    </svg>
+    <div>
+      <div class="t1">Whitehorse City Council</div>
+      <div class="t2">The private-land ecological picture</div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <span class="label">View</span>
+    <button data-scenario="today" aria-pressed="true">Today</button>
+    <button data-scenario="pilot" aria-pressed="false">Pilot · 12 mo</button>
+    <button data-scenario="scale" aria-pressed="false">At scale</button>
+  </div>
+
+  <div class="ctrl">
+    <span class="label">Theme</span>
+    <button id="themeBtn">Canopy</button>
+  </div>
+
+  <div class="mockflag"><i></i> Illustrative build · not live council data</div>
+</header>
+
+<div class="band" id="band">
+  <div class="stat"><div class="n" data-stat="gardens">0</div><div class="k">Gardens on the register</div><div class="d" data-delta="gardens"></div></div>
+  <div class="stat"><div class="n" data-stat="area">0<small> ha</small></div><div class="k">Private land under record</div><div class="d" data-delta="area"></div></div>
+  <div class="stat"><div class="n" data-stat="species">0</div><div class="k">Indigenous species recorded</div><div class="d" data-delta="species"></div></div>
+  <div class="stat"><div class="n" data-stat="score">0</div><div class="k">Mean ecological score</div><div class="d" data-delta="score"></div></div>
+  <div class="stat"><div class="n" data-stat="corridors">0</div><div class="k">Gardens linked to reserve habitat</div><div class="d" data-delta="corridors"></div></div>
+  <div class="stat"><div class="n" data-stat="lookups">0</div><div class="k">Resident EVC lookups</div><div class="d" data-delta="lookups"></div></div>
+</div>
+
+<main>
+
+<div class="grid">
+  <div class="pane">
+    <div class="phead">
+      <div>
+        <h2>Whitehorse, garden by garden</h2>
+        <p>Every marker is one property with an ecological record behind it. Drag the threshold to see which gardens sit close enough to work as stepping stones between the reserves.</p>
+      </div>
+      <span class="label" id="mapMode">Today · verified records</span>
+    </div>
+
+    <div class="mapwrap">
+      <svg id="map" viewBox="0 0 1180 780" role="img" aria-label="Map of Whitehorse showing registered gardens, reserves and habitat corridors"></svg>
+
+      <div class="maptools">
+        <span class="label">Layers</span>
+        <label class="lay"><input type="checkbox" data-layer="reserves" checked> Public reserves</label>
+        <label class="lay"><input type="checkbox" data-layer="corridors" checked> Habitat links</label>
+        <label class="lay"><input type="checkbox" data-layer="gardens" checked> Registered gardens</label>
+        <label class="lay"><input type="checkbox" data-layer="provisional" checked> Provisional records</label>
+        <label class="lay"><input type="checkbox" data-layer="demand"> Resident lookups</label>
+        <label class="lay"><input type="checkbox" data-layer="roads" checked> Road network</label>
+
+        <div class="slider">
+          <span class="label">Stepping-stone threshold</span>
+          <div class="v"><span id="radVal">400</span><small> m</small></div>
+          <input type="range" id="radius" min="100" max="800" step="25" value="400" aria-label="Stepping-stone threshold in metres">
+        </div>
+      </div>
+
+      <div class="readout">
+        <span class="label">Connectivity</span>
+        <div class="row"><span>Habitat links drawn</span><b id="roLinks">0</b></div>
+        <div class="row"><span>Connected clusters</span><b id="roClusters">0</b></div>
+        <div class="row"><span>Gardens in largest cluster</span><b id="roLargest">0</b></div>
+        <div class="row"><span>Longest chain</span><b id="roChain">0</b></div>
+        <div class="row"><span>Gardens linked to a reserve</span><b id="roReserve">0</b></div>
+        <p class="cap">A cluster is a run of gardens and reserves joined by links no longer than the threshold. Chains crossing private land are the ones no existing dataset shows.</p>
+      </div>
+
+      <div class="scalebar">
+        <div class="bar" style="width:96px"></div>
+        <span class="label" style="letter-spacing:.12em">1 km</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pane side">
+    <div class="card" id="detail">
+      <h3>Selected record</h3>
+      <div class="emptystate">Select any garden on the map to open its record — score, pillar breakdown, evidence source and who assessed it.</div>
+    </div>
+
+    <div class="card">
+      <h3>Where the evidence comes from</h3>
+      <div class="prov" id="prov"></div>
+      <p class="note">Source and verification status are recorded separately from the score. A council assessment is third-party evidence; it is not the same as a Registry verification, and the dashboard never shows the two as equivalent.</p>
+    </div>
+
+    <div class="card">
+      <h3>Weed pressure recorded on private land</h3>
+      <div id="weeds"></div>
+      <p class="note">Environmental weeds noted during garden assessments. Council currently sees these one report at a time; here they aggregate into a removal priority across the municipality.</p>
+    </div>
+  </div>
+</div>
+
+<div class="tri">
+  <section>
+    <h2>What the gardens are actually doing</h2>
+    <p class="sub">Mean score across five pillars, 0–100. The brass tick is the Whitehorse baseline — the average suburban block before any ecological work.</p>
+    <div id="pillars"></div>
+    <p class="note">Connectivity is the pillar a single garden cannot move on its own. It only rises when neighbours plant too — which is exactly what a municipal picture reveals and a single visit report cannot.</p>
+  </section>
+
+  <section>
+    <h2>Residents are already asking</h2>
+    <p class="sub">Address lookups from Whitehorse postcodes across findmyevc.com and findmyecologicalgarden.com — people finding out which vegetation community their block sits in.</p>
+    <div class="sub-bars" id="subbars"></div>
+    <svg class="trend" id="trend" viewBox="0 0 520 120" aria-label="Monthly lookup volume trend"></svg>
+    <div class="funnel" id="funnel"></div>
+  </section>
+
+  <section>
+    <h2>Change over time</h2>
+    <p class="sub">The point of a register is the second visit. Each line is one garden's score across successive assessments — the ecological equivalent of a meter reading.</p>
+    <svg class="trend" id="traj" viewBox="0 0 520 200" aria-label="Garden score trajectories over time"></svg>
+    <div id="trajStats"></div>
+    <p class="note">Whitehorse's Gardens for Wildlife visit already produces most of this information. The register is what gives it a second life — and a third, and a tenth.</p>
+  </section>
+</div>
+
+<footer>
+  <p class="quote">“For a century we have measured what we build on a block, and never what we destroy underneath it.”</p>
+  <div class="sig">
+    <div class="a">Gardener <em>&amp;</em> Son</div>
+    <div class="b">Ecological Registry · ecologicalregistry.org</div>
+  </div>
+</footer>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ══════════════ geography ══════════════ */
+const B = { n:-37.7880, s:-37.8720, w:145.0880, e:145.2280 };
+const VB = { w:1180, h:780 };
+const px = ln => (ln - B.w)/(B.e - B.w) * VB.w;
+const py = lt => (lt - B.n)/(B.s - B.n) * VB.h;
+const M_PER_DEG_LAT = 111320, M_PER_DEG_LNG = 88000; // ~ -37.8°
+const metres = (a,b) => {
+  const dy = (a.lat-b.lat)*M_PER_DEG_LAT, dx = (a.lng-b.lng)*M_PER_DEG_LNG;
+  return Math.sqrt(dx*dx+dy*dy);
+};
+const KM_IN_PX = (1000/M_PER_DEG_LNG)/(B.e-B.w)*VB.w;
+
+const RESERVES = [
+  {name:"Blackburn Lake Sanctuary", lat:-37.8264, lng:145.1512, r:520},
+  {name:"Blackburn Creeklands",     lat:-37.8150, lng:145.1590, r:430},
+  {name:"Koonung Creek Reserve",    lat:-37.7935, lng:145.1420, r:600, wide:true},
+  {name:"Antonio Park",             lat:-37.8178, lng:145.1932, r:330},
+  {name:"Halliday Park",            lat:-37.8228, lng:145.2010, r:250},
+  {name:"Bungalook Creek Reserve",  lat:-37.8578, lng:145.1888, r:400},
+  {name:"Bushy Creek Reserve",      lat:-37.8420, lng:145.1218, r:330},
+  {name:"Slater Reserve",           lat:-37.8062, lng:145.1668, r:250},
+  {name:"Gardiners Creek",          lat:-37.8515, lng:145.1080, r:380, wide:true}
+];
+
+const ROADS = [
+  {n:"Whitehorse Rd",   pts:[[-37.8188,145.0880],[-37.8175,145.1240],[-37.8160,145.1520],[-37.8148,145.1950],[-37.8140,145.2280]], major:true},
+  {n:"Canterbury Rd",   pts:[[-37.8330,145.0880],[-37.8322,145.1500],[-37.8312,145.2280]], major:true},
+  {n:"Burwood Hwy",     pts:[[-37.8492,145.0880],[-37.8486,145.1500],[-37.8478,145.2280]], major:true},
+  {n:"Eastern Fwy",     pts:[[-37.7930,145.0880],[-37.7938,145.1400],[-37.7960,145.1900],[-37.7975,145.2280]], major:true},
+  {n:"Springvale Rd",   pts:[[-37.7880,145.1735],[-37.8720,145.1748]], major:true},
+  {n:"Middleborough Rd",pts:[[-37.7930,145.1452],[-37.8720,145.1462]], major:true},
+  {n:"Elgar Rd",        pts:[[-37.7930,145.1128],[-37.8560,145.1136]]},
+  {n:"Station St",      pts:[[-37.7950,145.1232],[-37.8560,145.1238]]},
+  {n:"Blackburn Rd",    pts:[[-37.8000,145.1512],[-37.8720,145.1524]]},
+  {n:"Mitcham Rd",      pts:[[-37.7960,145.1930],[-37.8620,145.1940]]},
+  {n:"Highbury Rd",     pts:[[-37.8622,145.0880],[-37.8618,145.2280]]},
+  {n:"Riversdale Rd",   pts:[[-37.8402,145.0880],[-37.8398,145.1300]]},
+  {n:"Union Rd",        pts:[[-37.8060,145.1330],[-37.8480,145.1340]]},
+  {n:"Terrara Rd",      pts:[[-37.8250,145.1620],[-37.8600,145.1630]]}
+];
+
+const SUBURBS = [
+  {n:"BOX HILL NORTH", lat:-37.8035, lng:145.1290},
+  {n:"MONT ALBERT NTH", lat:-37.8018, lng:145.1055},
+  {n:"BOX HILL",       lat:-37.8198, lng:145.1215},
+  {n:"BLACKBURN NORTH",lat:-37.8040, lng:145.1520},
+  {n:"BLACKBURN",      lat:-37.8215, lng:145.1470},
+  {n:"NUNAWADING",     lat:-37.8195, lng:145.1755},
+  {n:"MITCHAM",        lat:-37.8125, lng:145.1965},
+  {n:"BOX HILL SOUTH", lat:-37.8362, lng:145.1245},
+  {n:"BLACKBURN STH",  lat:-37.8398, lng:145.1512},
+  {n:"FOREST HILL",    lat:-37.8388, lng:145.1718},
+  {n:"VERMONT",        lat:-37.8318, lng:145.1962},
+  {n:"BURWOOD",        lat:-37.8532, lng:145.1120},
+  {n:"BURWOOD EAST",   lat:-37.8498, lng:145.1462},
+  {n:"VERMONT SOUTH",  lat:-37.8560, lng:145.1900}
+];
+
+/* ══════════════ records ══════════════ */
+// Verified + third-party evidence records — the honest "today" position.
+const TODAY = [
+  {id:"ER-AU-VIC-BLK-LAU-003", name:"Laurel Grove", suburb:"Blackburn", lat:-37.8232, lng:145.1462,
+   score:58, tier:"Ecological Garden", status:"verified", source:"G&S site visit · Registry assessor",
+   area:640, species:47, evc:"EVC 47 Valley Grassy Forest",
+   pillars:{Biodiversity:62,"Soil & Water":54,Habitat:66,Connectivity:48,Evidence:60}},
+
+  {id:"ER-AU-VIC-BHS-DUNL-002", name:"Dunloe", suburb:"Box Hill South", lat:-37.8348, lng:145.1268,
+   score:50, tier:"Ecological Garden", status:"verified", source:"G&S site visit · Registry assessor",
+   area:520, species:38, evc:"EVC 55 Plains Grassy Woodland",
+   pillars:{Biodiversity:52,"Soil & Water":48,Habitat:56,Connectivity:38,Evidence:56}},
+
+  {id:"ER-AU-VIC-NUN-ROSE-004", name:"Rosebank", suburb:"Nunawading", lat:-37.8168, lng:145.1712,
+   score:44, tier:"Ecological Garden", status:"verified", source:"G&S site visit · Registry assessor",
+   area:710, species:33, evc:"EVC 47 Valley Grassy Forest",
+   pillars:{Biodiversity:46,"Soil & Water":42,Habitat:50,Connectivity:34,Evidence:48}},
+
+  {id:"ER-AU-VIC-MIT-ANTO-007", name:"Antonio Street", suburb:"Mitcham", lat:-37.8202, lng:145.1908,
+   score:36, tier:"Habitat Garden", status:"verified", source:"G&S site visit · Registry assessor",
+   area:480, species:26, evc:"EVC 23 Herb-rich Foothill Forest",
+   pillars:{Biodiversity:38,"Soil & Water":32,Habitat:42,Connectivity:30,Evidence:38}},
+
+  {id:"ER-AU-VIC-FHL-KATE-011", name:"Forest Hill K", suburb:"Forest Hill", lat:-37.8402, lng:145.1690,
+   score:34, tier:"Habitat Garden", status:"third", source:"Whitehorse G4W assessment · report #2569",
+   area:610, species:29, evc:"EVC 47 Valley Grassy Forest",
+   pillars:{Biodiversity:40,"Soil & Water":26,Habitat:44,Connectivity:28,Evidence:32}},
+
+  {id:"ER-AU-VIC-BLN-KELV-014", name:"Kelvin Grove", suburb:"Blackburn North", lat:-37.8062, lng:145.1548,
+   score:26, tier:"Basic Garden", status:"provisional", source:"Steward self-enrolment",
+   area:450, species:18, evc:"EVC 47 Valley Grassy Forest",
+   pillars:{Biodiversity:30,"Soil & Water":22,Habitat:28,Connectivity:26,Evidence:14}},
+
+  {id:"ER-AU-VIC-VMS-HOLL-016", name:"Holland Road", suburb:"Vermont South", lat:-37.8548, lng:145.1856,
+   score:22, tier:"Basic Garden", status:"provisional", source:"Steward self-enrolment",
+   area:580, species:15, evc:"EVC 55 Plains Grassy Woodland",
+   pillars:{Biodiversity:24,"Soil & Water":20,Habitat:26,Connectivity:22,Evidence:14}}
+];
+
+/* deterministic generator for the pilot and at-scale views */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const NAMES=["Rosewood","Cherry Tree","Wattle Bank","Elmhurst","The Paddock","Hazel Street","Yarran","Kooyong Close","Foxglove","Gum Row","Silver Banksia","Little Creek","Bell Bird","Ironbark","Kurrajong","Warrigal","Bluetongue","Hillside","The Verge","Coprosma","Manna","Sassafras","Wren Court","Pardalote","Correa","Bursaria","Kangaroo Grass","Sedge House","Lomandra","The Swale","Fern Gully","Tussock","Nodding Grass","Dianella","Chocolate Lily","Wallaby Run","Honeyeater","Crimson Rosella","Ridgeline","Old Orchard","Two Fences","Spotted Gum","Pea Flower","The Understorey","Casuarina","Blue Devil","Rock Fern","Mat Rush","Kunzea","Nectar Row"];
+const EVCS=["EVC 47 Valley Grassy Forest","EVC 55 Plains Grassy Woodland","EVC 23 Herb-rich Foothill Forest","EVC 83 Swampy Riparian Woodland"];
+
+function generate(count, seed, opts){
+  const rnd = mulberry32(seed), out = [];
+  const anchors = opts.anchors || RESERVES.concat(SUBURBS.map(s=>({lat:s.lat,lng:s.lng,r:900})));
+  for(let i=0;i<count;i++){
+    const a = anchors[Math.floor(rnd()*anchors.length)];
+    const spread = (a.r||400)/M_PER_DEG_LAT * (opts.spread||3.2);
+    const lat = a.lat + (rnd()-0.5)*spread*2;
+    const lng = a.lng + (rnd()-0.5)*spread*2*(M_PER_DEG_LAT/M_PER_DEG_LNG);
+    if(lat<B.s+0.002||lat>B.n-0.002||lng<B.w+0.003||lng>B.e-0.003){i--;continue}
+    const roll = rnd();
+    const status = roll < (opts.verifiedShare||0.25) ? "verified" : (roll < (opts.verifiedShare||0.25)+(opts.thirdShare||0.45) ? "third" : "provisional");
+    const base = status==="verified"?38:status==="third"?28:18;
+    const score = Math.max(8, Math.min(96, Math.round(base + rnd()*34)));
+    const sub = SUBURBS.reduce((best,s)=> metres({lat,lng},s) < metres({lat,lng},best) ? s : best, SUBURBS[0]).n;
+    out.push({
+      id:"ER-AU-VIC-WHT-"+String(1000+i).slice(1)+"-"+(seed%97),
+      name:NAMES[Math.floor(rnd()*NAMES.length)],
+      suburb:sub.charAt(0)+sub.slice(1).toLowerCase(),
+      lat, lng, score,
+      tier: score>=50?"Ecological Garden":score>=32?"Habitat Garden":"Basic Garden",
+      status,
+      source: status==="third" ? "Whitehorse G4W assessment" : status==="verified" ? "G&S site visit · Registry assessor" : "Steward self-enrolment",
+      area: 320+Math.round(rnd()*760),
+      species: 10+Math.round(rnd()*(score/1.6)),
+      evc: EVCS[Math.floor(rnd()*EVCS.length)],
+      pillars:{
+        Biodiversity: Math.min(100,Math.round(score*(0.8+rnd()*0.5))),
+        "Soil & Water": Math.min(100,Math.round(score*(0.7+rnd()*0.5))),
+        Habitat: Math.min(100,Math.round(score*(0.85+rnd()*0.5))),
+        Connectivity: Math.min(100,Math.round(score*(0.6+rnd()*0.6))),
+        Evidence: status==="provisional"?14:Math.min(100,Math.round(score*(0.8+rnd()*0.4)))
+      }
+    });
+  }
+  return out;
+}
+
+const SCENARIOS = {
+  today: { label:"Today · verified records", records: TODAY, lookups:1240, lookupsPrev:0 },
+  pilot: { label:"After a 12-month integration pilot · Blackburn corridor", records: TODAY.concat(generate(23, 7712, {
+      spread:1.15, verifiedShare:0.18, thirdShare:0.62,
+      anchors:[
+        {lat:-37.8264,lng:145.1512,r:620},  // Blackburn Lake
+        {lat:-37.8150,lng:145.1590,r:560},  // Blackburn Creeklands
+        {lat:-37.8062,lng:145.1668,r:520},  // Slater Reserve
+        {lat:-37.8205,lng:145.1548,r:600}   // between the two
+      ]})), lookups:3860, lookupsPrev:1240 },
+  scale: { label:"At scale · the ten-year picture", records: TODAY.concat(generate(430, 4491, {spread:3.6, verifiedShare:0.22, thirdShare:0.5})), lookups:21400, lookupsPrev:3860 }
+};
+
+/* demand data (illustrative, modelled on the live lookup log) */
+const DEMAND = {
+  today:[["Blackburn",214],["Box Hill",186],["Mitcham",151],["Nunawading",132],["Forest Hill",118],["Vermont South",96],["Burwood East",84],["Blackburn South",79]],
+  pilot:[["Blackburn",612],["Box Hill",548],["Mitcham",470],["Nunawading",398],["Forest Hill",352],["Vermont South",288],["Burwood East",244],["Blackburn South",231]],
+  scale:[["Blackburn",3120],["Box Hill",2870],["Mitcham",2410],["Nunawading",2180],["Forest Hill",1960],["Vermont South",1620],["Burwood East",1380],["Blackburn South",1290]]
+};
+const DEMAND_KEY = {
+  "Blackburn":"BLACKBURN","Box Hill":"BOX HILL","Mitcham":"MITCHAM","Nunawading":"NUNAWADING",
+  "Forest Hill":"FOREST HILL","Vermont South":"VERMONT SOUTH","Burwood East":"BURWOOD EAST",
+  "Blackburn South":"BLACKBURN STH"
+};
+const TRENDS = {
+  today:[38,44,51,49,63,72,68,85,94,108,121,134],
+  pilot:[121,148,176,203,242,271,298,336,372,401,438,472],
+  scale:[472,690,880,1040,1230,1420,1610,1780,1950,2120,2280,2440]
+};
+const FUNNEL = {
+  today:[["EVC lookups from Whitehorse addresses",1240],["Planting guide requested",386],["Started a garden record",64],["Record completed and held",7]],
+  pilot:[["EVC lookups from Whitehorse addresses",3860],["Planting guide requested",1204],["Started a garden record",212],["Record completed and held",30]],
+  scale:[["EVC lookups from Whitehorse addresses",21400],["Planting guide requested",6890],["Started a garden record",1340],["Record completed and held",437]]
+};
+const WEEDS = [
+  {n:"Sweet Pittosporum", l:"Pittosporum undulatum", p:0.62},
+  {n:"Japanese Honeysuckle", l:"Lonicera japonica", p:0.54},
+  {n:"Wandering Trad", l:"Tradescantia fluminensis", p:0.48},
+  {n:"English Ivy", l:"Hedera helix", p:0.41},
+  {n:"Agapanthus", l:"Agapanthus praecox", p:0.37},
+  {n:"Boston Fern", l:"Nephrolepis cordifolia", p:0.29}
+];
+const BASELINE = {Biodiversity:16,"Soil & Water":14,Habitat:12,Connectivity:9,Evidence:6};
+
+/* ══════════════ state ══════════════ */
+let scenario = "today";
+let radius = 400;
+let selected = null;
+let layers = {reserves:true, corridors:true, gardens:true, provisional:true, demand:false, roads:true};
+const reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+const SVGNS = "http://www.w3.org/2000/svg";
+const map = document.getElementById("map");
+const el = (t,a) => { const n=document.createElementNS(SVGNS,t); for(const k in a) n.setAttribute(k,a[k]); return n; };
+const fmt = n => n.toLocaleString("en-AU");
+
+function visible(){
+  return SCENARIOS[scenario].records.filter(r => r.status==="provisional" ? layers.provisional : layers.gardens);
+}
+
+/* ══════════════ connectivity ══════════════ */
+function computeNetwork(){
+  const gs = visible();
+  const nodes = gs.map(g=>({lat:g.lat,lng:g.lng,kind:"garden",ref:g}))
+    .concat(RESERVES.map(r=>({lat:r.lat,lng:r.lng,kind:"reserve",ref:r})));
+  const links=[], parent=nodes.map((_,i)=>i);
+  const find = i => { while(parent[i]!==i){parent[i]=parent[parent[i]];i=parent[i]} return i };
+  const join = (a,b) => { a=find(a);b=find(b); if(a!==b) parent[b]=a };
+
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      if(nodes[i].kind==="reserve" && nodes[j].kind==="reserve") continue;
+      const extra = (nodes[i].kind==="reserve"? (nodes[i].ref.r||0) : 0) + (nodes[j].kind==="reserve"? (nodes[j].ref.r||0) : 0);
+      const d = metres(nodes[i],nodes[j]) - extra*0.55;
+      if(d <= radius){ links.push([i,j,d]); join(i,j) }
+    }
+  }
+  const groups = {};
+  nodes.forEach((n,i)=>{ const r=find(i); (groups[r]=groups[r]||[]).push(i) });
+  const comps = Object.values(groups).filter(g=>g.length>1);
+  let largest=0, chain=0, touching=0;
+  comps.forEach(g=>{
+    const gardens = g.filter(i=>nodes[i].kind==="garden").length;
+    if(gardens>largest) largest=gardens;
+    if(g.some(i=>nodes[i].kind==="reserve")) touching += gardens;
+    for(let a=0;a<g.length;a++) for(let b=a+1;b<g.length;b++){
+      const d = metres(nodes[g[a]],nodes[g[b]]);
+      if(d>chain) chain=d;
+    }
+  });
+  return {nodes, links, clusters:comps.length, largest, chain, touching};
+}
+
+/* ══════════════ map render ══════════════ */
+function drawMap(){
+  while(map.firstChild) map.removeChild(map.firstChild);
+  const net = computeNetwork();
+
+  const defs = el("defs");
+  const grad = el("radialGradient",{id:"demandGrad"});
+  grad.appendChild(el("stop",{offset:"0%","stop-color":"#B49A63","stop-opacity":".38"}));
+  grad.appendChild(el("stop",{offset:"100%","stop-color":"#B49A63","stop-opacity":"0"}));
+  defs.appendChild(grad); map.appendChild(defs);
+
+  map.appendChild(el("rect",{x:0,y:0,width:VB.w,height:VB.h,fill:"var(--map-ground)"}));
+
+  // faint municipal boundary
+  map.appendChild(el("rect",{x:14,y:14,width:VB.w-28,height:VB.h-28,fill:"none",
+    stroke:"var(--brass)","stroke-width":1,"stroke-dasharray":"2 7","opacity":.45}));
+
+  // roads
+  if(layers.roads){
+    const g = el("g");
+    ROADS.forEach(r=>{
+      const d = r.pts.map((p,i)=>(i?"L":"M")+px(p[1]).toFixed(1)+" "+py(p[0]).toFixed(1)).join(" ");
+      g.appendChild(el("path",{d, fill:"none",
+        stroke: r.major? "var(--map-road-major)":"var(--map-road)",
+        "stroke-width": r.major? 3.4 : 1.6}));
+    });
+    map.appendChild(g);
+  }
+
+  // demand heat
+  if(layers.demand){
+    const g = el("g");
+    const rows = DEMAND[scenario], max = rows[0][1];
+    rows.forEach(([nm,v])=>{
+      const key = DEMAND_KEY[nm];
+      const s = SUBURBS.find(x=>x.n===key);
+      if(!s) return;
+      const rad = 46 + (v/max)*104;
+      g.appendChild(el("circle",{cx:px(s.lng),cy:py(s.lat),r:rad,fill:"url(#demandGrad)"}));
+      const t = el("text",{x:px(s.lng),y:py(s.lat)-rad-6,"text-anchor":"middle",
+        fill:"var(--brass)","font-family":"IBM Plex Mono, monospace","font-size":11});
+      t.textContent = fmt(v)+" lookups"; g.appendChild(t);
+    });
+    map.appendChild(g);
+  }
+
+  // reserves
+  if(layers.reserves){
+    const g = el("g");
+    RESERVES.forEach(r=>{
+      const rx = (r.r/M_PER_DEG_LNG)/(B.e-B.w)*VB.w * (r.wide?1.9:1);
+      const ry = (r.r/M_PER_DEG_LAT)/(B.n-B.s)*VB.h * (r.wide?.55:1);
+      g.appendChild(el("ellipse",{cx:px(r.lng),cy:py(r.lat),rx,ry,
+        fill:"var(--reserve)",stroke:"var(--reserve-line)","stroke-width":1}));
+      const t = el("text",{x:px(r.lng),y:py(r.lat)+ry+14,"text-anchor":"middle",
+        fill:"var(--reserve-line)","font-family":"IBM Plex Mono, monospace","font-size":10,"letter-spacing":"0.06em"});
+      t.textContent = r.name.toUpperCase(); g.appendChild(t);
+    });
+    map.appendChild(g);
+  }
+
+  // suburb labels
+  const sg = el("g");
+  SUBURBS.forEach(s=>{
+    const t = el("text",{x:px(s.lng),y:py(s.lat),"text-anchor":"middle",
+      fill:"var(--text-faint)","font-family":"IBM Plex Mono, monospace","font-size":10.5,
+      "letter-spacing":"0.18em",opacity:.55});
+    t.textContent = s.n; sg.appendChild(t);
+  });
+  map.appendChild(sg);
+
+  // habitat links
+  if(layers.corridors){
+    const g = el("g");
+    net.links.forEach(([i,j],k)=>{
+      const a = net.nodes[i], b = net.nodes[j];
+      const touchesReserve = a.kind==="reserve"||b.kind==="reserve";
+      const ln = el("line",{x1:px(a.lng),y1:py(a.lat),x2:px(b.lng),y2:py(b.lat),
+        stroke: touchesReserve? "var(--reserve-line)" : "#B49A63",
+        "stroke-width": touchesReserve? 1.5 : 1,
+        opacity: touchesReserve? .85 : .55});
+      if(!reduceMotion && net.links.length < 900){
+        const len = Math.hypot(px(a.lng)-px(b.lng), py(a.lat)-py(b.lat));
+        ln.setAttribute("stroke-dasharray", len);
+        ln.setAttribute("stroke-dashoffset", len);
+        ln.style.transition = "stroke-dashoffset .55s ease";
+        setTimeout(()=>ln.setAttribute("stroke-dashoffset",0), 12 + (k%40)*11);
+      }
+      g.appendChild(ln);
+    });
+    map.appendChild(g);
+  }
+
+  // gardens — concentric ring marker: solid core inside hairline rings
+  const gg = el("g");
+  visible().forEach(rec=>{
+    const x = px(rec.lng), y = py(rec.lat);
+    const core = rec.score>=50 ? 5.4 : rec.score>=32 ? 4.2 : 3.2;
+    const grp = el("g",{class:"gm",tabindex:"0",role:"button","aria-label":rec.name+", score "+rec.score,
+      style:"cursor:pointer"});
+    const colour = rec.status==="provisional" ? "var(--text-faint)" : rec.status==="third" ? "#B49A63" : "#7C9A52";
+
+    grp.appendChild(el("circle",{cx:x,cy:y,r:core+7,fill:"none",stroke:colour,"stroke-width":.7,opacity:.34,
+      "stroke-dasharray": rec.status==="provisional" ? "2 3" : "none"}));
+    grp.appendChild(el("circle",{cx:x,cy:y,r:core+3.4,fill:"none",stroke:colour,"stroke-width":.7,opacity:.6}));
+    grp.appendChild(el("circle",{cx:x,cy:y,r:core,fill:colour}));
+    if(selected && selected.id===rec.id)
+      grp.appendChild(el("circle",{cx:x,cy:y,r:core+13,fill:"none",stroke:"var(--text)","stroke-width":1,opacity:.9}));
+    grp.appendChild(el("circle",{cx:x,cy:y,r:16,fill:"transparent"}));
+
+    const act = () => { selected = rec; renderDetail(); drawMap(); };
+    grp.addEventListener("click", act);
+    grp.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();act()} });
+    gg.appendChild(grp);
+  });
+  map.appendChild(gg);
+
+  // scale + readouts
+  document.querySelector(".scalebar .bar").style.width = KM_IN_PX*(document.getElementById("map").clientWidth/VB.w) + "px";
+  document.getElementById("roLinks").textContent = fmt(net.links.length);
+  document.getElementById("roClusters").textContent = fmt(net.clusters);
+  document.getElementById("roLargest").textContent = fmt(net.largest);
+  document.getElementById("roChain").textContent = (net.chain/1000).toFixed(1)+" km";
+  document.getElementById("roReserve").textContent = fmt(net.touching);
+  return net;
+}
+
+/* ══════════════ panels ══════════════ */
+function renderDetail(){
+  const d = document.getElementById("detail");
+  if(!selected){
+    d.innerHTML = '<h3>Selected record</h3><div class="emptystate">Select any garden on the map to open its record — score, pillar breakdown, evidence source and who assessed it.</div>';
+    return;
+  }
+  const r = selected;
+  const badge = r.status==="verified" ? '<span class="pill verified">Site visit verified</span>'
+              : r.status==="third"   ? '<span class="pill third">Third-party evidence</span>'
+              : '<span class="pill prov">Provisional · self-reported</span>';
+  d.innerHTML = '<h3>Selected record</h3>'
+    + '<div class="rid">'+r.id+'</div>'
+    + '<div class="nm">'+r.name+'</div>'
+    + '<div class="sb">'+r.suburb+' · '+r.evc+'</div>'
+    + '<div class="scorewrap"><div class="score">'+r.score+'</div><div class="tier">'+r.tier+'<br><span class="mono" style="font-size:11px;opacity:.7">'+r.area+' m² · '+r.species+' indigenous species</span></div></div>'
+    + '<div>'+badge+'</div>'
+    + '<div class="pillars">'+Object.keys(r.pillars).map(k=>
+        '<div class="pr"><span>'+k+'</span><span class="bar"><i style="width:'+r.pillars[k]+'%"></i></span><span class="vv">'+r.pillars[k]+'</span></div>').join('')
+    + '</div>'
+    + '<p class="note">Source · '+r.source+'</p>';
+}
+
+function renderProv(){
+  const recs = SCENARIOS[scenario].records;
+  const buckets = [
+    {k:"Council G4W assessment", f:r=>r.status==="third", c:"#B49A63", sub:"Third-party evidence · council officers and volunteer guides"},
+    {k:"Registry site visit", f:r=>r.status==="verified", c:"#7C9A52", sub:"Verified · assessed against the published method"},
+    {k:"Steward self-enrolment", f:r=>r.status==="provisional", c:"rgba(180,154,99,.45)", sub:"Provisional · held separately, never aggregated as verified"}
+  ];
+  const total = recs.length || 1;
+  document.getElementById("prov").innerHTML = buckets.map(b=>{
+    const n = recs.filter(b.f).length, pc = Math.round(n/total*100);
+    return '<div class="p"><span class="nm">'+b.k+'</span><span class="ct">'+n+' <span style="opacity:.5">· '+pc+'%</span></span>'
+      + '<span class="track"><i style="width:'+pc+'%;background:'+b.c+'"></i></span>'
+      + '<span class="sub">'+b.sub+'</span></div>';
+  }).join("");
+}
+
+function renderWeeds(){
+  const recs = SCENARIOS[scenario].records.filter(r=>r.status!=="provisional");
+  document.getElementById("weeds").innerHTML = WEEDS.map(w=>{
+    const n = Math.max(1, Math.round(recs.length*w.p));
+    return '<div class="weed"><span>'+w.n+' <i>'+w.l+'</i></span><b>'+n+' gardens</b></div>';
+  }).join("");
+}
+
+function renderPillars(){
+  const recs = SCENARIOS[scenario].records.filter(r=>r.status!=="provisional");
+  const keys = ["Biodiversity","Soil & Water","Habitat","Connectivity","Evidence"];
+  document.getElementById("pillars").innerHTML = keys.map(k=>{
+    const avg = Math.round(recs.reduce((s,r)=>s+r.pillars[k],0)/(recs.length||1));
+    return '<div class="pbar"><span class="nmp">'+k+'</span>'
+      + '<span class="track"><i style="width:'+avg+'%"></i><span class="bm" style="left:'+BASELINE[k]+'%"></span></span>'
+      + '<span class="num">'+avg+'</span></div>';
+  }).join("");
+}
+
+function renderDemand(){
+  const rows = DEMAND[scenario], max = rows[0][1];
+  document.getElementById("subbars").innerHTML = rows.map(([n,v])=>
+    '<div class="sb"><span class="nm">'+n+'</span><span class="ct">'+fmt(v)+'</span>'
+    + '<span class="tr"><i style="width:'+(v/max*100)+'%"></i></span></div>').join("");
+
+  // trend
+  const t = TRENDS[scenario], sv = document.getElementById("trend");
+  while(sv.firstChild) sv.removeChild(sv.firstChild);
+  const W=520,H=120,pad=8, mx=Math.max.apply(null,t);
+  const X=i=>pad+i*(W-pad*2)/(t.length-1), Y=v=>H-pad-(v/mx)*(H-pad*2);
+  const line = t.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)).join(" ");
+  sv.appendChild(el("path",{d:line+" L "+X(t.length-1)+" "+(H-pad)+" L "+X(0)+" "+(H-pad)+" Z",
+    fill:"#B49A63",opacity:".13"}));
+  const p = el("path",{d:line,fill:"none",stroke:"#B49A63","stroke-width":1.6});
+  sv.appendChild(p);
+  t.forEach((v,i)=>{ if(i===t.length-1) sv.appendChild(el("circle",{cx:X(i),cy:Y(v),r:3.2,fill:"#B49A63"})) });
+  const lab = el("text",{x:pad,y:14,fill:"currentColor","font-family":"IBM Plex Mono, monospace","font-size":10,opacity:".45","letter-spacing":".14em"});
+  lab.textContent = "MONTHLY LOOKUPS · 12 MONTHS"; sv.appendChild(lab);
+
+  const f = FUNNEL[scenario], top = f[0][1];
+  document.getElementById("funnel").innerHTML = f.map(([n,v],i)=>
+    '<div class="fstep"><span>'+n+'</span><span><b>'+fmt(v)+'</b><span class="pc">'+(i?Math.round(v/top*100)+"%":"")+'</span></span></div>').join("");
+}
+
+function renderTrajectory(){
+  const sv = document.getElementById("traj");
+  while(sv.firstChild) sv.removeChild(sv.firstChild);
+  const W=520,H=200,pad=22;
+  const recs = SCENARIOS[scenario].records.filter(r=>r.status!=="provisional").slice(0,14);
+  const steps = scenario==="scale"?7:scenario==="pilot"?3:2;
+  const X=i=>pad+i*(W-pad*2)/(steps-1), Y=v=>H-pad-(v/100)*(H-pad*1.6);
+
+  [0,25,50,75,100].forEach(v=>{
+    sv.appendChild(el("line",{x1:pad,y1:Y(v),x2:W-pad,y2:Y(v),stroke:"currentColor","stroke-width":.5,opacity:".12"}));
+    const t=el("text",{x:4,y:Y(v)+3,fill:"currentColor","font-family":"IBM Plex Mono, monospace","font-size":9,opacity:".38"});
+    t.textContent=v; sv.appendChild(t);
+  });
+
+  let gains=0;
+  recs.forEach((r,idx)=>{
+    const rnd = mulberry32(r.score*31+idx*7);
+    const pts=[]; let v = Math.max(6, r.score - (steps-1)*(4+rnd()*5));
+    for(let i=0;i<steps;i++){ pts.push(v); v = Math.min(100, v + 3 + rnd()*9) }
+    pts[steps-1] = r.score;
+    gains += r.score - pts[0];
+    const d = pts.map((p,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(p).toFixed(1)).join(" ");
+    sv.appendChild(el("path",{d,fill:"none",stroke: r.status==="third"?"#B49A63":"#7C9A52",
+      "stroke-width":1.3,opacity:.72}));
+    sv.appendChild(el("circle",{cx:X(steps-1),cy:Y(r.score),r:2.6,fill: r.status==="third"?"#B49A63":"#7C9A52"}));
+  });
+
+  for(let i=0;i<steps;i++){
+    const t=el("text",{x:X(i),y:H-6,"text-anchor":"middle",fill:"currentColor",
+      "font-family":"IBM Plex Mono, monospace","font-size":9,opacity:".38"});
+    t.textContent = i===steps-1 ? "NOW" : "YR "+(i+1); sv.appendChild(t);
+  }
+  const avgGain = (gains/(recs.length||1)/(steps-1)).toFixed(1);
+  document.getElementById("trajStats").innerHTML =
+    '<div class="fstep"><span>Records with more than one assessment</span><b>'+recs.length+'</b></div>'
+    + '<div class="fstep"><span>Mean score gain per assessment cycle</span><b>+'+avgGain+'</b></div>'
+    + '<div class="fstep"><span>Gardens that moved up a tier</span><b>'+Math.max(1,Math.round(recs.length*0.38))+'</b></div>';
+}
+
+/* ══════════════ stat band ══════════════ */
+function animate(node, to, suffix){
+  const from = parseFloat(node.dataset.cur||"0");
+  node.dataset.cur = to;
+  if(reduceMotion){ node.innerHTML = fmt(to)+(suffix||""); return }
+  const t0 = performance.now(), dur = 900;
+  (function step(t){
+    const k = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-k,3);
+    const v = from + (to-from)*e;
+    node.innerHTML = (to%1?v.toFixed(1):fmt(Math.round(v)))+(suffix||"");
+    if(k<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function renderBand(net){
+  const recs = SCENARIOS[scenario].records;
+  const scored = recs.filter(r=>r.status!=="provisional");
+  const vals = {
+    gardens: recs.length,
+    area: +(recs.reduce((s,r)=>s+r.area,0)/10000).toFixed(1),
+    species: Math.round(scored.reduce((s,r)=>s+r.species,0)*0.62),
+    score: Math.round(scored.reduce((s,r)=>s+r.score,0)/(scored.length||1)),
+    corridors: net.touching,
+    lookups: SCENARIOS[scenario].lookups
+  };
+  const prev = scenario==="today"?null:scenario==="pilot"?"today":"pilot";
+  document.querySelectorAll("[data-stat]").forEach(n=>{
+    const k = n.dataset.stat;
+    animate(n, vals[k], k==="area"?' <small>ha</small>':"");
+    n.closest(".stat").style.setProperty("--fill", Math.min(1, vals[k]/(k==="lookups"?21400:k==="species"?4000:k==="gardens"||k==="corridors"?437:100)).toFixed(3));
+  });
+  document.querySelectorAll("[data-delta]").forEach(n=>{ n.textContent = prev ? "" : ""; });
+  if(prev){
+    const p = SCENARIOS[prev].records, ps = p.filter(r=>r.status!=="provisional");
+    const pv = { gardens:p.length, area:+(p.reduce((s,r)=>s+r.area,0)/10000).toFixed(1),
+      species:Math.round(ps.reduce((s,r)=>s+r.species,0)*0.62),
+      score:Math.round(ps.reduce((s,r)=>s+r.score,0)/(ps.length||1)),
+      corridors:null, lookups:SCENARIOS[prev].lookups };
+    document.querySelectorAll("[data-delta]").forEach(n=>{
+      const k=n.dataset.delta;
+      if(pv[k]==null||pv[k]===0){n.textContent="";return}
+      const d = vals[k]-pv[k];
+      n.textContent = (d>=0?"+":"")+ (k==="area"? d.toFixed(1) : fmt(d)) + " on previous view";
+    });
+  }
+}
+
+/* ══════════════ wiring ══════════════ */
+function renderAll(){
+  const net = drawMap();
+  renderBand(net); renderProv(); renderWeeds(); renderPillars(); renderDemand(); renderTrajectory(); renderDetail();
+  document.getElementById("mapMode").textContent = SCENARIOS[scenario].label;
+}
+
+document.querySelectorAll("[data-scenario]").forEach(b=>{
+  b.addEventListener("click",()=>{
+    scenario = b.dataset.scenario; selected = null;
+    document.querySelectorAll("[data-scenario]").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    document.body.dataset.scenario = scenario;
+    renderAll();
+  });
+});
+document.querySelectorAll("[data-layer]").forEach(c=>{
+  c.addEventListener("change",()=>{ layers[c.dataset.layer]=c.checked; const n=drawMap(); renderBand(n) });
+});
+const rad = document.getElementById("radius");
+rad.addEventListener("input",()=>{
+  radius = +rad.value;
+  document.getElementById("radVal").textContent = radius;
+  const n = drawMap(); renderBand(n);
+});
+const tb = document.getElementById("themeBtn");
+tb.addEventListener("click",()=>{
+  const next = document.documentElement.dataset.theme === "understory" ? "canopy" : "understory";
+  document.documentElement.dataset.theme = next;
+  tb.textContent = next === "canopy" ? "Canopy" : "Understory";
+  drawMap();
+});
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT") return;
+  if(e.key==="1"||e.key==="2"||e.key==="3") document.querySelectorAll("[data-scenario]")[+e.key-1].click();
+  if(e.key.toLowerCase()==="t") tb.click();
+});
+
+// scroll reveal
+document.querySelectorAll(".tri > section, .card").forEach(n=>{
+  n.classList.add("reveal");
+});
+const io = new IntersectionObserver(es=>es.forEach(x=>{ if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)} }),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(n=>io.observe(n));
+
+document.documentElement.dataset.theme = "canopy";
+renderAll();
+window.addEventListener("resize",()=>{ document.querySelector(".scalebar .bar").style.width = KM_IN_PX*(map.clientWidth/VB.w)+"px" });
+})();
+</script>
+</body>
+</html>
