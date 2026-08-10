@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Aug 2026",
-    "total_gardens": 18,
+    "total_gardens": 19,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0",
@@ -484,10 +484,55 @@
       "points_available": 51,
       "cluster": {
         "name": "Boroondara",
-        "gardens": 6,
+        "gardens": 7,
         "area_ha": 0.68,
         "status": "Forming"
-      }
+      },
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-BOR-WIN-002"
+      ]
+    },
+    {
+      "garden_id": "ER-AU-VIC-BOR-WIN-002",
+      "garden_name": "88 Windella",
+      "typology": "Ecological Contemporary Garden",
+      "type": "Ecological Home Garden",
+      "suburb": "Kew East",
+      "state": "VIC",
+      "council": "Boroondara City Council",
+      "ward": "Maranoa",
+      "lga": "Boroondara",
+      "score": 29,
+      "rating": {
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 12
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Aug 2026",
+      "badge_count": 2,
+      "badges": [
+        "five_layers",
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/windella88/index.html",
+      "data_file": "data/windella88.json",
+      "registry_role": "Cluster Node",
+      "trajectory": "Installed",
+      "points_available": 71,
+      "cluster": {
+        "name": "Boroondara",
+        "gardens": 7,
+        "area_ha": 0.68,
+        "status": "Forming"
+      },
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-BOR-WIN-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-WHI-YRK-001",

@@ -1,0 +1,230 @@
+{
+  "garden_id": "ER-AU-VIC-BOR-WIN-002",
+  "garden_name": "88 Windella",
+  "garden_type": "Ecological Home Garden",
+  "typology": "Ecological Contemporary Garden",
+  "registry_role": "Cluster Node",
+  "trajectory": "Installed",
+  "suburb": "Kew East",
+  "state": "VIC",
+  "council": "Boroondara City Council",
+  "ward": "Maranoa",
+  "lga": "Boroondara",
+  "assessment_date": "Aug 2026",
+  "baseline_date": "Dec 2025",
+  "stewards": "Georgia and Dos",
+  "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": null,
+  "area_sqm": 0,
+  "target_score": 50,
+  "description": "A layered ecological contemporary planting built around Georgia and Dos' palette of silvers, purples, soft greens and smoky blues. Olive, Jacaranda and October Glory Maple form the upper canopy, while Westringia, Rosemary, Euphorbia, Echium and Smokebush anchor the mid structure with year-round form. Through the middle layers, Miscanthus, Gaura, Salvia and Limonium bring movement and extended seasonal colour. Native Violet, Dichondra and Pratia stitch together a living ground layer that protects soil and holds moisture. Designed by Gardener & Son to feel relaxed, immersive and full of seasonal life — a planting that becomes more resilient and ecologically connected as it matures.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 5,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 20,
+    "indigenous_dominant": false,
+    "structural_layers_current": 5,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 20,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Moderate",
+    "species_list": [
+      "Viola hederacea",
+      "Dichondra repens",
+      "Pratia puberula",
+      "Pycnosorus globosus",
+      "Westringia fruticosa"
+    ],
+    "species_proposed": [
+      "Viola hederacea",
+      "Dichondra repens",
+      "Pratia puberula",
+      "Pycnosorus globosus",
+      "Westringia fruticosa"
+    ],
+    "all_species": {
+      "trees": [
+        "Olea europaea",
+        "Jacaranda mimosifolia",
+        "Acer rubrum 'October Glory'",
+        "Gleditsia triacanthos"
+      ],
+      "shrubs": [
+        "Cotinus coggygria",
+        "Westringia fruticosa",
+        "Salvia rosmarinus",
+        "Euphorbia sp.",
+        "Echium sp.",
+        "Buddleja davidii",
+        "Tetrapanax papyrifer",
+        "Lavandula sp."
+      ],
+      "perennials_and_grasses": [
+        "Miscanthus sinensis",
+        "Calamagrostis x acutiflora 'Karl Foerster'",
+        "Anemone hupehensis",
+        "Salvia sp.",
+        "Persicaria sp.",
+        "Gaura lindheimeri",
+        "Limonium perezii",
+        "Eryngium sp.",
+        "Knautia macedonica",
+        "Sedum sp.",
+        "Carex sp.",
+        "Pycnosorus globosus",
+        "Helichrysum petiolare",
+        "Asparagus aethiopicus"
+      ],
+      "groundcovers_and_climbers": [
+        "Viola hederacea",
+        "Dichondra repens",
+        "Pratia puberula",
+        "Stachys byzantina",
+        "Parthenocissus tricuspidata",
+        "Mentha sp.",
+        "Fragaria sp."
+      ]
+    }
+  },
+  "soil_water": {
+    "soil_health_score": 2,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 1,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 75,
+    "mulch_type": "Arborist mulch"
+  },
+  "habitat": {
+    "habitat_nodes": 0,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Five-layer ecological contemporary planting — trees, shrubs, mid-layer perennials and grasses, groundcovers and climbers — integrated across the full garden",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [
+      {
+        "garden_id": "ER-AU-VIC-BOR-WIN-001",
+        "garden_name": "Windella",
+        "distance_m": 300,
+        "verified": true
+      }
+    ],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0,
+    "cluster_name": "Boroondara",
+    "cluster": {
+      "name": "Boroondara",
+      "gardens": 7,
+      "area_ha": 0.68,
+      "status": "Forming"
+    },
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Garden installed",
+      "date": "Dec 2025",
+      "complete": true
+    },
+    {
+      "title": "Registry record created",
+      "date": "Aug 2026",
+      "complete": true
+    },
+    {
+      "title": "Ecological baseline assessment",
+      "date": "TBC",
+      "complete": false
+    },
+    {
+      "title": "First fauna sighting recorded",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Garden installed — Georgia & Dos' ecological contemporary planting",
+      "date": "Dec 2025",
+      "type": "Installation",
+      "category": "planting",
+      "notes": "Three-day installation in December 2025. Five structural layers planted across the full garden: canopy trees (Olive, Jacaranda, October Glory Maple, Gleditsia), an evergreen shrub layer (Westringia, Rosemary, Echium, Euphorbia, Smokebush), mid-level perennials and grasses (Miscanthus, Karl Foerster, Gaura, Salvia, Limonium, Anemone, Billy Buttons), and a living ground layer of Native Violet, Dichondra and Pratia anchored by Stachys. Arborist mulch applied throughout. Garden now establishing."
+    },
+    {
+      "title": "Registry record created",
+      "date": "Aug 2026",
+      "type": "Registry",
+      "category": "admin",
+      "notes": "Garden enrolled in the Ecological Registry. Species list compiled from installation diary and Gardener & Son design records. Assessment based on planted species counts and G&S site knowledge."
+    }
+  ],
+  "notes": "Ecological contemporary planting designed for Georgia and Dos. Installation diary (Dec 2025) confirmed 5 structural layers and 33 species across the full garden, including 5 Australian native species. Area not yet measured — update area_sqm once surveyed.",
+  "rating": {
+    "current": "Habitat Garden",
+    "next": "Ecological Garden",
+    "points_to_next": 12
+  },
+  "upgrade_potential": 71,
+  "points_available": 71,
+  "yield": {
+    "eligible": false,
+    "status": "Not yet eligible — minimum score 40 required",
+    "estimated_annual": 0,
+    "potential_annual": 0,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": [
+      {
+        "action": "Add water feature",
+        "annual_yield_increase": 35,
+        "notes": "Significant habitat improvement and score lift"
+      },
+      {
+        "action": "Add 15 more indigenous species (to 20)",
+        "annual_yield_increase": 30
+      },
+      {
+        "action": "Install seasonal moisture basin",
+        "annual_yield_increase": 25
+      },
+      {
+        "action": "Add rock refuge zones and embedded logs",
+        "annual_yield_increase": 20
+      },
+      {
+        "action": "Install nest boxes",
+        "annual_yield_increase": 15
+      }
+    ]
+  }
+}
