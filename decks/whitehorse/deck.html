@@ -467,6 +467,8 @@ body.presenter #presenter{display:grid}
   <button id="nprev" type="button" aria-label="Previous slide">←</button>
   <span id="ncount">01 / 11</span>
   <button id="nnext" type="button" aria-label="Next slide">→</button>
+  <button id="nnotes" type="button" aria-label="Speaker notes">Notes</button>
+  <button id="npres" type="button" aria-label="Presenter mode">Present</button>
   <button id="nfull" type="button" aria-label="Fullscreen">Full</button>
 </div>
 <div id="help">← → move · F fullscreen · Z fill · S notes · P presenter</div>
@@ -475,7 +477,8 @@ body.presenter #presenter{display:grid}
 <div id="presenter">
   <div class="left">
     <div id="pbar"><span id="pdot"></span><span id="pstatus">Display window closed</span>
-      <button id="pbtn" type="button">Open display</button></div>
+      <button id="pbtn" type="button">Open display</button>
+      <button id="pexit" type="button">Exit</button></div>
     <div class="pmeta"><span id="pnum">01 / 11</span></div>
     <div id="pv-wrap"><iframe id="pv" title="Current slide"></iframe></div>
     <div id="timer">00:00</div>
@@ -485,7 +488,7 @@ body.presenter #presenter{display:grid}
     <div id="ptitle"></div>
     <div id="pnote"></div>
     <div id="pnext"><strong>Next</strong><div id="pnext-title"></div><span id="pnext-body"></span></div>
-    <div id="pkeys">← → move · R reset timer · P reopen display</div>
+    <div id="pkeys">← → move · R reset timer · P reopen display · Esc exit</div>
   </div>
 </div>
 
@@ -738,7 +741,9 @@ function buildAerial(opts){
     if (!presenter) return;
     var live = displayLive();
     document.getElementById('pdot').classList.toggle('live', live);
-    document.getElementById('pstatus').textContent = live ? 'Display window open' : 'Display window closed';
+    document.getElementById('pstatus').textContent =
+      live ? 'Display window open'
+           : (popupBlocked ? 'Pop-up blocked — allow pop-ups, then Open display' : 'Display window closed');
     document.getElementById('pbtn').textContent = live ? 'Reopen display' : 'Open display';
   }
 
@@ -797,20 +802,22 @@ function buildAerial(opts){
       String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
   }, 500);
 
+  var popupBlocked = false;
   function openDisplay(){
-    displayWin = window.open(location.pathname + location.search + '#display', 'gs-display');
-    if (!displayWin) {
-      alert('Your browser blocked the display window.\n\nAllow pop-ups for this page, then press P again.');
-      return false;
+    try {
+      displayWin = window.open(location.pathname + location.search + '#display', 'gs-display');
+    } catch(e){ displayWin = null; }
+    popupBlocked = !displayWin;
+    if (displayWin) {
+      try { displayWin.focus(); } catch(e){}
+      setTimeout(function(){ syncStatus(); broadcast(); }, 900);
     }
-    try { displayWin.focus(); } catch(e){}
-    setTimeout(function(){ syncStatus(); broadcast(); }, 900);
-    return true;
+    syncStatus();
+    return !popupBlocked;
   }
 
   function openPresenter(){
-    if (isDisplay) return;
-    if (!openDisplay()) return;
+    if (isDisplay || presenter) return;
     presenter = true; t0 = Date.now();
     document.body.classList.add('presenter');
     var pv = document.getElementById('pv');
@@ -818,11 +825,27 @@ function buildAerial(opts){
     pv.onload = function(){ render(); };
     render();
     setInterval(syncStatus, 2000);
+    openDisplay();
+  }
+
+  function exitPresenter(){
+    presenter = false;
+    document.body.classList.remove('presenter');
+    try { if (displayWin && !displayWin.closed) displayWin.close(); } catch(e){}
+    fit(); render();
   }
 
   document.addEventListener('DOMContentLoaded', function(){});
   var btn = document.getElementById('pbtn');
   if (btn) btn.addEventListener('click', function(){ openDisplay(); });
+  var xbtn = document.getElementById('pexit');
+  if (xbtn) xbtn.addEventListener('click', exitPresenter);
+  document.getElementById('nnotes').addEventListener('click', function(e){
+    e.stopPropagation(); document.getElementById('notes').classList.toggle('on');
+  });
+  document.getElementById('npres').addEventListener('click', function(e){
+    e.stopPropagation(); openPresenter();
+  });
 
   addEventListener('keydown', function(e){
     var k = e.key;
@@ -835,6 +858,7 @@ function buildAerial(opts){
     else if (k === 'r' || k === 'R'){ if (presenter) t0 = Date.now(); }
     else if (k === 'f' || k === 'F'){ fullscreen(); }
     else if (k === 'z' || k === 'Z'){ fillMode = fillMode === 'contain' ? 'cover' : 'contain'; fit(); }
+    else if (k === 'Escape' && presenter){ exitPresenter(); }
   });
 
   addEventListener('click', function(e){
