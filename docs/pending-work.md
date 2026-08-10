@@ -254,6 +254,57 @@ Follow-ups:
 
 The trajectory recorded from baseline 16 Jun 2026 → post-intervention score will be the registry's first independently-legible before/after evidence for a non-G&S-install garden. Strategic value to the Boroondara council pitch and to AfN-grade methodology.
 
+### Master plants-EVC database — needs fmeg access to build
+
+All G&S products (fmeg, Ecological Registry, Plants of Place, future design workspace) should consume a single authoritative plant database with EVC associations. Currently no such database exists in a usable form.
+
+**State of existing data (audited Aug 2026):**
+- Notion Plants DB (`collection://17b8bf0f-89b5-4c8c-84ba-2e3f57b911ba`): 1,133 plants total, 241 Australian natives, life-form (layer) data partially populated — but only **1 plant** has the `♻️ EVCs` relation set. The field exists in the schema but was never populated. Notion is not the source of truth for EVC associations.
+- `data/species.json` in reg repo: 167 species, layer tagged, no EVC field at all.
+- fmeg: already shows plants per EVC in production — the EVC-plant data **lives in the fmeg codebase**. This is the seed.
+
+**EVCs to cover (priority order):**
+1. EVC 175 — Grassy Woodland, Victorian Volcanic Plain — 13 registry gardens, dominant
+2. EVC 55 — Plains Grassy Woodland — 1 registry garden
+3. EVC 38 — Wet Sclerophyll Forest — 1 registry garden
+4. Additional EVCs as fmeg coverage reveals them
+
+**Agreed schema — both directions:**
+```json
+{
+  "metadata": { "version": "1.0", "custodian": "Gardener & Son", "classification_system": "EVC-Vic" },
+  "evcs": [
+    { "code": "EVC175", "name": "Grassy Woodland", "bioregion": "Victorian Volcanic Plain", "bioregion_code": "VVP", "gs_curated": true }
+  ],
+  "species": [
+    {
+      "botanical_name": "Kennedia prostrata",
+      "common_name": "Running Postman",
+      "family": "Fabaceae",
+      "indigenous": true,
+      "layer": "groundcover",
+      "evcs": ["EVC175", "EVC55"],
+      "conditions": ["Well-Drained Soil", "Full Sun"],
+      "bloom_colour": ["Red"],
+      "bloom_time": ["Winter to Spring"],
+      "gs_recommended": true
+    }
+  ]
+}
+```
+Both directions: each species has an `evcs` array (query: "what EVCs does this plant suit?") and the `evcs` array is a lookup table (query: "what should I plant for EVC175?").
+
+**Build sequence (when fmeg access is available):**
+1. Pull plant-EVC data from fmeg repo (it's already powering fmeg in production — JSON file or DB)
+2. Use as EVC175 seed; enrich with Notion's 241 native plant records (botanical names, common names, life-form/layer)
+3. Write `data/plants-evc.json` in this repo initially; move to shared CDN when other products consume it
+4. Back-populate Notion `♻️ EVCs` relation so Notion becomes the maintained master
+5. Wire registry self-enrolment ramp Deepen step + assess.html species DB to consume the new file
+
+**Blocked on:** fmeg codebase access. Revisit in a session where fmeg repo is available.
+
+**Connects to:** self-enrolment ramp → assess bootstrap (ramp Deepen step shows EVC species); shared core library (g-and-s-core.js `loadPlantList(evcCode)`); national expansion (schema is VIC-first but classification_system field is designed for extension).
+
 ## Medium priority
 
 ### Council pilot — first signed pilot
