@@ -38,7 +38,8 @@ body.idle #nav{opacity:.18}
 #nav button:hover{background:rgba(180,154,99,.25)}
 #nav button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 #ncount{font-size:12px;letter-spacing:.18em;color:rgba(255,240,220,.55);padding:0 4px}
-body.presenter #nav{display:none}
+body.presenter #nav,body.presenter #help{display:none}
+body.display #nav,body.display #help{display:none!important}
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
   padding:110px 130px;display:flex;flex-direction:column;overflow:hidden;}
@@ -892,7 +893,9 @@ function buildAerial(opts){
   if (cover) cover.innerHTML = buildAerial({});
 
   if (isDisplay) {
+    document.body.classList.add('display');
     document.getElementById('help').style.display='none';
+    document.getElementById('nav').style.display='none';
     var hint = document.getElementById('dhint');
     function hintCheck(){
       var fs = document.fullscreenElement || document.webkitFullscreenElement;
