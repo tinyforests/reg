@@ -13,13 +13,13 @@
   "assessment_date": "Aug 2026",
   "baseline_date": "1997",
   "stewards": "Sam Cox",
-  "designer": "Gardener & Son",
-  "designer_id": "gardener-and-son",
+  "designer": "Sam Cox Landscape",
+  "designer_id": "sam-cox-landscape",
   "enroller": "Gardener & Son",
   "verifier": "Gardener & Son",
-  "area_sqm": 650,
+  "area_sqm": 6070,
   "target_score": 100,
-  "description": "An exemplar of what is ecologically possible in a Nillumbik Shire residential garden. Established in the late 1990s and cultivated over nearly three decades into a genuine biodiversity corridor node, Bellbird sits directly adjacent to a Nillumbik council green wedge corridor. Thirty indigenous species now span all five structural layers, supported by a closed-loop water system and embedded habitat complexity. Confirmed fauna includes nesting Superb Fairywrens, Eastern Spinebills and Brushtail Possums. As the founding garden of the Nillumbik cluster, Bellbird carries the highest ecological function score in the Ecological Registry.",
+  "description": "Sam Cox — last apprentice of Gordon Ford and principal of Sam Cox Landscape — has spent nearly three decades shaping this 1.5-acre Wattle Glen bush garden into one of the finest examples of Australian naturalistic design in private hands. Directly adjacent to a Nillumbik council green wedge corridor, the garden moves through earth-shaped terrain and layered native planting to a winding watercourse that feeds a large basalt-lined pond — habitat for frogs, birds and other wildlife. A waterfall brings water movement into the living spaces on the other side of the house. Thirty indigenous species now span all five structural layers. The garden opened through Open Gardens Victoria in November 2023 and carries the highest ecological function score in the Ecological Registry.",
   "evc": {
     "name": "Heathy Woodland",
     "code": "EVC 55",
@@ -123,7 +123,7 @@
     "has_rock_refuges": true,
     "has_water_feature": true,
     "has_nest_boxes": true,
-    "planting_method": "Deep ecological planting across five structural layers — canopy trees, understorey shrubs, mid-layer grasses and forbs, groundcovers, and climbers — with all layers now self-seeding and self-sustaining. Established over a decade with consistent ecological management.",
+    "planting_method": "Australian naturalistic design by Sam Cox Landscape — earth shaping, considered basalt rockwork, and layered indigenous planting across five structural layers. Winding watercourse leads to a large basalt-lined pond; a separate waterfall brings water sound into the family living spaces. All layers now self-seeding and self-sustaining after nearly three decades of ecological management.",
     "fauna_sightings": [
       {
         "species": "Superb Fairywren",
@@ -142,6 +142,12 @@
         "verified": true,
         "date": "2026-03-14",
         "notes": "Active nesting in installed nest box. Documented by G&S site visit."
+      },
+      {
+        "species": "Spotted Marsh Frog",
+        "verified": true,
+        "date": "2026-03-14",
+        "notes": "Confirmed active in basalt-lined pond. Frog habitat noted as a key function of the watercourse and pond system."
       }
     ]
   },
@@ -153,13 +159,13 @@
     "park_lng": 145.156,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": true,
-    "effective_ecological_area_ha": 0.065,
-    "cluster_area_ha": 0.065,
+    "effective_ecological_area_ha": 0.607,
+    "cluster_area_ha": 0.607,
     "cluster_name": "Nillumbik",
     "cluster": {
       "name": "Nillumbik",
       "gardens": 1,
-      "area_ha": 0.065,
+      "area_ha": 0.607,
       "status": "Seed"
     },
   },
@@ -176,7 +182,7 @@
   },
   "milestones": [
     {
-      "title": "Ecological planting begun",
+      "title": "Garden established — Sam Cox Landscape, est. 1999",
       "date": "1997",
       "complete": true
     },
@@ -202,6 +208,13 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Open Gardens Victoria — public garden opening",
+      "date": "Nov 2023",
+      "type": "Recognition",
+      "category": "recognition",
+      "notes": "Garden opened to the public through Open Gardens Victoria, November 2023. Recognised as an exemplar of Australian naturalistic landscape design in private hands. Sam Cox Landscape's own home garden profiled alongside the studio's broader project work."
+    },
     {
       "title": "G&S ecological assessment — corridor node confirmed",
       "date": "Aug 2026",
@@ -231,7 +244,7 @@
       "notes": "Pratia puberula (Hairy Pratia) planted as the 30th locally indigenous species, completing the groundcover layer. All five structural layers now occupied by indigenous species. Indigenous species dominant across the planting. Garden has been actively managed since 1997."
     }
   ],
-  "notes": "Highest-scoring garden in the Ecological Registry. Field notes (full written inventory) are the only outstanding evidence gap — all other evidence criteria met. Connectivity will rise as neighbouring Nillumbik gardens register. Area to be formally surveyed; 650m2 is an estimate.",
+  "notes": "Highest-scoring garden in the Ecological Registry. Designer is Sam Cox (samcoxlandscape.com) — this is his own home garden. 1.5 acres (6,070m²). Field notes are the only outstanding evidence gap. Connectivity will rise significantly as neighbouring Nillumbik gardens register.",
   "rating": {
     "current": "High Habitat Garden",
     "next": "Urban Biodiversity Node",

@@ -49,7 +49,7 @@
       "cluster": {
         "name": "Nillumbik",
         "gardens": 1,
-        "area_ha": 0.065,
+        "area_ha": 0.607,
         "status": "Seed"
       },
       "adjacent_garden_ids": []
