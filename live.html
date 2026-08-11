@@ -290,6 +290,14 @@
 
 <script>
 /* ============================================================
+   Months excluded from every figure on this page (YYYY-MM).
+   Applied at the source, before any other filtering — these
+   rows never enter the dataset, so they stay hidden whether or
+   not the studio toggle is on.
+   ============================================================ */
+const EXCLUDE_MONTHS = ['2025-11','2025-12'];
+
+/* ============================================================
    Studio / dev clusters to exclude (organic-demand filter).
    These two points each repeat dozens of times — calibration,
    not organic traffic. Proximity in metres. 'test' rows always drop.
@@ -329,7 +337,7 @@ function referralSource(addr){
   return null;
 }
 
-let RAW=[];  // cleaned base rows (test dropped, studio flagged)
+let RAW=[];  // cleaned base rows (test dropped, excluded months dropped, studio flagged)
 
 async function load(){
   if(CONFIG.API_KEY==='YOUR_API_KEY') return showSetup();
@@ -357,7 +365,7 @@ async function load(){
       council:parseCouncil(addr),
       month:d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):null,
     };
-  }).filter(r=>r.date && !r.isTest && (r.code||r.hasGeo));
+  }).filter(r=>r.date && !r.isTest && !EXCLUDE_MONTHS.includes(r.month) && (r.code||r.hasGeo));
 
   RAW.forEach(r=>r.isStudio=isStudio(r.lat,r.lng));
   render();
