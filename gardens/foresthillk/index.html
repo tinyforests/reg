@@ -244,7 +244,6 @@
     <div class="grid lg:grid-cols-2 gap-6">
       <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
         <div class="council-banner mb-6">
-          <div class="text-xs font-mono mb-1" style="color:#7a9e5f">COUNCIL VERIFIED</div>
           <div class="font-medium text-sm" id="provenanceVerifier"></div>
           <div class="text-xs opacity-60 mt-1" id="provenanceDate"></div>
         </div>
@@ -610,7 +609,7 @@ function render() {
     html('heroTags',
       '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.garden_type + '</span> ' +
       '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.suburb + ' ' + R.state + '</span> ' +
-      '<span class="text-xs border px-3 py-1.5 font-medium" style="background:#7a9e5f;color:#3d4535;border-color:rgba(61,69,53,.25)">Council Verified — ' + R.assessment_date + '</span>'
+      ''
     );
 
     txt('heroBadgeCount', (badges.all || []).length);
@@ -705,8 +704,8 @@ function render() {
       sigCell('Indigenous Species', b.indigenous_species_current, '<span class="text-xs opacity-50">Confirmed present</span>') +
       sigCell('Structural Layers', b.structural_layers_current, '<span class="text-xs opacity-50">Missing middle storey</span>') +
       sigCell('Weed Pressure', b.weed_pressure, '<span class="text-xs opacity-50">6 species identified</span>') +
-      sigCell('Fauna Species', fauna.length, '<span class="text-xs opacity-50">Council-verified</span>') +
-      sigCell('Verification', '<span style="color:#7a9e5f;font-weight:600;font-size:.8rem">Council</span>', '<span class="text-xs opacity-50">G4W Program</span>')
+      sigCell('Fauna Species', fauna.length, '') +
+      sigCell('Verification', '<span style="font-weight:600;font-size:.8rem">G4W Program</span>', '<span class="text-xs opacity-50">Whitehorse</span>')
     );
 
     html('signalGridSecondary',
