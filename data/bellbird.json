@@ -1,17 +1,17 @@
 {
-  "garden_id": "ER-AU-VIC-BOR-BEL-001",
+  "garden_id": "ER-AU-VIC-NIL-BEL-001",
   "garden_name": "Bellbird",
   "garden_type": "Ecological Home Garden",
   "typology": "Deep Ecological Garden",
   "registry_role": "Corridor Node",
   "trajectory": "Peak",
-  "suburb": "Canterbury",
+  "suburb": "Wattle Glen",
   "state": "VIC",
-  "council": "Boroondara City Council",
-  "ward": "Gardiner",
-  "lga": "Boroondara",
+  "council": "Nillumbik Shire Council",
+  "ward": null,
+  "lga": "Nillumbik",
   "assessment_date": "Aug 2026",
-  "baseline_date": "2016",
+  "baseline_date": "1997",
   "stewards": "Sam Cox",
   "designer": "Gardener & Son",
   "designer_id": "gardener-and-son",
@@ -19,12 +19,12 @@
   "verifier": "Gardener & Son",
   "area_sqm": 650,
   "target_score": 100,
-  "description": "An exemplar of what is ecologically possible in a Boroondara residential garden. Sam's Canterbury property has been cultivated over a decade into a genuine biodiversity corridor node — 30 indigenous species spanning all five structural layers, a closed-loop water system, embedded habitat complexity, and confirmed fauna including Superb Fairywren, Eastern Spinebill and Common Brushtail Possum. The garden carries the highest ecological function score in the Ecological Registry and is recognised as a confirmed corridor node within the Boroondara cluster.",
+  "description": "An exemplar of what is ecologically possible in a Nillumbik Shire residential garden. Established in the late 1990s and cultivated over nearly three decades into a genuine biodiversity corridor node, Bellbird sits directly adjacent to a Nillumbik council green wedge corridor. Thirty indigenous species now span all five structural layers, supported by a closed-loop water system and embedded habitat complexity. Confirmed fauna includes nesting Superb Fairywrens, Eastern Spinebills and Brushtail Possums. As the founding garden of the Nillumbik cluster, Bellbird carries the highest ecological function score in the Ecological Registry.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "name": "Heathy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Dandenong Foothills",
+    "bioregion_code": "DFO"
   },
   "biodiversity": {
     "indigenous_species_current": 30,
@@ -147,39 +147,20 @@
   },
   "connectivity": {
     "adjacent_park": true,
-    "park_name": "Highfield Reserve",
-    "park_distance_m": 45,
-    "park_lat": -37.823,
-    "park_lng": 145.075,
-    "adjacent_registered_gardens": [
-      {
-        "garden_id": "ER-AU-VIC-SH-ARU-0001",
-        "garden_name": "Arundel",
-        "distance_m": 420,
-        "verified": true
-      },
-      {
-        "garden_id": "ER-AU-VIC-BOR-WIN-001",
-        "garden_name": "Windella",
-        "distance_m": 680,
-        "verified": true
-      },
-      {
-        "garden_id": "ER-AU-VIC-BOR-WIN-002",
-        "garden_name": "Smokebush",
-        "distance_m": 920,
-        "verified": true
-      }
-    ],
+    "park_name": "Nillumbik Green Wedge Corridor",
+    "park_distance_m": 0,
+    "park_lat": -37.694,
+    "park_lng": 145.156,
+    "adjacent_registered_gardens": [],
     "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0.065,
-    "cluster_area_ha": 2.1,
-    "cluster_name": "Boroondara",
+    "cluster_area_ha": 0.065,
+    "cluster_name": "Nillumbik",
     "cluster": {
-      "name": "Boroondara",
-      "gardens": 8,
-      "area_ha": 2.1,
-      "status": "Active"
+      "name": "Nillumbik",
+      "gardens": 1,
+      "area_ha": 0.065,
+      "status": "Seed"
     },
   },
   "evidence": {
@@ -196,17 +177,17 @@
   "milestones": [
     {
       "title": "Ecological planting begun",
-      "date": "2016",
+      "date": "1997",
       "complete": true
     },
     {
       "title": "30 indigenous species established",
-      "date": "2022",
+      "date": "2010",
       "complete": true
     },
     {
-      "title": "Corridor node confirmed",
-      "date": "2024",
+      "title": "Corridor node confirmed — Nillumbik green wedge",
+      "date": "2018",
       "complete": true
     },
     {
@@ -226,7 +207,7 @@
       "date": "Aug 2026",
       "type": "Verification",
       "category": "verification",
-      "notes": "Full site assessment by Gardener & Son. Garden assessed across all five scoring pillars. 30 indigenous species confirmed across five structural layers. Superb Fairywren nesting pair and possum nest box occupancy documented. Rainwater collection, seasonal moisture basin, and swale all functioning. Garden confirmed as a corridor node in the Boroondara ecological network. Score: 97/100."
+      "notes": "Full site assessment by Gardener & Son. Garden assessed across all five scoring pillars. 30 indigenous species confirmed across five structural layers. Superb Fairywren nesting pair and possum nest box occupancy documented. Rainwater collection, seasonal moisture basin, and swale all functioning. Garden confirmed as a corridor node and founding garden of the Nillumbik cluster. Score: 86/100."
     },
     {
       "title": "Breeding Superb Fairywren confirmed",
@@ -244,20 +225,20 @@
     },
     {
       "title": "30th indigenous species established",
-      "date": "2022",
+      "date": "2010",
       "type": "Milestone",
       "category": "planting",
-      "notes": "Pratia puberula (Hairy Pratia) planted as the 30th locally indigenous species, completing the groundcover layer. All five structural layers now occupied by indigenous species. Indigenous species dominant across the planting."
+      "notes": "Pratia puberula (Hairy Pratia) planted as the 30th locally indigenous species, completing the groundcover layer. All five structural layers now occupied by indigenous species. Indigenous species dominant across the planting. Garden has been actively managed since 1997."
     }
   ],
-  "notes": "Highest-scoring garden in the Ecological Registry. Field notes (full written inventory) are the only outstanding evidence gap — all other evidence criteria met. Area to be formally surveyed; 650m2 is an estimate.",
+  "notes": "Highest-scoring garden in the Ecological Registry. Field notes (full written inventory) are the only outstanding evidence gap — all other evidence criteria met. Connectivity will rise as neighbouring Nillumbik gardens register. Area to be formally surveyed; 650m2 is an estimate.",
   "rating": {
-    "current": "Urban Biodiversity Node",
-    "next": null,
-    "points_to_next": null
+    "current": "High Habitat Garden",
+    "next": "Urban Biodiversity Node",
+    "points_to_next": 3
   },
-  "upgrade_potential": 3,
-  "points_available": 3,
+  "upgrade_potential": 12,
+  "points_available": 12,
   "yield": {
     "eligible": true,
     "status": "Active — corridor node premium applied",

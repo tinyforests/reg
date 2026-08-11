@@ -10,28 +10,28 @@
   },
   "gardens": [
     {
-      "garden_id": "ER-AU-VIC-BOR-BEL-001",
+      "garden_id": "ER-AU-VIC-NIL-BEL-001",
       "garden_name": "Bellbird",
       "typology": "Deep Ecological Garden",
       "type": "Ecological Home Garden",
-      "suburb": "Canterbury",
+      "suburb": "Wattle Glen",
       "state": "VIC",
-      "council": "Boroondara City Council",
-      "ward": "Gardiner",
-      "lga": "Boroondara",
-      "score": 97,
+      "council": "Nillumbik Shire Council",
+      "ward": null,
+      "lga": "Nillumbik",
+      "score": 88,
       "rating": {
-        "current": "Urban Biodiversity Node",
-        "next": null,
-        "points_to_next": null
+        "current": "High Habitat Garden",
+        "next": "Urban Biodiversity Node",
+        "points_to_next": 3
       },
-      "primary_evc": "Grassy Woodland (EVC 175)",
-      "bioregion": "Victorian Volcanic Plain",
+      "primary_evc": "Heathy Woodland (EVC 55)",
+      "bioregion": "Dandenong Foothills",
       "status": "Active — Corridor Node",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Aug 2026",
-      "badge_count": 8,
+      "badge_count": 7,
       "badges": [
         "indigenous_dominant",
         "species_rich_20",
@@ -39,25 +39,20 @@
         "five_layers",
         "habitat_builder",
         "fauna_record",
-        "gs_verified",
-        "full_record"
+        "gs_verified"
       ],
       "profile_url": "/gardens/bellbird/index.html",
       "data_file": "data/bellbird.json",
       "registry_role": "Corridor Node",
       "trajectory": "Peak",
-      "points_available": 3,
+      "points_available": 12,
       "cluster": {
-        "name": "Boroondara",
-        "gardens": 8,
-        "area_ha": 2.1,
-        "status": "Active"
+        "name": "Nillumbik",
+        "gardens": 1,
+        "area_ha": 0.065,
+        "status": "Seed"
       },
-      "adjacent_garden_ids": [
-        "ER-AU-VIC-SH-ARU-0001",
-        "ER-AU-VIC-BOR-WIN-001",
-        "ER-AU-VIC-BOR-WIN-002"
-      ]
+      "adjacent_garden_ids": []
     },
     {
       "garden_id": "ER-AU-VIC-SH-ARU-0001",
