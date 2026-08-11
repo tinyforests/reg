@@ -110,6 +110,10 @@ function doPost(e) {
       return handleClaim(payload, cache);
     }
 
+    if (payload.submission_type === 'voucher_email') {
+      return handleVoucherEmail(payload);
+    }
+
     return handleEnrolment(payload, cache);
 
   } catch (err) {
@@ -444,6 +448,44 @@ function handleClaim(payload, cache) {
       dbg3.appendRow([new Date().toISOString(), 'claim notification email', mailErr.message]);
     } catch (e2) {}
   }
+
+  return jsonResp({ok: true});
+}
+
+/* ---- Voucher email log handler ---- */
+
+var VOUCHER_EMAIL_HEADERS = [
+  'timestamp', 'garden_id', 'garden_name', 'email', 'plants_selected', 'plant_list'
+];
+
+function handleVoucherEmail(payload) {
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet  = ss.getSheetByName('Voucher Emails');
+  if (!sheet) {
+    sheet = ss.insertSheet('Voucher Emails');
+    sheet.appendRow(VOUCHER_EMAIL_HEADERS);
+  } else if (sheet.getLastRow() === 0) {
+    sheet.appendRow(VOUCHER_EMAIL_HEADERS);
+  }
+
+  var email      = safeStr((payload.email       || '').toLowerCase().trim(), 254);
+  var gardenId   = safeStr((payload.garden_id   || '').trim(), 40);
+  var gardenName = safeStr((payload.garden_name || '').trim(), 120);
+  var plantList  = safeStr((payload.plant_list  || '').trim(), 2000);
+  var plantCount = parseInt(payload.plants_selected, 10) || 0;
+
+  if (!email) {
+    return jsonResp({ok: false, error: 'email is required.'});
+  }
+
+  sheet.appendRow([
+    new Date().toISOString(),
+    gardenId,
+    gardenName,
+    email,
+    plantCount,
+    plantList
+  ]);
 
   return jsonResp({ok: true});
 }

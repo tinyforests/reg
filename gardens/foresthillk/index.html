@@ -1038,6 +1038,21 @@ function emailPlantList() {
   lines.push('Ecological Registry · ' + (G.garden_id || ''));
   var body = lines.join('\n');
   if (typeof markSteward === 'function') markSteward(G.garden_id, email);
+
+  // Log to sheet via gateway (non-blocking)
+  var plantNames = spSelection.map(function(i) { return species[i] ? species[i].common + ' (' + species[i].scientific + ')' : ''; }).filter(Boolean).join('; ');
+  fetch('https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec', {
+    method: 'POST',
+    body: JSON.stringify({
+      submission_type:  'voucher_email',
+      email:            email,
+      garden_id:        G.garden_id  || '',
+      garden_name:      G.garden_name || '',
+      plants_selected:  spSelection.length,
+      plant_list:       plantNames
+    })
+  }).catch(function() {});
+
   window.location.href = 'mailto:' + email + '?subject=Your G4W planting list — ' + (G.garden_name || 'Forest Hill') + '&body=' + encodeURIComponent(body);
 }
 
