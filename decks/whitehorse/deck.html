@@ -202,9 +202,7 @@ body.presenter #presenter{display:grid}
   border:1px solid rgba(180,154,99,.55);padding:7px 12px;cursor:pointer}
 #pbtn:hover{background:rgba(180,154,99,.12)}
 #pkeys{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,226,210,.32);margin-top:auto}
-#dhint{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);z-index:90;
-  font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--beige);background:rgba(20,23,15,.82);border:1px solid rgba(180,154,99,.5);padding:12px 20px;display:none}
+
 @media (prefers-reduced-motion:reduce){.slide{transition:none}}
 </style>
 </head>
@@ -470,10 +468,8 @@ body.presenter #presenter{display:grid}
   <button id="nnext" type="button" aria-label="Next slide">→</button>
   <button id="nnotes" type="button" aria-label="Speaker notes">Notes</button>
   <button id="npres" type="button" aria-label="Presenter mode">Present</button>
-  <button id="nfull" type="button" aria-label="Fullscreen">Full</button>
 </div>
-<div id="help">← → move · F fullscreen · Z fill · S notes · P presenter</div>
-<div id="dhint">Press F for fullscreen</div>
+<div id="help">← → move · Z fill · S notes · P presenter</div>
 
 <div id="presenter">
   <div class="left">
@@ -805,8 +801,13 @@ function buildAerial(opts){
 
   var popupBlocked = false;
   function openDisplay(){
+    // a chrome-less pop-up window: no toolbar or tab strip, and no Fullscreen API,
+    // so it can't black out the laptop screen the way native fullscreen does
+    var feat = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,scrollbars=no,resizable=yes'
+             + ',width=' + Math.min(1600, (screen.availWidth || 1440))
+             + ',height=' + Math.min(900, (screen.availHeight || 900));
     try {
-      displayWin = window.open(location.pathname + location.search + '#display', 'gs-display');
+      displayWin = window.open(location.pathname + location.search + '#display', 'gs-display', feat);
     } catch(e){ displayWin = null; }
     popupBlocked = !displayWin;
     if (displayWin) {
@@ -857,7 +858,6 @@ function buildAerial(opts){
     else if (k === 's' || k === 'S'){ document.getElementById('notes').classList.toggle('on'); }
     else if (k === 'p' || k === 'P'){ if (!presenter) openPresenter(); else if (!displayLive()) { openDisplay(); } else { try { displayWin.focus(); } catch(e){} } }
     else if (k === 'r' || k === 'R'){ if (presenter) t0 = Date.now(); }
-    else if (k === 'f' || k === 'F'){ fullscreen(); }
     else if (k === 'z' || k === 'Z'){ fillMode = fillMode === 'contain' ? 'cover' : 'contain'; fit(); }
     else if (k === 'Escape' && presenter){ exitPresenter(); }
   });
@@ -877,17 +877,8 @@ function buildAerial(opts){
   try { window.focus(); } catch(e){}
   addEventListener('pointerdown', function(){ try { window.focus(); } catch(e){} });
 
-  function fullscreen(){
-    var el = document.documentElement;
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-      (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
-    } else {
-      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-    }
-  }
   document.getElementById('nprev').addEventListener('click', function(e){ e.stopPropagation(); go(i-1); });
   document.getElementById('nnext').addEventListener('click', function(e){ e.stopPropagation(); go(i+1); });
-  document.getElementById('nfull').addEventListener('click', function(e){ e.stopPropagation(); fullscreen(); });
 
   var cover = document.getElementById('coverSvg');
   if (cover) cover.innerHTML = buildAerial({});
@@ -896,14 +887,6 @@ function buildAerial(opts){
     document.body.classList.add('display');
     document.getElementById('help').style.display='none';
     document.getElementById('nav').style.display='none';
-    var hint = document.getElementById('dhint');
-    function hintCheck(){
-      var fs = document.fullscreenElement || document.webkitFullscreenElement;
-      hint.style.display = fs ? 'none' : 'block';
-    }
-    hintCheck();
-    document.addEventListener('fullscreenchange', hintCheck);
-    document.addEventListener('webkitfullscreenchange', hintCheck);
     addEventListener('beforeunload', function(){
       try { if (window.opener) window.opener.postMessage({deck:'gs', closed:true}, '*'); } catch(e){}
     });
