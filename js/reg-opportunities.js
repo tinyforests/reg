@@ -177,7 +177,7 @@
     // Only offer corridor-node confirmation where a corridor plausibly exists:
     // a nearby park, or at least one registered neighbour. An isolated garden
     // cannot be a stepping-stone, so we don't invite it to buy the points.
-    var inCorridor = (c.adjacent_park && (c.park_distance_m || 9999) <= 500) || adj >= 1;
+    var inCorridor = (c.adjacent_park && ((c.park_distance_m != null) ? c.park_distance_m : 9999) <= 500) || adj >= 1;
     if (!c.corridor_node_confirmed && inCorridor) add({ id: 'corridor_node', pillar: 'connectivity', label: 'Confirm corridor-node status', detail: 'A verification visit confirms the garden as a stepping-stone in the local corridor.', effort: 'moderate', delivery_options: [{ path: 'verification', cost: '$$' }], mutate: function (r) { r.connectivity.corridor_node_confirmed = true; } });
     var adjNext = nextThreshold(adj, [1, 2, 3]);
     if (adjNext !== null) add({ id: 'adjacent_' + adjNext, pillar: 'connectivity', label: (adj < 1 ? 'Register a neighbouring garden' : 'Register adjacent garden ' + adjNext), detail: 'Each registered neighbour strengthens the cluster and everyone\'s connectivity score.', effort: 'moderate', delivery_options: [{ path: 'diy', cost: '—' }], mutate: function (r) { var arr = (r.connectivity.adjacent_registered_gardens || []).slice(); arr.push({ verified: true }); r.connectivity.adjacent_registered_gardens = arr; } });

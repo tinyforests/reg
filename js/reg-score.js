@@ -135,7 +135,7 @@ function scoreConnectivity(r) {
   var notes = [];
 
   if (c.adjacent_park) {
-    var dist = c.park_distance_m || 999;
+    var dist = (c.park_distance_m != null) ? c.park_distance_m : 999;
     if (dist <= 50)       { score += 6; notes.push("Park within 50m"); }
     else if (dist <= 150) { score += 4; notes.push("Park within 150m"); }
     else if (dist <= 300) { score += 2; notes.push("Park within 300m"); }
@@ -270,7 +270,7 @@ function estimateBaseline(record) {
     },
     connectivity: {
       adjacent_park:               record.connectivity && record.connectivity.adjacent_park || false,
-      park_distance_m:             record.connectivity && record.connectivity.park_distance_m || 999,
+      park_distance_m:             (record.connectivity && record.connectivity.park_distance_m != null) ? record.connectivity.park_distance_m : 999,
       corridor_node_confirmed:     false,
       adjacent_registered_gardens: [],
       cluster_area_ha:             record.connectivity && record.connectivity.cluster_area_ha || 0
