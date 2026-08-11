@@ -1,0 +1,281 @@
+{
+  "garden_id": "ER-AU-VIC-BOR-BEL-001",
+  "garden_name": "Bellbird",
+  "garden_type": "Ecological Home Garden",
+  "typology": "Deep Ecological Garden",
+  "registry_role": "Corridor Node",
+  "trajectory": "Peak",
+  "suburb": "Canterbury",
+  "state": "VIC",
+  "council": "Boroondara City Council",
+  "ward": "Gardiner",
+  "lga": "Boroondara",
+  "assessment_date": "Aug 2026",
+  "baseline_date": "2016",
+  "stewards": "Sam Cox",
+  "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": "Gardener & Son",
+  "area_sqm": 650,
+  "target_score": 100,
+  "description": "An exemplar of what is ecologically possible in a Boroondara residential garden. Sam's Canterbury property has been cultivated over a decade into a genuine biodiversity corridor node — 30 indigenous species spanning all five structural layers, a closed-loop water system, embedded habitat complexity, and confirmed fauna including Superb Fairywren, Eastern Spinebill and Common Brushtail Possum. The garden carries the highest ecological function score in the Ecological Registry and is recognised as a confirmed corridor node within the Boroondara cluster.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 30,
+    "indigenous_species_baseline": 4,
+    "indigenous_species_target": 35,
+    "indigenous_dominant": true,
+    "structural_layers_current": 5,
+    "structural_layers_baseline": 1,
+    "canopy_cover_pct_current": 35,
+    "canopy_cover_pct_baseline": 5,
+    "canopy_cover_pct_target": 40,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "High",
+    "species_list": [
+      "Eucalyptus leucoxylon subsp. connata",
+      "Eucalyptus radiata",
+      "Acacia verticillata",
+      "Indigofera australis",
+      "Leptospermum continentale",
+      "Hardenbergia violacea",
+      "Correa lawrenceana",
+      "Goodenia ovata",
+      "Kunzea leptospermoides",
+      "Poa labillardieri",
+      "Austrodanthonia racemosa",
+      "Dichelachne crinita",
+      "Austrostipa elegantissima",
+      "Lomandra filiformis",
+      "Dianella revoluta",
+      "Bulbine bulbosa",
+      "Arthropodium milleflorum",
+      "Xerochrysum viscosum",
+      "Xerochrysum bracteatum",
+      "Chrysocephalum semipapposum",
+      "Pycnosorus globosus",
+      "Brachyscome multifida",
+      "Wahlenbergia gracilis",
+      "Viola hederacea",
+      "Dichondra repens",
+      "Kennedia prostrata",
+      "Pelargonium australe",
+      "Einadia nutans",
+      "Linum marginale",
+      "Pratia puberula"
+    ],
+    "species_proposed": [
+      "Eucalyptus leucoxylon subsp. connata",
+      "Eucalyptus radiata",
+      "Acacia verticillata",
+      "Indigofera australis",
+      "Leptospermum continentale",
+      "Hardenbergia violacea",
+      "Correa lawrenceana",
+      "Goodenia ovata",
+      "Kunzea leptospermoides",
+      "Poa labillardieri",
+      "Austrodanthonia racemosa",
+      "Dichelachne crinita",
+      "Austrostipa elegantissima",
+      "Lomandra filiformis",
+      "Dianella revoluta",
+      "Bulbine bulbosa",
+      "Arthropodium milleflorum",
+      "Xerochrysum viscosum",
+      "Xerochrysum bracteatum",
+      "Chrysocephalum semipapposum",
+      "Pycnosorus globosus",
+      "Brachyscome multifida",
+      "Wahlenbergia gracilis",
+      "Viola hederacea",
+      "Dichondra repens",
+      "Kennedia prostrata",
+      "Pelargonium australe",
+      "Einadia nutans",
+      "Linum marginale",
+      "Pratia puberula"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 5,
+    "soil_health_baseline": 1,
+    "soil_health_max": 5,
+    "water_function_score": 5,
+    "water_function_baseline": 1,
+    "water_function_max": 5,
+    "has_rainwater_system": true,
+    "has_moisture_basin": true,
+    "has_swale": true,
+    "mulch_depth_mm": 100,
+    "mulch_type": "Arborist mulch — self-generating from garden prunings"
+  },
+  "habitat": {
+    "habitat_nodes": 6,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": true,
+    "has_nest_boxes": true,
+    "planting_method": "Deep ecological planting across five structural layers — canopy trees, understorey shrubs, mid-layer grasses and forbs, groundcovers, and climbers — with all layers now self-seeding and self-sustaining. Established over a decade with consistent ecological management.",
+    "fauna_sightings": [
+      {
+        "species": "Superb Fairywren",
+        "verified": true,
+        "date": "2026-03-14",
+        "notes": "Breeding pair confirmed nesting in Leptospermum hedge. Documented by G&S site visit."
+      },
+      {
+        "species": "Eastern Spinebill",
+        "verified": true,
+        "date": "2026-05-20",
+        "notes": "Regular foraging visitor to Correa and Indigofera. Confirmed during G&S assessment."
+      },
+      {
+        "species": "Common Brushtail Possum",
+        "verified": true,
+        "date": "2026-03-14",
+        "notes": "Active nesting in installed nest box. Documented by G&S site visit."
+      }
+    ]
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_name": "Highfield Reserve",
+    "park_distance_m": 45,
+    "park_lat": -37.823,
+    "park_lng": 145.075,
+    "adjacent_registered_gardens": [
+      {
+        "garden_id": "ER-AU-VIC-SH-ARU-0001",
+        "garden_name": "Arundel",
+        "distance_m": 420,
+        "verified": true
+      },
+      {
+        "garden_id": "ER-AU-VIC-BOR-WIN-001",
+        "garden_name": "Windella",
+        "distance_m": 680,
+        "verified": true
+      },
+      {
+        "garden_id": "ER-AU-VIC-BOR-WIN-002",
+        "garden_name": "Smokebush",
+        "distance_m": 920,
+        "verified": true
+      }
+    ],
+    "corridor_node_confirmed": true,
+    "effective_ecological_area_ha": 0.065,
+    "cluster_area_ha": 2.1,
+    "cluster_name": "Boroondara",
+    "cluster": {
+      "name": "Boroondara",
+      "gardens": 8,
+      "area_ha": 2.1,
+      "status": "Active"
+    },
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_species_list": true,
+    "has_fauna_record": true,
+    "has_professional_assessment": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son",
+    "verification_date": "Aug 2026"
+  },
+  "milestones": [
+    {
+      "title": "Ecological planting begun",
+      "date": "2016",
+      "complete": true
+    },
+    {
+      "title": "30 indigenous species established",
+      "date": "2022",
+      "complete": true
+    },
+    {
+      "title": "Corridor node confirmed",
+      "date": "2024",
+      "complete": true
+    },
+    {
+      "title": "Registry record created",
+      "date": "Aug 2026",
+      "complete": true
+    },
+    {
+      "title": "Field notes — complete species inventory",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "G&S ecological assessment — corridor node confirmed",
+      "date": "Aug 2026",
+      "type": "Verification",
+      "category": "verification",
+      "notes": "Full site assessment by Gardener & Son. Garden assessed across all five scoring pillars. 30 indigenous species confirmed across five structural layers. Superb Fairywren nesting pair and possum nest box occupancy documented. Rainwater collection, seasonal moisture basin, and swale all functioning. Garden confirmed as a corridor node in the Boroondara ecological network. Score: 97/100."
+    },
+    {
+      "title": "Breeding Superb Fairywren confirmed",
+      "date": "Mar 2026",
+      "type": "Fauna",
+      "category": "fauna",
+      "notes": "Breeding pair of Superb Fairywren documented nesting in established Leptospermum continentale hedge. First confirmed nesting record for this garden. Possum nest box occupancy also confirmed on the same visit."
+    },
+    {
+      "title": "Water feature and swale installed",
+      "date": "2023",
+      "type": "Installation",
+      "category": "water",
+      "notes": "Seasonal moisture basin and garden swale installed to close the water cycle. Combined with existing 5,000L rainwater tank, the garden now manages all rainfall on-site."
+    },
+    {
+      "title": "30th indigenous species established",
+      "date": "2022",
+      "type": "Milestone",
+      "category": "planting",
+      "notes": "Pratia puberula (Hairy Pratia) planted as the 30th locally indigenous species, completing the groundcover layer. All five structural layers now occupied by indigenous species. Indigenous species dominant across the planting."
+    }
+  ],
+  "notes": "Highest-scoring garden in the Ecological Registry. Field notes (full written inventory) are the only outstanding evidence gap — all other evidence criteria met. Area to be formally surveyed; 650m2 is an estimate.",
+  "rating": {
+    "current": "Urban Biodiversity Node",
+    "next": null,
+    "points_to_next": null
+  },
+  "upgrade_potential": 3,
+  "points_available": 3,
+  "yield": {
+    "eligible": true,
+    "status": "Active — corridor node premium applied",
+    "estimated_annual": 520,
+    "potential_annual": 560,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1. Corridor node premium applied.",
+    "upgrades": [
+      {
+        "action": "Complete field notes — full written species inventory",
+        "annual_yield_increase": 15,
+        "notes": "Only remaining evidence gap. Adds 2 pts and completes a full evidence record."
+      },
+      {
+        "action": "Confirm exact garden area (currently estimated at 650m²)",
+        "annual_yield_increase": 25,
+        "notes": "Formal survey may increase or adjust yield calculation"
+      }
+    ]
+  }
+}
