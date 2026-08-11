@@ -2,7 +2,7 @@
   "garden_id": "ER-AU-VIC-WHI-KTE-001",
   "garden_name": "Kate's Forest Hill Garden",
   "garden_type": "Wildlife Garden",
-  "typology": "Council-Assessed Wildlife Garden",
+  "typology": "Wildlife Garden",
   "registry_role": "Performer",
   "trajectory": "Emerging",
   "suburb": "Forest Hill",
@@ -15,19 +15,18 @@
   "stewards": "Kate",
   "designer": null,
   "designer_id": null,
-  "enroller": "Whitehorse City Council — Gardens for Wildlife",
-  "verifier": "Lynne, Gay — Gardens for Wildlife, Whitehorse City Council",
+  "enroller": "Gardens for Wildlife",
+  "verifier": "Gardens for Wildlife",
   "area_sqm": null,
   "target_score": null,
-  "description": "An old, well-established garden in Forest Hill with east/west orientation and mature canopy. A mix of exotic and native planting with an active Banksia and a Sticky Wattle overhanging the nature strip. Middle storey largely absent. Actively visited by possums, king parrots, and insects. G4W-assessed 30 Oct 2025 by Whitehorse City Council.",
+  "description": "An old, well-established garden in Forest Hill with east/west orientation and mature canopy. A mix of exotic and native planting with an active Banksia and a Sticky Wattle overhanging the nature strip. Middle storey largely absent. Actively visited by possums, king parrots, and insects. Assessed through the Gardens for Wildlife program, Oct 2025.",
   "data_source": {
     "type": "council_gfw_report",
     "program": "Gardens for Wildlife",
     "council": "Whitehorse City Council",
     "voucher": "2569",
     "visit_date": "2025-10-30",
-    "assessors": ["Lynne", "Gay"],
-    "report_ref": "Garden Report #2569 — Kate, Forest Hill",
+    "report_ref": "Garden Report #2569",
     "note": "Record created from G4W visit report. Fields marked null require follow-up with the steward or council."
   },
   "evc": {
@@ -145,16 +144,16 @@
     "has_species_list": false,
     "has_fauna_record": true,
     "has_professional_assessment": true,
-    "verification_level": "council_garden_guide_verified",
-    "verification_label": "Council Verified",
-    "assessor": "Lynne, Gay — Gardens for Wildlife, Whitehorse City Council",
+    "verification_level": "site_visit",
+    "verification_label": "G4W Site Visit",
+    "assessor": "Gardens for Wildlife",
     "verification_date": "2025-10-30",
     "verification_program": "Gardens for Wildlife, Whitehorse City Council",
     "verification_voucher": "2569"
   },
   "milestones": [
     {
-      "title": "G4W on-site visit — Whitehorse City Council",
+      "title": "G4W on-site visit",
       "date": "30 Oct 2025",
       "complete": true
     },
@@ -241,11 +240,11 @@
   },
   "activity_log": [
     {
-      "title": "G4W on-site assessment — Whitehorse City Council",
+      "title": "G4W on-site assessment",
       "date": "30 Oct 2025",
       "type": "Verification",
       "category": "verification",
-      "notes": "On-site visit by Lynne and Gay (Gardens for Wildlife garden guides, Whitehorse City Council). Voucher #2569. Garden assessed as well-established with mature Banksia and Acacia howitti (Sticky Wattle) on nature strip. Possums, king parrots, and insects confirmed present. Key gaps identified: absent middle storey, no bird baths, six environmental weeds present. Area-specific planting recommendations made for back garden, side gardens, front garden, and nature strip."
+      "notes": "Gardens for Wildlife on-site visit. Voucher #2569. Garden assessed as well-established with mature Banksia and Acacia howitti (Sticky Wattle) on nature strip. Possums, king parrots, and insects confirmed present. Key gaps identified: absent middle storey, no bird baths, six environmental weeds present. Area-specific planting recommendations made for back garden, side gardens, front garden, and nature strip."
     }
   ],
   "rating": {
