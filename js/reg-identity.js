@@ -79,13 +79,13 @@
     ].join(';');
     bar.innerHTML =
       '<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto">' +
-        '<span style="font-size:.72rem;opacity:.65;flex-shrink:0">Is this your garden?</span>' +
+        '<span style="font-size:.72rem;opacity:.65;flex-shrink:0">Is this your garden? Your name and precise location are private.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
           'background:transparent;border:1px solid rgba(255,240,220,.3);color:#fff0dc;outline:none;font-family:inherit" />' +
         '<button id="er-unlock-btn" ' +
           'style="font-size:.72rem;padding:.35rem .85rem;background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;white-space:nowrap;font-family:inherit">' +
-          'Unlock steward view</button>' +
+          'Claim this profile</button>' +
         '<button id="er-unlock-dismiss" aria-label="Dismiss" ' +
           'style="font-size:.8rem;opacity:.35;background:none;border:none;cursor:pointer;color:#fff0dc;padding:.2rem .4rem;line-height:1">' +
           '&#x2715;</button>' +
@@ -115,15 +115,15 @@
           if (json && json.ok) {
             markSteward(gardenId, email);
             bar.innerHTML = '<div style="font-size:.8rem;font-weight:500;text-align:center;padding:.1rem 0">' +
-              '✓ Steward view unlocked — badge notifications are now active on this device.</div>';
-            setTimeout(function () { bar.parentNode && bar.parentNode.removeChild(bar); }, 3000);
+              'Profile claimed — loading your steward view…</div>';
+            setTimeout(function () { window.location.reload(); }, 1200);
           } else {
             btn.disabled    = false;
-            btn.textContent = 'Unlock steward view';
+            btn.textContent = 'Claim this profile';
             msg.style.display = 'block';
             msg.textContent = json && json.error
               ? json.error
-              : 'No claims found for this email on this garden. Submit a claim first to link your account.';
+              : 'No claims found for this email on this garden. Submit a claim first, or contact Gardener & Son to be linked.';
           }
         })
         .catch(function () {

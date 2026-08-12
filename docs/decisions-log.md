@@ -20,6 +20,26 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-08-12 — Privacy-first: steward names and precise coordinates removed from public profiles
+
+**Decision:** All 20 garden profile pages now hide steward names and fuzz GPS coordinates for public visitors. Stewards who have claimed their profile on a device (via the unlock bar in `reg-identity.js`) see their name and precise location. Public visitors see `—` in the Steward field and a map pin offset by ~250m from the actual property.
+
+**Reason:** Raised at a council meeting 12 Aug 2026. Prospective stewards — particularly those considering registering through a council program — should not have their names or home addresses publicly visible without explicit consent. The garden slug and name are already anonymised (no street numbers). This change extends that principle to the steward name field and the Leaflet map pin, which previously pointed exactly at the house.
+
+**How it works:** `_publicCoords(lat, lng, gardenId)` in each profile template computes a deterministic ~250m offset from the garden ID hash. Offset is consistent (same every time, not random) so the approximate neighbourhood context is stable. Steward checking is via `isSteward(gardenId)` from `reg-identity.js` (localStorage-based device link, set after a successful claim). When a steward claims their profile, the page reloads and re-renders with precise coords and their name visible.
+
+**Privacy gap (follow-up required):** The precise `lat`/`lng` values remain in the public garden JSON files in `/data/`. A determined reader can extract them from the raw files. The JS fuzzing protects the map rendering but not the underlying data. Follow-up: move precise coordinates to a private data file (e.g. `data/garden-addresses.json`, not committed to the public repo) and have the public JSONs store only approximate coords. This mirrors the existing plan for the admin address mapping.
+
+**Activity log names (follow-up required):** `data/arundel.json` had a note referencing stewards by first name; changed to "stewards". A full sweep of all garden JSON activity log notes for embedded personal names is outstanding.
+
+**Files affected:**
+- `gardens/*/index.html` — all 20 profiles: `heroStewards` render conditional; `_publicCoords` function; `initCorridorMap` updated to use `displayLat`/`displayLng`; steward privacy panel HTML added
+- `js/reg-identity.js` — unlock bar copy updated (privacy framing); button relabelled "Claim this profile"; post-unlock reloads page instead of fading bar
+- `data/arundel.json` — one activity log note with steward first names sanitised
+- `scripts/apply_privacy.py` — one-time migration script (keep for reference)
+
+---
+
 ## 2026-05-25 — site_visit_badge: standardise badge ID; wire profile pages to canonical engines
 
 **Decision:** Two related changes. (1) Site visit badge ID standardised to `site_visit_badge` in `badge-engine.js`. Previously the badge ID was `site_visit`, identical to the `evidence.verification_level` value it triggers on. (2) All 13 garden profile pages now load `js/reg-score.js` and `js/badge-engine.js` via `<script src>` instead of carrying inline engine copies. Backward-compat aliases (`result.level`, `badges.all`, `badges.vb`) added to the canonical engines so profile page render code needed no changes.

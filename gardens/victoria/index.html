@@ -220,7 +220,7 @@
         <p class="text-base leading-relaxed opacity-85 max-w-xl" id="heroDesc"></p>
         <div class="mt-6 pt-6 border-t border-rl dark:border-rdl grid grid-cols-2 gap-4">
             <div>
-              <div class="section-label mb-2">Stewards</div>
+              <div class="section-label mb-2">Steward</div>
               <div class="text-sm" id="heroStewards"></div>
             </div>
             <div>
@@ -387,6 +387,36 @@
     </div>
   </section>
 
+
+  <!-- Steward-only privacy panel — hidden publicly; revealed via JS when this device is claimed -->
+  <section id="stewardPrivacyPanel" style="display:none" class="stagger">
+    <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6 md:p-8">
+      <div class="section-label mb-1">This device is linked to this garden</div>
+      <h2 class="font-serif text-3xl mb-5">Your Privacy</h2>
+      <div class="grid md:grid-cols-2 gap-8 text-sm">
+        <div>
+          <div class="section-label mb-3">Visible only to you on this device</div>
+          <ul class="space-y-2 opacity-75">
+            <li>Your name</li>
+            <li>Precise garden location — public visitors see an approximate map position (~250m offset)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label mb-3">Visible to everyone</div>
+          <ul class="space-y-2 opacity-75">
+            <li>Garden name and ecological data</li>
+            <li>Suburb and state</li>
+            <li>Score, badges, and species list</li>
+            <li>Field notes and activity log</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-6 pt-5 border-t border-rl dark:border-rdl text-xs opacity-50">
+        To change what's public, contact Gardener &amp; Son.
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="mt-16 border-t border-rl dark:border-rdl">
@@ -467,12 +497,18 @@ function render() {
   var nl = result.nextLevel;
   var adj = c.adjacent_registered_gardens || [];
   var fauna = h.fauna_sightings || [];
+  var _isSt = (typeof isSteward === 'function') && isSteward(R.garden_id);
 
   txt('headerMeta',   R.garden_name + ' - ' + R.garden_id);
   txt('heroType',     R.garden_type);
   txt('heroName',     R.garden_name);
   txt('heroDesc',     R.description);
-  txt('heroStewards', R.stewards + ' - Registered ' + R.baseline_date);
+    if (_isSt) {
+    txt('heroStewards', R.stewards || '—');
+  } else {
+    var _hs = document.getElementById('heroStewards');
+    if (_hs) _hs.innerHTML = '<span style="opacity:.4">—</span>';
+  }
   txt('heroScore',    result.total);
   txt('heroLevel',    result.level);
   txt('heroBaseline', result.baselineScore);
@@ -596,6 +632,11 @@ function render() {
   R._score = result.total;
   initCorridorMap(R);
 
+  if (_isSt) {
+    var _pp = document.getElementById('stewardPrivacyPanel');
+    if (_pp) _pp.style.display = 'block';
+  }
+
   var lh = '';
   var log = R.activity_log || [];
   for (var li = 0; li < log.length; li++) {
@@ -670,6 +711,18 @@ function render() {
   }, 200);
 }
 
+/* Deterministic ~250m offset so the public map pin does not reveal the exact property.
+   Stewards who have claimed this profile see the precise coordinates. */
+function _publicCoords(lat, lng, gardenId) {
+  var h = 0;
+  for (var i = 0; i < gardenId.length; i++) {
+    h = (h * 31 + gardenId.charCodeAt(i)) & 0xFFFFFF;
+  }
+  var dlat = ((h & 0xFF) / 255 - 0.5) * 0.005;
+  var dlng = ((h >> 8 & 0xFF) / 255 - 0.5) * 0.006;
+  return [lat + dlat, lng + dlng];
+}
+
 /* ---- MAP ---- */
 var _map = null;
 
@@ -677,6 +730,15 @@ function initCorridorMap(record) {
   var c = record.connectivity || {};
   var lat = c.lat;
   var lng = c.lng;
+
+  var _isStewardMap = (typeof isSteward === 'function') && isSteward(record.garden_id || '');
+  var displayLat = lat;
+  var displayLng = lng;
+  if (!_isStewardMap && lat && lng) {
+    var _fc = _publicCoords(lat, lng, record.garden_id || '');
+    displayLat = _fc[0];
+    displayLng = _fc[1];
+  }
 
   if (!lat || !lng) {
     document.getElementById('corridorMap').innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;opacity:.4;font-size:.75rem">No coordinates in data</div>';
@@ -689,7 +751,7 @@ function initCorridorMap(record) {
   }
 
   _map = L.map('corridorMap', {
-    center: [lat, lng],
+    center: [displayLat, displayLng],
     zoom: 14,
     zoomControl: true,
     scrollWheelZoom: false,
@@ -701,11 +763,11 @@ function initCorridorMap(record) {
   }).addTo(_map);
 
   /* Collect all bounds from the start */
-  var bounds = [[lat, lng]];
+  var bounds = [[displayLat, displayLng]];
 
   /* Primary garden marker */
   var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [60,60] });
-  var primary = L.marker([lat, lng], { icon: regIcon }).addTo(_map);
+  var primary = L.marker([displayLat, displayLng], { icon: regIcon }).addTo(_map);
   primary.bindPopup(
     '<strong>' + (record.garden_name || 'This garden') + '</strong><br>' +
     (record.garden_id || '') + '<br>' +
@@ -718,7 +780,7 @@ function initCorridorMap(record) {
     var parkIcon = L.divIcon({ className: 'park-marker', iconSize: [50,50] });
     var park = L.marker([c.park_lat, c.park_lng], { icon: parkIcon }).addTo(_map);
     park.bindPopup('<strong>' + (c.park_name || 'Adjacent park') + '</strong>');
-    L.polyline([[lat, lng], [c.park_lat, c.park_lng]], {
+    L.polyline([[displayLat, displayLng], [c.park_lat, c.park_lng]], {
       color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.6
     }).addTo(_map);
   }
@@ -738,7 +800,7 @@ function initCorridorMap(record) {
       g.distance_m + 'm ' + (g.direction || '')
     );
     /* Dashed line to adjacent */
-    L.polyline([[lat, lng], [g.lat, g.lng]], {
+    L.polyline([[displayLat, displayLng], [g.lat, g.lng]], {
       color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.7
     }).addTo(_map);
   }

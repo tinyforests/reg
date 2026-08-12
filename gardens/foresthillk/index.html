@@ -425,6 +425,36 @@
     </div>
   </section>
 
+
+  <!-- Steward-only privacy panel — hidden publicly; revealed via JS when this device is claimed -->
+  <section id="stewardPrivacyPanel" style="display:none" class="stagger">
+    <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6 md:p-8">
+      <div class="section-label mb-1">This device is linked to this garden</div>
+      <h2 class="font-serif text-3xl mb-5">Your Privacy</h2>
+      <div class="grid md:grid-cols-2 gap-8 text-sm">
+        <div>
+          <div class="section-label mb-3">Visible only to you on this device</div>
+          <ul class="space-y-2 opacity-75">
+            <li>Your name</li>
+            <li>Precise garden location — public visitors see an approximate map position (~250m offset)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label mb-3">Visible to everyone</div>
+          <ul class="space-y-2 opacity-75">
+            <li>Garden name and ecological data</li>
+            <li>Suburb and state</li>
+            <li>Score, badges, and species list</li>
+            <li>Field notes and activity log</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-6 pt-5 border-t border-rl dark:border-rdl text-xs opacity-50">
+        To change what's public, contact Gardener &amp; Son.
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="mt-16 border-t border-rl dark:border-rdl">
@@ -591,6 +621,7 @@ function render() {
     var ev = R.evidence || {};
     var nl = result.nextLevel || {};
     var fauna = h.fauna_sightings || [];
+  var _isSt = (typeof isSteward === 'function') && isSteward(R.garden_id);
     var adj   = c.adjacent_registered_gardens || [];
 
     /* Header */
@@ -600,7 +631,12 @@ function render() {
     txt('heroType',     R.garden_type);
     txt('heroName',     R.garden_name);
     txt('heroDesc',     R.description);
-    txt('heroStewards', R.stewards + ' — ' + R.suburb + ' · Whitehorse');
+      if (_isSt) {
+    txt('heroStewards', R.stewards || '—');
+  } else {
+    var _hs = document.getElementById('heroStewards');
+    if (_hs) _hs.innerHTML = '<span style="opacity:.4">—</span>';
+  }
     txt('heroScore',    result.total);
     txt('heroLevel',    result.level);
     txt('heroId',       R.garden_id);
