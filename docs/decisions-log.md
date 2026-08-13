@@ -20,6 +20,27 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-08-13 — Magic-link profile claiming
+
+**Decision:** Stewards claim their garden profile by entering their email in the bottom bar. The backend checks the email against three sources (Steward Emails sheet, Submissions sheet for published gardens, Claims sheet) and — if found — emails a one-use 30-minute magic link. Clicking it verifies the token server-side, marks the device in localStorage, and reloads in steward view. The old `verify_steward` flow (which required a prior opportunity claim) is replaced entirely.
+
+**Reason:** The old flow was a broken prerequisite chain — a steward could only unlock their profile if they had already submitted an opportunity claim, which most new stewards hadn't. The magic-link approach uses email ownership as proof of stewardship, which is simpler and more trustworthy. No passwords, no accounts, no new UI complexity.
+
+**How it works:** `request_claim` in Code.gs generates a 32-char random token, stores it in a `Claim Tokens` sheet with a 30-min `expires_at`, and emails the link `ecologicalregistry.org/gardens/<slug>/?claim=<token>`. `verify_claim` validates token (exists, right garden, not used, not expired), marks used, returns the steward's email. The client (`reg-identity.js` `handleClaimParam`) detects the `?claim=` URL param on page load, verifies, calls `markSteward`, cleans the URL with `history.replaceState`, and reloads.
+
+**G&S gardens (manual step required):** The 15 existing verified gardens were added manually by Tyson — their steward emails are not in the Submissions or Claims sheets. To enable magic-link claiming for those stewards, add a row to the `Steward Emails` tab in the Sheet: `garden_id | steward_email | notes`. This tab is checked first by `isKnownSteward()`.
+
+**Anti-enumeration:** `request_claim` always returns the same success message regardless of whether the email was found. Rate-limited to 3 requests per email per hour.
+
+**Files affected:**
+- `scripts/appsscript/Code.gs` — `isKnownSteward()`, `generateToken()`, `handleRequestClaim()`, `handleVerifyClaimToken()`; `doGet` router updated; `TOKEN_EXPIRY_MS`, `BASE_URL`, `CLAIM_TOKEN_HEADERS` constants added
+- `js/reg-identity.js` — `handleClaimParam()` added; `mountStewardUnlock()` rewritten to use `request_claim`; `handleClaimParam` exported to global scope
+- `gardens/*/index.html` — all 20 profiles: `handleClaimParam(R.garden_id)` called before `mountStewardUnlock`
+
+**Deploy note:** Code.gs must be deployed as a new version in Apps Script before magic-link claiming will work. The `Steward Emails` and `Claim Tokens` tabs are created automatically on first use.
+
+---
+
 ## 2026-08-12 — Privacy-first: steward names and precise coordinates removed from public profiles
 
 **Decision:** All 20 garden profile pages now hide steward names and fuzz GPS coordinates for public visitors. Stewards who have claimed their profile on a device (via the unlock bar in `reg-identity.js`) see their name and precise location. Public visitors see `—` in the Steward field and a map pin offset by ~250m from the actual property.

@@ -2,15 +2,13 @@
  * reg-identity.js
  * Ecological Registry — Device identity and steward recognition
  *
- * A steward is identified when they take a meaningful action on a garden
- * (submit a claim, request a plant voucher email). At that point we link
- * their email and a device UUID to that garden_id in localStorage.
+ * A steward claims their garden profile by entering their email in the bottom
+ * bar. The backend checks the email against known steward records and sends a
+ * magic link. Clicking the link verifies the token, marks this device as the
+ * steward in localStorage, and reloads in steward view.
  *
- * On subsequent visits, isSteward(gardenId) returns true for that device,
- * which gates badge and score notifications so random browsers don't see them.
- *
- * Nothing here is authentication. The device link is a UX signal only —
- * it keeps notifications relevant without requiring an account.
+ * isSteward(gardenId) is a UX signal only — it gates badge notifications and
+ * privacy-sensitive rendering (name, precise map pin). It is not authentication.
  */
 
 (function (root) {
@@ -32,7 +30,7 @@
     } catch (e) { return ''; }
   }
 
-  /* Link this device + email to a garden. Called after a claim or voucher sign-up. */
+  /* Link this device + email to a garden. Called after token verification. */
   function markSteward(gardenId, email) {
     if (!gardenId) return;
     try {
@@ -59,14 +57,65 @@
   }
 
   /*
-   * Renders a fixed bottom bar that lets a steward on a new device enter their
-   * email to re-link. Checks against the Claims sheet via doGet. No-ops if
-   * already identified, already dismissed this session, or already mounted.
+   * Detects a ?claim=<token> param placed in the URL by a magic-link email.
+   * If found, validates the token with the Apps Script backend. On success,
+   * marks this device as the steward and reloads in steward view.
+   * Call this from the profile render function with the garden's garden_id.
+   */
+  function handleClaimParam(gardenId) {
+    if (!gardenId) return;
+    var search = window.location.search;
+    if (search.indexOf('claim=') === -1) return;
+
+    var token = '';
+    try {
+      token = new URLSearchParams(search).get('claim') || '';
+    } catch (e) {
+      var m = search.match(/[?&]claim=([^&]+)/);
+      token = m ? decodeURIComponent(m[1]) : '';
+    }
+    if (!token) return;
+
+    // Clean the URL immediately so the token doesn't linger in the address bar
+    try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
+
+    var banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999;background:#3d4535;color:#fff0dc;font-family:"IBM Plex Sans",sans-serif;font-size:.78rem;padding:.6rem 1.25rem;text-align:center';
+    banner.textContent = 'Verifying your claim link…';
+    document.body.appendChild(banner);
+
+    fetch(ENDPOINT + '?action=verify_claim&token=' + encodeURIComponent(token) +
+          '&garden_id=' + encodeURIComponent(gardenId))
+      .then(function (r) { return r.json(); })
+      .then(function (json) {
+        if (json && json.ok && json.email) {
+          markSteward(gardenId, json.email);
+          banner.textContent = 'Profile claimed — loading your steward view…';
+          setTimeout(function () { window.location.reload(); }, 900);
+        } else {
+          banner.style.background = '#8b3a3a';
+          banner.textContent = (json && json.error) || 'This claim link is invalid or has expired. Request a new one from your garden profile.';
+          setTimeout(function () { banner.parentNode && banner.parentNode.removeChild(banner); }, 6000);
+        }
+      })
+      .catch(function () {
+        banner.parentNode && banner.parentNode.removeChild(banner);
+      });
+  }
+
+  /*
+   * Renders a fixed bottom bar that lets a steward enter their email to receive
+   * a magic claim link. No-ops if already identified, dismissed this session,
+   * or already mounted.
    */
   function mountStewardUnlock(gardenId) {
     if (!gardenId || isSteward(gardenId)) return;
     if (document.getElementById('er-steward-unlock')) return;
     try { if (sessionStorage.getItem('er_unlock_dismissed:' + gardenId) === '1') return; } catch (e) {}
+
+    // Derive the garden slug from the pathname (e.g. /gardens/arundel/ -> arundel)
+    var pathParts  = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+    var gardenSlug = pathParts[pathParts.length - 1] || '';
 
     var bar = document.createElement('div');
     bar.id = 'er-steward-unlock';
@@ -85,7 +134,7 @@
           'background:transparent;border:1px solid rgba(255,240,220,.3);color:#fff0dc;outline:none;font-family:inherit" />' +
         '<button id="er-unlock-btn" ' +
           'style="font-size:.72rem;padding:.35rem .85rem;background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;white-space:nowrap;font-family:inherit">' +
-          'Claim this profile</button>' +
+          'Send magic link</button>' +
         '<button id="er-unlock-dismiss" aria-label="Dismiss" ' +
           'style="font-size:.8rem;opacity:.35;background:none;border:none;cursor:pointer;color:#fff0dc;padding:.2rem .4rem;line-height:1">' +
           '&#x2715;</button>' +
@@ -107,35 +156,30 @@
       var btn = document.getElementById('er-unlock-btn');
       var msg = document.getElementById('er-unlock-msg');
       btn.disabled    = true;
-      btn.textContent = 'Checking…';
+      btn.textContent = 'Sending…';
 
-      fetch(ENDPOINT + '?action=verify_steward&email=' + encodeURIComponent(email) + '&garden_id=' + encodeURIComponent(gardenId))
+      fetch(ENDPOINT + '?action=request_claim&email=' + encodeURIComponent(email) +
+            '&garden_id=' + encodeURIComponent(gardenId) +
+            '&garden_slug=' + encodeURIComponent(gardenSlug))
         .then(function (r) { return r.json(); })
-        .then(function (json) {
-          if (json && json.ok) {
-            markSteward(gardenId, email);
-            bar.innerHTML = '<div style="font-size:.8rem;font-weight:500;text-align:center;padding:.1rem 0">' +
-              'Profile claimed — loading your steward view…</div>';
-            setTimeout(function () { window.location.reload(); }, 1200);
-          } else {
-            btn.disabled    = false;
-            btn.textContent = 'Claim this profile';
-            msg.style.display = 'block';
-            msg.textContent = json && json.error
-              ? json.error
-              : 'No claims found for this email on this garden. Submit a claim first, or contact Gardener & Son to be linked.';
-          }
+        .then(function () {
+          // Always show the safe message — backend never reveals if the email was found
+          bar.innerHTML =
+            '<div style="font-size:.8rem;text-align:center;padding:.1rem 0;max-width:960px;margin:0 auto">' +
+            'Check your email for a magic link — it expires in 30 minutes.' +
+            '</div>';
+          setTimeout(function () { bar.parentNode && bar.parentNode.removeChild(bar); }, 12000);
         })
         .catch(function () {
           btn.disabled    = false;
-          btn.textContent = 'Unlock steward view';
+          btn.textContent = 'Send magic link';
           msg.style.display = 'block';
           msg.textContent = 'Could not reach the server — please try again.';
         });
     };
   }
 
-  var api = { getDeviceId: getDeviceId, markSteward: markSteward, isSteward: isSteward, getSteward: getSteward, mountStewardUnlock: mountStewardUnlock };
+  var api = { getDeviceId: getDeviceId, markSteward: markSteward, isSteward: isSteward, getSteward: getSteward, mountStewardUnlock: mountStewardUnlock, handleClaimParam: handleClaimParam };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else {
     root.getDeviceId        = getDeviceId;
@@ -143,6 +187,7 @@
     root.isSteward          = isSteward;
     root.getSteward         = getSteward;
     root.mountStewardUnlock = mountStewardUnlock;
+    root.handleClaimParam   = handleClaimParam;
     root.RegIdentity        = api;
   }
 

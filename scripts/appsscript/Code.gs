@@ -42,14 +42,18 @@ var RATE_GLOBAL_MAX  = 20;   // max enrolment submissions per hour (all users)
 var CLAIM_RATE_MAX   = 40;   // max claims per hour (all users)
 var CLAIM_EMAIL_MAX  = 10;   // max claims per email per hour
 var RATE_CACHE_TTL   = 3600; // cache entry lifetime in seconds (1 hour)
+var TOKEN_EXPIRY_MS  = 30 * 60 * 1000; // magic link lifetime: 30 minutes
+var BASE_URL         = 'https://ecologicalregistry.org/gardens/';
+
+var CLAIM_TOKEN_HEADERS = ['token', 'garden_id', 'email', 'created_at', 'expires_at', 'used'];
 
 /* ---- Health check + steward verification ---- */
 function doGet(e) {
   var params = (e && e.parameter) ? e.parameter : {};
 
-  if (params.action === 'verify_steward') {
-    return handleVerifySteward(params);
-  }
+  if (params.action === 'verify_steward')  return handleVerifySteward(params);
+  if (params.action === 'request_claim')   return handleRequestClaim(params);
+  if (params.action === 'verify_claim')    return handleVerifyClaimToken(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -87,6 +91,190 @@ function handleVerifySteward(params) {
   }
 
   return jsonResp({ok: false, error: 'No claim found for this email on this garden.'});
+}
+
+/*
+ * Returns true if email is on record as a steward for gardenId.
+ * Checks three sources in order:
+ *   1. 'Steward Emails' sheet — manually managed by G&S for verified gardens
+ *      Columns: garden_id | steward_email | notes
+ *   2. 'Submissions' sheet — self-enrolled gardens that have been published
+ *      Column D = steward_email, Column Z = published_garden_id
+ *   3. 'Claims' sheet — existing opportunity claims
+ */
+function isKnownSteward(email, gardenId) {
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var eLower = email.toLowerCase().trim();
+  var gLower = gardenId.toLowerCase().trim();
+
+  // 1. Steward Emails sheet
+  var stewardSheet = ss.getSheetByName('Steward Emails');
+  if (stewardSheet && stewardSheet.getLastRow() > 1) {
+    var sd = stewardSheet.getRange(2, 1, stewardSheet.getLastRow() - 1, 2).getValues();
+    for (var i = 0; i < sd.length; i++) {
+      if (String(sd[i][0]).toLowerCase() === gLower &&
+          String(sd[i][1]).toLowerCase() === eLower) return true;
+    }
+  }
+
+  // 2. Submissions sheet — published gardens only (col Z = published_garden_id)
+  var subSheet = ss.getSheetByName('Submissions');
+  if (subSheet && subSheet.getLastRow() > 1) {
+    var subData = subSheet.getRange(2, 1, subSheet.getLastRow() - 1, 26).getValues();
+    for (var j = 0; j < subData.length; j++) {
+      if (String(subData[j][25]).toLowerCase() === gLower &&
+          String(subData[j][3]).toLowerCase()  === eLower) return true;
+    }
+  }
+
+  // 3. Claims sheet
+  var claimsSheet = ss.getSheetByName('Claims');
+  if (claimsSheet && claimsSheet.getLastRow() > 1) {
+    var cd = claimsSheet.getRange(2, 1, claimsSheet.getLastRow() - 1, claimsSheet.getLastColumn()).getValues();
+    var iG = CLAIM_HEADERS.indexOf('garden_id');
+    var iE = CLAIM_HEADERS.indexOf('steward_email');
+    for (var k = 0; k < cd.length; k++) {
+      if (String(cd[k][iG]).toLowerCase() === gLower &&
+          String(cd[k][iE]).toLowerCase() === eLower) return true;
+    }
+  }
+
+  return false;
+}
+
+/* Generates a cryptographically adequate random token (32 chars, url-safe). */
+function generateToken() {
+  var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  var token = '';
+  for (var i = 0; i < 32; i++) {
+    token += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return token;
+}
+
+/*
+ * request_claim — called via GET ?action=request_claim&email=...&garden_id=...&garden_slug=...
+ *
+ * Checks whether the email is on record for the garden. If yes, generates a
+ * short-lived magic-link token and emails it. Always returns the same success
+ * message regardless of whether the email was found (prevents enumeration).
+ */
+function handleRequestClaim(params) {
+  var email      = safeStr((params.email       || '').toLowerCase().trim(), 254);
+  var gardenId   = safeStr((params.garden_id   || '').trim(), 40);
+  var gardenSlug = safeStr((params.garden_slug || '').trim(), 80);
+
+  if (!email || !gardenId) {
+    return jsonResp({ok: false, error: 'email and garden_id are required.'});
+  }
+
+  // Rate-limit: max 3 token requests per email per hour
+  var cache    = CacheService.getScriptCache();
+  var rlKey    = 'claim_req_' + hourBucket() + '_' + email;
+  var rlCount  = parseInt(cache.get(rlKey) || '0', 10);
+  if (rlCount >= 3) {
+    return jsonResp({ok: true, message: 'If your email is on record for this garden, we have sent you a magic link. Check your inbox — it expires in 30 minutes.'});
+  }
+  cache.put(rlKey, String(rlCount + 1), RATE_CACHE_TTL);
+
+  var SAFE_MSG = 'If your email is on record for this garden, we have sent you a magic link. Check your inbox — it expires in 30 minutes.';
+
+  if (!isKnownSteward(email, gardenId)) {
+    return jsonResp({ok: true, message: SAFE_MSG});
+  }
+
+  // Generate and store token
+  var token      = generateToken();
+  var now        = new Date();
+  var expiresAt  = new Date(now.getTime() + TOKEN_EXPIRY_MS);
+  var ss         = SpreadsheetApp.getActiveSpreadsheet();
+  var tokenSheet = ss.getSheetByName('Claim Tokens');
+  if (!tokenSheet) {
+    tokenSheet = ss.insertSheet('Claim Tokens');
+    tokenSheet.appendRow(CLAIM_TOKEN_HEADERS);
+  } else if (tokenSheet.getLastRow() === 0) {
+    tokenSheet.appendRow(CLAIM_TOKEN_HEADERS);
+  }
+  tokenSheet.appendRow([token, gardenId, email, now.toISOString(), expiresAt.toISOString(), false]);
+
+  // Build and send magic link
+  var link = BASE_URL + (gardenSlug ? gardenSlug + '/' : '') + '?claim=' + token;
+  try {
+    MailApp.sendEmail({
+      to:      email,
+      subject: 'Claim your garden profile — Ecological Registry',
+      body: [
+        'Click the link below to claim your garden profile on the Ecological Registry.',
+        '',
+        link,
+        '',
+        'This link expires in 30 minutes and can only be used once.',
+        'If you did not request this, you can ignore this email.',
+        '',
+        'Ecological Registry',
+        'ecologicalregistry.org'
+      ].join('\n')
+    });
+  } catch (mailErr) {
+    try {
+      var dbg = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+      dbg.appendRow([new Date().toISOString(), 'claim token email', mailErr.message]);
+    } catch (e2) {}
+  }
+
+  return jsonResp({ok: true, message: SAFE_MSG});
+}
+
+/*
+ * verify_claim — called via GET ?action=verify_claim&token=...&garden_id=...
+ *
+ * Validates the token. If valid, marks it used and returns {ok:true, email:...}
+ * so the client can call markSteward(gardenId, email).
+ */
+function handleVerifyClaimToken(params) {
+  var token    = safeStr((params.token     || '').trim(), 64);
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+
+  if (!token || !gardenId) {
+    return jsonResp({ok: false, error: 'token and garden_id are required.'});
+  }
+
+  var ss         = SpreadsheetApp.getActiveSpreadsheet();
+  var tokenSheet = ss.getSheetByName('Claim Tokens');
+
+  if (!tokenSheet || tokenSheet.getLastRow() <= 1) {
+    return jsonResp({ok: false, error: 'Invalid or expired link.'});
+  }
+
+  var data     = tokenSheet.getRange(2, 1, tokenSheet.getLastRow() - 1, CLAIM_TOKEN_HEADERS.length).getValues();
+  var iToken   = CLAIM_TOKEN_HEADERS.indexOf('token');
+  var iGarden  = CLAIM_TOKEN_HEADERS.indexOf('garden_id');
+  var iEmail   = CLAIM_TOKEN_HEADERS.indexOf('email');
+  var iExpires = CLAIM_TOKEN_HEADERS.indexOf('expires_at');
+  var iUsed    = CLAIM_TOKEN_HEADERS.indexOf('used');
+
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[iToken]) !== token) continue;
+
+    if (String(row[iGarden]).toLowerCase() !== gardenId.toLowerCase()) {
+      return jsonResp({ok: false, error: 'Invalid or expired link.'});
+    }
+    if (row[iUsed] === true || String(row[iUsed]).toLowerCase() === 'true') {
+      return jsonResp({ok: false, error: 'This link has already been used. Request a new one from your garden profile.'});
+    }
+    var expires = new Date(String(row[iExpires]));
+    if (isNaN(expires.getTime()) || new Date() > expires) {
+      return jsonResp({ok: false, error: 'This link has expired. Request a new one from your garden profile.'});
+    }
+
+    // Valid — mark used (sheet row = i + 2, column = iUsed + 1, both 1-indexed)
+    tokenSheet.getRange(i + 2, iUsed + 1).setValue(true);
+
+    return jsonResp({ok: true, email: String(row[iEmail])});
+  }
+
+  return jsonResp({ok: false, error: 'Invalid or expired link.'});
 }
 
 /* ---- Auth helper (run once from editor to grant MailApp scope) ---- */

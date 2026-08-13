@@ -713,6 +713,7 @@ function render() {
       }
       oppEl.innerHTML = oh || '<div class="text-sm opacity-40">No opportunities calculated — address required.</div>';
       if (typeof attachClaims === 'function') attachClaims(R);
+      if (typeof handleClaimParam === 'function') handleClaimParam(R.garden_id);
       if (typeof mountStewardUnlock === 'function') mountStewardUnlock(R.garden_id);
 
       refreshRecClaims = function() {
