@@ -703,7 +703,7 @@ function render() {
       for (var oi = 0; oi < opps.length; oi++) {
         var o = opps[oi];
         var recIdxs = REC_OPP_MAP[o.id] || [];
-        oh += '<div class="opp-item bg-white dark:bg-rdp"' +
+        oh += '<div class="opp-item bg-white dark:bg-rdp" style="border-left:3px solid #3d4535"' +
           ' data-opp-id="' + o.id + '"' +
           ' data-opp-action="' + String(o.action).replace(/"/g, '&quot;') + '"' +
           ' data-opp-points="' + o.points + '">' +
