@@ -626,9 +626,9 @@ function render() {
   }
   if (cc) { txt('connectivityScore', cc.score + ' / ' + cc.max); wid('connectivityBar', Math.round(cc.score / cc.max * 100)); }
 
-  txt('effectiveArea', c.effective_ecological_area_ha + 'ha');
-  txt('clusterNote',   'Part of ' + c.cluster_area_ha + 'ha ' + c.cluster_name + ' cluster.');
-  txt('curbingNote',   'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' + (adj.length + 1) + ' registered gardens and 1 adjacent park representing ' + c.cluster_area_ha + 'ha of measured ecological function.');
+  txt('effectiveArea', c.effective_ecological_area_ha != null ? c.effective_ecological_area_ha + 'ha' : '—');
+  txt('clusterNote',   c.cluster_area_ha != null ? 'Part of ' + c.cluster_area_ha + 'ha ' + c.cluster_name + ' cluster.' : 'Part of ' + c.cluster_name + ' cluster.');
+  txt('curbingNote',   'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' + (adj.length + 1) + ' registered gardens and 1 adjacent park' + (c.cluster_area_ha != null ? ' representing ' + c.cluster_area_ha + 'ha of measured ecological function.' : '.'));
 
   /* Store score on record for map popup then init map */
   R._score = result.total;
