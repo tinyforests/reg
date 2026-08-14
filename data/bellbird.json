@@ -34,10 +34,10 @@
     "indigenous_dominant": true,
     "structural_layers_current": 5,
     "structural_layers_baseline": null,
-    "canopy_cover_pct_current": 70,
+    "canopy_cover_pct_current": 60,
     "canopy_cover_pct_baseline": null,
     "canopy_cover_pct_target": null,
-    "weed_pressure": null,
+    "weed_pressure": "Low",
     "weed_pressure_baseline": null,
     "species_list": [
       "Correa reflexa",
@@ -70,19 +70,19 @@
     "water_function_baseline": null,
     "water_function_max": 5,
     "has_rainwater_system": null,
-    "has_moisture_basin": null,
+    "has_moisture_basin": true,
     "has_swale": null,
     "mulch_depth_mm": null,
-    "mulch_type": null,
+    "mulch_type": "Woodchips — deep application",
     "water_note": "Score reflects publicly confirmed features only: winding watercourse feeding a large basalt-lined pond, and a separate waterfall. Sources: Sam Cox Landscape website, Open Gardens Victoria listing, Domain/Design Files 2018. Swale, moisture basin and rainwater system unconfirmed — score may rise at site assessment."
   },
   "habitat": {
-    "habitat_nodes": null,
+    "habitat_nodes": 5,
     "habitat_nodes_baseline": null,
-    "has_embedded_logs": null,
+    "has_embedded_logs": true,
     "has_rock_refuges": true,
     "has_water_feature": true,
-    "has_nest_boxes": null,
+    "has_nest_boxes": false,
     "planting_method": "Australian naturalistic design by Sam Cox Landscape — earth shaping, basalt boulder placement, and layered indigenous planting. Winding watercourse leads to a large basalt-lined pond; a separate waterfall brings water sound into the family living spaces. Garden developed over 25 years following the principles of Gordon Ford.",
     "fauna_sightings": [
       {
