@@ -38,7 +38,7 @@
     "canopy_cover_pct_baseline": null,
     "canopy_cover_pct_target": null,
     "weed_pressure": "Low",
-    "weed_pressure_baseline": null,
+    "weed_pressure_baseline": "High",
     "species_list": [
       "Correa reflexa",
       "Correa alba",
