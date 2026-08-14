@@ -122,14 +122,17 @@
     bar.style.cssText = [
       'position:fixed;bottom:0;left:0;right:0;z-index:100',
       'padding:.7rem 1.25rem',
-      'background:#3d4535;color:#fff0dc',
-      'border-top:1px solid rgba(255,240,220,.15)',
+      'background:rgba(61,69,53,.88)',
+      '-webkit-backdrop-filter:blur(3px)',
+      'backdrop-filter:blur(3px)',
+      'border-top:1px solid rgba(255,240,220,.12)',
       'font-family:"IBM Plex Sans",sans-serif',
       'display:flex;flex-direction:column;justify-content:flex-end',
       'transition:min-height .38s ease'
     ].join(';');
     bar.innerHTML =
-      '<div id="er-unlock-hero" style="opacity:0;transition:opacity .25s ease;padding-bottom:1.75rem;max-width:960px;margin-left:auto;margin-right:auto;width:100%">' +
+      '<div id="er-unlock-hero" style="position:absolute;top:.9rem;left:1.25rem;right:1.25rem;' +
+        'opacity:0;transition:opacity .28s ease .08s;pointer-events:none;max-width:960px">' +
         '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0;color:#fff0dc">' +
           'Claim this profile to add and unlock your field records.' +
         '</p>' +
