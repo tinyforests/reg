@@ -217,7 +217,8 @@ function verificationLabelFromLevel(level) {
     gardener_and_son_verified: "G&S Verified",
     site_visit:                "Site Visit",
     photo_verified:            "Photo Verified",
-    self_reported:             "Self Reported"
+    self_reported:             "Self Reported",
+    enrolled:                  "Enrolled"
   };
   return map[level] || "Unverified";
 }
