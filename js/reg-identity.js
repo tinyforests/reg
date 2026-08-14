@@ -42,10 +42,13 @@
     } catch (e) {}
   }
 
-  /* Returns true if this device has been linked to the given garden. */
+  /* Returns true if this device has been linked to the given garden, or admin override is set. */
   function isSteward(gardenId) {
     if (!gardenId) return false;
-    try { return !!localStorage.getItem(STEWARD_PFX + gardenId); } catch (e) { return false; }
+    try {
+      if (localStorage.getItem('er_admin') === '1') return true;
+      return !!localStorage.getItem(STEWARD_PFX + gardenId);
+    } catch (e) { return false; }
   }
 
   /* Returns the stored steward record, or null. */
