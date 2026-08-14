@@ -119,7 +119,7 @@
     "park_lng": 145.156,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": null,
+    "effective_ecological_area_ha": 0.607,
     "cluster_area_ha": 0.607,
     "cluster_name": "Nillumbik",
     "cluster": {
