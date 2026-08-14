@@ -114,7 +114,7 @@
     try { if (sessionStorage.getItem('er_unlock_dismissed:' + gardenId) === '1') return; } catch (e) {}
 
     // Derive the garden slug from the pathname (e.g. /gardens/arundel/ -> arundel)
-    var pathParts  = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+    var pathParts  = window.location.pathname.replace(/\/$/, '').split('/').filter(function(p) { return p && p !== 'index.html'; });
     var gardenSlug = pathParts[pathParts.length - 1] || '';
 
     var bar = document.createElement('div');
