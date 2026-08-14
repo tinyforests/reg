@@ -51,9 +51,11 @@ var CLAIM_TOKEN_HEADERS = ['token', 'garden_id', 'email', 'created_at', 'expires
 function doGet(e) {
   var params = (e && e.parameter) ? e.parameter : {};
 
-  if (params.action === 'verify_steward')  return handleVerifySteward(params);
-  if (params.action === 'request_claim')   return handleRequestClaim(params);
-  if (params.action === 'verify_claim')    return handleVerifyClaimToken(params);
+  if (params.action === 'verify_steward')    return handleVerifySteward(params);
+  if (params.action === 'request_claim')     return handleRequestClaim(params);
+  if (params.action === 'verify_claim')      return handleVerifyClaimToken(params);
+  if (params.action === 'get_log_visibility') return handleGetLogVisibility(params);
+  if (params.action === 'set_log_visibility') return handleSetLogVisibility(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -682,6 +684,58 @@ function handleVoucherEmail(payload) {
 }
 
 /* ---- Utilities ---- */
+/* ---- Log visibility (steward-controlled public/private per entry) ---- */
+var LOG_VIS_SHEET   = 'Log Visibility';
+var LOG_VIS_HEADERS = ['garden_id', 'entry_index', 'public', 'email', 'updated_at'];
+
+function handleGetLogVisibility(params) {
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+  if (!gardenId) return jsonResp({ ok: false, error: 'garden_id required' });
+
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(LOG_VIS_SHEET);
+  if (!sheet || sheet.getLastRow() <= 1) return jsonResp({ ok: true, overrides: {} });
+
+  var data      = sheet.getRange(2, 1, sheet.getLastRow() - 1, 3).getValues();
+  var overrides = {};
+  for (var i = 0; i < data.length; i++) {
+    if (String(data[i][0]).trim() === gardenId) {
+      var idx = parseInt(data[i][1], 10);
+      overrides[idx] = (data[i][2] === true || String(data[i][2]).toUpperCase() === 'TRUE');
+    }
+  }
+  return jsonResp({ ok: true, overrides: overrides });
+}
+
+function handleSetLogVisibility(params) {
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+  var idx      = parseInt(params.entry_index, 10);
+  var isPublic = params.public === 'true' || params.public === true;
+  var email    = safeStr((params.email || '').toLowerCase().trim(), 254);
+
+  if (!gardenId || isNaN(idx)) return jsonResp({ ok: false, error: 'garden_id and entry_index required' });
+
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(LOG_VIS_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(LOG_VIS_SHEET);
+    sheet.getRange(1, 1, 1, LOG_VIS_HEADERS.length).setValues([LOG_VIS_HEADERS]);
+  }
+
+  var lastRow = sheet.getLastRow();
+  if (lastRow > 1) {
+    var data = sheet.getRange(2, 1, lastRow - 1, 2).getValues();
+    for (var i = 0; i < data.length; i++) {
+      if (String(data[i][0]).trim() === gardenId && parseInt(data[i][1], 10) === idx) {
+        sheet.getRange(i + 2, 3, 1, 3).setValues([[isPublic, email, new Date().toISOString()]]);
+        return jsonResp({ ok: true });
+      }
+    }
+  }
+  sheet.appendRow([gardenId, idx, isPublic, email, new Date().toISOString()]);
+  return jsonResp({ ok: true });
+}
+
 function hourBucket() {
   var d = new Date();
   return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' +

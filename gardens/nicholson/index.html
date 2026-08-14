@@ -454,6 +454,95 @@ function sc(cls1, cls2) {
   return 'text-xs border border-rl dark:border-rdl px-2.5 py-1.5 ' + (cls1 ? cls1 : cls2);
 }
 
+/* ---- FIELD RECORD LOG ---- */
+function _erRenderLog(log, isSt) {
+  var allLog = log || [];
+  var lh = '';
+  for (var li = 0; li < allLog.length; li++) {
+    var ent = allLog[li];
+    var isPub = ent.public === true;
+    if (!isSt && !isPub) continue;
+    var toggle = isSt ? (
+      '<button onclick="erToggleLogEntry(' + li + ',this)" title="' + (isPub ? 'Make private' : 'Make public') + '" ' +
+      'style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:0;vertical-align:middle;margin-left:8px;">' +
+      '<span style="display:inline-block;width:28px;height:14px;position:relative;' +
+      (isPub ? 'background:#7a9e5f;' : 'border:1px solid currentColor;opacity:.4;') + '">' +
+      '<span style="position:absolute;top:2px;' +
+      (isPub ? 'right:2px;background:#fff0dc;' : 'left:2px;background:currentColor;opacity:.6;') +
+      'width:10px;height:10px;"></span></span>' +
+      '<span style="font-size:.6rem;font-family:\'IBM Plex Mono\',monospace;' +
+      (isPub ? 'color:#7a9e5f;' : 'opacity:.4;') + '">' + (isPub ? 'Public' : 'Private') + '</span></button>'
+    ) : '';
+    lh += '<article class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">' +
+      '<div class="flex items-start justify-between gap-4 mb-3">' +
+      '<div><div class="text-sm font-medium">' + (ent.note_url ? '<a href="' + ent.note_url + '" style="text-decoration:underline;text-underline-offset:3px;opacity:.9">' + ent.title + '</a>' : ent.title) + toggle + '</div>' +
+      '<div class="text-xs opacity-50 mt-1 font-mono">' + ent.date + '</div></div>' +
+      '<span class="flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg">' + ent.type + '</span></div>' +
+      '<p class="text-sm leading-relaxed opacity-80">' + ent.notes + '</p></article>';
+  }
+  if (!lh) lh = '<p class="text-sm opacity-50 font-mono">Field record entries are not yet shared publicly.</p>';
+  html('activityLog', lh);
+}
+
+function erToggleLogEntry(idx, btn) {
+  if (!G || !G.activity_log || G.activity_log[idx] === undefined) return;
+  G.activity_log[idx].public = !G.activity_log[idx].public;
+  var isPub = G.activity_log[idx].public;
+  var _isSt2 = (typeof isSteward === 'function') && isSteward(G.garden_id);
+  _erRenderLog(G.activity_log, _isSt2);
+  try {
+    var lk = 'er_lv_local:' + G.garden_id;
+    var lv = JSON.parse(localStorage.getItem(lk) || '{}');
+    lv[idx] = isPub;
+    localStorage.setItem(lk, JSON.stringify(lv));
+  } catch(e) {}
+  try { sessionStorage.removeItem('er_lv:' + G.garden_id); } catch(e) {}
+  var ep = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+  if (ep) {
+    var st = (typeof getSteward === 'function') ? getSteward(G.garden_id) : null;
+    var email = st ? (st.email || '') : '';
+    fetch(ep + '?action=set_log_visibility&garden_id=' + encodeURIComponent(G.garden_id) +
+          '&entry_index=' + idx + '&public=' + isPub + '&email=' + encodeURIComponent(email))
+      .catch(function() {});
+  }
+}
+
+function _erFetchLogOverrides(gardenId) {
+  if (!G || !G.activity_log || !G.activity_log.length) return;
+  var ep = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+  if (!ep) return;
+  var cacheKey = 'er_lv:' + gardenId;
+  function applyOv(ov) {
+    if (!ov || typeof ov !== 'object') return;
+    var log = G.activity_log;
+    var changed = false;
+    var keys = Object.keys(ov);
+    for (var k = 0; k < keys.length; k++) {
+      var i = parseInt(keys[k], 10);
+      if (!isNaN(i) && log[i] !== undefined && log[i].public !== ov[keys[k]]) {
+        log[i].public = ov[keys[k]];
+        changed = true;
+      }
+    }
+    if (changed) {
+      var _isSt3 = (typeof isSteward === 'function') && isSteward(gardenId);
+      _erRenderLog(log, _isSt3);
+    }
+  }
+  try {
+    var cached = sessionStorage.getItem(cacheKey);
+    if (cached !== null) { applyOv(JSON.parse(cached)); return; }
+  } catch(e) {}
+  fetch(ep + '?action=get_log_visibility&garden_id=' + encodeURIComponent(gardenId))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var ov = (data && data.overrides) ? data.overrides : {};
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(ov)); } catch(e) {}
+      applyOv(ov);
+    })
+    .catch(function() {});
+}
+
 
 /* ---- LEVEL TRACK ---- */
 var LEVEL_TIERS = [
@@ -636,23 +725,7 @@ function render() {
     if (_pp) _pp.style.display = 'block';
   }
 
-  var log = R.activity_log || [];
-  var displayLog = _isSt ? log : log.filter(function(e) { return e.public === true; });
-  var lh = '';
-  if (displayLog.length === 0) {
-    lh = '<p class="text-sm opacity-50 font-mono">Field record entries are not yet shared publicly.</p>';
-  } else {
-    for (var li = 0; li < displayLog.length; li++) {
-      var ent = displayLog[li];
-      var privTag = _isSt ? '<span class="text-[0.6rem] border px-1.5 py-0.5 ml-2 align-middle ' + (ent.public ? 'border-[#7a9e5f] text-[#7a9e5f]' : 'opacity-30 border-current') + '">' + (ent.public ? 'Public' : 'Private') + '</span>' : '';
-      lh += '<article class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">' +
-        '<div class="flex items-start justify-between gap-4 mb-3">' +
-        '<div><div class="text-sm font-medium">' + (ent.note_url ? '<a href="' + ent.note_url + '" style="text-decoration:underline;text-underline-offset:3px;opacity:.9">' + ent.title + '</a>' : ent.title) + privTag + '</div><div class="text-xs opacity-50 mt-1 font-mono">' + ent.date + '</div></div>' +
-        '<span class="flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg">' + ent.type + '</span></div>' +
-        '<p class="text-sm leading-relaxed opacity-80">' + ent.notes + '</p></article>';
-    }
-  }
-  html('activityLog', lh);
+  _erRenderLog(R.activity_log || [], _isSt);
 
   html('gardenFacts',
     '<div class="flex justify-between gap-4"><dt class="opacity-60">EVC</dt><dd class="font-medium text-right">' + R.evc.name + ' (' + R.evc.code + ')</dd></div>' +
@@ -943,6 +1016,7 @@ fetch('/data/nicholson.json')
   .then(function(data) {
     G = data;
     render();
+    _erFetchLogOverrides(G.garden_id);
   })
   .catch(function(err) {
     console.error('Could not load garden data:', err);

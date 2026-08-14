@@ -128,7 +128,7 @@
     ].join(';');
     bar.innerHTML =
       '<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto">' +
-        '<span style="font-size:.72rem;opacity:.65;flex-shrink:0">Is this your garden? Your name and precise location are private.</span>' +
+        '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0">Is this your garden? Your name and precise location are private.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
           'background:transparent;border:1px solid rgba(255,240,220,.3);color:#fff0dc;outline:none;font-family:inherit" />' +
@@ -142,6 +142,20 @@
       '<div id="er-unlock-msg" style="font-size:.7rem;margin-top:.35rem;display:none;max-width:960px;margin-left:auto;margin-right:auto;opacity:.8"></div>';
 
     document.body.appendChild(bar);
+
+    // Change hint text when the Field Record section scrolls into view
+    if (window.IntersectionObserver) {
+      var _recordSec = document.getElementById('record');
+      if (_recordSec) {
+        new IntersectionObserver(function(entries) {
+          var hint = document.getElementById('er-unlock-hint');
+          if (!hint) return;
+          hint.textContent = entries[0].isIntersecting
+            ? 'Claim this profile to add and unlock your field records.'
+            : 'Is this your garden? Your name and precise location are private.';
+        }, { threshold: 0.15 }).observe(_recordSec);
+      }
+    }
 
     document.getElementById('er-unlock-dismiss').onclick = function () {
       bar.parentNode && bar.parentNode.removeChild(bar);
@@ -179,7 +193,7 @@
     };
   }
 
-  var api = { getDeviceId: getDeviceId, markSteward: markSteward, isSteward: isSteward, getSteward: getSteward, mountStewardUnlock: mountStewardUnlock, handleClaimParam: handleClaimParam };
+  var api = { getDeviceId: getDeviceId, markSteward: markSteward, isSteward: isSteward, getSteward: getSteward, mountStewardUnlock: mountStewardUnlock, handleClaimParam: handleClaimParam, endpoint: ENDPOINT };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else {
     root.getDeviceId        = getDeviceId;
@@ -189,6 +203,7 @@
     root.mountStewardUnlock = mountStewardUnlock;
     root.handleClaimParam   = handleClaimParam;
     root.RegIdentity        = api;
+    root.RegEndpoint        = ENDPOINT;
   }
 
 })(typeof self !== 'undefined' ? self : this);
