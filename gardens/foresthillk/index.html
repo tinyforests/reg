@@ -1,9 +1,1131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth dark">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- HIDDEN: remove this meta tag to restore the profile -->
   <meta http-equiv="refresh" content="0;url=/registry.html" />
-  <title>Ecological Registry</title>
+  <title>Ecological Registry - Kate's Forest Hill Garden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        fontFamily: {
+          serif: ['"Abril Fatface"', 'serif'],
+          sans:  ['"IBM Plex Sans"', 'sans-serif'],
+          mono:  ['"IBM Plex Mono"', 'monospace']
+        },
+        colors: {
+          rg: '#3d4535', rb: '#fff0dc', rs: '#f7ead6',
+          rl: '#d7ccb9', rdp: '#485141', rdl: 'rgba(255,240,220,0.12)',
+          signal: '#7a9e5f'
+        }
+      }}
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <style>
+    * { border-radius: 0 !important; }
+    body { transition: background 0.3s, color 0.3s; }
+    .bar-fill { transition: width 900ms cubic-bezier(0.16,1,0.3,1); }
+    .section-label { font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; opacity:.5; }
+    .signal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(61,69,53,.15); }
+    .dark .signal-grid { background:rgba(255,240,220,.1); }
+    .signal-cell { background:#fff0dc; padding:1rem 1.25rem; }
+    .dark .signal-cell { background:#485141; }
+    @media(min-width:640px){ .signal-grid{grid-template-columns:repeat(3,1fr)} }
+    @media(min-width:1024px){ .signal-grid{grid-template-columns:repeat(6,1fr)} }
+    .delta-up   { color:#7a9e5f; font-weight:600; }
+    .delta-same { opacity:.45; }
+    .delta-down { color:#b49a63; font-weight:600; }
+    .stagger > * { opacity:0; transform:translateY(12px); animation:fadeUp 0.5s ease forwards; }
+    .stagger > *:nth-child(1){animation-delay:.05s}
+    .stagger > *:nth-child(2){animation-delay:.1s}
+    .stagger > *:nth-child(3){animation-delay:.15s}
+    .stagger > *:nth-child(4){animation-delay:.2s}
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+    .leaflet-div-icon { background:transparent !important; border:none !important; }
+    .leaflet-container { font-family: "IBM Plex Sans", sans-serif; }
+    .leaflet-popup-content-wrapper { border-radius:0 !important; border:1px solid #d7ccb9; box-shadow:none; font-size:11px; }
+    .dark .leaflet-popup-content-wrapper { background:#485141; color:#fff0dc; border-color:rgba(255,240,220,.12); }
+    .leaflet-popup-tip { display:none; }
+    .bar-track { background:rgba(255,240,220,.12); height:4px; }
+    html.light .bar-track { background:rgba(61,69,53,.12); }
+    .bar-fill  { height:4px; }
+
+    /* Council provenance banner */
+    .council-banner {
+      border-left: 3px solid #7a9e5f;
+      background: rgba(122,158,95,.08);
+      padding: 1rem 1.25rem;
+    }
+    .dark .council-banner {
+      background: rgba(122,158,95,.12);
+    }
+
+    /* Null field placeholder */
+    .null-field { opacity:.35; font-style:italic; }
+
+    /* Weed item */
+    .weed-item {
+      font-size:.75rem;
+      padding:.5rem .75rem;
+      border-bottom: 1px solid rgba(61,69,53,.1);
+      display:flex;
+      align-items:center;
+      gap:.75rem;
+    }
+    .dark .weed-item { border-color:rgba(255,240,220,.08); }
+    .weed-item:last-child { border-bottom:none; }
+    .weed-dot { width:6px; height:6px; background:#c0392b; flex-shrink:0; }
+
+    /* Recommendation item */
+    .rec-item {
+      font-size:.75rem;
+      padding:.5rem .75rem;
+      border-bottom:1px solid rgba(61,69,53,.1);
+      display:flex;
+      gap:.75rem;
+    }
+    .dark .rec-item { border-color:rgba(255,240,220,.08); }
+    .rec-item:last-child { border-bottom:none; }
+    .rec-num { font-family:"IBM Plex Mono",monospace; font-size:.6rem; opacity:.4; flex-shrink:0; padding-top:1px; }
+    .rec-item > div { flex:1; min-width:0; }
+    .rec-opp-link { display:inline-block; margin-top:.3rem; font-size:.68rem; color:#7a9e5f; text-decoration:underline; text-underline-offset:2px; }
+    .claimed-tag { display:inline-block; margin-top:.3rem; font-size:.68rem; font-weight:600; color:#7a9e5f; }
+    .rec-opp-badge { margin-top:.45rem; font-size:.67rem; font-weight:600; color:#7a9e5f; letter-spacing:.01em; }
+
+    /* Level track */
+    .level-track { display:flex; align-items:center; margin:1.4rem 0 .25rem; }
+    .lt-dot { width:11px; height:11px; border-radius:50% !important; flex-shrink:0; border:1.5px solid currentColor; }
+    .lt-dot.passed { background:currentColor; }
+    .lt-dot.future { background:transparent; opacity:.35; }
+    .lt-dot.current { width:15px; height:15px; background:#7a9e5f; border-color:#7a9e5f; }
+    .lt-seg { flex:1; height:1.5px; background:currentColor; }
+    .lt-seg.future { opacity:.2; }
+
+    /* Voucher modal */
+    #voucherOverlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(61,69,53,.7); align-items:center; justify-content:center; padding:1rem; }
+    #voucherOverlay.open { display:flex; }
+    #voucherModal { background:#fff0dc; color:#3d4535; width:100%; max-width:680px; max-height:90vh; overflow:hidden; display:flex; flex-direction:column; }
+    .dark #voucherModal { background:#3d4535; color:#fff0dc; }
+    #voucherModal .vm-header { padding:1.25rem 1.5rem; border-bottom:1px solid rgba(61,69,53,.15); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .dark #voucherModal .vm-header { border-color:rgba(255,240,220,.12); }
+    #voucherModal .vm-body { flex:1; overflow-y:auto; padding:1.5rem; }
+    #voucherModal .vm-footer { padding:1.25rem 1.5rem; border-top:1px solid rgba(61,69,53,.15); display:flex; justify-content:space-between; align-items:center; flex-shrink:0; }
+    .dark #voucherModal .vm-footer { border-color:rgba(255,240,220,.12); }
+    .vm-step { display:none; }
+    .vm-step.active { display:block; }
+    .vm-progress { height:2px; background:rgba(61,69,53,.12); margin-bottom:1.5rem; }
+    .dark .vm-progress { background:rgba(255,240,220,.12); }
+    .vm-progress-fill { height:2px; background:#7a9e5f; transition:width 400ms ease; }
+
+    /* Species picker */
+    .sp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.5rem; }
+    .sp-card { border:1px solid rgba(61,69,53,.2); padding:.6rem .75rem; cursor:pointer; transition:border-color .15s,background .15s; user-select:none; }
+    .dark .sp-card { border-color:rgba(255,240,220,.15); }
+    .sp-card:hover { border-color:#7a9e5f; }
+    .sp-card.selected { border-color:#7a9e5f; background:rgba(122,158,95,.12); }
+    .sp-card.disabled:not(.selected) { opacity:.4; cursor:not-allowed; }
+    .sp-scientific { font-size:.7rem; font-style:italic; opacity:.7; margin-bottom:.15rem; }
+    .sp-common { font-size:.8rem; font-weight:500; }
+    .sp-layer { font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; opacity:.45; margin-top:.2rem; }
+    .sp-counter { font-family:"IBM Plex Mono",monospace; font-size:.8rem; }
+
+    /* Address input */
+    .vm-input { width:100%; border:1px solid rgba(61,69,53,.25); background:transparent; padding:.75rem 1rem; font-family:inherit; font-size:.875rem; color:inherit; outline:none; }
+    .vm-input:focus { border-color:#7a9e5f; }
+    .dark .vm-input { border-color:rgba(255,240,220,.2); }
+    .dark .vm-input:focus { border-color:#7a9e5f; }
+
+    /* Voucher CTA banner */
+    .voucher-banner { border:2px solid #7a9e5f; padding:1.5rem 2rem; display:flex; flex-direction:column; gap:1rem; }
+    @media(min-width:768px){ .voucher-banner { flex-direction:row; align-items:center; justify-content:space-between; } }
+
+    /* Opportunity item */
+    .opp-item { border:1px solid rgba(61,69,53,.15); padding:.875rem 1rem; }
+    .dark .opp-item { border-color:rgba(255,240,220,.12); }
+  </style>
 </head>
-<body></body>
+<body class="bg-rb text-rg font-sans antialiased dark:bg-rg dark:text-rb">
+
+<header class="sticky top-0 z-40 border-b border-rl bg-rb/90 backdrop-blur dark:border-rdl dark:bg-rg/90">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+      <div class="grid h-9 w-9 place-items-center bg-rg text-rb dark:bg-rb dark:text-rg font-semibold text-sm">ER</div>
+      <div class="leading-tight">
+        <div class="text-sm font-medium tracking-wide">Ecological Registry</div>
+        <div class="text-xs opacity-60 font-mono" id="headerMeta">Loading…</div>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-1 text-xs">
+      <a href="#voucher"    class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp" style="color:#7a9e5f;font-weight:600">Plants</a>
+      <a href="#score"      class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
+      <a href="#provenance" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Source</a>
+      <a href="#weeds"      class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Weeds</a>
+      <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
+      <a href="#record"     class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
+    </nav>
+    <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Canopy</button>
+  </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-4 py-8 md:py-12 space-y-12">
+
+  <!-- HERO -->
+  <section class="stagger">
+    <div class="grid lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8 border border-rl dark:border-rdl bg-white dark:bg-rdp p-8 md:p-10">
+        <div class="section-label mb-4" id="heroType">Loading…</div>
+        <h1 class="font-serif text-6xl md:text-7xl leading-none mb-4" id="heroName">--</h1>
+        <div class="flex flex-wrap gap-2 mb-5" id="heroTags"></div>
+        <p class="text-base leading-relaxed opacity-85 max-w-xl" id="heroDesc"></p>
+        <div class="mt-6 pt-6 border-t border-rl dark:border-rdl grid grid-cols-2 gap-4">
+          <div>
+            <div class="section-label mb-2">Steward</div>
+            <div class="text-sm" id="heroStewards"></div>
+          </div>
+          <div>
+            <div class="section-label mb-2">Registry ID</div>
+            <div class="font-mono text-xs" id="heroId">--</div>
+          </div>
+        </div>
+      </div>
+      <div class="lg:col-span-4 flex flex-col gap-4">
+        <div class="border p-6 flex-1 flex flex-col justify-between" style="background:#7a9e5f;color:#3d4535;border-color:rgba(61,69,53,.25)">
+          <div class="section-label mb-6" style="color:inherit;opacity:.6">Ecological Function</div>
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">
+              <div class="font-serif" style="font-size:4.5rem;line-height:1" id="heroScore">--</div>
+              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">score</div>
+            </div>
+            <div style="border:1px solid rgba(61,69,53,.25);padding:.875rem 1rem;text-align:center">
+              <div class="font-serif" style="font-size:4.5rem;line-height:1" id="heroBadgeCount">--</div>
+              <div style="font-size:.65rem;opacity:.5;margin-top:.3rem">badges</div>
+            </div>
+          </div>
+          <div>
+            <div style="margin-bottom:.75rem">
+              <span style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.25rem .6rem;display:inline-block" id="heroLevel">--</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" id="heroScoreBar" style="width:0%;background:#3d4535"></div>
+            </div>
+          </div>
+          <div style="border-top:1px solid rgba(61,69,53,.2);padding-top:1.25rem;margin-top:1rem">
+            <div style="font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(61,69,53,.25);padding:.25rem .6rem;opacity:.65;display:inline-block;margin-bottom:.6rem">Badges earned</div>
+            <div class="flex flex-wrap gap-2" id="heroBadges"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOUCHER CTA -->
+  <section id="voucher" class="stagger">
+    <div class="voucher-banner" style="background:rgba(122,158,95,.06)">
+      <div>
+        <div class="text-xs font-mono mb-2" style="color:#7a9e5f;letter-spacing:.08em">WHITEHORSE CITY COUNCIL · GARDENS FOR WILDLIFE</div>
+        <h2 class="font-serif text-3xl md:text-4xl mb-2">Your planting list — 20 free plants</h2>
+        <p class="text-sm opacity-70 leading-relaxed max-w-lg">Your G4W assessors have prepared a personalised planting list. Whitehorse G4W participants receive a voucher for 20 free indigenous plants, redeemable at Greenlink (Box Hill) or Bungalook — both volunteer-run nurseries growing from local Whitehorse seed.</p>
+        <p class="text-xs opacity-50 mt-2 font-mono" id="voucherSeasonNote"></p>
+      </div>
+      <button onclick="openVoucherFlow()" class="flex-shrink-0 px-6 py-3.5 font-medium text-sm self-start md:self-center" style="background:#3d4535;color:#fff0dc;white-space:nowrap">Claim your planting list →</button>
+    </div>
+  </section>
+
+  <!-- COUNCIL PROVENANCE -->
+  <section id="provenance" class="stagger">
+    <div class="section-label mb-1">Data Origin</div>
+    <h2 class="font-serif text-4xl mb-6">Record Provenance</h2>
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
+        <div class="council-banner mb-6">
+          <div class="font-medium text-sm" id="provenanceVerifier"></div>
+          <div class="text-xs opacity-60 mt-1" id="provenanceDate"></div>
+        </div>
+        <dl class="space-y-3 text-xs">
+          <div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-3">
+            <dt class="opacity-60">Program</dt>
+            <dd class="font-medium text-right" id="provenanceProgram"></dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-3">
+            <dt class="opacity-60">Council</dt>
+            <dd class="font-medium text-right" id="provenanceCouncil"></dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-3">
+            <dt class="opacity-60">Assessors</dt>
+            <dd class="font-medium text-right" id="provenanceAssessors"></dd>
+          </div>
+          <div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-3">
+            <dt class="opacity-60">Voucher</dt>
+            <dd class="font-mono text-right" id="provenanceVoucher"></dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="opacity-60">Visit date</dt>
+            <dd class="font-medium text-right" id="provenanceVisitDate"></dd>
+          </div>
+        </dl>
+      </div>
+      <div class="space-y-4">
+        <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-5">
+          <div class="section-label mb-3" style="color:inherit;opacity:.6">What this record closes</div>
+          <p class="text-sm leading-relaxed opacity-90 mb-4">This record was created directly from a Whitehorse City Council Gardens for Wildlife visit report — no additional data entry by the steward required.</p>
+          <p class="text-sm leading-relaxed opacity-90">The council is recorded as the <strong>source of third-party evidence</strong>, not as a Registry verifier. The G4W assessment was conducted for the council's own program — it was not performed against the Registry standard.</p>
+        </div>
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Fields requiring follow-up</div>
+          <ul class="space-y-2 text-xs" id="nullFieldList"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNALS -->
+  <section id="signals" class="stagger">
+    <div class="flex items-end justify-between gap-4 mb-4">
+      <div>
+        <div class="section-label mb-1">Structured Ecological Data</div>
+        <h2 class="font-serif text-4xl">Ecological Signals</h2>
+      </div>
+      <div class="text-xs opacity-50 font-mono text-right" id="signalDates"></div>
+    </div>
+    <div class="signal-grid mb-4" id="signalGridPrimary"></div>
+    <div class="signal-grid" id="signalGridSecondary"></div>
+  </section>
+
+  <!-- SCORE -->
+  <section id="score" class="stagger">
+    <div class="section-label mb-1">Performance</div>
+    <h2 class="font-serif text-4xl mb-6">Score Breakdown</h2>
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div class="section-label">Category Scores</div>
+          <div class="text-2xl font-light" id="overallPct">--</div>
+        </div>
+        <div class="space-y-5" id="categoryBars"></div>
+        <p class="text-xs opacity-50 mt-6 leading-relaxed">Score is provisional. Null inputs (area, EVC, soil) are treated as zero by the scoring engine. Score will rise as the record is completed with steward input.</p>
+      </div>
+      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+        <div class="section-label mb-4">Assessor Recommendations</div>
+        <div id="recList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPPORTUNITIES -->
+  <section id="opportunities" class="stagger">
+    <div class="section-label mb-1">Grow the record</div>
+    <h2 class="font-serif text-4xl mb-6">Biggest Opportunities</h2>
+    <div class="grid lg:grid-cols-3 gap-4" id="opportunityList"></div>
+  </section>
+
+  <!-- WEEDS -->
+  <section id="weeds" class="stagger">
+    <div class="section-label mb-1">Environmental Weeds</div>
+    <h2 class="font-serif text-4xl mb-6">Weeds Identified</h2>
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp">
+        <div class="px-6 py-4 border-b border-rl dark:border-rdl">
+          <div class="text-sm font-medium">Weeds recorded on-site — 30 Oct 2025</div>
+          <div class="text-xs opacity-50 mt-1">Identified by Whitehorse City Council G4W garden guides</div>
+        </div>
+        <div id="weedList"></div>
+      </div>
+      <div class="space-y-4">
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-3">Nearest Reserves</div>
+          <div class="text-xs opacity-60 mb-3 leading-relaxed">Recorded in G4W visit report. These are the reserves assessors identified as closest to this garden.</div>
+          <div id="reserveList" class="space-y-2"></div>
+        </div>
+        <div class="border border-rl dark:border-rdl bg-rs dark:bg-rdp p-5">
+          <div class="section-label mb-2">Weed pressure rating</div>
+          <div class="text-2xl font-light mb-2" id="weedPressure">--</div>
+          <p class="text-xs opacity-60 leading-relaxed">Six environmental weed species identified across garden. Priority removal: <em>Lonicera japonica</em> (Japanese Honeysuckle) and <em>Asparagus densiflorus</em> (Boston Fern).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIES -->
+  <section id="species" class="stagger">
+    <div class="section-label mb-1">Confirmed Indigenous Flora</div>
+    <h2 class="font-serif text-4xl mb-6">Species on Record</h2>
+    <div id="speciesSection"></div>
+    <p class="text-xs opacity-40 mt-4 leading-relaxed max-w-xl">Only species confirmed present during the G4W visit are listed. The report also recommends ~30 indigenous species for planting — these are in the assessor recommendations, not this list.</p>
+  </section>
+
+  <!-- FAUNA -->
+  <section id="fauna" class="stagger">
+    <div class="section-label mb-1">Wildlife Record</div>
+    <h2 class="font-serif text-4xl mb-6">Fauna Sightings</h2>
+    <div class="grid lg:grid-cols-3 gap-4" id="faunaGrid"></div>
+  </section>
+
+  <!-- TRAJECTORY -->
+  <section id="trajectory" class="stagger">
+    <div class="section-label mb-1">Long-term View</div>
+    <h2 class="font-serif text-4xl mb-6">Trajectory</h2>
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
+        <div class="section-label mb-5">Milestones</div>
+        <ol class="space-y-3" id="milestoneList"></ol>
+      </div>
+      <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-6">
+        <div class="section-label mb-3" style="color:inherit;opacity:.6">Next Level</div>
+        <div class="text-2xl font-serif mb-2" id="nextLevelName">--</div>
+        <div class="text-sm opacity-80 mb-4" id="nextLevelGap"></div>
+        <div class="h-1.5 bg-rb/20 dark:bg-rg/20">
+          <div class="bar-fill h-full bg-rb dark:bg-rg" id="nextLevelBar" style="width:0%"></div>
+        </div>
+        <div class="level-track" id="levelTrack"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- G&S VERIFICATION -->
+  <section id="verification" class="stagger">
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="border border-rl dark:border-rdl bg-rg text-rb dark:bg-rb dark:text-rg p-8">
+        <div class="section-label mb-3" style="color:inherit;opacity:.6">Independent verification</div>
+        <h2 class="font-serif text-3xl mb-3">Book a Gardener &amp; Son verification visit</h2>
+        <p class="text-sm leading-relaxed opacity-80 mb-6">A G&amp;S site visit adds Registry verification to the G4W evidence — combining two sources on the same record. The visit confirms species, structure, and habitat against the Registry standard, and upgrades the verification level from G4W Site Visit to G&amp;S Verified.</p>
+        <a href="mailto:registry@gardenerandson.com.au?subject=Verification visit — Forest Hill G4W garden&body=Hi, I'd like to book a Gardener %26 Son verification visit for Kate's Forest Hill garden (Registry ID: ER-AU-VIC-WHI-KTE-001)." class="inline-block px-5 py-3 text-sm font-medium" style="background:#fff0dc;color:#3d4535;">Enquire about a verification visit →</a>
+      </div>
+      <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-8">
+        <div class="section-label mb-3">What a G&amp;S visit adds</div>
+        <ul class="space-y-3 text-sm">
+          <li class="flex gap-3"><span style="color:#7a9e5f;font-weight:700">+</span><span>Independent species count and structural layer assessment</span></li>
+          <li class="flex gap-3"><span style="color:#7a9e5f;font-weight:700">+</span><span>Soil and water function evaluation</span></li>
+          <li class="flex gap-3"><span style="color:#7a9e5f;font-weight:700">+</span><span>Verification level upgrade: G&amp;S Verified badge</span></li>
+          <li class="flex gap-3"><span style="color:#7a9e5f;font-weight:700">+</span><span>Full score calculation against the Registry standard</span></li>
+          <li class="flex gap-3"><span style="color:#7a9e5f;font-weight:700">+</span><span>Field notes published to your garden record</span></li>
+          <li class="flex gap-3"><span style="color:#7a9e5f;font-weight:700">+</span><span>Dual-source evidence: council + independent assessor</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECORD -->
+  <section id="record" class="stagger">
+    <div class="section-label mb-1">Garden Story</div>
+    <h2 class="font-serif text-4xl mb-6">Field Record</h2>
+    <div class="grid lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-4" id="activityLog"></div>
+      <div class="space-y-4">
+        <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">
+          <div class="section-label mb-4">Garden Facts</div>
+          <dl class="space-y-3 text-xs" id="gardenFacts"></dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Steward-only privacy panel — hidden publicly; revealed via JS when this device is claimed -->
+  <section id="stewardPrivacyPanel" style="display:none" class="stagger">
+    <div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6 md:p-8">
+      <div class="section-label mb-1">This device is linked to this garden</div>
+      <h2 class="font-serif text-3xl mb-5">Your Privacy</h2>
+      <div class="grid md:grid-cols-2 gap-8 text-sm">
+        <div>
+          <div class="section-label mb-3">Visible only to you on this device</div>
+          <ul class="space-y-2 opacity-75">
+            <li>Your name</li>
+            <li>Precise garden location — public visitors see an approximate map position (~250m offset)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-label mb-3">Visible to everyone</div>
+          <ul class="space-y-2 opacity-75">
+            <li>Garden name and ecological data</li>
+            <li>Suburb and state</li>
+            <li>Score, badges, and species list</li>
+            <li>Field notes and activity log</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-6 pt-5 border-t border-rl dark:border-rdl text-xs opacity-50">
+        To change what's public, contact Gardener &amp; Son.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="mt-16 border-t border-rl dark:border-rdl">
+  <div class="mx-auto max-w-6xl px-4 py-8 flex flex-col md:flex-row justify-between gap-6">
+    <div>
+      <div class="text-sm font-medium mb-1">Ecological Registry</div>
+      <div class="text-xs opacity-50">Private ecological infrastructure for cities</div>
+    </div>
+    <div class="text-xs opacity-50 max-w-sm leading-relaxed text-right">
+      Record created from Whitehorse City Council G4W visit report #2569.<br>
+      Verifier: Lynne, Gay — Gardens for Wildlife.
+    </div>
+  </div>
+</footer>
+
+<!-- VOUCHER MODAL -->
+<div id="voucherOverlay" role="dialog" aria-modal="true">
+  <div id="voucherModal">
+    <div class="vm-header">
+      <div>
+        <div class="text-xs opacity-50 font-mono mb-0.5">Gardens for Wildlife · Whitehorse City Council</div>
+        <div class="font-medium text-sm" id="vmStepTitle">Your planting list</div>
+      </div>
+      <button onclick="closeVoucherFlow()" style="background:none;border:none;cursor:pointer;opacity:.4;font-size:1.25rem;line-height:1;padding:.25rem .4rem;color:inherit" aria-label="Close">&times;</button>
+    </div>
+    <div class="vm-body">
+      <div class="vm-progress mb-6"><div class="vm-progress-fill" id="vmProgressFill" style="width:33%"></div></div>
+
+      <!-- Step 1: Address -->
+      <div class="vm-step active" id="vstep-0">
+        <h3 class="font-serif text-2xl mb-2">Your garden's address</h3>
+        <p class="text-sm opacity-70 mb-5 leading-relaxed">We'll use your address to confirm your EVC — the indigenous plant community your garden belongs to — and update your registry record.</p>
+        <div class="space-y-4">
+          <div>
+            <label class="section-label block mb-2">Street address</label>
+            <input type="text" id="vmAddress" class="vm-input" placeholder="e.g. 42 Wattle Street" autocomplete="street-address" />
+          </div>
+          <div>
+            <label class="section-label block mb-2">Suburb</label>
+            <input type="text" id="vmSuburb" class="vm-input" value="Forest Hill" />
+          </div>
+          <div>
+            <label class="section-label block mb-2">Garden area (approximate m²)</label>
+            <input type="number" id="vmArea" class="vm-input" placeholder="e.g. 250" min="1" />
+            <p class="text-xs opacity-50 mt-1">Used to calculate your score. Estimate is fine.</p>
+          </div>
+        </div>
+        <div id="vmGeoStatus" class="text-xs mt-4 font-mono opacity-60"></div>
+      </div>
+
+      <!-- Step 2: Species picker -->
+      <div class="vm-step" id="vstep-1">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-serif text-2xl">Choose your 20 plants</h3>
+          <div class="sp-counter"><span id="spSelected">0</span> / 20 selected</div>
+        </div>
+        <p class="text-sm opacity-70 mb-5 leading-relaxed">These species were recommended by your G4W assessors for this garden. Choose up to 20 to take to the nursery. Grouped by garden zone.</p>
+        <div id="spPickerWrap"></div>
+      </div>
+
+      <!-- Step 3: Get your list -->
+      <div class="vm-step" id="vstep-2">
+        <h3 class="font-serif text-2xl mb-2">Your plant list is ready</h3>
+        <p class="text-sm opacity-70 mb-5 leading-relaxed">Take this list to Greenlink or Bungalook with your Whitehorse G4W voucher. Both nurseries grow from local Whitehorse seed.</p>
+        <div id="vmPlantListOut" class="mb-6"></div>
+        <div class="border border-rl dark:border-rdl p-4 mb-5 space-y-3">
+          <div>
+            <div class="text-xs font-medium mb-0.5">Greenlink Box Hill</div>
+            <div class="text-xs opacity-60">Volunteer-run · growing from local Whitehorse seed · <a href="https://greenlink.org.au" target="_blank" style="text-decoration:underline;text-underline-offset:2px">greenlink.org.au</a></div>
+          </div>
+          <div>
+            <div class="text-xs font-medium mb-0.5">Bungalook Indigenous Nursery, Box Hill North</div>
+            <div class="text-xs opacity-60">Volunteer-run · growing from local Whitehorse seed · <a href="https://bungalook.org.au" target="_blank" style="text-decoration:underline;text-underline-offset:2px">bungalook.org.au</a></div>
+          </div>
+          <div class="text-xs opacity-50 pt-1 border-t border-rl dark:border-rdl" id="vmSeasonNoteOut"></div>
+        </div>
+        <div>
+          <label class="section-label block mb-2">Email your plant list</label>
+          <div class="flex gap-2">
+            <input type="email" id="vmEmail" class="vm-input flex-1" placeholder="your@email.com" />
+            <button onclick="emailPlantList()" class="px-4 py-2 text-xs font-medium flex-shrink-0" style="background:#3d4535;color:#fff0dc">Send list</button>
+          </div>
+          <p class="text-xs opacity-50 mt-1">We'll send your plant selection and nursery details. Your voucher is issued by Whitehorse City Council — bring it to the nursery.</p>
+        </div>
+      </div>
+    </div>
+    <div class="vm-footer">
+      <button id="vmBackBtn" onclick="voucherBack()" class="text-sm opacity-60 hover:opacity-100" style="background:none;border:none;cursor:pointer;color:inherit;display:none">← Back</button>
+      <div class="text-xs opacity-40 font-mono" id="vmStepLabel">Step 1 of 3</div>
+      <button id="vmNextBtn" onclick="voucherNext()" class="px-5 py-2.5 text-sm font-medium" style="background:#3d4535;color:#fff0dc">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/reg-score.js"></script>
+<script src="/js/reg-opportunities.js"></script>
+<script src="/js/reg-identity.js"></script>
+<script src="/js/reg-claims.js"></script>
+<script src="/js/badge-engine.js"></script>
+<script>
+
+var G = null;
+
+function el(id) { return document.getElementById(id); }
+function txt(id, v) { var e = el(id); if (e) e.textContent = v == null ? '—' : String(v); }
+function html(id, v) { var e = el(id); if (e) e.innerHTML = v; }
+function wid(id, p) { var e = el(id); if (e) e.style.width = (p || 0) + '%'; }
+function orDash(v) { return (v == null || v === '') ? '—' : v; }
+
+var LEVEL_TIERS = [
+  "Basic Garden","Habitat Garden","Ecological Garden",
+  "Registered Ecological Garden","High Habitat Garden","Urban Biodiversity Node"
+];
+
+function buildLevelTrack(elId, currentName) {
+  var track = el(elId);
+  if (!track) return;
+  var idx = LEVEL_TIERS.indexOf(currentName);
+  if (idx === -1) idx = 0;
+  var h = '';
+  for (var i = 0; i < LEVEL_TIERS.length; i++) {
+    var cls = i < idx ? 'passed' : (i === idx ? 'current' : 'future');
+    h += '<div class="lt-dot ' + cls + '" title="' + LEVEL_TIERS[i] + '"></div>';
+    if (i < LEVEL_TIERS.length - 1) h += '<div class="lt-seg ' + (i < idx ? '' : 'future') + '"></div>';
+  }
+  track.innerHTML = h;
+}
+
+/* Normalise nulls before scoring so the engine doesn't crash */
+function normalise(R) {
+  var b = R.biodiversity || {};
+  var sw = R.soil_water || {};
+  var h = R.habitat || {};
+  var c = R.connectivity || {};
+  b.canopy_cover_pct_current  = b.canopy_cover_pct_current  || 0;
+  b.canopy_cover_pct_baseline = b.canopy_cover_pct_baseline || 0;
+  b.structural_layers_current  = b.structural_layers_current  || 2;
+  b.structural_layers_baseline = b.structural_layers_baseline || 2;
+  b.indigenous_species_current  = b.indigenous_species_current  || 0;
+  b.indigenous_species_baseline = b.indigenous_species_baseline || 0;
+  b.indigenous_dominant = !!b.indigenous_dominant;
+  sw.soil_health_score    = sw.soil_health_score    || 1;
+  sw.soil_health_baseline = sw.soil_health_baseline || 1;
+  sw.water_function_score    = sw.water_function_score    || 1;
+  sw.water_function_baseline = sw.water_function_baseline || 1;
+  h.habitat_nodes          = h.habitat_nodes          || 0;
+  h.habitat_nodes_baseline = h.habitat_nodes_baseline || 0;
+  c.park_distance_m         = c.park_distance_m || 999;
+  c.adjacent_registered_gardens = c.adjacent_registered_gardens || [];
+  R.area_sqm = R.area_sqm || 0;
+  return R;
+}
+
+function render() {
+  try {
+    var R = normalise(G);
+    var result = scoreEcologicalRegistry(R);
+    var badges = awardBadges ? awardBadges(R) : { all: [], vb: [] };
+    var b  = R.biodiversity;
+    var sw = R.soil_water;
+    var h  = R.habitat;
+    var c  = R.connectivity;
+    var ds = R.data_source || {};
+    var ev = R.evidence || {};
+    var nl = result.nextLevel || {};
+    var fauna = h.fauna_sightings || [];
+  var _isSt = (typeof isSteward === 'function') && isSteward(R.garden_id);
+    var adj   = c.adjacent_registered_gardens || [];
+
+    /* Header */
+    txt('headerMeta', R.garden_name + ' — ' + R.garden_id);
+
+    /* Hero */
+    txt('heroType',     R.garden_type);
+    txt('heroName',     R.garden_name);
+    txt('heroDesc',     R.description);
+      if (_isSt) {
+    txt('heroStewards', R.stewards || '—');
+  } else {
+    var _hs = document.getElementById('heroStewards');
+    if (_hs) _hs.innerHTML = '<span style="opacity:.4">—</span>';
+  }
+    txt('heroScore',    result.total);
+    txt('heroLevel',    result.level);
+    txt('heroId',       R.garden_id);
+    wid('heroScoreBar', result.total);
+
+    html('heroTags',
+      '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.garden_type + '</span> ' +
+      '<span class="text-xs border border-rl dark:border-rdl px-3 py-1.5 bg-rs dark:bg-rg">' + R.suburb + ' ' + R.state + '</span> ' +
+      ''
+    );
+
+    txt('heroBadgeCount', (badges.all || []).length);
+    var bh = '';
+    for (var i = 0; i < (badges.all || []).length; i++) {
+      var bid = badges.all[i];
+      bh += '<span style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.25rem .6rem;display:inline-block">' + bid.replace(/_/g,' ') + '</span> ';
+    }
+    html('heroBadges', bh || '<span style="font-size:.7rem;opacity:.5">Completing record</span>');
+
+    /* Provenance */
+    txt('provenanceVerifier',  ev.assessor);
+    txt('provenanceDate',      'On-site visit · ' + ev.verification_date);
+    txt('provenanceProgram',   ds.program);
+    txt('provenanceCouncil',   ds.council);
+    txt('provenanceAssessors', (ds.assessors || []).join(', '));
+    txt('provenanceVoucher',   '#' + ds.voucher);
+    txt('provenanceVisitDate', ds.visit_date);
+
+    html('nullFieldList',
+      '<li class="flex gap-2 items-start"><span class="font-mono text-xs opacity-40 flex-shrink-0">○</span><span>Street address — needed for geo-lookup, EVC, and park distance</span></li>' +
+      '<li class="flex gap-2 items-start"><span class="font-mono text-xs opacity-40 flex-shrink-0">○</span><span>Garden area (m²) — needed for yield calculation</span></li>' +
+      '<li class="flex gap-2 items-start"><span class="font-mono text-xs opacity-40 flex-shrink-0">○</span><span>Full indigenous species inventory — report gives recommendations only</span></li>' +
+      '<li class="flex gap-2 items-start"><span class="font-mono text-xs opacity-40 flex-shrink-0">○</span><span>EVC — derivable once address is confirmed</span></li>'
+    );
+
+    /* Signals */
+    /* Season note */
+    var pl = R.planting_list || {};
+    txt('voucherSeasonNote', pl.season_note || '');
+    txt('vmSeasonNoteOut', pl.season_note || '');
+
+    /* Opportunity ↔ Recommendation cross-links (indices into assessor_recommendations[]) */
+    var refreshRecClaims = null; /* defined below, called after recs render */
+    var REC_OPP_MAP = { water_feature: [2], rocks: [3], logs: [3] };
+    var OPP_REC_MAP = {};
+    for (var _rk in REC_OPP_MAP) {
+      var _ri2 = REC_OPP_MAP[_rk];
+      for (var _ii = 0; _ii < _ri2.length; _ii++) {
+        if (!OPP_REC_MAP[_ri2[_ii]]) OPP_REC_MAP[_ri2[_ii]] = [];
+        OPP_REC_MAP[_ri2[_ii]].push(_rk);
+      }
+    }
+
+    /* Opportunities */
+    var oppEl = el('opportunityList');
+    if (oppEl && typeof buildOpportunities === 'function') {
+      var oppRes = buildOpportunities(R);
+      var DLBL = { diy: 'DIY', plants_of_place: 'Plants of Place', gs_install: 'G&S install', designer_install: 'Designer install', tend: 'Tend', verification: 'Verification' };
+      var deliveryStr = function(o) { return (o.delivery_options || []).map(function(d){ return DLBL[d.path] || d.path; }).join(' · '); };
+      var opps = (oppRes.opportunities || []).slice(0, 6);
+      var oh = '';
+      for (var oi = 0; oi < opps.length; oi++) {
+        var o = opps[oi];
+        var recIdxs = REC_OPP_MAP[o.id] || [];
+        oh += '<div class="opp-item bg-white dark:bg-rdp"' +
+          ' data-opp-id="' + o.id + '"' +
+          ' data-opp-action="' + String(o.action).replace(/"/g, '&quot;') + '"' +
+          ' data-opp-points="' + o.points + '">' +
+          '<div class="text-xs font-medium mb-1">' + o.action + '</div>' +
+          '<div class="text-xl font-serif mb-1">+' + o.points + '</div>' +
+          '<div class="text-xs opacity-50">' + (deliveryStr(o) || 'points') + '</div>' +
+          (recIdxs.length ? '<div class="rec-opp-badge">Council recommended</div>' : '') +
+          '</div>';
+      }
+      oppEl.innerHTML = oh || '<div class="text-sm opacity-40">No opportunities calculated — address required.</div>';
+      if (typeof attachClaims === 'function') attachClaims(R);
+      if (typeof handleClaimParam === 'function') handleClaimParam(R.garden_id);
+      if (typeof mountStewardUnlock === 'function') mountStewardUnlock(R.garden_id);
+
+      refreshRecClaims = function() {
+        for (var oppId in REC_OPP_MAP) {
+          var isCl = false;
+          try { isCl = sessionStorage.getItem('erclaim:' + (R.garden_id || '') + ':' + oppId) === '1'; } catch(e) {}
+          if (isCl) {
+            var ridxs = REC_OPP_MAP[oppId];
+            for (var _i = 0; _i < ridxs.length; _i++) {
+              var st = document.getElementById('rec-status-' + ridxs[_i]);
+              if (st && !st.querySelector('.claimed-tag')) {
+                st.innerHTML = '<span class="claimed-tag">✓ Claimed — pending review</span>';
+              }
+            }
+          }
+        }
+      };
+      new MutationObserver(refreshRecClaims).observe(oppEl, { subtree: true, childList: true, characterData: true });
+    }
+
+    txt('signalDates', 'Baseline · ' + R.baseline_date);
+
+    html('signalGridPrimary',
+      sigCell('EVC', '<span class="null-field text-xs">To be confirmed</span>', '<span class="text-xs opacity-40 font-mono">Needs address</span>') +
+      sigCell('Indigenous Species', b.indigenous_species_current, '<span class="text-xs opacity-50">Confirmed present</span>') +
+      sigCell('Structural Layers', b.structural_layers_current, '<span class="text-xs opacity-50">Missing middle storey</span>') +
+      sigCell('Weed Pressure', b.weed_pressure, '<span class="text-xs opacity-50">6 species identified</span>') +
+      sigCell('Fauna Species', fauna.length, '') +
+      sigCell('Verification', '<span style="font-weight:600;font-size:.8rem">G4W Program</span>', '<span class="text-xs opacity-50">Whitehorse</span>')
+    );
+
+    html('signalGridSecondary',
+      sigCell('Mulch', 'Active', '<span class="text-xs opacity-50">Pea straw + general</span>') +
+      sigCell('Water Feature', 'None', '<span class="text-xs opacity-50 delta-down">Recommended</span>') +
+      sigCell('Bird Baths', 'None', '<span class="text-xs opacity-50 delta-down">Recommended ×3</span>') +
+      sigCell('Embedded Logs', 'None', '<span class="text-xs opacity-50 delta-down">Recommended</span>') +
+      sigCell('Rock Refuges', 'None', '<span class="text-xs opacity-50 delta-down">For lizards</span>') +
+      sigCell('Area', '<span class="null-field">Unknown</span>', '<span class="text-xs opacity-40">Needs follow-up</span>')
+    );
+
+    /* Score */
+    txt('overallPct', result.total + ' / 100');
+    var ch = '';
+    for (var ci = 0; ci < (result.categories || []).length; ci++) {
+      var cat = result.categories[ci];
+      var pct = cat.max > 0 ? Math.round(cat.score / cat.max * 100) : 0;
+      ch += '<div><div class="flex justify-between text-sm mb-2"><span class="font-medium">' + cat.label + '</span><span class="font-mono text-xs">' + cat.score + ' / ' + cat.max + '</span></div>' +
+        '<div class="h-2 bg-rs dark:bg-rb/10"><div class="bar-fill h-full bg-rg dark:bg-rb" style="width:' + pct + '%"></div></div>' +
+        (cat.notes && cat.notes.length ? '<div class="text-xs opacity-40 mt-1">' + cat.notes.join(' · ') + '</div>' : '') + '</div>';
+    }
+    html('categoryBars', ch);
+
+    /* Recommendations */
+    var recs = h.assessor_recommendations || [];
+    var rh = '';
+    for (var ri = 0; ri < recs.length; ri++) {
+      var mappedOpps = OPP_REC_MAP[ri] || [];
+      rh += '<div class="rec-item">' +
+        '<span class="rec-num">0' + (ri+1) + '</span>' +
+        '<div><span>' + recs[ri] + '</span>' +
+        '<div id="rec-status-' + ri + '">' +
+        (mappedOpps.length ? '<a href="#opportunities" class="rec-opp-link">→ Earn points for this</a>' : '') +
+        '</div></div>' +
+        '</div>';
+    }
+    html('recList', rh || '<p class="text-xs opacity-40">No recommendations on file.</p>');
+    if (typeof refreshRecClaims === 'function') refreshRecClaims();
+
+    /* Weeds */
+    var weeds = b.weeds_identified || [];
+    var wh = '';
+    for (var wi = 0; wi < weeds.length; wi++) {
+      wh += '<div class="weed-item"><div class="weed-dot"></div><span>' + weeds[wi] + '</span></div>';
+    }
+    html('weedList', wh);
+    txt('weedPressure', b.weed_pressure);
+
+    /* Reserves */
+    var reserves = c.nearest_reserves || [];
+    var rsvh = '';
+    for (var rsi = 0; rsi < reserves.length; rsi++) {
+      rsvh += '<div class="text-xs py-2 border-b border-rl dark:border-rdl flex items-center gap-2"><span style="width:6px;height:6px;background:#7a9e5f;display:inline-block;flex-shrink:0"></span>' + reserves[rsi] + '</div>';
+    }
+    html('reserveList', rsvh);
+
+    /* Species */
+    var sl = b.species_list || [];
+    var ssh = '';
+    if (sl.length > 0) {
+      ssh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">';
+      ssh += '<div class="section-label mb-4">' + sl.length + ' confirmed indigenous species</div>';
+      ssh += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.5rem 2rem">';
+      for (var si = 0; si < sl.length; si++) {
+        ssh += '<div class="text-xs py-2 border-b border-rl dark:border-rdl"><span class="font-medium italic">' + sl[si] + '</span></div>';
+      }
+      ssh += '</div></div>';
+    } else {
+      ssh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6 opacity-50"><div class="text-sm">Full species inventory not yet recorded.</div><div class="text-xs mt-1 opacity-60">Report identifies species for planting recommendation only — confirmed present species require steward follow-up.</div></div>';
+    }
+    html('speciesSection', ssh);
+
+    /* Fauna */
+    var fh = '';
+    for (var fi = 0; fi < fauna.length; fi++) {
+      var f = fauna[fi];
+      fh += '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">' +
+        '<div class="section-label mb-2">' + (f.verified ? 'Verified sighting' : 'Reported') + '</div>' +
+        '<div class="font-medium text-sm mb-2">' + f.species + '</div>' +
+        '<div class="text-xs opacity-60 leading-relaxed">' + f.notes + '</div>' +
+        '<div class="text-xs opacity-40 mt-3 font-mono">' + f.date + '</div>' +
+        '</div>';
+    }
+    html('faunaGrid', fh || '<div class="text-sm opacity-40">No additional fauna records.</div>');
+
+    /* Milestones */
+    var ms = R.milestones || [];
+    var mh = '';
+    for (var mi = 0; mi < ms.length; mi++) {
+      var m = ms[mi];
+      mh += '<li class="border border-rl dark:border-rdl p-4' + (m.complete ? '' : ' opacity-50') + '">' +
+        '<div class="text-xs font-medium">' + (m.complete ? '✓ ' : '○ ') + m.title + '</div>' +
+        '<div class="text-xs opacity-50 mt-1 font-mono">' + orDash(m.date) + '</div></li>';
+    }
+    html('milestoneList', mh);
+
+    /* Trajectory */
+    txt('nextLevelName', nl.name || '--');
+    txt('nextLevelGap',  nl.gap > 0 ? result.total + ' pts · ' + nl.target + ' required · ' + nl.gap + ' to go' : 'Reviewing');
+    wid('nextLevelBar',  nl.progress || 0);
+    buildLevelTrack('levelTrack', result.rating);
+
+    /* Activity log */
+    var log = R.activity_log || [];
+    var lh = '';
+    for (var li = 0; li < log.length; li++) {
+      var ent = log[li];
+      lh += '<article class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5">' +
+        '<div class="flex items-start justify-between gap-4 mb-3">' +
+        '<div><div class="text-sm font-medium">' + ent.title + '</div>' +
+        '<div class="text-xs opacity-50 mt-1 font-mono">' + ent.date + '</div></div>' +
+        '<span class="flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg">' + ent.type + '</span></div>' +
+        '<p class="text-sm leading-relaxed opacity-80">' + ent.notes + '</p></article>';
+    }
+    html('activityLog', lh);
+
+    /* Garden facts */
+    html('gardenFacts',
+      factRow('Suburb',    R.suburb + ', VIC') +
+      factRow('Council',   R.council) +
+      factRow('Program',   ds.program || '—') +
+      factRow('Voucher',   ds.voucher ? '#' + ds.voucher : '—') +
+      factRow('Verifier',  ev.assessor || '—') +
+      factRow('EVC',       '<span class="null-field">To be confirmed</span>') +
+      factRow('Area',      '<span class="null-field">To be confirmed</span>') +
+      factRow('Visit',     ds.visit_date || '—')
+    );
+
+    /* Animate bars */
+    setTimeout(function() {
+      var bars = document.querySelectorAll('.bar-fill');
+      for (var xi = 0; xi < bars.length; xi++) {
+        (function(bar) {
+          var w = bar.style.width;
+          bar.style.width = '0%';
+          requestAnimationFrame(function() {
+            setTimeout(function() { bar.style.width = w; }, 50);
+          });
+        })(bars[xi]);
+      }
+    }, 200);
+
+  } catch(err) {
+    console.error('Render error:', err);
+    if (el('heroName')) el('heroName').textContent = 'Render error — check console';
+  }
+}
+
+function sigCell(label, val, sub) {
+  return '<div class="signal-cell"><div class="section-label mb-2">' + label + '</div>' +
+    '<div class="text-xl font-light">' + val + '</div>' +
+    '<div class="text-xs mt-1">' + (sub || '') + '</div></div>';
+}
+
+function factRow(label, val) {
+  return '<div class="flex justify-between gap-4 border-b border-rl dark:border-rdl pb-2"><dt class="opacity-60">' + label + '</dt><dd class="font-medium text-right">' + val + '</dd></div>';
+}
+
+/* ---- VOUCHER MODAL ---- */
+var voucherStep = 0;
+var spSelection = [];
+var VOUCHER_MAX = 20;
+var VM_TITLES = ['Your garden\'s address', 'Choose your 20 plants', 'Your plant list is ready'];
+
+function openVoucherFlow() {
+  voucherStep = 0;
+  spSelection = [];
+  el('voucherOverlay').classList.add('open');
+  renderVoucherStep();
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVoucherFlow() {
+  el('voucherOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderVoucherStep() {
+  for (var i = 0; i < 3; i++) {
+    var s = el('vstep-' + i);
+    if (s) s.className = 'vm-step' + (i === voucherStep ? ' active' : '');
+  }
+  txt('vmStepTitle', VM_TITLES[voucherStep]);
+  txt('vmStepLabel', 'Step ' + (voucherStep + 1) + ' of 3');
+  el('vmProgressFill').style.width = ((voucherStep + 1) / 3 * 100) + '%';
+  el('vmBackBtn').style.display = voucherStep > 0 ? '' : 'none';
+  el('vmNextBtn').textContent = voucherStep === 2 ? 'Done' : 'Continue →';
+  if (voucherStep === 1) renderSpeciesPicker();
+  if (voucherStep === 2) renderPlantListOut();
+}
+
+function voucherNext() {
+  if (voucherStep === 0) {
+    var addr = (el('vmAddress').value || '').trim();
+    var suburb = (el('vmSuburb').value || '').trim();
+    if (!addr) { el('vmAddress').focus(); return; }
+    geocodeAddress(addr + ', ' + suburb + ', VIC');
+    voucherStep = 1;
+    renderVoucherStep();
+    return;
+  }
+  if (voucherStep === 1) {
+    if (spSelection.length === 0) { return; }
+    voucherStep = 2;
+    renderVoucherStep();
+    return;
+  }
+  closeVoucherFlow();
+}
+
+function voucherBack() {
+  if (voucherStep > 0) { voucherStep--; renderVoucherStep(); }
+}
+
+function geocodeAddress(query) {
+  var status = el('vmGeoStatus');
+  if (status) status.textContent = 'Looking up location…';
+  var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+  fetch(url, { headers: { 'Accept-Language': 'en' } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data || !data.length) {
+        if (status) status.textContent = 'Address not found — record will be updated manually.';
+        return;
+      }
+      var lat = parseFloat(data[0].lat);
+      var lng = parseFloat(data[0].lon);
+      if (status) status.textContent = 'Location confirmed · ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
+      var area = parseInt(el('vmArea').value) || null;
+    })
+    .catch(function() {
+      if (status) status.textContent = 'Could not confirm location — continue anyway.';
+    });
+}
+
+var SP_ZONE_LABELS = { back: 'Back garden', side: 'Side gardens', front: 'Front garden', nature_strip: 'Nature strip' };
+var SP_ZONE_ORDER  = ['back', 'side', 'front', 'nature_strip'];
+
+function renderSpeciesPicker() {
+  var wrap = el('spPickerWrap');
+  if (!wrap || !G || !G.planting_list) return;
+  var species = G.planting_list.species || [];
+  var byZone = {};
+  for (var i = 0; i < species.length; i++) {
+    var z = species[i].zone || 'general';
+    if (!byZone[z]) byZone[z] = [];
+    byZone[z].push(species[i]);
+  }
+  var h = '';
+  for (var zi = 0; zi < SP_ZONE_ORDER.length; zi++) {
+    var zone = SP_ZONE_ORDER[zi];
+    var list = byZone[zone];
+    if (!list || !list.length) continue;
+    h += '<div class="mb-5"><div class="section-label mb-2">' + (SP_ZONE_LABELS[zone] || zone) + '</div>';
+    h += '<div class="sp-grid">';
+    for (var si = 0; si < list.length; si++) {
+      var sp = list[si];
+      var idx = species.indexOf(sp);
+      var sel = spSelection.indexOf(idx) !== -1;
+      var dis = !sel && spSelection.length >= VOUCHER_MAX;
+      h += '<div class="sp-card' + (sel ? ' selected' : '') + (dis ? ' disabled' : '') + '" onclick="toggleSpecies(' + idx + ')" data-idx="' + idx + '">' +
+        '<div class="sp-scientific">' + sp.scientific + '</div>' +
+        '<div class="sp-common">' + sp.common + '</div>' +
+        '<div class="sp-layer">' + sp.layer + '</div>' +
+        '</div>';
+    }
+    h += '</div></div>';
+  }
+  wrap.innerHTML = h;
+  updateSpCounter();
+}
+
+function toggleSpecies(idx) {
+  var pos = spSelection.indexOf(idx);
+  if (pos !== -1) {
+    spSelection.splice(pos, 1);
+  } else {
+    if (spSelection.length >= VOUCHER_MAX) return;
+    spSelection.push(idx);
+  }
+  renderSpeciesPicker();
+}
+
+function updateSpCounter() {
+  txt('spSelected', spSelection.length);
+  el('vmNextBtn').disabled = (voucherStep === 1 && spSelection.length === 0);
+}
+
+function renderPlantListOut() {
+  var wrap = el('vmPlantListOut');
+  if (!wrap || !G || !G.planting_list) return;
+  var species = G.planting_list.species || [];
+  if (!spSelection.length) { wrap.innerHTML = '<p class="text-sm opacity-50">No plants selected.</p>'; return; }
+  var h = '<div class="border border-rl dark:border-rdl"><div class="px-4 py-3 border-b border-rl dark:border-rdl"><div class="text-xs font-mono opacity-60">Your plant selection · ' + spSelection.length + ' of ' + VOUCHER_MAX + ' plants</div></div>';
+  for (var i = 0; i < spSelection.length; i++) {
+    var sp = species[spSelection[i]];
+    if (!sp) continue;
+    h += '<div class="flex justify-between items-center px-4 py-2 border-b border-rl dark:border-rdl text-xs">' +
+      '<span class="italic opacity-70">' + sp.scientific + '</span>' +
+      '<span class="font-medium">' + sp.common + '</span>' +
+      '</div>';
+  }
+  h += '</div>';
+  wrap.innerHTML = h;
+}
+
+function emailPlantList() {
+  var emailEl = el('vmEmail');
+  var email = emailEl ? emailEl.value.trim() : '';
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (emailEl) emailEl.focus();
+    return;
+  }
+  if (!G || !G.planting_list) return;
+  var species = G.planting_list.species || [];
+  var lines = ['Your G4W planting list — ' + spSelection.length + ' plants selected', ''];
+  for (var i = 0; i < spSelection.length; i++) {
+    var sp = species[spSelection[i]];
+    if (sp) lines.push((i + 1) + '. ' + sp.common + ' (' + sp.scientific + ')');
+  }
+  lines.push('');
+  lines.push('Redeem at:');
+  lines.push('  Greenlink Box Hill — greenlink.org.au');
+  lines.push('  Bungalook Indigenous Nursery, Box Hill North — bungalook.org.au');
+  lines.push('');
+  lines.push(G.planting_list.season_note || '');
+  lines.push('');
+  lines.push('Bring your Whitehorse City Council G4W voucher to the nursery.');
+  lines.push('Ecological Registry · ' + (G.garden_id || ''));
+  var body = lines.join('\n');
+  if (typeof markSteward === 'function') markSteward(G.garden_id, email);
+
+  // Log to sheet via gateway (non-blocking)
+  var plantNames = spSelection.map(function(i) { return species[i] ? species[i].common + ' (' + species[i].scientific + ')' : ''; }).filter(Boolean).join('; ');
+  fetch('https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec', {
+    method: 'POST',
+    body: JSON.stringify({
+      submission_type:  'voucher_email',
+      email:            email,
+      garden_id:        G.garden_id  || '',
+      garden_name:      G.garden_name || '',
+      plants_selected:  spSelection.length,
+      plant_list:       plantNames
+    })
+  }).catch(function() {});
+
+  window.location.href = 'mailto:' + email + '?subject=Your G4W planting list — ' + (G.garden_name || 'Forest Hill') + '&body=' + encodeURIComponent(body);
+}
+
+el('voucherOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeVoucherFlow();
+});
+
+/* Theme */
+var st = localStorage.getItem('reg-theme');
+var thBtn = el('themeToggle');
+if (st === 'light') { document.documentElement.classList.remove('dark'); if(thBtn) thBtn.textContent='Understory'; }
+else                { document.documentElement.classList.add('dark'); if(thBtn) thBtn.textContent='Canopy'; }
+if (thBtn) thBtn.addEventListener('click', function() {
+  document.documentElement.classList.toggle('dark');
+  var isDark = document.documentElement.classList.contains('dark');
+  this.textContent = isDark ? 'Canopy' : 'Understory';
+  localStorage.setItem('reg-theme', isDark ? 'dark' : 'light');
+});
+
+/* Load */
+fetch('/data/foresthillk.json')
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    G = data;
+    render();
+  })
+  .catch(function(err) {
+    console.error('Data load failed:', err);
+    txt('heroName', 'Data unavailable');
+    txt('heroScore', '--');
+  });
+
+</script>
+</body>
 </html>
