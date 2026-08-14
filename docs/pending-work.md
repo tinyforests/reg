@@ -469,3 +469,16 @@ gardens/*/index.html call awardBadges() live via badge-engine.js, bypassing NO_B
 - Marketplace functionality — Registry is not a marketplace
 - Social features — not a social network
 - Mobile app — web is sufficient
+
+## Council pilot — opened 14 Aug 2026
+
+- [ ] BLOCKER: Forest Hill (foresthillk) — remove COUNCIL VERIFIED marker; relabel as
+      third-party evidence, Council as source. Must be done before Leonie visits the site.
+- [ ] BLOCKER: precise GPS coordinates still in public JSON — move to private store.
+      Until closed, display privacy is presentational only. Blocks the one-pager.
+- [ ] Steward view (localStorage device mark) has no expiry or revocation path.
+      Breaks the ownership-change commitment in COUNCIL-PARTNERSHIP-PRINCIPLES.md §3.
+- [ ] Deploy updated Apps Script as new version.
+- [ ] Populate Steward Emails sheet for the 15 G&S-installed gardens.
+- [ ] Rebuild Whitehorse one-pager: two-stream privacy, separation section,
+      Registry masthead with G&S named as operator.
