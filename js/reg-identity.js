@@ -133,7 +133,7 @@
     bar.innerHTML =
       '<div id="er-unlock-hero" style="position:absolute;top:.9rem;left:1.25rem;right:1.25rem;' +
         'opacity:0;transition:opacity .28s ease .08s;pointer-events:none;max-width:960px">' +
-        '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0;color:#fff0dc">' +
+        '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0;color:#fff0dc;text-align:center">' +
           'Claim this profile to add and unlock your field records.' +
         '</p>' +
       '</div>' +
