@@ -34,7 +34,7 @@
     "indigenous_dominant": true,
     "structural_layers_current": 5,
     "structural_layers_baseline": null,
-    "canopy_cover_pct_current": null,
+    "canopy_cover_pct_current": 70,
     "canopy_cover_pct_baseline": null,
     "canopy_cover_pct_target": null,
     "weed_pressure": null,
@@ -63,17 +63,18 @@
     "species_note": "Steward-reported list, not yet verified by field assessment. Subject to further inventory."
   },
   "soil_water": {
-    "soil_health_score": null,
+    "soil_health_score": 5,
     "soil_health_baseline": null,
     "soil_health_max": 5,
-    "water_function_score": null,
+    "water_function_score": 3,
     "water_function_baseline": null,
     "water_function_max": 5,
     "has_rainwater_system": null,
     "has_moisture_basin": null,
     "has_swale": null,
     "mulch_depth_mm": null,
-    "mulch_type": null
+    "mulch_type": null,
+    "water_note": "Score reflects publicly confirmed features only: winding watercourse feeding a large basalt-lined pond, and a separate waterfall. Sources: Sam Cox Landscape website, Open Gardens Victoria listing, Domain/Design Files 2018. Swale, moisture basin and rainwater system unconfirmed — score may rise at site assessment."
   },
   "habitat": {
     "habitat_nodes": null,
