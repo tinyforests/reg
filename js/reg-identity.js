@@ -124,7 +124,9 @@
       'padding:.7rem 1.25rem',
       'background:#3d4535;color:#fff0dc',
       'border-top:1px solid rgba(255,240,220,.15)',
-      'font-family:"IBM Plex Sans",sans-serif'
+      'font-family:"IBM Plex Sans",sans-serif',
+      'transition:padding-top .4s ease',
+      'display:flex;flex-direction:column;justify-content:flex-end'
     ].join(';');
     bar.innerHTML =
       '<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto">' +
@@ -150,9 +152,13 @@
         new IntersectionObserver(function(entries) {
           var hint = document.getElementById('er-unlock-hint');
           if (!hint) return;
-          hint.textContent = entries[0].isIntersecting
-            ? 'Claim this profile to add and unlock your field records.'
-            : 'Is this your garden? Your name and precise location are private.';
+          if (entries[0].isIntersecting) {
+            hint.textContent = 'Claim this profile to add and unlock your field records.';
+            bar.style.paddingTop = '28vh';
+          } else {
+            hint.textContent = 'Is this your garden? Your name and precise location are private.';
+            bar.style.paddingTop = '.7rem';
+          }
         }, { threshold: 0.15 }).observe(_recordSec);
       }
     }
