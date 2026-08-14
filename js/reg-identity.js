@@ -125,11 +125,16 @@
       'background:#3d4535;color:#fff0dc',
       'border-top:1px solid rgba(255,240,220,.15)',
       'font-family:"IBM Plex Sans",sans-serif',
-      'transition:padding-top .4s ease',
-      'display:flex;flex-direction:column;justify-content:flex-end'
+      'display:flex;flex-direction:column;justify-content:flex-end',
+      'transition:min-height .38s ease'
     ].join(';');
     bar.innerHTML =
-      '<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto">' +
+      '<div id="er-unlock-hero" style="opacity:0;transition:opacity .25s ease;padding-bottom:1.75rem;max-width:960px;margin-left:auto;margin-right:auto;width:100%">' +
+        '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0;color:#fff0dc">' +
+          'Claim this profile to add and unlock your field records.' +
+        '</p>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto;width:100%">' +
         '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0">Is this your garden? Your name and precise location are private.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
@@ -145,21 +150,42 @@
 
     document.body.appendChild(bar);
 
-    // Change hint text when the Field Record section scrolls into view
+    // Rise up under the Field Record heading as it scrolls into view
     if (window.IntersectionObserver) {
       var _recordSec = document.getElementById('record');
       if (_recordSec) {
+        var _erExpanded = false;
+        var _erHero = null;
+
+        function _erBarHeight() {
+          var h2 = _recordSec.querySelector('h2');
+          if (!h2) return Math.round(window.innerHeight * 0.6);
+          var r = h2.getBoundingClientRect();
+          return Math.max(80, window.innerHeight - r.bottom - 4);
+        }
+
+        function _erScrollTrack() {
+          if (!_erExpanded) return;
+          bar.style.transition = 'none';
+          bar.style.minHeight = _erBarHeight() + 'px';
+        }
+
         new IntersectionObserver(function(entries) {
-          var hint = document.getElementById('er-unlock-hint');
-          if (!hint) return;
+          _erHero = _erHero || document.getElementById('er-unlock-hero');
           if (entries[0].isIntersecting) {
-            hint.textContent = 'Claim this profile to add and unlock your field records.';
-            bar.style.paddingTop = '28vh';
+            _erExpanded = true;
+            bar.style.transition = 'min-height .38s ease';
+            bar.style.minHeight = _erBarHeight() + 'px';
+            if (_erHero) _erHero.style.opacity = '1';
+            window.addEventListener('scroll', _erScrollTrack, { passive: true });
           } else {
-            hint.textContent = 'Is this your garden? Your name and precise location are private.';
-            bar.style.paddingTop = '.7rem';
+            _erExpanded = false;
+            bar.style.transition = 'min-height .38s ease';
+            bar.style.minHeight = '';
+            if (_erHero) _erHero.style.opacity = '0';
+            window.removeEventListener('scroll', _erScrollTrack);
           }
-        }, { threshold: 0.15 }).observe(_recordSec);
+        }, { threshold: 0.1 }).observe(_recordSec);
       }
     }
 
