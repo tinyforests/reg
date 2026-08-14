@@ -408,7 +408,9 @@ function handleEnrolment(payload, cache) {
     parkName,                                      // AI park_name
     parkLat,                                       // AJ park_lat
     parkLng,                                       // AK park_lng
-    parkDistM                                      // AL park_distance_m
+    parkDistM,                                     // AL park_distance_m
+    parseInt(payload.area_sqm, 10) || '',          // AM area_sqm
+    parseFloat(payload.effective_ecological_area_ha) || ''  // AN effective_ecological_area_ha
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -429,6 +431,7 @@ function handleEnrolment(payload, cache) {
       'Suburb:          ' + (suburb || '(not provided)'),
       'Coordinates:     ' + (gardenLat && gardenLng ? gardenLat + ', ' + gardenLng : '(not resolved)'),
       'EVC:             ' + (safeStr(payload.evc_code || '', 50) || '(not resolved)') + ' ' + (safeStr(payload.evc_name || '', 120) || ''),
+      'Garden area:     ' + (payload.area_sqm ? payload.area_sqm + ' m²' : '(not provided)'),
       'Nearest park:    ' + (parkName || '(not resolved)') + (parkDistM ? ' · ' + parkDistM + 'm' : ''),
       'Score:           ' + score + '/100',
       'Tier:            ' + tier,
