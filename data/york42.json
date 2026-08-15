@@ -2,7 +2,7 @@
   "garden_id": "ER-AU-VIC-WHI-YRK-002",
   "garden_name": "Sensory Garden",
   "garden_type": "Ecological Home Garden",
-  "typology": "Biodiversity Design \u2014 Real Estate",
+  "typology": "Biodiversity Design — Real Estate",
   "registry_role": "Designed Record",
   "trajectory": "Installed",
   "suburb": "Mont Albert",
@@ -19,7 +19,7 @@
   "verifier": null,
   "area_sqm": 300,
   "target_score": 50,
-  "description": "A colourful, layered garden designed to boost biodiversity and enhance biophilic responses in Mont Albert. Structured across three distinct zones \u2014 Entrance, Sensory and Rear Garden \u2014 the planting brings together native grasses, groundcovers and flowering shrubs with ornamental companions. Designed by Gardener & Son to weave ecological function into a real estate presentation, demonstrating that a garden can perform ecologically while still reading as beautiful, lush and alive.",
+  "description": "A colourful, layered garden designed to boost biodiversity and enhance biophilic responses in Mont Albert. Structured across three distinct zones — Entrance, Sensory and Rear Garden — the planting brings together native grasses, groundcovers and flowering shrubs with ornamental companions. Designed by Gardener & Son to weave ecological function into a real estate presentation, demonstrating that a garden can perform ecologically while still reading as beautiful, lush and alive.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
@@ -137,7 +137,7 @@
     "has_rock_refuges": false,
     "has_water_feature": false,
     "has_nest_boxes": false,
-    "planting_method": "Three-zone layered planting \u2014 Entrance, Sensory and Rear Garden \u2014 with ornamental and native species integrated across five structural layers",
+    "planting_method": "Three-zone layered planting — Entrance, Sensory and Rear Garden — with ornamental and native species integrated across five structural layers",
     "fauna_sightings": []
   },
   "connectivity": {
@@ -146,7 +146,26 @@
     "park_distance_m": 280,
     "park_lat": -37.811,
     "park_lng": 145.084,
-    "adjacent_registered_gardens": [],
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-BAL-001",
+        "garden_id": "ER-AU-VIC-BAL-001",
+        "name": "Parring",
+        "verified": true,
+        "distance_m": 368,
+        "display_lat": -37.8114,
+        "display_lng": 145.0907
+      },
+      {
+        "id": "ER-AU-VIC-BAL-PRD-001",
+        "garden_id": "ER-AU-VIC-BAL-PRD-001",
+        "name": "Parring Stepping Stone",
+        "verified": true,
+        "distance_m": 286,
+        "display_lat": -37.8128,
+        "display_lng": 145.09
+      }
+    ],
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0.03,
     "cluster_area_ha": 0,
@@ -157,6 +176,8 @@
       "area_ha": 0.1,
       "status": "Forming"
     },
+    "display_lat": -37.815,
+    "display_lng": 145.0871
   },
   "evidence": {
     "has_photos": true,
@@ -197,11 +218,11 @@
   ],
   "activity_log": [
     {
-      "title": "Garden Design \u2014 Three-Zone Planting Proposal",
+      "title": "Garden Design — Three-Zone Planting Proposal",
       "date": "2025",
       "type": "Design",
       "category": "planting",
-      "notes": "Gardener & Son developed a three-zone planting proposal for this Mont Albert property. The Entrance Garden features columnar cherry blossom (Prunus cerasifera 'Oakville Crimson Spire') as a focal tree, underplanted with layered grasses, groundcovers and flowering shrubs including Poa labillardieri, Brachyscome, Lavender and Catmint. The Sensory Garden weaves together aromatic herbs \u2014 Rosemary, Curry Plant and Billy Buttons \u2014 with native groundcovers Dichondra and Kennedia. The Rear Garden is anchored by Weeping Lilly Pilly (Waterhousia floribunda) with shade-tolerant Aspidistra and Native Violet beneath. Together the three zones deliver five structural layers and 10 indigenous species across approximately 300m\u00b2 of garden."
+      "notes": "Gardener & Son developed a three-zone planting proposal for this Mont Albert property. The Entrance Garden features columnar cherry blossom (Prunus cerasifera 'Oakville Crimson Spire') as a focal tree, underplanted with layered grasses, groundcovers and flowering shrubs including Poa labillardieri, Brachyscome, Lavender and Catmint. The Sensory Garden weaves together aromatic herbs — Rosemary, Curry Plant and Billy Buttons — with native groundcovers Dichondra and Kennedia. The Rear Garden is anchored by Weeping Lilly Pilly (Waterhousia floribunda) with shade-tolerant Aspidistra and Native Violet beneath. Together the three zones deliver five structural layers and 10 indigenous species across approximately 300m² of garden."
     },
     {
       "title": "Garden Installation Complete",
@@ -211,7 +232,7 @@
       "notes": "All three zones installed. Arborist mulch applied to 75mm depth across planted areas. Garden presented as part of the property's real estate marketing, demonstrating that ecological function and market appeal are not in conflict."
     }
   ],
-  "notes": "Designed and installed for a residential real estate sale. Three distinct zones (Entrance, Sensory, Rear) totalling approximately 300m\u00b2. No formal ecological baseline recorded at time of install. Current steward record reflects the installing client. Future assessment recommended once occupied.",
+  "notes": "Designed and installed for a residential real estate sale. Three distinct zones (Entrance, Sensory, Rear) totalling approximately 300m². No formal ecological baseline recorded at time of install. Current steward record reflects the installing client. Future assessment recommended once occupied.",
   "rating": {
     "current": "Habitat Garden",
     "next": "Ecological Garden",
@@ -221,7 +242,7 @@
   "points_available": 55,
   "yield": {
     "eligible": false,
-    "status": "Not yet eligible \u2014 minimum score 40 required",
+    "status": "Not yet eligible — minimum score 40 required",
     "estimated_annual": 0,
     "potential_annual": 0,
     "currency": "AUD",

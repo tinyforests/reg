@@ -96,10 +96,12 @@
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-SH-MID-001",
+        "garden_id": "ER-AU-VIC-SH-MID-001",
         "name": "Middlesex",
-        "distance_m": 350,
-        "direction": "south",
-        "verified": true
+        "verified": true,
+        "distance_m": 452,
+        "display_lat": -37.834,
+        "display_lng": 145.0908
       }
     ],
     "corridor_node_confirmed": false,
@@ -113,7 +115,9 @@
       "gardens": 2,
       "area_ha": 0.48,
       "status": "Forming"
-    }
+    },
+    "display_lat": -37.8302,
+    "display_lng": 145.0956
   },
   "evidence": {
     "has_photos": true,

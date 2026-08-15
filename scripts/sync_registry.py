@@ -23,10 +23,13 @@ Usage:
   python scripts/sync_registry.py --check   # report drift, write nothing
 """
 
+import hashlib
+import hmac
 import json
 import math
 import os
 import shutil
+import struct
 import sys
 import time
 import urllib.parse
@@ -35,6 +38,70 @@ import urllib.request
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY = os.path.join(REPO_ROOT, 'data', 'registry.json')
 TMP_OUT = '/tmp/registry.sync.json'
+PRIVATE_COORDS = os.path.join(REPO_ROOT, 'data', 'private', 'coords.json')
+
+
+def _load_private_coords():
+    """Load garden_id → {lat, lng} from the git-ignored private coords file.
+    Aborts loudly if the file or the ER_COORD_SEED env var are missing."""
+    seed = os.environ.get('ER_COORD_SEED', '').strip()
+    if not seed:
+        sys.exit(
+            "\nERROR: ER_COORD_SEED environment variable is not set.\n"
+            "Export it before running sync_registry.py:\n"
+            "  export ER_COORD_SEED=<your-secret-seed>\n"
+            "The seed is stored outside the repo — check your team password manager.\n"
+        )
+    if not os.path.exists(PRIVATE_COORDS):
+        sys.exit(
+            "\nERROR: data/private/coords.json not found.\n"
+            "This file is git-ignored and must be present locally.\n"
+            "Recover it from your secure backup (password manager / private drive).\n"
+        )
+    with open(PRIVATE_COORDS) as f:
+        return json.load(f), seed
+
+
+def _fuzz_coords(lat, lng, garden_id, seed):
+    """Derive a deterministic ~250 m display offset from a private seed + garden_id.
+    Uses HMAC-SHA256 so the offset cannot be reconstructed from the public JS or JSON.
+    Returns (display_lat, display_lng) rounded to 4 dp (≈11 m precision)."""
+    digest = hmac.new(seed.encode(), garden_id.encode(), hashlib.sha256).digest()
+    dlat = (struct.unpack('>H', digest[0:2])[0] / 65535 - 0.5) * 0.005  # ±~278 m
+    dlng = (struct.unpack('>H', digest[2:4])[0] / 65535 - 0.5) * 0.006  # ±~250 m at -37°
+    return round(lat + dlat, 4), round(lng + dlng, 4)
+
+
+def _sanitise_connectivity(record, private_coords, seed):
+    """Replace lat/lng with pre-fuzzed display_lat/display_lng in connectivity block.
+    Also sanitises adjacent_registered_gardens entries the same way.
+    Modifies record in-place; returns record."""
+    c = record.get('connectivity')
+    if not c:
+        return record
+    gid = record.get('garden_id', '')
+
+    # Primary garden coordinates
+    prec = private_coords.get(gid)
+    if prec:
+        dlat, dlng = _fuzz_coords(prec['lat'], prec['lng'], gid, seed)
+        c['display_lat'] = dlat
+        c['display_lng'] = dlng
+    c.pop('lat', None)
+    c.pop('lng', None)
+
+    # Adjacent gardens: fuzz each neighbour's coords too
+    for adj in c.get('adjacent_registered_gardens') or []:
+        adj_gid = adj.get('garden_id') or adj.get('id', '')
+        adj_prec = private_coords.get(adj_gid)
+        if adj_prec:
+            adlat, adlng = _fuzz_coords(adj_prec['lat'], adj_prec['lng'], adj_gid, seed)
+            adj['display_lat'] = adlat
+            adj['display_lng'] = adlng
+        adj.pop('lat', None)
+        adj.pop('lng', None)
+
+    return record
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from reg_score import score_ecological_registry  # noqa: E402
@@ -150,9 +217,8 @@ def _haversine_m(lat1, lng1, lat2, lng2):
 
 def build_adjacency(coord_index, name_index=None):
     """Given {garden_id: (lat, lng, verified)}, return {garden_id: [neighbour_dict, ...]}.
-    Each neighbour dict is compatible with both the scoring engine and profile map:
-      {"id": str, "garden_id": str, "name": str, "lat": float, "lng": float,
-       "verified": bool, "distance_m": int}"""
+    Neighbour dicts include lat/lng for internal scoring only — call _sanitise_connectivity()
+    before writing any record to disk so precise coords never reach the public JSON."""
     ids = list(coord_index.keys())
     adjacency = {gid: [] for gid in ids}
     name_index = name_index or {}
@@ -224,6 +290,9 @@ def resolve_nearest_park(lat, lng):
 
 
 def sync(check_only=False):
+    # Load private coords + seed — fails loudly if either is missing.
+    private_coords, coord_seed = _load_private_coords()
+
     with open(REGISTRY) as f:
         registry = json.load(f)
 
@@ -235,7 +304,8 @@ def sync(check_only=False):
             del registry[block]
 
     # Pass 1: build coordinate index for adjacency computation.
-    # Format: {garden_id: (lat, lng, is_verified)} — only gardens with coordinates.
+    # Source of truth is the private coords file — never the public data/*.json.
+    # Format: {garden_id: (lat, lng, is_verified)}
     coord_index = {}
     _records = {}  # cache loaded records to avoid re-reading in pass 2
     for g in registry['gardens']:
@@ -247,11 +317,10 @@ def sync(check_only=False):
         with open(path) as f:
             record = json.load(f)
         _records[gid] = record
-        c = record.get('connectivity') or {}
-        lat, lng = c.get('lat'), c.get('lng')
-        if lat is not None and lng is not None:
+        prec = private_coords.get(gid)
+        if prec:
             is_verified = g.get('status') not in PRE_INSTALL_STATUSES | {'Provisional'}
-            coord_index[gid] = (float(lat), float(lng), is_verified)
+            coord_index[gid] = (float(prec['lat']), float(prec['lng']), is_verified)
 
     name_index = {g.get('garden_id'): g.get('garden_name', '')
                   for g in registry['gardens'] if g.get('garden_id')}
@@ -273,6 +342,8 @@ def sync(check_only=False):
         # Always inject into in-memory record for scoring.
         # Write back to data file if the neighbour set changed, so profile
         # maps stay correct without manual maintenance.
+        # IMPORTANT: _sanitise_connectivity() is called before any disk write so
+        # precise lat/lng never reach public JSON — display_lat/display_lng only.
         computed_adj = adjacency.get(gid, [])
         if gid in coord_index:
             def _adj_sig(entries):
@@ -281,15 +352,33 @@ def sync(check_only=False):
             file_adj = (record.get('connectivity') or {}).get('adjacent_registered_gardens') or []
             # Always update in-memory record so score is computed with adjacency.
             record.setdefault('connectivity', {})['adjacent_registered_gardens'] = computed_adj
+
+            # Determine whether the public-facing adjacency data (display coords) differs.
+            # We compare on garden_id + verified only; lat/lng are internal.
             if _adj_sig(computed_adj) != _adj_sig(file_adj):
                 changes.append("%s: adjacency %s -> %s" % (
                     gid,
                     [e.get('id') or e.get('garden_id') for e in file_adj],
                     [e['garden_id'] for e in computed_adj]))
                 if not check_only:
+                    pub = _sanitise_connectivity(
+                        json.loads(json.dumps(record)), private_coords, coord_seed)
                     with open(path, 'w') as wf:
-                        json.dump(record, wf, indent=2, ensure_ascii=False)
+                        json.dump(pub, wf, indent=2, ensure_ascii=False)
                         wf.write('\n')
+            elif gid in private_coords:
+                # Adjacency unchanged — but still sanitise if lat/lng still present
+                # (first run after migration) or display coords are missing.
+                c_now = record.get('connectivity') or {}
+                needs_sanitise = ('lat' in c_now or 'display_lat' not in c_now)
+                if needs_sanitise:
+                    changes.append("%s: stripping lat/lng → display_lat/display_lng" % gid)
+                    if not check_only:
+                        pub = _sanitise_connectivity(
+                            json.loads(json.dumps(record)), private_coords, coord_seed)
+                        with open(path, 'w') as wf:
+                            json.dump(pub, wf, indent=2, ensure_ascii=False)
+                            wf.write('\n')
 
         # Store neighbour IDs in the registry entry for profile page map.
         adj_ids = [n['garden_id'] for n in computed_adj]
@@ -323,8 +412,10 @@ def sync(check_only=False):
                         c_block['park_distance_m'] = pdist
                     changes.append("%s: park resolved -> %s (%.4f, %.4f)" % (
                         gid, c_block['park_name'], plat, plng))
+                    pub = _sanitise_connectivity(
+                        json.loads(json.dumps(record)), private_coords, coord_seed)
                     with open(path, 'w') as wf:
-                        json.dump(record, wf, indent=2, ensure_ascii=False)
+                        json.dump(pub, wf, indent=2, ensure_ascii=False)
                         wf.write('\n')
 
         # Demo flag: input file is authoritative.

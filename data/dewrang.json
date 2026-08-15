@@ -172,6 +172,8 @@
       "area_ha": 0.025,
       "status": "Emerging"
     },
+    "display_lat": -37.8175,
+    "display_lng": 145.1418
   },
   "evidence": {
     "has_photos": true,

@@ -80,8 +80,19 @@
         "id": "ER-AU-VIC-BAL-001",
         "garden_id": "ER-AU-VIC-BAL-001",
         "name": "Parring",
-        "distance_m": 88,
         "verified": true,
+        "distance_m": 87,
+        "display_lat": -37.8114,
+        "display_lng": 145.0907
+      },
+      {
+        "id": "ER-AU-VIC-WHI-YRK-002",
+        "garden_id": "ER-AU-VIC-WHI-YRK-002",
+        "name": "Sensory Garden",
+        "verified": true,
+        "distance_m": 286,
+        "display_lat": -37.815,
+        "display_lng": 145.0871
       }
     ],
     "corridor_node_confirmed": false,
@@ -93,7 +104,9 @@
       "gardens": 2,
       "area_ha": 0.12,
       "status": "Forming"
-    }
+    },
+    "display_lat": -37.8128,
+    "display_lng": 145.09
   },
   "evidence": {
     "has_photos": true,

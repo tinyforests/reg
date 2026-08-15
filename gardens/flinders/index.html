@@ -398,7 +398,7 @@
           <div class="section-label mb-3">Visible only to you on this device</div>
           <ul class="space-y-2 opacity-75">
             <li>Your name</li>
-            <li>Precise garden location — public visitors see an approximate map position (~250m offset)</li>
+            <li>Garden location — your precise address is not displayed publicly</li>
             <li>Field notes and activity log — share individual entries by toggling them public</li>
           </ul>
         </div>
@@ -1104,13 +1104,6 @@ function render() {
   }, 200);
 }
 
-/* Deterministic ~250m offset so the public map pin does not reveal the exact property.
-   Stewards who have claimed this profile see the precise coordinates. */
-function _publicCoords(lat, lng, gardenId) {
-  var h = 0;
-  for (var i = 0; i < gardenId.length; i++) {
-    h = (h * 31 + gardenId.charCodeAt(i)) & 0xFFFFFF;
-  }
   var dlat = ((h & 0xFF) / 255 - 0.5) * 0.005;
   var dlng = ((h >> 8 & 0xFF) / 255 - 0.5) * 0.006;
   return [lat + dlat, lng + dlng];
@@ -1121,17 +1114,13 @@ var _map = null;
 
 function initCorridorMap(record) {
   var c = record.connectivity || {};
-  var lat = c.lat;
-  var lng = c.lng;
+  var lat = c.display_lat;
+  var lng = c.display_lng;
 
-  var _isStewardMap = (typeof isSteward === 'function') && isSteward(record.garden_id || '');
+  // display_lat/display_lng are pre-baked by sync_registry.py — no client-side offset needed.
+  // TODO: stewards see fuzzed pin for now; fetch precise coords from Apps Script get_precise_coords.
   var displayLat = lat;
   var displayLng = lng;
-  if (!_isStewardMap && lat && lng) {
-    var _fc = _publicCoords(lat, lng, record.garden_id || '');
-    displayLat = _fc[0];
-    displayLng = _fc[1];
-  }
 
   if (!lat || !lng) {
     document.getElementById('corridorMap').innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;opacity:.4;font-size:.75rem">No coordinates in data</div>';
@@ -1183,17 +1172,17 @@ function initCorridorMap(record) {
 
   for (var i = 0; i < adj.length; i++) {
     var g = adj[i];
-    if (!g.lat || !g.lng) continue;
-    bounds.push([g.lat, g.lng]);
+    if (!g.display_lat || !g.display_lng) continue;
+    bounds.push([g.display_lat, g.display_lng]);
     var adjIcon = L.divIcon({ className: 'adj-marker', iconSize: [12,12] });
-    var adjMarker = L.marker([g.lat, g.lng], { icon: adjIcon }).addTo(_map);
+    var adjMarker = L.marker([g.display_lat, g.display_lng], { icon: adjIcon }).addTo(_map);
     adjMarker.bindPopup(
       '<strong>' + (g.name || g.id) + '</strong><br>' +
       g.id + '<br>' +
       g.distance_m + 'm ' + (g.direction || '')
     );
     /* Dashed line to adjacent */
-    L.polyline([[displayLat, displayLng], [g.lat, g.lng]], {
+    L.polyline([[displayLat, displayLng], [g.display_lat, g.display_lng]], {
       color: '#7a9e5f', weight: 1.5, dashArray: '4 4', opacity: 0.7
     }).addTo(_map);
   }

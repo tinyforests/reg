@@ -66,6 +66,10 @@
     "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Hawthorn",
+    "park_lat": -37.820524,
+    "park_lng": 145.031134,
+    "display_lat": -37.8232,
+    "display_lng": 145.0306
   },
   "evidence": {
     "has_photos": true,

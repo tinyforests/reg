@@ -124,10 +124,13 @@
     "park_distance_m": 0,
     "adjacent_registered_gardens": [
       {
+        "id": "ER-AU-VIC-BOR-WIN-001",
         "garden_id": "ER-AU-VIC-BOR-WIN-001",
-        "garden_name": "Windella",
-        "distance_m": 300,
-        "verified": true
+        "name": "Windella",
+        "verified": true,
+        "distance_m": 286,
+        "display_lat": -37.7955,
+        "display_lng": 145.0471
       }
     ],
     "corridor_node_confirmed": false,
@@ -139,6 +142,8 @@
       "area_ha": 0.68,
       "status": "Forming"
     },
+    "display_lat": -37.7939,
+    "display_lng": 145.054
   },
   "evidence": {
     "has_photos": true,
