@@ -551,7 +551,20 @@ function erToggleLogEntry(idx, btn) {
 function _erRenderSpecies(sl, isSt) {
   var sec = document.getElementById('speciesSection');
   if (!sec) return;
-  if (!sl || !sl.length) { sec.innerHTML = ''; return; }
+  if (!sl || !sl.length) {
+    if (isSt) {
+      sec.innerHTML = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">' +
+        '<div class="section-label mb-4">0 documented species</div>' +
+        '<div class="border-t border-rl dark:border-rdl mt-2 pt-4" style="display:flex;gap:.5rem;align-items:center">' +
+        '<input id="er-species-input" type="text" placeholder="Add species\u2026" ' +
+          'style="flex:1;font-family:\'IBM Plex Mono\',monospace;font-size:.8rem;padding:.4rem .65rem;background:transparent;border:1px solid;border-color:inherit;color:inherit;outline:none;font-style:italic" ' +
+          'onkeydown="if(event.key===\'Enter\')erAddSpecies()">' +
+        '<button onclick="erAddSpecies()" style="font-size:.72rem;padding:.35rem .85rem;background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;font-family:\'IBM Plex Sans\',sans-serif">Add \u2192</button>' +
+        '<span id="er-species-msg" style="font-size:.7rem;opacity:.6;align-self:center"></span>' +
+        '</div></div>';
+    } else { sec.innerHTML = ''; }
+    return;
+  }
   var sh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">';
   sh += '<div class="section-label mb-4">' + sl.length + ' documented species</div>';
   sh += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.5rem 2rem">';
