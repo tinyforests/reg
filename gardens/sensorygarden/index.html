@@ -461,7 +461,21 @@ function _erRenderLog(log, isSt) {
   for (var li = 0; li < allLog.length; li++) {
     var ent = allLog[li];
     var isPub = ent.public === true;
-    if (!isSt && !isPub) continue;
+    if (!isSt && !isPub) {
+      lh += '<article class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5" aria-hidden="true">' +
+        '<div class="flex items-start justify-between gap-4 mb-3">' +
+        '<div style="flex:1">' +
+        '<div style="height:13px;background:currentColor;opacity:.1;width:58%;margin-bottom:7px"></div>' +
+        '<div style="height:9px;background:currentColor;opacity:.07;width:26%"></div>' +
+        '</div>' +
+        '<span class="flex-shrink-0 text-xs border border-rl dark:border-rdl px-2 py-1 bg-rs dark:bg-rg" style="opacity:.3">' + ent.type + '</span>' +
+        '</div>' +
+        '<div style="height:10px;background:currentColor;opacity:.07;width:94%;margin-bottom:5px"></div>' +
+        '<div style="height:10px;background:currentColor;opacity:.07;width:78%;margin-bottom:5px"></div>' +
+        '<div style="height:10px;background:currentColor;opacity:.07;width:52%"></div>' +
+        '</article>';
+      continue;
+    }
     var toggle = isSt ? (
       '<button onclick="erToggleLogEntry(' + li + ',this)" title="' + (isPub ? 'Make private' : 'Make public') + '" ' +
       'style="display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:0;vertical-align:middle;margin-left:8px;">' +

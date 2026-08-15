@@ -91,6 +91,13 @@
   ],
   "activity_log": [
     {
+      "title": "Initial field observation",
+      "date": "Aug 2026",
+      "type": "Field Note",
+      "category": "field_note",
+      "notes": "Established residential garden with eight indigenous species recorded across three structural layers. Canopy cover approximately 20%. Weed pressure low. Garden enrolled following self-assessment — G&S site visit pending to verify species list and confirm ecological scoring."
+    },
+    {
       "title": "Self-enrolment submission received",
       "date": "Aug 2026",
       "type": "Enrolment",

@@ -125,9 +125,9 @@
     bar.style.cssText = [
       'position:fixed;bottom:0;left:0;right:0;z-index:100',
       'padding:.7rem 1.25rem',
-      'background:rgba(61,69,53,.88)',
-      '-webkit-backdrop-filter:blur(3px)',
-      'backdrop-filter:blur(3px)',
+      'background:rgba(61,69,53,.76)',
+      '-webkit-backdrop-filter:blur(1.5px)',
+      'backdrop-filter:blur(1.5px)',
       'border-top:1px solid rgba(255,240,220,.12)',
       'font-family:"IBM Plex Sans",sans-serif',
       'display:flex;flex-direction:column;justify-content:flex-end',
