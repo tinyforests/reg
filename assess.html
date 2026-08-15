@@ -693,8 +693,8 @@ function buildRecordFromForm() {
       fauna_sightings:    fauna_sightings
     },
     connectivity: {
-      lat:            parseFloat(gv('f_con_lat'))      || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.lat)      || null,
-      lng:            parseFloat(gv('f_con_lng'))      || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.lng)      || null,
+      lat:            parseFloat(gv('f_con_lat'))      || null,
+      lng:            parseFloat(gv('f_con_lng'))      || null,
       adjacent_park:  gc('f_con_park'),
       park_name:      gv('f_con_park_name'),
       park_distance_m: gn('f_con_park_dist'),
@@ -778,8 +778,8 @@ function populateFormFromRecord(r) {
   sv('f_hab_fauna_count',   fauna.length);
   sv('f_hab_fauna_species', fauna.length > 0 ? fauna[0].species : '');
   var c = r.connectivity || {};
-  sv('f_con_lat',       c.lat);
-  sv('f_con_lng',       c.lng);
+  sv('f_con_lat',       c.lat || c.display_lat);
+  sv('f_con_lng',       c.lng || c.display_lng);
   sc('f_con_park',      c.adjacent_park);
   sv('f_con_park_name', c.park_name);
   sv('f_con_park_dist', c.park_distance_m);

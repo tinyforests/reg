@@ -303,6 +303,39 @@ def sync(check_only=False):
             changes.append("removed stored derived block: %s" % block)
             del registry[block]
 
+    # Pre-pass: absorb any freshly geocoded coords from data files into coords.json.
+    # If a data file has connectivity.lat + connectivity.lng (set via the assess form),
+    # those precise values take precedence over whatever is currently in coords.json.
+    coords_updated = False
+    for g in registry['gardens']:
+        gid = g.get('garden_id', '?')
+        data_file = (g.get('data_file') or '').lstrip('/')
+        path = os.path.join(REPO_ROOT, data_file)
+        if not os.path.exists(path):
+            continue
+        with open(path) as f:
+            rec = json.load(f)
+        c = rec.get('connectivity') or {}
+        raw_lat = c.get('lat')
+        raw_lng = c.get('lng')
+        if raw_lat is not None and raw_lng is not None:
+            new_lat = float(raw_lat)
+            new_lng = float(raw_lng)
+            existing = private_coords.get(gid, {})
+            if existing.get('lat') != new_lat or existing.get('lng') != new_lng:
+                entry = dict(existing)
+                entry['lat'] = new_lat
+                entry['lng'] = new_lng
+                private_coords[gid] = entry
+                changes.append("%s: absorbed geocoded coords (%.6f, %.6f) into coords.json" % (
+                    gid, new_lat, new_lng))
+                coords_updated = True
+    if coords_updated and not check_only:
+        with open(PRIVATE_COORDS, 'w') as f:
+            json.dump(private_coords, f, indent=2)
+            f.write('\n')
+        print("Updated data/private/coords.json with new geocoded coordinates.")
+
     # Pass 1: build coordinate index for adjacency computation.
     # Source of truth is the private coords file — never the public data/*.json.
     # Format: {garden_id: (lat, lng, is_verified)}
