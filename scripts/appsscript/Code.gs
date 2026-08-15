@@ -59,6 +59,8 @@ function doGet(e) {
   if (params.action === 'get_steward_data')    return handleGetStewardData(params);
   if (params.action === 'add_field_note')      return handleAddFieldNote(params);
   if (params.action === 'add_species')         return handleAddSpecies(params);
+  if (params.action === 'save_garden_coords')  return handleSaveGardenCoords(params);
+  if (params.action === 'get_all_coords')      return handleGetAllCoords(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -817,6 +819,88 @@ function handleSetLogVisibility(params) {
   }
   sheet.appendRow([gardenId, idx, isPublic, email, new Date().toISOString()]);
   return jsonResp({ ok: true });
+}
+
+/* ---- Garden Coordinates ---- */
+
+/*
+ * Called by assess.html after geocoding a garden address.
+ * Appends a row to the "Garden Coords" sheet — latest row per
+ * garden_id wins when get_all_coords reads it back.
+ * No admin token required: writing a coord for a known garden_id
+ * is low-risk and the sheet is private to the spreadsheet owner.
+ */
+function handleSaveGardenCoords(params) {
+  var gardenId = safeStr(params.garden_id || '', 60);
+  var lat      = parseFloat(params.lat);
+  var lng      = parseFloat(params.lng);
+  var address  = safeStr(params.address  || '', 200);
+
+  if (!gardenId)          return jsonResp({ok: false, error: 'garden_id is required'});
+  if (isNaN(lat) || isNaN(lng)) return jsonResp({ok: false, error: 'lat and lng must be numbers'});
+  if (lat < -44 || lat > -10 || lng < 112 || lng > 155)
+    return jsonResp({ok: false, error: 'Coordinates outside Australia'});
+
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet  = ss.getSheetByName('Garden Coords');
+  if (!sheet) {
+    sheet = ss.insertSheet('Garden Coords');
+    sheet.appendRow(['timestamp', 'garden_id', 'lat', 'lng', 'address']);
+    sheet.setFrozenRows(1);
+  }
+
+  sheet.appendRow([new Date().toISOString(), gardenId, lat, lng, address]);
+  return jsonResp({ok: true});
+}
+
+/*
+ * Returns precise coords for every garden, merged from two sources:
+ *   1. Submissions sheet cols AG/AH (garden_lat/lng from enrolment form)
+ *   2. Garden Coords sheet (from assess.html geocoding — takes precedence)
+ * Protected by ADMIN_TOKEN stored in Script Properties.
+ * Set it once via the Apps Script editor console:
+ *   PropertiesService.getScriptProperties().setProperty('ADMIN_TOKEN','your-token')
+ */
+function handleGetAllCoords(params) {
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  if (!stored || (params.admin_token || '') !== stored)
+    return jsonResp({ok: false, error: 'Unauthorized'});
+
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var result = {};
+
+  // Source 1: Submissions sheet — enrolment-form geocoded coords (cols AG=32, AH=33, Z=25, E=4)
+  var subSheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
+  if (subSheet && subSheet.getLastRow() > 1) {
+    var lastCol = Math.max(subSheet.getLastColumn(), 34);
+    var rows = subSheet.getRange(2, 1, subSheet.getLastRow() - 1, lastCol).getValues();
+    for (var i = 0; i < rows.length; i++) {
+      var pubGid = String(rows[i][25] || '').trim();   // col Z
+      var sLat   = parseFloat(rows[i][32]);             // col AG
+      var sLng   = parseFloat(rows[i][33]);             // col AH
+      var sAddr  = String(rows[i][4]  || '').trim();   // col E
+      if (pubGid && !isNaN(sLat) && !isNaN(sLng)) {
+        result[pubGid] = {lat: sLat, lng: sLng, address: sAddr};
+      }
+    }
+  }
+
+  // Source 2: Garden Coords sheet — assess.html saves here; latest row wins
+  var coordSheet = ss.getSheetByName('Garden Coords');
+  if (coordSheet && coordSheet.getLastRow() > 1) {
+    var cRows = coordSheet.getRange(2, 1, coordSheet.getLastRow() - 1, 5).getValues();
+    for (var j = 0; j < cRows.length; j++) {
+      var gid  = String(cRows[j][1] || '').trim();
+      var cLat = parseFloat(cRows[j][2]);
+      var cLng = parseFloat(cRows[j][3]);
+      var cAddr = String(cRows[j][4] || '').trim();
+      if (gid && !isNaN(cLat) && !isNaN(cLng)) {
+        result[gid] = {lat: cLat, lng: cLng, address: cAddr || (result[gid] || {}).address || ''};
+      }
+    }
+  }
+
+  return jsonResp({ok: true, coords: result});
 }
 
 function hourBucket() {

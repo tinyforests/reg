@@ -965,6 +965,8 @@ function copyJSON() {
 }
 
 /* ---- GEOCODING + MINI MAPS ---- */
+var ER_APPS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
+
 var _maps = {};
 var _markers = {};
 
@@ -1024,6 +1026,20 @@ function saveCoords(key, lat, lng) {
   if (latEl) latEl.value = lat.toFixed(6);
   if (lngEl) lngEl.value = lng.toFixed(6);
   if (disp)  disp.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
+
+  if (key === 'garden' && _loadedRecord && _loadedRecord.garden_id) {
+    var addrEl  = document.getElementById('f_con_garden_address');
+    var address = addrEl ? addrEl.value.trim() : '';
+    var qs = 'action=save_garden_coords'
+           + '&garden_id=' + encodeURIComponent(_loadedRecord.garden_id)
+           + '&lat='       + lat.toFixed(6)
+           + '&lng='       + lng.toFixed(6)
+           + '&address='   + encodeURIComponent(address);
+    fetch(ER_APPS_ENDPOINT + '?' + qs)
+      .then(function(r) { return r.json(); })
+      .then(function(d) { if (disp && d.ok) disp.textContent += ' — saved to sheet'; })
+      .catch(function() {});
+  }
 }
 
 function geocodeAddress(key) {

@@ -39,6 +39,23 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY = os.path.join(REPO_ROOT, 'data', 'registry.json')
 TMP_OUT = '/tmp/registry.sync.json'
 PRIVATE_COORDS = os.path.join(REPO_ROOT, 'data', 'private', 'coords.json')
+APPS_SCRIPT_URL = (
+    'https://script.google.com/macros/s/'
+    'AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec'
+)
+
+
+def _fetch_sheet_coords(admin_token):
+    """Pull precise coords from the Apps Script sheet (Garden Coords + Submissions).
+    Returns a dict of {garden_id: {lat, lng, address}} or raises on failure."""
+    qs = urllib.parse.urlencode({'action': 'get_all_coords', 'admin_token': admin_token})
+    url = APPS_SCRIPT_URL + '?' + qs
+    req = urllib.request.Request(url, headers={'User-Agent': 'sync_registry/1.0'})
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        data = json.loads(resp.read().decode())
+    if not data.get('ok'):
+        raise RuntimeError(data.get('error', 'Apps Script returned ok:false'))
+    return data['coords']
 
 
 def _load_private_coords():
@@ -292,6 +309,35 @@ def resolve_nearest_park(lat, lng):
 def sync(check_only=False):
     # Load private coords + seed — fails loudly if either is missing.
     private_coords, coord_seed = _load_private_coords()
+
+    # If ER_ADMIN_TOKEN is set, pull fresh geocoded coords from the Apps Script
+    # sheet and merge into private_coords (sheet takes precedence over local file).
+    admin_token = os.environ.get('ER_ADMIN_TOKEN', '').strip()
+    if admin_token:
+        try:
+            sheet_coords = _fetch_sheet_coords(admin_token)
+            updated = 0
+            for gid, entry in sheet_coords.items():
+                slat = float(entry.get('lat', 0))
+                slng = float(entry.get('lng', 0))
+                if not slat or not slng:
+                    continue
+                existing = private_coords.get(gid, {})
+                if existing.get('lat') != slat or existing.get('lng') != slng:
+                    merged = dict(existing)
+                    merged['lat'] = slat
+                    merged['lng'] = slng
+                    if entry.get('address'):
+                        merged['address'] = entry['address']
+                    private_coords[gid] = merged
+                    updated += 1
+            if updated and not check_only:
+                with open(PRIVATE_COORDS, 'w') as f:
+                    json.dump(private_coords, f, indent=2)
+                    f.write('\n')
+                print("Synced %d coord(s) from Apps Script sheet → coords.json" % updated)
+        except Exception as e:
+            print("WARN: could not fetch coords from sheet: %s" % e)
 
     with open(REGISTRY) as f:
         registry = json.load(f)
