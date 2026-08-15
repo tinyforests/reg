@@ -135,13 +135,16 @@
     ].join(';');
     bar.innerHTML =
       '<div id="er-unlock-hero" style="position:absolute;top:.9rem;left:1.25rem;right:1.25rem;' +
-        'opacity:0;transition:opacity .28s ease .08s;pointer-events:none;max-width:960px">' +
-        '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0;color:#fff0dc;text-align:center">' +
+        'opacity:0;transition:opacity .28s ease .08s;pointer-events:none;max-width:960px;margin:0 auto;text-align:center">' +
+        '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0 0 .6rem;color:#fff0dc">' +
           'Claim this profile to add and unlock your field records.' +
         '</p>' +
+        '<p style="font-size:.78rem;opacity:.65;margin:0;line-height:1.5">' +
+          'Your field notes, precise location and steward details are private — share what you choose.' +
+        '</p>' +
       '</div>' +
-      '<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto;width:100%">' +
-        '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0">Is this your garden? Your name and precise location are private.</span>' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto;width:100%">' +
+        '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0;text-align:center">Is this your garden? Your name and precise location are private.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
           'background:transparent;border:1px solid rgba(255,240,220,.3);color:#fff0dc;outline:none;font-family:inherit" />' +
