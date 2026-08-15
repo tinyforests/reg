@@ -495,6 +495,30 @@ function _erRenderLog(log, isSt) {
       '<p class="text-sm leading-relaxed opacity-80">' + ent.notes + '</p></article>';
   }
   if (!lh) lh = '<p class="text-sm opacity-50 font-mono">Field record entries are not yet shared publicly.</p>';
+  if (isSt) {
+    lh += '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5 mt-1" id="er-add-note-panel">' +
+      '<div class="section-label mb-4">Add Field Note</div>' +
+      '<div style="display:flex;flex-direction:column;gap:.65rem">' +
+      '<input id="er-note-title" type="text" placeholder="Title" ' +
+        'style="font-family:\'IBM Plex Sans\',sans-serif;font-size:.8rem;padding:.4rem .65rem;background:transparent;border:1px solid;border-color:inherit;color:inherit;outline:none">' +
+      '<div style="display:flex;gap:.5rem">' +
+        '<input id="er-note-date" type="text" placeholder="Date (e.g. Aug 2026)" ' +
+          'style="flex:1;font-family:\'IBM Plex Mono\',monospace;font-size:.8rem;padding:.4rem .65rem;background:transparent;border:1px solid;border-color:inherit;color:inherit;outline:none">' +
+        '<select id="er-note-type" ' +
+          'style="flex:1;font-family:\'IBM Plex Mono\',monospace;font-size:.8rem;padding:.4rem .65rem;background:transparent;border:1px solid;border-color:inherit;color:inherit;outline:none">' +
+          '<option>Field Note</option><option>Observation</option><option>Milestone</option>' +
+          '<option>Management</option><option>Recognition</option>' +
+        '</select>' +
+      '</div>' +
+      '<textarea id="er-note-text" rows="3" placeholder="Notes\u2026" ' +
+        'style="font-family:\'IBM Plex Sans\',sans-serif;font-size:.8rem;padding:.4rem .65rem;background:transparent;border:1px solid;border-color:inherit;color:inherit;outline:none;resize:vertical"></textarea>' +
+      '<div style="display:flex;align-items:center;gap:.75rem">' +
+        '<button id="er-note-submit" onclick="erSubmitFieldNote()" ' +
+          'style="font-size:.72rem;padding:.35rem .85rem;background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;font-family:\'IBM Plex Sans\',sans-serif">Save note \u2192</button>' +
+        '<span id="er-note-msg" style="font-size:.7rem;opacity:.6"></span>' +
+      '</div>' +
+      '</div></div>';
+  }
   html('activityLog', lh);
 }
 
@@ -519,6 +543,144 @@ function erToggleLogEntry(idx, btn) {
           '&entry_index=' + idx + '&public=' + isPub + '&email=' + encodeURIComponent(email))
       .catch(function() {});
   }
+}
+
+function _erRenderSpecies(sl, isSt) {
+  var sec = document.getElementById('speciesSection');
+  if (!sec) return;
+  if (!sl || !sl.length) { sec.innerHTML = ''; return; }
+  var sh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">';
+  sh += '<div class="section-label mb-4">' + sl.length + ' documented species</div>';
+  sh += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.5rem 2rem">';
+  for (var si = 0; si < sl.length; si++) {
+    sh += '<div class="text-xs py-2 border-b border-rl dark:border-rdl">' +
+      '<span class="font-medium italic">' + sl[si] + '</span></div>';
+  }
+  sh += '</div>';
+  if (isSt) {
+    sh += '<div class="border-t border-rl dark:border-rdl mt-4 pt-4" style="display:flex;gap:.5rem;align-items:center">' +
+      '<input id="er-species-input" type="text" placeholder="Add species…" ' +
+        'style="flex:1;font-family:\'IBM Plex Mono\',monospace;font-size:.8rem;padding:.4rem .65rem;background:transparent;border:1px solid;border-color:inherit;color:inherit;outline:none;font-style:italic" ' +
+        'onkeydown="if(event.key===\'Enter\')erAddSpecies()">' +
+      '<button onclick="erAddSpecies()" style="font-size:.72rem;padding:.35rem .85rem;background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;font-family:\'IBM Plex Sans\',sans-serif">Add →</button>' +
+      '<span id="er-species-msg" style="font-size:.7rem;opacity:.6;align-self:center"></span>' +
+      '</div>';
+  }
+  sh += '</div>';
+  sec.innerHTML = sh;
+}
+
+function erAddSpecies() {
+  var inp = document.getElementById('er-species-input');
+  var species = inp ? inp.value.trim() : '';
+  var msg = document.getElementById('er-species-msg');
+  if (!species) return;
+  var ep = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+  if (!ep) return;
+  var st2 = (typeof getSteward === 'function') ? getSteward(G.garden_id) : null;
+  var email = st2 ? (st2.email || '') : '';
+  if (inp) inp.disabled = true;
+  fetch(ep + '?action=add_species&garden_id=' + encodeURIComponent(G.garden_id) +
+        '&species=' + encodeURIComponent(species) + '&email=' + encodeURIComponent(email))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.ok) {
+        var b = G.biodiversity = G.biodiversity || {};
+        b.species_list = b.species_list || [];
+        if (b.species_list.indexOf(species) === -1) b.species_list.push(species);
+        b.indigenous_species_current = b.species_list.length;
+        var _isSt5 = (typeof isSteward === 'function') && isSteward(G.garden_id);
+        _erRenderSpecies(b.species_list, _isSt5);
+        try { sessionStorage.removeItem('er_sd:' + G.garden_id); } catch(e) {}
+        if (msg) { msg.style.color = '#7a9e5f'; msg.textContent = species + ' added.'; }
+      } else {
+        if (inp) inp.disabled = false;
+        if (msg) msg.textContent = 'Could not save — try again.';
+      }
+    })
+    .catch(function() {
+      if (inp) inp.disabled = false;
+      if (msg) msg.textContent = 'Network error.';
+    });
+}
+
+function erSubmitFieldNote() {
+  var title = (document.getElementById('er-note-title') || {}).value || '';
+  var date  = (document.getElementById('er-note-date')  || {}).value || '';
+  var type  = (document.getElementById('er-note-type')  || {}).value || 'Field Note';
+  var notes = (document.getElementById('er-note-text')  || {}).value || '';
+  var msg   = document.getElementById('er-note-msg');
+  var btn   = document.getElementById('er-note-submit');
+  if (!title.trim() || !notes.trim()) { if (msg) msg.textContent = 'Title and notes are required.'; return; }
+  var ep = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+  if (!ep) return;
+  var st3 = (typeof getSteward === 'function') ? getSteward(G.garden_id) : null;
+  var email = st3 ? (st3.email || '') : '';
+  if (btn) btn.disabled = true;
+  var autoDate = new Date().toLocaleDateString('en-AU', {month:'short', year:'numeric'});
+  fetch(ep + '?action=add_field_note&garden_id=' + encodeURIComponent(G.garden_id) +
+        '&title=' + encodeURIComponent(title.trim()) +
+        '&date='  + encodeURIComponent(date.trim() || autoDate) +
+        '&type='  + encodeURIComponent(type) +
+        '&notes=' + encodeURIComponent(notes.trim()) +
+        '&email=' + encodeURIComponent(email))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.ok) {
+        G.activity_log = G.activity_log || [];
+        G.activity_log.push({ title: title.trim(), date: date.trim() || autoDate, type: type, notes: notes.trim(), public: false, steward_added: true });
+        var _isSt6 = (typeof isSteward === 'function') && isSteward(G.garden_id);
+        _erRenderLog(G.activity_log, _isSt6);
+        try { sessionStorage.removeItem('er_sd:' + G.garden_id); } catch(e) {}
+      } else {
+        if (msg) msg.textContent = 'Could not save — try again.';
+        if (btn) btn.disabled = false;
+      }
+    })
+    .catch(function() {
+      if (msg) msg.textContent = 'Network error — try again.';
+      if (btn) btn.disabled = false;
+    });
+}
+
+function _erFetchStewardData(gardenId, cb) {
+  var ep = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+  if (!ep) { if (cb) cb(); return; }
+  var cacheKey = 'er_sd:' + gardenId;
+  function applySD(data) {
+    var changed = false;
+    if (data && data.notes && data.notes.length) {
+      G.activity_log = G.activity_log || [];
+      for (var ni = 0; ni < data.notes.length; ni++) G.activity_log.push(data.notes[ni]);
+      changed = true;
+    }
+    if (data && data.species && data.species.length) {
+      var b = G.biodiversity = G.biodiversity || {};
+      b.species_list = b.species_list || [];
+      for (var si2 = 0; si2 < data.species.length; si2++) {
+        if (b.species_list.indexOf(data.species[si2]) === -1) b.species_list.push(data.species[si2]);
+      }
+      b.indigenous_species_current = b.species_list.length;
+      changed = true;
+    }
+    if (changed) {
+      var _isSt7 = (typeof isSteward === 'function') && isSteward(gardenId);
+      _erRenderLog(G.activity_log, _isSt7);
+      _erRenderSpecies((G.biodiversity || {}).species_list || [], _isSt7);
+    }
+    if (cb) cb();
+  }
+  try {
+    var cached = sessionStorage.getItem(cacheKey);
+    if (cached !== null) { applySD(JSON.parse(cached)); return; }
+  } catch(e) {}
+  fetch(ep + '?action=get_steward_data&garden_id=' + encodeURIComponent(gardenId))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
+      applySD(data || {});
+    })
+    .catch(function() { if (cb) cb(); });
 }
 
 function _erFetchLogOverrides(gardenId) {
@@ -752,23 +914,7 @@ function render() {
   /* Species list */
   var speciesSection = document.getElementById('speciesSection');
   var sl = (R.biodiversity && R.biodiversity.species_list) || [];
-  if (speciesSection) {
-    if (sl.length > 0) {
-      var sh = '<div class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">';
-      sh += '<div class="section-label mb-4">' + sl.length + ' documented species</div>';
-      sh += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.5rem 2rem">';
-      for (var si = 0; si < sl.length; si++) {
-        var sp = sl[si];
-        sh += '<div class="text-xs py-2 border-b border-rl dark:border-rdl">';
-        sh += '<span class="font-medium italic">' + sp + '</span>';
-        sh += '</div>';
-      }
-      sh += '</div></div>';
-      speciesSection.innerHTML = sh;
-    } else {
-      speciesSection.innerHTML = '';
-    }
-  }
+  if (speciesSection) _erRenderSpecies(sl, _isSt);
 
   var mh = '';
   var ms = R.milestones || [];
@@ -1030,7 +1176,7 @@ fetch('/data/rupert.json')
   .then(function(data) {
     G = data;
     render();
-    _erFetchLogOverrides(G.garden_id);
+    _erFetchStewardData(G.garden_id, function() { _erFetchLogOverrides(G.garden_id); });
   })
   .catch(function(err) {
     console.error('Could not load garden data:', err);

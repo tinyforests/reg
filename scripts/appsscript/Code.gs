@@ -54,8 +54,11 @@ function doGet(e) {
   if (params.action === 'verify_steward')    return handleVerifySteward(params);
   if (params.action === 'request_claim')     return handleRequestClaim(params);
   if (params.action === 'verify_claim')      return handleVerifyClaimToken(params);
-  if (params.action === 'get_log_visibility') return handleGetLogVisibility(params);
-  if (params.action === 'set_log_visibility') return handleSetLogVisibility(params);
+  if (params.action === 'get_log_visibility')  return handleGetLogVisibility(params);
+  if (params.action === 'set_log_visibility')  return handleSetLogVisibility(params);
+  if (params.action === 'get_steward_data')    return handleGetStewardData(params);
+  if (params.action === 'add_field_note')      return handleAddFieldNote(params);
+  if (params.action === 'add_species')         return handleAddSpecies(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -684,6 +687,86 @@ function handleVoucherEmail(payload) {
 }
 
 /* ---- Utilities ---- */
+/* ---- Steward-contributed species and field notes ---- */
+var STEWARD_NOTES_SHEET    = 'Steward Notes';
+var STEWARD_SPECIES_SHEET  = 'Steward Species';
+var STEWARD_NOTES_HEADERS  = ['garden_id','title','date','type','notes','email','added_at'];
+var STEWARD_SPECIES_HEADERS = ['garden_id','species','email','added_at'];
+
+function handleGetStewardData(params) {
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+  if (!gardenId) return jsonResp({ ok: false, error: 'garden_id required' });
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  var notes = [];
+  var ns = ss.getSheetByName(STEWARD_NOTES_SHEET);
+  if (ns && ns.getLastRow() > 1) {
+    var nd = ns.getRange(2, 1, ns.getLastRow() - 1, STEWARD_NOTES_HEADERS.length).getValues();
+    for (var i = 0; i < nd.length; i++) {
+      if (String(nd[i][0]).trim() === gardenId) {
+        notes.push({ title: nd[i][1], date: nd[i][2], type: nd[i][3],
+                     notes: nd[i][4], public: false, steward_added: true });
+      }
+    }
+  }
+
+  var species = [];
+  var ss2 = ss.getSheetByName(STEWARD_SPECIES_SHEET);
+  if (ss2 && ss2.getLastRow() > 1) {
+    var sd = ss2.getRange(2, 1, ss2.getLastRow() - 1, 2).getValues();
+    for (var j = 0; j < sd.length; j++) {
+      if (String(sd[j][0]).trim() === gardenId) species.push(String(sd[j][1]).trim());
+    }
+  }
+
+  return jsonResp({ ok: true, notes: notes, species: species });
+}
+
+function handleAddFieldNote(params) {
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+  var title    = safeStr((params.title  || '').trim(), 200);
+  var date     = safeStr((params.date   || '').trim(), 50);
+  var type     = safeStr((params.type   || 'Field Note').trim(), 50);
+  var notes    = safeStr((params.notes  || '').trim(), 2000);
+  var email    = safeStr((params.email  || '').toLowerCase().trim(), 254);
+  if (!gardenId || !title || !notes) return jsonResp({ ok: false, error: 'garden_id, title and notes required' });
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(STEWARD_NOTES_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(STEWARD_NOTES_SHEET);
+    sheet.getRange(1, 1, 1, STEWARD_NOTES_HEADERS.length).setValues([STEWARD_NOTES_HEADERS]);
+  }
+  sheet.appendRow([gardenId, title, date, type, notes, email, new Date().toISOString()]);
+  try { MailApp.sendEmail(NOTIFY_EMAIL, 'New field note — ' + gardenId,
+    'Steward ' + email + ' added a field note to ' + gardenId + ':\n\n' + title + '\n\n' + notes); } catch(e) {}
+  return jsonResp({ ok: true });
+}
+
+function handleAddSpecies(params) {
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+  var species  = safeStr((params.species   || '').trim(), 200);
+  var email    = safeStr((params.email     || '').toLowerCase().trim(), 254);
+  if (!gardenId || !species) return jsonResp({ ok: false, error: 'garden_id and species required' });
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(STEWARD_SPECIES_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(STEWARD_SPECIES_SHEET);
+    sheet.getRange(1, 1, 1, STEWARD_SPECIES_HEADERS.length).setValues([STEWARD_SPECIES_HEADERS]);
+  }
+  if (sheet.getLastRow() > 1) {
+    var data = sheet.getRange(2, 1, sheet.getLastRow() - 1, 2).getValues();
+    for (var i = 0; i < data.length; i++) {
+      if (String(data[i][0]).trim() === gardenId &&
+          String(data[i][1]).trim().toLowerCase() === species.toLowerCase())
+        return jsonResp({ ok: true, duplicate: true });
+    }
+  }
+  sheet.appendRow([gardenId, species, email, new Date().toISOString()]);
+  return jsonResp({ ok: true });
+}
+
 /* ---- Log visibility (steward-controlled public/private per entry) ---- */
 var LOG_VIS_SHEET   = 'Log Visibility';
 var LOG_VIS_HEADERS = ['garden_id', 'entry_index', 'public', 'email', 'updated_at'];
