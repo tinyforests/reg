@@ -100,8 +100,8 @@
         "name": "Middlesex",
         "verified": true,
         "distance_m": 452,
-        "display_lat": -37.834,
-        "display_lng": 145.0908
+        "display_lat": -37.8314,
+        "display_lng": 145.0866
       }
     ],
     "corridor_node_confirmed": false,
@@ -116,8 +116,8 @@
       "area_ha": 0.48,
       "status": "Forming"
     },
-    "display_lat": -37.8302,
-    "display_lng": 145.0956
+    "display_lat": -37.833,
+    "display_lng": 145.097
   },
   "evidence": {
     "has_photos": true,

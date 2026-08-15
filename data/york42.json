@@ -153,8 +153,8 @@
         "name": "Parring",
         "verified": true,
         "distance_m": 368,
-        "display_lat": -37.8114,
-        "display_lng": 145.0907
+        "display_lat": -37.8138,
+        "display_lng": 145.0896
       },
       {
         "id": "ER-AU-VIC-BAL-PRD-001",
@@ -162,8 +162,8 @@
         "name": "Parring Stepping Stone",
         "verified": true,
         "distance_m": 286,
-        "display_lat": -37.8128,
-        "display_lng": 145.09
+        "display_lat": -37.8129,
+        "display_lng": 145.0922
       }
     ],
     "corridor_node_confirmed": false,
@@ -176,8 +176,8 @@
       "area_ha": 0.1,
       "status": "Forming"
     },
-    "display_lat": -37.815,
-    "display_lng": 145.0871
+    "display_lat": -37.8114,
+    "display_lng": 145.0841
   },
   "evidence": {
     "has_photos": true,

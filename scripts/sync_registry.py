@@ -367,12 +367,21 @@ def sync(check_only=False):
                         json.dump(pub, wf, indent=2, ensure_ascii=False)
                         wf.write('\n')
             elif gid in private_coords:
-                # Adjacency unchanged — but still sanitise if lat/lng still present
-                # (first run after migration) or display coords are missing.
+                # Adjacency unchanged — still sanitise if: lat/lng present (first run
+                # after migration), display coords missing, or seed was rotated and the
+                # pre-baked display coords no longer match the current seed output.
                 c_now = record.get('connectivity') or {}
-                needs_sanitise = ('lat' in c_now or 'display_lat' not in c_now)
+                prec = private_coords[gid]
+                expected_dlat, expected_dlng = _fuzz_coords(
+                    prec['lat'], prec['lng'], gid, coord_seed)
+                needs_sanitise = (
+                    'lat' in c_now
+                    or 'display_lat' not in c_now
+                    or c_now.get('display_lat') != expected_dlat
+                    or c_now.get('display_lng') != expected_dlng
+                )
                 if needs_sanitise:
-                    changes.append("%s: stripping lat/lng → display_lat/display_lng" % gid)
+                    changes.append("%s: updating display_lat/display_lng" % gid)
                     if not check_only:
                         pub = _sanitise_connectivity(
                             json.loads(json.dumps(record)), private_coords, coord_seed)

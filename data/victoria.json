@@ -113,8 +113,8 @@
         "name": "York Street",
         "verified": true,
         "distance_m": 368,
-        "display_lat": -37.8203,
-        "display_lng": 145.1019
+        "display_lat": -37.8177,
+        "display_lng": 145.1016
       }
     ],
     "corridor_node_confirmed": false,
@@ -127,8 +127,8 @@
       "area_ha": 0.074,
       "status": "Forming"
     },
-    "display_lat": -37.819,
-    "display_lng": 145.1066
+    "display_lat": -37.8157,
+    "display_lng": 145.1048
   },
   "evidence": {
     "has_photos": true,

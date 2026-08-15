@@ -129,8 +129,8 @@
         "name": "Windella",
         "verified": true,
         "distance_m": 286,
-        "display_lat": -37.7955,
-        "display_lng": 145.0471
+        "display_lat": -37.7978,
+        "display_lng": 145.0499
       }
     ],
     "corridor_node_confirmed": false,
@@ -142,8 +142,8 @@
       "area_ha": 0.68,
       "status": "Forming"
     },
-    "display_lat": -37.7939,
-    "display_lng": 145.054
+    "display_lat": -37.7953,
+    "display_lng": 145.0542
   },
   "evidence": {
     "has_photos": true,
