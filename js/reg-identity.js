@@ -125,10 +125,8 @@
     bar.style.cssText = [
       'position:fixed;bottom:0;left:0;right:0;z-index:100',
       'padding:.7rem 1.25rem',
-      'background:rgba(61,69,53,.76)',
       '-webkit-backdrop-filter:blur(1.5px)',
       'backdrop-filter:blur(1.5px)',
-      'border-top:1px solid rgba(255,240,220,.12)',
       'font-family:"IBM Plex Sans",sans-serif',
       'display:flex;flex-direction:column;justify-content:flex-end',
       'transition:min-height .38s ease'
@@ -136,7 +134,7 @@
     bar.innerHTML =
       '<div id="er-unlock-hero" style="position:absolute;top:.9rem;left:1.25rem;right:1.25rem;' +
         'opacity:0;transition:opacity .28s ease .08s;pointer-events:none;max-width:960px;margin:0 auto;text-align:center">' +
-        '<p style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0 0 .6rem;color:#fff0dc">' +
+        '<p id="er-hero-heading" style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0 0 .6rem">' +
           'Claim this profile to add and unlock your field records.' +
         '</p>' +
         '<p style="font-size:.78rem;opacity:.65;margin:0;line-height:1.5">' +
@@ -147,17 +145,41 @@
         '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0;text-align:center">Is this your garden? Your name and precise location are private.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
-          'background:transparent;border:1px solid rgba(255,240,220,.3);color:#fff0dc;outline:none;font-family:inherit" />' +
+          'background:transparent;outline:none;font-family:inherit" />' +
         '<button id="er-unlock-btn" ' +
-          'style="font-size:.72rem;padding:.35rem .85rem;background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;white-space:nowrap;font-family:inherit">' +
+          'style="font-size:.72rem;padding:.35rem .85rem;border:none;cursor:pointer;white-space:nowrap;font-family:inherit">' +
           'Send magic link</button>' +
         '<button id="er-unlock-dismiss" aria-label="Dismiss" ' +
-          'style="font-size:.8rem;opacity:.35;background:none;border:none;cursor:pointer;color:#fff0dc;padding:.2rem .4rem;line-height:1">' +
+          'style="font-size:.8rem;opacity:.35;background:none;border:none;cursor:pointer;padding:.2rem .4rem;line-height:1">' +
           '&#x2715;</button>' +
       '</div>' +
       '<div id="er-unlock-msg" style="font-size:.7rem;margin-top:.35rem;display:none;max-width:960px;margin-left:auto;margin-right:auto;opacity:.8"></div>';
 
     document.body.appendChild(bar);
+
+    // Theme-aware colours: beige bar on dark/Canopy, green bar on light/Understory
+    function _erBarTheme() {
+      var dark = document.documentElement.classList.contains('dark');
+      var fg   = dark ? '#3d4535' : '#fff0dc';
+      var bg   = dark ? 'rgba(255,240,220,.85)' : 'rgba(61,69,53,.76)';
+      var bdr  = dark ? 'rgba(61,69,53,.15)'    : 'rgba(255,240,220,.12)';
+      var btnBg = dark ? '#3d4535' : '#7a9e5f';
+      bar.style.background    = bg;
+      bar.style.borderTop     = '1px solid ' + bdr;
+      bar.style.color         = fg;
+      var inp = document.getElementById('er-unlock-email');
+      if (inp) { inp.style.borderColor = dark ? 'rgba(61,69,53,.35)' : 'rgba(255,240,220,.3)'; inp.style.color = fg; inp.style.border = '1px solid ' + (dark ? 'rgba(61,69,53,.35)' : 'rgba(255,240,220,.3)'); }
+      var btn = document.getElementById('er-unlock-btn');
+      if (btn) { btn.style.background = btnBg; btn.style.color = '#fff0dc'; }
+      var dis = document.getElementById('er-unlock-dismiss');
+      if (dis) dis.style.color = fg;
+      var hdg = document.getElementById('er-hero-heading');
+      if (hdg) hdg.style.color = fg;
+    }
+    _erBarTheme();
+    if (window.MutationObserver) {
+      new MutationObserver(_erBarTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    }
 
     // Rise up under the Field Record heading as it scrolls into view
     if (window.IntersectionObserver) {
