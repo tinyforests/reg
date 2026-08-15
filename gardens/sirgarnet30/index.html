@@ -1103,10 +1103,6 @@ function render() {
   }, 200);
 }
 
-  var dlat = ((h & 0xFF) / 255 - 0.5) * 0.005;
-  var dlng = ((h >> 8 & 0xFF) / 255 - 0.5) * 0.006;
-  return [lat + dlat, lng + dlng];
-}
 
 /* ---- MAP ---- */
 var _map = null;
