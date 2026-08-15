@@ -1108,8 +1108,6 @@ function initCorridorMap(record) {
   var lat = c.display_lat;
   var lng = c.display_lng;
 
-  // display_lat/display_lng are pre-baked by sync_registry.py — no client-side offset needed.
-  // TODO: stewards see fuzzed pin for now; fetch precise coords from Apps Script get_precise_coords.
   var displayLat = lat;
   var displayLng = lng;
 
@@ -1126,8 +1124,12 @@ function initCorridorMap(record) {
   _map = L.map('corridorMap', {
     center: [displayLat, displayLng],
     zoom: 14,
-    zoomControl: true,
+    zoomControl: false,
     scrollWheelZoom: false,
+    touchZoom: false,
+    doubleClickZoom: false,
+    boxZoom: false,
+    keyboard: false,
     attributionControl: false
   });
 
@@ -1138,14 +1140,15 @@ function initCorridorMap(record) {
   /* Collect all bounds from the start */
   var bounds = [[displayLat, displayLng]];
 
-  /* Primary garden marker */
-  var regIcon = L.divIcon({ className: 'reg-marker', iconSize: [60,60] });
-  var primary = L.marker([displayLat, displayLng], { icon: regIcon }).addTo(_map);
-  primary.bindPopup(
-    '<strong>' + (record.garden_name || 'This garden') + '</strong><br>' +
-    (record.garden_id || '') + '<br>' +
-    '<span style="color:#7a9e5f">Score: ' + (record._score || '--') + '</span>'
-  );
+  /* Approximate location circle — no precise pin on public map */
+  var primaryCircle = L.circle([displayLat, displayLng], {
+    radius: 75,
+    color: '#3d4535',
+    fillColor: '#7a9e5f',
+    fillOpacity: 0.15,
+    weight: 1.5,
+    opacity: 0.5
+  }).addTo(_map);
 
   /* Park marker */
   if (c.adjacent_park && c.park_lat && c.park_lng) {
