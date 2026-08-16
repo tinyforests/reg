@@ -209,7 +209,15 @@
               <input type="text" id="f_stewards" placeholder="Andrew & Elizabeth" />
             </div>
             <div>
-              <div class="opacity-50 mb-1">Area (m?)</div>
+              <div class="opacity-50 mb-1">Steward Email</div>
+              <input type="text" id="f_steward_email" placeholder="steward@email.com" />
+            </div>
+            <div class="col-span-2">
+              <div class="opacity-50 mb-1">Street Address</div>
+              <input type="text" id="f_garden_address" placeholder="12 Example St, Surrey Hills VIC 3127" />
+            </div>
+            <div>
+              <div class="opacity-50 mb-1">Area (m²)</div>
               <input type="number" id="f_area_sqm" placeholder="180" />
             </div>
             <div>
@@ -646,8 +654,10 @@ function buildRecordFromForm() {
   }
   var adjacent_registered_gardens = getAdjacentGardens();
   return {
-    garden_id:       gv('f_garden_id')   || 'ER-AU-VIC-XX-XXX-0001',
-    garden_name:     gv('f_garden_name') || 'New Garden',
+    garden_id:       gv('f_garden_id')      || 'ER-AU-VIC-XX-XXX-0001',
+    garden_name:     gv('f_garden_name')    || 'New Garden',
+    garden_address:  gv('f_garden_address') || '',
+    steward_email:   gv('f_steward_email')  || '',
     garden_type:     gv('f_garden_type') || 'Ecological Garden',
     typology:        gv('f_typology')    || gv('f_garden_type') || 'Ecological Garden',
     registry_role:   gv('f_registry_role'),
@@ -742,6 +752,8 @@ function populateFormFromRecord(r) {
   function sc(id, val) { var e = document.getElementById(id); if (e) e.checked = !!val; }
   sv('f_garden_name',       r.garden_name);
   sv('f_garden_id',         r.garden_id);
+  sv('f_garden_address',    r.garden_address || '');
+  sv('f_steward_email',     r.steward_email  || '');
   sv('f_suburb',            r.suburb);
   sv('f_state',             r.state);
   sv('f_stewards',          r.stewards);
@@ -1744,6 +1756,19 @@ function _erRenderAdminPanel(d) {
     addrEl.textContent = addrParts.join(', ');
   }
 
+  // Populate address + steward email fields in Garden Identity section
+  var addrField = document.getElementById('f_garden_address');
+  if (addrField && !addrField.value) {
+    var fullAddr = [d.garden_address, d.garden_suburb].filter(Boolean).join(', ');
+    if (fullAddr) addrField.value = fullAddr;
+  }
+  var emailField = document.getElementById('f_steward_email');
+  if (emailField && !emailField.value && d.steward_email) emailField.value = d.steward_email;
+
+  // Also pre-fill the connectivity tab address search input if empty
+  var conAddrEl = document.getElementById('f_con_garden_address');
+  if (conAddrEl && !conAddrEl.value && d.garden_address) conAddrEl.value = d.garden_address;
+
   var statusEl = document.getElementById('adminStatus');
   if (statusEl) {
     var statusParts = [];
@@ -1900,7 +1925,7 @@ renderLive();
    mode behind the Apps Script backend. */
 (function () {
   var ASSESSOR_KEY = 'gs-assessor-2026'; // not a secret on a public repo — rotate as needed
-  var isAssessor = new URLSearchParams(location.search).get('key') === ASSESSOR_KEY;
+  var isAssessor = new URLSearchParams(location.search).get('key') === ASSESSOR_KEY || !!_erAdminToken;
   var banner = document.getElementById('modeBanner');
   var scoreEl = document.getElementById('liveScore');
   var scoreCard = scoreEl ? scoreEl.closest('.border') : null;
