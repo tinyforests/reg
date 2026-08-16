@@ -1186,7 +1186,7 @@ function _erShowAddrDrop(results, targetInp) {
   ul.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:400;background:var(--bg,#fafaf7);border:1px solid #d7ccb9;margin:2px 0 0;padding:0;list-style:none;box-shadow:0 6px 18px rgba(0,0,0,.12);max-height:220px;overflow-y:auto';
   results.forEach(function(r) {
     var li = document.createElement('li');
-    li.style.cssText = 'padding:8px 12px;font-size:.75rem;cursor:pointer;border-bottom:1px solid #ede9e0;line-height:1.4';
+    li.style.cssText = 'padding:8px 12px;font-size:.75rem;cursor:pointer;border-bottom:1px solid #ede9e0;line-height:1.4;color:#3d4535';
     li.textContent = _erFmtAddr(r);
     li.addEventListener('mouseover', function() { li.style.background = '#f5f2eb'; });
     li.addEventListener('mouseout',  function() { li.style.background = ''; });
