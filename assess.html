@@ -214,7 +214,7 @@
             </div>
             <div class="col-span-2">
               <div class="opacity-50 mb-1">Street Address</div>
-              <input type="text" id="f_garden_address" placeholder="12 Example St, Surrey Hills VIC 3127" />
+              <input type="text" id="f_garden_address" placeholder="12 Example St, Surrey Hills VIC 3127" oninput="_erIdentityAddrInput(this.value)" onblur="_erAddrBlur()" autocomplete="off" />
             </div>
             <div>
               <div class="opacity-50 mb-1">Area (m²)</div>
@@ -1125,9 +1125,9 @@ function _erHideAddrDrop() {
   if (el) el.remove();
 }
 
-function _erShowAddrDrop(results) {
+function _erShowAddrDrop(results, targetInp) {
   _erHideAddrDrop();
-  var inp = document.getElementById('f_con_garden_address');
+  var inp = targetInp || document.getElementById('f_con_garden_address');
   if (!inp || !results.length) return;
   var ul = document.createElement('ul');
   ul.id = 'er-addr-drop';
@@ -1140,7 +1140,12 @@ function _erShowAddrDrop(results) {
     li.addEventListener('mouseout',  function() { li.style.background = ''; });
     li.addEventListener('mousedown', function(e) {
       e.preventDefault();
-      inp.value = _erFmtAddr(r);
+      var addr = _erFmtAddr(r);
+      // Sync both address fields regardless of which one triggered the search
+      var conEl = document.getElementById('f_con_garden_address');
+      var idEl  = document.getElementById('f_garden_address');
+      if (conEl) conEl.value = addr;
+      if (idEl)  idEl.value  = addr;
       _erHideAddrDrop();
       var lat = parseFloat(r.lat), lng = parseFloat(r.lon);
       if (!_maps['garden']) initMiniMap('garden', lat, lng);
@@ -1161,12 +1166,22 @@ var _erFetchSuggestions = _erDebounce(function(q) {
   fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=au&q=' + encodeURIComponent(q),
     { headers: { 'Accept-Language': 'en' } })
     .then(function(r) { return r.json(); })
-    .then(function(d) { _erShowAddrDrop(d); })
+    .then(function(d) { _erShowAddrDrop(d, document.getElementById('f_con_garden_address')); })
     .catch(function() {});
 }, 380);
 
-function _erAddrInput(val) { _erFetchSuggestions(val); }
-function _erAddrBlur()     { setTimeout(_erHideAddrDrop, 200); }
+var _erFetchIdentityAddr = _erDebounce(function(q) {
+  if (q.length < 4) { _erHideAddrDrop(); return; }
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=au&q=' + encodeURIComponent(q),
+    { headers: { 'Accept-Language': 'en' } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { _erShowAddrDrop(d, document.getElementById('f_garden_address')); })
+    .catch(function() {});
+}, 380);
+
+function _erAddrInput(val)         { _erFetchSuggestions(val); }
+function _erIdentityAddrInput(val) { _erFetchIdentityAddr(val); }
+function _erAddrBlur()             { setTimeout(_erHideAddrDrop, 200); }
 
 function _erSetStatus(id, msg, ok) {
   var el = document.getElementById(id);

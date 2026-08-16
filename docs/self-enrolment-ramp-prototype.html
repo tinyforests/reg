@@ -428,12 +428,40 @@ function _setGeoResult(row, msg, ok) {
   const wrap = document.getElementById('geo-results');
   if (wrap) wrap.style.display = '';
 }
-function _setEvcStatus(msg, ok)  { _setGeoResult('evc',  msg, ok); }
-function _setParkStatus(msg, ok) { _setGeoResult('park', msg, ok); }
+function _setEvcStatus(msg, ok)    { _setGeoResult('evc',    msg, ok); }
+function _setParkStatus(msg, ok)   { _setGeoResult('park',   msg, ok); }
+function _setGardenStatus(msg, ok) { _setGeoResult('garden', msg, ok); }
+
+let _gardenLocs = null;
+
+async function resolveNearestGarden(lat, lng) {
+  _setGardenStatus('Looking for nearby registered gardens…', false);
+  try {
+    if (!_gardenLocs) {
+      const r = await fetch('/data/garden-locations.json');
+      _gardenLocs = await r.json();
+    }
+    const pt = turf.point([lng, lat]);
+    let best = Infinity, bestLoc = null;
+    for (const g of _gardenLocs) {
+      if (!g.display_lat || !g.display_lng) continue;
+      const d = turf.distance(pt, turf.point([g.display_lng, g.display_lat]), { units: 'meters' });
+      if (d < best) { best = d; bestLoc = g; }
+    }
+    if (!bestLoc || best > 3000) {
+      _setGardenStatus('No registered garden within 3km', false);
+    } else {
+      _setGardenStatus(bestLoc.garden_name + ' · ' + Math.round(best) + 'm away', true);
+    }
+  } catch(e) {
+    _setGardenStatus('Garden lookup unavailable', false);
+  }
+}
 
 /* Shared coord-based resolution — called after geocoding OR after autocomplete selection */
 async function _resolveFromCoords(lat, lng) {
   resolveNearestPark(lat, lng);
+  resolveNearestGarden(lat, lng);
   try {
     const d    = 0.02;
     const bbox = (lng-d)+','+(lat-d)+','+(lng+d)+','+(lat+d)+',EPSG:4326';
@@ -992,9 +1020,13 @@ function buildFormSteps() {
           '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Vegetation class</div>' +
           '<div id="geo-val-evc" style="font-size:.8rem;color:rgba(61,69,53,.45)">Type your address above to look up your EVC</div>' +
         '</div>' +
-        '<div style="padding:10px 14px">' +
+        '<div style="padding:10px 14px;border-bottom:1px solid var(--rl,#d6d9cf)">' +
           '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Nearest green space</div>' +
           '<div id="geo-val-park" style="font-size:.8rem;color:rgba(61,69,53,.45)">—</div>' +
+        '</div>' +
+        '<div style="padding:10px 14px">' +
+          '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Nearest registered garden</div>' +
+          '<div id="geo-val-garden" style="font-size:.8rem;color:rgba(61,69,53,.45)">—</div>' +
         '</div>';
       idfWrap.appendChild(card);
     }
