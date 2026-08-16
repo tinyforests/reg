@@ -29,7 +29,7 @@
      NOTE: the Apps Script doPost() needs a branch for submission_type ===
      'opportunity_claim' — without it, claims will not be written. That change
      lives in Apps Script, not in this repo. */
-  var ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
+  var ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec';
 
   /* Which opportunities a steward may claim.
      Deliberately an explicit allowlist, not an inferred rule — gaming risk

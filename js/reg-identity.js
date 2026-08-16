@@ -16,7 +16,7 @@
 
   var DEVICE_KEY  = 'er_device_id';
   var STEWARD_PFX = 'er_steward:';
-  var ENDPOINT    = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
+  var ENDPOINT    = 'https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec';
 
   /* Returns the persisted device UUID, creating one on first call. */
   function getDeviceId() {
