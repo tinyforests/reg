@@ -2,7 +2,7 @@
   "metadata": {
     "version": "1.0",
     "last_updated": "Apr 2026",
-    "total_species": 167,
+    "total_species": 168,
     "custodian": "Gardener & Son"
   },
   "layers": [
@@ -1847,6 +1847,14 @@
       "gardens": [
         "york"
       ]
+    },
+    {
+      "botanical_name": "Eucalyptus tricarpa",
+      "common_name": "Box Ironbark",
+      "layer": "tree",
+      "family": "Myrtaceae",
+      "notes": "",
+      "gardens": []
     }
   ]
 }
