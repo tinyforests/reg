@@ -1952,6 +1952,7 @@ function _erPublishToRegistry() {
     if (!msg) return;
     if (d && d.ok) {
       _loadedRecord = record;
+      _liveCacheSet(record.garden_id, record, d.updated_at);
       msg.style.color = '#7a9e5f';
       msg.textContent = 'Published — ' + String(d.updated_at || '').slice(0, 16).replace('T', ' ');
     } else {
@@ -2019,10 +2020,27 @@ function loadGardenSelector() {
     .catch(function() { console.log('Registry not available for selector'); });
 }
 
+var _LIVE_CACHE_TTL = 5 * 60 * 1000; /* 5 minutes */
+function _liveCache(gardenId) {
+  try {
+    var raw = sessionStorage.getItem('er_live:' + gardenId);
+    if (!raw) return null;
+    var obj = JSON.parse(raw);
+    if (Date.now() - (obj.ts || 0) > _LIVE_CACHE_TTL) return null;
+    return obj;
+  } catch(e) { return null; }
+}
+function _liveCacheSet(gardenId, data, updated_at) {
+  try { sessionStorage.setItem('er_live:' + gardenId, JSON.stringify({ data: data, updated_at: updated_at, ts: Date.now() })); } catch(e) {}
+}
+function _liveCacheClear(gardenId) {
+  try { sessionStorage.removeItem('er_live:' + gardenId); } catch(e) {}
+}
+
 function loadGarden(dataPath) {
   var status = document.getElementById('gardenSelectorStatus');
   if (status) status.textContent = 'Loading…';
-  fetch('/' + dataPath, { cache: 'no-store' })
+  fetch('/' + dataPath, { cache: 'default' })
     .then(function(r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -2030,10 +2048,15 @@ function loadGarden(dataPath) {
     .then(function(staticData) {
       var gardenId = staticData.garden_id;
       if (!gardenId || !ER_APPS_ENDPOINT) return Promise.resolve({ data: staticData, source: 'static' });
+      var cached = _liveCache(gardenId);
+      if (cached) return Promise.resolve({ data: cached.data, source: 'live', updated_at: cached.updated_at });
       return fetch(ER_APPS_ENDPOINT + '?action=get_garden_record&garden_id=' + encodeURIComponent(gardenId))
         .then(function(r) { return r.json(); })
         .then(function(d) {
-          if (d && d.ok && d.data) return { data: d.data, source: 'live', updated_at: d.updated_at };
+          if (d && d.ok && d.data) {
+            _liveCacheSet(gardenId, d.data, d.updated_at);
+            return { data: d.data, source: 'live', updated_at: d.updated_at };
+          }
           return { data: staticData, source: 'static' };
         })
         .catch(function() { return { data: staticData, source: 'static' }; });
