@@ -1289,10 +1289,10 @@ function _erLookupEvc(lat, lng) {
       var evcName    = p.x_evcname || p.evc_name || '';
       var bioregion  = p.bioregion_name || p.biore_name || p.bioregion || '';
       var bioregCode = p.bioregion_no   || p.biore_no   || '';
-      var evcEl  = document.getElementById('f_evc_name');  if (evcEl  && !evcEl.value)  evcEl.value  = evcName;
-      var codeEl = document.getElementById('f_evc_code');  if (codeEl && !codeEl.value) codeEl.value = evcCode;
-      var brEl   = document.getElementById('f_evc_bioregion');      if (brEl   && !brEl.value   && bioregion)  brEl.value   = bioregion;
-      var brcEl  = document.getElementById('f_evc_bioregion_code'); if (brcEl  && !brcEl.value  && bioregCode) brcEl.value  = bioregCode;
+      var evcEl  = document.getElementById('f_evc_name');  if (evcEl  && evcName)    evcEl.value  = evcName;
+      var codeEl = document.getElementById('f_evc_code');  if (codeEl && evcCode)    codeEl.value = evcCode;
+      var brEl   = document.getElementById('f_evc_bioregion');      if (brEl  && bioregion)  brEl.value   = bioregion;
+      var brcEl  = document.getElementById('f_evc_bioregion_code'); if (brcEl && bioregCode) brcEl.value  = bioregCode;
       var statusEl = document.getElementById('evc_status');
       if (statusEl && evcName) {
         statusEl.textContent = evcName + (evcCode ? ' · ' + evcCode : '') + (bioregion ? ' · ' + bioregion : '');
