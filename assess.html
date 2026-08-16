@@ -915,6 +915,16 @@ function renderLive() {
   wid('liveScoreBar', result.total);
   txt('headerMeta', (record.garden_name || 'New Garden') + ' - ' + (record.garden_id || '--'));
 
+  /* Keep dropdown label in sync with garden name / suburb */
+  var sel = document.getElementById('gardenSelector');
+  if (sel && sel.value && sel.value !== '__new__') {
+    var selOpt = sel.options[sel.selectedIndex];
+    if (selOpt) {
+      var label = (record.garden_name || 'New Garden') + (record.suburb ? ' -- ' + record.suburb : '');
+      if (selOpt.textContent !== label) selOpt.textContent = label;
+    }
+  }
+
   /* Category bars */
   var ch = '';
   for (var ci = 0; ci < result.categories.length; ci++) {
