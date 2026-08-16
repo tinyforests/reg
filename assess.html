@@ -620,6 +620,15 @@
           </div>
           <pre id="jsonOutput" class="text-[10px] font-mono leading-relaxed opacity-80 whitespace-pre-wrap break-words max-h-80 overflow-y-auto"></pre>
         </div>
+
+        <!-- Publish to Registry (admin only) -->
+        <div id="publishPanel" class="border border-rl dark:border-rdl bg-white dark:bg-rdp p-5" style="display:none">
+          <div class="flex items-center justify-between mb-2">
+            <div class="section-label">Publish to Registry</div>
+            <button onclick="_erPublishToRegistry()" style="background:#7a9e5f;color:#fff0dc;border:none;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:.72rem;padding:.35rem .85rem">Publish &rarr;</button>
+          </div>
+          <div id="publishMsg" class="text-xs opacity-70 mt-1 font-mono"></div>
+        </div>
       </div>
 
     </div>
@@ -1690,13 +1699,16 @@ var _erAdminToken = localStorage.getItem('er-admin-token') || '';
 
 function _erInitAdminBtn() {
   var btn = document.getElementById('adminTokenBtn');
+  var pub = document.getElementById('publishPanel');
   if (!btn) return;
   if (_erAdminToken) {
     btn.textContent = 'Admin ✓';
     btn.style.opacity = '1';
+    if (pub) pub.style.display = 'block';
   } else {
     btn.textContent = 'Admin';
     btn.style.opacity = '0.55';
+    if (pub) pub.style.display = 'none';
   }
   btn.onclick = function() {
     if (_erAdminToken) {
@@ -1839,6 +1851,53 @@ function _erRenderAdminPanel(d) {
   }
 }
 
+function _erPublishToRegistry() {
+  var msg = document.getElementById('publishMsg');
+  if (!_erAdminToken) {
+    if (msg) { msg.style.color = '#c0392b'; msg.textContent = 'Admin token required.'; }
+    return;
+  }
+  var record = buildRecordFromForm();
+  if (!record.garden_id) {
+    if (msg) { msg.style.color = '#c0392b'; msg.textContent = 'Load a garden first.'; }
+    return;
+  }
+  var result = scoreEcologicalRegistry(record);
+  var nextLvl = result.nextLevel || {};
+  record.rating = {
+    current: result.rating,
+    next: nextLvl.name || 'Maximum Level Achieved',
+    points_to_next: nextLvl.gap || 0
+  };
+  record.upgrade_potential = 100 - result.total;
+  record.points_available  = 100 - result.total;
+
+  if (msg) { msg.style.color = ''; msg.textContent = 'Publishing…'; }
+  fetch(ER_APPS_ENDPOINT, {
+    method: 'POST',
+    body: JSON.stringify({
+      submission_type: 'save_garden_record',
+      admin_token: _erAdminToken,
+      garden_id: record.garden_id,
+      record: record
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (!msg) return;
+    if (d && d.ok) {
+      msg.style.color = '#7a9e5f';
+      msg.textContent = 'Published — ' + String(d.updated_at || '').slice(0, 16).replace('T', ' ');
+    } else {
+      msg.style.color = '#c0392b';
+      msg.textContent = 'Error: ' + ((d && d.error) || 'Unknown error');
+    }
+  })
+  .catch(function() {
+    if (msg) { msg.style.color = '#c0392b'; msg.textContent = 'Network error'; }
+  });
+}
+
 /* ---- BOOT ---- */
 var st = localStorage.getItem('reg-theme');
 if (st === 'light') { document.documentElement.classList.remove('dark'); }
@@ -1972,6 +2031,8 @@ renderLive();
       banner.style.background = 'rgba(120,158,95,0.10)';
       banner.innerHTML = '<strong>Assessor mode.</strong> Verification levels unlocked. A score becomes canonical only once recorded through the verification workflow.';
     }
+    var pubPanel = byId('publishPanel');
+    if (pubPanel && _erAdminToken) pubPanel.style.display = 'block';
     return;
   }
 
@@ -1998,10 +2059,10 @@ renderLive();
     banner.innerHTML = '<strong>Provisional — self-assessed.</strong> An unverified estimate. Book an Ecological Garden Health Check to have it verified and registered.';
   }
   if (scoreCard) { scoreCard.style.borderStyle = 'dashed'; scoreCard.style.borderWidth = '2px'; scoreCard.style.borderColor = '#c9a24b'; }
-  // 4. Hide the raw-JSON export — an assessor/dev affordance a self-user can't use
-  //    and shouldn't see (their capture path is the enrolment ramp, not copy-paste).
+  // 4. Hide the raw-JSON export and publish panel — assessor/dev affordances a self-user can't use.
   var copyTop = byId('copyBtn'); if (copyTop) copyTop.style.display = 'none';
   var jsonOut = byId('jsonOutput'); if (jsonOut) { var jsonPanel = jsonOut.closest('.border'); if (jsonPanel) jsonPanel.style.display = 'none'; }
+  var pubPanel = byId('publishPanel'); if (pubPanel) pubPanel.style.display = 'none';
 
   renderLive(); // recompute now that verified inputs are locked out
 })();

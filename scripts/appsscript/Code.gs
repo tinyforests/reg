@@ -62,6 +62,7 @@ function doGet(e) {
   if (params.action === 'save_garden_coords')    return handleSaveGardenCoords(params);
   if (params.action === 'get_all_coords')        return handleGetAllCoords(params);
   if (params.action === 'get_garden_admin_data') return handleGetGardenAdminData(params);
+  if (params.action === 'get_garden_record')     return handleGetGardenRecord(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -308,6 +309,10 @@ function doPost(e) {
 
     if (payload.submission_type === 'voucher_email') {
       return handleVoucherEmail(payload);
+    }
+
+    if (payload.submission_type === 'save_garden_record') {
+      return handleSaveGardenRecord(payload);
     }
 
     return handleEnrolment(payload, cache);
@@ -967,6 +972,73 @@ function handleGetGardenAdminData(params) {
   }
 
   return jsonResp({ok: true, data: result});
+}
+
+/*
+ * Stores a full garden record JSON for a given garden_id in the "Records" sheet.
+ * Called via doPost with submission_type === 'save_garden_record'.
+ * Protected by ADMIN_TOKEN.
+ */
+function handleSaveGardenRecord(payload) {
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  if (!stored || (payload.admin_token || '') !== stored) {
+    return jsonResp({ok: false, error: 'Unauthorized'});
+  }
+  var gardenId = safeStr(String(payload.garden_id || '').trim(), 60);
+  var record   = payload.record;
+  if (!gardenId || !record) return jsonResp({ok: false, error: 'Missing garden_id or record'});
+
+  var jsonBlob = JSON.stringify(record);
+  var now      = new Date().toISOString();
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('Records');
+  if (!sh) {
+    sh = ss.insertSheet('Records');
+    sh.appendRow(['garden_id', 'updated_at', 'json_blob']);
+    sh.setFrozenRows(1);
+  }
+
+  var data     = sh.getDataRange().getValues();
+  var foundRow = -1;
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === gardenId) { foundRow = i + 1; break; }
+  }
+
+  if (foundRow > 0) {
+    sh.getRange(foundRow, 1, 1, 3).setValues([[gardenId, now, jsonBlob]]);
+  } else {
+    sh.appendRow([gardenId, now, jsonBlob]);
+  }
+
+  return jsonResp({ok: true, garden_id: gardenId, updated_at: now});
+}
+
+/*
+ * Returns the latest published garden record for a garden_id from the "Records" sheet.
+ * Public (no token required) — the data is already public on the profile page.
+ * Falls through to {ok:false} if not yet published, so profile pages can fall back to static JSON.
+ */
+function handleGetGardenRecord(params) {
+  var gardenId = safeStr(String(params.garden_id || '').trim(), 60);
+  if (!gardenId) return jsonResp({ok: false, error: 'Missing garden_id'});
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('Records');
+  if (!sh) return jsonResp({ok: false, error: 'No published records yet'});
+
+  var data = sh.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() === gardenId) {
+      try {
+        var record = JSON.parse(data[i][2]);
+        return jsonResp({ok: true, data: record, updated_at: String(data[i][1])});
+      } catch (e) {
+        return jsonResp({ok: false, error: 'Stored record is invalid JSON'});
+      }
+    }
+  }
+  return jsonResp({ok: false, error: 'Not found'});
 }
 
 function hourBucket() {

@@ -18,7 +18,7 @@
   "enroller": "Gardener & Son",
   "verifier": null,
   "area_sqm": 6070,
-  "target_score": null,
+  "target_score": 82,
   "description": "Sam Cox — last apprentice of Gordon Ford and principal of Sam Cox Landscape — has spent 25 years shaping this 1.5-acre Wattle Glen bush garden into one of the finest examples of Australian naturalistic design in private hands. Directly adjacent to a Nillumbik green wedge corridor, the garden moves through earth-shaped terrain and layered native planting to a winding watercourse that feeds a large basalt-lined pond — habitat for frogs, birds and other wildlife. A waterfall brings water movement into the living spaces on the other side of the house. Nineteen indigenous species are currently recorded across the planting. The garden opened through Open Gardens Victoria in November 2023.",
   "evc": {
     "name": "Heathy Woodland",
@@ -135,7 +135,7 @@
     "has_photos": true,
     "has_field_notes": false,
     "has_species_list": true,
-    "has_fauna_record": false,
+    "has_fauna_record": true,
     "has_professional_assessment": false,
     "verification_level": "enrolled",
     "verification_label": "Enrolled",
@@ -170,6 +170,7 @@
       "date": "Aug 2026",
       "type": "Field Note",
       "category": "field_note",
+      "public": true,
       "notes": "Nineteen indigenous species recorded across five structural layers. Canopy cover 60%, weed pressure low — improved from high at baseline in 1998. Deep woodchip mulch throughout. Winding watercourse feeds large basalt-lined pond with confirmed frog activity. Waterfall feature active. Rock refuges and embedded logs present. Steward-reported fauna: Superb Fairywren, Eastern Spinebill, Common Brushtail Possum, Spotted Marsh Frog. G&S ecological assessment pending."
     },
     {
@@ -177,6 +178,7 @@
       "date": "Nov 2023",
       "type": "Recognition",
       "category": "recognition",
+      "public": true,
       "notes": "Garden opened to the public through Open Gardens Victoria on 25–26 November 2023. Sam Cox ran garden talks and Q&A at 11am and 2pm both days. Recognised as an exemplar of Australian naturalistic landscape design in private hands. The garden returned to Open Gardens Victoria for a second opening in November 2026."
     }
   ],

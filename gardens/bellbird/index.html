@@ -198,12 +198,12 @@
       </div>
     </a>
     <nav class="hidden md:flex items-center gap-1 text-xs">
-      <a href="#signals" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Signals</a>
-      <a href="#score"   class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
-      <a href="#network" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
-      <a href="#species" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
-      <a <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
-      <a href="#record"  class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
+      <a href="#signals"    class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Signals</a>
+      <a href="#score"      class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Score</a>
+      <a href="#network"    class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Network</a>
+      <a href="#species"    class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Species</a>
+      <a href="#trajectory" class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Trajectory</a>
+      <a href="#record"     class="px-3 py-2 hover:bg-rs dark:hover:bg-rdp">Record</a>
     </nav>
     <button id="themeToggle" class="border border-rl dark:border-rdl px-3 py-1.5 text-xs hover:opacity-80 font-mono">Canopy</button>
   </div>
@@ -930,7 +930,7 @@ function render() {
   txt('heroScore',    result.total);
   txt('heroLevel',    result.level);
   txt('heroBaseline', result.baselineScore);
-  txt('heroTarget',   R.target_score);
+  txt('heroTarget',   R.target_score || 82);
   txt('heroId',       R.garden_id);
   wid('heroScoreBar', result.total);
 
@@ -941,12 +941,9 @@ function render() {
   );
 
   txt('heroBadgeCount', badges.all.length);
-
-  txt('heroBadgeCount', badges.all.length);
   if (typeof isSteward !== "function" || isSteward(R.garden_id)) erCheckNotifications(R.garden_id, badges.all, result.total);
   if (typeof handleClaimParam === "function") handleClaimParam(R.garden_id);
   if (typeof mountStewardUnlock === "function") mountStewardUnlock(R.garden_id);
-  txt('heroBadgeLabel', badges.all.length === 1 ? 'badge earned' : 'badges earned');
 
   var hbh = '';
   for (var i = 0; i < badges.all.length; i++) {
@@ -1000,7 +997,6 @@ function render() {
     var bcls = (isV2 || isN2) ? 'bg-rg text-rb dark:bg-rb dark:text-rg' : 'bg-rs dark:bg-rg';
     blh += '<span class="text-xs border border-rl dark:border-rdl px-2.5 py-1.5 ' + bcls + '">' + ((BADGE_DEFINITIONS[bid2] && BADGE_DEFINITIONS[bid2].name) || bid2) + '</span> ';
   }
-  html('badgeList', blh);
 
   var oppRes = (typeof buildOpportunities === 'function') ? buildOpportunities(R) : { opportunities: [] };
   var deliveryNames = function (o) {
@@ -1025,8 +1021,6 @@ function render() {
   if (typeof attachClaims === 'function') attachClaims(R);
 
   txt('networkMapLabel', 'Corridor Map - ' + c.cluster_name);
-  txt('svgGardenName',   R.garden_name);
-  txt('svgAdjacentId',   adj.length ? adj[0].id : '--');
   txt('nodeStatus',      c.corridor_node_confirmed ? 'Active' : 'Pending');
   txt('nodeStatusNote',  c.corridor_node_confirmed ? 'Confirmed corridor node. Amphibian presence and proximity to green space activate connectivity weighting.' : 'Not yet confirmed.');
   txt('adjacentCount',   adj.length);
@@ -1313,22 +1307,40 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem('reg-theme', isDark ? 'dark' : 'light');
 });
 
-fetch('/data/bellbird.json')
-  .then(function(r) {
-    if (!r.ok) { throw new Error('HTTP ' + r.status); }
-    return r.json();
-  })
-  .then(function(data) {
-    G = data;
-    render();
-    _erFetchStewardData(G.garden_id, function() { _erFetchLogOverrides(G.garden_id); });
-  })
-  .catch(function(err) {
-    console.error('Could not load garden data:', err);
-    document.getElementById('heroName').textContent = 'Data unavailable';
-    document.getElementById('heroScore').textContent = '--';
-    document.getElementById('heroLevel').textContent = 'Check /data/bellbird.json';
-  });
+var _GARDEN_ID   = 'ER-AU-VIC-NIL-BEL-001';
+var _staticJson  = '/data/bellbird.json';
+var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+
+(function loadGardenRecord() {
+  var liveUrl = _liveEndpoint
+    ? (_liveEndpoint + '?action=get_garden_record&garden_id=' + encodeURIComponent(_GARDEN_ID))
+    : null;
+
+  var fetchLive = liveUrl
+    ? fetch(liveUrl)
+        .then(function(r) { return r.json(); })
+        .then(function(d) { if (d && d.ok && d.data) return d.data; throw new Error('no live record'); })
+    : Promise.reject(new Error('no endpoint'));
+
+  fetchLive
+    .catch(function() {
+      return fetch(_staticJson).then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      });
+    })
+    .then(function(data) {
+      G = data;
+      render();
+      _erFetchStewardData(G.garden_id, function() { _erFetchLogOverrides(G.garden_id); });
+    })
+    .catch(function(err) {
+      console.error('Could not load garden data:', err);
+      document.getElementById('heroName').textContent = 'Data unavailable';
+      document.getElementById('heroScore').textContent = '--';
+      document.getElementById('heroLevel').textContent = 'Check /data/bellbird.json';
+    });
+})();
 
   /* ---- Notification engine ---- */
   var _erQueue = [];
