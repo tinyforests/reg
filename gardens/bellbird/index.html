@@ -1316,14 +1316,16 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
     ? (_liveEndpoint + '?action=get_garden_record&garden_id=' + encodeURIComponent(_GARDEN_ID))
     : null;
 
+  var _dataSource = 'static';
   var fetchLive = liveUrl
     ? fetch(liveUrl)
         .then(function(r) { return r.json(); })
-        .then(function(d) { if (d && d.ok && d.data) return d.data; throw new Error('no live record'); })
+        .then(function(d) { if (d && d.ok && d.data) { _dataSource = 'live'; return d.data; } throw new Error('no live record'); })
     : Promise.reject(new Error('no endpoint'));
 
   fetchLive
-    .catch(function() {
+    .catch(function(err) {
+      console.warn('Live record not loaded (' + err.message + '), using static JSON');
       return fetch(_staticJson).then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
@@ -1331,6 +1333,7 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
     })
     .then(function(data) {
       G = data;
+      console.info('Garden data source:', _dataSource, _dataSource === 'live' ? liveUrl : _staticJson);
       render();
       _erFetchStewardData(G.garden_id, function() { _erFetchLogOverrides(G.garden_id); });
     })

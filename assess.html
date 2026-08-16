@@ -223,6 +223,7 @@
             <div>
               <div class="opacity-50 mb-1">EVC Name</div>
               <input type="text" id="f_evc_name" placeholder="Grassy Woodland" />
+              <div id="evc_status" class="text-xs mt-1 font-mono" style="display:none;opacity:.65"></div>
             </div>
             <div>
               <div class="opacity-50 mb-1">EVC Code</div>
@@ -652,15 +653,20 @@ function gn(id) { var e = document.getElementById(id); return e ? parseFloat(e.v
 function gc(id) { var e = document.getElementById(id); return e ? e.checked || false : false; }
 
 function buildRecordFromForm() {
+  var lr  = _loadedRecord || {};
+  var lrB = lr.biodiversity  || {};
+  var lrSW = lr.soil_water   || {};
+  var lrH = lr.habitat       || {};
+  var lrC = lr.connectivity  || {};
+  var lrEvc = lr.evc         || {};
+
   var faunaCount = gn('f_hab_fauna_count');
   var faunaSpecies = gv('f_hab_fauna_species');
   var fauna_sightings = [];
   if (faunaCount > 0) {
-    // Preserve verified status from loaded record when available.
-    // Only mark verified:true when verification level is site_visit or G&S verified.
     var vLevel = gv('f_ev_verification');
     var sightingVerified = (vLevel === 'site_visit' || vLevel === 'gardener_and_son_verified');
-    var loadedSightings = (_loadedRecord && _loadedRecord.habitat && _loadedRecord.habitat.fauna_sightings) || [];
+    var loadedSightings = lrH.fauna_sightings || [];
     for (var fi = 0; fi < faunaCount; fi++) {
       if (fi < loadedSightings.length) {
         fauna_sightings.push(loadedSightings[fi]);
@@ -670,29 +676,42 @@ function buildRecordFromForm() {
       }
     }
   }
+
   var adjacent_registered_gardens = getAdjacentGardens();
+  var formLat = parseFloat(gv('f_con_lat')) || null;
+  var formLng = parseFloat(gv('f_con_lng')) || null;
+
   return {
-    garden_id:       gv('f_garden_id')      || 'ER-AU-VIC-XX-XXX-0001',
-    garden_name:     gv('f_garden_name')    || 'New Garden',
-    garden_address:  gv('f_garden_address') || '',
-    steward_email:   gv('f_steward_email')  || '',
-    garden_type:     gv('f_garden_type') || 'Ecological Garden',
-    typology:        gv('f_typology')    || gv('f_garden_type') || 'Ecological Garden',
-    registry_role:   gv('f_registry_role'),
-    trajectory:      gv('f_trajectory'),
-    suburb:          gv('f_suburb'),
-    state:           gv('f_state'),
-    assessment_date: gv('f_assessment_date'),
-    baseline_date:   gv('f_baseline_date'),
-    target_score:    gn('f_target_score') || 82,
-    stewards:        gv('f_stewards'),
-    designer:        'Gardener & Son',
-    area_sqm:        gn('f_area_sqm'),
-    description:     gv('f_description'),
-    council:         gv('f_council'),
-    ward:            gv('f_ward'),
-    lga:             gv('f_lga'),
-    evc: { name: gv('f_evc_name'), code: gv('f_evc_code'), bioregion: gv('f_evc_bioregion'), bioregion_code: gv('f_evc_bioregion_code') },
+    garden_id:       gv('f_garden_id')      || lr.garden_id || 'ER-AU-VIC-XX-XXX-0001',
+    garden_name:     gv('f_garden_name')    || lr.garden_name || 'New Garden',
+    garden_address:  gv('f_garden_address') || lr.garden_address || '',
+    steward_email:   gv('f_steward_email')  || lr.steward_email || '',
+    garden_type:     gv('f_garden_type') || lr.garden_type || 'Ecological Garden',
+    typology:        gv('f_typology')    || lr.typology || gv('f_garden_type') || 'Ecological Garden',
+    registry_role:   gv('f_registry_role') || lr.registry_role || '',
+    trajectory:      gv('f_trajectory')    || lr.trajectory || '',
+    suburb:          gv('f_suburb') || lr.suburb || '',
+    state:           gv('f_state')  || lr.state  || '',
+    assessment_date: gv('f_assessment_date') || lr.assessment_date || null,
+    baseline_date:   gv('f_baseline_date')   || lr.baseline_date   || null,
+    target_score:    gn('f_target_score') || lr.target_score || 82,
+    stewards:        gv('f_stewards')   || lr.stewards || '',
+    designer:        lr.designer        || 'Gardener & Son',
+    designer_id:     lr.designer_id     || null,
+    enroller:        lr.enroller        || null,
+    verifier:        lr.verifier        || null,
+    area_sqm:        gn('f_area_sqm')   || lr.area_sqm || 0,
+    description:     gv('f_description') || lr.description || '',
+    council:         gv('f_council') || lr.council || '',
+    ward:            gv('f_ward')    || lr.ward    || null,
+    lga:             gv('f_lga')     || lr.lga     || '',
+    evc: {
+      name:           gv('f_evc_name')          || lrEvc.name || '',
+      code:           gv('f_evc_code')          || lrEvc.code || '',
+      bioregion:      gv('f_evc_bioregion')     || lrEvc.bioregion || '',
+      bioregion_code: gv('f_evc_bioregion_code')|| lrEvc.bioregion_code || '',
+      note:           lrEvc.note || ''
+    },
     biodiversity: {
       indigenous_species_current:  gn('f_bio_species_current'),
       indigenous_species_baseline: gn('f_bio_species_baseline'),
@@ -703,27 +722,30 @@ function buildRecordFromForm() {
       canopy_cover_pct_current:    gn('f_bio_canopy_current'),
       canopy_cover_pct_baseline:   gn('f_bio_canopy_baseline'),
       canopy_cover_pct_target:     gn('f_bio_canopy_target'),
-      weed_pressure:               gv('f_bio_weed_pressure'),
-      weed_pressure_baseline:      gv('f_bio_weed_baseline'),
+      weed_pressure:               gv('f_bio_weed_pressure') || lrB.weed_pressure || '',
+      weed_pressure_baseline:      gv('f_bio_weed_baseline') || lrB.weed_pressure_baseline || '',
       species_list:                (function() {
         var out = [];
         for (var xi = 0; xi < _speciesList.length; xi++) {
           out.push(typeof _speciesList[xi] === 'object' ? _speciesList[xi].name : _speciesList[xi]);
         }
         return out;
-      })()
+      })(),
+      species_note: lrB.species_note || ''
     },
     soil_water: {
-      soil_health_score:    gn('f_sw_soil_current'),
-      soil_health_baseline: gn('f_sw_soil_baseline'),
-      soil_health_max:      5,
+      soil_health_score:       gn('f_sw_soil_current'),
+      soil_health_baseline:    gn('f_sw_soil_baseline'),
+      soil_health_max:         5,
       water_function_score:    gn('f_sw_water_current'),
       water_function_baseline: gn('f_sw_water_baseline'),
       water_function_max:      5,
-      has_rainwater_system: gc('f_sw_rainwater'),
-      has_moisture_basin:   gc('f_sw_basin'),
-      has_swale:            gc('f_sw_swale'),
-      mulch_depth_mm:       gn('f_sw_mulch')
+      has_rainwater_system:    gc('f_sw_rainwater'),
+      has_moisture_basin:      gc('f_sw_basin'),
+      has_swale:               gc('f_sw_swale'),
+      mulch_depth_mm:          gn('f_sw_mulch'),
+      mulch_type:              lrSW.mulch_type  || '',
+      water_note:              lrSW.water_note  || ''
     },
     habitat: {
       habitat_nodes:          gn('f_hab_nodes_current'),
@@ -732,22 +754,25 @@ function buildRecordFromForm() {
       has_rock_refuges:   gc('f_hab_rocks'),
       has_water_feature:  gc('f_hab_water'),
       has_nest_boxes:     gc('f_hab_nest'),
-      planting_method:    gv('f_hab_method'),
+      planting_method:    gv('f_hab_method') || lrH.planting_method || '',
       fauna_sightings:    fauna_sightings
     },
     connectivity: {
-      lat:            parseFloat(gv('f_con_lat'))      || null,
-      lng:            parseFloat(gv('f_con_lng'))      || null,
-      adjacent_park:  gc('f_con_park'),
-      park_name:      gv('f_con_park_name'),
+      lat:         formLat || lrC.lat || null,
+      lng:         formLng || lrC.lng || null,
+      display_lat: formLat || lrC.display_lat || null,
+      display_lng: formLng || lrC.display_lng || null,
+      adjacent_park:   gc('f_con_park'),
+      park_name:       gv('f_con_park_name') || lrC.park_name || '',
       park_distance_m: gn('f_con_park_dist'),
-      park_lat:       parseFloat(gv('f_con_park_lat')) || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.park_lat) || null,
-      park_lng:       parseFloat(gv('f_con_park_lng')) || (_loadedRecord && _loadedRecord.connectivity && _loadedRecord.connectivity.park_lng) || null,
+      park_lat:        parseFloat(gv('f_con_park_lat')) || lrC.park_lat || null,
+      park_lng:        parseFloat(gv('f_con_park_lng')) || lrC.park_lng || null,
       adjacent_registered_gardens: adjacent_registered_gardens,
-      corridor_node_confirmed:  gc('f_con_corridor'),
+      corridor_node_confirmed:     gc('f_con_corridor'),
       effective_ecological_area_ha: Math.round((gn('f_area_sqm') / 10000) * 100) / 100,
-      cluster_area_ha:  gn('f_con_cluster_ha'),
-      cluster_name:     gv('f_con_cluster_name')
+      cluster_area_ha:  gn('f_con_cluster_ha')   || lrC.cluster_area_ha  || 0,
+      cluster_name:     gv('f_con_cluster_name') || lrC.cluster_name || '',
+      cluster:          lrC.cluster || null
     },
     evidence: {
       has_photos:                  gc('f_ev_photos'),
@@ -757,11 +782,13 @@ function buildRecordFromForm() {
       has_professional_assessment: gc('f_ev_professional'),
       verification_level:          gv('f_ev_verification'),
       verification_label:          verificationLabelFromLevel(gv('f_ev_verification')),
-      assessor:                    gv('f_ev_assessor')
+      assessor:                    gv('f_ev_assessor') || lr.assessor || null,
+      verification_date:           lr.verification_date || null
     },
-    milestones:    _loadedRecord ? (_loadedRecord.milestones    || []) : [],
-    activity_log:  _loadedRecord ? (_loadedRecord.activity_log  || []) : [],
-    notes:         _loadedRecord ? (_loadedRecord.notes         || '') : ''
+    milestones:    lr.milestones    || [],
+    activity_log:  lr.activity_log  || [],
+    notes:         lr.notes         || '',
+    yield:         lr.yield         || null
   };
 }
 
@@ -778,6 +805,13 @@ function populateFormFromRecord(r) {
   sv('f_area_sqm',          r.area_sqm);
   sv('f_evc_name',          r.evc && r.evc.name);
   sv('f_evc_code',          r.evc && r.evc.code);
+  (function() {
+    var evcSt = document.getElementById('evc_status');
+    if (evcSt && r.evc && r.evc.name) {
+      evcSt.textContent = r.evc.name + (r.evc.code ? ' · ' + r.evc.code : '') + (r.evc.bioregion ? ' · ' + r.evc.bioregion : '');
+      evcSt.style.display = '';
+    }
+  })();
   sv('f_garden_type',       r.garden_type || '');
   sv('f_typology',          r.typology || '');
   sv('f_registry_role',     r.registry_role || '');
@@ -1251,10 +1285,19 @@ function _erLookupEvc(lat, lng) {
       }
       if (!match) return;
       var p = match.properties;
-      var evcCode = 'EVC ' + (p.evc || p.evc_no || '');
-      var evcName = p.x_evcname || p.evc_name || '';
-      var evcEl = document.getElementById('f_evc_name'); if (evcEl && !evcEl.value) evcEl.value = evcName;
-      var codeEl = document.getElementById('f_evc_code'); if (codeEl && !codeEl.value) codeEl.value = evcCode;
+      var evcCode    = 'EVC ' + (p.evc || p.evc_no || '');
+      var evcName    = p.x_evcname || p.evc_name || '';
+      var bioregion  = p.bioregion_name || p.biore_name || p.bioregion || '';
+      var bioregCode = p.bioregion_no   || p.biore_no   || '';
+      var evcEl  = document.getElementById('f_evc_name');  if (evcEl  && !evcEl.value)  evcEl.value  = evcName;
+      var codeEl = document.getElementById('f_evc_code');  if (codeEl && !codeEl.value) codeEl.value = evcCode;
+      var brEl   = document.getElementById('f_evc_bioregion');      if (brEl   && !brEl.value   && bioregion)  brEl.value   = bioregion;
+      var brcEl  = document.getElementById('f_evc_bioregion_code'); if (brcEl  && !brcEl.value  && bioregCode) brcEl.value  = bioregCode;
+      var statusEl = document.getElementById('evc_status');
+      if (statusEl && evcName) {
+        statusEl.textContent = evcName + (evcCode ? ' · ' + evcCode : '') + (bioregion ? ' · ' + bioregion : '');
+        statusEl.style.display = '';
+      }
       renderLive();
     })
     .catch(function() {});
@@ -1396,15 +1439,19 @@ function addAdjacentGarden(prefill) {
     if (prefill.name)        { var el = document.getElementById('adj_name_' + idx); if(el) el.value = prefill.name; }
     if (prefill.distance_m)  { var el = document.getElementById('adj_dist_' + idx); if(el) el.value = prefill.distance_m; }
     if (prefill.direction)   { var el = document.getElementById('adj_dir_'  + idx); if(el) el.value = prefill.direction; }
-    if (prefill.lat && prefill.lng) {
+    var pLat = prefill.lat || prefill.display_lat;
+    var pLng = prefill.lng || prefill.display_lng;
+    if (pLat && pLng) {
       var latEl = document.getElementById('lat_' + key);
       var lngEl = document.getElementById('lng_' + key);
-      if(latEl) latEl.value = prefill.lat;
-      if(lngEl) lngEl.value = prefill.lng;
+      if(latEl) latEl.value = pLat;
+      if(lngEl) lngEl.value = pLng;
     }
   }
 
-  setTimeout(function() { initMiniMap(key, prefill && prefill.lat || null, prefill && prefill.lng || null); }, 50);
+  var _pLat = prefill && (prefill.lat || prefill.display_lat) || null;
+  var _pLng = prefill && (prefill.lng || prefill.display_lng) || null;
+  setTimeout(function() { initMiniMap(key, _pLat, _pLng); }, 50);
 }
 
 function removeAdjacentGarden(idx) {
@@ -1437,9 +1484,11 @@ function getAdjacentGardens() {
       name:       name ? name.value : '',
       distance_m: dist ? parseFloat(dist.value) || 0 : 0,
       direction:  dir  ? dir.value : 'adjacent',
-      lat:        lat  ? parseFloat(lat.value) || null : null,
-      lng:        lng  ? parseFloat(lng.value) || null : null,
-      verified:   _registryIds.indexOf(adjId) !== -1
+      lat:         lat  ? parseFloat(lat.value) || null : null,
+      lng:         lng  ? parseFloat(lng.value) || null : null,
+      display_lat: lat  ? parseFloat(lat.value) || null : null,
+      display_lng: lng  ? parseFloat(lng.value) || null : null,
+      verified:    _registryIds.indexOf(adjId) !== -1
     });
   }
   return results;
@@ -1886,6 +1935,7 @@ function _erPublishToRegistry() {
   .then(function(d) {
     if (!msg) return;
     if (d && d.ok) {
+      _loadedRecord = record;
       msg.style.color = '#7a9e5f';
       msg.textContent = 'Published — ' + String(d.updated_at || '').slice(0, 16).replace('T', ' ');
     } else {
@@ -1955,18 +2005,35 @@ function loadGardenSelector() {
 
 function loadGarden(dataPath) {
   var status = document.getElementById('gardenSelectorStatus');
-  if (status) status.textContent = 'Loading...';
+  if (status) status.textContent = 'Loading…';
   fetch('/' + dataPath, { cache: 'no-store' })
     .then(function(r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
-    .then(function(data) {
+    .then(function(staticData) {
+      var gardenId = staticData.garden_id;
+      if (!gardenId || !ER_APPS_ENDPOINT) return Promise.resolve({ data: staticData, source: 'static' });
+      return fetch(ER_APPS_ENDPOINT + '?action=get_garden_record&garden_id=' + encodeURIComponent(gardenId))
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d && d.ok && d.data) return { data: d.data, source: 'live', updated_at: d.updated_at };
+          return { data: staticData, source: 'static' };
+        })
+        .catch(function() { return { data: staticData, source: 'static' }; });
+    })
+    .then(function(result) {
+      var data = result.data;
       _loadedRecord = data;
       populateFormFromRecord(data);
       renderLive();
       initAllMaps();
-      if (status) status.textContent = 'Loaded ' + (data.garden_name || dataPath);
+      if (status) {
+        var src = result.source === 'live'
+          ? ' (live · ' + String(result.updated_at || '').slice(0, 16).replace('T', ' ') + ')'
+          : ' (static JSON)';
+        status.textContent = 'Loaded ' + (data.garden_name || dataPath) + src;
+      }
       if (_erAdminToken && data.garden_id) { _erLoadAdminData(data.garden_id); }
       else { _erHideAdminStrip(); }
     })

@@ -1313,22 +1313,43 @@ document.getElementById('themeToggle').addEventListener('click', function() {
   localStorage.setItem('reg-theme', isDark ? 'dark' : 'light');
 });
 
-fetch('/data/auburn_test.json')
-  .then(function(r) {
-    if (!r.ok) { throw new Error('HTTP ' + r.status); }
-    return r.json();
-  })
-  .then(function(data) {
-    G = data;
-    render();
-    _erFetchStewardData(G.garden_id, function() { _erFetchLogOverrides(G.garden_id); });
-  })
-  .catch(function(err) {
-    console.error('Could not load garden data:', err);
-    document.getElementById('heroName').textContent = 'Data unavailable';
-    document.getElementById('heroScore').textContent = '--';
-    document.getElementById('heroLevel').textContent = 'Check /data/auburn_test.json';
-  });
+var _GARDEN_ID  = 'ER-AU-VIC-HW-AUB-0001';
+var _staticJson = '/data/auburn_test.json';
+var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
+
+(function loadGardenRecord() {
+  var liveUrl = _liveEndpoint
+    ? (_liveEndpoint + '?action=get_garden_record&garden_id=' + encodeURIComponent(_GARDEN_ID))
+    : null;
+
+  var _dataSource = 'static';
+  var fetchLive = liveUrl
+    ? fetch(liveUrl)
+        .then(function(r) { return r.json(); })
+        .then(function(d) { if (d && d.ok && d.data) { _dataSource = 'live'; return d.data; } throw new Error('no live record'); })
+    : Promise.reject(new Error('no endpoint'));
+
+  fetchLive
+    .catch(function(err) {
+      console.warn('Live record not loaded (' + err.message + '), using static JSON');
+      return fetch(_staticJson).then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      });
+    })
+    .then(function(data) {
+      G = data;
+      console.info('Garden data source:', _dataSource, _dataSource === 'live' ? liveUrl : _staticJson);
+      render();
+      _erFetchStewardData(G.garden_id, function() { _erFetchLogOverrides(G.garden_id); });
+    })
+    .catch(function(err) {
+      console.error('Could not load garden data:', err);
+      document.getElementById('heroName').textContent = 'Data unavailable';
+      document.getElementById('heroScore').textContent = '--';
+      document.getElementById('heroLevel').textContent = 'Check /data/auburn_test.json';
+    });
+})();
 
   /* ---- Notification engine ---- */
   var _erQueue = [];
