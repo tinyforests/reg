@@ -1921,6 +1921,21 @@ function _erPublishToRegistry() {
   record.upgrade_potential = 100 - result.total;
   record.points_available  = 100 - result.total;
 
+  /* Auto-log the publish event */
+  var now = new Date();
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dateStr = months[now.getMonth()] + ' ' + now.getFullYear();
+  var assessorName = gv('f_ev_assessor') || 'Gardener & Son';
+  var logEntry = {
+    title: 'Record updated — ' + assessorName,
+    date: dateStr,
+    type: 'Record Update',
+    category: 'record_update',
+    public: true,
+    notes: 'Ecological function score: ' + result.total + '/100 (' + result.rating + '). Updated via assessment tool.'
+  };
+  record.activity_log = [logEntry].concat(record.activity_log || []);
+
   if (msg) { msg.style.color = ''; msg.textContent = 'Publishing…'; }
   fetch(ER_APPS_ENDPOINT, {
     method: 'POST',
