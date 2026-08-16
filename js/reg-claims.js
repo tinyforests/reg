@@ -92,13 +92,19 @@
     reader.readAsDataURL(file);
   }
 
-  function formHtml(oppId) {
+  function formHtml(oppId, knownEmail) {
     var i = 'c_' + oppId;
+    var emailField = knownEmail
+      ? '<input id="' + i + '_email" type="hidden" value="' + esc(knownEmail) + '" />'
+      : '<input id="' + i + '_email" type="email" placeholder="Email" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit" />';
+    var hint = knownEmail
+      ? '<div class="text-xs mb-2" style="opacity:.7">Tell us it\'s done and we\'ll confirm it at your next check. Points are added once confirmed.</div>'
+      : '<div class="text-xs mb-2" style="opacity:.7">Tell us it\'s done and we\'ll confirm it at your next check. Points are added once confirmed.</div>';
     return '' +
     '<div class="mt-3 pt-3" style="border-top:1px solid rgba(128,128,128,.25)">' +
-      '<div class="text-xs mb-2" style="opacity:.7">Tell us it\'s done and we\'ll confirm it at your next check. Points are added once confirmed.</div>' +
+      hint +
       '<input id="' + i + '_name"  type="text"  placeholder="Your name" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit" />' +
-      '<input id="' + i + '_email" type="email" placeholder="Email" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit" />' +
+      emailField +
       '<textarea id="' + i + '_note" rows="2" placeholder="Anything worth noting (optional)" class="w-full text-xs mb-2" style="background:transparent;border:1px solid rgba(128,128,128,.35);padding:.4rem;color:inherit;resize:vertical"></textarea>' +
       '<label class="text-xs block mb-1" style="opacity:.6">Add a photo as evidence (optional)</label>' +
       '<input id="' + i + '_photo" type="file" accept="image/*" capture="environment" class="w-full text-xs mb-2" style="color:inherit" />' +
@@ -116,6 +122,9 @@
     var gardenId = record.garden_id || record.id || '';
     var list = document.getElementById('opportunityList');
     if (!list) return;
+
+    var storedSteward = (typeof getSteward === 'function') ? getSteward(gardenId) : null;
+    var knownEmail = storedSteward ? (storedSteward.email || '') : '';
 
     var cards = list.querySelectorAll('[data-opp-id]');
     Array.prototype.forEach.call(cards, function (card) {
@@ -156,7 +165,7 @@
       if (open) {
         var id = open.getAttribute('data-claim-open');
         open.style.display = 'none';
-        open.closest('[data-opp-id]').insertAdjacentHTML('beforeend', formHtml(id));
+        open.closest('[data-opp-id]').insertAdjacentHTML('beforeend', formHtml(id, knownEmail));
         return;
       }
       if (cancel) {
@@ -191,7 +200,8 @@
       msg.textContent = text;
     };
 
-    if (!name || !email) { show('Name and email are needed so we can confirm it.', false); return; }
+    if (!name) { show('Please add your name so we can confirm it.', false); return; }
+    if (!email) { show('Email is needed so we can confirm it.', false); return; }
 
     var card = btn.closest('[data-opp-id]');
     var payload = {
