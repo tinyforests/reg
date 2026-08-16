@@ -647,9 +647,18 @@ function buildRecordFromForm() {
   var faunaSpecies = gv('f_hab_fauna_species');
   var fauna_sightings = [];
   if (faunaCount > 0) {
-    fauna_sightings.push({ species: faunaSpecies || 'Unknown', date: 'Recorded', location: 'Field observation', verified: true });
-    for (var fi = 1; fi < faunaCount; fi++) {
-      fauna_sightings.push({ species: 'Additional sighting ' + (fi + 1), date: 'Recorded', location: 'Field observation', verified: true });
+    // Preserve verified status from loaded record when available.
+    // Only mark verified:true when verification level is site_visit or G&S verified.
+    var vLevel = gv('f_ev_verification');
+    var sightingVerified = (vLevel === 'site_visit' || vLevel === 'gardener_and_son_verified');
+    var loadedSightings = (_loadedRecord && _loadedRecord.habitat && _loadedRecord.habitat.fauna_sightings) || [];
+    for (var fi = 0; fi < faunaCount; fi++) {
+      if (fi < loadedSightings.length) {
+        fauna_sightings.push(loadedSightings[fi]);
+      } else {
+        var sp = fi === 0 ? (faunaSpecies || 'Unknown') : ('Additional sighting ' + (fi + 1));
+        fauna_sightings.push({ species: sp, date: 'Recorded', location: 'Field observation', verified: sightingVerified });
+      }
     }
   }
   var adjacent_registered_gardens = getAdjacentGardens();
