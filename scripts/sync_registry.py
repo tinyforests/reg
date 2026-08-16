@@ -588,6 +588,37 @@ def sync(check_only=False):
         json.load(f)  # raises if invalid
     shutil.copy(TMP_OUT, REGISTRY)
     print("\nWritten to data/registry.json (validated via %s)." % TMP_OUT)
+
+    # Write data/garden-locations.json — lightweight public index of display coords
+    # used by assess.html to find the nearest registered garden after geocoding.
+    locs = []
+    for g in registry['gardens']:
+        gid = g.get('garden_id', '')
+        data_file = (g.get('data_file') or '').lstrip('/')
+        path = os.path.join(REPO_ROOT, data_file)
+        if not os.path.exists(path):
+            continue
+        rec = _records.get(gid)
+        if rec is None:
+            try:
+                with open(path) as f:
+                    rec = json.load(f)
+            except Exception:
+                continue
+        c = rec.get('connectivity') or {}
+        if c.get('display_lat') and c.get('display_lng'):
+            locs.append({
+                'garden_id':   gid,
+                'garden_name': g.get('garden_name', gid),
+                'display_lat': c['display_lat'],
+                'display_lng': c['display_lng'],
+            })
+    locs_path = os.path.join(REPO_ROOT, 'data', 'garden-locations.json')
+    with open(locs_path, 'w') as f:
+        json.dump(locs, f, indent=2, ensure_ascii=False)
+        f.write('\n')
+    print("Written data/garden-locations.json (%d gardens with display coords)." % len(locs))
+
     return 0
 
 

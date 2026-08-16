@@ -13,6 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -455,7 +456,7 @@
               <div class="border border-rl dark:border-rdl p-4">
                 <div class="section-label mb-3">Garden Position</div>
                 <div class="map-search-wrap">
-                  <input type="text" id="f_con_garden_address" placeholder="Search address or postcode..." />
+                  <input type="text" id="f_con_garden_address" placeholder="Search address or postcode..." oninput="_erAddrInput(this.value)" onblur="_erAddrBlur()" />
                   <button class="map-search-btn" onclick="geocodeAddress('garden')">Locate</button>
                 </div>
                 <div class="map-preview" id="map_garden"></div>
@@ -1065,12 +1066,221 @@ function geocodeAddress(key) {
       var lat = parseFloat(results[0].lat);
       var lng = parseFloat(results[0].lon);
       if (!_maps[key]) { initMiniMap(key, lat, lng); }
-      else { _maps[key].setView([lat, lng], 15); placePin(key, lat, lng); }
+      else { _maps[key].setView([lat, lng], 16); placePin(key, lat, lng); }
+      if (key === 'garden') _erResolveFromCoords(lat, lng);
       renderLive();
     })
     .catch(function() {
       if (disp) disp.textContent = 'Search failed -- check connection';
     });
+}
+
+/* ---- ADDRESS AUTOCOMPLETE + AUTO-RESOLVE (EVC / PARK / NEAREST GARDEN) ---- */
+
+var _VIC_WFS   = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
+var _EVC_LAYER = 'open-data-platform:nv2005_evcbcs';
+var _OVERPASS  = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+var _erGardenLocs = null; // cache of [{garden_id, garden_name, display_lat, display_lng}]
+
+function _erDebounce(fn, ms) {
+  var t;
+  return function() { var a = arguments; clearTimeout(t); t = setTimeout(function() { fn.apply(null, a); }, ms); };
+}
+
+function _erFmtAddr(r) {
+  var a = r.address || {};
+  return [[a.house_number, a.road].filter(Boolean).join(' '),
+          a.suburb || a.city_district || a.town || a.city,
+          a.state].filter(Boolean).join(', ') || r.display_name;
+}
+
+function _erHideAddrDrop() {
+  var el = document.getElementById('er-addr-drop');
+  if (el) el.remove();
+}
+
+function _erShowAddrDrop(results) {
+  _erHideAddrDrop();
+  var inp = document.getElementById('f_con_garden_address');
+  if (!inp || !results.length) return;
+  var ul = document.createElement('ul');
+  ul.id = 'er-addr-drop';
+  ul.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:400;background:var(--bg,#fafaf7);border:1px solid #d7ccb9;margin:2px 0 0;padding:0;list-style:none;box-shadow:0 6px 18px rgba(0,0,0,.12);max-height:220px;overflow-y:auto';
+  results.forEach(function(r) {
+    var li = document.createElement('li');
+    li.style.cssText = 'padding:8px 12px;font-size:.75rem;cursor:pointer;border-bottom:1px solid #ede9e0;line-height:1.4';
+    li.textContent = _erFmtAddr(r);
+    li.addEventListener('mouseover', function() { li.style.background = '#f5f2eb'; });
+    li.addEventListener('mouseout',  function() { li.style.background = ''; });
+    li.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      inp.value = _erFmtAddr(r);
+      _erHideAddrDrop();
+      var lat = parseFloat(r.lat), lng = parseFloat(r.lon);
+      if (!_maps['garden']) initMiniMap('garden', lat, lng);
+      else { _maps['garden'].setView([lat, lng], 16); placePin('garden', lat, lng); }
+      saveCoords('garden', lat, lng);
+      _erResolveFromCoords(lat, lng);
+      renderLive();
+    });
+    ul.appendChild(li);
+  });
+  var wrap = inp.parentElement;
+  wrap.style.position = 'relative';
+  wrap.appendChild(ul);
+}
+
+var _erFetchSuggestions = _erDebounce(function(q) {
+  if (q.length < 4) { _erHideAddrDrop(); return; }
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=au&q=' + encodeURIComponent(q),
+    { headers: { 'Accept-Language': 'en' } })
+    .then(function(r) { return r.json(); })
+    .then(function(d) { _erShowAddrDrop(d); })
+    .catch(function() {});
+}, 380);
+
+function _erAddrInput(val) { _erFetchSuggestions(val); }
+function _erAddrBlur()     { setTimeout(_erHideAddrDrop, 200); }
+
+function _erSetStatus(id, msg, ok) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = ok ? '' : 'rgba(61,69,53,.45)';
+}
+
+function _erResolveFromCoords(lat, lng) {
+  _erLookupEvc(lat, lng);
+  _erLookupPark(lat, lng);
+  _erFindNearestGarden(lat, lng);
+}
+
+/* EVC lookup via VIC WFS */
+function _erLookupEvc(lat, lng) {
+  var statusEl = document.getElementById('f_evc_name');
+  var d = 0.02;
+  var bbox = (lng-d)+','+(lat-d)+','+(lng+d)+','+(lat+d)+',EPSG:4326';
+  var url = _VIC_WFS + '?service=WFS&version=1.0.0&request=GetFeature'
+          + '&typeName=' + encodeURIComponent(_EVC_LAYER)
+          + '&bbox=' + bbox + '&outputFormat=application%2Fjson';
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.features || !data.features.length) return;
+      var pt = turf.point([lng, lat]);
+      var match = null;
+      for (var i = 0; i < data.features.length; i++) {
+        var f = data.features[i];
+        try {
+          var geom = f.geometry.type === 'Polygon'
+            ? turf.polygon(f.geometry.coordinates)
+            : (f.geometry.type === 'MultiPolygon' ? turf.multiPolygon(f.geometry.coordinates) : null);
+          if (geom && turf.booleanPointInPolygon(pt, geom)) { match = f; break; }
+        } catch(e) {}
+      }
+      if (!match) {
+        var best = Infinity;
+        for (var j = 0; j < data.features.length; j++) {
+          try {
+            var g2 = data.features[j].geometry.type === 'Polygon'
+              ? turf.polygon(data.features[j].geometry.coordinates)
+              : turf.multiPolygon(data.features[j].geometry.coordinates);
+            var d2 = turf.distance(pt, turf.centroid(g2));
+            if (d2 < best) { best = d2; match = data.features[j]; }
+          } catch(e) {}
+        }
+      }
+      if (!match) return;
+      var p = match.properties;
+      var evcCode = 'EVC ' + (p.evc || p.evc_no || '');
+      var evcName = p.x_evcname || p.evc_name || '';
+      var evcEl = document.getElementById('f_evc_name'); if (evcEl && !evcEl.value) evcEl.value = evcName;
+      var codeEl = document.getElementById('f_evc_code'); if (codeEl && !codeEl.value) codeEl.value = evcCode;
+      renderLive();
+    })
+    .catch(function() {});
+}
+
+/* Park lookup via Overpass */
+function _erLookupPark(lat, lng, attempt) {
+  if (!attempt) attempt = 0;
+  var query = '[out:json][timeout:10];(\n'
+    + 'way["leisure"="park"](around:600,' + lat + ',' + lng + ');\n'
+    + 'way["leisure"="nature_reserve"](around:600,' + lat + ',' + lng + ');\n'
+    + 'way["leisure"="garden"]["access"!="private"](around:600,' + lat + ',' + lng + ');\n'
+    + 'relation["leisure"="park"](around:600,' + lat + ',' + lng + ');\n'
+    + ');out center tags;';
+  var encoded = '?data=' + encodeURIComponent(query);
+  Promise.any(_OVERPASS.map(function(ep) {
+    return fetch(ep + encoded)
+      .then(function(r) { if (!r.ok) throw r.status; return r.json(); });
+  }))
+  .then(function(data) {
+    if (!data.elements || !data.elements.length) return;
+    var pt = turf.point([lng, lat]);
+    var best = Infinity, bestEl = null;
+    data.elements.forEach(function(el) {
+      var clat = el.center ? el.center.lat : el.lat;
+      var clng = el.center ? el.center.lon : el.lon;
+      if (!clat || !clng) return;
+      var dist = turf.distance(pt, turf.point([clng, clat]), { units: 'meters' });
+      if (dist < best) { best = dist; bestEl = el; bestEl._clat = clat; bestEl._clng = clng; }
+    });
+    if (!bestEl) return;
+    var pName = bestEl.tags && bestEl.tags.name ? bestEl.tags.name : 'Unnamed park';
+    var pLat  = parseFloat(bestEl._clat.toFixed(6));
+    var pLng  = parseFloat(bestEl._clng.toFixed(6));
+    var pDist = Math.round(best);
+    var pNameEl = document.getElementById('f_con_park_name'); if (pNameEl && !pNameEl.value) pNameEl.value = pName;
+    var pDistEl = document.getElementById('f_con_park_dist'); if (pDistEl && !pDistEl.value) pDistEl.value = pDist;
+    var pChk    = document.getElementById('f_con_park');      if (pChk)    pChk.checked = true;
+    saveCoords('park', pLat, pLng);
+    if (!_maps['park']) initMiniMap('park', pLat, pLng);
+    else { _maps['park'].setView([pLat, pLng], 15); placePin('park', pLat, pLng); }
+    renderLive();
+  })
+  .catch(function() {
+    if (attempt < 1) setTimeout(function() { _erLookupPark(lat, lng, 1); }, 2500);
+  });
+}
+
+/* Nearest registered garden */
+function _erFindNearestGarden(lat, lng) {
+  function _run(locs) {
+    if (!locs || !locs.length) return;
+    var current = _loadedRecord && _loadedRecord.garden_id;
+    var pt = turf.point([lng, lat]);
+    var best = Infinity, bestLoc = null;
+    locs.forEach(function(g) {
+      if (g.garden_id === current) return;
+      if (!g.display_lat || !g.display_lng) return;
+      var d = turf.distance(pt, turf.point([g.display_lng, g.display_lat]), { units: 'meters' });
+      if (d < best) { best = d; bestLoc = g; }
+    });
+    if (!bestLoc || best > 2000) return;
+    var dir = _erBearing(lat, lng, bestLoc.display_lat, bestLoc.display_lng);
+    addAdjacentGarden({
+      id:         bestLoc.garden_id,
+      name:       bestLoc.garden_name,
+      distance_m: Math.round(best),
+      direction:  dir,
+      lat:        bestLoc.display_lat,
+      lng:        bestLoc.display_lng
+    });
+    renderLive();
+  }
+  if (_erGardenLocs) { _run(_erGardenLocs); return; }
+  fetch('/data/garden-locations.json')
+    .then(function(r) { return r.json(); })
+    .then(function(d) { _erGardenLocs = d; _run(d); })
+    .catch(function() {});
+}
+
+function _erBearing(lat1, lng1, lat2, lng2) {
+  var dy = lat2 - lat1, dx = lng2 - lng1;
+  var deg = Math.atan2(dx, dy) * 180 / Math.PI;
+  var dirs = ['north','northeast','east','southeast','south','southwest','west','northwest'];
+  return dirs[Math.round(((deg % 360) + 360) % 360 / 45) % 8];
 }
 
 /* ---- DYNAMIC ADJACENT GARDEN LIST ---- */
