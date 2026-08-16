@@ -1285,10 +1285,11 @@ function _erLookupEvc(lat, lng) {
       }
       if (!match) return;
       var p = match.properties;
-      var evcCode    = 'EVC ' + (p.evc || p.evc_no || '');
-      var evcName    = p.x_evcname || p.evc_name || '';
-      var bioregion  = p.bioregion_name || p.biore_name || p.bioregion || '';
-      var bioregCode = p.bioregion_no   || p.biore_no   || '';
+      console.info('[EVC WFS properties]', JSON.stringify(p));
+      var evcCode    = 'EVC ' + (p.evc || p.evc_no || p.EVC || p.EVC_NO || '');
+      var evcName    = p.x_evcname || p.evc_name || p.EVCNAME || p.X_EVCNAME || '';
+      var bioregion  = p.bioregion_name || p.biore_name || p.bioregion || p.BIOREGION_NAME || p.BIORE_NAME || p.BIOREGION || '';
+      var bioregCode = p.bioregion_no || p.biore_no || p.bioregion_code || p.BIOREGION_NO || p.BIORE_NO || '';
       var evcEl  = document.getElementById('f_evc_name');  if (evcEl  && evcName)    evcEl.value  = evcName;
       var codeEl = document.getElementById('f_evc_code');  if (codeEl && evcCode)    codeEl.value = evcCode;
       var brEl   = document.getElementById('f_evc_bioregion');      if (brEl  && bioregion)  brEl.value   = bioregion;
