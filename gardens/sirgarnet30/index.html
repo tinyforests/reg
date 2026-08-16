@@ -1143,13 +1143,15 @@ function initCorridorMap(record) {
 
   /* Collect all bounds from the start */
   var bounds = [[displayLat, displayLng]];
-  L.circleMarker([displayLat, displayLng], {
-    radius: 7,
+
+  /* Approximate location circle — no precise pin on public map */
+  var primaryCircle = L.circle([displayLat, displayLng], {
+    radius: 75,
     color: '#3d4535',
     fillColor: '#7a9e5f',
-    fillOpacity: 0.85,
-    weight: 2,
-    opacity: 0.9
+    fillOpacity: 0.15,
+    weight: 1.5,
+    opacity: 0.5
   }).addTo(_map);
 
   /* Park marker */
