@@ -1781,26 +1781,36 @@ function _erRenderAdminPanel(d) {
     var coordEl = document.getElementById('adminCoords');
     if (coordEl) coordEl.textContent = d.lat.toFixed(6) + ', ' + d.lng.toFixed(6) + (d.coord_updated_at ? ' (geocoded)' : ' (submission)');
 
-    // Apply precise coords to the garden map
     var latEl = document.getElementById('f_con_lat');
     var lngEl = document.getElementById('f_con_lng');
     if (latEl) latEl.value = d.lat.toFixed(6);
     if (lngEl) lngEl.value = d.lng.toFixed(6);
 
     var dispEl = document.getElementById('coord_garden');
-    if (dispEl) dispEl.textContent = d.lat.toFixed(6) + ', ' + d.lng.toFixed(6) + ' (precise)';
+    if (dispEl) dispEl.textContent = d.lat.toFixed(6) + ', ' + d.lng.toFixed(6) + ' (precise — from sheet)';
 
-    if (_maps['garden']) {
-      _maps['garden'].setView([d.lat, d.lng], 16);
+    var _pLat = d.lat, _pLng = d.lng;
+
+    function _placePrecisePin() {
+      if (!_maps['garden']) {
+        // Map not initialised yet (connectivity tab never opened) — create it now
+        initMiniMap('garden', _pLat, _pLng);
+        return;
+      }
+      _maps['garden'].setView([_pLat, _pLng], 16);
       if (_markers['garden']) { _maps['garden'].removeLayer(_markers['garden']); }
       var icon = L.divIcon({ className: 'map-pin-green', iconSize: [12, 12] });
-      _markers['garden'] = L.marker([d.lat, d.lng], { icon: icon, draggable: true }).addTo(_maps['garden']);
+      _markers['garden'] = L.marker([_pLat, _pLng], { icon: icon, draggable: true }).addTo(_maps['garden']);
       _markers['garden'].on('dragend', function(e) {
         var p = e.target.getLatLng();
         saveCoords('garden', p.lat, p.lng);
         renderLive();
       });
+      // Force Leaflet to repaint — map may have been in a hidden tab when initialised
+      setTimeout(function() { if (_maps['garden']) _maps['garden'].invalidateSize(); }, 100);
     }
+
+    _placePrecisePin();
     renderLive();
   }
 }
