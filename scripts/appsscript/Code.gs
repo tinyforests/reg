@@ -59,8 +59,9 @@ function doGet(e) {
   if (params.action === 'get_steward_data')    return handleGetStewardData(params);
   if (params.action === 'add_field_note')      return handleAddFieldNote(params);
   if (params.action === 'add_species')         return handleAddSpecies(params);
-  if (params.action === 'save_garden_coords')  return handleSaveGardenCoords(params);
-  if (params.action === 'get_all_coords')      return handleGetAllCoords(params);
+  if (params.action === 'save_garden_coords')    return handleSaveGardenCoords(params);
+  if (params.action === 'get_all_coords')        return handleGetAllCoords(params);
+  if (params.action === 'get_garden_admin_data') return handleGetGardenAdminData(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -901,6 +902,71 @@ function handleGetAllCoords(params) {
   }
 
   return jsonResp({ok: true, coords: result});
+}
+
+/*
+ * Returns admin data for a single garden: steward contact, address, review
+ * status, and the most precise coords available (Garden Coords tab wins over
+ * Submissions sheet, since assess.html geocoding is newer / higher precision).
+ * Protected by ADMIN_TOKEN stored in Script Properties.
+ */
+function handleGetGardenAdminData(params) {
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  if (!stored || (params.admin_token || '') !== stored)
+    return jsonResp({ok: false, error: 'Unauthorized'});
+
+  var gardenId = safeStr((params.garden_id || '').trim(), 60);
+  if (!gardenId) return jsonResp({ok: false, error: 'garden_id required'});
+
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var result = {
+    garden_id: gardenId, found: false,
+    lat: null, lng: null,
+    garden_address: '', garden_suburb: '',
+    steward_name: '', steward_email: '',
+    review_status: '', submission_id: '', submitted_at: ''
+  };
+
+  // Source 1: Submissions sheet — col Z (index 25) = published_garden_id
+  var subSheet = ss.getSheetByName('Submissions');
+  if (subSheet && subSheet.getLastRow() > 1) {
+    var lastCol = Math.max(subSheet.getLastColumn(), 34);
+    var rows    = subSheet.getRange(2, 1, subSheet.getLastRow() - 1, lastCol).getValues();
+    for (var i = 0; i < rows.length; i++) {
+      if (String(rows[i][25] || '').trim().toLowerCase() !== gardenId.toLowerCase()) continue;
+      result.found          = true;
+      result.submitted_at   = String(rows[i][0]  || '');  // A
+      result.submission_id  = String(rows[i][1]  || '');  // B
+      result.steward_name   = String(rows[i][2]  || '');  // C
+      result.steward_email  = String(rows[i][3]  || '');  // D
+      result.garden_address = String(rows[i][4]  || '');  // E
+      result.review_status  = String(rows[i][23] || '');  // X
+      result.garden_suburb  = String(rows[i][31] || '');  // AF
+      var sLat = parseFloat(rows[i][32]);                  // AG
+      var sLng = parseFloat(rows[i][33]);                  // AH
+      if (!isNaN(sLat) && !isNaN(sLng)) { result.lat = sLat; result.lng = sLng; }
+      // keep scanning — latest matching row wins for mutable fields
+    }
+  }
+
+  // Source 2: Garden Coords sheet — assess.html saves here; latest row wins
+  var coordSheet = ss.getSheetByName('Garden Coords');
+  if (coordSheet && coordSheet.getLastRow() > 1) {
+    var cRows = coordSheet.getRange(2, 1, coordSheet.getLastRow() - 1, 5).getValues();
+    for (var j = 0; j < cRows.length; j++) {
+      if (String(cRows[j][1] || '').trim().toLowerCase() !== gardenId.toLowerCase()) continue;
+      var cLat = parseFloat(cRows[j][2]);
+      var cLng = parseFloat(cRows[j][3]);
+      if (!isNaN(cLat) && !isNaN(cLng)) {
+        result.lat = cLat;
+        result.lng = cLng;
+        result.coord_updated_at = String(cRows[j][0] || '');
+        if (!result.garden_address && cRows[j][4]) result.garden_address = String(cRows[j][4]);
+      }
+    }
+  }
+
+  return jsonResp({ok: true, data: result});
 }
 
 function hourBucket() {

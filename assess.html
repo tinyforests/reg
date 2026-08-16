@@ -161,6 +161,20 @@
       <option value="__new__">+ New garden</option>
     </select>
     <div id="gardenSelectorStatus" class="text-xs opacity-50"></div>
+    <button id="adminTokenBtn" style="margin-left:auto;font-size:.65rem;padding:.25rem .6rem;border:1px solid rgba(122,158,95,.35);color:rgba(122,158,95,.65);white-space:nowrap;background:transparent;cursor:pointer;font-family:inherit">Admin</button>
+  </div>
+</div>
+
+<div id="adminStrip" style="display:none;background:rgba(122,158,95,.07);border-bottom:1px solid rgba(122,158,95,.22)">
+  <div class="mx-auto max-w-7xl px-4 py-2">
+    <div class="flex items-center gap-x-5 gap-y-1 flex-wrap" style="font-size:.75rem">
+      <span style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:#7a9e5f;white-space:nowrap">Admin</span>
+      <span id="adminSteward" class="font-medium" style="opacity:.85"></span>
+      <span id="adminAddress" class="font-mono" style="font-size:.7rem;opacity:.55"></span>
+      <span id="adminStatus" style="font-size:.7rem;opacity:.45"></span>
+      <span id="adminCoords" class="font-mono" style="font-size:.7rem;opacity:.4"></span>
+      <span id="adminMsg" style="font-size:.7rem;opacity:.35"></span>
+    </div>
   </div>
 </div>
 
@@ -1635,6 +1649,137 @@ document.addEventListener('click', function(e) {
   }
 });
 
+/* ---- ADMIN PANEL ---- */
+var _erAdminToken = localStorage.getItem('er-admin-token') || '';
+
+function _erInitAdminBtn() {
+  var btn = document.getElementById('adminTokenBtn');
+  if (!btn) return;
+  if (_erAdminToken) {
+    btn.textContent = 'Admin ✓';
+    btn.style.opacity = '1';
+  } else {
+    btn.textContent = 'Admin';
+    btn.style.opacity = '0.55';
+  }
+  btn.onclick = function() {
+    if (_erAdminToken) {
+      if (confirm('Clear admin token?')) {
+        localStorage.removeItem('er-admin-token');
+        _erAdminToken = '';
+        _erInitAdminBtn();
+        _erHideAdminStrip();
+      }
+    } else {
+      var t = prompt('Enter admin token:');
+      if (t && t.trim()) {
+        _erAdminToken = t.trim();
+        localStorage.setItem('er-admin-token', _erAdminToken);
+        _erInitAdminBtn();
+        if (_loadedRecord && _loadedRecord.garden_id) {
+          _erLoadAdminData(_loadedRecord.garden_id);
+        }
+      }
+    }
+  };
+}
+
+function _erHideAdminStrip() {
+  var el = document.getElementById('adminStrip');
+  if (el) el.style.display = 'none';
+  var ids = ['adminSteward','adminAddress','adminStatus','adminCoords','adminMsg'];
+  for (var i = 0; i < ids.length; i++) {
+    var e = document.getElementById(ids[i]); if (e) e.textContent = '';
+  }
+}
+
+function _erLoadAdminData(gardenId) {
+  if (!_erAdminToken || !gardenId) return;
+  var msgEl = document.getElementById('adminMsg');
+  var strip  = document.getElementById('adminStrip');
+  if (strip) strip.style.display = 'block';
+  var ids = ['adminSteward','adminAddress','adminStatus','adminCoords'];
+  for (var i = 0; i < ids.length; i++) {
+    var e = document.getElementById(ids[i]); if (e) e.textContent = '';
+  }
+  if (msgEl) msgEl.textContent = 'Fetching...';
+
+  var url = ER_APPS_ENDPOINT
+    + '?action=get_garden_admin_data'
+    + '&garden_id='   + encodeURIComponent(gardenId)
+    + '&admin_token=' + encodeURIComponent(_erAdminToken);
+
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      if (msgEl) msgEl.textContent = '';
+      if (!resp.ok) { if (msgEl) msgEl.textContent = resp.error || 'Error'; return; }
+      _erRenderAdminPanel(resp.data);
+    })
+    .catch(function() { if (msgEl) msgEl.textContent = 'Fetch failed'; });
+}
+
+function _erRenderAdminPanel(d) {
+  var strip = document.getElementById('adminStrip');
+  if (strip) strip.style.display = 'block';
+
+  var stewardEl = document.getElementById('adminSteward');
+  if (stewardEl) {
+    if (d.steward_name || d.steward_email) {
+      var parts = [];
+      if (d.steward_name)  parts.push(d.steward_name);
+      if (d.steward_email) parts.push(d.steward_email);
+      stewardEl.textContent = parts.join(' · ');
+    } else {
+      stewardEl.textContent = d.found ? '(no steward on record)' : 'Not in submissions';
+      stewardEl.style.opacity = '0.4';
+    }
+  }
+
+  var addrEl = document.getElementById('adminAddress');
+  if (addrEl) {
+    var addrParts = [];
+    if (d.garden_address) addrParts.push(d.garden_address);
+    if (d.garden_suburb && d.garden_address.indexOf(d.garden_suburb) === -1) addrParts.push(d.garden_suburb);
+    addrEl.textContent = addrParts.join(', ');
+  }
+
+  var statusEl = document.getElementById('adminStatus');
+  if (statusEl) {
+    var statusParts = [];
+    if (d.review_status)  statusParts.push(d.review_status);
+    if (d.submission_id)  statusParts.push(d.submission_id);
+    statusEl.textContent = statusParts.join(' · ');
+  }
+
+  if (d.lat && d.lng) {
+    var coordEl = document.getElementById('adminCoords');
+    if (coordEl) coordEl.textContent = d.lat.toFixed(6) + ', ' + d.lng.toFixed(6) + (d.coord_updated_at ? ' (geocoded)' : ' (submission)');
+
+    // Apply precise coords to the garden map
+    var latEl = document.getElementById('f_con_lat');
+    var lngEl = document.getElementById('f_con_lng');
+    if (latEl) latEl.value = d.lat.toFixed(6);
+    if (lngEl) lngEl.value = d.lng.toFixed(6);
+
+    var dispEl = document.getElementById('coord_garden');
+    if (dispEl) dispEl.textContent = d.lat.toFixed(6) + ', ' + d.lng.toFixed(6) + ' (precise)';
+
+    if (_maps['garden']) {
+      _maps['garden'].setView([d.lat, d.lng], 16);
+      if (_markers['garden']) { _maps['garden'].removeLayer(_markers['garden']); }
+      var icon = L.divIcon({ className: 'map-pin-green', iconSize: [12, 12] });
+      _markers['garden'] = L.marker([d.lat, d.lng], { icon: icon, draggable: true }).addTo(_maps['garden']);
+      _markers['garden'].on('dragend', function(e) {
+        var p = e.target.getLatLng();
+        saveCoords('garden', p.lat, p.lng);
+        renderLive();
+      });
+    }
+    renderLive();
+  }
+}
+
 /* ---- BOOT ---- */
 var st = localStorage.getItem('reg-theme');
 if (st === 'light') { document.documentElement.classList.remove('dark'); }
@@ -1704,6 +1849,8 @@ function loadGarden(dataPath) {
       renderLive();
       initAllMaps();
       if (status) status.textContent = 'Loaded ' + (data.garden_name || dataPath);
+      if (_erAdminToken && data.garden_id) { _erLoadAdminData(data.garden_id); }
+      else { _erHideAdminStrip(); }
     })
     .catch(function() {
       if (status) status.textContent = 'Could not load data';
@@ -1726,6 +1873,7 @@ function resetToNew() {
   _loadedRecord = null;
   var status = document.getElementById('gardenSelectorStatus');
   if (status) status.textContent = 'New garden';
+  _erHideAdminStrip();
   renderLive();
 }
 
@@ -1736,6 +1884,7 @@ document.getElementById('gardenSelector').addEventListener('change', function() 
   loadGarden(val);
 });
 
+_erInitAdminBtn();
 loadGardenSelector();
 loadSpeciesDb();
 renderLive();
