@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ecological Registry · Gardener &amp; Son</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#3d4535;
+  --green-deep:#2b3126;
+  --beige:#fff0dc;
+  --signal:#7C9A52;
+  --brass:#B49A63;
+  --ink:#2b3126;
+  --stage-w:1600px;
+  --stage-h:900px;
+}
+*{margin:0;padding:0;box-sizing:border-box;border-radius:0}
+html,body{width:100%;height:100%;background:#14170f;overflow:hidden;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;}
+
+#viewport{position:absolute;left:0;top:0;right:0;bottom:0;background:#14170f;transition:background .5s ease;overflow:hidden;}
+#stage{width:var(--stage-w);height:var(--stage-h);position:absolute;
+  left:50%;top:50%;margin-left:calc(var(--stage-w) / -2);margin-top:calc(var(--stage-h) / -2);
+  transform-origin:center center;}
+body.idle{cursor:none}
+body.idle #help{opacity:0}
+#help{transition:opacity .4s ease}
+#nav{position:absolute;right:16px;bottom:44px;z-index:75;display:flex;align-items:center;gap:8px;
+  transition:opacity .4s ease;font-family:"IBM Plex Mono",monospace}
+body.idle #nav{opacity:.18}
+#nav button{font:inherit;font-size:15px;letter-spacing:.1em;background:rgba(20,23,15,.55);color:var(--beige);
+  border:1px solid rgba(180,154,99,.45);padding:8px 14px;cursor:pointer;line-height:1}
+#nav button:hover{background:rgba(180,154,99,.25)}
+#nav button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+#ncount{font-size:12px;letter-spacing:.18em;color:rgba(255,240,220,.55);padding:0 4px}
+body.presenter #nav,body.presenter #help{display:none}
+body.display #nav,body.display #help{display:none!important}
+
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
+  padding:110px 130px;display:flex;flex-direction:column;overflow:hidden;}
+.slide.active{opacity:1;visibility:visible;}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.30'/%3E%3C/svg%3E");}
+.dark{background:var(--green);color:var(--beige);}
+.deep{background:var(--green-deep);color:var(--beige);}
+.light{background:var(--beige);color:var(--ink);}
+.dark::after,.deep::after{mix-blend-mode:overlay;opacity:.22}
+
+/* type */
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.24em;text-transform:uppercase;}
+.dark .eyebrow,.deep .eyebrow{color:rgba(255,240,220,.5)}
+.light .eyebrow{color:#6d7360}
+h1{font-family:"Abril Fatface",Georgia,serif;font-weight:400;font-size:104px;line-height:1.02;letter-spacing:-.015em;}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:76px;line-height:1.08;letter-spacing:-.015em;}
+.big{font-size:92px}
+.lede{font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:34px;line-height:1.45;max-width:20ch;}
+p.body{font-size:26px;line-height:1.62;font-weight:300;max-width:44ch;}
+em{font-style:italic;color:var(--signal)}
+.dark em,.deep em{color:#a9c47c}
+.rule{height:1px;background:var(--brass);opacity:.55;width:100%}
+.dark .rule,.deep .rule{background:var(--brass);opacity:.4}
+.spacer{flex:1}
+
+/* footer / slide numbers */
+.foot{position:absolute;left:130px;right:130px;bottom:56px;display:flex;justify-content:space-between;align-items:flex-end;
+  font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.18em;text-transform:uppercase;}
+.dark .foot,.deep .foot{color:rgba(255,240,220,.38)}
+.light .foot{color:#8a8f7d}
+
+/* concentric marker */
+.marker{position:relative;display:inline-block}
+.marker i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid currentColor;border-radius:50%;opacity:.45}
+.marker b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:currentColor;border-radius:50%}
+
+/* slide 1 */
+.title-grid{position:absolute;inset:0;opacity:.95}
+.title-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(100deg, rgba(61,69,53,.94) 0%, rgba(61,69,53,.86) 30%, rgba(61,69,53,.42) 56%, rgba(61,69,53,0) 78%);}
+.title-wrap{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;justify-content:center}
+.title-wrap h1{max-width:16ch}
+.title-sub{margin-top:30px;font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:34px;
+  line-height:1.35;color:rgba(255,240,220,.84);max-width:26ch}
+.byline-2{margin-top:12px;color:rgba(255,240,220,.44)}
+.byline{margin-top:44px;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,240,220,.62)}
+
+/* acknowledgement */
+.ack{max-width:30ch;font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:38px;line-height:1.5}
+.ack-full{max-width:46ch;font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:32px;line-height:1.55;color:rgba(255,240,220,.88)}
+.ack-full p{margin-bottom:22px}
+.ack-full p.turn{font-size:34px;line-height:1.4;color:#a9c47c;margin:34px 0 34px;padding-left:26px;border-left:1px solid var(--brass);max-width:36ch}
+
+/* context words */
+.words{display:flex;gap:0;margin-top:64px;border-top:1px solid rgba(61,69,53,.25)}
+.words span{flex:1;padding:26px 0 0;font-family:"IBM Plex Mono",monospace;font-size:16px;letter-spacing:.16em;text-transform:uppercase;color:#6d7360}
+
+/* system slide */
+.system{display:grid;grid-template-columns:1fr 76px 1fr 76px 1fr;align-items:start;margin-top:20px}
+.step h2{font-size:80px;letter-spacing:.01em}
+.step .prod{margin-top:26px;font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.1em;color:var(--signal)}
+.step .say{margin-top:20px;font-size:24px;line-height:1.5;font-weight:300;color:#5e6553;max-width:22ch}
+.arrow{display:flex;justify-content:center;padding-top:34px;color:var(--brass);font-size:40px;font-family:"Fraunces",serif}
+
+/* gardens */
+.gardens{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:30px}
+.garden{padding:0 46px;border-left:1px solid rgba(255,240,220,.22)}
+.garden:first-child{padding-left:0;border-left:0}
+.garden .place{font-family:"Fraunces",Georgia,serif;font-size:38px;line-height:1.2;margin-bottom:8px}
+.garden .lga{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,240,220,.5)}
+.garden .note{margin-top:26px;font-size:20px;line-height:1.6;font-weight:300;color:rgba(255,240,220,.86)}
+.tag{display:inline-block;margin-top:26px;font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid rgba(180,154,99,.6);color:var(--brass);padding:7px 12px}
+.method{margin-top:auto;display:flex;gap:56px;font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,240,220,.55)}
+
+/* deeper engagement */
+.engage{display:grid;grid-template-columns:1fr 560px;gap:70px;align-items:start}
+.pillars{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,240,220,.2)}
+.pillars span{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,240,220,.55)}
+.record{border:1px solid rgba(255,240,220,.2);padding:32px 34px 30px}
+.rec-head{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,240,220,.5);margin-bottom:18px}
+.rec-nums{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.rec-nums div{border:1px solid rgba(255,240,220,.16);padding:18px 0 14px;text-align:center}
+.rec-nums b{display:block;font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:64px;
+  line-height:1;color:var(--beige)}
+.rec-nums span{display:block;margin-top:8px;font-size:15px;font-weight:300;color:rgba(255,240,220,.6)}
+.rec-tier{display:inline-block;margin-top:22px;border:1px solid rgba(180,154,99,.6);color:var(--brass);
+  padding:9px 14px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.rec-bar{margin-top:24px;height:6px;background:rgba(255,240,220,.14)}
+.rec-bar i{display:block;height:6px;background:var(--signal)}
+.rec-scale{display:flex;justify-content:space-between;margin-top:12px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.1em;color:rgba(255,240,220,.55)}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chips span{border:1px solid rgba(255,240,220,.2);padding:8px 12px;font-size:14px;font-weight:300;
+  color:rgba(255,240,220,.72)}
+.chips span.on{border-color:rgba(124,154,82,.75);color:#a9c47c}
+.rec-foot{margin-top:28px;padding-top:18px;border-top:1px solid rgba(255,240,220,.16);
+  font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,240,220,.45);line-height:1.9}
+
+/* whitehorse */
+.reasons{margin-top:40px;border-top:1px solid rgba(61,69,53,.22)}
+.reason{display:grid;grid-template-columns:70px 340px 1fr;align-items:baseline;gap:0 28px;
+  padding:20px 0 19px;border-bottom:1px solid rgba(61,69,53,.22)}
+.reason i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.16em;color:var(--brass)}
+.reason b{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:27px;line-height:1.2;color:var(--ink)}
+.reason span{font-size:20px;line-height:1.5;font-weight:300;color:#5e6553}
+
+/* ask */
+.possible{margin-top:52px;padding-top:30px;border-top:1px solid rgba(255,240,220,.22);
+  max-width:62ch;font-size:24px;line-height:1.58;font-weight:300;color:rgba(255,240,220,.88)}
+.possible span{display:block;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+.possible em{display:block;margin-top:22px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:27px;color:#a9c47c}
+.pilot{display:flex;gap:0;margin-top:56px;border-top:1px solid rgba(255,240,220,.22)}
+.pilot div{flex:1;padding:28px 34px 0 0;font-size:20px;line-height:1.55;font-weight:300;color:rgba(255,240,220,.86)}
+.pilot div span{display:block;font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
+
+/* bigger vision */
+.vision-line{font-size:60px;line-height:1.26;max-width:28ch}
+.vision-line em{font-style:normal;color:var(--signal)}
+
+/* close */
+.close-wrap{height:100%;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.corridor{position:absolute;inset:0;opacity:.55}
+
+/* notes */
+#notes{position:absolute;left:0;right:0;bottom:0;max-height:42%;overflow:auto;background:#12150e;color:#e8e2d2;
+  border-top:1px solid rgba(180,154,99,.4);padding:26px 34px;display:none;z-index:60;
+  font-size:16px;line-height:1.65;font-weight:300}
+#notes.on{display:block}
+#notes h4{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:12px;font-weight:500}
+#notes p{margin-bottom:12px;max-width:100ch}
+#help{position:absolute;right:16px;bottom:14px;z-index:70;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(255,240,220,.28)}
+
+/* presenter */
+body.presenter #viewport{display:none}
+#presenter{display:none;position:absolute;inset:0;background:#12150e;color:#e8e2d2;grid-template-columns:1.25fr 1fr;gap:0;z-index:80}
+body.presenter #presenter{display:grid}
+#presenter .left{padding:34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid rgba(180,154,99,.3);overflow:hidden}
+#presenter .right{padding:34px;display:flex;flex-direction:column;gap:22px;overflow:auto}
+#pv-wrap{width:100%;aspect-ratio:16/9;overflow:hidden;position:relative;background:#000;flex:none}
+#pv-wrap iframe{position:absolute;left:0;top:0;width:1600px;height:900px;border:0;transform-origin:top left}
+.pmeta{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+#timer{font-family:"IBM Plex Mono",monospace;font-size:44px;color:#e8e2d2}
+#pnote{font-size:19px;line-height:1.6;font-weight:300}
+#pnote p{margin-bottom:14px}
+#pnext{font-size:15px;line-height:1.55;color:rgba(232,226,210,.6);border-top:1px solid rgba(180,154,99,.3);padding-top:18px}
+#pnext strong{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;font-weight:500}
+#ptitle{font-family:"Fraunces",Georgia,serif;font-size:30px;line-height:1.2;color:#e8e2d2}
+#pnext-title{font-family:"Fraunces",Georgia,serif;font-size:20px;color:rgba(232,226,210,.8);margin-bottom:10px}
+#pbar{display:flex;align-items:center;gap:14px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+#pdot{width:9px;height:9px;border-radius:50%;background:#c05f4a;flex:none}
+#pdot.live{background:var(--signal)}
+#pbtn{font:inherit;letter-spacing:.16em;text-transform:uppercase;background:none;color:var(--brass);
+  border:1px solid rgba(180,154,99,.55);padding:7px 12px;cursor:pointer}
+#pbtn:hover{background:rgba(180,154,99,.12)}
+#pkeys{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,226,210,.32);margin-top:auto}
+
+@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+  <div id="stage">
+
+    <!-- 1 TITLE -->
+    <section class="slide dark active" data-notes="
+      <p>Thank you for making the time. I'm Tyson — I run Gardener &amp; Son with my partner Natasha. We're a two-person ecological design studio in Mont Albert and Hawthorn. We design and build gardens, and we've spent the last few years building a way to record what those gardens actually do.</p>
+      <p>I want to talk about private gardens — and what happens if we start treating them as part of the landscape rather than outside it.</p>">
+      <svg class="title-grid" id="coverSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+      <div class="title-scrim" aria-hidden="true"></div>
+      <div class="title-wrap">
+        <h1>The Ecological Registry</h1>
+        <div class="title-sub">Recognising private gardens as ecological infrastructure</div>
+        <div class="byline">Gardener &amp; Son · Presented to Whitehorse City Council</div>
+        <div class="byline byline-2">Tyson &amp; Natasha Lundbech · Ecological design studio · Mont Albert &amp; Hawthorn</div>
+      </div>
+      <div class="foot"><span>Gardener &amp; Son</span><span>01</span></div>
+    </section>
+
+    <!-- 2 ACKNOWLEDGEMENT -->
+    <section class="slide deep" data-notes="
+      <p>Read it slowly. Let the last line land before moving on.</p>
+      <p>Everything that follows sits on top of that — the plants, the soil, the water. We're not introducing something new here. We're trying to help people notice what was always underneath.</p>">
+      <div class="eyebrow" style="margin-bottom:44px">Acknowledgement of Country</div>
+      <div class="ack-full">
+        <p>We acknowledge the Wurundjeri Woi Wurrung people of the Kulin Nation as the Traditional Custodians of the land we live and work on, and pay our respects to their Elders past and present.</p>
+        <p>We also acknowledge the ecologies that once thrived here — the grasslands, woodlands and wetlands shaped by thousands of years of cultural care.</p>
+      </div>
+      <div class="foot"><span>Gardener &amp; Son</span><span>02</span></div>
+    </section>
+
+    <!-- 3 CONTEXT -->
+    <section class="slide light" data-notes="
+      <p>We&#39;ve come to believe that private gardens are one of the largest untapped opportunities for improving ecological health across our cities.</p>
+      <p>We&#39;ve spent years working in gardens, and we&#39;ve seen some of the problems first-hand — monocultures, compacted soils, heat, very little habitat, and sometimes people who have become disconnected from the living system around them.</p>
+      <p>A lot of the garden culture we&#39;ve inherited in Melbourne comes from formal European traditions — gardens that were often about order and control. Straight lines, clipped plants, lawns, hedges, high maintenance.</p>
+      <p><em>Delivery:</em> this is the part you know first-hand, not from a report — that is Gardener &amp; Son&#39;s credibility, so let it sound like lived experience rather than analysis. No blame: nobody was ever given anything else to work with.</p>">
+      <div class="eyebrow">01 · Context</div>
+      <div class="spacer"></div>
+      <h2 style="max-width:19ch">Private gardens are an untapped ecological resource.</h2>
+      <p class="body" style="margin-top:38px">A significant part of the suburb sits behind private fences. We've spent years working in those gardens, and the pattern rarely changes.</p>
+      <div class="words">
+        <span>Monoculture</span><span>Compacted soil</span><span>Heat</span><span>Little habitat</span><span>Disconnection</span>
+      </div>
+      <div class="spacer"></div>
+      <div class="foot"><span>Context</span><span>03</span></div>
+    </section>
+
+    <!-- 4 VISION -->
+    <section class="slide dark" data-notes="
+      <p>This one is a question. Ask it, then stop talking for a beat and let it sit.</p>
+      <p>We&#39;re finding that we — and other designers — are building gardens that transform a landscape in a way where it truly contributes to the broader landscape around it. Indigenous plantings, habitat, canopy, biodiversity returning.</p>
+      <p>We felt a movement happening: with our clients, in our gardens, and among fellow designers.</p>
+      <p>We&#39;ve witnessed the positive outcomes — in the gardens and in the stewards — but we couldn&#39;t measure it. So we started building something that can.</p>
+      <p><em>That last line is the bridge.</em> It hands you straight into the next slide without you having to explain the machinery here.</p>">
+      <div class="eyebrow">02 · Vision</div>
+      <div class="spacer"></div>
+      <h2 class="big" style="max-width:17ch">What if private gardens became part of our ecological <em>infrastructure</em>?</h2>
+      <div class="spacer"></div>
+      <div class="foot"><span>Vision</span><span>04</span></div>
+    </section>
+
+    <!-- 5 THE SYSTEM -->
+    <section class="slide light" data-notes="
+      <p>We&#39;ve found a lot of our work is actually educating. Talking to people about ecological vegetation classes, and why planting indigenous plants matters so much. Conversations about layered, structured planting of diverse species.</p>
+      <p>We started building a system to complement what we&#39;re talking about and what we&#39;re building in the gardens. A way to discover, recognise and measure — and to engage stewards more deeply with their gardens and the broader landscape around them.</p>
+      <p>Then three moves. Keep it plain.</p>
+      <p><strong>Place.</strong> First we help someone understand where they actually are — the ecological vegetation community that historically belonged to that address. You type in your address and you get your EVC back. It's a small moment but it changes people.</p>
+      <p><strong>Garden.</strong> Then we translate that into what an ecological garden could look like there. We're not recreating 1750 — we're helping people make informed decisions about plants, structure, habitat, soil and water for their block, their light, their life.</p>
+      <p><strong>Record.</strong> And then the Registry records what that garden is actually contributing, and how that changes over time. So the effort doesn't disappear the moment the visit ends or the house sells.</p>">
+      <div class="eyebrow">03 · The system</div>
+      <div class="spacer"></div>
+      <div class="system">
+        <div class="step">
+          <h2>Place</h2>
+          <div class="prod">Find My EVC</div>
+          <div class="say">Understand what belongs here.</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+          <h2>Garden</h2>
+          <div class="prod">Find My Ecological Garden</div>
+          <div class="say">Translate that into a garden.</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+          <h2>Record</h2>
+          <div class="prod">Ecological Registry</div>
+          <div class="say">Recognise what it contributes.</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="foot"><span>The system</span><span>05</span></div>
+    </section>
+
+    <!-- 6 WHAT WE'VE BUILT -->
+    <section class="slide dark" data-notes="
+      <p>So this is already happening in real gardens. We&#39;ve run an initial cohort on the Registry — a mix of gardens we&#39;ve designed and installed, gardens other designers have installed, new gardens and established gardens. Here are three examples from the Registry.</p>
+      <p>This is the slide that stops it being a theory. These are real addresses, real plants in the ground, real records.</p>
+      <p><strong>Sir Garnet Road.</strong> We designed it, we built it, we recorded it — and there's a physical sign on the fence now. The steward is proud of it, which matters more than the number.</p>
+      <p><strong>Bellbird.</strong> Sam Cox's own garden at Wattle Glen — our highest-scoring record, and one we had nothing to do with designing or installing. That matters more than it sounds: it's the moment the Registry stops being a portfolio of our work and becomes something other designers' gardens can enter. Twenty-five years of planting, no irrigation at all, canopy grown from tubestock.</p>
+      <p>Be accurate if pressed: it's a provisional record built from a site visit, with a return visit planned for measurement and a species survey. Sam has offered to help shape the methodology as it develops.</p>
+      <p><strong>Forest Hill.</strong> This record was built entirely from Whitehorse's own Gardens for Wildlife visit report. The steward didn't fill in a form. Your guides had already done the observing — we just gave the information somewhere to live. Be precise: council supplied the assessment, council hasn't verified our score.</p>
+      <p>Change over time isn't on this slide any more — the next slide carries it, with a real record showing what it needs to reach the next tier. If someone asks here, Victoria Crescent was registered, then re-recorded after further planting, and the score moved.</p>
+      <p>Then the method, plainly: we start with place, we design for ecological function, we install it, and then we record what happens.</p>">
+      <div class="eyebrow">04 · What we've built</div>
+      <h2 style="margin-top:26px;font-size:58px">This is already happening in real gardens.</h2>
+      <div class="gardens">
+        <div class="garden">
+          <div class="place">Sir Garnet Road</div>
+          <div class="lga">Surrey Hills</div>
+          <div class="note">Designed, built and recorded by us. A registered ecological garden with a sign on the fence.</div>
+          <div class="tag">Designed, built, recorded</div>
+        </div>
+        <div class="garden">
+          <div class="place">Bellbird</div>
+          <div class="lga">Wattle Glen · Sam Cox</div>
+          <div class="note">Our highest-scoring garden, designed by another landscape designer over 25 years. The Registry isn&#39;t a record of our own work.</div>
+          <div class="tag">Another designer</div>
+        </div>
+        <div class="garden">
+          <div class="place">Forest Hill</div>
+          <div class="lga">Whitehorse</div>
+          <div class="note">Built entirely from a Whitehorse Gardens for Wildlife visit report. No extra work asked of the steward or council.</div>
+          <div class="tag">Third-party evidence</div>
+        </div>
+      </div>
+      <div class="method">
+        <span>Start with place</span><span>Design for function</span><span>Install it</span><span>Record what happens</span>
+      </div>
+      <div class="foot"><span>What we've built</span><span>06</span></div>
+    </section>
+
+    <!-- 7 DEEPER ENGAGEMENT -->
+    <section class="slide deep" data-notes="
+      <p>Not only are we finding better gardens through the nature of them — we&#39;re finding deeper engagement with stewards, through the five-pillar scoring engine and the opportunity to earn badges as they update or upgrade their gardens.</p>
+      <p>The score isn&#39;t a verdict on someone&#39;s garden. It&#39;s a starting position and a reason to come back. A steward observes something, improves something, updates their record — and the garden is recognised for it.</p>
+      <p>This is a real record — Arundel, in Surrey Hills. Point at the line that says eight points to the next tier: that is the sentence that brings people back. Nobody is being marked down; they&#39;re being shown what is within reach.</p>
+      <p>This is the part councils tend to lean forward at: it&#39;s a retention mechanism. The hard part of any private-land program isn&#39;t the first visit, it&#39;s the second year. Don&#39;t say that as a criticism of Gardens for Wildlife. The loop is spoken, not on the screen: a steward observes, improves, updates — and the garden is recognised for it.</p>
+      <p><em>Then show the Whitehorse dashboard.</em> One garden record, then the municipal picture built from many of them — that is the jump you want them to make before the next slide.</p>">
+      <div class="eyebrow">05 · Deeper engagement</div>
+      <div class="spacer"></div>
+      <div class="engage">
+        <div>
+          <h2 style="font-size:62px">Deeper engagement</h2>
+          <p class="body" style="margin-top:24px;max-width:26ch;color:rgba(255,240,220,.86)">The score is a beginning, not an endpoint.</p>
+          <div class="pillars">
+            <span>Biodiversity structure</span><span>Soil &amp; water</span><span>Habitat complexity</span><span>Connectivity</span><span>Evidence</span>
+          </div>
+        </div>
+
+        <div class="record">
+          <div class="rec-head">Ecological function</div>
+          <div class="rec-nums">
+            <div><b>73</b><span>score</span></div>
+            <div><b>7</b><span>badges</span></div>
+          </div>
+          <div class="rec-tier">Registered Ecological Garden</div>
+          <div class="rec-bar"><i style="width:73%"></i></div>
+          <div class="rec-scale"><span>Now 73</span><span>8 pts to High Habitat Garden</span></div>
+          <div class="rec-head" style="margin-top:34px">Badges earned</div>
+          <div class="chips">
+            <span class="on">Species Rich</span><span class="on">Five Layers</span><span>Habitat Builder</span>
+            <span>Amphibian Active</span><span>G&amp;S Verified</span><span>Fauna Record</span>
+          </div>
+          <div class="rec-foot">Arundel — Surrey Hills VIC<br>ER-AU-VIC-SH-ARU-0001</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="foot"><span>Deeper engagement</span><span>07</span></div>
+    </section>
+
+    <!-- 8 WHY WHITEHORSE -->
+    <section class="slide light" data-notes="
+      <p>Whitehorse already has the pieces — Blackburn Lake, the Creeklands, remnant vegetation, the canopy work, the waterways, the street trees, and Gardens for Wildlife already out in people&#39;s back gardens doing the hardest part of this.</p>
+      <p>So frame this as an offer, not a pitch: <strong>we&#39;re not trying to replace the things Whitehorse is already doing. We&#39;re interested in what happens when the private garden becomes another connected layer.</strong></p>
+      <p>Don&#39;t read the five out. Pick the two that matter to whoever is in the room. For a biodiversity officer it&#39;s usually the picture and the connectivity. For someone reporting upward it&#39;s evidence over time and the framework that persists.</p>
+      <p>On <em>recognition</em>: councils are often good at telling people what they should do. This is a mechanism for saying — we see what you&#39;re already contributing. Say that one warmly; it lands.</p>
+      <p>On <em>evidence over time</em>: be careful not to sound critical of plant giveaways. The point isn&#39;t that counting plants is wrong, it&#39;s that nobody currently gets to find out what happened next.</p>
+      <p>Held in reserve if asked: better targeting of programs and spending, and a measurable story for the biodiversity strategy.</p>">
+      <div class="eyebrow">06 · Why Whitehorse</div>
+      <div class="spacer"></div>
+      <h2 style="font-size:52px;max-width:22ch">Where we think this could be useful.</h2>
+
+      <div class="reasons">
+        <div class="reason">
+          <i>01</i>
+          <b>A clearer picture of private land</b>
+          <span>Where the good gardens are, where the habitat gaps are, and where clusters are beginning to form.</span>
+        </div>
+        <div class="reason">
+          <i>02</i>
+          <b>Connectivity beyond council land</b>
+          <span>A reserve may sit isolated — but twenty nearby gardens can become stepping stones between larger habitat areas.</span>
+        </div>
+        <div class="reason">
+          <i>03</i>
+          <b>Recognising residents already doing the work</b>
+          <span>A way to say we see what you&#39;re already contributing, rather than only what you should be doing.</span>
+        </div>
+        <div class="reason">
+          <i>04</i>
+          <b>Evidence over time</b>
+          <span>Whether gardens are actually developing better structure, habitat, soil and water function, and connectivity.</span>
+        </div>
+        <div class="reason">
+          <i>05</i>
+          <b>A framework that persists</b>
+          <span>Programs come and go. The record of a garden and its contribution can carry on across years, and across owners.</span>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="foot"><span>Why Whitehorse</span><span>08</span></div>
+    </section>
+
+    <!-- 8 THE ASK -->
+    <section class="slide dark" data-notes="
+      <p>Be honest and be small here. We're not asking Whitehorse to adopt a finished system, and we're not asking for a budget line.</p>
+      <p>Offer it as a possibility, not a specification. 'One possibility might be a small cluster — perhaps ten to twenty gardens already involved in Gardens for Wildlife — where we test whether the information you're already gathering can form a baseline record. But we'd like to shape that with you.' The first yes you want is 'let's explore', not 'yes to your pilot'.</p>
+      <p>The key line: the Registry doesn't need to create another visit. One visit, a longer life for the information.</p>
+      <p>No regulation. No competition with anything you run. And if it isn't useful, we'll have learned that cheaply.</p>">
+      <div class="eyebrow">07 · The ask</div>
+      <div class="spacer"></div>
+      <h2 style="max-width:16ch">Could we explore this together?</h2>
+      <p class="body" style="margin-top:34px;max-width:52ch;color:rgba(255,240,220,.86)">We're not asking Whitehorse to adopt a finished system.</p>
+      <div class="possible">
+        <span>One possibility</span>
+        A small cluster — perhaps ten to twenty gardens already involved in Gardens for Wildlife — where we test whether the information you're already gathering can form a baseline record.
+        <em>But we'd like to shape that with you.</em>
+      </div>
+      <div class="spacer"></div>
+      <div class="foot"><span>The ask</span><span>09</span></div>
+    </section>
+
+    <!-- 9 THE BIGGER VISION -->
+    <section class="slide light" data-notes="
+      <p>Slow down. This slide is almost empty on purpose — the words are yours, not the screen&#39;s.</p>
+      <p>We already accept that buildings have a performance. We measure energy efficiency because at some point we decided that how a building performs matters — not just what it looks like.</p>
+      <p>I wonder whether one day we might think about gardens the same way. Not whether a garden is good or bad. Not whether someone has planted the &#39;right&#39; garden. But a simple, consistent way of understanding what that piece of land is giving back — its biodiversity, habitat, soil, water, and its connection to the landscape around it. And something that can improve over time.</p>
+      <p>The long-term possibility is a common way of understanding ecological performance. Maybe in ten years, knowing the ecological performance of a garden feels as normal as knowing the energy efficiency of a building.</p>
+      <p>Do not say &#39;standard&#39; in this room — it makes council people hear regulation, accreditation, compliance. Do not mention developers. Then pause, and go to the last slide.</p>">
+      <div class="eyebrow">08 · The bigger vision</div>
+      <div class="spacer"></div>
+      <h2 class="vision-line">We currently measure homes by their energy efficiency.<br><em>What if we measured gardens by their ecological performance?</em></h2>
+      <div class="spacer"></div>
+      <div class="foot"><span>The bigger vision</span><span>10</span></div>
+    </section>
+
+    <!-- 9 CLOSE -->
+    <section class="slide deep" data-notes="
+      <p>Slow right down. This is the ending.</p>
+      <p>Every one of these gardens is small. On its own, a single back garden doesn't change very much. But they're not on their own — they sit side by side, street after street, all the way across the municipality.</p>
+      <p>Many small gardens can become one living system. We'd love Whitehorse to be one of the first councils to explore what that could become.</p>
+      <p>Then stop. Thank them, and let them ask.</p>">
+      <svg class="corridor" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g stroke="#B49A63" stroke-opacity=".38" stroke-width="1.4" fill="none">
+          <path d="M180 700 L360 660 L540 690 L720 640 L900 672 L1080 626 L1260 658 L1440 612"/>
+        </g>
+        <g fill="none" stroke="#fff0dc" stroke-opacity=".45">
+          <g><circle cx="180" cy="700" r="5" fill="#fff0dc" stroke="none"/><circle cx="180" cy="700" r="14"/><circle cx="180" cy="700" r="24"/></g>
+          <g><circle cx="360" cy="660" r="5" fill="#fff0dc" stroke="none"/><circle cx="360" cy="660" r="13"/><circle cx="360" cy="660" r="22"/></g>
+          <g><circle cx="540" cy="690" r="6" fill="#fff0dc" stroke="none"/><circle cx="540" cy="690" r="15"/><circle cx="540" cy="690" r="26"/></g>
+          <g><circle cx="720" cy="640" r="5" fill="#fff0dc" stroke="none"/><circle cx="720" cy="640" r="13"/><circle cx="720" cy="640" r="22"/></g>
+          <g><circle cx="900" cy="672" r="6" fill="#fff0dc" stroke="none"/><circle cx="900" cy="672" r="15"/><circle cx="900" cy="672" r="26"/></g>
+          <g><circle cx="1080" cy="626" r="5" fill="#fff0dc" stroke="none"/><circle cx="1080" cy="626" r="13"/><circle cx="1080" cy="626" r="22"/></g>
+          <g><circle cx="1260" cy="658" r="5" fill="#fff0dc" stroke="none"/><circle cx="1260" cy="658" r="14"/><circle cx="1260" cy="658" r="24"/></g>
+          <g><circle cx="1440" cy="612" r="6" fill="#fff0dc" stroke="none"/><circle cx="1440" cy="612" r="15"/><circle cx="1440" cy="612" r="26"/></g>
+        </g>
+      </svg>
+      <div class="close-wrap">
+        <div class="eyebrow" style="margin-bottom:44px">Thank you</div>
+        <h2 style="max-width:18ch">Many small gardens can become <em>one living system</em>.</h2>
+        <div class="byline" style="margin-top:56px">Gardener &amp; Son · gardenerandson.com · ecologicalregistry.org</div>
+      </div>
+      <div class="foot"><span></span><span>11</span></div>
+    </section>
+
+  </div>
+</div>
+
+<div id="notes"><h4>Speaker notes</h4><div id="notes-body"></div></div>
+<div id="nav">
+  <button id="nprev" type="button" aria-label="Previous slide">←</button>
+  <span id="ncount">01 / 11</span>
+  <button id="nnext" type="button" aria-label="Next slide">→</button>
+  <button id="nnotes" type="button" aria-label="Speaker notes">Notes</button>
+  <button id="npres" type="button" aria-label="Presenter mode">Present</button>
+</div>
+<div id="help">← → move · Z fill · S notes · P presenter</div>
+
+<div id="presenter">
+  <div class="left">
+    <div id="pbar"><span id="pdot"></span><span id="pstatus">Display window closed</span>
+      <button id="pbtn" type="button">Open display</button>
+      <button id="pexit" type="button">Exit</button></div>
+    <div class="pmeta"><span id="pnum">01 / 11</span></div>
+    <div id="pv-wrap"><iframe id="pv" title="Current slide"></iframe></div>
+    <div id="timer">00:00</div>
+  </div>
+  <div class="right">
+    <div class="pmeta">Now</div>
+    <div id="ptitle"></div>
+    <div id="pnote"></div>
+    <div id="pnext"><strong>Next</strong><div id="pnext-title"></div><span id="pnext-body"></span></div>
+    <div id="pkeys">← → move · R reset timer · P reopen display · Esc exit</div>
+  </div>
+</div>
+
+<script>
+function buildAerial(opts){
+  opts = opts || {};
+  var W = 1600, H = 900;
+  var DENSITY = opts.density || 0.30;      // share of lots that carry a garden
+  var LINK_D  = opts.linkD  || 112;        // brass link distance
+  var seed    = opts.seed   || 20260810;
+
+  function rng(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a);
+    t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+  var R = rng(seed);
+  function jit(n){ return (R()-0.5)*2*n; }
+  function pick(a){ return a[Math.floor(R()*a.length)]; }
+
+  var out = [];
+  function el(s){ out.push(s); }
+
+  // ---- street skeleton -------------------------------------------------
+  var vx = [ -40, 196, 452, 690, 986, 1232, 1640 ];
+  var hy = [ -40, 158, 372, 596, 940 ];
+  var MAIN_Y = 596;                           // main road
+  var RB = { x: 690, y: 596, r: 48 };          // roundabout
+  var CDS = { x: 1232, y: 158, ey: 306, r: 42 }; // cul-de-sac stub
+  function drift(y){ // gentle non-orthogonal wander so it doesn't read as graph paper
+    var pts = [], k = 6, amp = (y===MAIN_Y) ? 5 : 13, ph = R()*6.28;
+    for (var q=0; q<=k; q++){
+      var xx = -40 + (W+80)*(q/k);
+      pts.push([xx, y + Math.sin(ph + q*1.05)*amp]);
+    }
+    return pts;
+  }
+  var hPath = {};
+  hy.forEach(function(y){ hPath[y] = drift(y); });
+  function ribbon(pts, w){
+    var top = pts.map(function(p,ix){ return (ix?'L':'M')+p[0].toFixed(1)+' '+(p[1]-w/2).toFixed(1); }).join('');
+    var bot = pts.slice().reverse().map(function(p){ return 'L'+p[0].toFixed(1)+' '+(p[1]+w/2).toFixed(1); }).join('');
+    return top+bot+'Z';
+  }
+  function centre(pts){ return pts.map(function(p,ix){ return (ix?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1); }).join(''); }
+
+  // block definitions
+  var blocks = [];
+  for (var a=0; a<vx.length-1; a++){
+    for (var b=0; b<hy.length-1; b++){
+      blocks.push({ x0:vx[a], x1:vx[a+1], y0:hy[b], y1:hy[b+1], col:a, row:b });
+    }
+  }
+  var resCols = [4], resRow = 1;
+  var reserveSet = blocks.filter(function(k){ return resCols.indexOf(k.col)>=0 && k.row===resRow; });
+  var reserve = reserveSet[0];
+  function inReserve(k){ return reserveSet.indexOf(k)>=0; }
+
+  // road fills
+  var roadFill = [];
+  hy.forEach(function(y){
+    roadFill.push('<path d="'+ribbon(hPath[y], (y===MAIN_Y)?28:16)+'"/>');
+  });
+  vx.forEach(function(x,ix){
+    var lean = jit(16);
+    roadFill.push('<path d="M'+(x-8)+' -40 L'+(x-8+lean)+' '+(H+40)+' L'+(x+8+lean)+' '+(H+40)+' L'+(x+8)+' -40 Z"/>');
+  });
+  roadFill.push('<rect x="'+(CDS.x-7)+'" y="'+CDS.y+'" width="14" height="'+(CDS.ey-CDS.y)+'"/>');
+  el('<g fill="#fff0dc" fill-opacity=".085">'+roadFill.join('')+'</g>');
+  el('<g fill="none" stroke="#fff0dc" stroke-opacity=".085" stroke-width="14">'
+     +'<circle cx="'+CDS.x+'" cy="'+CDS.ey+'" r="'+CDS.r+'"/>'
+     +'<circle cx="'+RB.x+'" cy="'+RB.y+'" r="'+RB.r+'"/></g>');
+
+  // main road centre line + roundabout island
+  el('<path d="'+centre(hPath[MAIN_Y])+'" stroke="#fff0dc" stroke-opacity=".26" stroke-width="1.5" stroke-dasharray="18 15" fill="none"/>');
+  el('<circle cx="'+RB.x+'" cy="'+RB.y+'" r="'+(RB.r-13)+'" fill="#7C9A52" fill-opacity=".16"/>');
+  el('<circle cx="'+RB.x+'" cy="'+RB.y+'" r="'+(RB.r-13)+'" fill="none" stroke="#fff0dc" stroke-opacity=".16"/>');
+  el('<circle cx="'+CDS.x+'" cy="'+CDS.ey+'" r="'+(CDS.r-14)+'" fill="#7C9A52" fill-opacity=".12"/>');
+
+  // ---- lots ------------------------------------------------------------
+  var lots = [], gardens = [];
+  blocks.forEach(function(k){
+    if (inReserve(k)) return;
+    var pad = 12;
+    var x0 = Math.max(k.x0+pad, -10), x1 = Math.min(k.x1-pad, W+10);
+    var y0 = k.y0+pad, y1 = k.y1-pad;
+    if (x1-x0 < 60 || y1-y0 < 70) return;
+    var midY = (y0+y1)/2 + jit(10);
+
+    [[y0, midY, 1], [midY, y1, -1]].forEach(function(strip){
+      var sy0 = strip[0], sy1 = strip[1], facing = strip[2];
+      var depth = sy1 - sy0;
+      if (depth < 46) return;
+      var x = x0;
+      while (x1 - x > 46){
+        var w = 58 + R()*44;
+        if (x1 - (x+w) < 46) w = x1 - x;
+        var lot = { x:x, y:sy0, w:w, h:depth, facing:facing };
+        lots.push(lot);
+
+        // house footprint near the street frontage
+        var hw = w * (0.5 + R()*0.24), hh = depth * (0.32 + R()*0.14);
+        var hx = lot.x + (w-hw)*(0.2 + R()*0.6);
+        var hy_ = facing === 1 ? lot.y + 8 + R()*6 : lot.y + depth - hh - 8 - R()*6;
+        lot.house = [hx, hy_, hw, hh];
+
+        // back garden centroid (away from the street)
+        lot.gx = lot.x + w/2 + jit(w*0.12);
+        lot.gy = facing === 1 ? lot.y + depth - (depth*0.22) + jit(6)
+                              : lot.y + (depth*0.22) + jit(6);
+        x += w;
+      }
+    });
+  });
+
+  // lot lines + houses
+  var lotLines = [], houses = [];
+  lots.forEach(function(l){
+    lotLines.push('M'+l.x.toFixed(1)+' '+l.y.toFixed(1)+' v'+l.h.toFixed(1));
+    houses.push('<rect x="'+l.house[0].toFixed(1)+'" y="'+l.house[1].toFixed(1)+'" width="'+l.house[2].toFixed(1)+'" height="'+l.house[3].toFixed(1)+'"/>');
+  });
+  el('<path d="'+lotLines.join(' ')+'" stroke="#fff0dc" stroke-opacity=".075" stroke-width="1" fill="none"/>');
+  el('<g fill="#fff0dc" fill-opacity=".055">'+houses.join('')+'</g>');
+
+  // block outlines
+  var outlines = [];
+  blocks.forEach(function(k){
+    if (inReserve(k)) return;
+    outlines.push('<rect x="'+(k.x0+10)+'" y="'+(k.y0+10)+'" width="'+(k.x1-k.x0-20)+'" height="'+(k.y1-k.y0-20)+'"/>');
+  });
+  el('<g fill="none" stroke="#fff0dc" stroke-opacity=".09">'+outlines.join('')+'</g>');
+
+  // ---- reserve ---------------------------------------------------------
+  var rx0 = Math.min.apply(null, reserveSet.map(function(k){return k.x0;}));
+  var rx1 = Math.max.apply(null, reserveSet.map(function(k){return k.x1;}));
+  var rc = { x:(rx0+rx1)/2, y:(reserve.y0+reserve.y1)/2 };
+  var rw = (rx1-rx0)/2 - 14, rh = (reserve.y1-reserve.y0)/2 - 14;
+  var pts = [];
+  for (var t=0; t<18; t++){
+    var ang = (t/18)*Math.PI*2, k2 = 0.82 + R()*0.2;
+    pts.push([(rc.x + Math.cos(ang)*rw*k2).toFixed(1), (rc.y + Math.sin(ang)*rh*k2).toFixed(1)]);
+  }
+  var d = 'M'+pts[0].join(' ')+pts.slice(1).map(function(p){ return 'L'+p.join(' '); }).join('')+'Z';
+  el('<path d="'+d+'" fill="#7C9A52" fill-opacity=".17" stroke="#7C9A52" stroke-opacity=".42" stroke-width="1.2"/>');
+  for (var c=0; c<9; c++){
+    var ca = R()*Math.PI*2, cd = R()*0.72;
+    el('<circle cx="'+(rc.x+Math.cos(ca)*rw*cd).toFixed(1)+'" cy="'+(rc.y+Math.sin(ca)*rh*cd).toFixed(1)+'" r="'+(9+R()*13).toFixed(1)+'" fill="#7C9A52" fill-opacity=".16"/>');
+  }
+
+  // ---- gardens ---------------------------------------------------------
+  lots.forEach(function(l){
+    if (R() > DENSITY) return;
+    gardens.push({ x:l.gx, y:l.gy, tier: R() < 0.16 ? 2 : (R() < 0.5 ? 1 : 0) });
+  });
+
+  function dist(p,q){ var dx=p.x-q.x, dy=p.y-q.y; return Math.sqrt(dx*dx+dy*dy); }
+
+  // corridor: greedy outward walk from the reserve, heading-biased, never back
+  var start = null, bestD = 1e9;
+  gardens.forEach(function(g){
+    if (g.x > rc.x - rw) return;                       // start west of the reserve
+    var dd = dist(g, rc);
+    if (dd < bestD){ bestD = dd; start = g; }
+  });
+  var path = [], used = {};
+  if (start){
+    var from = start, dir = { x:-1, y:0 };
+    path.push(start); used[gardens.indexOf(start)] = 1;
+    for (var hop=0; hop<6; hop++){
+      var best = -1, bestScore = 1e9;
+      for (var gi=0; gi<gardens.length; gi++){
+        if (used[gi]) continue;
+        var g = gardens[gi], dd2 = dist(g, from);
+        if (dd2 > 300 || dd2 < 40) continue;
+        if (g.x > from.x - 12) continue;                 // keep walking west
+        var vx2 = (g.x-from.x)/dd2, vy2 = (g.y-from.y)/dd2;
+        var dot = vx2*dir.x + vy2*dir.y;
+        if (dot < 0.55) continue;                        // no sharp turns
+        var pen = (1 - dot) * 190;
+        if (dd2 + pen < bestScore){ bestScore = dd2 + pen; best = gi; }
+      }
+      if (best < 0) break;
+      var nx = gardens[best], nd = dist(nx, from);
+      if (nx.x < 700) break;                             // leave the left third quiet
+      dir = { x:(nx.x-from.x)/nd, y:(nx.y-from.y)/nd };
+      path.push(nx); used[best] = 1; from = nx;
+    }
+  }
+
+  // brass links between near neighbours
+  var links = [];
+  for (var p1=0; p1<gardens.length; p1++){
+    for (var p2=p1+1; p2<gardens.length; p2++){
+      if (dist(gardens[p1], gardens[p2]) < LINK_D){
+        links.push('M'+gardens[p1].x.toFixed(1)+' '+gardens[p1].y.toFixed(1)+'L'+gardens[p2].x.toFixed(1)+' '+gardens[p2].y.toFixed(1));
+      }
+    }
+  }
+  el('<path d="'+links.join('')+'" stroke="#B49A63" stroke-opacity="'+(opts.linkOpacity||0.22)+'" stroke-width="1" fill="none"/>');
+
+  // corridor drawn as a band, then a bright line
+  if (path.length > 1){
+    var cd2 = 'M'+rc.x.toFixed(1)+' '+rc.y.toFixed(1)+path.map(function(g){ return 'L'+g.x.toFixed(1)+' '+g.y.toFixed(1); }).join('');
+    el('<path d="'+cd2+'" stroke="#7C9A52" stroke-opacity=".22" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>');
+    el('<path d="'+cd2+'" stroke="#9CBE6B" stroke-opacity=".85" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>');
+    path.forEach(function(g,ix){ g.tier = Math.min(2, g.tier + (ix===0 ? 2 : 1)); });
+  }
+
+  // markers, three tiers
+  var TIER = [ { c:5, r:[12] }, { c:6, r:[14,23] }, { c:7, r:[16,27] } ];
+  var marks = [];
+  gardens.forEach(function(g){
+    var t2 = TIER[g.tier], op = [0.30, 0.42, 0.55][g.tier];
+    var m = '<g stroke-opacity="'+op+'"><circle cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" r="'+t2.c+'" fill="#fff0dc" stroke="none" fill-opacity="'+(op+0.18)+'"/>';
+    t2.r.forEach(function(rr){ m += '<circle cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" r="'+rr+'"/>'; });
+    marks.push(m + '</g>');
+  });
+  el('<g fill="none" stroke="#fff0dc">'+marks.join('')+'</g>');
+
+  return out.join('');
+}
+
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0, isDisplay = location.hash === '#display', displayWin = null, presenter = false;
+  var bc = null; try { bc = new BroadcastChannel('gs-deck'); } catch(e){}
+
+  var fillMode = 'contain';
+  function fit(){
+    var vp = document.getElementById('viewport');
+    var r = vp.getBoundingClientRect();
+    var w = Math.round(r.width)  || vp.clientWidth  || document.documentElement.clientWidth  || innerWidth;
+    var h = Math.round(r.height) || vp.clientHeight || document.documentElement.clientHeight || innerHeight;
+    var sw = w/1600, sh = h/900;
+    var s = fillMode === 'cover' ? Math.max(sw, sh) : Math.min(sw, sh);
+    document.getElementById('stage').style.transform = 'scale('+s+')';
+  }
+  addEventListener('resize', fit);
+  addEventListener('orientationchange', fit);
+  document.addEventListener('fullscreenchange', function(){ setTimeout(fit, 60); });
+  document.addEventListener('webkitfullscreenchange', function(){ setTimeout(fit, 60); });
+  try { new ResizeObserver(fit).observe(document.getElementById('viewport')); } catch(e){}
+  fit(); setTimeout(fit, 120); addEventListener('load', fit);
+
+  function notesFor(n){ return slides[n] ? (slides[n].getAttribute('data-notes')||'') : ''; }
+  function titleFor(n){
+    if (!slides[n]) return '';
+    var h = slides[n].querySelector('h1,h2');
+    return h ? h.textContent.replace(/\s+/g,' ').trim() : '';
+  }
+  function displayLive(){ return !!(displayWin && !displayWin.closed); }
+  function syncStatus(){
+    if (!presenter) return;
+    var live = displayLive();
+    document.getElementById('pdot').classList.toggle('live', live);
+    document.getElementById('pstatus').textContent =
+      live ? 'Display window open'
+           : (popupBlocked ? 'Pop-up blocked — allow pop-ups, then Open display' : 'Display window closed');
+    document.getElementById('pbtn').textContent = live ? 'Reopen display' : 'Open display';
+  }
+
+  function render(){
+    slides.forEach(function(s,n){ s.classList.toggle('active', n===i); });
+    var cs = slides[i].classList;
+    document.getElementById('viewport').style.background =
+      cs.contains('light') ? '#fff0dc' : cs.contains('deep') ? '#2b3126' : '#3d4535';
+    document.getElementById('notes-body').innerHTML = notesFor(i);
+    if (presenter) {
+      document.getElementById('pnum').textContent = String(i+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+      document.getElementById('ptitle').textContent = titleFor(i);
+      document.getElementById('pnote').innerHTML = notesFor(i);
+      document.getElementById('pnext-title').textContent = i+1 < slides.length ? titleFor(i+1) : '';
+      document.getElementById('pnext-body').innerHTML = i+1 < slides.length ? notesFor(i+1) : '<p>End of deck.</p>';
+      syncStatus();
+      var pv = document.getElementById('pv');
+      if (pv.contentWindow) { try { pv.contentWindow.postMessage({deck:'gs', go:i}, '*'); } catch(e){} }
+      var w = document.getElementById('pv-wrap').clientWidth;
+      pv.style.transform = 'scale('+(w/1600)+')';
+    }
+    var nc = document.getElementById('ncount');
+    if (nc) nc.textContent = String(i+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  }
+
+  function broadcast(){
+    var msg = {deck:'gs', go:i};
+    if (bc) { try { bc.postMessage(msg); } catch(e){} }
+    if (displayWin && !displayWin.closed) { try { displayWin.postMessage(msg,'*'); } catch(e){} }
+    try { if (window.opener) window.opener.postMessage(msg,'*'); } catch(e){}
+    if (parent !== window) { try { parent.postMessage(msg,'*'); } catch(e){} }
+  }
+
+  function go(n, quiet){
+    n = Math.max(0, Math.min(slides.length-1, n));
+    if (n === i && quiet) return;
+    i = n; render(); if (!quiet) broadcast();
+  }
+
+  addEventListener('message', function(e){
+    var d = e.data; if (!d || d.deck !== 'gs') return;
+    if (d.closed) { setTimeout(syncStatus, 200); return; }
+    if (typeof d.go === 'number') go(d.go, true);
+  });
+  if (bc) bc.onmessage = function(e){
+    var d = e.data; if (d && d.deck === 'gs' && typeof d.go === 'number') go(d.go, true);
+  };
+
+  // timer
+  var t0 = null;
+  setInterval(function(){
+    if (!presenter) return;
+    if (!t0) t0 = Date.now();
+    var s = Math.floor((Date.now()-t0)/1000);
+    document.getElementById('timer').textContent =
+      String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  }, 500);
+
+  var popupBlocked = false;
+  function openDisplay(){
+    // a chrome-less pop-up window: no toolbar or tab strip, and no Fullscreen API,
+    // so it can't black out the laptop screen the way native fullscreen does
+    var feat = 'popup=yes,menubar=no,toolbar=no,location=no,status=no,scrollbars=no,resizable=yes'
+             + ',width=' + Math.min(1600, (screen.availWidth || 1440))
+             + ',height=' + Math.min(900, (screen.availHeight || 900));
+    try {
+      displayWin = window.open(location.pathname + location.search + '#display', 'gs-display', feat);
+    } catch(e){ displayWin = null; }
+    popupBlocked = !displayWin;
+    if (displayWin) {
+      try { displayWin.focus(); } catch(e){}
+      setTimeout(function(){ syncStatus(); broadcast(); }, 900);
+    }
+    syncStatus();
+    return !popupBlocked;
+  }
+
+  function openPresenter(){
+    if (isDisplay || presenter) return;
+    presenter = true; t0 = Date.now();
+    document.body.classList.add('presenter');
+    var pv = document.getElementById('pv');
+    pv.src = location.pathname + location.search + '#display';
+    pv.onload = function(){ render(); };
+    render();
+    setInterval(syncStatus, 2000);
+    openDisplay();
+  }
+
+  function exitPresenter(){
+    presenter = false;
+    document.body.classList.remove('presenter');
+    try { if (displayWin && !displayWin.closed) displayWin.close(); } catch(e){}
+    fit(); render();
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){});
+  var btn = document.getElementById('pbtn');
+  if (btn) btn.addEventListener('click', function(){ openDisplay(); });
+  var xbtn = document.getElementById('pexit');
+  if (xbtn) xbtn.addEventListener('click', exitPresenter);
+  document.getElementById('nnotes').addEventListener('click', function(e){
+    e.stopPropagation(); document.getElementById('notes').classList.toggle('on');
+  });
+  document.getElementById('npres').addEventListener('click', function(e){
+    e.stopPropagation(); openPresenter();
+  });
+
+  addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowDown' || k === ' ' || k === 'PageDown'){ e.preventDefault(); go(i+1); }
+    else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp'){ e.preventDefault(); go(i-1); }
+    else if (k === 'Home'){ go(0); }
+    else if (k === 'End'){ go(slides.length-1); }
+    else if (k === 's' || k === 'S'){ document.getElementById('notes').classList.toggle('on'); }
+    else if (k === 'p' || k === 'P'){ if (!presenter) openPresenter(); else if (!displayLive()) { openDisplay(); } else { try { displayWin.focus(); } catch(e){} } }
+    else if (k === 'r' || k === 'R'){ if (presenter) t0 = Date.now(); }
+    else if (k === 'z' || k === 'Z'){ fillMode = fillMode === 'contain' ? 'cover' : 'contain'; fit(); }
+    else if (k === 'Escape' && presenter){ exitPresenter(); }
+  });
+
+  addEventListener('click', function(e){
+    if (presenter || isDisplay) return;
+    go(e.clientX < innerWidth*0.25 ? i-1 : i+1);
+  });
+
+  var idleT;
+  function wake(){
+    document.body.classList.remove('idle');
+    clearTimeout(idleT);
+    idleT = setTimeout(function(){ document.body.classList.add('idle'); }, 2500);
+  }
+  addEventListener('mousemove', wake); addEventListener('keydown', wake); wake();
+  try { window.focus(); } catch(e){}
+  addEventListener('pointerdown', function(){ try { window.focus(); } catch(e){} });
+
+  document.getElementById('nprev').addEventListener('click', function(e){ e.stopPropagation(); go(i-1); });
+  document.getElementById('nnext').addEventListener('click', function(e){ e.stopPropagation(); go(i+1); });
+
+  var cover = document.getElementById('coverSvg');
+  if (cover) cover.innerHTML = buildAerial({});
+
+  if (isDisplay) {
+    document.body.classList.add('display');
+    document.getElementById('help').style.display='none';
+    document.getElementById('nav').style.display='none';
+    addEventListener('beforeunload', function(){
+      try { if (window.opener) window.opener.postMessage({deck:'gs', closed:true}, '*'); } catch(e){}
+    });
+  }
+  render();
+})();
+</script>
+</body>
+</html>
