@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecological Registry — A small Whitehorse pilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#3d4535;
+    --beige:#fff0dc;
+    --signal:#7C9A52;
+    --brass:#B49A63;
+    --ink:#2a2e22;
+    --dim:#6f6a5c;
+    --rule:#d9cdb6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  body{
+    background:#e6ddcb;
+    font-family:'IBM Plex Sans',sans-serif;
+    color:var(--ink);
+    display:flex;justify-content:center;
+    padding:32px 16px;
+  }
+
+  .page{
+    background:var(--beige);
+    width:210mm;min-height:297mm;
+    padding:14mm 15mm 12mm;
+    box-shadow:0 10px 44px rgba(0,0,0,.16);
+    display:flex;flex-direction:column;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:2px solid var(--green);
+    padding-bottom:7px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--dim);
+  }
+  h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:31px;line-height:1.04;color:var(--green);
+    margin-top:5px;letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;font-weight:400;color:var(--signal)}
+  .meta{
+    text-align:right;font-family:'IBM Plex Mono',monospace;
+    font-size:8.5px;line-height:1.75;color:var(--dim);
+    letter-spacing:.04em;
+  }
+  .meta strong{color:var(--ink);font-weight:500}
+
+  /* ---------- lead ---------- */
+  .lead{
+    font-size:10.6px;line-height:1.62;
+    padding:9px 0 11px;
+    border-bottom:1px solid var(--rule);
+    max-width:none;
+  }
+  .lead b{font-weight:600}
+
+  /* ---------- section furniture ---------- */
+  .label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--signal);
+    padding-bottom:4px;margin-bottom:7px;
+    border-bottom:1px solid var(--rule);
+  }
+  section{padding:11px 0;border-bottom:1px solid var(--rule)}
+  section:last-of-type{border-bottom:none}
+
+  /* ---------- the pilot ---------- */
+  .pilot{display:grid;grid-template-columns:1fr 128px;gap:16px;align-items:start}
+  .spec{display:grid;grid-template-columns:104px 1fr;gap:3px 12px;font-size:10px;line-height:1.5}
+  .spec dt{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:8px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--dim);padding-top:2.5px;
+  }
+  .spec dd{border-bottom:1px dotted #e0d5bf;padding-bottom:3px;margin-bottom:1px}
+  .spec dd:last-child{border-bottom:none}
+
+  .scale{
+    border:1px solid var(--rule);
+    padding:11px 10px 9px;text-align:center;
+  }
+  .scale svg{display:block;margin:0 auto 6px}
+  .scale .n{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:23px;color:var(--green);line-height:1;
+  }
+  .scale .c{
+    font-family:'IBM Plex Mono',monospace;font-size:7.5px;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--dim);
+    margin-top:4px;line-height:1.5;
+  }
+
+  /* ---------- sequence ---------- */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+  .step .ring{display:block;margin-bottom:5px}
+  .step h3{
+    font-size:9.5px;font-weight:600;line-height:1.3;
+    margin-bottom:2px;color:var(--green);
+  }
+  .step p{font-size:8.8px;line-height:1.45;color:var(--dim)}
+
+  /* ---------- two-up ---------- */
+  .twoup{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .stream{margin-bottom:8px}
+  .stream:last-child{margin-bottom:0}
+  .stream h4{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:8px;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--ink);margin-bottom:2px;
+  }
+  .stream h4 span{color:var(--brass)}
+  .stream p{font-size:9.4px;line-height:1.52;color:var(--dim)}
+
+  ul.commit{list-style:none}
+  ul.commit li{
+    font-size:9.4px;line-height:1.5;color:var(--dim);
+    padding-left:13px;position:relative;margin-bottom:4.5px;
+  }
+  ul.commit li::before{
+    content:'';position:absolute;left:0;top:5.5px;
+    width:5px;height:5px;background:var(--signal);
+  }
+  ul.commit li b{color:var(--ink);font-weight:600}
+  .aside{
+    font-size:9.2px;line-height:1.5;color:var(--ink);
+    border-left:2px solid var(--brass);padding-left:9px;margin-top:8px;
+  }
+
+  /* ---------- value ---------- */
+  .value{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .value h5{font-size:9.5px;font-weight:600;color:var(--green);margin-bottom:2px;line-height:1.3}
+  .value p{font-size:8.8px;line-height:1.45;color:var(--dim)}
+
+  .cite{
+    margin-top:9px;padding-top:7px;border-top:1px solid var(--rule);
+    font-size:8.6px;line-height:1.52;color:var(--dim);
+  }
+  .cite b{color:var(--ink);font-weight:500}
+
+  /* ---------- ask ---------- */
+  .ask{
+    background:var(--green);color:var(--beige);
+    padding:12px 14px;margin-top:11px;
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+  }
+  .ask .t{
+    font-family:'IBM Plex Mono',monospace;font-size:8px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
+    margin-bottom:4px;
+  }
+  .ask p{font-size:10.4px;line-height:1.5;max-width:118mm}
+  .ask p em{font-style:italic;color:#cfe0b4}
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:auto;padding-top:9px;border-top:1px solid var(--rule);
+    display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace;font-size:7.5px;
+    letter-spacing:.06em;color:var(--dim);line-height:1.8;
+  }
+  footer .r{text-align:right}
+  footer b{color:var(--ink);font-weight:500}
+
+  @media print{
+    body{background:none;padding:0;display:block}
+    .page{box-shadow:none;width:auto;min-height:0;padding:12mm 14mm}
+    @page{size:A4;margin:0}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div>
+      <div class="eyebrow">Ecological Registry</div>
+      <h1>A small Whitehorse pilot <em>— outline for discussion</em></h1>
+    </div>
+    <div class="meta">
+      Prepared for<br>
+      <strong>Leonie Gibson</strong> · Natural Environment Strategy<br>
+      <strong>Sue Ann Yap</strong> · Gardens for Wildlife<br>
+      August 2026
+    </div>
+  </div>
+
+  <p class="lead">
+    Gardens for Wildlife already does the hard part. Two Garden Guides visit a private garden,
+    look at what is actually growing and living there, and write it up. What follows this outline
+    is one idea: that the assessment could also become the <b>beginning of a long-term ecological
+    record</b> rather than a single point in time. This is a test of that idea at a deliberately
+    small scale — shaped around the two points raised at our first meeting.
+  </p>
+
+  <section>
+    <div class="label">What we propose</div>
+    <div class="pilot">
+      <dl class="spec">
+        <dt>Scale</dt>
+        <dd>10–20 Whitehorse gardens, existing or upcoming Gardens for Wildlife participants, entirely voluntary.</dd>
+        <dt>New visits</dt>
+        <dd>None. The Registry does not need to create another visit — the value is in what already happens.</dd>
+        <dt>Evidence</dt>
+        <dd>A small agreed set drawn from the steward's own Gardens for Wildlife assessment, with the source and its verification status recorded rather than treated as equivalent to a field visit.</dd>
+        <dt>Duration</dt>
+        <dd>Registry baseline at joining, then one steward-provided update at twelve months.</dd>
+        <dt>Cost to Council</dt>
+        <dd>No fee, minimal additional officer time, and no change to the Gardens for Wildlife assessment process.</dd>
+      </dl>
+      <div class="scale">
+        <svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="26" r="25" fill="none" stroke="#d9cdb6" stroke-width="1"/>
+          <circle cx="26" cy="26" r="18" fill="none" stroke="#d9cdb6" stroke-width="1"/>
+          <circle cx="26" cy="26" r="11" fill="none" stroke="#B49A63" stroke-width="1"/>
+          <circle cx="26" cy="26" r="4.5" fill="#7C9A52"/>
+        </svg>
+        <div class="n">10–20</div>
+        <div class="c">gardens<br>one pilot year</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">How it would work</div>
+    <div class="steps">
+      <div class="step">
+        <svg class="ring" width="17" height="17" viewBox="0 0 17 17" aria-hidden="true"><circle cx="8.5" cy="8.5" r="8" fill="none" stroke="#d9cdb6"/><circle cx="8.5" cy="8.5" r="2.6" fill="#7C9A52"/></svg>
+        <h3>Council invites</h3>
+        <p>Whitehorse tells its own Gardens for Wildlife participants the pilot exists. No list changes hands.</p>
+      </div>
+      <div class="step">
+        <svg class="ring" width="17" height="17" viewBox="0 0 17 17" aria-hidden="true"><circle cx="8.5" cy="8.5" r="8" fill="none" stroke="#d9cdb6"/><circle cx="8.5" cy="8.5" r="2.6" fill="#7C9A52"/></svg>
+        <h3>Steward registers</h3>
+        <p>The resident comes to the Registry themselves and consents in their own name.</p>
+      </div>
+      <div class="step">
+        <svg class="ring" width="17" height="17" viewBox="0 0 17 17" aria-hidden="true"><circle cx="8.5" cy="8.5" r="8" fill="none" stroke="#d9cdb6"/><circle cx="8.5" cy="8.5" r="2.6" fill="#7C9A52"/></svg>
+        <h3>Assessment provided</h3>
+        <p>The steward supplies their own copy of their Gardens for Wildlife assessment directly to the Registry.</p>
+      </div>
+      <div class="step">
+        <svg class="ring" width="17" height="17" viewBox="0 0 17 17" aria-hidden="true"><circle cx="8.5" cy="8.5" r="8" fill="none" stroke="#d9cdb6"/><circle cx="8.5" cy="8.5" r="2.6" fill="#7C9A52"/></svg>
+        <h3>Baseline recorded</h3>
+        <p>Biodiversity structure, soil and water, habitat complexity, connectivity, evidence.</p>
+      </div>
+      <div class="step">
+        <svg class="ring" width="17" height="17" viewBox="0 0 17 17" aria-hidden="true"><circle cx="8.5" cy="8.5" r="8" fill="none" stroke="#d9cdb6"/><circle cx="8.5" cy="8.5" r="2.6" fill="#7C9A52"/></svg>
+        <h3>Twelve months on</h3>
+        <p>The steward updates the record. The pilot provides an aggregated picture of whether participating gardens are developing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="twoup">
+      <div>
+        <div class="label">Privacy — no resident data transfer</div>
+        <div class="stream">
+          <p>For this pilot, Whitehorse does not provide resident information to the Registry.
+          Council simply lets Gardens for Wildlife participants know the pilot exists. A steward who
+          wishes to participate approaches the Registry themselves, consents directly, and supplies
+          their own assessment. Records are created only by the steward — the Registry never receives
+          Whitehorse's participant list and never pre-builds a household record.</p>
+        </div>
+        <p class="aside">Whitehorse remains the custodian of its resident information. Consent comes
+        from the steward rather than being inferred, and Council never needs to transfer resident
+        information to a third party. Any future municipal reporting would be aggregated and
+        de-identified.</p>
+      </div>
+
+      <div>
+        <div class="label">Separation from our design work</div>
+        <ul class="commit">
+          <li><b>No design services</b> marketed or solicited to any steward who joins through the Gardens for Wildlife pathway.</li>
+          <li><b>Referral elsewhere</b> for the duration of the pilot if a steward asks us for design help.</li>
+          <li><b>Registry branding</b> on all steward-facing pilot materials, not Gardener &amp; Son's.</li>
+          <li><b>Sole purpose</b> — information supplied directly by participating stewards is used for Registry purposes only.</li>
+        </ul>
+        <p class="aside">The Registry already holds gardens we had no hand in designing or building —
+        that separation exists in practice, not only in principle. If Council has a standard
+        conflict-of-interest, partnership or probity process, we would much rather work through it
+        properly than rely on our own undertaking.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Where we think this could be useful to Whitehorse</div>
+    <div class="value">
+      <div>
+        <h5>A clearer picture of private land</h5>
+        <p>Where good gardens already are, where the habitat gaps sit, and where clusters are forming.</p>
+      </div>
+      <div>
+        <h5>Connectivity beyond council land</h5>
+        <p>An isolated reserve and twenty nearby gardens read as stepping stones rather than separate sites.</p>
+      </div>
+      <div>
+        <h5>Evidence over time</h5>
+        <p>Whether gardens are genuinely developing structure, habitat and soil function — not only how many plants were given away.</p>
+      </div>
+      <div>
+        <h5>A record that persists</h5>
+        <p>A long-term ecological record can carry across years and changes of ownership, without carrying personal information forward.</p>
+      </div>
+    </div>
+    <p class="cite"><b>Further reading —</b> Mumaw &amp; Bekessy, "Wildlife gardening for
+    collaborative public–private biodiversity conservation", <i>Australasian Journal of Environmental
+    Management</i>, 2017. An RMIT study of a Victorian Gardens for Wildlife program; the authors
+    recommend a participatory monitoring component, and found members willing to record and
+    contribute that information themselves.</p>
+  </section>
+
+  <section>
+    <div class="label">How a steward would take the next step</div>
+    <div class="twoup">
+      <div class="stream">
+        <p>A steward who uploads their own Gardens for Wildlife assessment sees their ecological
+        baseline, their strongest area and their clearest gap — and can then redeem their Gardens for
+        Wildlife plant voucher with that gap in front of them. Council's plant support gets directed
+        by evidence rather than guesswork, and at twelve months there is a record of whether it
+        worked.</p>
+      </div>
+      <div>
+        <p class="aside">This would be the default pathway rather than the only one — Council's
+        existing redemption process stays available on request, so no resident is required to join
+        the Registry to receive a voucher they are already entitled to.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="ask">
+    <div>
+      <div class="t">What we're asking</div>
+      <p>Not for Whitehorse to adopt a finished system. Only whether a group this small is worth
+      trying together, and <em>what you would need to see</em> before it could be considered further.
+      We would like to shape it with you.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <b>Ecological Registry</b> · ecologicalregistry.org<br>
+      Operated by Gardener &amp; Son · Mont Albert &amp; Hawthorn
+    </div>
+    <div class="r">
+      Tyson &amp; Natasha Lundbech · 0406 059 866<br>
+      Wurundjeri Woi Wurrung Country
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
