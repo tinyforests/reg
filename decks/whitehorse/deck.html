@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Ecological Registry · Gardener &amp; Son</title>
+<title>The Ecological Registry · Whitehorse City Council</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -38,7 +38,6 @@ body.idle #nav{opacity:.18}
 #nav button:hover{background:rgba(180,154,99,.25)}
 #nav button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 #ncount{font-size:12px;letter-spacing:.18em;color:rgba(255,240,220,.55);padding:0 4px}
-body.presenter #nav,body.presenter #help{display:none}
 body.display #nav,body.display #help{display:none!important}
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .5s ease;
@@ -169,40 +168,6 @@ em{font-style:italic;color:var(--signal)}
 .close-wrap{height:100%;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
 .corridor{position:absolute;inset:0;opacity:.55}
 
-/* notes */
-#notes{position:absolute;left:0;right:0;bottom:0;max-height:42%;overflow:auto;background:#12150e;color:#e8e2d2;
-  border-top:1px solid rgba(180,154,99,.4);padding:26px 34px;display:none;z-index:60;
-  font-size:16px;line-height:1.65;font-weight:300}
-#notes.on{display:block}
-#notes h4{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:12px;font-weight:500}
-#notes p{margin-bottom:12px;max-width:100ch}
-#help{position:absolute;right:16px;bottom:14px;z-index:70;font-family:"IBM Plex Mono",monospace;font-size:11px;
-  letter-spacing:.14em;text-transform:uppercase;color:rgba(255,240,220,.28)}
-
-/* presenter */
-body.presenter #viewport{display:none}
-#presenter{display:none;position:absolute;inset:0;background:#12150e;color:#e8e2d2;grid-template-columns:1.25fr 1fr;gap:0;z-index:80}
-body.presenter #presenter{display:grid}
-#presenter .left{padding:34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid rgba(180,154,99,.3);overflow:hidden}
-#presenter .right{padding:34px;display:flex;flex-direction:column;gap:22px;overflow:auto}
-#pv-wrap{width:100%;aspect-ratio:16/9;overflow:hidden;position:relative;background:#000;flex:none}
-#pv-wrap iframe{position:absolute;left:0;top:0;width:1600px;height:900px;border:0;transform-origin:top left}
-.pmeta{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
-#timer{font-family:"IBM Plex Mono",monospace;font-size:44px;color:#e8e2d2}
-#pnote{font-size:19px;line-height:1.6;font-weight:300}
-#pnote p{margin-bottom:14px}
-#pnext{font-size:15px;line-height:1.55;color:rgba(232,226,210,.6);border-top:1px solid rgba(180,154,99,.3);padding-top:18px}
-#pnext strong{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;font-weight:500}
-#ptitle{font-family:"Fraunces",Georgia,serif;font-size:30px;line-height:1.2;color:#e8e2d2}
-#pnext-title{font-family:"Fraunces",Georgia,serif;font-size:20px;color:rgba(232,226,210,.8);margin-bottom:10px}
-#pbar{display:flex;align-items:center;gap:14px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
-#pdot{width:9px;height:9px;border-radius:50%;background:#c05f4a;flex:none}
-#pdot.live{background:var(--signal)}
-#pbtn{font:inherit;letter-spacing:.16em;text-transform:uppercase;background:none;color:var(--brass);
-  border:1px solid rgba(180,154,99,.55);padding:7px 12px;cursor:pointer}
-#pbtn:hover{background:rgba(180,154,99,.12)}
-#pkeys{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,226,210,.32);margin-top:auto}
-
 @media (prefers-reduced-motion:reduce){.slide{transition:none}}
 </style>
 </head>
@@ -212,9 +177,7 @@ body.presenter #presenter{display:grid}
   <div id="stage">
 
     <!-- 1 TITLE -->
-    <section class="slide dark active" data-notes="
-      <p>Thank you for making the time. I'm Tyson — I run Gardener &amp; Son with my partner Natasha. We're a two-person ecological design studio in Mont Albert and Hawthorn. We design and build gardens, and we've spent the last few years building a way to record what those gardens actually do.</p>
-      <p>I want to talk about private gardens — and what happens if we start treating them as part of the landscape rather than outside it.</p>">
+    <section class="slide dark active">
       <svg class="title-grid" id="coverSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
       <div class="title-scrim" aria-hidden="true"></div>
       <div class="title-wrap">
@@ -227,9 +190,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 2 ACKNOWLEDGEMENT -->
-    <section class="slide deep" data-notes="
-      <p>Read it slowly. Let the last line land before moving on.</p>
-      <p>Everything that follows sits on top of that — the plants, the soil, the water. We're not introducing something new here. We're trying to help people notice what was always underneath.</p>">
+    <section class="slide deep">
       <div class="eyebrow" style="margin-bottom:44px">Acknowledgement of Country</div>
       <div class="ack-full">
         <p>We acknowledge the Wurundjeri Woi Wurrung people of the Kulin Nation as the Traditional Custodians of the land we live and work on, and pay our respects to their Elders past and present.</p>
@@ -239,11 +200,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 3 CONTEXT -->
-    <section class="slide light" data-notes="
-      <p>We&#39;ve come to believe that private gardens are one of the largest untapped opportunities for improving ecological health across our cities.</p>
-      <p>We&#39;ve spent years working in gardens, and we&#39;ve seen some of the problems first-hand — monocultures, compacted soils, heat, very little habitat, and sometimes people who have become disconnected from the living system around them.</p>
-      <p>A lot of the garden culture we&#39;ve inherited in Melbourne comes from formal European traditions — gardens that were often about order and control. Straight lines, clipped plants, lawns, hedges, high maintenance.</p>
-      <p><em>Delivery:</em> this is the part you know first-hand, not from a report — that is Gardener &amp; Son&#39;s credibility, so let it sound like lived experience rather than analysis. No blame: nobody was ever given anything else to work with.</p>">
+    <section class="slide light">
       <div class="eyebrow">01 · Context</div>
       <div class="spacer"></div>
       <h2 style="max-width:19ch">Private gardens are an untapped ecological resource.</h2>
@@ -256,12 +213,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 4 VISION -->
-    <section class="slide dark" data-notes="
-      <p>This one is a question. Ask it, then stop talking for a beat and let it sit.</p>
-      <p>We&#39;re finding that we — and other designers — are building gardens that transform a landscape in a way where it truly contributes to the broader landscape around it. Indigenous plantings, habitat, canopy, biodiversity returning.</p>
-      <p>We felt a movement happening: with our clients, in our gardens, and among fellow designers.</p>
-      <p>We&#39;ve witnessed the positive outcomes — in the gardens and in the stewards — but we couldn&#39;t measure it. So we started building something that can.</p>
-      <p><em>That last line is the bridge.</em> It hands you straight into the next slide without you having to explain the machinery here.</p>">
+    <section class="slide dark">
       <div class="eyebrow">02 · Vision</div>
       <div class="spacer"></div>
       <h2 class="big" style="max-width:17ch">What if private gardens became part of our ecological <em>infrastructure</em>?</h2>
@@ -270,13 +222,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 5 THE SYSTEM -->
-    <section class="slide light" data-notes="
-      <p>We&#39;ve found a lot of our work is actually educating. Talking to people about ecological vegetation classes, and why planting indigenous plants matters so much. Conversations about layered, structured planting of diverse species.</p>
-      <p>We started building a system to complement what we&#39;re talking about and what we&#39;re building in the gardens. A way to discover, recognise and measure — and to engage stewards more deeply with their gardens and the broader landscape around them.</p>
-      <p>Then three moves. Keep it plain.</p>
-      <p><strong>Place.</strong> First we help someone understand where they actually are — the ecological vegetation community that historically belonged to that address. You type in your address and you get your EVC back. It's a small moment but it changes people.</p>
-      <p><strong>Garden.</strong> Then we translate that into what an ecological garden could look like there. We're not recreating 1750 — we're helping people make informed decisions about plants, structure, habitat, soil and water for their block, their light, their life.</p>
-      <p><strong>Record.</strong> And then the Registry records what that garden is actually contributing, and how that changes over time. So the effort doesn't disappear the moment the visit ends or the house sells.</p>">
+    <section class="slide light">
       <div class="eyebrow">03 · The system</div>
       <div class="spacer"></div>
       <div class="system">
@@ -303,15 +249,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 6 WHAT WE'VE BUILT -->
-    <section class="slide dark" data-notes="
-      <p>So this is already happening in real gardens. We&#39;ve run an initial cohort on the Registry — a mix of gardens we&#39;ve designed and installed, gardens other designers have installed, new gardens and established gardens. Here are three examples from the Registry.</p>
-      <p>This is the slide that stops it being a theory. These are real addresses, real plants in the ground, real records.</p>
-      <p><strong>Sir Garnet Road.</strong> We designed it, we built it, we recorded it — and there's a physical sign on the fence now. The steward is proud of it, which matters more than the number.</p>
-      <p><strong>Bellbird.</strong> Sam Cox's own garden at Wattle Glen — our highest-scoring record, and one we had nothing to do with designing or installing. That matters more than it sounds: it's the moment the Registry stops being a portfolio of our work and becomes something other designers' gardens can enter. Twenty-five years of planting, no irrigation at all, canopy grown from tubestock.</p>
-      <p>Be accurate if pressed: it's a provisional record built from a site visit, with a return visit planned for measurement and a species survey. Sam has offered to help shape the methodology as it develops.</p>
-      <p><strong>Forest Hill.</strong> This record was built entirely from Whitehorse's own Gardens for Wildlife visit report. The steward didn't fill in a form. Your guides had already done the observing — we just gave the information somewhere to live. Be precise: council supplied the assessment, council hasn't verified our score.</p>
-      <p>Change over time isn't on this slide any more — the next slide carries it, with a real record showing what it needs to reach the next tier. If someone asks here, Victoria Crescent was registered, then re-recorded after further planting, and the score moved.</p>
-      <p>Then the method, plainly: we start with place, we design for ecological function, we install it, and then we record what happens.</p>">
+    <section class="slide dark">
       <div class="eyebrow">04 · What we've built</div>
       <h2 style="margin-top:26px;font-size:58px">This is already happening in real gardens.</h2>
       <div class="gardens">
@@ -341,12 +279,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 7 DEEPER ENGAGEMENT -->
-    <section class="slide deep" data-notes="
-      <p>Not only are we finding better gardens through the nature of them — we&#39;re finding deeper engagement with stewards, through the five-pillar scoring engine and the opportunity to earn badges as they update or upgrade their gardens.</p>
-      <p>The score isn&#39;t a verdict on someone&#39;s garden. It&#39;s a starting position and a reason to come back. A steward observes something, improves something, updates their record — and the garden is recognised for it.</p>
-      <p>This is a real record — Arundel, in Surrey Hills. Point at the line that says eight points to the next tier: that is the sentence that brings people back. Nobody is being marked down; they&#39;re being shown what is within reach.</p>
-      <p>This is the part councils tend to lean forward at: it&#39;s a retention mechanism. The hard part of any private-land program isn&#39;t the first visit, it&#39;s the second year. Don&#39;t say that as a criticism of Gardens for Wildlife. The loop is spoken, not on the screen: a steward observes, improves, updates — and the garden is recognised for it.</p>
-      <p><em>Then show the Whitehorse dashboard.</em> One garden record, then the municipal picture built from many of them — that is the jump you want them to make before the next slide.</p>">
+    <section class="slide deep">
       <div class="eyebrow">05 · Deeper engagement</div>
       <div class="spacer"></div>
       <div class="engage">
@@ -380,13 +313,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 8 WHY WHITEHORSE -->
-    <section class="slide light" data-notes="
-      <p>Whitehorse already has the pieces — Blackburn Lake, the Creeklands, remnant vegetation, the canopy work, the waterways, the street trees, and Gardens for Wildlife already out in people&#39;s back gardens doing the hardest part of this.</p>
-      <p>So frame this as an offer, not a pitch: <strong>we&#39;re not trying to replace the things Whitehorse is already doing. We&#39;re interested in what happens when the private garden becomes another connected layer.</strong></p>
-      <p>Don&#39;t read the five out. Pick the two that matter to whoever is in the room. For a biodiversity officer it&#39;s usually the picture and the connectivity. For someone reporting upward it&#39;s evidence over time and the framework that persists.</p>
-      <p>On <em>recognition</em>: councils are often good at telling people what they should do. This is a mechanism for saying — we see what you&#39;re already contributing. Say that one warmly; it lands.</p>
-      <p>On <em>evidence over time</em>: be careful not to sound critical of plant giveaways. The point isn&#39;t that counting plants is wrong, it&#39;s that nobody currently gets to find out what happened next.</p>
-      <p>Held in reserve if asked: better targeting of programs and spending, and a measurable story for the biodiversity strategy.</p>">
+    <section class="slide light">
       <div class="eyebrow">06 · Why Whitehorse</div>
       <div class="spacer"></div>
       <h2 style="font-size:52px;max-width:22ch">Where we think this could be useful.</h2>
@@ -424,11 +351,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 8 THE ASK -->
-    <section class="slide dark" data-notes="
-      <p>Be honest and be small here. We're not asking Whitehorse to adopt a finished system, and we're not asking for a budget line.</p>
-      <p>Offer it as a possibility, not a specification. 'One possibility might be a small cluster — perhaps ten to twenty gardens already involved in Gardens for Wildlife — where we test whether the information you're already gathering can form a baseline record. But we'd like to shape that with you.' The first yes you want is 'let's explore', not 'yes to your pilot'.</p>
-      <p>The key line: the Registry doesn't need to create another visit. One visit, a longer life for the information.</p>
-      <p>No regulation. No competition with anything you run. And if it isn't useful, we'll have learned that cheaply.</p>">
+    <section class="slide dark">
       <div class="eyebrow">07 · The ask</div>
       <div class="spacer"></div>
       <h2 style="max-width:16ch">Could we explore this together?</h2>
@@ -443,12 +366,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 9 THE BIGGER VISION -->
-    <section class="slide light" data-notes="
-      <p>Slow down. This slide is almost empty on purpose — the words are yours, not the screen&#39;s.</p>
-      <p>We already accept that buildings have a performance. We measure energy efficiency because at some point we decided that how a building performs matters — not just what it looks like.</p>
-      <p>I wonder whether one day we might think about gardens the same way. Not whether a garden is good or bad. Not whether someone has planted the &#39;right&#39; garden. But a simple, consistent way of understanding what that piece of land is giving back — its biodiversity, habitat, soil, water, and its connection to the landscape around it. And something that can improve over time.</p>
-      <p>The long-term possibility is a common way of understanding ecological performance. Maybe in ten years, knowing the ecological performance of a garden feels as normal as knowing the energy efficiency of a building.</p>
-      <p>Do not say &#39;standard&#39; in this room — it makes council people hear regulation, accreditation, compliance. Do not mention developers. Then pause, and go to the last slide.</p>">
+    <section class="slide light">
       <div class="eyebrow">08 · The bigger vision</div>
       <div class="spacer"></div>
       <h2 class="vision-line">We currently measure homes by their energy efficiency.<br><em>What if we measured gardens by their ecological performance?</em></h2>
@@ -457,11 +375,7 @@ body.presenter #presenter{display:grid}
     </section>
 
     <!-- 9 CLOSE -->
-    <section class="slide deep" data-notes="
-      <p>Slow right down. This is the ending.</p>
-      <p>Every one of these gardens is small. On its own, a single back garden doesn't change very much. But they're not on their own — they sit side by side, street after street, all the way across the municipality.</p>
-      <p>Many small gardens can become one living system. We'd love Whitehorse to be one of the first councils to explore what that could become.</p>
-      <p>Then stop. Thank them, and let them ask.</p>">
+    <section class="slide deep">
       <svg class="corridor" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <g stroke="#B49A63" stroke-opacity=".38" stroke-width="1.4" fill="none">
           <path d="M180 700 L360 660 L540 690 L720 640 L900 672 L1080 626 L1260 658 L1440 612"/>
@@ -488,33 +402,12 @@ body.presenter #presenter{display:grid}
   </div>
 </div>
 
-<div id="notes"><h4>Speaker notes</h4><div id="notes-body"></div></div>
 <div id="nav">
   <button id="nprev" type="button" aria-label="Previous slide">←</button>
   <span id="ncount">01 / 11</span>
   <button id="nnext" type="button" aria-label="Next slide">→</button>
-  <button id="nnotes" type="button" aria-label="Speaker notes">Notes</button>
-  <button id="npres" type="button" aria-label="Presenter mode">Present</button>
 </div>
-<div id="help">← → move · Z fill · S notes · P presenter</div>
-
-<div id="presenter">
-  <div class="left">
-    <div id="pbar"><span id="pdot"></span><span id="pstatus">Display window closed</span>
-      <button id="pbtn" type="button">Open display</button>
-      <button id="pexit" type="button">Exit</button></div>
-    <div class="pmeta"><span id="pnum">01 / 11</span></div>
-    <div id="pv-wrap"><iframe id="pv" title="Current slide"></iframe></div>
-    <div id="timer">00:00</div>
-  </div>
-  <div class="right">
-    <div class="pmeta">Now</div>
-    <div id="ptitle"></div>
-    <div id="pnote"></div>
-    <div id="pnext"><strong>Next</strong><div id="pnext-title"></div><span id="pnext-body"></span></div>
-    <div id="pkeys">← → move · R reset timer · P reopen display · Esc exit</div>
-  </div>
-</div>
+<div id="help">← → move · Z fill</div>
 
 <script>
 function buildAerial(opts){
@@ -776,7 +669,6 @@ function buildAerial(opts){
     var cs = slides[i].classList;
     document.getElementById('viewport').style.background =
       cs.contains('light') ? '#fff0dc' : cs.contains('deep') ? '#2b3126' : '#3d4535';
-    document.getElementById('notes-body').innerHTML = notesFor(i);
     if (presenter) {
       document.getElementById('pnum').textContent = String(i+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
       document.getElementById('ptitle').textContent = titleFor(i);
@@ -865,16 +757,6 @@ function buildAerial(opts){
   }
 
   document.addEventListener('DOMContentLoaded', function(){});
-  var btn = document.getElementById('pbtn');
-  if (btn) btn.addEventListener('click', function(){ openDisplay(); });
-  var xbtn = document.getElementById('pexit');
-  if (xbtn) xbtn.addEventListener('click', exitPresenter);
-  document.getElementById('nnotes').addEventListener('click', function(e){
-    e.stopPropagation(); document.getElementById('notes').classList.toggle('on');
-  });
-  document.getElementById('npres').addEventListener('click', function(e){
-    e.stopPropagation(); openPresenter();
-  });
 
   addEventListener('keydown', function(e){
     var k = e.key;
@@ -882,11 +764,7 @@ function buildAerial(opts){
     else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp'){ e.preventDefault(); go(i-1); }
     else if (k === 'Home'){ go(0); }
     else if (k === 'End'){ go(slides.length-1); }
-    else if (k === 's' || k === 'S'){ document.getElementById('notes').classList.toggle('on'); }
-    else if (k === 'p' || k === 'P'){ if (!presenter) openPresenter(); else if (!displayLive()) { openDisplay(); } else { try { displayWin.focus(); } catch(e){} } }
-    else if (k === 'r' || k === 'R'){ if (presenter) t0 = Date.now(); }
     else if (k === 'z' || k === 'Z'){ fillMode = fillMode === 'contain' ? 'cover' : 'contain'; fit(); }
-    else if (k === 'Escape' && presenter){ exitPresenter(); }
   });
 
   addEventListener('click', function(e){
