@@ -262,7 +262,7 @@
             </div>
             <div>
               <div class="opacity-50 mb-1">Registry Role</div>
-              <select id="f_registry_role">
+              <select id="f_registry_role" onchange="_erUpdateRoleDesc()">
                 <option value="">-- Select --</option>
                 <option value="Cluster Seed">Cluster Seed</option>
                 <option value="Connector">Connector</option>
@@ -270,6 +270,7 @@
                 <option value="Satellite">Satellite</option>
                 <option value="Anchor">Anchor</option>
               </select>
+              <div id="role_desc" class="text-xs mt-1" style="display:none;opacity:.65;line-height:1.4"></div>
             </div>
             <div>
               <div class="opacity-50 mb-1">Trajectory</div>
@@ -814,7 +815,7 @@ function populateFormFromRecord(r) {
   })();
   sv('f_garden_type',       r.garden_type || '');
   sv('f_typology',          r.typology || '');
-  sv('f_registry_role',     r.registry_role || '');
+  sv('f_registry_role',     r.registry_role || ''); _erUpdateRoleDesc();
   sv('f_trajectory',        r.trajectory || '');
   sv('f_target_score',      r.target_score || '');
   sv('f_council',           r.council || '');
@@ -1244,6 +1245,23 @@ var _erFetchIdentityAddr = _erDebounce(function(q) {
 function _erAddrInput(val)         { _erFetchSuggestions(val); }
 function _erIdentityAddrInput(val) { _erFetchIdentityAddr(val); }
 function _erAddrBlur()             { setTimeout(_erHideAddrDrop, 200); }
+
+var _ROLE_DESCS = {
+  'Cluster Seed': 'The originating garden. Source of local provenance seed, species diversity and ecological function that anchors a neighbourhood cluster. The network grows from here.',
+  'Connector':    'Links two or more gardens or clusters. Maintains genetic flow and species movement across the network. Critical for corridor integrity.',
+  'Performer':    'High ecological function within an established cluster. Contributes biodiversity, habitat and resilience without anchoring the network structurally.',
+  'Satellite':    'Part of an established cluster, expanding its reach and supporting the cluster seed ecologically. An earlier or smaller-scale presence than a Performer.',
+  'Anchor':       'Long-established garden that stabilises the network over time. Provides continuity and resilience — the backbone the rest of the cluster leans on.'
+};
+
+function _erUpdateRoleDesc() {
+  var sel = document.getElementById('f_registry_role');
+  var desc = document.getElementById('role_desc');
+  if (!sel || !desc) return;
+  var d = _ROLE_DESCS[sel.value];
+  if (d) { desc.textContent = d; desc.style.display = ''; }
+  else    { desc.style.display = 'none'; }
+}
 
 function _erSetStatus(id, msg, ok) {
   var el = document.getElementById(id);
