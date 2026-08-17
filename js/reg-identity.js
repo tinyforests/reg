@@ -143,7 +143,7 @@
         '</p>' +
       '</div>' +
       '<div style="display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto;width:100%;box-sizing:border-box">' +
-        '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0;text-align:center">Is this your garden? Your name and precise location are private.</span>' +
+        '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0;text-align:center">Is this your garden? Enter your email to unlock your private profile.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
           'background:transparent;outline:none;font-family:inherit" />' +
