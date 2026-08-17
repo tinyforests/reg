@@ -116,8 +116,10 @@
       "area_ha": 0.48,
       "status": "Forming"
     },
-    "display_lat": -37.833,
-    "display_lng": 145.097
+    "display_lat": -37.831278,
+    "display_lng": 145.094139,
+    "lat": -37.831278,
+    "lng": 145.094139
   },
   "evidence": {
     "has_photos": true,
