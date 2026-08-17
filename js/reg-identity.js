@@ -128,12 +128,13 @@
       '-webkit-backdrop-filter:blur(1.5px)',
       'backdrop-filter:blur(1.5px)',
       'font-family:"IBM Plex Sans",sans-serif',
-      'display:flex;flex-direction:column;justify-content:flex-end',
+      'display:flex;flex-direction:column;justify-content:center;align-items:center',
       'transition:min-height .38s ease'
     ].join(';');
     bar.innerHTML =
-      '<div id="er-unlock-hero" style="position:absolute;top:.9rem;left:1.25rem;right:1.25rem;' +
-        'opacity:0;transition:opacity .28s ease .08s;pointer-events:none;max-width:960px;margin:0 auto;text-align:center">' +
+      '<div id="er-unlock-hero" style="width:100%;max-width:960px;margin:0 auto;text-align:center;' +
+        'overflow:hidden;max-height:0;padding-bottom:0;opacity:0;pointer-events:none;' +
+        'transition:max-height .38s ease,opacity .28s ease .08s,padding-bottom .38s ease">' +
         '<p id="er-hero-heading" style="font-family:\'Abril Fatface\',serif;font-size:clamp(1.4rem,3.5vw,2rem);line-height:1.25;margin:0 0 .6rem">' +
           'Claim this profile to add and unlock your field records.' +
         '</p>' +
@@ -141,7 +142,7 @@
           'Your field notes, precise location and steward details are private — share what you choose.' +
         '</p>' +
       '</div>' +
-      '<div style="display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto;width:100%">' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;max-width:960px;margin:0 auto;width:100%;box-sizing:border-box">' +
         '<span id="er-unlock-hint" style="font-size:.72rem;opacity:.65;flex-shrink:0;text-align:center">Is this your garden? Your name and precise location are private.</span>' +
         '<input id="er-unlock-email" type="email" placeholder="Your email" autocomplete="email" ' +
           'style="flex:1;min-width:160px;font-size:.75rem;padding:.32rem .6rem;' +
@@ -207,13 +208,23 @@
             _erExpanded = true;
             bar.style.transition = 'min-height .38s ease';
             bar.style.minHeight = _erBarHeight() + 'px';
-            if (_erHero) _erHero.style.opacity = '1';
+            if (_erHero) {
+              _erHero.style.maxHeight = '20rem';
+              _erHero.style.opacity = '1';
+              _erHero.style.paddingBottom = '1.25rem';
+              _erHero.style.pointerEvents = '';
+            }
             window.addEventListener('scroll', _erScrollTrack, { passive: true });
           } else {
             _erExpanded = false;
             bar.style.transition = 'min-height .38s ease';
             bar.style.minHeight = '';
-            if (_erHero) _erHero.style.opacity = '0';
+            if (_erHero) {
+              _erHero.style.maxHeight = '0';
+              _erHero.style.opacity = '0';
+              _erHero.style.paddingBottom = '0';
+              _erHero.style.pointerEvents = 'none';
+            }
             window.removeEventListener('scroll', _erScrollTrack);
           }
         }, { threshold: 0.1 }).observe(_recordSec);
