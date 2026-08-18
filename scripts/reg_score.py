@@ -99,7 +99,7 @@ def score_connectivity(record):
     score = 0
 
     if c.get('adjacent_park'):
-        dist = c.get('park_distance_m') or 999
+        dist = c.get('park_distance_m') if c.get('park_distance_m') is not None else 999
         if dist <= 50:      score += 6
         elif dist <= 150:   score += 4
         elif dist <= 300:   score += 2
