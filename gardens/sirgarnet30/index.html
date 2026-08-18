@@ -1333,10 +1333,6 @@ fetch(_staticJson)
   .then(function(data) {
     G = data;
     render();
-    var _sc = document.getElementById('heroScore');
-    if (_sc) _sc.textContent = '--';
-    var _sb = document.getElementById('heroScoreBar');
-    if (_sb) _sb.style.width = '0%';
     _afterRender();
   })
   .catch(function(err) {
@@ -1350,7 +1346,7 @@ fetch(_staticJson)
 fetch(_liveUrl)
   .then(function(r) { return r.json(); })
   .then(function(d) {
-    if (d && d.ok && d.data) { G = d.data; render(); _afterRender(); }
+    if (d && d.ok && d.data) { G = d.data; }
   })
   .catch(function() {});
 

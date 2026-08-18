@@ -1326,7 +1326,7 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
   /* Static fetch — renders immediately */
   fetch(_staticJson)
     .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function(data) { G = data; render(); var _sc=document.getElementById('heroScore'); if(_sc)_sc.textContent='--'; var _sb=document.getElementById('heroScoreBar'); if(_sb)_sb.style.width='0%'; _afterRender(); })
+    .then(function(data) { G = data; render(); _afterRender(); })
     .catch(function(err) {
       console.error('Could not load garden data:', err);
       document.getElementById('heroName').textContent = 'Data unavailable';
@@ -1339,12 +1339,7 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
     fetch(liveUrl)
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (d && d.ok && d.data) {
-          G = d.data;
-          console.info('Garden data source: live');
-          render();
-          _afterRender();
-        }
+        if (d && d.ok && d.data) { G = d.data; }
       })
       .catch(function() {});
   }
