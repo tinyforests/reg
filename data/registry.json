@@ -19,11 +19,11 @@
       "council": "Nillumbik Shire Council",
       "ward": "",
       "lga": "Nillumbik",
-      "score": 68,
+      "score": 62,
       "rating": {
         "current": "Registered Ecological Garden",
         "next": "High Habitat Garden",
-        "points_to_next": 13
+        "points_to_next": 19
       },
       "primary_evc": "Box Ironbark Forest (EVC 61)",
       "bioregion": "Highlands - Southern Fall",
@@ -31,13 +31,14 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Aug 2026",
-      "badge_count": 5,
+      "badge_count": 6,
       "badges": [
-        null,
-        null,
-        null,
-        null,
-        null
+        "indigenous_dominant",
+        "species_rich_20",
+        "full_canopy",
+        "five_layers",
+        "habitat_builder",
+        "gs_verified"
       ],
       "profile_url": "/gardens/bushgarden/index.html",
       "data_file": "data/bellbird.json",
@@ -57,11 +58,11 @@
       "garden_name": "Arundel",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 71,
+      "score": 58,
       "rating": {
-        "current": "Registered Ecological Garden",
-        "next": "High Habitat Garden",
-        "points_to_next": 10
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 3
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -69,15 +70,12 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 7,
+      "badge_count": 4,
       "badges": [
         "species_rich_20",
-        "five_layers",
-        "habitat_builder",
         "amphibian_active",
         "gs_verified",
-        "fauna_record",
-        "full_record"
+        "fauna_record"
       ],
       "profile_url": "/gardens/arundel/index.html",
       "data_file": "data/arundel.json",
@@ -95,9 +93,7 @@
       "ward": "Gardiner",
       "lga": "Boroondara",
       "adjacent_garden_ids": [
-        "ER-AU-VIC-SH-MID-001",
-        "ER-AU-VIC-SH-CAN-0001",
-        "ER-AU-VIC-SH-CAN-0001"
+        "ER-AU-VIC-SH-MID-001"
       ]
     },
     {
@@ -716,11 +712,11 @@
       "garden_name": "The Auburn Test",
       "suburb": "Hawthorn",
       "state": "VIC",
-      "score": 56,
+      "score": 35,
       "rating": {
-        "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
-        "points_to_next": 5
+        "current": "Habitat Garden",
+        "next": "Ecological Garden",
+        "points_to_next": 6
       },
       "primary_evc": "Not assessed (TBC)",
       "bioregion": "Gippsland Plain",
@@ -728,15 +724,10 @@
       "verification_level": "site_visit",
       "verification_label": "Site Visit",
       "last_verified": "Aug 2026",
-      "badge_count": 7,
+      "badge_count": 2,
       "badges": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        "indigenous_dominant",
+        "site_visit_badge"
       ],
       "profile_url": "/gardens/auburn/index.html",
       "data_file": "data/auburn_test.json",

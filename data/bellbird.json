@@ -1,16 +1,16 @@
 {
   "garden_id": "ER-AU-VIC-NIL-BEL-001",
-  "garden_name": "Bellbird",
+  "garden_name": "Wattle Glen Bush Garden",
   "garden_type": "Ecological Home Garden",
   "typology": "Deep Ecological Garden",
-  "registry_role": "Corridor Node",
+  "registry_role": "Cluster Seed",
   "trajectory": "Emerging",
   "suburb": "Wattle Glen",
   "state": "VIC",
   "council": "Nillumbik Shire Council",
   "ward": null,
   "lga": "Nillumbik",
-  "assessment_date": null,
+  "assessment_date": "Aug 2026",
   "baseline_date": "1998",
   "stewards": "Sam Cox",
   "designer": "Sam Cox Landscape",
@@ -21,23 +21,23 @@
   "target_score": 82,
   "description": "Sam Cox — last apprentice of Gordon Ford and principal of Sam Cox Landscape — has spent 25 years shaping this 1.5-acre Wattle Glen bush garden into one of the finest examples of Australian naturalistic design in private hands. Directly adjacent to a Nillumbik green wedge corridor, the garden moves through earth-shaped terrain and layered native planting to a winding watercourse that feeds a large basalt-lined pond — habitat for frogs, birds and other wildlife. A waterfall brings water movement into the living spaces on the other side of the house. Nineteen indigenous species are currently recorded across the planting. The garden opened through Open Gardens Victoria in November 2023.",
   "evc": {
-    "name": "Heathy Woodland",
-    "code": "EVC 48",
-    "bioregion": "Dandenong Foothills",
-    "bioregion_code": "DFO",
+    "name": "Box Ironbark Forest",
+    "code": "EVC 61",
+    "bioregion": "Highlands - Southern Fall",
+    "bioregion_code": "10.1",
     "note": "EVC classification requires confirmation against DELWP NatureKit mapping for this site."
   },
   "biodiversity": {
-    "indigenous_species_current": 19,
-    "indigenous_species_baseline": null,
-    "indigenous_species_target": null,
+    "indigenous_species_current": 20,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 0,
     "indigenous_dominant": true,
     "structural_layers_current": 5,
-    "structural_layers_baseline": null,
-    "canopy_cover_pct_current": 60,
-    "canopy_cover_pct_baseline": null,
-    "canopy_cover_pct_target": null,
-    "weed_pressure": "Low",
+    "structural_layers_baseline": 5,
+    "canopy_cover_pct_current": 50,
+    "canopy_cover_pct_baseline": 45,
+    "canopy_cover_pct_target": 0,
+    "weed_pressure": "low",
     "weed_pressure_baseline": "High",
     "species_list": [
       "Correa reflexa",
@@ -58,32 +58,33 @@
       "Marsilea drummondii",
       "Persicaria decipiens",
       "Dodonaea viscosa",
-      "Solanum laciniatum"
+      "Solanum laciniatum",
+      "Eucalyptus tricarpa"
     ],
     "species_note": "Steward-reported list, not yet verified by field assessment. Subject to further inventory."
   },
   "soil_water": {
     "soil_health_score": 5,
-    "soil_health_baseline": null,
+    "soil_health_baseline": 0,
     "soil_health_max": 5,
-    "water_function_score": 3,
-    "water_function_baseline": null,
+    "water_function_score": 5,
+    "water_function_baseline": 0,
     "water_function_max": 5,
-    "has_rainwater_system": null,
+    "has_rainwater_system": false,
     "has_moisture_basin": true,
-    "has_swale": null,
-    "mulch_depth_mm": null,
+    "has_swale": true,
+    "mulch_depth_mm": 75,
     "mulch_type": "Woodchips — deep application",
     "water_note": "Score reflects publicly confirmed features only: winding watercourse feeding a large basalt-lined pond, and a separate waterfall. Sources: Sam Cox Landscape website, Open Gardens Victoria listing, Domain/Design Files 2018. Swale, moisture basin and rainwater system unconfirmed — score may rise at site assessment."
   },
   "habitat": {
     "habitat_nodes": 5,
-    "habitat_nodes_baseline": null,
+    "habitat_nodes_baseline": 0,
     "has_embedded_logs": true,
     "has_rock_refuges": true,
     "has_water_feature": true,
     "has_nest_boxes": false,
-    "planting_method": "Australian naturalistic design by Sam Cox Landscape — earth shaping, basalt boulder placement, and layered indigenous planting. Winding watercourse leads to a large basalt-lined pond; a separate waterfall brings water sound into the family living spaces. Garden developed over 25 years following the principles of Gordon Ford.",
+    "planting_method": "Australian naturalistic design by Sam Cox Landscape — earth shaping, basalt boulder placement, and layered indigenous planting following the principles of Gordon Ford.",
     "fauna_sightings": [
       {
         "species": "Superb Fairywren",
@@ -112,14 +113,16 @@
     ]
   },
   "connectivity": {
+    "display_lat": -37.685,
+    "display_lng": 145.1924,
     "adjacent_park": true,
     "park_name": "Nillumbik Green Wedge Corridor",
     "park_distance_m": 0,
-    "park_lat": -37.694,
-    "park_lng": 145.156,
+    "park_lat": -37.688012,
+    "park_lng": 145.203898,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.607,
+    "effective_ecological_area_ha": 0.61,
     "cluster_area_ha": 0.607,
     "cluster_name": "Nillumbik",
     "cluster": {
@@ -127,19 +130,17 @@
       "gardens": 1,
       "area_ha": 0.607,
       "status": "Seed"
-    },
-    "display_lat": -37.6961,
-    "display_lng": 145.1608
+    }
   },
   "evidence": {
-    "has_photos": true,
+    "has_photos": false,
     "has_field_notes": false,
-    "has_species_list": true,
-    "has_fauna_record": true,
-    "has_professional_assessment": false,
-    "verification_level": "enrolled",
-    "verification_label": "Enrolled",
-    "assessor": null,
+    "has_species_list": false,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son",
     "verification_date": null
   },
   "milestones": [
@@ -165,6 +166,62 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 68/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 68/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 70/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 68/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 68/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 65/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 61/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
     {
       "title": "Initial field observation — registry enrolment",
       "date": "Aug 2026",
@@ -198,5 +255,63 @@
     "currency": "AUD",
     "formula_note": null,
     "upgrades": []
+  },
+  "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
+  "steward_email": "sam@samcoxlandscape.com",
+  "score": {
+    "total": 68,
+    "rating": "Registered Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 23,
+        "max": 25,
+        "notes": [
+          "20-29 indigenous species",
+          "Indigenous dominant",
+          "5 structural layers",
+          "50%+ canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 18,
+        "max": 20,
+        "notes": [
+          "Soil health 5/5",
+          "Water function 5/5",
+          "Moisture basin",
+          "Swale installed"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 14,
+        "max": 20,
+        "notes": [
+          "5+ habitat nodes",
+          "Embedded logs",
+          "Rock refuges",
+          "Water feature"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 6,
+        "max": 20,
+        "notes": [
+          "Park within 50m"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 7,
+        "max": 15,
+        "notes": [
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
   }
 }

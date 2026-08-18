@@ -82,8 +82,8 @@
         "name": "Parring",
         "verified": true,
         "distance_m": 87,
-        "display_lat": -37.8138,
-        "display_lng": 145.0896
+        "display_lat": -37.8109,
+        "display_lng": 145.0909
       },
       {
         "id": "ER-AU-VIC-WHI-YRK-002",
@@ -91,7 +91,7 @@
         "name": "Sensory Garden",
         "verified": true,
         "distance_m": 286,
-        "display_lat": -37.8114,
+        "display_lat": -37.8144,
         "display_lng": 145.0841
       }
     ],
@@ -105,8 +105,8 @@
       "area_ha": 0.12,
       "status": "Forming"
     },
-    "display_lat": -37.8129,
-    "display_lng": 145.0922
+    "display_lat": -37.8122,
+    "display_lng": 145.089
   },
   "evidence": {
     "has_photos": true,

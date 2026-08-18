@@ -14,23 +14,23 @@
   "area_sqm": 180,
   "description": "Arundel responds to a fragmented Grassy Woodland and Valley Grassy Forest context, restoring ecological function through layered planting, dense groundcover and woodland structure. The garden reconnects soil, water and habitat to South Surrey Park, contributing to local biodiversity and long-term landscape resilience.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "name": "Valley Grassy Forest",
+    "code": "EVC 47",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
     "indigenous_species_current": 24,
     "indigenous_species_baseline": 8,
     "indigenous_species_target": 40,
     "indigenous_dominant": false,
-    "structural_layers_current": 5,
+    "structural_layers_current": 1,
     "structural_layers_baseline": 2,
-    "structural_layers_max": 5,
-    "canopy_cover_pct_current": 5,
-    "canopy_cover_pct_baseline": 12,
+    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_baseline": 0,
     "canopy_cover_pct_target": 55,
-    "weed_pressure": "Low",
+    "weed_pressure": "low",
     "weed_pressure_baseline": "high",
     "species_list": [
       "Hardenbergia violacea",
@@ -57,10 +57,11 @@
       "Eucalyptus radiata",
       "Austrodanthonia racemosa",
       "Acacia verticillata"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
-    "soil_health_score": 3,
+    "soil_health_score": 2,
     "soil_health_baseline": 2,
     "soil_health_max": 5,
     "water_function_score": 4,
@@ -69,15 +70,18 @@
     "has_rainwater_system": false,
     "has_moisture_basin": true,
     "has_swale": true,
-    "mulch_depth_mm": 75
+    "mulch_depth_mm": 75,
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
-    "habitat_nodes": 3,
+    "habitat_nodes": 1,
     "habitat_nodes_baseline": 0,
     "has_embedded_logs": true,
     "has_rock_refuges": true,
     "has_water_feature": true,
     "has_nest_boxes": false,
+    "planting_method": "Miyawaki-style layering",
     "fauna_sightings": [
       {
         "species": "Burrowing frog",
@@ -85,51 +89,48 @@
         "location": "Lower slope refuge zone",
         "verified": true
       }
-    ],
-    "planting_method": "Miyawaki-style layering",
-    "water_feature_count": 6
+    ]
   },
   "connectivity": {
+    "display_lat": -37.8312,
+    "display_lng": 145.0957,
     "adjacent_park": true,
     "park_name": "South Surrey Park",
     "park_distance_m": 45,
+    "park_lat": -37.831735,
+    "park_lng": 145.096353,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-SH-MID-001",
         "garden_id": "ER-AU-VIC-SH-MID-001",
         "name": "Middlesex",
         "verified": true,
-        "distance_m": 452,
-        "display_lat": -37.8314,
-        "display_lng": 145.0866
+        "distance_m": 458,
+        "display_lat": -37.8318,
+        "display_lng": 145.0872
       }
     ],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.4,
+    "effective_ecological_area_ha": 0.02,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills",
-    "park_lat": -37.8332,
-    "park_lng": 145.0938,
     "cluster": {
       "name": "Surrey Hills",
       "gardens": 2,
       "area_ha": 0.48,
       "status": "Forming"
-    },
-    "display_lat": -37.831279,
-    "display_lng": 145.094142,
-    "lat": -37.831279,
-    "lng": 145.094142
+    }
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
+    "has_species_list": false,
     "has_fauna_record": true,
-    "has_species_list": true,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -159,6 +160,22 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 61/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological function score: 74/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
     {
       "title": "Pre-design site analysis -- ecological context mapping",
       "date": "31 Jul 2025",
@@ -382,5 +399,7 @@
         ]
       }
     ]
-  }
+  },
+  "garden_address": "8 Arundel Crescent, Surrey Hills, Victoria",
+  "steward_email": ""
 }

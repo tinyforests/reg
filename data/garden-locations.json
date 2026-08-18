@@ -1,15 +1,15 @@
 [
   {
     "garden_id": "ER-AU-VIC-NIL-BEL-001",
-    "garden_name": "Bellbird",
-    "display_lat": -37.6961,
-    "display_lng": 145.1608
+    "garden_name": "Wattle Glen Bush Garden",
+    "display_lat": -37.684537,
+    "display_lng": 145.193461
   },
   {
     "garden_id": "ER-AU-VIC-SH-ARU-0001",
     "garden_name": "Arundel",
-    "display_lat": -37.833,
-    "display_lng": 145.097
+    "display_lat": -37.831279,
+    "display_lng": 145.094142
   },
   {
     "garden_id": "ER-AU-VIC-SY-NIC-0002",
