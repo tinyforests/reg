@@ -19,11 +19,11 @@
       "council": "Nillumbik Shire Council",
       "ward": "",
       "lga": "Nillumbik",
-      "score": 62,
+      "score": 74,
       "rating": {
         "current": "Registered Ecological Garden",
         "next": "High Habitat Garden",
-        "points_to_next": 19
+        "points_to_next": 7
       },
       "primary_evc": "Box Ironbark Forest (EVC 61)",
       "bioregion": "Highlands - Southern Fall",
@@ -58,11 +58,11 @@
       "garden_name": "Arundel",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 58,
+      "score": 60,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 3
+        "points_to_next": 1
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -70,12 +70,13 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 4,
+      "badge_count": 5,
       "badges": [
         "species_rich_20",
         "amphibian_active",
         "gs_verified",
-        "fauna_record"
+        "fauna_record",
+        "full_record"
       ],
       "profile_url": "/gardens/arundel/index.html",
       "data_file": "data/arundel.json",

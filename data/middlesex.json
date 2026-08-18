@@ -90,8 +90,8 @@
         "name": "Arundel",
         "verified": true,
         "distance_m": 458,
-        "display_lat": -37.8312,
-        "display_lng": 145.0957
+        "display_lat": -37.8332,
+        "display_lng": 145.0971
       }
     ],
     "corridor_node_confirmed": false,
@@ -104,8 +104,8 @@
       "area_ha": 0.48,
       "status": "Forming"
     },
-    "display_lat": -37.8318,
-    "display_lng": 145.0872
+    "display_lat": -37.8314,
+    "display_lng": 145.0866
   },
   "evidence": {
     "has_photos": true,

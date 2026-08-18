@@ -113,8 +113,8 @@
     ]
   },
   "connectivity": {
-    "display_lat": -37.685,
-    "display_lng": 145.1924,
+    "display_lat": -37.6857,
+    "display_lng": 145.1962,
     "adjacent_park": true,
     "park_name": "Nillumbik Green Wedge Corridor",
     "park_distance_m": 0,
@@ -133,10 +133,10 @@
     }
   },
   "evidence": {
-    "has_photos": false,
+    "has_photos": true,
     "has_field_notes": false,
-    "has_species_list": false,
-    "has_fauna_record": false,
+    "has_species_list": true,
+    "has_fauna_record": true,
     "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",

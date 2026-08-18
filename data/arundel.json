@@ -14,10 +14,10 @@
   "area_sqm": 180,
   "description": "Arundel responds to a fragmented Grassy Woodland and Valley Grassy Forest context, restoring ecological function through layered planting, dense groundcover and woodland structure. The garden reconnects soil, water and habitat to South Surrey Park, contributing to local biodiversity and long-term landscape resilience.",
   "evc": {
-    "name": "Valley Grassy Forest",
-    "code": "EVC 47",
-    "bioregion": "Gippsland Plain",
-    "bioregion_code": "5.1",
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP",
     "note": ""
   },
   "biodiversity": {
@@ -92,8 +92,8 @@
     ]
   },
   "connectivity": {
-    "display_lat": -37.8312,
-    "display_lng": 145.0957,
+    "display_lat": -37.8332,
+    "display_lng": 145.0971,
     "adjacent_park": true,
     "park_name": "South Surrey Park",
     "park_distance_m": 45,
@@ -106,8 +106,8 @@
         "name": "Middlesex",
         "verified": true,
         "distance_m": 458,
-        "display_lat": -37.8318,
-        "display_lng": 145.0872
+        "display_lat": -37.8314,
+        "display_lng": 145.0866
       }
     ],
     "corridor_node_confirmed": false,
@@ -124,7 +124,7 @@
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_species_list": false,
+    "has_species_list": true,
     "has_fauna_record": true,
     "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
