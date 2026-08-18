@@ -1339,7 +1339,7 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
     fetch(liveUrl)
       .then(function(r) { return r.json(); })
       .then(function(d) {
-        if (d && d.ok && d.data) { G = d.data; }
+        if (d && d.ok && d.data) { G = d.data; render(); _afterRender(); }
       })
       .catch(function() {});
   }
