@@ -197,7 +197,9 @@ Badges are returned in three categorised arrays plus a combined `all_badges`:
 
 ### Corridor Node — earned, not assumed
 
-The badge engine reads `connectivity.corridor_node_confirmed`. Do not set this to `true` based on adjacency alone. The defensible thresholds:
+The badge engine reads `connectivity.corridor_node_confirmed`. Do not set this to `true` based on adjacency alone.
+
+**Planting maturity test (v1.0)**
 
 - Plants at least 12 months established
 - Canopy or shrub layer closing — overhead cover present
@@ -205,6 +207,18 @@ The badge engine reads `connectivity.corridor_node_confirmed`. Do not set this t
 - Ideally a documented fauna sighting
 
 A freshly planted garden — even one with great design and great neighbours — does not earn this badge until function exists. Patience is the rule.
+
+**Spatial test (v1.1 — 2026-08-18)**
+
+- At least two habitat patches (registered gardens, parks, or mapped green corridors) lie within 300m of this garden in at least two non-adjacent directions.
+- This garden sits between them — its position measurably shortens the gap a dispersing animal or seed must cross.
+- The named patches must be recorded: in `connectivity.park_name`, `connectivity.adjacent_registered_gardens`, or an assessor note in the activity log.
+
+The 300m threshold is consistent with the park-proximity band already used by `scoreConnectivity()`. A corridor claim beyond 300m is unsupported by any other part of the engine.
+
+A garden that is merely adjacent to two neighbours does not qualify automatically. The test is direction and position: the patches must lie in roughly opposing directions such that this garden forms a stepping stone, not just a cluster member.
+
+Both tests must be satisfied. The assess.html input carries the same wording for in-form reference.
 
 ### Data shape the badge engine expects
 

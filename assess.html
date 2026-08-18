@@ -537,6 +537,7 @@
                 </div>
                 <div class="col-span-2 mt-1">
                   <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" id="f_con_corridor" /><span>Corridor node confirmed (+5 pts)</span></label>
+                  <p class="text-xs opacity-50 mt-1 leading-relaxed" style="padding-left:1.75rem">Tick when: (1) the planting is at least 12 months old, the canopy or shrub layer is beginning to close, and at least 15 indigenous species are established in the ground; and (2) two or more habitat patches — registered gardens, parks, or mapped green corridors — lie within 300m in at least two directions, with this garden sitting between them. Name the patches in the notes.</p>
                 </div>
               </div>
 
@@ -800,6 +801,7 @@ function populateFormFromRecord(r) {
   sv('f_garden_name',       r.garden_name);
   sv('f_garden_id',         r.garden_id);
   sv('f_garden_address',    r.garden_address || '');
+  sv('f_con_garden_address', r.garden_address || '');
   sv('f_steward_email',     r.steward_email  || '');
   sv('f_suburb',            r.suburb);
   sv('f_state',             r.state);
