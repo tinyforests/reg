@@ -56,11 +56,11 @@
       "garden_name": "Arundel",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 73,
+      "score": 61,
       "rating": {
         "current": "Registered Ecological Garden",
         "next": "High Habitat Garden",
-        "points_to_next": 8
+        "points_to_next": 20
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -83,7 +83,7 @@
       "typology": "Ecological Forest Garden",
       "registry_role": "Performer",
       "trajectory": "Rising",
-      "points_available": 19,
+      "points_available": 39,
       "cluster": {
         "name": "Surrey Hills",
         "gardens": 4,

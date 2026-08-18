@@ -1958,6 +1958,11 @@ function _erPublishToRegistry() {
   }
   var result = scoreEcologicalRegistry(record);
   var nextLvl = result.nextLevel || {};
+  record.score = {
+    total:      result.total,
+    rating:     result.rating,
+    categories: result.categories
+  };
   record.rating = {
     current: result.rating,
     next: nextLvl.name || 'Maximum Level Achieved',

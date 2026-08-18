@@ -924,7 +924,7 @@ function render() {
     var _hs = document.getElementById('heroStewards');
     if (_hs) _hs.innerHTML = '<span style="opacity:.4">—</span>';
   }
-  txt('heroScore',    result.total);
+  var _displayScore = (R.score && R.score.total != null) ? R.score.total : result.total; txt('heroScore', _displayScore);
   txt('heroLevel',    result.level);
   txt('heroBaseline', result.baselineScore);
   txt('heroTarget',   R.target_score);

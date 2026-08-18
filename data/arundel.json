@@ -116,10 +116,10 @@
       "area_ha": 0.48,
       "status": "Forming"
     },
-    "display_lat": -37.831278,
-    "display_lng": 145.094139,
-    "lat": -37.831278,
-    "lng": 145.094139
+    "display_lat": -37.831279,
+    "display_lng": 145.094142,
+    "lat": -37.831279,
+    "lng": 145.094142
   },
   "evidence": {
     "has_photos": true,
@@ -295,9 +295,9 @@
   "rating": {
     "current": "Registered Ecological Garden",
     "next": "High Habitat Garden",
-    "points_to_next": 8
+    "points_to_next": 20
   },
-  "upgrade_potential": 19,
+  "upgrade_potential": 39,
   "points_available": 19,
   "yield": {
     "eligible": true,
@@ -320,5 +320,64 @@
   },
   "council": "Boroondara City Council",
   "ward": "Gardiner",
-  "lga": "Boroondara"
+  "lga": "Boroondara",
+  "score": {
+    "total": 61,
+    "rating": "Registered Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 8,
+        "max": 25,
+        "notes": [
+          "20-29 indigenous species"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 12,
+        "max": 20,
+        "notes": [
+          "Soil health 2/5",
+          "Water function 4/5",
+          "Moisture basin",
+          "Swale installed"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 13,
+        "max": 20,
+        "notes": [
+          "1-2 habitat nodes",
+          "Embedded logs",
+          "Rock refuges",
+          "Water feature",
+          "1 fauna sighting"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 15,
+        "max": 20,
+        "notes": [
+          "Park within 50m",
+          "3+ adjacent registered",
+          "2.1ha cluster"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 13,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Fauna record",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
+  }
 }
