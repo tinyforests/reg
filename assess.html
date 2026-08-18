@@ -806,6 +806,8 @@ function populateFormFromRecord(r) {
   sv('f_area_sqm',          r.area_sqm);
   sv('f_evc_name',          r.evc && r.evc.name);
   sv('f_evc_code',          r.evc && r.evc.code);
+  sv('f_evc_bioregion',     r.evc && r.evc.bioregion);
+  sv('f_evc_bioregion_code', r.evc && r.evc.bioregion_code);
   (function() {
     var evcSt = document.getElementById('evc_status');
     if (evcSt && r.evc && r.evc.name) {
