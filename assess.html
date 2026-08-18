@@ -1314,14 +1314,30 @@ function _erLookupEvc(lat, lng) {
       if (!match) return;
       var p = match.properties;
       console.info('[EVC WFS properties]', JSON.stringify(p));
-      var evcCode    = 'EVC ' + (p.evc || p.evc_no || p.EVC || p.EVC_NO || '');
-      var evcName    = p.x_evcname || p.evc_name || p.EVCNAME || p.X_EVCNAME || '';
-      var bioregion  = p.bioregion_name || p.biore_name || p.bioregion || p.BIOREGION_NAME || p.BIORE_NAME || p.BIOREGION || '';
-      var bioregCode = p.bioregion_no || p.biore_no || p.bioregion_code || p.BIOREGION_NO || p.BIORE_NO || '';
-      var evcEl  = document.getElementById('f_evc_name');  if (evcEl  && evcName)    evcEl.value  = evcName;
-      var codeEl = document.getElementById('f_evc_code');  if (codeEl && evcCode)    codeEl.value = evcCode;
-      var brEl   = document.getElementById('f_evc_bioregion');      if (brEl  && bioregion)  brEl.value   = bioregion;
+
+      /* Scan property keys for bioregion name/code regardless of exact naming */
+      function _wfsPick(obj, patterns) {
+        var keys = Object.keys(obj);
+        for (var pi = 0; pi < patterns.length; pi++) {
+          var re = new RegExp(patterns[pi], 'i');
+          for (var ki = 0; ki < keys.length; ki++) {
+            if (re.test(keys[ki]) && obj[keys[ki]]) return String(obj[keys[ki]]);
+          }
+        }
+        return '';
+      }
+
+      var evcCode    = 'EVC ' + (_wfsPick(p, ['^evc$', '^evc_no$', '^evc_num$']) || '');
+      var evcName    = _wfsPick(p, ['^x_evcname$', '^evcname$', '^evc_name$', 'evcname', 'evc_name']);
+      var bioregion  = _wfsPick(p, ['^bioregion_name$', '^biore_name$', '^bioregion$', 'bioregion_name', 'biore_name', 'bioregion']);
+      var bioregCode = _wfsPick(p, ['^bioregion_no$', '^biore_no$', '^bioregion_code$', 'bioregion_no', 'biore_no', 'bioregion_code']);
+
+      var evcEl  = document.getElementById('f_evc_name');         if (evcEl  && evcName)    evcEl.value    = evcName;
+      var codeEl = document.getElementById('f_evc_code');         if (codeEl && evcCode)    codeEl.value   = evcCode;
+      var brEl   = document.getElementById('f_evc_bioregion');    if (brEl   && bioregion)  brEl.value     = bioregion;
       var brcEl  = document.getElementById('f_evc_bioregion_code'); if (brcEl && bioregCode) brcEl.value  = bioregCode;
+
+      console.info('[EVC fill]', { evcName: evcName, evcCode: evcCode, bioregion: bioregion, bioregCode: bioregCode });
       var statusEl = document.getElementById('evc_status');
       if (statusEl && evcName) {
         statusEl.textContent = evcName + (evcCode ? ' · ' + evcCode : '') + (bioregion ? ' · ' + bioregion : '');
