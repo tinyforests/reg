@@ -714,7 +714,7 @@ function buildRecordFromForm() {
       note:           lrEvc.note || ''
     },
     biodiversity: {
-      indigenous_species_current:  gn('f_bio_species_current'),
+      indigenous_species_current:  gn('f_bio_species_current') || (_speciesList.length || null),
       indigenous_species_baseline: gn('f_bio_species_baseline'),
       indigenous_species_target:   gn('f_bio_species_target'),
       indigenous_dominant:         gc('f_bio_dominant'),
@@ -1623,6 +1623,16 @@ function renderSpeciesList() {
       '</div>';
   }
   container.innerHTML = h;
+
+  /* Keep species count field in sync with list length */
+  var countEl = document.getElementById('f_bio_species_current');
+  if (countEl) {
+    var existing = parseInt(countEl.value, 10);
+    if (isNaN(existing) || existing !== _speciesList.length) {
+      countEl.value = _speciesList.length;
+      renderLive();
+    }
+  }
 }
 
 function searchSpecies(query) {
