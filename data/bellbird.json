@@ -259,7 +259,7 @@
   "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
   "steward_email": "sam@samcoxlandscape.com",
   "score": {
-    "total": 68,
+    "total": 74,
     "rating": "Registered Ecological Garden",
     "categories": [
       {
@@ -305,9 +305,12 @@
       },
       {
         "label": "Evidence & Verification",
-        "score": 7,
+        "score": 13,
         "max": 15,
         "notes": [
+          "Photos",
+          "Species list",
+          "Fauna record",
           "Professional assessment",
           "G&S Verified"
         ]
