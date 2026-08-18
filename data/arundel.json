@@ -72,7 +72,7 @@
     "mulch_depth_mm": 75
   },
   "habitat": {
-    "habitat_nodes": 5,
+    "habitat_nodes": 3,
     "habitat_nodes_baseline": 0,
     "has_embedded_logs": true,
     "has_rock_refuges": true,
@@ -322,23 +322,25 @@
   "ward": "Gardiner",
   "lga": "Boroondara",
   "score": {
-    "total": 61,
+    "total": 71,
     "rating": "Registered Ecological Garden",
     "categories": [
       {
         "label": "Biodiversity Structure",
-        "score": 8,
+        "score": 15,
         "max": 25,
         "notes": [
-          "20-29 indigenous species"
+          "20-29 indigenous species",
+          "5 structural layers",
+          "5-14% canopy"
         ]
       },
       {
         "label": "Soil & Water Function",
-        "score": 12,
+        "score": 14,
         "max": 20,
         "notes": [
-          "Soil health 2/5",
+          "Soil health 3/5",
           "Water function 4/5",
           "Moisture basin",
           "Swale installed"
@@ -346,10 +348,10 @@
       },
       {
         "label": "Habitat Complexity",
-        "score": 13,
+        "score": 15,
         "max": 20,
         "notes": [
-          "1-2 habitat nodes",
+          "3-4 habitat nodes",
           "Embedded logs",
           "Rock refuges",
           "Water feature",
@@ -358,21 +360,22 @@
       },
       {
         "label": "Connectivity",
-        "score": 15,
+        "score": 12,
         "max": 20,
         "notes": [
           "Park within 50m",
-          "3+ adjacent registered",
+          "1 adjacent registered",
           "2.1ha cluster"
         ]
       },
       {
         "label": "Evidence & Verification",
-        "score": 13,
+        "score": 15,
         "max": 15,
         "notes": [
           "Photos",
           "Field notes",
+          "Species list",
           "Fauna record",
           "Professional assessment",
           "G&S Verified"

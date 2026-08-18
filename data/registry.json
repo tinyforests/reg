@@ -57,25 +57,27 @@
       "garden_name": "Arundel",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 61,
+      "score": 71,
       "rating": {
         "current": "Registered Ecological Garden",
         "next": "High Habitat Garden",
-        "points_to_next": 20
+        "points_to_next": 10
       },
-      "primary_evc": "Valley Grassy Forest (EVC 47)",
-      "bioregion": "Gippsland Plain",
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Victorian Volcanic Plain",
       "status": "Active / Establishing",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 5,
+      "badge_count": 7,
       "badges": [
-        null,
-        null,
-        null,
-        null,
-        null
+        "species_rich_20",
+        "five_layers",
+        "habitat_builder",
+        "amphibian_active",
+        "gs_verified",
+        "fauna_record",
+        "full_record"
       ],
       "profile_url": "/gardens/arundel/index.html",
       "data_file": "data/arundel.json",
