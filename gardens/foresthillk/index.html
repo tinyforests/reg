@@ -639,7 +639,7 @@ function render() {
     var _hs = document.getElementById('heroStewards');
     if (_hs) _hs.innerHTML = '<span style="opacity:.4">—</span>';
   }
-    var _displayScore = (R.score && R.score.total != null) ? R.score.total : result.total; txt('heroScore', _displayScore);
+    txt('heroScore', result.total);
     txt('heroLevel',    result.level);
     txt('heroId',       R.garden_id);
     wid('heroScoreBar', result.total);
