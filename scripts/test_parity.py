@@ -22,7 +22,7 @@ NODE_BRIDGE = os.path.join(REPO_ROOT, 'scripts', 'score_garden.js')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from reg_score import score_ecological_registry
 
-SKIP_FILES = {'registry.json', 'species.json', 'badge-definitions.json', 'gardens.json'}
+SKIP_FILES = {'registry.json', 'species.json', 'badge-definitions.json', 'gardens.json', 'garden-locations.json'}
 PILLARS    = ['biodiversity', 'soil_water', 'habitat', 'connectivity', 'evidence']
 
 
