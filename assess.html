@@ -274,7 +274,7 @@
             </div>
             <div>
               <div class="opacity-50 mb-1">Trajectory</div>
-              <select id="f_trajectory">
+              <select id="f_trajectory" onchange="_erUpdateTrajectoryDesc()">
                 <option value="">-- Select --</option>
                 <option value="Emerging">Emerging</option>
                 <option value="Forming">Forming</option>
@@ -282,6 +282,7 @@
                 <option value="Stable">Stable</option>
                 <option value="Established">Established</option>
               </select>
+              <div id="trajectory_desc" class="text-xs mt-1" style="display:none;opacity:.65;line-height:1.4"></div>
             </div>
             <div>
               <div class="opacity-50 mb-1">Target Score</div>
@@ -818,7 +819,7 @@ function populateFormFromRecord(r) {
   sv('f_garden_type',       r.garden_type || '');
   sv('f_typology',          r.typology || '');
   sv('f_registry_role',     r.registry_role || ''); _erUpdateRoleDesc();
-  sv('f_trajectory',        r.trajectory || '');
+  sv('f_trajectory',        r.trajectory || '');   _erUpdateTrajectoryDesc();
   sv('f_target_score',      r.target_score || '');
   sv('f_council',           r.council || '');
   sv('f_ward',              r.ward || '');
@@ -1247,6 +1248,23 @@ var _erFetchIdentityAddr = _erDebounce(function(q) {
 function _erAddrInput(val)         { _erFetchSuggestions(val); }
 function _erIdentityAddrInput(val) { _erFetchIdentityAddr(val); }
 function _erAddrBlur()             { setTimeout(_erHideAddrDrop, 200); }
+
+var _TRAJECTORY_DESCS = {
+  'Emerging':    'Garden is newly planted or in its first years of establishment. Species are settling in, structure is forming. Ecological function is beginning but not yet legible at scale.',
+  'Forming':     'Planting is established and structural layers are developing. Ecological signals are present but the garden has not yet reached a stable, self-sustaining state.',
+  'Rising':      'Ecological function is improving season on season. Species diversity, canopy cover, or habitat complexity are measurably increasing. The garden is building momentum.',
+  'Stable':      'The garden has reached a consistent ecological baseline. Function is maintained year to year with modest steward input. A platform for incremental improvement.',
+  'Established': 'Long-term ecological garden with a mature structure, deep soil biology, and self-sustaining processes. A reference point for the network.'
+};
+
+function _erUpdateTrajectoryDesc() {
+  var sel = document.getElementById('f_trajectory');
+  var desc = document.getElementById('trajectory_desc');
+  if (!sel || !desc) return;
+  var d = _TRAJECTORY_DESCS[sel.value];
+  if (d) { desc.textContent = d; desc.style.display = ''; }
+  else    { desc.style.display = 'none'; }
+}
 
 var _ROLE_DESCS = {
   'Cluster Seed': 'The originating garden. Source of local provenance seed, species diversity and ecological function that anchors a neighbourhood cluster. The network grows from here.',
