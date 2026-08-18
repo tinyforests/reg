@@ -193,7 +193,10 @@
           var h2 = _recordSec.querySelector('h2');
           if (!h2) return Math.round(window.innerHeight * 0.6);
           var r = h2.getBoundingClientRect();
-          return Math.max(80, window.innerHeight - r.bottom - 4);
+          var hdr = document.querySelector('header');
+          var headerH = hdr ? hdr.getBoundingClientRect().height : 0;
+          var maxH = window.innerHeight - headerH;
+          return Math.min(maxH, Math.max(80, window.innerHeight - r.bottom - 4));
         }
 
         function _erScrollTrack() {
