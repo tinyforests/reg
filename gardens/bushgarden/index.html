@@ -1308,7 +1308,7 @@ document.getElementById('themeToggle').addEventListener('click', function() {
 });
 
 var _GARDEN_ID   = 'ER-AU-VIC-NIL-BEL-001';
-var _staticJson  = '/data/bellbird.json';
+var _staticJson  = '/data/bushgarden.json';
 var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
 
 (function loadGardenRecord() {
@@ -1331,7 +1331,7 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
       console.error('Could not load garden data:', err);
       document.getElementById('heroName').textContent = 'Data unavailable';
       document.getElementById('heroScore').textContent = '--';
-      document.getElementById('heroLevel').textContent = 'Check /data/bellbird.json';
+      document.getElementById('heroLevel').textContent = 'Check /data/bushgarden.json';
     });
 
   /* Live fetch runs in parallel — silently upgrades when ready */
