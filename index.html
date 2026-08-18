@@ -697,15 +697,67 @@
     strip.innerHTML = cards.map(stripCard).join('');
   }
 
+  var _ER_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec';
+  var _gardenMap = {};   /* garden_id -> registry entry, kept in sync */
+
+  function _rerender() {
+    var all = Object.values ? Object.values(_gardenMap) : Object.keys(_gardenMap).map(function(k){ return _gardenMap[k]; });
+    var hero = all
+      .filter(function (g) { return scoreOf(g) > 0; })
+      .sort(function (a, b) { return scoreOf(b) - scoreOf(a); })[0];
+    renderHero(hero);
+    renderStrip(all, hero);
+  }
+
+  /* Merge live Apps Script record into the garden map entry */
+  function _mergeLive(existing, live) {
+    return {
+      garden_id:          existing.garden_id,
+      garden_name:        live.garden_name        || existing.garden_name,
+      suburb:             live.suburb              || existing.suburb,
+      state:              live.state               || existing.state || 'VIC',
+      score:              (live.score && live.score.total != null) ? live.score.total : existing.score,
+      rating:             live.rating              || existing.rating,
+      primary_evc:        (live.evc && live.evc.name) ? (live.evc.code ? live.evc.name + ' (' + live.evc.code + ')' : live.evc.name) : existing.primary_evc,
+      bioregion:          (live.evc && live.evc.bioregion) || existing.bioregion,
+      status:             live.status              || existing.status,
+      verification_level: (live.evidence && live.evidence.verification_level) || existing.verification_level,
+      verification_label: (live.evidence && live.evidence.verification_label) || existing.verification_label,
+      typology:           live.typology            || existing.typology,
+      registry_role:      live.registry_role       || existing.registry_role,
+      trajectory:         live.trajectory          || existing.trajectory,
+      badge_count:        existing.badge_count,
+      badges:             existing.badges,
+      profile_url:        existing.profile_url,
+      points_available:   live.points_available    != null ? live.points_available : existing.points_available,
+      cluster:            live.cluster             || existing.cluster,
+      council:            live.council             || existing.council,
+      ward:               live.ward                || existing.ward,
+      lga:                live.lga                 || existing.lga
+    };
+  }
+
+  /* Static load — renders immediately */
   fetch('/data/registry.json', { cache: 'no-store' })
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function (data) {
       var gardens = (data.gardens || []).filter(function (g) { return !g.demo; });
-      var hero = gardens
-        .filter(function (g) { return scoreOf(g) > 0; })
-        .sort(function (a, b) { return scoreOf(b) - scoreOf(a); })[0];
-      renderHero(hero);
-      renderStrip(gardens, hero);
+      gardens.forEach(function(g) { _gardenMap[g.garden_id] = g; });
+      _rerender();
+
+      /* Live upgrade — fetch each garden's record from Apps Script in parallel */
+      gardens.forEach(function(g) {
+        if (!g.garden_id) return;
+        fetch(_ER_ENDPOINT + '?action=get_garden_record&garden_id=' + encodeURIComponent(g.garden_id))
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (d && d.ok && d.data) {
+              _gardenMap[g.garden_id] = _mergeLive(g, d.data);
+              _rerender();
+            }
+          })
+          .catch(function() {});
+      });
     })
     .catch(function (err) { console.error('Registry surfaces failed to load:', err); });
 })();
