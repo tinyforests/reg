@@ -339,25 +339,25 @@
   "ward": "Gardiner",
   "lga": "Boroondara",
   "score": {
-    "total": 71,
-    "rating": "Registered Ecological Garden",
+    "total": 60,
+    "rating": "Ecological Garden",
     "categories": [
       {
         "label": "Biodiversity Structure",
-        "score": 15,
+        "score": 8,
         "max": 25,
         "notes": [
           "20-29 indigenous species",
-          "5 structural layers",
-          "5-14% canopy"
+          "1 structural layer",
+          "Canopy not yet established"
         ]
       },
       {
         "label": "Soil & Water Function",
-        "score": 14,
+        "score": 12,
         "max": 20,
         "notes": [
-          "Soil health 3/5",
+          "Soil health 2/5",
           "Water function 4/5",
           "Moisture basin",
           "Swale installed"
@@ -365,10 +365,10 @@
       },
       {
         "label": "Habitat Complexity",
-        "score": 15,
+        "score": 13,
         "max": 20,
         "notes": [
-          "3-4 habitat nodes",
+          "1 habitat node",
           "Embedded logs",
           "Rock refuges",
           "Water feature",

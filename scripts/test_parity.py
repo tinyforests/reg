@@ -46,6 +46,7 @@ def run():
 
     passed = failed = 0
     failures = []
+    stale_blocks = []  # stored score.total that no longer matches its inputs
 
     print(f'Parity check: {len(garden_files)} gardens\n')
     print(f'{"Garden":<32} {"JS":>5} {"PY":>5} {"Diff":>5}  {"Result"}')
@@ -81,6 +82,16 @@ def run():
                 failed += 1
                 failures.append({'file': filename, 'name': name, 'js': js, 'py': py})
 
+            # Stored score.total is an unread cache in the profile (which
+            # computes live) but it drifts when inputs change without a
+            # republish. Flag any block that no longer matches its inputs.
+            block = record.get('score')
+            if isinstance(block, dict) and block.get('total') is not None:
+                if block['total'] != py['total']:
+                    stale_blocks.append({
+                        'name': name, 'stored': block['total'], 'computed': py['total'],
+                    })
+
         except Exception as exc:
             print(f'{name:<32} {"ERR":>5} {"ERR":>5} {"?":>5}  ERROR: {exc}')
             failed += 1
@@ -89,10 +100,16 @@ def run():
     print('─' * 62)
     print(f'{passed} passed  {failed} failed\n')
 
+    if stale_blocks:
+        print('STALE stored score blocks (stored total != computed):')
+        for s in stale_blocks:
+            print(f'  {s["name"]:<30} stored={s["stored"]}  computed={s["computed"]}')
+        print('  Fix: update the data file\'s score.total to the computed value.\n')
+
     if failures and not verbose:
         print('Run with --verbose for per-pillar breakdown.\n')
 
-    if failures:
+    if failures or stale_blocks:
         for f in failures:
             if 'error' not in f and not verbose:
                 js, py = f['js'], f['py']
