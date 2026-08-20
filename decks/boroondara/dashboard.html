@@ -309,7 +309,7 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
         <span class="lab">Network</span>
         <div class="ro"><span>Habitat links</span><b id="nLinks">0</b></div>
         <div class="ro"><span>Connected clusters</span><b id="nClusters">0</b></div>
-        <div class="ro"><span>Gardens in largest cluster</span><b id="nLargest">0</b></div>
+        <div class="ro"><span>Gardens in longest corridor</span><b id="nLargest">0</b></div>
         <div class="ro"><span>Reserves joined by gardens</span><b id="nBridged">0</b></div>
         <div class="ro"><span>Longest continuous chain</span><b id="nChain">0</b></div>
         <div class="ro"><span>Gardens standing alone</span><b id="nOrphan">0</b></div>
@@ -624,26 +624,72 @@ const NAMES=["Rosebank","Wattle Bank","The Paddock","Hazel Street","Kooyong Clos
 "Mat Rush","Kunzea","Nectar Row","Billabong","Creekside","Two Elms","Blackwood"];
 const EVCS=["EVC 47 Valley Grassy Forest","EVC 55 Plains Grassy Woodland","EVC 56 Floodplain Riparian Woodland","EVC 175 Grassy Woodland"];
 
-function generate(count,seed,tight){
+/* ── Corridor spines ──
+   Reserve-to-reserve routes a revegetation program would actually work along.
+   Illustrative gardens are placed by walking these, not scattered at random. */
+const SPINES=[
+ {n:"Greythorn to the Yarra", pts:[
+   [-37.7902,145.0812],[-37.7928,145.0742],[-37.7948,145.0648],[-37.7898,145.0612],
+   [-37.7932,145.0532],[-37.7958,145.0468],[-37.7974,145.0402],[-37.7994,145.0300],[-37.8010,145.0210]]},
+ {n:"Balwyn North ridge", pts:[
+   [-37.7966,145.0944],[-37.7930,145.0872],[-37.7902,145.0812],[-37.7972,145.0834],
+   [-37.8044,145.0856],[-37.8078,145.0824],[-37.8104,145.0798]]},
+ {n:"Back Creek", pts:[
+   [-37.8104,145.0798],[-37.8126,145.0698],[-37.8202,145.0712],[-37.8302,145.0704],
+   [-37.8342,145.0640],[-37.8402,145.0592],[-37.8462,145.0562],[-37.8522,145.0602],[-37.8582,145.0648]]},
+ {n:"Canterbury ridge", pts:[
+   [-37.8240,145.0994],[-37.8244,145.0928],[-37.8248,145.0868],[-37.8250,145.0808],
+   [-37.8250,145.0742],[-37.8286,145.0712],[-37.8302,145.0704]]},
+ {n:"Gardiners Creek", pts:[
+   [-37.8452,145.1090],[-37.8480,145.0958],[-37.8502,145.0848],[-37.8522,145.0740],
+   [-37.8536,145.0618],[-37.8520,145.0498],[-37.8490,145.0380],[-37.8456,145.0262]]},
+ {n:"Hawthorn to Auburn", pts:[
+   [-37.8262,145.0296],[-37.8208,145.0318],[-37.8170,145.0336],[-37.8200,145.0368],
+   [-37.8218,145.0388],[-37.8234,145.0444],[-37.8248,145.0498],[-37.8252,145.0566]]},
+ {n:"Wattle Park link", pts:[
+   [-37.8396,145.0928],[-37.8400,145.0846],[-37.8420,145.0770],[-37.8452,145.0700],
+   [-37.8462,145.0620],[-37.8462,145.0562]]},
+ {n:"Ashburton south", pts:[
+   [-37.8582,145.0648],[-37.8618,145.0712],[-37.8652,145.0796],[-37.8636,145.0876]]}
+];
+
+/* walk a spine, dropping n points at even arc-length with lateral scatter */
+function walkSpine(pts,spacingM,lateralM,rnd){
+  const segs=[];let total=0;
+  for(let i=0;i<pts.length-1;i++){
+    const a={lat:pts[i][0],lng:pts[i][1]},b={lat:pts[i+1][0],lng:pts[i+1][1]};
+    const d=metres(a,b);segs.push({a,b,d,start:total});total+=d;
+  }
+  const n=Math.max(2,Math.round(total/spacingM));
+  const out=[];
+  for(let i=0;i<n;i++){
+    let t=((i+0.5)/n)*total+(rnd()-.5)*spacingM*0.55;
+    t=Math.max(0,Math.min(total-1,t));
+    let s=segs[segs.length-1];
+    for(const q of segs){if(t<=q.start+q.d){s=q;break}}
+    const f=(t-s.start)/(s.d||1);
+    const lat=s.a.lat+(s.b.lat-s.a.lat)*f, lng=s.a.lng+(s.b.lng-s.a.lng)*f;
+    const dx=(s.b.lng-s.a.lng)*MLNG, dy=(s.b.lat-s.a.lat)*MLAT, L=Math.hypot(dx,dy)||1;
+    const off=(rnd()-.5)*2*lateralM;
+    out.push({lat:lat+(-dx/L*off)/MLAT, lng:lng+(dy/L*off)/MLNG});
+  }
+  return out;
+}
+
+function buildRecords(positions,seed){
   const rnd=seeded(seed),out=[];
-  const anchors=tight
-    ? RESERVES.filter(r=>["Greythorn Park","Bellbird Dell","Burke Rd Billabong","Hays Paddock","Maranoa Gardens"].indexOf(r.n)>-1)
-    : RESERVES.concat(SUBURBS.map(s=>({lat:s.lat,lng:s.lng,r:800})));
-  for(let i=0;i<count;i++){
-    const a=anchors[Math.floor(rnd()*anchors.length)];
-    const sp=(a.r||400)/MLAT*(tight?2.6:3.4);
-    const lat=a.lat+(rnd()-.5)*sp*2, lng=a.lng+(rnd()-.5)*sp*2*(MLAT/MLNG);
-    if(lat<B.s+.003||lat>B.n-.003||lng<B.w+.004||lng>B.e-.004){i--;continue}
+  positions.forEach((p,i)=>{
+    if(p.lat<B.s+.003||p.lat>B.n-.003||p.lng<B.w+.004||p.lng>B.e-.004)return;
     const roll=rnd();
     const status=roll<.2?"verified":roll<.72?"third":"provisional";
     const base=status==="verified"?36:status==="third"?27:16;
     const score=Math.max(8,Math.min(94,Math.round(base+rnd()*36)));
-    const sub=SUBURBS.reduce((b,s)=>metres({lat,lng},s)<metres({lat,lng},b)?s:b,SUBURBS[0]).n;
+    const sub=SUBURBS.reduce((b,s)=>metres(p,s)<metres(p,b)?s:b,SUBURBS[0]).n;
     out.push({
       id:"ER-AU-VIC-BOR-"+String(1000+i).slice(1)+"-"+(seed%89),
       name:NAMES[Math.floor(rnd()*NAMES.length)],
       suburb:sub.charAt(0)+sub.slice(1).toLowerCase(),
-      lat,lng,score,status,
+      lat:p.lat,lng:p.lng,score,status,
       tier:score>=50?"Ecological Garden":score>=32?"Habitat Garden":"Basic Garden",
       area:260+Math.round(rnd()*680),
       species:9+Math.round(rnd()*(score/1.5)),
@@ -657,14 +703,48 @@ function generate(count,seed,tight){
         Connectivity:Math.min(100,Math.round(score*(.6+rnd()*.6))),
         Evidence:status==="provisional"?14:Math.min(100,Math.round(score*(.8+rnd()*.4)))}
     });
+  });
+  return out;
+}
+
+/* scatter — the gardens that enrol off-corridor. Keeps the picture honest. */
+function scatter(count,seed){
+  const rnd=seeded(seed),out=[];
+  const anchors=RESERVES.concat(SUBURBS.map(s=>({lat:s.lat,lng:s.lng,r:750})));
+  for(let i=0;i<count;i++){
+    const a=anchors[Math.floor(rnd()*anchors.length)];
+    const sp=(a.r||400)/MLAT*3.2;
+    out.push({lat:a.lat+(rnd()-.5)*sp*2, lng:a.lng+(rnd()-.5)*sp*2*(MLAT/MLNG)});
   }
   return out;
 }
 
+/* pilot — a focused first corridor: Greythorn out to the Yarra, plus the Balwyn North ridge */
+function pilotPositions(){
+  const rnd=seeded(4471),p=[];
+  // Greythorn Park out to Hays Paddock — the stretch the Friends group already plants
+  p.push.apply(p,walkSpine([[-37.7902,145.0812],[-37.7928,145.0742],[-37.7948,145.0648],
+    [-37.7898,145.0612],[-37.7932,145.0532]],185,62,rnd));
+  // Macleay Park down to Greythorn
+  p.push.apply(p,walkSpine([[-37.7966,145.0944],[-37.7930,145.0872],[-37.7902,145.0812]],195,62,rnd));
+  p.push.apply(p,scatter(6,9902));
+  return p;
+}
+
+/* at scale — every corridor carried, plus off-corridor enrolments */
+function scalePositions(){
+  const rnd=seeded(6620),p=[];
+  SPINES.forEach(s=>p.push.apply(p,walkSpine(s.pts,175,70,rnd)));
+  p.push.apply(p,scatter(150,3311));
+  return p;
+}
+
 const VIEWS={
  now:{label:"9 gardens · recorded now",records:BOROONDARA,lookups:1030},
- pilot:{label:"With the Backyard Biodiversity Project · 12 months",records:BOROONDARA.concat(generate(27,3319,true)),lookups:3186},
- scale:{label:"At scale · the ten-year record",records:BOROONDARA.concat(generate(372,8815,false)),lookups:17970}
+ pilot:{label:"With the Backyard Biodiversity Project · 12 months",
+        records:BOROONDARA.concat(buildRecords(pilotPositions(),3319)),lookups:3186},
+ scale:{label:"At scale · the ten-year record",
+        records:BOROONDARA.concat(buildRecords(scalePositions(),8815)),lookups:17970}
 };
 
 
@@ -713,16 +793,19 @@ function computeNetwork(thr){
   const groups={};
   nodes.forEach((_,i)=>{const r=find(i);(groups[r]=groups[r]||[]).push(i)});
   const comps=Object.values(groups);
-  let largest=0,chain=0,bridged=0,orphan=0;
+  let largest=0,chain=0,bridged=0,orphan=0,mainComp=[];
   comps.forEach(g=>{
     const gardens=g.filter(i=>nodes[i].kind==="g").length;
     const reserves=g.filter(i=>nodes[i].kind==="r").length;
     if(g.length===1&&nodes[g[0]].kind==="g")orphan++;
-    if(gardens>largest)largest=gardens;
+    if(gardens>largest){largest=gardens;mainComp=g}
     if(reserves>=2&&gardens>=1)bridged+=reserves;
-    if(g.length>1&&g.length<220){
-      for(let a=0;a<g.length;a++)for(let b=a+1;b<g.length;b++){
-        const d=metres(nodes[g[a]],nodes[g[b]]);if(d>chain)chain=d;
+    if(g.length>1){
+      // sample large components so the longest chain is still measured, not skipped
+      const step=Math.max(1,Math.ceil(g.length/110));
+      const smp=[];for(let k=0;k<g.length;k+=step)smp.push(g[k]);
+      for(let a=0;a<smp.length;a++)for(let b=a+1;b<smp.length;b++){
+        const d=metres(nodes[smp[a]],nodes[smp[b]]);if(d>chain)chain=d;
       }
     }
   });
@@ -738,7 +821,8 @@ function computeNetwork(thr){
     seen[key]=1;gaps.push(t);
     if(gaps.length>=18)break;
   }
-  return {nodes,links,gaps,clusters:comps.filter(g=>g.length>1).length,largest,chain,bridged,orphan};
+  const main={};mainComp.forEach(i=>main[i]=1);
+  return {nodes,links,gaps,main,clusters:comps.filter(g=>g.length>1).length,largest,chain,bridged,orphan};
 }
 
 /* ═════════ LEAFLET MAP ═════════ */
@@ -824,8 +908,10 @@ function drawNet(){
     net.links.forEach(([i,j])=>{
       const A=net.nodes[i],C=net.nodes[j];
       const toReserve=A.kind==="r"||C.kind==="r";
-      L.polyline([[A.lat,A.lng],[C.lat,C.lng]],
-        {color:SIG,weight:toReserve?2.4:1.5,opacity:toReserve?.9:.6}).addTo(G.links);
+      const onMain=net.main[i]&&net.main[j];
+      L.polyline([[A.lat,A.lng],[C.lat,C.lng]],{color:SIG,
+        weight:onMain?(toReserve?3.4:2.6):(toReserve?2:1.2),
+        opacity:onMain?.95:.42}).addTo(G.links);
     });
 
   rs.forEach(r=>{
