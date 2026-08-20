@@ -133,8 +133,8 @@
     }
   },
   "evidence": {
-    "has_photos": true,
-    "has_field_notes": true,
+    "has_photos": false,
+    "has_field_notes": false,
     "has_species_list": true,
     "has_fauna_record": true,
     "has_professional_assessment": true,
@@ -182,7 +182,7 @@
       "type": "Record Update",
       "category": "record_update",
       "public": true,
-      "notes": "Corridor node confirmed; Moisture basin and swale confirmed; Photos, field notes, species list and fauna record added; Professional assessment recorded; 3 fauna sightings verified (Superb Fairywren, Eastern Spinebill, Common Brushtail Possum); Ecological score 62 → 85 (High Habitat Garden)."
+      "notes": "Ecological assessment recorded from first site visit and public documentation. Corridor node confirmed; moisture basin and swale confirmed; professional assessment recorded; species list and fauna record on file; 3 fauna sightings verified (Superb Fairywren, Eastern Spinebill, Common Brushtail Possum). Ecological score: 81/100 (High Habitat Garden). Photographs and formal steward records pending."
     },
     {
       "title": "Initial field observation — registry enrolment",
@@ -205,10 +205,10 @@
   "rating": {
     "current": "High Habitat Garden",
     "next": "Urban Biodiversity Node",
-    "points_to_next": 6
+    "points_to_next": 10
   },
-  "upgrade_potential": 15,
-  "points_available": 15,
+  "upgrade_potential": 19,
+  "points_available": 19,
   "yield": {
     "eligible": false,
     "status": "Pending G&S assessment",
@@ -221,7 +221,7 @@
   "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
   "steward_email": "sam@samcoxlandscape.com",
   "score": {
-    "total": 85,
+    "total": 81,
     "rating": "High Habitat Garden",
     "categories": [
       {
@@ -269,11 +269,9 @@
       },
       {
         "label": "Evidence & Verification",
-        "score": 15,
+        "score": 11,
         "max": 15,
         "notes": [
-          "Photos",
-          "Field notes",
           "Species list",
           "Fauna record",
           "Professional assessment",
