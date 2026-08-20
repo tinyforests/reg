@@ -71,8 +71,8 @@
     "water_function_baseline": 0,
     "water_function_max": 5,
     "has_rainwater_system": false,
-    "has_moisture_basin": true,
-    "has_swale": true,
+    "has_moisture_basin": false,
+    "has_swale": false,
     "mulch_depth_mm": 75,
     "mulch_type": "Woodchips — deep application",
     "water_note": "Score reflects publicly confirmed features only: winding watercourse feeding a large basalt-lined pond, and a separate waterfall. Sources: Sam Cox Landscape website, Open Gardens Victoria listing, Domain/Design Files 2018. Swale, moisture basin and rainwater system unconfirmed — score may rise at site assessment."
@@ -172,6 +172,14 @@
       "type": "Record Update",
       "category": "record_update",
       "public": true,
+      "notes": "Ecological function score: 62/100 (Registered Ecological Garden). Updated via assessment tool."
+    },
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
       "notes": "Ecological function score: 68/100 (Registered Ecological Garden). Updated via assessment tool."
     },
     {
@@ -259,7 +267,7 @@
   "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
   "steward_email": "sam@samcoxlandscape.com",
   "score": {
-    "total": 65,
+    "total": 62,
     "rating": "Registered Ecological Garden",
     "categories": [
       {
@@ -275,13 +283,11 @@
       },
       {
         "label": "Soil & Water Function",
-        "score": 18,
+        "score": 15,
         "max": 20,
         "notes": [
           "Soil health 5/5",
-          "Water function 5/5",
-          "Moisture basin",
-          "Swale installed"
+          "Water function 5/5"
         ]
       },
       {
