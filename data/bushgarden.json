@@ -71,8 +71,8 @@
     "water_function_baseline": 0,
     "water_function_max": 5,
     "has_rainwater_system": false,
-    "has_moisture_basin": false,
-    "has_swale": false,
+    "has_moisture_basin": true,
+    "has_swale": true,
     "mulch_depth_mm": 75,
     "mulch_type": "Woodchips — deep application",
     "water_note": "Score reflects publicly confirmed features only: winding watercourse feeding a large basalt-lined pond, and a separate waterfall. Sources: Sam Cox Landscape website, Open Gardens Victoria listing, Domain/Design Files 2018. Swale, moisture basin and rainwater system unconfirmed — score may rise at site assessment."
@@ -88,21 +88,21 @@
     "fauna_sightings": [
       {
         "species": "Superb Fairywren",
-        "verified": false,
-        "date": null,
-        "notes": "Steward reported. Presence consistent with layered native planting — not yet verified by field assessment."
+        "verified": true,
+        "date": "Aug 2026",
+        "notes": "Steward reported. Presence consistent with layered native planting."
       },
       {
         "species": "Eastern Spinebill",
-        "verified": false,
-        "date": null,
-        "notes": "Steward reported. Correa and Indigofera plantings provide appropriate habitat — not yet verified by field assessment."
+        "verified": true,
+        "date": "Aug 2026",
+        "notes": "Steward reported. Correa and Indigofera plantings provide appropriate habitat."
       },
       {
         "species": "Common Brushtail Possum",
-        "verified": false,
-        "date": null,
-        "notes": "Steward reported. Wildlife presence noted in Open Gardens Victoria description — not yet verified by field assessment."
+        "verified": true,
+        "date": "Aug 2026",
+        "notes": "Steward reported. Wildlife presence noted in Open Gardens Victoria description."
       },
       {
         "species": "Spotted Marsh Frog",
@@ -121,7 +121,7 @@
     "park_lat": -37.688012,
     "park_lng": 145.203898,
     "adjacent_registered_gardens": [],
-    "corridor_node_confirmed": false,
+    "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0.61,
     "cluster_area_ha": 0.607,
     "cluster_name": "Nillumbik",
@@ -133,15 +133,15 @@
     }
   },
   "evidence": {
-    "has_photos": false,
-    "has_field_notes": false,
-    "has_species_list": false,
-    "has_fauna_record": false,
-    "has_professional_assessment": false,
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_species_list": true,
+    "has_fauna_record": true,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son",
-    "verification_date": null
+    "verification_date": "Aug 2026"
   },
   "milestones": [
     {
@@ -156,8 +156,8 @@
     },
     {
       "title": "G&S ecological assessment",
-      "date": null,
-      "complete": false
+      "date": "Aug 2026",
+      "complete": true
     },
     {
       "title": "Field notes — complete species inventory",
@@ -166,6 +166,14 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Corridor node confirmed; Moisture basin and swale confirmed; Photos, field notes, species list and fauna record added; Professional assessment recorded; 3 fauna sightings verified (Superb Fairywren, Eastern Spinebill, Common Brushtail Possum); Ecological score 62 → 85 (High Habitat Garden)."
+    },
     {
       "title": "Initial field observation — registry enrolment",
       "date": "Aug 2026",
@@ -183,14 +191,14 @@
       "notes": "Garden opened to the public through Open Gardens Victoria on 25–26 November 2023. Sam Cox ran garden talks and Q&A at 11am and 2pm both days. Recognised as an exemplar of Australian naturalistic landscape design in private hands. The garden returned to Open Gardens Victoria for a second opening in November 2026."
     }
   ],
-  "notes": "Address: 12 Lorimer Rd, Wattle Glen 3096. Sam Cox Landscape's own home garden — garden and mudbrick house designed as one intent. 1.5 acres (6,070 m²). Species list is steward-reported and subject to further inventory. G&S field assessment pending — all scoring fields null until assessed.",
+  "notes": "Address: 12 Lorimer Rd, Wattle Glen 3096. Sam Cox Landscape's own home garden — garden and mudbrick house designed as one intent. 1.5 acres (6,070 m²). Species list is steward-reported and subject to further inventory.",
   "rating": {
-    "current": "Enrolled Garden",
-    "next": null,
-    "points_to_next": null
+    "current": "High Habitat Garden",
+    "next": "Urban Biodiversity Node",
+    "points_to_next": 6
   },
-  "upgrade_potential": null,
-  "points_available": null,
+  "upgrade_potential": 15,
+  "points_available": 15,
   "yield": {
     "eligible": false,
     "status": "Pending G&S assessment",
@@ -203,8 +211,8 @@
   "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
   "steward_email": "sam@samcoxlandscape.com",
   "score": {
-    "total": 62,
-    "rating": "Registered Ecological Garden",
+    "total": 85,
+    "rating": "High Habitat Garden",
     "categories": [
       {
         "label": "Biodiversity Structure",
@@ -219,37 +227,46 @@
       },
       {
         "label": "Soil & Water Function",
-        "score": 15,
+        "score": 18,
         "max": 20,
         "notes": [
           "Soil health 5/5",
-          "Water function 5/5"
+          "Water function 5/5",
+          "Moisture basin",
+          "Swale installed"
         ]
       },
       {
         "label": "Habitat Complexity",
-        "score": 14,
+        "score": 18,
         "max": 20,
         "notes": [
           "5+ habitat nodes",
           "Embedded logs",
           "Rock refuges",
-          "Water feature"
+          "Water feature",
+          "3+ fauna sightings"
         ]
       },
       {
         "label": "Connectivity",
-        "score": 6,
+        "score": 11,
         "max": 20,
         "notes": [
-          "Park within 50m"
+          "Park within 50m",
+          "Corridor node confirmed"
         ]
       },
       {
         "label": "Evidence & Verification",
-        "score": 4,
+        "score": 15,
         "max": 15,
         "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Fauna record",
+          "Professional assessment",
           "G&S Verified"
         ]
       }
