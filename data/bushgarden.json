@@ -13,13 +13,13 @@
   "assessment_date": "Aug 2026",
   "baseline_date": "1998",
   "stewards": "Sam Cox",
-  "designer": "Sam Cox Landscape",
+  "designer": "Private design studio",
   "designer_id": "sam-cox-landscape",
   "enroller": "Gardener & Son",
   "verifier": null,
   "area_sqm": 6070,
   "target_score": 82,
-  "description": "Sam Cox — last apprentice of Gordon Ford and principal of Sam Cox Landscape — has spent 25 years shaping this 1.5-acre Wattle Glen bush garden into one of the finest examples of Australian naturalistic design in private hands. Directly adjacent to a Nillumbik green wedge corridor, the garden moves through earth-shaped terrain and layered native planting to a winding watercourse that feeds a large basalt-lined pond — habitat for frogs, birds and other wildlife. A waterfall brings water movement into the living spaces on the other side of the house. Twenty indigenous species are currently recorded across the planting. The garden opened through Open Gardens Victoria in November 2023.",
+  "description": "This 1.5-acre Wattle Glen bush garden has been shaped over twenty-five years into one of the finest examples of Australian naturalistic design in private hands. Directly adjacent to a Nillumbik green wedge corridor, the garden moves through earth-shaped terrain and layered native planting to a winding watercourse that feeds a large basalt-lined pond — habitat for frogs, birds and other wildlife. A waterfall brings water movement into the living spaces on the other side of the house. Twenty indigenous species are currently recorded across the planting. The garden opened through Open Gardens Victoria in November 2023.",
   "evc": {
     "name": "Box Ironbark Forest",
     "code": "EVC 61",
@@ -84,7 +84,7 @@
     "has_rock_refuges": true,
     "has_water_feature": true,
     "has_nest_boxes": false,
-    "planting_method": "Australian naturalistic design by Sam Cox Landscape — earth shaping, basalt boulder placement, and layered indigenous planting following the principles of Gordon Ford.",
+    "planting_method": "Australian naturalistic design — earth shaping, basalt boulder placement, and layered indigenous planting.",
     "fauna_sightings": [
       {
         "species": "Superb Fairywren",
