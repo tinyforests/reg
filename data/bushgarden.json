@@ -70,12 +70,12 @@
     "water_function_score": 5,
     "water_function_baseline": 0,
     "water_function_max": 5,
-    "has_rainwater_system": false,
+    "has_rainwater_system": true,
     "has_moisture_basin": true,
     "has_swale": true,
     "mulch_depth_mm": 75,
     "mulch_type": "Woodchips — deep application",
-    "water_note": "Score reflects publicly confirmed features only: winding watercourse feeding a large basalt-lined pond, and a separate waterfall. Sources: Sam Cox Landscape website, Open Gardens Victoria listing, Domain/Design Files 2018. Swale, moisture basin and rainwater system unconfirmed — score may rise at site assessment."
+    "water_note": "Winding watercourse feeding a large basalt-lined pond, a separate waterfall, moisture basin, swale and rainwater capture — all confirmed at the site visit. Soil health and water function scored at maximum."
   },
   "habitat": {
     "habitat_nodes": 5,
@@ -182,7 +182,7 @@
       "type": "Record Update",
       "category": "record_update",
       "public": true,
-      "notes": "Ecological assessment recorded from first site visit and public documentation. Corridor node confirmed; moisture basin and swale confirmed; professional assessment recorded; species list and fauna record on file; 3 fauna sightings verified (Superb Fairywren, Eastern Spinebill, Common Brushtail Possum). Ecological score: 81/100 (High Habitat Garden). Photographs and formal steward records pending."
+      "notes": "Ecological assessment recorded from first site visit and public documentation. Corridor node confirmed; moisture basin, swale and rainwater capture confirmed; professional assessment recorded; species list and fauna record on file; 3 fauna sightings verified (Superb Fairywren, Eastern Spinebill, Common Brushtail Possum). Ecological score: 83/100 (High Habitat Garden). Photographs and formal steward records pending."
     },
     {
       "title": "Initial field observation — registry enrolment",
@@ -205,10 +205,10 @@
   "rating": {
     "current": "High Habitat Garden",
     "next": "Urban Biodiversity Node",
-    "points_to_next": 10
+    "points_to_next": 8
   },
-  "upgrade_potential": 19,
-  "points_available": 19,
+  "upgrade_potential": 17,
+  "points_available": 17,
   "yield": {
     "eligible": false,
     "status": "Pending G&S assessment",
@@ -221,7 +221,7 @@
   "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
   "steward_email": "sam@samcoxlandscape.com",
   "score": {
-    "total": 81,
+    "total": 83,
     "rating": "High Habitat Garden",
     "categories": [
       {
@@ -237,11 +237,12 @@
       },
       {
         "label": "Soil & Water Function",
-        "score": 18,
+        "score": 20,
         "max": 20,
         "notes": [
           "Soil health 5/5",
           "Water function 5/5",
+          "Rainwater system",
           "Moisture basin",
           "Swale installed"
         ]

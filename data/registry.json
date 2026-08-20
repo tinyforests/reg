@@ -19,11 +19,11 @@
       "council": "Nillumbik Shire Council",
       "ward": "",
       "lga": "Nillumbik",
-      "score": 81,
+      "score": 83,
       "rating": {
         "current": "High Habitat Garden",
         "next": "Urban Biodiversity Node",
-        "points_to_next": 10
+        "points_to_next": 8
       },
       "primary_evc": "Box Ironbark Forest (EVC 61)",
       "bioregion": "Highlands - Southern Fall",
@@ -31,7 +31,7 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Aug 2026",
-      "badge_count": 10,
+      "badge_count": 11,
       "badges": [
         "indigenous_dominant",
         "species_rich_20",
@@ -40,6 +40,7 @@
         "habitat_builder",
         "amphibian_active",
         "pollinator_rich",
+        "water_wise",
         "corridor_node",
         "gs_verified",
         "fauna_record"
