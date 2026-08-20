@@ -315,6 +315,10 @@ function doPost(e) {
       return handleSaveGardenRecord(payload);
     }
 
+    if (payload.submission_type === 'invite_neighbour') {
+      return handleInviteNeighbour(payload);
+    }
+
     return handleEnrolment(payload, cache);
 
   } catch (err) {
@@ -773,6 +777,90 @@ function handleAddSpecies(params) {
   }
   sheet.appendRow([gardenId, species, email, new Date().toISOString()]);
   return jsonResp({ ok: true });
+}
+
+/*
+ * invite_neighbour — a steward invites a neighbouring garden to register.
+ * Records the invite and emails the neighbour. Gated to the garden's known
+ * steward so the endpoint can't be used as an open email relay; rate-limited.
+ */
+function handleInviteNeighbour(payload) {
+  var gardenId      = safeStr(String(payload.garden_id      || '').trim(), 40);
+  var gardenName    = safeStr(String(payload.garden_name    || '').trim(), 120);
+  var inviter       = safeStr(String(payload.inviter_email  || '').toLowerCase().trim(), 254);
+  var neighbour     = safeStr(String(payload.neighbour_email|| '').toLowerCase().trim(), 254);
+  var neighbourName = safeStr(String(payload.neighbour_name || '').trim(), 120);
+
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!gardenId || !EMAIL_RE.test(neighbour) || !EMAIL_RE.test(inviter)) {
+    return jsonResp({ ok: false, error: 'garden_id, a valid your-email and neighbour email are required.' });
+  }
+  if (inviter === neighbour) {
+    return jsonResp({ ok: false, error: 'The neighbour email must be different from your own.' });
+  }
+  if (!isKnownSteward(inviter, gardenId)) {
+    return jsonResp({ ok: false, error: 'Only the garden\'s registered steward can send invitations.' });
+  }
+
+  // Rate-limit: max 5 invites per inviter per hour
+  var cache   = CacheService.getScriptCache();
+  var rlKey   = 'invite_' + hourBucket() + '_' + inviter;
+  var rlCount = parseInt(cache.get(rlKey) || '0', 10);
+  if (rlCount >= 5) {
+    return jsonResp({ ok: false, error: 'Invitation limit reached for now — please try again later.' });
+  }
+  cache.put(rlKey, String(rlCount + 1), RATE_CACHE_TTL);
+
+  // Record the invite
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Neighbour Invites');
+  if (!sheet) {
+    sheet = ss.insertSheet('Neighbour Invites');
+    sheet.appendRow(['garden_id', 'garden_name', 'inviter_email', 'neighbour_email', 'neighbour_name', 'invited_at', 'status']);
+    sheet.setFrozenRows(1);
+  }
+  sheet.appendRow([gardenId, gardenName, inviter, neighbour, neighbourName, new Date().toISOString(), 'invited']);
+
+  // Email the neighbour
+  var gname    = gardenName || 'a nearby garden';
+  var greeting = neighbourName ? ('Hi ' + neighbourName + ',') : 'Hello,';
+  try {
+    MailApp.sendEmail({
+      to:      neighbour,
+      subject: 'You have been invited to the Ecological Registry',
+      body: [
+        greeting,
+        '',
+        'The steward of ' + gname + ', near you, has invited your garden to join the Ecological Registry —',
+        'a public record of ecological gardens with field-noted baselines, scoring and verified stewardship.',
+        '',
+        'Neighbouring gardens that register strengthen a local wildlife corridor, and each one lifts the whole',
+        'cluster\'s connectivity. Yours could be the next stepping-stone.',
+        '',
+        'See how it works and enrol your garden:',
+        'https://ecologicalregistry.org/',
+        '',
+        'If this is not for you, you can simply ignore this email.',
+        '',
+        'Ecological Registry',
+        'ecologicalregistry.org'
+      ].join('\n')
+    });
+  } catch (mailErr) {
+    try {
+      var dbg = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+      dbg.appendRow([new Date().toISOString(), 'invite email', mailErr.message]);
+    } catch (e2) {}
+  }
+
+  // Notify G&S
+  try {
+    MailApp.sendEmail(NOTIFY_EMAIL, 'Neighbour invite — ' + gardenId,
+      inviter + ' invited ' + neighbour + (neighbourName ? ' (' + neighbourName + ')' : '') +
+      ' to register, from ' + gname + ' (' + gardenId + ').');
+  } catch (e3) {}
+
+  return jsonResp({ ok: true, message: 'Invitation sent.' });
 }
 
 /* ---- Log visibility (steward-controlled public/private per entry) ---- */
