@@ -2003,20 +2003,11 @@ function _erPublishToRegistry() {
   record.upgrade_potential = 100 - result.total;
   record.points_available  = 100 - result.total;
 
-  /* Auto-log the publish event */
-  var now = new Date();
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var dateStr = months[now.getMonth()] + ' ' + now.getFullYear();
+  /* No client-side log entry: the server auto-logs an activity entry
+     describing what actually changed versus the stored record
+     (handleSaveGardenRecord → diffGardenRecords). We only pass the actor
+     name via `editor` so the entry is attributed correctly. */
   var assessorName = gv('f_ev_assessor') || 'Gardener & Son';
-  var logEntry = {
-    title: 'Record updated — ' + assessorName,
-    date: dateStr,
-    type: 'Record Update',
-    category: 'record_update',
-    public: true,
-    notes: 'Ecological function score: ' + result.total + '/100 (' + result.rating + '). Updated via assessment tool.'
-  };
-  record.activity_log = [logEntry].concat(record.activity_log || []);
 
   if (msg) { msg.style.color = ''; msg.textContent = 'Publishing…'; }
   fetch(ER_APPS_ENDPOINT, {
@@ -2025,6 +2016,7 @@ function _erPublishToRegistry() {
       submission_type: 'save_garden_record',
       admin_token: _erAdminToken,
       garden_id: record.garden_id,
+      editor: assessorName,
       record: record
     })
   })

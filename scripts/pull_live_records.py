@@ -33,6 +33,7 @@ Usage:
 import json
 import os
 import sys
+import time
 import urllib.parse
 import urllib.request
 
@@ -51,15 +52,21 @@ LOCAL_ONLY_ROOT_FIELDS = {'demo', 'badges', 'rating', 'upgrade_potential', 'poin
 def fetch_live(garden_id):
     """Fetch the live Apps Script record for garden_id.
     Returns the record dict, or None if not published / not found."""
+    # Cache-buster: Apps Script web-app GET responses can be served stale from
+    # Google's edge cache. A unique query param + no-cache headers force a fresh
+    # read — without it a pull (or a fetch-modify-write) can act on a stale record.
     url = ENDPOINT + '?' + urllib.parse.urlencode({
         'action':    'get_garden_record',
         'garden_id': garden_id,
+        '_cb':       ('%d' % (time.time() * 1000)),
     })
     req = urllib.request.Request(
         url,
         headers={
-            'User-Agent': 'pull_live_records/1.0',
-            'Accept':     'application/json',
+            'User-Agent':    'pull_live_records/1.0',
+            'Accept':        'application/json',
+            'Cache-Control': 'no-cache',
+            'Pragma':        'no-cache',
         }
     )
     try:

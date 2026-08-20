@@ -979,6 +979,117 @@ function handleGetGardenAdminData(params) {
  * Called via doPost with submission_type === 'save_garden_record'.
  * Protected by ADMIN_TOKEN.
  */
+/*
+ * Compares two garden records and returns an array of human-readable change
+ * descriptions, e.g. "Added to species list: Eucalyptus tricarpa",
+ * "Canopy cover 45% → 50%", "Moisture basin added", "Ecological score 65 → 62".
+ * The activity_log itself is never diffed. Returns [] when nothing tracked changed.
+ */
+function diffGardenRecords(oldRec, newRec) {
+  oldRec = oldRec || {};
+  newRec = newRec || {};
+  var changes = [];
+
+  function get(obj, path) {
+    var parts = path.split('.'), cur = obj;
+    for (var i = 0; i < parts.length; i++) {
+      if (cur == null) return undefined;
+      cur = cur[parts[i]];
+    }
+    return cur;
+  }
+
+  // Scalar fields: "Label from → to". Third element is an optional unit suffix.
+  var scalars = [
+    ['garden_name',                             'Garden name'],
+    ['typology',                                'Typology'],
+    ['target_score',                            'Target score'],
+    ['stewards',                                'Stewards'],
+    ['designer',                                'Designer'],
+    ['biodiversity.indigenous_species_current', 'Indigenous species'],
+    ['biodiversity.structural_layers_current',  'Structural layers'],
+    ['biodiversity.canopy_cover_pct_current',   'Canopy cover', '%'],
+    ['biodiversity.weed_pressure',              'Weed pressure'],
+    ['soil_water.soil_health_score',            'Soil health'],
+    ['soil_water.water_function_score',         'Water function'],
+    ['soil_water.mulch_depth_mm',               'Mulch depth', 'mm'],
+    ['habitat.habitat_nodes',                   'Habitat nodes'],
+    ['connectivity.park_name',                  'Adjacent park'],
+    ['connectivity.park_distance_m',            'Park distance', 'm'],
+    ['evidence.verification_level',             'Verification level'],
+    ['score.total',                             'Ecological score']
+  ];
+  for (var i = 0; i < scalars.length; i++) {
+    var path = scalars[i][0], label = scalars[i][1], unit = scalars[i][2] || '';
+    var ov = get(oldRec, path), nv = get(newRec, path);
+    if (nv === undefined) continue;
+    if (String(ov == null ? '' : ov) === String(nv == null ? '' : nv)) continue;
+    var from = (ov == null || ov === '') ? '—' : (ov + unit);
+    changes.push(label + ' ' + from + ' → ' + (nv + unit));
+  }
+
+  // Free-text fields: note that they changed, don't dump the contents.
+  var texts = [['description', 'Description'], ['notes', 'Notes']];
+  for (var t = 0; t < texts.length; t++) {
+    var to = get(oldRec, texts[t][0]), tn = get(newRec, texts[t][0]);
+    if (tn !== undefined && String(to == null ? '' : to) !== String(tn == null ? '' : tn))
+      changes.push(texts[t][1] + ' updated');
+  }
+
+  // Boolean feature flags: "Label added" / "Label removed".
+  var bools = [
+    ['biodiversity.indigenous_dominant',     'Indigenous-dominant status'],
+    ['soil_water.has_rainwater_system',      'Rainwater system'],
+    ['soil_water.has_moisture_basin',        'Moisture basin'],
+    ['soil_water.has_swale',                 'Swale'],
+    ['habitat.has_embedded_logs',            'Embedded logs'],
+    ['habitat.has_rock_refuges',             'Rock refuges'],
+    ['habitat.has_water_feature',            'Water feature'],
+    ['habitat.has_nest_boxes',               'Nest boxes'],
+    ['connectivity.adjacent_park',           'Adjacent park'],
+    ['connectivity.corridor_node_confirmed', 'Corridor node'],
+    ['evidence.has_photos',                  'Photos'],
+    ['evidence.has_field_notes',             'Field notes'],
+    ['evidence.has_species_list',            'Species list evidence'],
+    ['evidence.has_fauna_record',            'Fauna record'],
+    ['evidence.has_professional_assessment', 'Professional assessment']
+  ];
+  for (var j = 0; j < bools.length; j++) {
+    var bo = !!get(oldRec, bools[j][0]), bn = !!get(newRec, bools[j][0]);
+    if (bo !== bn) changes.push(bools[j][1] + (bn ? ' added' : ' removed'));
+  }
+
+  // List fields: what was added / removed.
+  changes = changes.concat(diffList(
+    get(oldRec, 'biodiversity.species_list'),
+    get(newRec, 'biodiversity.species_list'), 'species list'));
+  changes = changes.concat(diffList(
+    faunaNames(get(oldRec, 'habitat.fauna_sightings')),
+    faunaNames(get(newRec, 'habitat.fauna_sightings')), 'fauna sightings'));
+
+  return changes;
+}
+
+function diffList(oldArr, newArr, label) {
+  oldArr = oldArr || [];
+  newArr = newArr || [];
+  var out = [], oldSet = {}, newSet = {}, added = [], removed = [], i;
+  for (i = 0; i < oldArr.length; i++) oldSet[String(oldArr[i]).toLowerCase()] = true;
+  for (i = 0; i < newArr.length; i++) newSet[String(newArr[i]).toLowerCase()] = true;
+  for (i = 0; i < newArr.length; i++) if (!oldSet[String(newArr[i]).toLowerCase()]) added.push(newArr[i]);
+  for (i = 0; i < oldArr.length; i++) if (!newSet[String(oldArr[i]).toLowerCase()]) removed.push(oldArr[i]);
+  if (added.length)   out.push('Added to ' + label + ': ' + added.join(', '));
+  if (removed.length) out.push('Removed from ' + label + ': ' + removed.join(', '));
+  return out;
+}
+
+function faunaNames(arr) {
+  arr = arr || [];
+  var out = [];
+  for (var i = 0; i < arr.length; i++) if (arr[i] && arr[i].species) out.push(arr[i].species);
+  return out;
+}
+
 function handleSaveGardenRecord(payload) {
   var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
   if (!stored || (payload.admin_token || '') !== stored) {
@@ -988,7 +1099,6 @@ function handleSaveGardenRecord(payload) {
   var record   = payload.record;
   if (!gardenId || !record) return jsonResp({ok: false, error: 'Missing garden_id or record'});
 
-  var jsonBlob = JSON.stringify(record);
   var now      = new Date().toISOString();
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -999,11 +1109,39 @@ function handleSaveGardenRecord(payload) {
     sh.setFrozenRows(1);
   }
 
-  var data     = sh.getDataRange().getValues();
-  var foundRow = -1;
+  var data      = sh.getDataRange().getValues();
+  var foundRow  = -1;
+  var oldRecord = null;
   for (var i = 1; i < data.length; i++) {
-    if (String(data[i][0]).trim() === gardenId) { foundRow = i + 1; break; }
+    if (String(data[i][0]).trim() === gardenId) {
+      foundRow = i + 1;
+      try { oldRecord = JSON.parse(data[i][2]); } catch (e) { oldRecord = null; }
+      break;
+    }
   }
+
+  // Auto-log what actually changed versus the previously stored record.
+  // Runs for every save, so both the assessment tool and steward profile
+  // edits get a descriptive change entry with no client-side log logic.
+  // A no-op save (nothing changed) adds no entry.
+  if (oldRecord) {
+    var changes = diffGardenRecords(oldRecord, record);
+    if (changes.length) {
+      var editor = safeStr(String(payload.editor || 'Gardener & Son').trim(), 80) || 'Gardener & Son';
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var dt     = new Date();
+      record.activity_log = [{
+        title:    'Record updated — ' + editor,
+        date:     months[dt.getMonth()] + ' ' + dt.getFullYear(),
+        type:     'Record Update',
+        category: 'record_update',
+        public:   true,
+        notes:    changes.join('; ') + '.'
+      }].concat(record.activity_log || []);
+    }
+  }
+
+  var jsonBlob = JSON.stringify(record);
 
   if (foundRow > 0) {
     sh.getRange(foundRow, 1, 1, 3).setValues([[gardenId, now, jsonBlob]]);
