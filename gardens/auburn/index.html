@@ -436,6 +436,7 @@
 <script src="/js/reg-opportunities.js"></script>
 <script src="/js/reg-identity.js"></script>
 <script src="/js/reg-claims.js"></script>
+<script src="/js/reg-invite.js"></script>
 <script src="/js/badge-engine.js"></script>
 <script>
 /* Ecological Registry - The Auburn Test - Profile Page */
@@ -1023,6 +1024,7 @@ function render() {
   }
   html('opportunityList', oh);
   if (typeof attachClaims === 'function') attachClaims(R);
+  if (typeof attachNeighbourInvite === 'function') attachNeighbourInvite(R);
 
   txt('networkMapLabel', 'Corridor Map - ' + c.cluster_name);
   txt('svgGardenName',   R.garden_name);
