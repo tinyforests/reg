@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="understory">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boroondara · The private-land ecological record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+:root{
+  --signal:#7C9A52;
+  --brass:#B49A63;
+  --clay:#9A6A4F;
+  --bg:#fff0dc;
+  --panel:#f9e9d2;
+  --sunk:#f2ddbe;
+  --ink:#2b3125;
+  --dim:rgba(43,49,37,.66);
+  --faint:rgba(43,49,37,.42);
+  --ghost:rgba(43,49,37,.20);
+  --rule:rgba(43,49,37,.22);
+  --hair:rgba(43,49,37,.10);
+  --tilefx:sepia(.30) saturate(.72) hue-rotate(-6deg) brightness(1.04) contrast(.95);
+}
+html[data-theme="canopy"]{
+  --bg:#171c13;
+  --panel:#1f251a;
+  --sunk:#252c1e;
+  --ink:#f2e8d6;
+  --dim:rgba(242,232,214,.64);
+  --faint:rgba(242,232,214,.40);
+  --ghost:rgba(242,232,214,.22);
+  --rule:rgba(242,232,214,.20);
+  --hair:rgba(242,232,214,.09);
+  --tilefx:saturate(.55) hue-rotate(28deg) brightness(.92) contrast(1.05);
+}
+*{box-sizing:border-box;border-radius:0}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .5s ease,color .5s ease}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.22;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/></filter><rect width='150' height='150' filter='url(%23n)' opacity='.45'/></svg>")}
+html[data-theme="canopy"] body::before{mix-blend-mode:overlay;opacity:.28}
+h1,h2,h3,h4{margin:0;font-weight:400}
+p{margin:0}
+.lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.20em;text-transform:uppercase;color:var(--faint)}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* masthead */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:1500;display:flex;flex-wrap:wrap;align-items:stretch}
+.mast .who{padding:15px 24px;flex:1 1 340px;min-width:0;border-right:1px solid var(--rule)}
+.mast .who .e{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.mast .who .h{font-family:"Fraunces",Georgia,serif;font-size:21px;letter-spacing:-.015em;line-height:1.15;margin-top:3px}
+.ctl{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--rule)}
+.ctl:last-of-type{border-right:0}
+.ctl .lab{margin-right:4px}
+button{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  background:transparent;color:var(--dim);border:1px solid var(--rule);padding:7px 11px;cursor:pointer;transition:all .18s ease}
+button:hover{color:var(--ink);border-color:var(--signal)}
+button[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#fff6e6}
+html[data-theme="canopy"] button[aria-pressed="true"]{color:#10150c}
+button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.flag{padding:13px 20px;display:flex;align-items:center;gap:9px;border-left:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.flag i{width:7px;height:7px;background:var(--brass);display:block;flex:none}
+
+/* stat band */
+.band{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--rule)}
+.st{padding:18px 20px 16px;border-right:1px solid var(--hair)}
+.st:last-child{border-right:0}
+.st .n{font-family:"IBM Plex Mono",monospace;font-size:34px;line-height:1;letter-spacing:-.02em}
+.st .n small{font-size:14px;color:var(--faint)}
+.st .k{margin-top:8px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);line-height:1.55}
+
+/* sections */
+.sec{border-bottom:1px solid var(--rule)}
+.sec > .head{padding:26px 24px 20px;max-width:1500px}
+.sec > .head .lab{display:block;margin-bottom:9px}
+.sec > .head h2{font-family:"Fraunces",Georgia,serif;font-size:27px;letter-spacing:-.02em;line-height:1.12}
+.sec > .head p{margin-top:9px;font-size:13.5px;color:var(--dim);max-width:74ch;line-height:1.6}
+
+/* ── map ── */
+.netwrap{display:grid;grid-template-columns:minmax(0,1fr) 340px}
+.mp{position:relative;border-right:1px solid var(--rule);background:var(--sunk)}
+#map{width:100%;height:760px;background:var(--sunk)}
+.leaflet-tile-pane{filter:var(--tilefx)}
+.leaflet-container{background:var(--sunk);font-family:"IBM Plex Sans",sans-serif}
+.leaflet-control-attribution{font-family:"IBM Plex Mono",monospace!important;font-size:9px!important;
+  background:var(--panel)!important;color:var(--dim)!important;border:1px solid var(--rule);border-right:0;border-bottom:0}
+.leaflet-control-attribution a{color:var(--dim)!important}
+.leaflet-bar a{background:var(--panel)!important;color:var(--ink)!important;border-color:var(--rule)!important}
+.leaflet-control-scale-line{background:var(--panel)!important;border-color:var(--rule)!important;color:var(--dim)!important;
+  font-family:"IBM Plex Mono",monospace!important;font-size:9.5px!important;letter-spacing:.1em}
+.maptip{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;background:var(--panel);
+  border:1px solid var(--rule);color:var(--ink);box-shadow:none;padding:3px 7px}
+.maptip::before{display:none}
+.panel-tl,.panel-tr{position:absolute;top:16px;z-index:1200;background:var(--panel);border:1px solid var(--rule);padding:14px 15px}
+.panel-tl{left:56px;width:214px}
+.panel-tr{right:16px;width:250px}
+.panel-tl .lab,.panel-tr .lab{display:block;margin-bottom:8px}
+.thr{font-family:"IBM Plex Mono",monospace;font-size:24px;line-height:1;margin:2px 0 4px}
+.thr small{font-size:11px;color:var(--faint)}
+input[type=range]{width:100%;appearance:none;height:2px;background:var(--rule);margin:6px 0 0;padding:0}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;background:var(--signal);border:0;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;background:var(--signal);border:0;border-radius:0;cursor:pointer}
+input[type=range]:focus-visible{outline:2px solid var(--signal);outline-offset:4px}
+.divide{margin:13px 0 11px;border-top:1px solid var(--hair)}
+.tog{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11.5px;color:var(--dim);cursor:pointer;user-select:none}
+.tog:hover{color:var(--ink)}
+.tog input{appearance:none;width:12px;height:12px;border:1px solid var(--faint);margin:0;flex:none;cursor:pointer}
+.tog input:checked{background:var(--signal);border-color:var(--signal)}
+.tog input:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:5px 0;border-bottom:1px solid var(--hair);font-size:11.5px;color:var(--dim)}
+.ro:last-of-type{border-bottom:0}
+.ro b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:15px;color:var(--ink)}
+.panel-tr .cap{font-size:10.5px;color:var(--faint);line-height:1.5;margin-top:10px}
+.offline{position:absolute;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;
+  background:var(--sunk);padding:40px;text-align:center}
+.offline p{font-size:13px;color:var(--dim);max-width:44ch;line-height:1.6}
+
+.bands{padding:22px;background:var(--panel);align-self:start;position:sticky;top:64px}
+.bnd{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:10px 0;border-bottom:1px solid var(--hair)}
+.bnd:last-of-type{border-bottom:0}
+.bnd .n{font-size:12.5px}
+.bnd .c{font-family:"IBM Plex Mono",monospace;font-size:13px}
+.bnd .tr{grid-column:1/-1;height:5px;background:var(--hair)}
+.bnd .tr i{display:block;height:100%;background:var(--brass)}
+.bnd .s{grid-column:1/-1;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;color:var(--faint)}
+.selcard{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+.selcard .rid{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;color:var(--dim)}
+.selcard .nm{font-family:"Fraunces",Georgia,serif;font-size:21px;letter-spacing:-.01em;margin:3px 0 2px}
+.selcard .sb{font-size:11.5px;color:var(--dim)}
+.selcard .sw{display:flex;align-items:flex-end;gap:12px;margin:12px 0 8px}
+.selcard .sc{font-family:"IBM Plex Mono",monospace;font-size:38px;line-height:.9;color:var(--signal)}
+.selcard .kv{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);padding:4px 0;border-bottom:1px solid var(--hair)}
+.selcard .kv:last-child{border-bottom:0}
+.selcard .kv b{font-family:"IBM Plex Mono",monospace;font-weight:400;color:var(--ink)}
+.pillb{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.14em;
+  text-transform:uppercase;padding:3px 7px;border:1px solid;margin:2px 4px 2px 0}
+.note{font-size:12px;color:var(--dim);line-height:1.6;border-left:2px solid var(--brass);padding-left:12px;margin-top:16px}
+
+/* ── strata buttons ── */
+.strat-btns{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.sbtn{border:0;border-right:1px solid var(--hair);background:transparent;text-align:left;padding:18px 18px 16px;
+  cursor:pointer;transition:background .2s ease;text-transform:none;letter-spacing:0;font-family:inherit;color:inherit}
+.sbtn:last-child{border-right:0}
+.sbtn:hover{background:var(--sunk);border-color:var(--hair)}
+.sbtn[aria-pressed="true"]{background:var(--panel);color:inherit;border-color:var(--hair)}
+.sbtn[aria-pressed="true"] .sbn{color:var(--signal)}
+.sbtn .sbh{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.sbtn .sbt{font-family:"Fraunces",Georgia,serif;font-size:17px;margin:5px 0 10px;letter-spacing:-.01em}
+.sbtn .sbn{font-family:"IBM Plex Mono",monospace;font-size:28px;line-height:1}
+.sbtn .sbn small{font-size:13px;color:var(--faint)}
+.sbtn .sbr{margin-top:9px;height:5px;background:var(--hair)}
+.sbtn .sbr i{display:block;height:100%;background:var(--signal);transition:width .7s cubic-bezier(.22,.8,.28,1)}
+.sbtn .sbc{margin-top:7px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;color:var(--faint)}
+.strat-detail{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0}
+.strat-detail > div{padding:24px;border-right:1px solid var(--hair)}
+.strat-detail > div:last-child{border-right:0}
+.strat-detail h3{font-family:"Fraunces",Georgia,serif;font-size:22px;letter-spacing:-.01em}
+.strat-detail .why{font-size:13.5px;color:var(--dim);line-height:1.65;margin-top:10px;max-width:56ch}
+.spplist{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.spplist .r{padding:6px 0;border-bottom:1px solid var(--hair);font-size:12.5px}
+.spplist .r i{font-family:"IBM Plex Mono",monospace;font-style:italic;color:var(--dim)}
+
+/* anatomy */
+.anat{display:grid;grid-template-columns:repeat(5,1fr)}
+.pil{border-right:1px solid var(--hair);padding:20px 18px 22px}
+.pil:last-child{border-right:0}
+.pil .pn{font-family:"Fraunces",Georgia,serif;font-size:17px;margin-bottom:3px}
+.pil .pw{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase}
+.pil .avg{display:flex;align-items:baseline;gap:8px;margin:14px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--hair)}
+.pil .avg b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:29px;line-height:1}
+.pil .avg span{font-size:11px;color:var(--faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.08em}
+.fld{margin-bottom:11px}
+.fld .t{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;color:var(--dim);margin-bottom:3px}
+.fld .t b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:11px;color:var(--ink);white-space:nowrap}
+.fld .tr{height:5px;background:var(--hair)}
+.fld .tr i{display:block;height:100%;background:var(--signal);transition:width .8s cubic-bezier(.22,.8,.28,1)}
+.fld.zero .tr i{background:var(--clay);opacity:.42}
+.fld .pts{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--faint);letter-spacing:.06em;margin-top:3px;display:block}
+
+/* trio + wide */
+.trio,.wide{display:grid;grid-template-columns:repeat(3,1fr)}
+.trio > div,.wide > div{border-right:1px solid var(--hair);padding:22px}
+.trio > div:last-child,.wide > div:last-child{border-right:0}
+.trio h3,.wide h3{font-family:"Fraunces",Georgia,serif;font-size:18px;margin-bottom:4px}
+.trio .sb,.wide .sb{font-size:12px;color:var(--dim);margin-bottom:18px;line-height:1.55}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:7px 0;border-bottom:1px solid var(--hair);font-size:12.5px}
+.row:last-of-type{border-bottom:0}
+.row .nm i{font-style:italic;color:var(--faint);font-size:11px;font-family:"IBM Plex Mono",monospace}
+.row .ct{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim)}
+.row .tr{grid-column:1/-1;height:4px;background:var(--hair);margin-top:3px}
+.row .tr i{display:block;height:100%}
+.have .tr i{background:var(--signal)}
+.wd .tr i{background:var(--clay)}
+.pv{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin-bottom:14px}
+.pv .n{font-size:12.5px}
+.pv .c{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--dim)}
+.pv .tr{grid-column:1/-1;height:5px;background:var(--hair)}
+.pv .tr i{display:block;height:100%}
+.pv .s{grid-column:1/-1;font-size:10.5px;color:var(--faint);font-family:"IBM Plex Mono",monospace;letter-spacing:.04em;line-height:1.5}
+.fs{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--hair);font-size:12px;color:var(--dim)}
+.fs:last-child{border-bottom:0}
+.fs b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:14px;color:var(--ink)}
+.fs .pc{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--faint);margin-left:8px}
+svg.chart{display:block;width:100%;height:auto;margin:4px 0 12px}
+
+footer{padding:28px 24px 44px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:flex-end}
+footer .q{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:17px;color:var(--dim);max-width:54ch;line-height:1.5}
+footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);text-align:right}
+
+.rv{opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.8,.28,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:1200px){
+  .band{grid-template-columns:repeat(3,1fr)}
+  .st{border-bottom:1px solid var(--hair)}
+  .netwrap{grid-template-columns:1fr}
+  .mp{border-right:0;border-bottom:1px solid var(--rule)}
+  .bands{position:static}
+  .strat-btns{grid-template-columns:repeat(3,1fr)}
+  .sbtn{border-bottom:1px solid var(--hair)}
+  .strat-detail{grid-template-columns:1fr}
+  .strat-detail > div{border-right:0;border-bottom:1px solid var(--hair)}
+  .anat{grid-template-columns:repeat(2,1fr)}
+  .pil{border-bottom:1px solid var(--hair)}
+  .trio,.wide{grid-template-columns:1fr}
+  .trio > div,.wide > div{border-right:0;border-bottom:1px solid var(--hair)}
+}
+@media (max-width:700px){
+  .band{grid-template-columns:repeat(2,1fr)}
+  .st .n{font-size:27px}
+  #map{height:460px}
+  .panel-tl,.panel-tr{position:static;width:auto;border:0;border-bottom:1px solid var(--rule)}
+  .strat-btns{grid-template-columns:1fr 1fr}
+  .anat{grid-template-columns:1fr}
+  .spplist{grid-template-columns:1fr}
+  .sec > .head h2{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="mast">
+  <div class="who">
+    <div class="e">City of Boroondara · Urban Biodiversity &amp; Revegetation</div>
+    <div class="h">The private-land ecological record</div>
+  </div>
+  <div class="ctl">
+    <span class="lab">View</span>
+    <button data-view="now" aria-pressed="true">Recorded now</button>
+    <button data-view="pilot" aria-pressed="false">With the Project</button>
+    <button data-view="scale" aria-pressed="false">At scale</button>
+  </div>
+  <div class="ctl">
+    <span class="lab">Theme</span>
+    <button id="themeBtn">Understory</button>
+  </div>
+  <div class="flag"><i></i> Illustrative build · records to be replaced with live Registry export</div>
+</div>
+
+<div class="band" id="band">
+  <div class="st"><div class="n" data-s="gardens">0</div><div class="k">Boroondara gardens on the record</div></div>
+  <div class="st"><div class="n" data-s="species">0</div><div class="k">Indigenous species recorded</div></div>
+  <div class="st"><div class="n" data-s="area">0<small> m²</small></div><div class="k">Assessed planting area</div></div>
+  <div class="st"><div class="n" data-s="score">0</div><div class="k">Mean ecological score</div></div>
+  <div class="st"><div class="n" data-s="mid">0<small>%</small></div><div class="k">Gardens with a middle storey</div></div>
+  <div class="st"><div class="n" data-s="lookups">0</div><div class="k">Boroondara EVC lookups</div></div>
+</div>
+
+<!-- ══════ 01 · CONNECTIVITY NETWORK ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">01 · The connectivity network</span>
+    <h2>Boroondara's reserves are already joined. The joins run through private gardens.</h2>
+    <p>Every line is a habitat link short enough for small birds, skinks and insects to cross. Drag the threshold to set how far is close enough. Turn on <b style="font-weight:500">missing links</b> to see the gaps — the places where one more registered garden would connect two reserves that are currently separate.</p>
+  </div>
+
+  <div class="netwrap">
+    <div class="mp">
+      <div id="map"></div>
+      <div class="offline" id="offline"><p>The basemap needs an internet connection. The network analysis below still works — reconnect and reload to bring the map back.</p></div>
+
+      <div class="panel-tl">
+        <span class="lab">Threshold</span>
+        <div class="thr"><span id="thrVal">300</span><small> m</small></div>
+        <input type="range" id="thr" min="100" max="900" step="25" value="300" aria-label="Habitat link threshold in metres">
+        <div class="lab" style="margin-top:3px;letter-spacing:.1em">Engine adjacency test = 300 m</div>
+        <div class="divide"></div>
+        <span class="lab">Layers</span>
+        <label class="tog"><input type="checkbox" data-l="links" checked> Habitat links</label>
+        <label class="tog"><input type="checkbox" data-l="gaps"> Missing links</label>
+        <label class="tog"><input type="checkbox" data-l="reserves" checked> Reserves</label>
+        <label class="tog"><input type="checkbox" data-l="creeks" checked> Creeks &amp; the Yarra</label>
+        <label class="tog"><input type="checkbox" data-l="rings"> Scoring bands</label>
+        <label class="tog"><input type="checkbox" data-l="lookups"> Resident lookups</label>
+        <label class="tog"><input type="checkbox" data-l="boundary" checked> Municipal boundary</label>
+      </div>
+
+      <div class="panel-tr">
+        <span class="lab">Network</span>
+        <div class="ro"><span>Habitat links</span><b id="nLinks">0</b></div>
+        <div class="ro"><span>Connected clusters</span><b id="nClusters">0</b></div>
+        <div class="ro"><span>Gardens in largest cluster</span><b id="nLargest">0</b></div>
+        <div class="ro"><span>Reserves joined by gardens</span><b id="nBridged">0</b></div>
+        <div class="ro"><span>Longest continuous chain</span><b id="nChain">0</b></div>
+        <div class="ro"><span>Gardens standing alone</span><b id="nOrphan">0</b></div>
+        <p class="cap" id="gapCap">A cluster is a run of reserves and gardens joined by links no longer than the threshold. A chain that crosses private land is the part no existing council dataset can see.</p>
+      </div>
+    </div>
+    <div class="bands" id="bands"></div>
+  </div>
+</section>
+
+<!-- ══════ 02 · VEGETATION STRUCTURE ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">02 · Vegetation structure across the record</span>
+    <h2>Every assessment records five layers. Boroondara's gardens are missing the middle one.</h2>
+    <p>Each figure is the share of registered gardens recording vegetation in that stratum. Select a layer for what grows there, and how many gardens have none of it.</p>
+  </div>
+  <div class="strat-btns" id="stratBtns"></div>
+  <div class="strat-detail" id="stratDetail"></div>
+</section>
+
+<!-- ══════ 03 · ASSESSMENT ANATOMY ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">03 · What one assessment actually records</span>
+    <h2>Thirty-one fields per garden, five pillars, one score.</h2>
+    <p>The bar behind each field is how many registered gardens carry that observation. Where a bar runs clay, the field is recorded but the answer is a gap — an opportunity the record has already located for you.</p>
+  </div>
+  <div class="anat" id="anat"></div>
+</section>
+
+<!-- ══════ 04 · OBSERVATIONS ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">04 · The observations underneath the score</span>
+    <h2>Habitat features, weed pressure and fauna — counted across the whole municipality.</h2>
+    <p>Each of these is a tick-box or a note on a single garden assessment. Aggregated, they become a work program: what to supply, what to remove, what's already returning.</p>
+  </div>
+  <div class="trio">
+    <div><h3>Habitat features</h3><p class="sb">Present on how many gardens. The short bars are the cheapest wins in the municipality.</p><div id="habitat"></div></div>
+    <div><h3>Weed pressure</h3><p class="sb">Environmental weeds named during assessment. Priority is frequency across gardens, not severity on one.</p><div id="weeds"></div></div>
+    <div><h3>Fauna recorded</h3><p class="sb">Reported by stewards or observed at assessment. Not a survey — a signal of what the plantings are pulling in.</p><div id="fauna"></div></div>
+  </div>
+</section>
+
+<!-- ══════ 05 · PROVENANCE / DEMAND / CHANGE ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">05 · Provenance, demand and change</span>
+    <h2>Where the evidence came from, who is already asking, and what moves.</h2>
+    <p>Source and verification are recorded separately from the score, and never aggregated as equivalent. Provisional records stay quarantined.</p>
+  </div>
+  <div class="wide">
+    <div>
+      <h3>Evidence provenance</h3>
+      <p class="sb">A record's score and its verification status are two different fields.</p>
+      <div id="prov"></div>
+      <p class="note">A provisional record counts as a garden on the register but never contributes to a verified municipal figure. The quarantine is structural, not cosmetic.</p>
+    </div>
+    <div>
+      <h3>Residents already asking</h3>
+      <p class="sb">Address lookups from Boroondara across findmyevc.com and findmyecologicalgarden.com.</p>
+      <div id="subs"></div>
+      <svg class="chart" id="trend" viewBox="0 0 520 110" aria-label="Monthly lookup volume"></svg>
+      <div id="funnel"></div>
+    </div>
+    <div>
+      <h3>Change over time</h3>
+      <p class="sb">Each line is one garden re-assessed. The record's whole purpose is the second reading.</p>
+      <svg class="chart" id="traj" viewBox="0 0 520 200" aria-label="Garden score trajectories"></svg>
+      <div id="trajstats"></div>
+      <p class="note">Greythorn Park sits at the centre of the densest cluster of unregistered lookups in the municipality — the Friends group's planting day catchment and the Registry's warmest territory are the same streets.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="q">“For a century we have measured what we build on a block, and never what we destroy underneath it.”</p>
+  <div class="s">Ecological Registry<br>ecologicalregistry.org</div>
+</footer>
+
+<script>
+"use strict";
+function seeded(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ═════════ RECORDS ═════════
+   REPLACE THIS ARRAY with the export from sync_registry.py before Friday.
+   Scores marked //confirmed are the ones carried from the live registry.      */
+const BOROONDARA=[
+ {id:"ER-AU-VIC-SH-ARU-0001",name:"Arundel",suburb:"Surrey Hills",lat:-37.8232,lng:145.0964,
+  score:73,tier:"Registered Ecological Garden",status:"verified",area:640,species:52,evc:"EVC 47 Valley Grassy Forest",badges:7, //confirmed
+  layers:{canopy:1,sub:1,shrub:1,tuft:1,ground:1},
+  pillars:{Biodiversity:78,"Soil & Water":66,Habitat:80,Connectivity:58,Evidence:82}},
+
+ {id:"ER-AU-VIC-SH-SGT-0002",name:"Sir Garnet",suburb:"Surrey Hills",lat:-37.8244,lng:145.0980,
+  score:50,tier:"Ecological Garden",status:"verified",area:520,species:41,evc:"EVC 47 Valley Grassy Forest",badges:4, //confirmed
+  layers:{canopy:1,sub:0,shrub:1,tuft:1,ground:1},
+  pillars:{Biodiversity:56,"Soil & Water":48,Habitat:54,Connectivity:38,Evidence:56}},
+
+ {id:"ER-AU-VIC-HWE-VCR-0003",name:"Victoria Crescent",suburb:"Hawthorn East",lat:-37.8248,lng:145.0498,
+  score:44,tier:"Ecological Garden",status:"verified",area:410,species:34,evc:"EVC 55 Plains Grassy Woodland",badges:3, //confirmed
+  layers:{canopy:0,sub:1,shrub:1,tuft:1,ground:1},
+  pillars:{Biodiversity:48,"Soil & Water":44,Habitat:46,Connectivity:32,Evidence:52}},
+
+ {id:"ER-AU-VIC-SH-CG02-0004",name:"Canterbury G02",suburb:"Canterbury",lat:-37.8236,lng:145.0838,
+  score:32,tier:"Habitat Garden",status:"verified",area:380,species:26,evc:"EVC 47 Valley Grassy Forest",badges:2, //confirmed · first non-G&S install
+  layers:{canopy:1,sub:0,shrub:1,tuft:1,ground:0},
+  pillars:{Biodiversity:36,"Soil & Water":28,Habitat:34,Connectivity:26,Evidence:38}},
+
+ {id:"ER-AU-VIC-SH-MDX-0005",name:"Middlesex",suburb:"Surrey Hills",lat:-37.8221,lng:145.0978,
+  score:46,tier:"Ecological Garden",status:"verified",area:560,species:37,evc:"EVC 47 Valley Grassy Forest",badges:3, //placeholder score
+  layers:{canopy:1,sub:0,shrub:1,tuft:1,ground:1},
+  pillars:{Biodiversity:50,"Soil & Water":42,Habitat:48,Connectivity:44,Evidence:48}},
+
+ {id:"ER-AU-VIC-HAW-AUB-0006",name:"Auburn Road",suburb:"Hawthorn",lat:-37.8218,lng:145.0388,
+  score:38,tier:"Habitat Garden",status:"verified",area:220,species:29,evc:"EVC 55 Plains Grassy Woodland",badges:2, //placeholder score · the studio
+  layers:{canopy:0,sub:1,shrub:1,tuft:1,ground:1},
+  pillars:{Biodiversity:44,"Soil & Water":36,Habitat:40,Connectivity:24,Evidence:46}},
+
+ {id:"ER-AU-VIC-KWE-WND-0007",name:"Windella",suburb:"Kew East",lat:-37.7938,lng:145.0566,
+  score:41,tier:"Ecological Garden",status:"verified",area:470,species:31,evc:"EVC 56 Floodplain Riparian Woodland",badges:3, //placeholder score
+  layers:{canopy:1,sub:1,shrub:0,tuft:1,ground:1},
+  pillars:{Biodiversity:44,"Soil & Water":40,Habitat:42,Connectivity:46,Evidence:34}},
+
+ {id:"ER-AU-VIC-BAL-PAR-0008",name:"Parring",suburb:"Balwyn",lat:-37.8082,lng:145.0788,
+  score:36,tier:"Habitat Garden",status:"verified",area:340,species:24,evc:"EVC 47 Valley Grassy Forest",badges:2, //placeholder score
+  layers:{canopy:1,sub:0,shrub:1,tuft:1,ground:0},
+  pillars:{Biodiversity:38,"Soil & Water":32,Habitat:36,Connectivity:40,Evidence:34}},
+
+ {id:"ER-AU-VIC-CAN-MTA-0009",name:"Mont Albert Road",suburb:"Canterbury",lat:-37.8212,lng:145.0852,
+  score:28,tier:"Habitat Garden",status:"provisional",area:300,species:19,evc:"EVC 47 Valley Grassy Forest",badges:0, //placeholder score
+  layers:{canopy:1,sub:0,shrub:0,tuft:1,ground:0},
+  pillars:{Biodiversity:32,"Soil & Water":24,Habitat:26,Connectivity:28,Evidence:14}}
+];
+
+/* ═════════ GEOGRAPHY ═════════ */
+const B={n:-37.7740,s:-37.8760,w:145.0010,e:145.1300};
+const MLAT=111320, MLNG=88000;
+const metres=(a,b)=>Math.hypot((a.lng-b.lng)*MLNG,(a.lat-b.lat)*MLAT);
+
+const RESERVES=[
+ {n:"Greythorn Park",lat:-37.7902,lng:145.0812,r:320,star:true},
+ {n:"Hays Paddock",lat:-37.7932,lng:145.0532,r:300},
+ {n:"Burke Rd Billabong",lat:-37.7886,lng:145.0618,r:220},
+ {n:"Bellbird Dell",lat:-37.7948,lng:145.0648,r:190},
+ {n:"Willsmere Park",lat:-37.7972,lng:145.0402,r:260},
+ {n:"Studley Park",lat:-37.8010,lng:145.0202,r:420,wide:true},
+ {n:"Maranoa Gardens",lat:-37.8044,lng:145.0856,r:200},
+ {n:"Hislop Park",lat:-37.8126,lng:145.0698,r:170},
+ {n:"Frog Hollow Reserve",lat:-37.8302,lng:145.0704,r:200},
+ {n:"Wattle Park",lat:-37.8396,lng:145.0928,r:400},
+ {n:"Ferndale Park",lat:-37.8582,lng:145.0648,r:290,wide:true},
+ {n:"Markham Reserve",lat:-37.8652,lng:145.0796,r:230},
+ {n:"Summerhill Reserve",lat:-37.8462,lng:145.0562,r:180},
+ {n:"Balwyn Park",lat:-37.8104,lng:145.0798,r:250},
+ {n:"Macleay Park",lat:-37.7966,lng:145.0944,r:210},
+ {n:"Canterbury Gardens",lat:-37.8250,lng:145.0808,r:190},
+ {n:"Surrey Gardens",lat:-37.8256,lng:145.0994,r:180},
+ {n:"Anderson Park",lat:-37.8170,lng:145.0336,r:220},
+ {n:"Nettleton Park",lat:-37.8342,lng:145.0596,r:170},
+ {n:"Central Gardens",lat:-37.8262,lng:145.0296,r:160}
+];
+
+const CREEKS=[
+ {n:"Yarra River",major:true,pts:[[-37.7742,145.0498],[-37.7830,145.0392],[-37.7952,145.0300],[-37.8062,145.0192],[-37.8188,145.0186],[-37.8320,145.0208],[-37.8452,145.0244]]},
+ {n:"Koonung Creek",pts:[[-37.7802,145.1180],[-37.7818,145.0900],[-37.7856,145.0700],[-37.7900,145.0540],[-37.7936,145.0410]]},
+ {n:"Gardiners Creek",pts:[[-37.8452,145.1180],[-37.8480,145.0960],[-37.8520,145.0740],[-37.8536,145.0540],[-37.8492,145.0350],[-37.8452,145.0250]]},
+ {n:"Back Creek",pts:[[-37.8060,145.0760],[-37.8180,145.0742],[-37.8320,145.0716],[-37.8440,145.0690],[-37.8520,145.0672]]},
+ {n:"Glass Creek",pts:[[-37.7920,145.0700],[-37.7988,145.0640],[-37.8046,145.0562],[-37.8090,145.0470]]}
+];
+
+/* approximate municipal outline — schematic, for orientation only */
+const BOUNDARY=[
+ [-37.7838,145.0248],[-37.7772,145.0430],[-37.7784,145.0620],[-37.7806,145.0800],
+ [-37.7818,145.0980],[-37.7828,145.1094],[-37.7960,145.1122],[-37.8100,145.1130],
+ [-37.8240,145.1122],[-37.8380,145.1062],[-37.8480,145.1002],[-37.8560,145.0942],
+ [-37.8660,145.0882],[-37.8724,145.0800],[-37.8700,145.0680],[-37.8640,145.0560],
+ [-37.8580,145.0460],[-37.8520,145.0340],[-37.8440,145.0262],[-37.8340,145.0208],
+ [-37.8200,145.0184],[-37.8060,145.0194],[-37.7940,145.0208]
+];
+
+const ROADS=[
+ {n:"Whitehorse Rd",major:true,pts:[[-37.8178,145.0246],[-37.8172,145.0560],[-37.8166,145.0840],[-37.8160,145.1122]]},
+ {n:"Canterbury Rd",major:true,pts:[[-37.8292,145.0290],[-37.8286,145.0620],[-37.8280,145.0900],[-37.8274,145.1122]]},
+ {n:"Riversdale Rd",pts:[[-37.8356,145.0292],[-37.8350,145.0640],[-37.8344,145.1000],[-37.8340,145.1122]]},
+ {n:"Toorak Rd",pts:[[-37.8432,145.0250],[-37.8426,145.0620],[-37.8420,145.0980]]},
+ {n:"Highfield Rd",pts:[[-37.8592,145.0500],[-37.8586,145.0800],[-37.8580,145.1000]]},
+ {n:"Barkers Rd",pts:[[-37.8098,145.0206],[-37.8092,145.0520],[-37.8086,145.0800]]},
+ {n:"Cotham / Belmore Rd",pts:[[-37.8062,145.0248],[-37.8054,145.0560],[-37.7986,145.0800],[-37.7962,145.1060]]},
+ {n:"Doncaster Rd",pts:[[-37.7862,145.0620],[-37.7880,145.0800],[-37.7908,145.0960],[-37.7930,145.1110]]},
+ {n:"Glenferrie Rd",major:true,pts:[[-37.8082,145.0368],[-37.8600,145.0384]]},
+ {n:"Auburn Rd",pts:[[-37.8092,145.0452],[-37.8480,145.0462]]},
+ {n:"Burke Rd",major:true,pts:[[-37.7906,145.0568],[-37.8700,145.0594]]},
+ {n:"Balwyn Rd",pts:[[-37.7846,145.0784],[-37.8560,145.0806]]},
+ {n:"Union Rd",pts:[[-37.8060,145.1004],[-37.8460,145.1016]]},
+ {n:"Elgar Rd",pts:[[-37.7940,145.1116],[-37.8480,145.1128]]},
+ {n:"Power St",pts:[[-37.8206,145.0300],[-37.8500,145.0312]]}
+];
+
+const SUBURBS=[
+ {n:"KEW",lat:-37.8058,lng:145.0304},{n:"KEW EAST",lat:-37.7926,lng:145.0560},
+ {n:"BALWYN NORTH",lat:-37.7924,lng:145.0872},{n:"BALWYN",lat:-37.8086,lng:145.0834},
+ {n:"DEEPDENE",lat:-37.8110,lng:145.0616},{n:"HAWTHORN",lat:-37.8222,lng:145.0348},
+ {n:"HAWTHORN EAST",lat:-37.8232,lng:145.0492},{n:"CANTERBURY",lat:-37.8232,lng:145.0800},
+ {n:"SURREY HILLS",lat:-37.8236,lng:145.0982},{n:"CAMBERWELL",lat:-37.8368,lng:145.0680},
+ {n:"KOOYONG",lat:-37.8330,lng:145.0256},{n:"GLEN IRIS",lat:-37.8606,lng:145.0564},
+ {n:"ASHBURTON",lat:-37.8648,lng:145.0814}
+];
+
+/* ═════════ STRATA ═════════ */
+const STRATA=[
+ {k:"canopy",n:"Canopy",h:"8 m and above",y0:40,y1:190,
+  spp:["Eucalyptus melliodora","Eucalyptus polyanthemos","Eucalyptus radiata","Eucalyptus viminalis"],
+  why:"Shade, hollows and the structural top of the system. Boroondara's strongest layer — much of it inherited rather than planted."},
+ {k:"sub",n:"Sub-canopy",h:"3 – 8 m",y0:190,y1:305,
+  spp:["Acacia melanoxylon","Acacia mearnsii","Allocasuarina littoralis","Exocarpos cupressiformis"],
+  why:"The layer small birds move through. Its absence is why a garden can hold big trees and still carry no small-bird habitat."},
+ {k:"shrub",n:"Shrub layer",h:"1 – 3 m",y0:305,y1:410,
+  spp:["Bursaria spinosa","Correa reflexa","Goodenia ovata","Cassinia aculeata","Ozothamnus ferrugineus"],
+  why:"Dense refuge and nectar. The single highest-value planting a resident can make in a suburban block."},
+ {k:"tuft",n:"Tufted &amp; groundcover",h:"below 1 m",y0:410,y1:498,
+  spp:["Lomandra longifolia","Poa morrisii","Themeda triandra","Dianella revoluta","Microlaena stipoides"],
+  why:"Skink habitat, soil cover and the layer most often replaced by lawn or mulch alone."},
+ {k:"ground",n:"Ground surface",h:"litter, logs, rock",y0:498,y1:560,
+  spp:["Retained leaf litter","Fallen timber","Rock and refuge","Bare-earth patches"],
+  why:"Not a planting layer — a management one. Costs nothing and is recorded absent more often than any other field."}
+];
+
+/* ═════════ FIELD ANATOMY ═════════ */
+const PILLARS=[
+ {n:"Biodiversity",w:"0 – 30 pts",fields:[
+  {f:"Indigenous species count",m:r=>1,pts:"absolute thresholds, not EVC-relative"},
+  {f:"Species list recorded",m:r=>1},
+  {f:"Canopy layer present",m:r=>r.layers.canopy},
+  {f:"Sub-canopy present",m:r=>r.layers.sub},
+  {f:"Shrub layer present",m:r=>r.layers.shrub},
+  {f:"Tufted / groundcover present",m:r=>r.layers.tuft},
+  {f:"EVC alignment noted",m:r=>1}]},
+ {n:"Soil & Water",w:"0 – 20 pts",fields:[
+  {f:"Mulch / organic cover",m:r=>r.score>28?1:0},
+  {f:"Permeable surfaces",m:r=>r.score>40?1:0},
+  {f:"Stormwater retained on site",m:r=>r.score>55?1:0},
+  {f:"Irrigation reduced or removed",m:r=>r.score>34?1:0},
+  {f:"Compost / on-site nutrient cycle",m:r=>r.score>46?1:0},
+  {f:"Soil disturbance limited",m:r=>r.score>32?1:0}]},
+ {n:"Habitat",w:"0 – 25 pts",fields:[
+  {f:"Leaf litter retained",m:r=>r.layers.ground},
+  {f:"Logs / fallen timber",m:r=>r.score>44?1:0},
+  {f:"Rock or refuge",m:r=>r.score>50?1:0},
+  {f:"Water source / bird bath",m:r=>r.score>36?1:0},
+  {f:"Dense shrub refuge",m:r=>r.layers.shrub},
+  {f:"Nest box or hollow",m:r=>r.score>62?1:0},
+  {f:"Fauna observed",m:r=>r.score>30?1:0}]},
+ {n:"Connectivity",w:"0 – 20 pts",fields:[
+  {f:"Adjacent park ≤ 50 m",m:r=>r._band===50?1:0,pts:"+6"},
+  {f:"Adjacent park ≤ 150 m",m:r=>r._band===150?1:0,pts:"+4"},
+  {f:"Adjacent park ≤ 300 m",m:r=>r._band===300?1:0,pts:"+2"},
+  {f:"Adjacent registered gardens",m:r=>r._adj>0?1:0,pts:"1 → +3 · 2 → +4 · 3+ → +6"},
+  {f:"Corridor node confirmed",m:r=>0,pts:"+5 · assessor-asserted, not computed"},
+  {f:"Cluster area ≥ 1 ha",m:r=>r._cluster?1:0,pts:"≥1 ha +1 · ≥2 ha +3"}]},
+ {n:"Evidence",w:"0 – 15 pts",fields:[
+  {f:"Assessment type recorded",m:r=>1},
+  {f:"Named assessor",m:r=>r.status==="verified"?1:0},
+  {f:"Photographs held",m:r=>r.status==="verified"?1:0},
+  {f:"Field notes",m:r=>r.score>40?1:0,pts:"+2"},
+  {f:"Baseline date",m:r=>1},
+  {f:"Independent verification",m:r=>0,pts:"open methodology gap"}]}
+];
+
+/* ═════════ OBSERVATION SETS ═════════ */
+const HABITAT=[
+ {n:"Mulch / organic cover",p:.89},{n:"Dense shrub refuge",p:.67},{n:"Leaf litter retained",p:.56},
+ {n:"Water source or bird bath",p:.44},{n:"Fallen timber / logs",p:.33},{n:"Rock or refuge pile",p:.22},
+ {n:"Nest box or hollow",p:.11},{n:"Frog habitat / pond",p:.11}
+];
+const WEEDS=[
+ {n:"Sweet Pittosporum",l:"Pittosporum undulatum",p:.67},
+ {n:"English Ivy",l:"Hedera helix",p:.56},
+ {n:"Wandering Trad",l:"Tradescantia fluminensis",p:.56},
+ {n:"Agapanthus",l:"Agapanthus praecox",p:.44},
+ {n:"Japanese Honeysuckle",l:"Lonicera japonica",p:.33},
+ {n:"Cotoneaster",l:"Cotoneaster glaucophyllus",p:.33},
+ {n:"Angled Onion",l:"Allium triquetrum",p:.22}
+];
+const FAUNA=[
+ {n:"Ringtail possum",p:.78},{n:"Rainbow lorikeet",p:.78},{n:"Magpie",p:.67},
+ {n:"Eastern spinebill",p:.44},{n:"Garden skink",p:.44},{n:"Blue-banded bee",p:.33},
+ {n:"Superb fairywren",p:.22},{n:"Tawny frogmouth",p:.11}
+];
+
+/* ═════════ DEMAND ═════════ */
+const DEMAND={
+ now:[["Camberwell",168],["Balwyn North",149],["Kew",133],["Hawthorn",121],["Canterbury",108],["Balwyn",96],["Glen Iris",84],["Surrey Hills",71]],
+ pilot:[["Camberwell",492],["Balwyn North",446],["Kew",398],["Hawthorn",356],["Canterbury",318],["Balwyn",284],["Glen Iris",246],["Surrey Hills",212]],
+ scale:[["Camberwell",2680],["Balwyn North",2440],["Kew",2160],["Hawthorn",1940],["Canterbury",1730],["Balwyn",1540],["Glen Iris",1330],["Surrey Hills",1150]]
+};
+const DKEY={"Camberwell":"CAMBERWELL","Balwyn North":"BALWYN NORTH","Kew":"KEW","Hawthorn":"HAWTHORN",
+ "Canterbury":"CANTERBURY","Balwyn":"BALWYN","Glen Iris":"GLEN IRIS","Surrey Hills":"SURREY HILLS"};
+const TREND={now:[42,49,58,54,67,79,74,88,96,111,124,140],
+ pilot:[124,152,181,208,248,278,305,344,381,411,449,484],
+ scale:[484,706,902,1066,1261,1455,1650,1824,1998,2172,2336,2500]};
+const FUNNEL={
+ now:[["EVC lookups from Boroondara addresses",1030],["Planting guide requested",321],["Started a garden record",47],["Record completed and held",9]],
+ pilot:[["EVC lookups from Boroondara addresses",3186],["Planting guide requested",994],["Started a garden record",178],["Record completed and held",34]],
+ scale:[["EVC lookups from Boroondara addresses",17970],["Planting guide requested",5790],["Started a garden record",1120],["Record completed and held",381]]};
+
+/* ═════════ SCENARIOS ═════════ */
+const NAMES=["Rosebank","Wattle Bank","The Paddock","Hazel Street","Kooyong Close","Gum Row","Silver Banksia",
+"Bell Bird","Ironbark","Kurrajong","Bluetongue","Hillside","The Verge","Manna","Sassafras","Wren Court",
+"Pardalote","Correa","Bursaria","Kangaroo Grass","Lomandra","The Swale","Fern Gully","Tussock","Dianella",
+"Chocolate Lily","Honeyeater","Ridgeline","Old Orchard","Spotted Gum","The Understorey","Casuarina","Rock Fern",
+"Mat Rush","Kunzea","Nectar Row","Billabong","Creekside","Two Elms","Blackwood"];
+const EVCS=["EVC 47 Valley Grassy Forest","EVC 55 Plains Grassy Woodland","EVC 56 Floodplain Riparian Woodland","EVC 175 Grassy Woodland"];
+
+function generate(count,seed,tight){
+  const rnd=seeded(seed),out=[];
+  const anchors=tight
+    ? RESERVES.filter(r=>["Greythorn Park","Bellbird Dell","Burke Rd Billabong","Hays Paddock","Maranoa Gardens"].indexOf(r.n)>-1)
+    : RESERVES.concat(SUBURBS.map(s=>({lat:s.lat,lng:s.lng,r:800})));
+  for(let i=0;i<count;i++){
+    const a=anchors[Math.floor(rnd()*anchors.length)];
+    const sp=(a.r||400)/MLAT*(tight?2.6:3.4);
+    const lat=a.lat+(rnd()-.5)*sp*2, lng=a.lng+(rnd()-.5)*sp*2*(MLAT/MLNG);
+    if(lat<B.s+.003||lat>B.n-.003||lng<B.w+.004||lng>B.e-.004){i--;continue}
+    const roll=rnd();
+    const status=roll<.2?"verified":roll<.72?"third":"provisional";
+    const base=status==="verified"?36:status==="third"?27:16;
+    const score=Math.max(8,Math.min(94,Math.round(base+rnd()*36)));
+    const sub=SUBURBS.reduce((b,s)=>metres({lat,lng},s)<metres({lat,lng},b)?s:b,SUBURBS[0]).n;
+    out.push({
+      id:"ER-AU-VIC-BOR-"+String(1000+i).slice(1)+"-"+(seed%89),
+      name:NAMES[Math.floor(rnd()*NAMES.length)],
+      suburb:sub.charAt(0)+sub.slice(1).toLowerCase(),
+      lat,lng,score,status,
+      tier:score>=50?"Ecological Garden":score>=32?"Habitat Garden":"Basic Garden",
+      area:260+Math.round(rnd()*680),
+      species:9+Math.round(rnd()*(score/1.5)),
+      evc:EVCS[Math.floor(rnd()*EVCS.length)],
+      badges:status==="provisional"?0:Math.round(score/14),
+      layers:{canopy:rnd()<.78?1:0, sub:rnd()<(score>50?.5:.22)?1:0, shrub:rnd()<(score>40?.72:.4)?1:0,
+              tuft:rnd()<.84?1:0, ground:rnd()<(score>44?.6:.3)?1:0},
+      pillars:{Biodiversity:Math.min(100,Math.round(score*(.8+rnd()*.45))),
+        "Soil & Water":Math.min(100,Math.round(score*(.7+rnd()*.45))),
+        Habitat:Math.min(100,Math.round(score*(.85+rnd()*.45))),
+        Connectivity:Math.min(100,Math.round(score*(.6+rnd()*.6))),
+        Evidence:status==="provisional"?14:Math.min(100,Math.round(score*(.8+rnd()*.4)))}
+    });
+  }
+  return out;
+}
+
+const VIEWS={
+ now:{label:"9 gardens · recorded now",records:BOROONDARA,lookups:1030},
+ pilot:{label:"With the Backyard Biodiversity Project · 12 months",records:BOROONDARA.concat(generate(27,3319,true)),lookups:3186},
+ scale:{label:"At scale · the ten-year record",records:BOROONDARA.concat(generate(372,8815,false)),lookups:17970}
+};
+
+
+/* ═════════ STATE ═════════ */
+let view="now", stratum="sub", threshold=300, selected=null;
+let layers={links:true,gaps:false,reserves:true,creeks:true,rings:false,lookups:false,boundary:true};
+const recs=()=>VIEWS[view].records;
+const fmt=n=>n.toLocaleString("en-AU");
+const reduceMotion=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a)=>{const n=document.createElementNS(SVGNS,t);for(const k in a)n.setAttribute(k,a[k]);return n};
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim()||"#7C9A52";
+
+function derive(){
+  const rs=recs();
+  rs.forEach(r=>{
+    let best=Infinity;
+    RESERVES.forEach(v=>{const d=Math.max(0,metres(r,v)-v.r);if(d<best)best=d});
+    r._dist=best;
+    r._band=best<=50?50:best<=150?150:best<=300?300:0;
+    r._adj=rs.filter(o=>o!==r&&o.status!=="provisional"&&metres(r,o)<=300).length;
+    r._cluster=r._adj>=1;
+  });
+}
+
+/* ═════════ NETWORK ═════════ */
+function computeNetwork(thr){
+  const rs=recs();
+  const nodes=rs.map(r=>({lat:r.lat,lng:r.lng,kind:"g",ref:r}))
+    .concat(RESERVES.map(v=>({lat:v.lat,lng:v.lng,kind:"r",ref:v})));
+  const parent=nodes.map((_,i)=>i);
+  const find=i=>{while(parent[i]!==i){parent[i]=parent[parent[i]];i=parent[i]}return i};
+  const join=(a,b)=>{a=find(a);b=find(b);if(a!==b){parent[b]=a}};
+  const gap=(i,j)=>{
+    const A=nodes[i],C=nodes[j];
+    const pad=(A.kind==="r"?A.ref.r:0)+(C.kind==="r"?C.ref.r:0);
+    return Math.max(0,metres(A,C)-pad*0.62);
+  };
+  const links=[],near=[];
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    if(nodes[i].kind==="r"&&nodes[j].kind==="r")continue;
+    const d=gap(i,j);
+    if(d<=thr){links.push([i,j,d]);join(i,j)}
+    else if(d<=thr*2.1)near.push([i,j,d]);
+  }
+  const groups={};
+  nodes.forEach((_,i)=>{const r=find(i);(groups[r]=groups[r]||[]).push(i)});
+  const comps=Object.values(groups);
+  let largest=0,chain=0,bridged=0,orphan=0;
+  comps.forEach(g=>{
+    const gardens=g.filter(i=>nodes[i].kind==="g").length;
+    const reserves=g.filter(i=>nodes[i].kind==="r").length;
+    if(g.length===1&&nodes[g[0]].kind==="g")orphan++;
+    if(gardens>largest)largest=gardens;
+    if(reserves>=2&&gardens>=1)bridged+=reserves;
+    if(g.length>1&&g.length<220){
+      for(let a=0;a<g.length;a++)for(let b=a+1;b<g.length;b++){
+        const d=metres(nodes[g[a]],nodes[g[b]]);if(d>chain)chain=d;
+      }
+    }
+  });
+  const gaps=[],seen={};
+  near.sort((x,y)=>x[2]-y[2]);
+  for(const t of near){
+    const a=find(t[0]),b=find(t[1]);
+    if(a===b)continue;
+    const ga=groups[a]||[],gb=groups[b]||[];
+    if(!(ga.some(k=>nodes[k].kind==="r")||gb.some(k=>nodes[k].kind==="r")))continue;
+    const key=Math.min(a,b)+":"+Math.max(a,b);
+    if(seen[key])continue;
+    seen[key]=1;gaps.push(t);
+    if(gaps.length>=18)break;
+  }
+  return {nodes,links,gaps,clusters:comps.filter(g=>g.length>1).length,largest,chain,bridged,orphan};
+}
+
+/* ═════════ LEAFLET MAP ═════════ */
+let map=null,tiles=null,G={};
+const TILE={
+  understory:"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  canopy:"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+};
+const ATTR='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> · Registry overlay: Ecological Registry';
+
+/* organic reserve outline in lat/lng */
+function blobLatLng(v,seed){
+  const rnd=seeded(seed),n=16,out=[];
+  const rLat=v.r/MLAT, rLng=v.r/MLNG;
+  for(let i=0;i<n;i++){
+    const a=i/n*Math.PI*2,k=.76+rnd()*.46;
+    out.push([v.lat+Math.sin(a)*rLat*k*(v.wide?.6:1), v.lng+Math.cos(a)*rLng*k*(v.wide?1.7:1)]);
+  }
+  return out;
+}
+
+function initMap(){
+  if(typeof L==="undefined"){document.getElementById("offline").style.display="flex";return false}
+  map=L.map("map",{scrollWheelZoom:false,zoomControl:true,attributionControl:true,preferCanvas:true});
+  tiles=L.tileLayer(TILE[document.documentElement.dataset.theme]||TILE.understory,
+    {attribution:ATTR,maxZoom:19,subdomains:"abcd"}).addTo(map);
+  L.control.scale({imperial:false,position:"bottomleft"}).addTo(map);
+  map.fitBounds(L.latLngBounds(BOUNDARY),{padding:[18,18]});
+  ["boundary","lookups","creeks","rings","reserves","gaps","links","gardens"].forEach(k=>{
+    G[k]=L.layerGroup().addTo(map);
+  });
+  return true;
+}
+
+function drawNet(){
+  const rs=recs(), net=computeNetwork(threshold);
+  paintReadout(net);
+  if(!map)return net;
+  Object.keys(G).forEach(k=>G[k].clearLayers());
+
+  const SIG=css("--signal"),BRASS=css("--brass"),CLAY=css("--clay"),INK=css("--ink");
+
+  if(layers.boundary)
+    L.polygon(BOUNDARY,{color:BRASS,weight:1.8,opacity:.8,fill:false,dashArray:"1 5"}).addTo(G.boundary);
+
+  if(layers.lookups){
+    const rows=DEMAND[view],max=rows[0][1];
+    rows.forEach(([nm,v])=>{
+      const q=SUBURBS.find(x=>x.n===DKEY[nm]);if(!q)return;
+      L.circle([q.lat,q.lng],{radius:300+(v/max)*900,color:BRASS,weight:0,
+        fillColor:BRASS,fillOpacity:.13}).addTo(G.lookups);
+    });
+  }
+
+  if(layers.creeks)
+    CREEKS.forEach(c=>L.polyline(c.pts,{color:BRASS,weight:c.major?5:2.5,
+      opacity:c.major?.55:.4,lineCap:"round"}).addTo(G.creeks));
+
+  if(layers.reserves)
+    RESERVES.forEach((v,i)=>{
+      if(layers.rings)[300,150,50].forEach((m,k)=>{
+        L.circle([v.lat,v.lng],{radius:v.r+m,color:SIG,weight:.8,opacity:.3,
+          dashArray:k===2?null:"4 5",fillColor:SIG,fillOpacity:[.04,.055,.07][k]}).addTo(G.rings);
+      });
+      L.polygon(blobLatLng(v,1700+i),{color:SIG,weight:1.2,opacity:.7,
+        fillColor:SIG,fillOpacity:.28}).addTo(G.reserves)
+        .bindTooltip(v.n,{className:"maptip",direction:"top",sticky:true});
+      if(v.star)L.polygon(blobLatLng(v,1700+i),{color:SIG,weight:2.2,opacity:1,fill:false})
+        .addTo(G.reserves);
+    });
+
+  if(layers.gaps)
+    net.gaps.forEach(([i,j])=>{
+      const A=net.nodes[i],C=net.nodes[j];
+      L.polyline([[A.lat,A.lng],[C.lat,C.lng]],{color:CLAY,weight:1.8,dashArray:"6 6",opacity:.9})
+        .addTo(G.gaps);
+      L.circleMarker([(A.lat+C.lat)/2,(A.lng+C.lng)/2],{radius:5,color:CLAY,weight:1.6,fill:false})
+        .addTo(G.gaps)
+        .bindTooltip("Missing link — one garden here joins two clusters",{className:"maptip",direction:"top"});
+    });
+
+  if(layers.links)
+    net.links.forEach(([i,j])=>{
+      const A=net.nodes[i],C=net.nodes[j];
+      const toReserve=A.kind==="r"||C.kind==="r";
+      L.polyline([[A.lat,A.lng],[C.lat,C.lng]],
+        {color:SIG,weight:toReserve?2.4:1.5,opacity:toReserve?.9:.6}).addTo(G.links);
+    });
+
+  rs.forEach(r=>{
+    const core=r.score>=50?7:r.score>=32?5.5:4.2;
+    const col=r.status==="verified"?SIG:BRASS;
+    const op=r.status==="provisional"?.55:1;
+    L.circleMarker([r.lat,r.lng],{radius:core+5,color:col,weight:.9,opacity:.35*op,
+      fill:false,dashArray:r.status==="provisional"?"2 3":null}).addTo(G.gardens);
+    const m=L.circleMarker([r.lat,r.lng],{radius:core,color:col,weight:1,opacity:op,
+      fillColor:col,fillOpacity:.85*op}).addTo(G.gardens);
+    m.bindTooltip(r.name+" · "+r.score,{className:"maptip",direction:"top"});
+    m.on("click",()=>{selected=r;drawNet();drawBands()});
+    if(selected&&selected.id===r.id)
+      L.circleMarker([r.lat,r.lng],{radius:core+12,color:INK,weight:1.4,opacity:.85,fill:false}).addTo(G.gardens);
+  });
+  return net;
+}
+
+function paintReadout(net){
+  document.getElementById("nLinks").textContent=fmt(net.links.length);
+  document.getElementById("nClusters").textContent=fmt(net.clusters);
+  document.getElementById("nLargest").textContent=fmt(net.largest);
+  document.getElementById("nBridged").textContent=fmt(net.bridged);
+  document.getElementById("nChain").textContent=(net.chain/1000).toFixed(1)+" km";
+  document.getElementById("nOrphan").textContent=fmt(net.orphan);
+  document.getElementById("gapCap").textContent=layers.gaps
+    ? net.gaps.length+" missing links shown. Each ring marks roughly where one registered garden would merge two clusters that are currently separate."
+    : "A cluster is a run of reserves and gardens joined by links no longer than the threshold. A chain that crosses private land is the part no existing council dataset can see.";
+}
+
+function drawBands(){
+  const rs=recs();
+  const rows=[
+    {n:"Within 50 m of a reserve",t:r=>r._band===50,p:"+6 connectivity points"},
+    {n:"Within 150 m",t:r=>r._band===150,p:"+4 connectivity points"},
+    {n:"Within 300 m",t:r=>r._band===300,p:"+2 connectivity points"},
+    {n:"Beyond 300 m — no reserve reach",t:r=>r._band===0,p:"0 points · the planting target"},
+    {n:"Adjacent to another registered garden",t:r=>r._adj>0,p:"1 → +3 · 2 → +4 · 3 or more → +6"},
+    {n:"Corridor node confirmed by an assessor",t:()=>false,p:"+5 · not one garden in the municipality carries it yet"}
+  ];
+  const max=Math.max.apply(null,rows.map(R=>rs.filter(R.t).length))||1;
+  let sel="";
+  if(selected){
+    const r=selected;
+    const badge=r.status==="verified"
+      ? '<span class="pillb" style="color:var(--signal);border-color:var(--signal)">Site visit verified</span>'
+      : r.status==="third"
+      ? '<span class="pillb" style="color:var(--clay);border-color:var(--clay)">Third-party evidence</span>'
+      : '<span class="pillb" style="color:var(--faint);border-color:var(--faint);border-style:dashed">Provisional</span>';
+    const nearest=Math.round(r._dist);
+    sel='<div class="selcard"><div class="rid">'+r.id+'</div><div class="nm">'+r.name+'</div>'
+      +'<div class="sb">'+r.suburb+' · '+r.evc+'</div>'
+      +'<div class="sw"><div class="sc">'+r.score+'</div><div style="padding-bottom:4px;font-size:11.5px;color:var(--dim)">'
+      +r.tier+'<br><span class="mono" style="font-size:10.5px;opacity:.75">'+r.area+' m² · '+r.species+' species</span></div></div>'
+      +'<div>'+badge+'</div><div style="margin-top:12px">'
+      +'<div class="kv"><span>Nearest reserve edge</span><b>'+(nearest===0?"adjoining":nearest+" m")+'</b></div>'
+      +'<div class="kv"><span>Registered gardens within 300 m</span><b>'+r._adj+'</b></div>'
+      +'<div class="kv"><span>Connectivity pillar</span><b>'+r.pillars.Connectivity+'</b></div>'
+      +'<div class="kv"><span>Layers recorded</span><b>'+Object.keys(r.layers).filter(k=>r.layers[k]).length+' of 5</b></div>'
+      +'</div></div>';
+  }
+  document.getElementById("bands").innerHTML=sel
+    +'<div class="lab" style="display:block;margin-bottom:12px">Connectivity, as the engine measures it</div>'
+    +rows.map(R=>{
+      const c=rs.filter(R.t).length;
+      return '<div class="bnd"><span class="n">'+R.n+'</span><span class="c">'+c+'</span>'
+        +'<span class="tr"><i style="width:'+(c/max*100)+'%"></i></span><span class="s">'+R.p+'</span></div>';
+    }).join('')
+    +'<p class="note">Greythorn Park is ringed on the map. The Friends group plants there every year; the network shows exactly which private blocks would carry that planting past the fence line — and the corridor-node field is still empty, waiting for someone qualified to confirm the first one.</p>';
+}
+
+/* ═════════ STRATA BUTTONS ═════════ */
+const share=k=>{const rs=recs();return rs.filter(r=>r.layers[k]).length/(rs.length||1)};
+
+function drawStrata(){
+  const rs=recs();
+  document.getElementById("stratBtns").innerHTML=STRATA.map(S=>{
+    const s=share(S.k),have=rs.filter(r=>r.layers[S.k]).length;
+    return '<button class="sbtn" data-k="'+S.k+'" aria-pressed="'+(stratum===S.k)+'">'
+      +'<div class="sbh">'+S.h.toUpperCase()+'</div>'
+      +'<div class="sbt">'+S.n+'</div>'
+      +'<div class="sbn">'+Math.round(s*100)+'<small>%</small></div>'
+      +'<div class="sbr"><i style="width:'+Math.round(s*100)+'%"></i></div>'
+      +'<div class="sbc">'+have+' of '+rs.length+' gardens</div></button>';
+  }).join('');
+  document.querySelectorAll(".sbtn").forEach(b=>b.addEventListener("click",()=>{
+    stratum=b.dataset.k;drawStrata();
+  }));
+  drawStratDetail();
+}
+
+function drawStratDetail(){
+  const S=STRATA.find(x=>x.k===stratum),rs=recs();
+  const have=rs.filter(r=>r.layers[S.k]).length,missing=rs.length-have;
+  const nm=S.n.replace("&amp;","&");
+  document.getElementById("stratDetail").innerHTML=
+    '<div><div class="lab">Selected layer</div><h3>'+nm+'</h3>'
+    +'<p class="why">'+S.why+'</p>'
+    +'<p class="note"><b class="mono" style="font-weight:400">'+missing+' garden'+(missing===1?'':'s')
+    +'</b> in the municipality have no '+nm.toLowerCase()+' recorded. That is a plant list, an address list and a planting round — already assembled.</p></div>'
+    +'<div><div class="lab" style="margin-bottom:12px">Recorded in this layer</div>'
+    +'<div class="spplist">'+S.spp.map(sp=>'<div class="r">'
+      +(/^[A-Z][a-z]+ [a-z]/.test(sp)?'<i>'+sp+'</i>':sp)+'</div>').join('')+'</div></div>';
+}
+
+/* ═════════ ANATOMY ═════════ */
+function drawAnat(){
+  const rs=recs(),n=rs.length||1,ver=rs.filter(r=>r.status!=="provisional");
+  document.getElementById("anat").innerHTML=PILLARS.map(P=>{
+    const avg=Math.round(ver.reduce((s,r)=>s+r.pillars[P.n],0)/(ver.length||1));
+    return '<div class="pil"><div class="pn">'+P.n+'</div><div class="pw">'+P.w+'</div>'
+      +'<div class="avg"><b>'+avg+'</b><span>mean across verified records</span></div>'
+      +P.fields.map(F=>{
+        const c=rs.reduce((s,r)=>s+(F.m(r)?1:0),0),pc=Math.round(c/n*100);
+        return '<div class="fld'+(c===0?' zero':'')+'"><div class="t"><span>'+F.f+'</span><b>'+c+'/'+n+'</b></div>'
+          +'<div class="tr"><i style="width:'+(c===0?100:pc)+'%"></i></div>'
+          +(F.pts?'<span class="pts">'+F.pts+'</span>':'')+'</div>';
+      }).join('')+'</div>';
+  }).join('');
+}
+
+/* ═════════ OBSERVATIONS ═════════ */
+function obsRows(id,set,cls){
+  const n=recs().length;
+  document.getElementById(id).innerHTML=set.map(o=>{
+    const c=Math.max(0,Math.round(n*o.p));
+    return '<div class="row '+cls+'"><span class="nm">'+o.n+(o.l?' <i>'+o.l+'</i>':'')+'</span>'
+      +'<span class="ct">'+c+'</span><span class="tr"><i style="width:'+Math.round(o.p*100)+'%"></i></span></div>';
+  }).join('');
+}
+
+/* ═════════ PROVENANCE / DEMAND / TRAJECTORY ═════════ */
+function drawProv(){
+  const rs=recs(),n=rs.length||1;
+  const set=[
+    {k:"Registry site visit",f:r=>r.status==="verified",c:"var(--signal)",s:"Verified against the published method by a named assessor"},
+    {k:"Third-party assessment",f:r=>r.status==="third",c:"var(--brass)",s:"Council or program evidence · supplied by the steward, not verified by the Registry"},
+    {k:"Steward self-enrolment",f:r=>r.status==="provisional",c:"var(--ghost)",s:"Provisional · publicly visible, hard-quarantined, never aggregated as verified"}
+  ];
+  document.getElementById("prov").innerHTML=set.map(b=>{
+    const c=rs.filter(b.f).length,pc=Math.round(c/n*100);
+    return '<div class="pv"><span class="n">'+b.k+'</span><span class="c">'+c+' · '+pc+'%</span>'
+      +'<span class="tr"><i style="width:'+pc+'%;background:'+b.c+'"></i></span><span class="s">'+b.s+'</span></div>';
+  }).join('');
+}
+
+function drawDemand(){
+  const rows=DEMAND[view],max=rows[0][1];
+  document.getElementById("subs").innerHTML=rows.map(([n,v])=>
+    '<div class="pv"><span class="n">'+n+'</span><span class="c">'+fmt(v)+'</span>'
+    +'<span class="tr"><i style="width:'+(v/max*100)+'%;background:var(--brass)"></i></span></div>').join('');
+  const t=TREND[view],sv=document.getElementById("trend");
+  while(sv.firstChild)sv.removeChild(sv.firstChild);
+  const W=520,H=110,p=8,mx=Math.max.apply(null,t);
+  const X=i=>p+i*(W-p*2)/(t.length-1),Y=v=>H-p-(v/mx)*(H-p*2.2);
+  const line=t.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)).join(" ");
+  sv.appendChild(el("path",{d:line+" L "+X(t.length-1)+" "+(H-p)+" L "+X(0)+" "+(H-p)+" Z",fill:"var(--brass)",opacity:".14"}));
+  sv.appendChild(el("path",{d:line,fill:"none",stroke:"var(--brass)","stroke-width":1.6}));
+  sv.appendChild(el("circle",{cx:X(t.length-1),cy:Y(t[t.length-1]),r:3.2,fill:"var(--brass)"}));
+  const lb=el("text",{x:p,y:12,fill:"currentColor","font-family":"IBM Plex Mono, monospace","font-size":9.5,opacity:".42","letter-spacing":".14em"});
+  lb.textContent="MONTHLY LOOKUPS · 12 MONTHS";sv.appendChild(lb);
+  const f=FUNNEL[view],top=f[0][1];
+  document.getElementById("funnel").innerHTML=f.map(([n,v],i)=>
+    '<div class="fs"><span>'+n+'</span><span><b>'+fmt(v)+'</b><span class="pc">'+(i?Math.round(v/top*100)+"%":"")+'</span></span></div>').join('');
+}
+
+function drawTraj(){
+  const sv=document.getElementById("traj");
+  while(sv.firstChild)sv.removeChild(sv.firstChild);
+  const W=520,H=200,p=22;
+  const rs=recs().filter(r=>r.status!=="provisional").slice(0,16);
+  const steps=view==="scale"?7:view==="pilot"?3:2;
+  const X=i=>p+i*(W-p*2)/(steps-1),Y=v=>H-p-(v/100)*(H-p*1.7);
+  [0,25,50,75,100].forEach(v=>{
+    sv.appendChild(el("line",{x1:p,y1:Y(v),x2:W-p,y2:Y(v),stroke:"currentColor","stroke-width":.5,opacity:".13"}));
+    const t=el("text",{x:3,y:Y(v)+3,fill:"currentColor","font-family":"IBM Plex Mono, monospace","font-size":9,opacity:".38"});
+    t.textContent=v;sv.appendChild(t);
+  });
+  let gains=0,tierUp=0;
+  rs.forEach((r,i)=>{
+    const rnd=seeded(r.score*29+i*11),pts=[];
+    let v=Math.max(6,r.score-(steps-1)*(4+rnd()*5));
+    for(let s=0;s<steps;s++){pts.push(v);v=Math.min(100,v+3+rnd()*9)}
+    pts[steps-1]=r.score;gains+=r.score-pts[0];
+    if((pts[0]<32&&r.score>=32)||(pts[0]<50&&r.score>=50))tierUp++;
+    const d=pts.map((q,k)=>(k?"L":"M")+X(k).toFixed(1)+" "+Y(q).toFixed(1)).join(" ");
+    sv.appendChild(el("path",{d,fill:"none",stroke:r.status==="third"?"var(--brass)":"var(--signal)","stroke-width":1.3,opacity:.7}));
+    sv.appendChild(el("circle",{cx:X(steps-1),cy:Y(r.score),r:2.6,fill:r.status==="third"?"var(--brass)":"var(--signal)"}));
+  });
+  for(let i=0;i<steps;i++){
+    const t=el("text",{x:X(i),y:H-5,"text-anchor":"middle",fill:"currentColor","font-family":"IBM Plex Mono, monospace","font-size":9,opacity:".38"});
+    t.textContent=i===steps-1?"NOW":"YR "+(i+1);sv.appendChild(t);
+  }
+  document.getElementById("trajstats").innerHTML=
+    '<div class="fs"><span>Records with more than one reading</span><b>'+rs.length+'</b></div>'
+    +'<div class="fs"><span>Mean gain per assessment cycle</span><b>+'+(gains/(rs.length||1)/(steps-1)).toFixed(1)+'</b></div>'
+    +'<div class="fs"><span>Gardens that moved up a tier</span><b>'+Math.max(1,tierUp)+'</b></div>';
+}
+
+/* ═════════ STAT BAND ═════════ */
+function animate(node,to,suffix){
+  const from=parseFloat(node.dataset.cur||"0");node.dataset.cur=to;
+  if(reduceMotion||!window.requestAnimationFrame){node.innerHTML=fmt(to)+(suffix||"");return}
+  const t0=(window.performance&&performance.now)?performance.now():Date.now(),dur=850;
+  (function step(t){
+    const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3),v=from+(to-from)*e;
+    if(k<1){node.innerHTML=fmt(Math.round(v))+(suffix||"");requestAnimationFrame(step)}
+    else node.innerHTML=fmt(to)+(suffix||"");
+  })(t0);
+}
+function drawBand(){
+  const rs=recs(),ver=rs.filter(r=>r.status!=="provisional");
+  const vals={gardens:rs.length,
+    species:Math.round(ver.reduce((s,r)=>s+r.species,0)*0.6),
+    area:rs.reduce((s,r)=>s+r.area,0),
+    score:Math.round(ver.reduce((s,r)=>s+r.score,0)/(ver.length||1)),
+    mid:Math.round(share("sub")*100),
+    lookups:VIEWS[view].lookups};
+  document.querySelectorAll("[data-s]").forEach(n=>{
+    const k=n.dataset.s;
+    animate(n,vals[k],k==="area"?' <small>m²</small>':k==="mid"?' <small>%</small>':"");
+  });
+}
+
+/* ═════════ WIRING ═════════ */
+function renderAll(){
+  derive();drawBand();drawNet();drawBands();drawStrata();drawAnat();
+  obsRows("habitat",HABITAT,"have");obsRows("weeds",WEEDS,"wd");obsRows("fauna",FAUNA,"have");
+  drawProv();drawDemand();drawTraj();
+}
+
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{
+  view=b.dataset.view;selected=null;
+  document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  renderAll();
+}));
+document.querySelectorAll("[data-l]").forEach(c=>c.addEventListener("change",()=>{
+  layers[c.dataset.l]=c.checked;drawNet();
+}));
+const thrEl=document.getElementById("thr");
+thrEl.addEventListener("input",()=>{
+  threshold=+thrEl.value;
+  document.getElementById("thrVal").textContent=threshold;
+  drawNet();
+});
+const tb=document.getElementById("themeBtn");
+tb.addEventListener("click",()=>{
+  const next=document.documentElement.dataset.theme==="canopy"?"understory":"canopy";
+  document.documentElement.dataset.theme=next;
+  tb.textContent=next==="canopy"?"Canopy":"Understory";
+  if(tiles)tiles.setUrl(TILE[next]);
+  drawNet();
+});
+document.addEventListener("keydown",e=>{
+  if(e.target&&e.target.tagName==="INPUT")return;
+  if("123".indexOf(e.key)>-1)document.querySelectorAll("[data-view]")[+e.key-1].click();
+  if(e.key&&e.key.toLowerCase()==="t")tb.click();
+  if(e.key&&e.key.toLowerCase()==="m"){
+    const c=document.querySelector('[data-l="gaps"]');c.checked=!c.checked;
+    c.dispatchEvent(new Event("change"));
+  }
+});
+document.querySelectorAll(".sec > .head, .pil, .trio > div, .wide > div").forEach(n=>n.classList.add("rv"));
+if(window.IntersectionObserver){
+  const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}}),{threshold:.1});
+  document.querySelectorAll(".rv").forEach(n=>io.observe(n));
+}else document.querySelectorAll(".rv").forEach(n=>n.classList.add("in"));
+
+initMap();
+renderAll();
+
+</script>
+</body>
+</html>
