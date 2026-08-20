@@ -61,7 +61,7 @@
       "Solanum laciniatum",
       "Eucalyptus tricarpa"
     ],
-    "species_note": "Steward-reported list, not yet verified by field assessment. Subject to further inventory."
+    "species_note": "Opening inventory of 20 indigenous species recorded at the first field assessment (Aug 2026) — a floor, not a full count. Fuller inventory and accurate canopy mapping pending a return visit; the steward may add further species via the profile page."
   },
   "soil_water": {
     "soil_health_score": 5,
@@ -161,6 +161,16 @@
     },
     {
       "title": "Field notes — complete species inventory",
+      "date": null,
+      "complete": false
+    },
+    {
+      "title": "Return visit — canopy mapping & full species inventory",
+      "date": null,
+      "complete": false
+    },
+    {
+      "title": "Steward photo archive — garden evolution imagery",
       "date": null,
       "complete": false
     }
@@ -271,5 +281,6 @@
         ]
       }
     ]
-  }
+  },
+  "baseline_note": "The 1998 baseline is a reconstructed, steward-reported starting point — the year Sam Cox began transforming the site — not a Gardener & Son field measurement. Baseline figures are indicative of pre-transformation condition per the steward's account and the garden's documented history."
 }
