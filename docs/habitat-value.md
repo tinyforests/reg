@@ -106,8 +106,13 @@ they create ecological function in landscapes the state model rates *low* strate
 value. This validates keeping Habitat Value separate from ecological function.
 
 **Anomalies / limitations:**
-- 16 of 19 used **display (privacy-fuzzed) coords** — approximate context only; 3 used
-  precise coords. Re-run with precise coords per garden for property-grade values.
+- Only **3 of 19 gardens are geocoded** (Auburn 0, Arundel 24, Wattle Glen 97) — via
+  the Garden Coords sheet / a published live record. The other **16 have no precise
+  coord anywhere** (no published record, not geocoded), so the batch falls back to the
+  **display (privacy-fuzzed) coord** — approximate context only. The lookup already
+  prefers precise (Garden Coords sheet → live `connectivity.lat/lng` → display); the
+  gate is data capture, not the query. **Action for property-grade values: geocode the
+  remaining gardens** (assess.html coord capture); they then auto-upgrade to precise.
 - 75 m cells: centroid can differ from the local mean (Wattle Glen 97 vs 78.4) — the
   point is a peak cell; the neighbourhood is lower. Both are stored.
 - Very low values cluster at exactly 0 (cleared urban) — real, not missing.

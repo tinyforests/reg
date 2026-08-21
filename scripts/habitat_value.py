@@ -192,7 +192,20 @@ def fetch_all_coords():
         if gid and lat is not None and lng is not None and "-VIC-" in gid:
             merged[gid] = {"lat": lat, "lng": lng, "src": "display"}
 
-    # 2. overlay precise coords where we have them
+    # 2. precise from each live record's connectivity.lat/lng (admin/precise field,
+    #    distinct from the fuzzed display_lat/lng)
+    for gid in list(merged):
+        try:
+            u = p.ENDPOINT + "?" + urllib.parse.urlencode(
+                {"action": "get_garden_record", "garden_id": gid, "_cb": str(int(__import__("time").time() * 1000))})
+            rec = (_get(u, timeout=30) or {}).get("data") or {}
+            c = rec.get("connectivity") or {}
+            if c.get("lat") is not None and c.get("lng") is not None:
+                merged[gid] = {"lat": c["lat"], "lng": c["lng"], "src": "precise"}
+        except Exception:
+            pass
+
+    # 3. overlay the authoritative Garden Coords sheet (most trusted precise)
     tok = os.environ.get("ER_ADMIN_TOKEN")
     if tok:
         try:
