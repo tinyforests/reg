@@ -50,6 +50,8 @@
   <div>Vertices: <span id="verts">0</span></div>
   <span id="boundaryPill" class="pill">boundary_type: garden_extent</span>
   <div class="row" style="margin-left:auto">
+    <label>Admin token</label><input id="token" type="password" size="16" placeholder="to save to garden" />
+    <button id="saveRecord" disabled>Save to garden</button>
     <button id="download" disabled>Download GeoJSON</button>
     <button class="ghost" id="clear" disabled>Clear</button>
   </div>
@@ -110,6 +112,7 @@ function refresh() {
   var poly = currentPolygon();
   var has = !!poly;
   document.getElementById('download').disabled = !has;
+  document.getElementById('saveRecord').disabled = !has;
   document.getElementById('clear').disabled = !has;
   if (!has) { document.getElementById('area').textContent = '—'; document.getElementById('areaAcre').textContent = ''; document.getElementById('verts').textContent = '0'; return; }
   var ll = poly.getLatLngs()[0];
@@ -147,6 +150,46 @@ document.getElementById('download').onclick = function () {
   a.href = URL.createObjectURL(blob);
   a.download = (feature.properties.garden_id || 'garden') + '_garden_extent.geojson';
   a.click();
+};
+
+/* Save the trace straight into the live record so the profile's steward-gated
+   overlay shows it — no manual step. Admin-gated write (save_garden_record).
+   Only the geometry + a provisional area go in; the authoritative canopy % still
+   comes from canopy_map.py. */
+var ENDPOINT = 'https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec';
+document.getElementById('saveRecord').onclick = function () {
+  var poly = currentPolygon(); if (!poly) return;
+  var tok = document.getElementById('token').value.trim();
+  var gid = document.getElementById('gid').value.trim();
+  if (!tok) { alert('Admin token required to save to the garden.'); return; }
+  var m2 = polyAreaM2(poly.getLatLngs()[0]);
+  var btn = this; btn.disabled = true; btn.textContent = 'Saving…';
+  fetch(ENDPOINT + '?action=get_garden_record&garden_id=' + encodeURIComponent(gid) + '&_cb=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d || !d.ok || !d.data) throw new Error('record not found for ' + gid);
+      var rec = d.data;
+      rec.canopy = rec.canopy || {}; rec.canopy.existing = rec.canopy.existing || {};
+      var ex = rec.canopy.existing;
+      ex.garden_extent_geojson = poly.toGeoJSON().geometry;   // display overlay (steward-gated)
+      ex.garden_extent_area_sqm = Math.round(m2);             // provisional; canopy_map.py is authoritative
+      ex.garden_extent_captured_at = new Date().toISOString();
+      ex.garden_extent_method = 'manual_delineation';
+      ex.boundary_type = 'garden_extent';
+      return fetch(ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ submission_type: 'save_garden_record', admin_token: tok,
+          garden_id: gid, editor: 'Gardener & Son', record: rec })
+      });
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      btn.disabled = false; btn.textContent = 'Save to garden';
+      alert(d && d.ok
+        ? 'Saved. The steward-gated canopy overlay will show this trace on the profile.'
+        : 'Error: ' + ((d && d.error) || 'unknown'));
+    })
+    .catch(function (e) { btn.disabled = false; btn.textContent = 'Save to garden'; alert('Save failed: ' + e.message); });
 };
 </script>
 </body>

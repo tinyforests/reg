@@ -46,7 +46,11 @@ ENDPOINT  = (
 
 # Fields in the root of the local JSON that are set by sync_registry.py
 # or manually and must never be overwritten by a pull.
-LOCAL_ONLY_ROOT_FIELDS = {'demo', 'badges', 'rating', 'upgrade_potential', 'points_available'}
+LOCAL_ONLY_ROOT_FIELDS = {'demo', 'badges', 'rating', 'upgrade_potential', 'points_available',
+                          # canopy is managed locally by canopy_map.py; the live record may also
+                          # carry a precise garden_extent_geojson (display overlay) that must never
+                          # be pulled into the committed repo.
+                          'canopy'}
 
 
 def fetch_live(garden_id):

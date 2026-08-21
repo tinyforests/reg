@@ -487,7 +487,9 @@ function renderCanopy(R) {
 
   if (cx.canopy_cover_pct == null) {
     txt('canopyCoverPct', 'Mapping pending');
-    txt('canopyAreaLine', 'Scheduled for the return visit — no dataset processed yet.');
+    txt('canopyAreaLine', cx.garden_extent_geojson
+      ? 'Garden extent captured — canopy % pending computation.'
+      : 'Scheduled for the return visit — no dataset processed yet.');
   } else {
     txt('canopyCoverPct', cx.canopy_cover_pct + '% mapped canopy cover');
     txt('canopyAreaLine', nf(cx.canopy_area_sqm) + ' m² of ' + nf(cx.property_area_sqm) + ' m² property area');
@@ -505,7 +507,7 @@ function renderCanopy(R) {
 
   // Precise geometry is private — overlay only for a claimed steward, and only when mapped.
   var isSt = (typeof isSteward === 'function') && isSteward(R.garden_id);
-  var geom = cx.parcel_geojson || cx.canopy_geojson;
+  var geom = cx.garden_extent_geojson || cx.parcel_geojson || cx.canopy_geojson;
   var pend = el('canopyMapPending');
   if (isSt && geom && typeof L !== 'undefined') {
     _renderCanopyMap(cx);
@@ -520,15 +522,20 @@ function _renderCanopyMap(cx) {
   var host = el('canopyMap'); if (!host) return;
   host.innerHTML = ''; host.style.display = 'block';
   var map = L.map(host, { attributionControl: false, scrollWheelZoom: false });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 20 }).addTo(map);
-  var parcel = L.geoJSON(cx.parcel_geojson, { style: { color: '#7a9e5f', weight: 2, fill: false } }).addTo(map);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 21, maxNativeZoom: 19 }).addTo(map);
+  var boundaryGeom = cx.garden_extent_geojson || cx.parcel_geojson;
+  var boundary = boundaryGeom
+    ? L.geoJSON(boundaryGeom, { style: { color: '#7a9e5f', weight: 2, fill: false } }).addTo(map)
+    : null;
   var canopy = cx.canopy_geojson
     ? L.geoJSON(cx.canopy_geojson, { style: { weight: 0, fillColor: '#7a9e5f', fillOpacity: 0.45 } }).addTo(map)
     : null;
-  try { map.fitBounds(parcel.getBounds(), { padding: [20, 20] }); } catch (e) {}
+  try { if (boundary) map.fitBounds(boundary.getBounds(), { padding: [20, 20] }); } catch (e) {}
   var legend = el('canopyMapLegend'); if (legend) legend.style.display = '';
   var toggle = el('canopyToggle');
   if (toggle && canopy) toggle.onchange = function () { this.checked ? canopy.addTo(map) : map.removeLayer(canopy); };
+  else { var lbl = toggle && toggle.parentNode; if (lbl) lbl.style.display = 'none'; }  // no canopy fill yet — boundary only
   setTimeout(function () { map.invalidateSize(); }, 100);
 }
 function dta(cur, base) {
