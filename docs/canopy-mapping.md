@@ -97,12 +97,19 @@ Confirmed endpoints (tested working Aug 2026):
 | Input | Service | How |
 |---|---|---|
 | **Property parcel** | GeoServer WFS `open-data-platform:parcel_view` at `https://opendata.maps.vic.gov.au/geoserver/wfs` | Automated — `canopy_fetch.py` bbox-queries by point and selects the containing parcel (stdlib only, no geo libs). |
-| **Tree Extent** (raster) | DataShare order, md `f6800447-ef34-5f66-acaa-77a5f2936546` | **Not a live API** — area-select + download a GeoTIFF; record the tile vintage as `--source-date`. |
-| Tree Density (vector, fallback) | ArcGIS VectorTileServer `…/Vicmap_Vegetation_Tree_Density/VectorTileServer` | Rendering tiles (PBF), coarser density classes — not clean analysis features. |
+| **Tree Density** (vector) ★ | GeoServer WFS `open-data-platform:tree_density` | **Automated, no DataShare.** `canopy_fetch.py --canopy-out` bbox-queries Dense/Medium/Sparse polygons; carries its own vintage in `source_begin_date`/`source_end_date`. Feeds the vector path. |
+| Tree Extent (raster) | DataShare order, md `f6800447-ef34-5f66-acaa-77a5f2936546` | Higher fidelity (20 cm presence/absence) but **not a live API** — area-select + download a GeoTIFF; record the tile vintage as `--source-date`. |
+
+★ Tree Density (dense+medium) is a *vector approximation* of canopy — pragmatic and fully
+automatable for a first number. Tree Extent (20 cm raster) is crisper but DataShare-gated;
+swap it in later via `--raster`. Either way the `source`/`source_date` are recorded.
 
 ```bash
+# Parcel + live canopy polygons in one go (no DataShare):
 python scripts/canopy_fetch.py --lat -37.684537 --lng 145.193461 \
-  --out wattleglen_parcel.geojson --expected-area-sqm 6070
+  --out wattleglen_parcel.geojson --expected-area-sqm 6070 \
+  --canopy-out wattleglen_canopy.geojson
+# tested Aug 2026: parcel found; 6 dense+medium polygons; vintage 2019-2020
 ```
 
 ### ⚠ Boundary definition — parcel ≠ garden extent

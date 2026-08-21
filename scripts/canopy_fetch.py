@@ -36,6 +36,7 @@ import urllib.request
 
 WFS = "https://opendata.maps.vic.gov.au/geoserver/wfs"
 PARCEL_LAYER = "open-data-platform:parcel_view"
+TREE_DENSITY_LAYER = "open-data-platform:tree_density"  # vector canopy (Dense/Medium/Sparse), live via WFS
 
 # Tree Extent (raster) — DataShare order, not a live service.
 TREE_EXTENT_MD = "f6800447-ef34-5f66-acaa-77a5f2936546"
@@ -65,6 +66,34 @@ def fetch_parcels_bbox(lon, lat, buffer_m):
                                                "Accept": "application/json"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.loads(r.read().decode())
+
+
+def fetch_tree_density(lon, lat, buffer_m, classes):
+    """Live canopy polygons from the Tree Density WFS (no DataShare). Returns
+    (FeatureCollection filtered to `classes`, vintage string, total_before_filter)."""
+    cx, cy = _merc(lon, lat)
+    params = {
+        "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+        "typeNames": TREE_DENSITY_LAYER, "outputFormat": "application/json",
+        "srsName": "EPSG:4326", "count": "3000",
+        "bbox": "%f,%f,%f,%f,EPSG:3857" % (cx - buffer_m, cy - buffer_m, cx + buffer_m, cy + buffer_m),
+    }
+    url = WFS + "?" + urllib.parse.urlencode(params)
+    req = urllib.request.Request(url, headers={"User-Agent": "reg-canopy-fetch/1.0",
+                                               "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=45) as r:
+        fc = json.loads(r.read().decode())
+    all_feats = fc.get("features", [])
+    keep = [f for f in all_feats
+            if str((f.get("properties") or {}).get("tree_density", "")).lower() in classes]
+    begins = [f["properties"].get("source_begin_date") for f in keep if f["properties"].get("source_begin_date")]
+    ends = [f["properties"].get("source_end_date") for f in keep if f["properties"].get("source_end_date")]
+    vintage = None
+    if begins:
+        b = min(begins)[:4]
+        e = (max(ends)[:4] if ends else b)
+        vintage = b if b == e else (b + "-" + e)
+    return {"type": "FeatureCollection", "features": keep}, vintage, len(all_feats)
 
 
 def _rings_contain(rings, lon, lat):
@@ -145,6 +174,9 @@ def main():
     ap.add_argument("--buffer-m", type=float, default=120.0, help="bbox half-size in metres")
     ap.add_argument("--expected-area-sqm", type=float, default=None,
                     help="warn if the parcel is >2x this (parcel vs garden-extent check)")
+    ap.add_argument("--canopy-out", help="also fetch live Tree Density canopy polygons to this GeoJSON (no DataShare)")
+    ap.add_argument("--canopy-classes", default="dense,medium", help="density classes to keep (default dense,medium)")
+    ap.add_argument("--canopy-buffer-m", type=float, default=300.0, help="canopy bbox half-size in metres")
     ap.add_argument("--no-canopy-steps", action="store_true")
     args = ap.parse_args()
 
@@ -179,7 +211,26 @@ def main():
               % format(round(args.expected_area_sqm), ","))
         print("    land), decide the canopy boundary deliberately: full parcel (canopy dominated by")
         print("    bushland) vs a supplied garden-extent polygon. Cadastre can't tell them apart.")
-    if not args.no_canopy_steps:
+    if args.canopy_out:
+        classes = set(c.strip().lower() for c in args.canopy_classes.split(","))
+        try:
+            cfc, vintage, total = fetch_tree_density(args.lng, args.lat, args.canopy_buffer_m, classes)
+        except Exception as e:
+            sys.exit("ERROR: tree_density WFS request failed: %s" % e)
+        with open(args.canopy_out, "w") as fh:
+            json.dump(cfc, fh)
+        cls = "+".join(sorted(classes))
+        print("\nCanopy polygons → %s" % args.canopy_out)
+        print("  kept %d of %d features (classes: %s)" % (len(cfc["features"]), total, cls))
+        if not cfc["features"]:
+            print("  WARN: no matching polygons in the canopy bbox — try a larger --canopy-buffer-m.")
+        print("  dataset vintage: %s" % (vintage or "unknown (check attrs)"))
+        print("  Next — the vector path (no DataShare):")
+        print("    python scripts/canopy_map.py <garden.json> \\")
+        print("      --parcel <garden_extent.geojson> --canopy %s --boundary-type garden_extent \\" % args.canopy_out)
+        print('      --source "Vicmap Vegetation - Tree Density (%s)" --source-date %s'
+              % (cls, vintage or "<year>"))
+    elif not args.no_canopy_steps:
         print_tree_extent_steps(args.lng, args.lat)
 
 
