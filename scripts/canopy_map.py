@@ -49,6 +49,7 @@ import argparse
 import json
 import os
 import sys
+import tempfile
 from datetime import datetime, timezone
 
 # Victoria sits in MGA Zone 55. Projected metres → correct areas.
@@ -196,6 +197,51 @@ def apply_result(record, metrics, source, source_date, resolution, boundary_type
     return record
 
 
+def _boundary_bounds_wgs84(path):
+    """(min_lon, min_lat, max_lon, max_lat) from a boundary GeoJSON — no geo libs."""
+    with open(path) as f:
+        gj = json.load(f)
+    feats = gj.get("features", [gj]) if gj.get("type") != "Feature" else [gj]
+    xs, ys = [], []
+
+    def walk(c):
+        if not isinstance(c, list):
+            return
+        if c and isinstance(c[0], (int, float)):
+            xs.append(c[0]); ys.append(c[1]); return
+        for x in c:
+            walk(x)
+
+    for feat in feats:
+        g = feat.get("geometry", feat)
+        if g:
+            walk(g.get("coordinates", []))
+    if not xs:
+        sys.exit("ERROR: no coordinates in boundary %s" % path)
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def compute_vector_wfs(parcel_path, classes):
+    """Chain: fetch Tree Density canopy over the boundary's bounds (live WFS, no
+    DataShare) → vector intersection. Returns (metrics, source, source_date)."""
+    import canopy_fetch  # sibling in scripts/ (added to sys.path[0] when run as a script)
+    bounds = _boundary_bounds_wgs84(parcel_path)
+    fc, vintage, total = canopy_fetch.fetch_tree_density_bounds(*bounds, classes=classes)
+    if not fc["features"]:
+        sys.exit("ERROR: no %s canopy polygons over the boundary — widen --canopy-classes or check location."
+                 % "/".join(sorted(classes)))
+    print("  fetched %d canopy polygons (of %d) from Tree Density WFS · vintage %s"
+          % (len(fc["features"]), total, vintage or "unknown"))
+    tmp = tempfile.NamedTemporaryFile("w", suffix=".geojson", delete=False)
+    json.dump(fc, tmp); tmp.close()
+    try:
+        metrics = compute_vector(parcel_path, tmp.name)
+    finally:
+        os.unlink(tmp.name)
+    source = "Vicmap Vegetation - Tree Density (%s)" % "+".join(sorted(classes))
+    return metrics, source, vintage
+
+
 def validate(record):
     ex = (record.get("canopy") or {}).get("existing")
     if not isinstance(ex, dict):
@@ -217,8 +263,12 @@ def main():
     ap.add_argument("garden", help="path to the garden JSON record")
     ap.add_argument("--parcel", help="property boundary GeoJSON (WGS84)")
     ap.add_argument("--canopy", help="canopy polygons GeoJSON for the vector path")
+    ap.add_argument("--canopy-wfs", dest="canopy_wfs", action="store_true",
+                    help="fetch canopy live from the Tree Density WFS over --parcel's bounds (no DataShare)")
+    ap.add_argument("--canopy-classes", dest="canopy_classes", default="dense,medium",
+                    help="density classes for --canopy-wfs (default dense,medium)")
     ap.add_argument("--raster", help="canopy GeoTIFF for the raster path (tree=1)")
-    ap.add_argument("--source", default="Vicmap Vegetation - Tree Extent")
+    ap.add_argument("--source", default=None)
     ap.add_argument("--boundary-type", dest="boundary_type", default="cadastral_parcel",
                     choices=["cadastral_parcel", "garden_extent"],
                     help="which boundary the parcel file represents (default cadastral_parcel)")
@@ -234,17 +284,28 @@ def main():
     if args.validate:
         sys.exit(0 if validate(record) else 1)
 
-    if not args.source_date:
-        sys.exit("ERROR: --source-date is required (never present a dataset without its vintage).")
-
-    if args.raster:
+    source = args.source
+    if args.canopy_wfs:
+        if not args.parcel:
+            sys.exit("ERROR: --canopy-wfs needs --parcel (the boundary polygon).")
+        classes = set(c.strip().lower() for c in args.canopy_classes.split(","))
+        metrics, source, wfs_date = compute_vector_wfs(args.parcel, classes)
+        if not args.source_date:
+            args.source_date = wfs_date
+    elif args.raster:
         metrics = compute_raster(args.parcel, args.raster)
+        source = source or "Vicmap Vegetation - Tree Extent"
     elif args.parcel and args.canopy:
         metrics = compute_vector(args.parcel, args.canopy)
     else:
-        sys.exit("ERROR: provide --raster, or both --parcel and --canopy.")
+        sys.exit("ERROR: provide --canopy-wfs (+ --parcel), --raster, or both --parcel and --canopy.")
 
-    record = apply_result(record, metrics, args.source, args.source_date,
+    if not args.source_date:
+        sys.exit("ERROR: --source-date is required (never present a dataset without its vintage).")
+    if not source:
+        sys.exit("ERROR: --source is required when passing a --canopy file.")
+
+    record = apply_result(record, metrics, source, args.source_date,
                           args.resolution or metrics.get("resolution"), args.boundary_type)
     ex = record["canopy"]["existing"]
     print("Canopy (existing, mapped_estimate, boundary=%s):" % args.boundary_type)

@@ -68,15 +68,14 @@ def fetch_parcels_bbox(lon, lat, buffer_m):
         return json.loads(r.read().decode())
 
 
-def fetch_tree_density(lon, lat, buffer_m, classes):
-    """Live canopy polygons from the Tree Density WFS (no DataShare). Returns
-    (FeatureCollection filtered to `classes`, vintage string, total_before_filter)."""
-    cx, cy = _merc(lon, lat)
+def _tree_density_bbox3857(minx, miny, maxx, maxy, classes):
+    """Live canopy polygons from the Tree Density WFS over an EPSG:3857 bbox.
+    Returns (FeatureCollection filtered to `classes`, vintage string, total_before_filter)."""
     params = {
         "service": "WFS", "version": "2.0.0", "request": "GetFeature",
         "typeNames": TREE_DENSITY_LAYER, "outputFormat": "application/json",
         "srsName": "EPSG:4326", "count": "3000",
-        "bbox": "%f,%f,%f,%f,EPSG:3857" % (cx - buffer_m, cy - buffer_m, cx + buffer_m, cy + buffer_m),
+        "bbox": "%f,%f,%f,%f,EPSG:3857" % (minx, miny, maxx, maxy),
     }
     url = WFS + "?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(url, headers={"User-Agent": "reg-canopy-fetch/1.0",
@@ -94,6 +93,20 @@ def fetch_tree_density(lon, lat, buffer_m, classes):
         e = (max(ends)[:4] if ends else b)
         vintage = b if b == e else (b + "-" + e)
     return {"type": "FeatureCollection", "features": keep}, vintage, len(all_feats)
+
+
+def fetch_tree_density(lon, lat, buffer_m, classes):
+    """Point + buffer (metres) → Tree Density canopy polygons."""
+    cx, cy = _merc(lon, lat)
+    return _tree_density_bbox3857(cx - buffer_m, cy - buffer_m, cx + buffer_m, cy + buffer_m, classes)
+
+
+def fetch_tree_density_bounds(min_lon, min_lat, max_lon, max_lat, classes, margin_m=40.0):
+    """WGS84 bounds (+ margin) → Tree Density canopy polygons. Used to fetch canopy
+    that covers a supplied boundary polygon."""
+    x0, y0 = _merc(min_lon, min_lat)
+    x1, y1 = _merc(max_lon, max_lat)
+    return _tree_density_bbox3857(x0 - margin_m, y0 - margin_m, x1 + margin_m, y1 + margin_m, classes)
 
 
 def _rings_contain(rings, lon, lat):

@@ -74,7 +74,12 @@ profile displays metrics; overlay (precise geometry) is steward-gated
 ### Running it
 
 ```bash
-# Raster path (preferred — Vicmap Tree Extent)
+# ★ One command — fetches live canopy (Tree Density WFS, no DataShare) + computes.
+#   Auto-fills source + vintage from the dataset. Just supply the traced boundary.
+python scripts/canopy_map.py data/bushgarden.json \
+  --parcel wattleglen_garden_extent.geojson --canopy-wfs --boundary-type garden_extent
+
+# Raster path (higher fidelity — Vicmap Tree Extent GeoTIFF via DataShare)
 python scripts/canopy_map.py data/bushgarden.json \
   --raster tree_extent_clip.tif \
   --parcel wattleglen_parcel.geojson \
