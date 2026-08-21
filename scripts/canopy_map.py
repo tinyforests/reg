@@ -165,13 +165,13 @@ def compute_raster(parcel_path, raster_path):
 # --------------------------------------------------------------------------- #
 EXISTING_KEYS = [
     "property_area_sqm", "canopy_area_sqm", "canopy_cover_pct", "canopy_overhang_sqm",
-    "measurement_method", "source", "source_type", "source_date", "resolution",
-    "calculated_at", "verification_status", "field_context_date",
+    "boundary_type", "measurement_method", "source", "source_type", "source_date",
+    "resolution", "calculated_at", "verification_status", "field_context_date",
     "field_context_note", "adjoins_remnant_vegetation", "notes",
 ]
 
 
-def apply_result(record, metrics, source, source_date, resolution):
+def apply_result(record, metrics, source, source_date, resolution, boundary_type):
     canopy = record.setdefault("canopy", {})
     existing = canopy.setdefault("existing", {})
 
@@ -185,6 +185,7 @@ def apply_result(record, metrics, source, source_date, resolution):
         })
 
     existing.update(metrics)
+    existing["boundary_type"] = boundary_type   # garden_extent | cadastral_parcel
     existing["measurement_method"] = "remote_spatial_mapping"
     existing["source"] = source
     existing["source_date"] = source_date
@@ -218,6 +219,9 @@ def main():
     ap.add_argument("--canopy", help="canopy polygons GeoJSON for the vector path")
     ap.add_argument("--raster", help="canopy GeoTIFF for the raster path (tree=1)")
     ap.add_argument("--source", default="Vicmap Vegetation - Tree Extent")
+    ap.add_argument("--boundary-type", dest="boundary_type", default="cadastral_parcel",
+                    choices=["cadastral_parcel", "garden_extent"],
+                    help="which boundary the parcel file represents (default cadastral_parcel)")
     ap.add_argument("--source-date", dest="source_date", help="dataset vintage, e.g. 2020")
     ap.add_argument("--resolution", help='e.g. "0.2 m raster"')
     ap.add_argument("--dry-run", action="store_true", help="compute + print, write nothing")
@@ -241,9 +245,9 @@ def main():
         sys.exit("ERROR: provide --raster, or both --parcel and --canopy.")
 
     record = apply_result(record, metrics, args.source, args.source_date,
-                          args.resolution or metrics.get("resolution"))
+                          args.resolution or metrics.get("resolution"), args.boundary_type)
     ex = record["canopy"]["existing"]
-    print("Canopy (existing, mapped_estimate):")
+    print("Canopy (existing, mapped_estimate, boundary=%s):" % args.boundary_type)
     print("  %s%% — %s m² of %s m²" % (
         ex["canopy_cover_pct"], ex["canopy_area_sqm"], ex["property_area_sqm"]))
     print("  source: %s (%s) · %s" % (ex["source"], ex["source_date"], ex.get("resolution") or ex["source_type"]))

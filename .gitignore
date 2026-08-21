@@ -1,3 +1,8 @@
 .DS_Store
 data/private/
 scripts/appsscript/.clasp.json
+
+# Canopy — precise property geometry, never commit
+*_garden_extent.geojson
+*_parcel.geojson
+data/private/

@@ -124,6 +124,24 @@ garden-extent polygon separately, and use `canopy_overhang_sqm` + a distinct
 (within / overhanging / adjoining). `canopy_fetch.py --expected-area-sqm` warns when
 the parcel dwarfs the expected garden.
 
+**Capturing a garden extent — `canopy-capture.html`.** A standalone, reusable tool:
+aerial imagery (Esri World Imagery) + polygon draw (Leaflet.draw) + live area
+readout. Someone who knows the garden traces the cultivated boundary and downloads
+a GeoJSON (`?garden=&lat=&lng=` params per property). The geometry is precise
+property data — it downloads as a file and is **git-ignored** (`*_garden_extent.geojson`);
+it never enters the public record. Feed it to the pipeline as the boundary:
+
+```bash
+python scripts/canopy_map.py data/bushgarden.json \
+  --parcel wattleglen_garden_extent.geojson --raster tree_extent.tif \
+  --boundary-type garden_extent \
+  --source "Vicmap Vegetation - Tree Extent" --source-date <vintage>
+```
+
+`--boundary-type` (`garden_extent` | `cadastral_parcel`) is stored in
+`canopy.existing.boundary_type` so the record always states what the % is measured
+against. Only the derived area/percent enter the record — not the geometry.
+
 ## Schema (`canopy.existing`)
 
 Names follow existing Registry conventions (`area_sqm`, `canopy_cover_pct`). This

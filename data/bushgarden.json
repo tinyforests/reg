@@ -138,6 +138,7 @@
       "canopy_area_sqm": null,
       "canopy_cover_pct": null,
       "canopy_overhang_sqm": null,
+      "boundary_type": null,
       "measurement_method": "remote_spatial_mapping",
       "source": null,
       "source_type": null,
