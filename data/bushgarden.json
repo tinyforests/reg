@@ -303,5 +303,26 @@
       }
     ]
   },
-  "baseline_note": "The 1998 baseline is a reconstructed, steward-reported starting point — the year Sam Cox began transforming the site — not a Gardener & Son field measurement. Baseline figures are indicative of pre-transformation condition per the steward's account and the garden's documented history."
+  "baseline_note": "The 1998 baseline is a reconstructed, steward-reported starting point — the year Sam Cox began transforming the site — not a Gardener & Son field measurement. Baseline figures are indicative of pre-transformation condition per the steward's account and the garden's documented history.",
+  "habitat_context": {
+    "habitat_value": {
+      "value": 97,
+      "scale": "0-100",
+      "band": "Very High",
+      "band_note": "REG provisional banding — not an official DEECA classification.",
+      "lookup_method": "property_centroid+local_context",
+      "source": "DEECA Habitat Value",
+      "source_service": "NatureKit",
+      "source_url": "https://biod-gis.mapshare.vic.gov.au/arcgis/rest/services/NatureKit/habitat_value/MapServer",
+      "dataset_version": "3.1.0",
+      "dataset_date": null,
+      "resolution_m": 75,
+      "calculated_at": "2026-08-21T23:05:21+00:00",
+      "state": "value",
+      "centroid_value": 97,
+      "local_context_mean": 78.4,
+      "local_context_radius_m": 250.0,
+      "local_context_samples": "9/9"
+    }
+  }
 }

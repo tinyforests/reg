@@ -50,7 +50,9 @@ LOCAL_ONLY_ROOT_FIELDS = {'demo', 'badges', 'rating', 'upgrade_potential', 'poin
                           # canopy is managed locally by canopy_map.py; the live record may also
                           # carry a precise garden_extent_geojson (display overlay) that must never
                           # be pulled into the committed repo.
-                          'canopy'}
+                          'canopy',
+                          # habitat_context is managed locally by habitat_value.py (DEECA lookup).
+                          'habitat_context'}
 
 
 def fetch_live(garden_id):
