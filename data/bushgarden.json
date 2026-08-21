@@ -132,6 +132,27 @@
       "status": "Seed"
     }
   },
+  "canopy": {
+    "existing": {
+      "property_area_sqm": null,
+      "canopy_area_sqm": null,
+      "canopy_cover_pct": null,
+      "canopy_overhang_sqm": null,
+      "measurement_method": "remote_spatial_mapping",
+      "source": null,
+      "source_type": null,
+      "source_date": null,
+      "resolution": null,
+      "calculated_at": null,
+      "verification_status": "mapped_estimate",
+      "field_context_date": "2026-08",
+      "field_context_note": "Garden visited by Gardener & Son, August 2026. Field context only — the spatial canopy calculation itself is not field-verified.",
+      "adjoins_remnant_vegetation": true,
+      "notes": null
+    },
+    "history": [],
+    "projected": null
+  },
   "evidence": {
     "has_photos": false,
     "has_field_notes": false,
