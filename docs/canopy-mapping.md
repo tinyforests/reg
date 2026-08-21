@@ -90,6 +90,40 @@ python scripts/canopy_map.py data/bushgarden.json --validate   # no geo libs nee
 
 Deps for real computation: `pip install shapely pyproj rasterio`.
 
+### Fetching the inputs (`scripts/canopy_fetch.py`)
+
+Confirmed endpoints (tested working Aug 2026):
+
+| Input | Service | How |
+|---|---|---|
+| **Property parcel** | GeoServer WFS `open-data-platform:parcel_view` at `https://opendata.maps.vic.gov.au/geoserver/wfs` | Automated — `canopy_fetch.py` bbox-queries by point and selects the containing parcel (stdlib only, no geo libs). |
+| **Tree Extent** (raster) | DataShare order, md `f6800447-ef34-5f66-acaa-77a5f2936546` | **Not a live API** — area-select + download a GeoTIFF; record the tile vintage as `--source-date`. |
+| Tree Density (vector, fallback) | ArcGIS VectorTileServer `…/Vicmap_Vegetation_Tree_Density/VectorTileServer` | Rendering tiles (PBF), coarser density classes — not clean analysis features. |
+
+```bash
+python scripts/canopy_fetch.py --lat -37.684537 --lng 145.193461 \
+  --out wattleglen_parcel.geojson --expected-area-sqm 6070
+```
+
+### ⚠ Boundary definition — parcel ≠ garden extent
+
+Tested on Wattle Glen: the **cadastral parcel is ~64,000 m² (~6.4 ha)** — roughly
+**10× the 1.5-acre (6,070 m²) cultivated garden**. The garden sits inside a large
+title that almost certainly includes remnant/bush canopy along the green wedge.
+
+So **"the registered property boundary" is a deliberate choice**, and canopy % means
+very different things:
+
+- **Full cadastral parcel** — canopy % is dominated by bushland, not the garden.
+- **Garden-extent polygon** (a supplied boundary of the cultivated 1.5 acres) — the
+  garden's own canopy.
+
+Cadastre can't distinguish them. For gardens adjoining remnant land, capture a
+garden-extent polygon separately, and use `canopy_overhang_sqm` + a distinct
+"adjoining remnant" layer to express the relationship the spec asks for
+(within / overhanging / adjoining). `canopy_fetch.py --expected-area-sqm` warns when
+the parcel dwarfs the expected garden.
+
 ## Schema (`canopy.existing`)
 
 Names follow existing Registry conventions (`area_sqm`, `canopy_cover_pct`). This
