@@ -372,7 +372,8 @@
     <h2 class="font-serif text-4xl mb-6">Habitat Context</h2>
     <div class="grid lg:grid-cols-12 gap-6">
       <div class="lg:col-span-5 border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">
-        <div class="text-3xl font-light mb-1" id="hvValue">--</div>
+        <div class="section-label mb-3">Habitat Value</div>
+        <div class="text-4xl font-light mb-1" id="hvValue">--</div>
         <div class="text-sm opacity-70 mb-5" id="hvBand"></div>
         <div class="section-label mb-1">Source</div>
         <div class="text-xs opacity-70" id="hvSource">--</div>
@@ -541,7 +542,7 @@ function renderHabitatContext(R) {
   var hv = R && R.habitat_context && R.habitat_context.habitat_value;
   if (!sec) return;
   if (!hv || hv.value == null) { sec.style.display = 'none'; return; }
-  txt('hvValue', 'Habitat Value — ' + hv.value + ' / 100');
+  txt('hvValue', hv.value + ' / 100');
   txt('hvBand', hv.band ? (hv.band + ' biodiversity context') : '');
   txt('hvSource', (hv.source || 'DEECA Habitat Value') + ' · ' + (hv.source_service || 'NatureKit')
     + (hv.dataset_version ? ' v' + hv.dataset_version : '') + ' · statewide spatial model (~'
