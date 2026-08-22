@@ -518,6 +518,7 @@
               <!-- Park position -->
               <div class="border border-rl dark:border-rdl p-4">
                 <div class="section-label mb-3">Adjacent Park or Reserve</div>
+                <div id="parkStatus" class="opacity-60" style="font-size:11px;margin-bottom:.6rem;min-height:14px"></div>
                 <div class="grid grid-cols-2 gap-3 mb-3">
                   <div>
                     <div class="opacity-50 mb-1">Park name</div>
@@ -1583,6 +1584,7 @@ function _erLookupEvc(lat, lng) {
 /* Park lookup via Overpass */
 function _erLookupPark(lat, lng, attempt) {
   if (!attempt) attempt = 0;
+  _erSetStatus('parkStatus', 'Finding nearest green space…', false);
   var query = '[out:json][timeout:10];(\n'
     + 'way["leisure"="park"](around:600,' + lat + ',' + lng + ');\n'
     + 'way["leisure"="nature_reserve"](around:600,' + lat + ',' + lng + ');\n'
@@ -1595,7 +1597,7 @@ function _erLookupPark(lat, lng, attempt) {
       .then(function(r) { if (!r.ok) throw r.status; return r.json(); });
   }))
   .then(function(data) {
-    if (!data.elements || !data.elements.length) return;
+    if (!data.elements || !data.elements.length) { _erSetStatus('parkStatus', 'No park or reserve found within 600 m.', false); return; }
     var pt = turf.point([lng, lat]);
     var best = Infinity, bestEl = null;
     data.elements.forEach(function(el) {
@@ -1605,7 +1607,7 @@ function _erLookupPark(lat, lng, attempt) {
       var dist = turf.distance(pt, turf.point([clng, clat]), { units: 'meters' });
       if (dist < best) { best = dist; bestEl = el; bestEl._clat = clat; bestEl._clng = clng; }
     });
-    if (!bestEl) return;
+    if (!bestEl) { _erSetStatus('parkStatus', 'No park or reserve found within 600 m.', false); return; }
     var pName = bestEl.tags && bestEl.tags.name ? bestEl.tags.name : 'Unnamed park';
     var pLat  = parseFloat(bestEl._clat.toFixed(6));
     var pLng  = parseFloat(bestEl._clng.toFixed(6));
@@ -1616,10 +1618,12 @@ function _erLookupPark(lat, lng, attempt) {
     saveCoords('park', pLat, pLng);
     if (!_maps['park']) initMiniMap('park', pLat, pLng);
     else { _maps['park'].setView([pLat, pLng], 15); placePin('park', pLat, pLng); }
+    _erSetStatus('parkStatus', 'Nearest: ' + pName + ' · ' + pDist + ' m', true);
     renderLive();
   })
   .catch(function() {
     if (attempt < 1) setTimeout(function() { _erLookupPark(lat, lng, 1); }, 2500);
+    else _erSetStatus('parkStatus', 'Park lookup unavailable — enter the park manually.', false);
   });
 }
 
