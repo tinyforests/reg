@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T06:09:52+00:00",
+  "generated_at": "2026-08-22T11:15:45+00:00",
   "count": 80,
   "gardens": 20,
   "updates": [
@@ -61,7 +61,7 @@
       "category": "record_update",
       "notes": "Ecological function score: 61/100 (Registered Ecological Garden). Updated via assessment tool.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SH-ARU-0001",
@@ -73,7 +73,7 @@
       "category": "record_update",
       "notes": "Ecological function score: 74/100 (Registered Ecological Garden). Updated via assessment tool.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-HW-AUB-0001",
@@ -85,7 +85,7 @@
       "category": "field_note",
       "notes": "Established residential garden with eight indigenous species recorded across three structural layers. Canopy cover approximately 20%. Weed pressure low. Garden enrolled following self-assessment — G&S site visit pending to verify species list and confirm ecological scoring.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-HW-AUB-0001",
@@ -97,7 +97,7 @@
       "category": "assessment",
       "notes": "Submitted via self-enrolment form. Score 34/100, Habitat Garden. Submission ID: SUB-1785922832618-DG3CE.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-NIL-BEL-001",
@@ -109,7 +109,7 @@
       "category": "record_update",
       "notes": "Ecological assessment recorded from first site visit and public documentation. Corridor node confirmed; moisture basin, swale and rainwater capture confirmed; professional assessment recorded; species list and fauna record on file; 3 fauna sightings verified (Superb Fairywren, Eastern Spinebill, Common Brushtail Possum). Ecological score: 83/100 (High Habitat Garden). Photographs and formal steward records pending.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-NIL-BEL-001",
@@ -121,7 +121,7 @@
       "category": "field_note",
       "notes": "Twenty indigenous species recorded across five structural layers. Canopy cover 60%, weed pressure low — improved from high at baseline in 1998. Deep woodchip mulch throughout. Winding watercourse feeds large basalt-lined pond with confirmed frog activity. Waterfall feature active. Rock refuges and embedded logs present. Steward-reported fauna: Superb Fairywren, Eastern Spinebill, Common Brushtail Possum, Spotted Marsh Frog. G&S ecological assessment pending.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-002",
@@ -133,7 +133,31 @@
       "category": "admin",
       "notes": "Garden enrolled in the Ecological Registry. Species list compiled from installation diary and Gardener & Son design records. Assessment based on planted species counts and G&S site knowledge.",
       "public": true,
-      "_sort": "2026-08-15T00:00:00+00:00"
+      "_sort": "2026-08-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-CAN-0001",
+      "garden_name": "Canterbury G02",
+      "slug": "canterbury",
+      "date": "16 Jun 2026",
+      "ts": null,
+      "type": "Assessment",
+      "category": "assessment",
+      "notes": "G&S site assessment of pre-existing garden maintained via Tend. 11 species, 142 plants in 60m² raised-bed area. 2 strictly local-indigenous species (Hardenbergia violacea, Lomandra longifolia). Surrey Park adjacent south of Canterbury Road. G&S design intervention commissioned — baseline captured 16 Jun 2026 for before/after trajectory.",
+      "public": true,
+      "_sort": "2026-06-16T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-WHI-VIC-001",
+      "garden_name": "Victoria Crescent",
+      "slug": "victoria",
+      "date": "12 Jun 2026",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Adjacent 9m² (3m × 3m) bed planted with 22 individuals across 14 species. 6 new species added to species_list: Bulbine bulbosa, Dampiera diversifolia, Goodia lotifolia, Lomandra confertifolia 'Little Pal', Olearia ramulosa, Xerochrysum viscosum. 8 top-up plantings of existing species (Kennedia prostrata, Themeda triandra, Leptospermum continentale, Hardenbergia violacea, Brachyscome multifida, Dichelachne crinata, Poa labillardieri, Ozothamnus ferrugineus). Strict-indigenous additions: 4 (Bulbine, Goodia, Olearia, Xerochrysum). Lomandra and Dampiera recorded but not strictly local-indigenous (cultivar / non-local). Existing record spells 'Dichelachne crinita' — correct spelling is 'crinata' — flagged in pending-work, not fixed in this commit. Total planted area now 18m².",
+      "public": true,
+      "_sort": "2026-06-12T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BAL-PRD-001",
@@ -145,7 +169,7 @@
       "category": "planting",
       "notes": "Front bed installed. 11 species planted across groundcover, grass and shrub layers. Nine are Victorian indigenous. Habitat rocks placed throughout the bed. Thick mulch blend applied. Rear garden installation pending.",
       "public": true,
-      "_sort": "2026-05-15T00:00:00+00:00"
+      "_sort": "2026-05-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SH-SIR-0001",
@@ -157,7 +181,7 @@
       "category": "planting",
       "notes": "Front buffer installation complete. 39 plants across 18 species. Nine strictly local-indigenous species including Themeda triandra, Correa alba, Chrysocephalum apiculatum and Acacia acinacea. Habitat rocks placed along the strip. 100-150mm specialised mulch applied. 3-way soil blend with mycorrhizal inoculation at planting. Strip connects planted front yard to council nature strip with remnant mature vegetation.",
       "public": true,
-      "_sort": "2026-05-15T00:00:00+00:00"
+      "_sort": "2026-05-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-WHI-VIC-001",
@@ -169,7 +193,55 @@
       "category": "installation",
       "notes": "68 plants installed across 35 species, structured into five layers: canopy, shrub, grassland and matrix, groundcover, and climbers. Indigenous grassy-woodland species form the backbone, threaded through basalt rockwork inspired by Ellis Stones. Garden establishing in Mont Albert.",
       "public": true,
-      "_sort": "2026-05-15T00:00:00+00:00"
+      "_sort": "2026-05-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-MAN-EVE-001",
+      "garden_name": "Evelina",
+      "slug": "evelina",
+      "date": "27 Apr 2026",
+      "ts": null,
+      "type": "Site Visit",
+      "category": "site_visit",
+      "notes": "Soil health excellent -- upgraded to 4/5. Einadia nutans cutback performed. Dead scrambler replaced with Hardenbergia violacea. Garden in excellent progress for five months post-planting. Irrigation to be reduced.",
+      "public": true,
+      "_sort": "2026-04-27T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "7 Apr 2026",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "First planting day. 23 species installed including two eucalypts (E. leucoxylon connata, E. radiata), Kunzea baxteri, Correa lawrenceana, Grevillea Red Rambler, Hardenbergia, Viola, Poa, Austrostipa, Dichelachne, Austrodanthonia and groundcovers. 6 ponds installed. Rocks and logs placed throughout. First layers of mulch and soil complete. Five structural layers now present.",
+      "public": true,
+      "_sort": "2026-04-07T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-001",
+      "garden_name": "Parring",
+      "slug": "parring",
+      "date": "1 Apr 2026",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Full planting installation completed. All 31 documented species planted with mycorrhiza inoculant applied at root zone. Finishing mulch layer installed. Drip irrigation system connected and tested. All plants hand watered in.",
+      "public": true,
+      "_sort": "2026-04-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-001",
+      "garden_name": "Parring",
+      "slug": "parring",
+      "date": "1 Apr 2026",
+      "ts": null,
+      "type": "Installed",
+      "category": "habitat",
+      "notes": "Habitat elements from Handmade Habitats -- hollowed logs set half into the ground, packed with sticks, dried grasses, gum nuts, native seeds, dried eucalyptus leaves and paper daisies. Designed to attract native bees, beetles, lizards and invertebrates. The embedded base creates a moist microclimate at soil level. Paper daisies closed in the rain on installation day. Local craft production from natural materials.",
+      "public": true,
+      "_sort": "2026-04-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BAL-PRD-001",
@@ -181,7 +253,7 @@
       "category": "design",
       "notes": "Design presented for 4/17 Parring Road, Balwyn. Two-zone connected ecological system -- narrow front bed and immersive rear garden. 34 species proposed across both zones. Installation to begin in coming weeks.",
       "public": true,
-      "_sort": "2026-04-15T00:00:00+00:00"
+      "_sort": "2026-04-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SH-SIR-0001",
@@ -193,7 +265,7 @@
       "category": "design",
       "notes": "Front garden: silver indigenous buffer along 5.5m of the front boundary. High-density palette — Grevillea, Banksia, Correa, Eremophila, Acacia, Kangaroo Paw, Everlastings and Kangaroo Grass. 39 plants across 18 species, 9 strictly local-indigenous, at approximately 7 plants per square metre.",
       "public": true,
-      "_sort": "2026-04-15T00:00:00+00:00"
+      "_sort": "2026-04-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-001",
@@ -205,7 +277,31 @@
       "category": "design",
       "notes": "Design presented for 40 Windella Avenue, Kew East. Front garden 10x20m, 32 species proposed across groundcover, grass, shrub and small tree layers.",
       "public": true,
-      "_sort": "2026-04-15T00:00:00+00:00"
+      "_sort": "2026-04-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-001",
+      "garden_name": "Parring",
+      "slug": "parring",
+      "date": "31 Mar 2026",
+      "ts": null,
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Installation commenced today. Underperforming vegetation removed including camellia and buxus. New soil and mulch installed. Habitat rocks placed throughout the garden beds. Micro-topology created across planting zones to guide water movement and create varied conditions for plant establishment. Rocks selected for both aesthetic presence and ecological function -- thermal mass, shelter and soil anchoring.",
+      "public": true,
+      "_sort": "2026-03-31T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-001",
+      "garden_name": "Parring",
+      "slug": "parring",
+      "date": "31 Mar 2026",
+      "ts": null,
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Two skinks observed in the rock refuge zone shortly after installation. Immediate fauna response to habitat rocks confirms thermal mass and shelter function. Adds to corridor node weighting.",
+      "public": true,
+      "_sort": "2026-03-31T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-CAN-MON-001",
@@ -217,7 +313,7 @@
       "category": "planting",
       "notes": "A layered ecological planting designed to create the sense of moving through a small landscape. A stepping-stone path passes through the bed allowing moments of immersion. Taller shrubs and small trees form a woodland backdrop -- Elaeocarpus, Hakea, Leptospermum and Olearia establish the upper layer. Through the middle, grasses including Themeda, Poa and Dichelachne create a flowing matrix, while flowering perennials emerge through to provide cottage seasonal colour. Closer to the path, Myoporum, Dichondra, Pratia and Scaevola soften the ground plane. The bed responds to varying light conditions -- shade-tolerant shrubs behind the path, sun-loving grasses and wildflowers in the open areas.",
       "public": true,
-      "_sort": "2026-03-15T00:00:00+00:00"
+      "_sort": "2026-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-CAN-MON-001",
@@ -229,7 +325,7 @@
       "category": "planting",
       "notes": "A sunny, open planting within the lawn as a softer curved island bed. The mature pear remains dominant, with existing silverberry, agapanthus, flax and echium retained to form a light, airy backdrop in grey-blue tones. A crepe myrtle with soft lilac flower is introduced as a new structural tree, tying in with others already in the garden. Through the middle, ornamental grasses and flowering shrubs -- including a large miscanthus as focal point -- give movement and softness. Dianella, carex and euphorbia create repetition and rhythm. Toward the lawn edge, salvias, kniphofia, brachyscome and helichrysum bring seasonal colour while silver-toned and trailing plants soften the boundary between garden and grass. The reduced bed shape improves movement through the space while layered planting suppresses weeds and reduces maintenance.",
       "public": true,
-      "_sort": "2026-03-15T00:00:00+00:00"
+      "_sort": "2026-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-CAN-MON-001",
@@ -241,7 +337,7 @@
       "category": "planting",
       "notes": "A sunny, open planting redesigned as a softer curved island within the lawn. The bed has been slightly reduced in size to improve flow and create a stronger sense of openness. The mature pear remains the dominant feature at the northern rear, with the existing silverberry, agapanthus, flax and echium retained to form a light, airy grey-blue backdrop. A crepe myrtle in soft lilac is introduced as a new structural tree to connect this bed to the wider garden. Through the middle, ornamental grasses and flowering shrubs give movement and softness -- a large miscanthus forms a focal point in the lower curve, with dianella, carex and euphorbia creating repetition and rhythm. Toward the lawn edge, salvias, kniphofia, brachyscome and helichrysum bring colour through warmer months while silver-toned trailing plants soften the boundary between garden and grass.",
       "public": true,
-      "_sort": "2026-03-15T00:00:00+00:00"
+      "_sort": "2026-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SY-NIC-0002",
@@ -253,7 +349,7 @@
       "category": "planting",
       "notes": "Beth's garden has been designed as a place of calm immersion -- a space where cottage softness meets Japanese-inspired restraint. The canopy of Acer palmatum and dwarf lemon-scented gum creates seasonal presence and dappled light, while sculptural forms like Doryanthes, Hakea and soft drifts of Banksia and Correa anchor the space with structure and habitat value. Beneath this framework, a tapestry of everlastings, billy buttons, flannel flowers and mauve daisies bring pink and purple tones through the seasons, many chosen for their ability to dry beautifully for preserving. The result is a resilient, low-maintenance garden that feels expressive yet grounded -- a place to read, illustrate, forage, hang laundry in the breeze, and quietly lose yourself in beauty year-round.",
       "public": true,
-      "_sort": "2026-03-15T00:00:00+00:00"
+      "_sort": "2026-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SY-NIC-0002",
@@ -265,7 +361,7 @@
       "category": "planting",
       "notes": "The front garden has been conceived as a soft meadow arrival -- a gentle, textural landscape with movement and seasonal rhythm. Repurposed bricks are reset into a small meandering path, creating a sense of wander rather than directness, while improving permeability and grounding the space in material honesty. Grasses such as Poa cita provide structure and sway, forming a luminous backdrop for wind flowers, globe thistles and Jerusalem sage. Lavender, catmint and society garlic weave through in mauve and soft purple tones, echoing Beth's love of colour while maintaining resilience. The result is a meadow that feels expressive and romantic but controlled -- a welcoming threshold that shifts beautifully through the seasons.",
       "public": true,
-      "_sort": "2026-03-15T00:00:00+00:00"
+      "_sort": "2026-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BAL-001",
@@ -277,7 +373,43 @@
       "category": "baseline",
       "notes": "Front and rear gardens documented as one connected system. 28 indigenous species recorded across groundcover, grass, shrub and small tree layers. Strong pollinator succession through banksia, correa, hardenbergia and kangaroo paw. Proximity to Maranoa Gardens noted as significant connectivity asset.",
       "public": true,
-      "_sort": "2026-03-15T00:00:00+00:00"
+      "_sort": "2026-03-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "18 Feb 2026",
+      "ts": null,
+      "type": "Verified",
+      "category": "fauna",
+      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden.",
+      "public": true,
+      "_sort": "2026-02-18T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "15 Feb 2026",
+      "ts": null,
+      "type": "Installed",
+      "category": "structure",
+      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded.",
+      "public": true,
+      "_sort": "2026-02-15T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "8 Feb 2026",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ.",
+      "public": true,
+      "_sort": "2026-02-08T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SY-NIC-0002",
@@ -289,7 +421,199 @@
       "category": "baseline",
       "notes": "Baseline condition recorded. Initial score set to establish trajectory tracking. Priority signals: structure, refuge, soil readiness, and water-wise function.",
       "public": true,
-      "_sort": "2026-02-15T00:00:00+00:00"
+      "_sort": "2026-02-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "20 Jan 2026",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Crushed rock sub-base partially installed across pathway zones. Path line visible from above for first time. Sub-base watered in. Granite rocks relocated for gabion reuse. Path curve follows design intent.",
+      "public": true,
+      "_sort": "2026-01-20T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "19 Jan 2026",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Kanga mini loader used for mechanical weed removal, pathway alignment, landform shaping, and surface consolidation. Intentionally shallow and controlled. Soil biology preserved. Site ready for sub-base introduction.",
+      "public": true,
+      "_sort": "2026-01-19T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "15 Jan 2026",
+      "ts": null,
+      "type": "Verified",
+      "category": "baseline",
+      "notes": "Return visit months after clearance. Six soil samples collected across site zones -- sandy, low organic matter, biologically active. Six weed species identified and hand-removed without chemicals: Flaxleaf fleabane, Common sow-thistle, Panic veldt grass, Barley grass, Wireweed, California poppy. Active ant colonies and soil insects observed. Site in settling and observation phase.",
+      "public": true,
+      "_sort": "2026-01-15T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "19 Dec 2025",
+      "ts": null,
+      "type": "Design",
+      "category": "planting",
+      "notes": "Full ecological design presented to stewards. Five-layer planting system across 475m2 rear garden -- canopy (~32 trees), sub-canopy (~42 trees), shrub (~262 plants), ground layer (~714 plants), and swale/water garden. Form and element strategy documents waterway hydrology and habitat structure. All species drawn from Grassy Woodland EVC context confirmed in site analysis.",
+      "public": true,
+      "_sort": "2025-12-19T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "10 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "planting",
+      "notes": "Indigenous species sourced for installation.",
+      "public": true,
+      "_sort": "2025-12-10T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "10 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "planting",
+      "notes": "Plants positioned across site prior to planting.",
+      "public": true,
+      "_sort": "2025-12-10T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "10 Dec 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "20 indigenous species planted across ground, shrub and emerging canopy layers.",
+      "public": true,
+      "_sort": "2025-12-10T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "10 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Site completed, cleaned and handed over.",
+      "public": true,
+      "_sort": "2025-12-10T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Materials delivered to site.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Bio mulch installed across planting zones.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Organic soil mix installed to improve soil health and water retention.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "habitat",
+      "notes": "Rocks placed to create thermal mass for lizards, insects and soil life.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Site cleaned and prepared.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Existing non-indigenous plants removed. Site cleared for ecological planting.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Weed pressure reduced ahead of planting installation.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "garden_name": "Middlesex",
+      "slug": "middlesex",
+      "date": "9 Dec 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Ground shaped to direct water movement and create planting zones.",
+      "public": true,
+      "_sort": "2025-12-09T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SH-ARU-0001",
@@ -301,7 +625,7 @@
       "category": "design",
       "notes": "Full proposed species palette organised by structural layer -- canopy, subcanopy, shrub, grass and groundcover. 26 species proposed across all layers.",
       "public": true,
-      "_sort": "2025-12-15T00:00:00+00:00"
+      "_sort": "2025-12-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-002",
@@ -313,7 +637,7 @@
       "category": "planting",
       "notes": "Three-day installation in December 2025. Five structural layers planted across the full garden: canopy trees (Olive, Jacaranda, October Glory Maple, Gleditsia), an evergreen shrub layer (Westringia, Rosemary, Echium, Euphorbia, Smokebush), mid-level perennials and grasses (Miscanthus, Karl Foerster, Gaura, Salvia, Limonium, Anemone, Billy Buttons), and a living ground layer of Native Violet, Dichondra and Pratia anchored by Stachys. Arborist mulch applied throughout. Garden now establishing.",
       "public": true,
-      "_sort": "2025-12-15T00:00:00+00:00"
+      "_sort": "2025-12-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-001",
@@ -325,7 +649,67 @@
       "category": "installation",
       "notes": "Full installation December 2025. 32 species planted. Imported soil and deep mulch throughout. Habitat rocks and logs installed. Permeable driveway with recycled materials. Garden now establishing.",
       "public": true,
-      "_sort": "2025-12-15T00:00:00+00:00"
+      "_sort": "2025-12-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-MAN-EVE-001",
+      "garden_name": "Evelina",
+      "slug": "evelina",
+      "date": "28 Nov 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "All 29 species planted with mycorrhizal dip. Hand watered in. Kangaroo paw flowering on planting day.",
+      "public": true,
+      "_sort": "2025-11-28T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-MAN-EVE-001",
+      "garden_name": "Evelina",
+      "slug": "evelina",
+      "date": "25 Nov 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "planting",
+      "notes": "All 29 species sourced. Lechenaultia already flowering at nursery.",
+      "public": true,
+      "_sort": "2025-11-25T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-MAN-EVE-001",
+      "garden_name": "Evelina",
+      "slug": "evelina",
+      "date": "24 Nov 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "groundworks",
+      "notes": "Bio mulch blend and premium organic soil installed. Igneous rocks placed. Habitat logs embedded. Log steppers positioned. Site blown down and tidied.",
+      "public": true,
+      "_sort": "2025-11-24T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-BLA-DEW-001",
+      "garden_name": "Dewrang",
+      "slug": "dewrang",
+      "date": "18 Nov 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Excavation and plant removal continued. Weeding completed. Mulch laid across beds. Drip irrigation lines positioned.",
+      "public": true,
+      "_sort": "2025-11-18T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-BLA-DEW-001",
+      "garden_name": "Dewrang",
+      "slug": "dewrang",
+      "date": "17 Nov 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Installation commenced 17 November 2025, completed 26 November 2025. All three zones planted across 25m2.",
+      "public": true,
+      "_sort": "2025-11-17T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-BLA-DEW-001",
@@ -337,7 +721,7 @@
       "category": "design",
       "notes": "Three-zone front garden designed as a calm welcoming space reflecting the natural character of the local landscape. Entrance garden (8x1m), scented tunnel pathway (2x4m), driveway garden (3x3m). 37 species across all zones. Habitat rocks, logs, organic soil and mulch installed.",
       "public": true,
-      "_sort": "2025-11-15T00:00:00+00:00"
+      "_sort": "2025-11-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-MAN-EVE-001",
@@ -349,7 +733,7 @@
       "category": "planting",
       "notes": "Wild native meadow design for 3x8m front garden. High-density planting 6-10 plants per m2. 29 species across all layers.",
       "public": true,
-      "_sort": "2025-11-15T00:00:00+00:00"
+      "_sort": "2025-11-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-SH-MID-001",
@@ -361,7 +745,115 @@
       "category": "planting",
       "notes": "The Habitat Garden has been designed to bring together native bushland character, wild meadow softness, and selective productive planting. A habitat-rich, low-chemical landscape that supports pollinators, small birds, butterflies, and local insect life while providing a calming daily outlook from the home. The planting palette prioritises Victorian natives, favouring species indigenous to the Surrey Hills area, selected for year-round flowering, seasonal movement, and layered ecological function. This forward-thinking design focuses on long-term resilience, sensory experience and supporting the re-establishment of local biodiversity.",
       "public": true,
-      "_sort": "2025-11-15T00:00:00+00:00"
+      "_sort": "2025-11-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-WHI-KTE-001",
+      "garden_name": "Kate's Forest Hill Garden",
+      "slug": "foresthillk",
+      "date": "30 Oct 2025",
+      "ts": null,
+      "type": "Verification",
+      "category": "verification",
+      "notes": "Gardens for Wildlife on-site visit. Voucher #2569. Garden assessed as well-established with mature Banksia and Acacia howitti (Sticky Wattle) on nature strip. Possums, king parrots, and insects confirmed present. Key gaps identified: absent middle storey, no bird baths, six environmental weeds present. Area-specific planting recommendations made for back garden, side gardens, front garden, and nature strip.",
+      "public": true,
+      "_sort": "2025-10-30T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "7 Oct 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Fifth day of preparation. Full aerial view of cleared slope from deck -- 475m2 visible in cleared state, Reserve canopy in spring flush beyond fence. Contaminated soil and plant material removal continuing.",
+      "public": true,
+      "_sort": "2025-10-07T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "2 Oct 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Kanga mini loader deployed for excavation and soil removal. Contaminated soil and existing plants cleared across all remaining zones. Four days of preparation now complete.",
+      "public": true,
+      "_sort": "2025-10-02T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "1 Oct 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Third and final day of site preparation. Excavation and soil removal completed across all zones. Existing plants removed, weeding finalised. Logs staged on slope ready for habitat embedding. Site preparation complete.",
+      "public": true,
+      "_sort": "2025-10-01T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "30 Sep 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Second day of site preparation. Excavation and soil removal continued. Existing plants removed, weeding completed across remaining zones. Slope cleared and settled -- small tree planted on upper slope.",
+      "public": true,
+      "_sort": "2025-09-30T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "29 Sep 2025",
+      "ts": null,
+      "type": "Recorded",
+      "category": "groundworks",
+      "notes": "Unwanted and contaminated soil excavated and removed from slope. Existing plants removed across planting zones. Weeding completed. Slope cleared to bare soil ready for contouring and amendment.",
+      "public": true,
+      "_sort": "2025-09-29T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "28 Sep 2025",
+      "ts": null,
+      "type": "Design",
+      "category": "site_analysis",
+      "notes": "Comprehensive photographic site documentation. 19 photographs record pre-installation condition -- slope, existing brick walls and stone steps, weed pressure, rainwater tank infrastructure, plant staging, and direct park adjacency. Visual baseline established for ecological change tracking.",
+      "public": true,
+      "_sort": "2025-09-28T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-CAN-FLI-001",
+      "garden_name": "Flinders",
+      "slug": "flinders",
+      "date": "10 Sep 2025",
+      "ts": null,
+      "type": "Installed",
+      "category": "planting",
+      "notes": "Installation complete at 1 Flinders Avenue, Canterbury. 45 species planted across groundcover, grass, shrub and small tree layers beneath a mature deciduous Chinese Elm. New soil and mulch introduced throughout. Igneous habitat rocks placed. Topography reshaped to guide water movement across the site. Six Victorian indigenous species in palette: Brachyscome Mauve Bliss, Dichondra repens, Microlaena stipoides, Pycnosorus globosus, Viola hederacea, Westringia fruticosa Smokey.",
+      "public": true,
+      "_sort": "2025-09-10T00:00:00+00:00"
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "garden_name": "Arundel",
+      "slug": "arundel",
+      "date": "31 Jul 2025",
+      "ts": null,
+      "type": "Design",
+      "category": "site_analysis",
+      "notes": "Site analysis completed prior to design. Pre-1770 EVC mapping confirmed Grassy Woodland as the dominant vegetation community. Present-day context shows fragmented remnants -- Valley Grassy Forest in drainage lines, Wattle Park and Surrey Hills Reserve as nearest intact EVCs. Property boundary confirmed via VicPlan -- NRZ3 zone with PPRZ directly adjacent confirming corridor node potential.",
+      "public": true,
+      "_sort": "2025-07-31T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-NTH-RUP-001",
@@ -373,7 +865,7 @@
       "category": "planting",
       "notes": "4 further species added as gaps appeared in the canopy and shrub layers. Total now 22 species. Canopy beginning to close.",
       "public": true,
-      "_sort": "2025-03-15T00:00:00+00:00"
+      "_sort": "2025-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-WHI-YRK-001",
@@ -433,7 +925,7 @@
       "category": "fauna",
       "notes": "Halictus sp. burrowing bee colony observed in bare soil patch, north corner. First fauna record for the site. Soil patch preserved deliberately.",
       "public": true,
-      "_sort": "2024-04-15T00:00:00+00:00"
+      "_sort": "2024-04-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-NTH-RUP-001",
@@ -445,7 +937,7 @@
       "category": "planting",
       "notes": "First 18 species planted across canopy, shrub, grass and groundcover layers. Logs and rocks positioned. Mulch 100mm depth.",
       "public": true,
-      "_sort": "2024-03-15T00:00:00+00:00"
+      "_sort": "2024-03-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-NTH-RUP-001",
@@ -457,7 +949,7 @@
       "category": "groundworks",
       "notes": "180m2 lawn removed following December 2023 heatwave. Soil amended. First mulch layer installed. The question asked: what was here before?",
       "public": true,
-      "_sort": "2024-01-15T00:00:00+00:00"
+      "_sort": "2024-01-01T00:00:00+00:00"
     },
     {
       "garden_id": "ER-AU-VIC-NIL-BEL-001",
@@ -469,499 +961,7 @@
       "category": "recognition",
       "notes": "Garden opened to the public through Open Gardens Victoria on 25–26 November 2023. Sam Cox ran garden talks and Q&A at 11am and 2pm both days. Recognised as an exemplar of Australian naturalistic landscape design in private hands. The garden returned to Open Gardens Victoria for a second opening in November 2026.",
       "public": true,
-      "_sort": "2023-11-15T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "31 Jul 2025",
-      "ts": null,
-      "type": "Design",
-      "category": "site_analysis",
-      "notes": "Site analysis completed prior to design. Pre-1770 EVC mapping confirmed Grassy Woodland as the dominant vegetation community. Present-day context shows fragmented remnants -- Valley Grassy Forest in drainage lines, Wattle Park and Surrey Hills Reserve as nearest intact EVCs. Property boundary confirmed via VicPlan -- NRZ3 zone with PPRZ directly adjacent confirming corridor node potential.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "28 Sep 2025",
-      "ts": null,
-      "type": "Design",
-      "category": "site_analysis",
-      "notes": "Comprehensive photographic site documentation. 19 photographs record pre-installation condition -- slope, existing brick walls and stone steps, weed pressure, rainwater tank infrastructure, plant staging, and direct park adjacency. Visual baseline established for ecological change tracking.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "29 Sep 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Unwanted and contaminated soil excavated and removed from slope. Existing plants removed across planting zones. Weeding completed. Slope cleared to bare soil ready for contouring and amendment.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "30 Sep 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Second day of site preparation. Excavation and soil removal continued. Existing plants removed, weeding completed across remaining zones. Slope cleared and settled -- small tree planted on upper slope.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "1 Oct 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Third and final day of site preparation. Excavation and soil removal completed across all zones. Existing plants removed, weeding finalised. Logs staged on slope ready for habitat embedding. Site preparation complete.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "2 Oct 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Kanga mini loader deployed for excavation and soil removal. Contaminated soil and existing plants cleared across all remaining zones. Four days of preparation now complete.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "7 Oct 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Fifth day of preparation. Full aerial view of cleared slope from deck -- 475m2 visible in cleared state, Reserve canopy in spring flush beyond fence. Contaminated soil and plant material removal continuing.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "19 Dec 2025",
-      "ts": null,
-      "type": "Design",
-      "category": "planting",
-      "notes": "Full ecological design presented to stewards. Five-layer planting system across 475m2 rear garden -- canopy (~32 trees), sub-canopy (~42 trees), shrub (~262 plants), ground layer (~714 plants), and swale/water garden. Form and element strategy documents waterway hydrology and habitat structure. All species drawn from Grassy Woodland EVC context confirmed in site analysis.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "15 Jan 2026",
-      "ts": null,
-      "type": "Verified",
-      "category": "baseline",
-      "notes": "Return visit months after clearance. Six soil samples collected across site zones -- sandy, low organic matter, biologically active. Six weed species identified and hand-removed without chemicals: Flaxleaf fleabane, Common sow-thistle, Panic veldt grass, Barley grass, Wireweed, California poppy. Active ant colonies and soil insects observed. Site in settling and observation phase.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "19 Jan 2026",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Kanga mini loader used for mechanical weed removal, pathway alignment, landform shaping, and surface consolidation. Intentionally shallow and controlled. Soil biology preserved. Site ready for sub-base introduction.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "20 Jan 2026",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Crushed rock sub-base partially installed across pathway zones. Path line visible from above for first time. Sub-base watered in. Granite rocks relocated for gabion reuse. Path curve follows design intent.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "8 Feb 2026",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Compacted surface layers removed by hand scraping. Gentle contours shaped to direct water to planting zones. Existing self-seeded natives retained in situ.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "15 Feb 2026",
-      "ts": null,
-      "type": "Installed",
-      "category": "structure",
-      "notes": "Logs partially embedded along contour line 2 to retain moisture and create cool refuges for invertebrates. Three nodes mapped and recorded.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "18 Feb 2026",
-      "ts": null,
-      "type": "Verified",
-      "category": "fauna",
-      "notes": "Presence indicates moist subsurface refuge, functional soil biology, and low-toxicity conditions. Adds to corridor node weighting for this garden.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-ARU-0001",
-      "garden_name": "Arundel",
-      "slug": "arundel",
-      "date": "7 Apr 2026",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "First planting day. 23 species installed including two eucalypts (E. leucoxylon connata, E. radiata), Kunzea baxteri, Correa lawrenceana, Grevillea Red Rambler, Hardenbergia, Viola, Poa, Austrostipa, Dichelachne, Austrodanthonia and groundcovers. 6 ponds installed. Rocks and logs placed throughout. First layers of mulch and soil complete. Five structural layers now present.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-CAN-0001",
-      "garden_name": "Canterbury G02",
-      "slug": "canterbury",
-      "date": "16 Jun 2026",
-      "ts": null,
-      "type": "Assessment",
-      "category": "assessment",
-      "notes": "G&S site assessment of pre-existing garden maintained via Tend. 11 species, 142 plants in 60m² raised-bed area. 2 strictly local-indigenous species (Hardenbergia violacea, Lomandra longifolia). Surrey Park adjacent south of Canterbury Road. G&S design intervention commissioned — baseline captured 16 Jun 2026 for before/after trajectory.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-BLA-DEW-001",
-      "garden_name": "Dewrang",
-      "slug": "dewrang",
-      "date": "17 Nov 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "Installation commenced 17 November 2025, completed 26 November 2025. All three zones planted across 25m2.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-BLA-DEW-001",
-      "garden_name": "Dewrang",
-      "slug": "dewrang",
-      "date": "18 Nov 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Excavation and plant removal continued. Weeding completed. Mulch laid across beds. Drip irrigation lines positioned.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-MAN-EVE-001",
-      "garden_name": "Evelina",
-      "slug": "evelina",
-      "date": "24 Nov 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "groundworks",
-      "notes": "Bio mulch blend and premium organic soil installed. Igneous rocks placed. Habitat logs embedded. Log steppers positioned. Site blown down and tidied.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-MAN-EVE-001",
-      "garden_name": "Evelina",
-      "slug": "evelina",
-      "date": "25 Nov 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "planting",
-      "notes": "All 29 species sourced. Lechenaultia already flowering at nursery.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-MAN-EVE-001",
-      "garden_name": "Evelina",
-      "slug": "evelina",
-      "date": "28 Nov 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "All 29 species planted with mycorrhizal dip. Hand watered in. Kangaroo paw flowering on planting day.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-MAN-EVE-001",
-      "garden_name": "Evelina",
-      "slug": "evelina",
-      "date": "27 Apr 2026",
-      "ts": null,
-      "type": "Site Visit",
-      "category": "site_visit",
-      "notes": "Soil health excellent -- upgraded to 4/5. Einadia nutans cutback performed. Dead scrambler replaced with Hardenbergia violacea. Garden in excellent progress for five months post-planting. Irrigation to be reduced.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-CAN-FLI-001",
-      "garden_name": "Flinders",
-      "slug": "flinders",
-      "date": "10 Sep 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "Installation complete at 1 Flinders Avenue, Canterbury. 45 species planted across groundcover, grass, shrub and small tree layers beneath a mature deciduous Chinese Elm. New soil and mulch introduced throughout. Igneous habitat rocks placed. Topography reshaped to guide water movement across the site. Six Victorian indigenous species in palette: Brachyscome Mauve Bliss, Dichondra repens, Microlaena stipoides, Pycnosorus globosus, Viola hederacea, Westringia fruticosa Smokey.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-WHI-KTE-001",
-      "garden_name": "Kate's Forest Hill Garden",
-      "slug": "foresthillk",
-      "date": "30 Oct 2025",
-      "ts": null,
-      "type": "Verification",
-      "category": "verification",
-      "notes": "Gardens for Wildlife on-site visit. Voucher #2569. Garden assessed as well-established with mature Banksia and Acacia howitti (Sticky Wattle) on nature strip. Possums, king parrots, and insects confirmed present. Key gaps identified: absent middle storey, no bird baths, six environmental weeds present. Area-specific planting recommendations made for back garden, side gardens, front garden, and nature strip.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "groundworks",
-      "notes": "Materials delivered to site.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "groundworks",
-      "notes": "Bio mulch installed across planting zones.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "groundworks",
-      "notes": "Organic soil mix installed to improve soil health and water retention.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "habitat",
-      "notes": "Rocks placed to create thermal mass for lizards, insects and soil life.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Site cleaned and prepared.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Existing non-indigenous plants removed. Site cleared for ecological planting.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Weed pressure reduced ahead of planting installation.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "9 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Ground shaped to direct water movement and create planting zones.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "10 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "planting",
-      "notes": "Indigenous species sourced for installation.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "10 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "planting",
-      "notes": "Plants positioned across site prior to planting.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "10 Dec 2025",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "20 indigenous species planted across ground, shrub and emerging canopy layers.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
-      "slug": "middlesex",
-      "date": "10 Dec 2025",
-      "ts": null,
-      "type": "Recorded",
-      "category": "groundworks",
-      "notes": "Site completed, cleaned and handed over.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-BAL-001",
-      "garden_name": "Parring",
-      "slug": "parring",
-      "date": "31 Mar 2026",
-      "ts": null,
-      "type": "Installed",
-      "category": "groundworks",
-      "notes": "Installation commenced today. Underperforming vegetation removed including camellia and buxus. New soil and mulch installed. Habitat rocks placed throughout the garden beds. Micro-topology created across planting zones to guide water movement and create varied conditions for plant establishment. Rocks selected for both aesthetic presence and ecological function -- thermal mass, shelter and soil anchoring.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-BAL-001",
-      "garden_name": "Parring",
-      "slug": "parring",
-      "date": "31 Mar 2026",
-      "ts": null,
-      "type": "Verified",
-      "category": "fauna",
-      "notes": "Two skinks observed in the rock refuge zone shortly after installation. Immediate fauna response to habitat rocks confirms thermal mass and shelter function. Adds to corridor node weighting.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-BAL-001",
-      "garden_name": "Parring",
-      "slug": "parring",
-      "date": "1 Apr 2026",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "Full planting installation completed. All 31 documented species planted with mycorrhiza inoculant applied at root zone. Finishing mulch layer installed. Drip irrigation system connected and tested. All plants hand watered in.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-BAL-001",
-      "garden_name": "Parring",
-      "slug": "parring",
-      "date": "1 Apr 2026",
-      "ts": null,
-      "type": "Installed",
-      "category": "habitat",
-      "notes": "Habitat elements from Handmade Habitats -- hollowed logs set half into the ground, packed with sticks, dried grasses, gum nuts, native seeds, dried eucalyptus leaves and paper daisies. Designed to attract native bees, beetles, lizards and invertebrates. The embedded base creates a moist microclimate at soil level. Paper daisies closed in the rain on installation day. Local craft production from natural materials.",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
-    },
-    {
-      "garden_id": "ER-AU-VIC-WHI-VIC-001",
-      "garden_name": "Victoria Crescent",
-      "slug": "victoria",
-      "date": "12 Jun 2026",
-      "ts": null,
-      "type": "Installed",
-      "category": "planting",
-      "notes": "Adjacent 9m² (3m × 3m) bed planted with 22 individuals across 14 species. 6 new species added to species_list: Bulbine bulbosa, Dampiera diversifolia, Goodia lotifolia, Lomandra confertifolia 'Little Pal', Olearia ramulosa, Xerochrysum viscosum. 8 top-up plantings of existing species (Kennedia prostrata, Themeda triandra, Leptospermum continentale, Hardenbergia violacea, Brachyscome multifida, Dichelachne crinata, Poa labillardieri, Ozothamnus ferrugineus). Strict-indigenous additions: 4 (Bulbine, Goodia, Olearia, Xerochrysum). Lomandra and Dampiera recorded but not strictly local-indigenous (cultivar / non-local). Existing record spells 'Dichelachne crinita' — correct spelling is 'crinata' — flagged in pending-work, not fixed in this commit. Total planted area now 18m².",
-      "public": true,
-      "_sort": "1970-01-01T00:00:00+00:00"
+      "_sort": "2023-11-01T00:00:00+00:00"
     }
   ]
 }

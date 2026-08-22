@@ -71,7 +71,8 @@ function whenLabel(u){
   return u.date || '—';
 }
 function monthLabel(u){
-  if(u.ts){ var d=new Date(u.ts); if(!isNaN(d)) return d.toLocaleDateString('en-AU',{month:'long',year:'numeric'}); }
+  var d = new Date(u.ts || u.date || '');   // parses ISO, "Aug 2026", "31 Jul 2025", "2025"
+  if(!isNaN(d)) return d.toLocaleDateString('en-AU',{month:'long',year:'numeric'});
   return u.date || 'Undated';
 }
 

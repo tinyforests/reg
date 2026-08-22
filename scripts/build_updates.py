@@ -44,12 +44,11 @@ def sort_dt(ts, date_str):
         except Exception:
             pass
     if date_str:
-        m = re.match(r'([A-Za-z]{3})[a-z]*\s+(\d{4})', str(date_str))
-        if m and m.group(1).title() in MONTHS:
-            return datetime(int(m.group(2)), MONTHS[m.group(1).title()], 15, tzinfo=timezone.utc)
-        m = re.match(r'(\d{4})', str(date_str))
-        if m:
-            return datetime(int(m.group(1)), 1, 1, tzinfo=timezone.utc)
+        for fmt in ('%d %b %Y', '%d %B %Y', '%b %Y', '%B %Y', '%Y'):
+            try:
+                return datetime.strptime(str(date_str).strip(), fmt).replace(tzinfo=timezone.utc)
+            except ValueError:
+                continue
     return datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
