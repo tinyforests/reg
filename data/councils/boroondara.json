@@ -1,0 +1,478 @@
+{
+  "meta": {
+    "council": "Boroondara",
+    "lga_code": null,
+    "as_at": "2026-08-22",
+    "methodology_version": "v1.0",
+    "scoring": "js/reg-score.js (five-pillar, parity-tested)",
+    "source_commit": "b1efb79",
+    "privacy_mode": "de-identified",
+    "derived": true,
+    "eligibility_definitions": {
+      "all_live": "every live garden record in the council",
+      "assessed": "verified/site-visit records with a completed ecological assessment (score > 0); design proposals & provisional excluded",
+      "verified": "verification_level gardener_and_son_verified or site_visit",
+      "provisional": "not verified (self_reported / photo_verified / none)"
+    },
+    "note": "Entirely derived from canonical garden records; no stored aggregates. Every metric carries its denominator n."
+  },
+  "records": [
+    {
+      "garden_id": "ER-AU-VIC-SH-ARU-0001",
+      "suburb": "Surrey Hills",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 60,
+      "registry_role": "Performer",
+      "structural_layers": 1,
+      "reassessments": 2
+    },
+    {
+      "garden_id": "ER-AU-VIC-HW-AUB-0001",
+      "suburb": "Hawthorn",
+      "eligibility": "assessed",
+      "verification": "site_visit",
+      "score": 35,
+      "registry_role": "Participant",
+      "structural_layers": 3,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-CAN-0001",
+      "suburb": "Surrey Hills",
+      "eligibility": "assessed",
+      "verification": "site_visit",
+      "score": 32,
+      "registry_role": "Cluster Member",
+      "structural_layers": 3,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-CAN-FLI-001",
+      "suburb": "Canterbury",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 39,
+      "registry_role": "Cluster Seed",
+      "structural_layers": 3,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-MID-001",
+      "suburb": "Surrey Hills",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 54,
+      "registry_role": "Connector",
+      "structural_layers": 3,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-CAN-MON-001",
+      "suburb": "Canterbury",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 11,
+      "registry_role": "Prototype",
+      "structural_layers": 0,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-001",
+      "suburb": "Balwyn",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 54,
+      "registry_role": "Connector",
+      "structural_layers": 3,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-PRD-001",
+      "suburb": "Balwyn",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 43,
+      "registry_role": "Connector",
+      "structural_layers": 3,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-SIR-0001",
+      "suburb": "Surrey Hills",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 50,
+      "registry_role": "Cluster Member",
+      "structural_layers": 4,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-BOR-WIN-002",
+      "suburb": "Kew East",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 29,
+      "registry_role": "Cluster Node",
+      "structural_layers": 5,
+      "reassessments": 0
+    },
+    {
+      "garden_id": "ER-AU-VIC-BOR-WIN-001",
+      "suburb": "Kew East",
+      "eligibility": "assessed",
+      "verification": "gardener_and_son_verified",
+      "score": 52,
+      "registry_role": "Cluster Seed",
+      "structural_layers": 4,
+      "reassessments": 0
+    }
+  ],
+  "participation": {
+    "eligibility": "all_live",
+    "live_records": 11,
+    "assessed_records": 11,
+    "verified": 9,
+    "site_visit": 2,
+    "provisional": 0,
+    "reassessed": 1
+  },
+  "condition": {
+    "eligibility": "assessed",
+    "n": 11,
+    "median_score": 43,
+    "mean_score": 41.7,
+    "score_range": [
+      11,
+      60
+    ],
+    "score_distribution": [
+      {
+        "band": "0-20",
+        "n": 1
+      },
+      {
+        "band": "21-40",
+        "n": 4
+      },
+      {
+        "band": "41-60",
+        "n": 6
+      },
+      {
+        "band": "61-80",
+        "n": 0
+      },
+      {
+        "band": "81-100",
+        "n": 0
+      }
+    ],
+    "pillar_scores": {
+      "biodiversity": {
+        "mean": 10.9,
+        "median": 11,
+        "max": 25,
+        "n": 11
+      },
+      "soil_water": {
+        "mean": 8.3,
+        "median": 9,
+        "max": 20,
+        "n": 11
+      },
+      "habitat": {
+        "mean": 5.1,
+        "median": 4,
+        "max": 20,
+        "n": 11
+      },
+      "connectivity": {
+        "mean": 5.6,
+        "median": 6,
+        "max": 20,
+        "n": 11
+      },
+      "evidence": {
+        "mean": 11.8,
+        "median": 12,
+        "max": 15,
+        "n": 11
+      }
+    }
+  },
+  "biodiversity": {
+    "eligibility": "assessed",
+    "n": 11,
+    "unique_taxa": 173,
+    "species_records": 245,
+    "indigenous_dominant": {
+      "k": 6,
+      "n": 11
+    },
+    "species_rich_20": {
+      "k": 4,
+      "n": 11
+    },
+    "species_rich_30": {
+      "k": 1,
+      "n": 11
+    },
+    "structural_layers": {
+      "five": {
+        "k": 1,
+        "n": 11
+      },
+      "four_plus": {
+        "k": 3,
+        "n": 11
+      },
+      "median": 3
+    },
+    "canopy_cover_weighted_pct": 2.3,
+    "canopy_measured_n": 8,
+    "canopy_note": "Area-weighted across gardens with both canopy_cover_pct and area_sqm. Council context: 23.3% private-land canopy / 30% 2040 target."
+  },
+  "soil_water": {
+    "eligibility": "assessed",
+    "n": 11,
+    "rainwater": {
+      "k": 0,
+      "n": 11
+    },
+    "moisture_basins": {
+      "k": 2,
+      "n": 11
+    },
+    "swales": {
+      "k": 1,
+      "n": 11
+    },
+    "water_function_mean": 2.5,
+    "soil_health_mean": 2.6
+  },
+  "habitat": {
+    "eligibility": "assessed",
+    "n": 11,
+    "habitat_nodes_median": 1,
+    "embedded_logs": {
+      "k": 3,
+      "n": 11
+    },
+    "rock_refuges": {
+      "k": 8,
+      "n": 11
+    },
+    "water_features": {
+      "k": 1,
+      "n": 11
+    },
+    "nest_boxes": {
+      "k": 0,
+      "n": 11
+    },
+    "gardens_with_verified_fauna": {
+      "k": 2,
+      "n": 11
+    },
+    "fauna_taxa": 2
+  },
+  "connectivity": {
+    "eligibility": "assessed",
+    "n": 11,
+    "adjacent_public_green": {
+      "k": 8,
+      "n": 11
+    },
+    "corridor_nodes": {
+      "k": 0,
+      "n": 11
+    },
+    "with_registered_neighbours": {
+      "k": 6,
+      "n": 11
+    },
+    "isolated": {
+      "k": 1,
+      "n": 11
+    },
+    "median_public_habitat_distance_m": 30,
+    "note": "park_distance_m is an analytical network distance, not a species-movement claim."
+  },
+  "evidence": {
+    "eligibility": "assessed",
+    "n": 11,
+    "verification_breakdown": {
+      "gardener_and_son_verified": 9,
+      "site_visit": 2,
+      "photo_verified": 0,
+      "self_reported": 0
+    },
+    "photos": {
+      "k": 10,
+      "n": 11
+    },
+    "field_notes": {
+      "k": 7,
+      "n": 11
+    },
+    "species_lists": {
+      "k": 10,
+      "n": 11
+    },
+    "fauna_records": {
+      "k": 2,
+      "n": 11
+    },
+    "professional_assessment": {
+      "k": 10,
+      "n": 11
+    },
+    "evidence_complete": {
+      "k": 6,
+      "n": 11
+    },
+    "median_assessment_age_months": null,
+    "assessment_over_12mo": {
+      "k": 0,
+      "n": 0
+    }
+  },
+  "trajectory": {
+    "eligibility": "reassessed",
+    "n": 1,
+    "gardens_with_history": 1,
+    "median_score_change": -13,
+    "note": "Change over time from recorded score observations; describes trajectory, not causation."
+  },
+  "opportunities": {
+    "eligibility": "assessed",
+    "n": 11,
+    "ranked": [
+      {
+        "id": "nest_boxes",
+        "action": "Install nest boxes",
+        "pillar": "habitat",
+        "gardens_affected": {
+          "k": 11,
+          "n": 11
+        },
+        "avg_potential_points": 2
+      },
+      {
+        "id": "rainwater",
+        "action": "Add rainwater capture",
+        "pillar": "soil_water",
+        "gardens_affected": {
+          "k": 11,
+          "n": 11
+        },
+        "avg_potential_points": 2
+      },
+      {
+        "id": "corridor_node",
+        "action": "Confirm corridor-node status",
+        "pillar": "connectivity",
+        "gardens_affected": {
+          "k": 10,
+          "n": 11
+        },
+        "avg_potential_points": 5
+      },
+      {
+        "id": "water_feature",
+        "action": "Add a small water feature",
+        "pillar": "habitat",
+        "gardens_affected": {
+          "k": 10,
+          "n": 11
+        },
+        "avg_potential_points": 3
+      },
+      {
+        "id": "water_function_up",
+        "action": "Improve water function one band",
+        "pillar": "soil_water",
+        "gardens_affected": {
+          "k": 10,
+          "n": 11
+        },
+        "avg_potential_points": 1.5
+      },
+      {
+        "id": "soil_health_up",
+        "action": "Lift soil health one band",
+        "pillar": "soil_water",
+        "gardens_affected": {
+          "k": 10,
+          "n": 11
+        },
+        "avg_potential_points": 1.4
+      },
+      {
+        "id": "swale",
+        "action": "Cut a swale on contour",
+        "pillar": "soil_water",
+        "gardens_affected": {
+          "k": 10,
+          "n": 11
+        },
+        "avg_potential_points": 1
+      },
+      {
+        "id": "fauna_first",
+        "action": "Log your first verified fauna sighting",
+        "pillar": "habitat",
+        "gardens_affected": {
+          "k": 9,
+          "n": 11
+        },
+        "avg_potential_points": 3
+      },
+      {
+        "id": "fauna_record",
+        "action": "Start a fauna record",
+        "pillar": "evidence",
+        "gardens_affected": {
+          "k": 9,
+          "n": 11
+        },
+        "avg_potential_points": 2
+      },
+      {
+        "id": "moisture_basin",
+        "action": "Install a seasonal moisture basin",
+        "pillar": "soil_water",
+        "gardens_affected": {
+          "k": 9,
+          "n": 11
+        },
+        "avg_potential_points": 2
+      },
+      {
+        "id": "logs",
+        "action": "Embed habitat logs",
+        "pillar": "habitat",
+        "gardens_affected": {
+          "k": 8,
+          "n": 11
+        },
+        "avg_potential_points": 3
+      },
+      {
+        "id": "layers_to_4",
+        "action": "Build structural layer 4",
+        "pillar": "biodiversity",
+        "gardens_affected": {
+          "k": 6,
+          "n": 11
+        },
+        "avg_potential_points": 2
+      }
+    ]
+  },
+  "demand": {
+    "available": false,
+    "note": "lookup/discovery demand lives in the Apps Script backend; wire in separately (aggregated, min-cohort, suburb/hex only)."
+  }
+}
