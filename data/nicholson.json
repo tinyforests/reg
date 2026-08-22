@@ -111,6 +111,28 @@
     "display_lat": -37.8418,
     "display_lng": 144.9849
   },
+  "canopy": {
+    "existing": {
+      "property_area_sqm": null,
+      "canopy_area_sqm": null,
+      "canopy_cover_pct": null,
+      "canopy_overhang_sqm": null,
+      "boundary_type": null,
+      "measurement_method": "remote_spatial_mapping",
+      "source": null,
+      "source_type": null,
+      "source_date": null,
+      "resolution": null,
+      "calculated_at": null,
+      "verification_status": "mapped_estimate",
+      "field_context_date": null,
+      "field_context_note": null,
+      "adjoins_remnant_vegetation": null,
+      "notes": null
+    },
+    "history": [],
+    "projected": null
+  },
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
@@ -200,5 +222,26 @@
   },
   "council": "Stonnington City Council",
   "ward": "Central",
-  "lga": "Stonnington"
+  "lga": "Stonnington",
+  "habitat_context": {
+    "habitat_value": {
+      "value": 0,
+      "scale": "0-100",
+      "band": "Low",
+      "band_note": "REG provisional banding — not an official DEECA classification.",
+      "lookup_method": "property_centroid+local_context",
+      "source": "DEECA Habitat Value",
+      "source_service": "NatureKit",
+      "source_url": "https://biod-gis.mapshare.vic.gov.au/arcgis/rest/services/NatureKit/habitat_value/MapServer",
+      "dataset_version": "3.1.0",
+      "dataset_date": null,
+      "resolution_m": 75,
+      "calculated_at": "2026-08-22T00:46:51+00:00",
+      "state": "value",
+      "centroid_value": 0,
+      "local_context_mean": 2.1,
+      "local_context_radius_m": 250.0,
+      "local_context_samples": "9/9"
+    }
+  }
 }
