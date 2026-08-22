@@ -13,6 +13,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
   <script>
     tailwind.config = {
@@ -490,6 +492,29 @@
                 <input type="hidden" id="f_con_lng" />
               </div>
 
+              <!-- Spatial context: live Habitat Value + Canopy garden-extent draw (not scored) -->
+              <div class="border border-rl dark:border-rdl p-4">
+                <div class="section-label mb-3">Spatial Context — not scored</div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <div class="opacity-50 mb-1">Habitat Value (DEECA · live)</div>
+                    <div id="assessHv" style="font-size:20px;font-weight:300;line-height:1.1">—</div>
+                    <div class="opacity-50" id="assessHvBand" style="font-size:10px">place the pin to look up</div>
+                  </div>
+                  <div>
+                    <div class="opacity-50 mb-1">Canopy</div>
+                    <div id="assessCanopyStatus" style="font-size:13px">—</div>
+                  </div>
+                </div>
+                <div class="opacity-50 mb-1">Garden extent — draw over the pin on the map above</div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <button type="button" class="map-search-btn" onclick="assessDrawExtent()">Draw garden extent</button>
+                  <button type="button" class="map-search-btn" style="opacity:.7" onclick="assessClearExtent()">Clear</button>
+                  <span id="assessExtentArea" class="opacity-70">no polygon</span>
+                </div>
+                <div class="opacity-50 mt-2" style="font-size:10px">Habitat Value is landscape context (0–100), not a garden score. Canopy % is computed offline from the drawn extent. Neither affects the ecological score.</div>
+              </div>
+
               <!-- Park position -->
               <div class="border border-rl dark:border-rdl p-4">
                 <div class="section-label mb-3">Adjacent Park or Reserve</div>
@@ -791,8 +816,43 @@ function buildRecordFromForm() {
     milestones:    lr.milestones    || [],
     activity_log:  lr.activity_log  || [],
     notes:         lr.notes         || '',
-    yield:         lr.yield         || null
+    yield:         lr.yield         || null,
+    canopy:          _assessBuildCanopy(lr),          // preserve + merge any drawn garden extent
+    habitat_context: _assessBuildHabitatContext(lr)   // preserve or store the live Habitat Value
   };
+}
+
+function _canopyPending() {
+  return { property_area_sqm: null, canopy_area_sqm: null, canopy_cover_pct: null, canopy_overhang_sqm: null,
+    boundary_type: null, measurement_method: 'remote_spatial_mapping', source: null, source_type: null,
+    source_date: null, resolution: null, calculated_at: null, verification_status: 'mapped_estimate',
+    field_context_date: null, field_context_note: null, adjoins_remnant_vegetation: null, notes: null };
+}
+
+function _assessBuildCanopy(lr) {
+  var canopy = (lr && lr.canopy) ? JSON.parse(JSON.stringify(lr.canopy)) : { existing: _canopyPending(), history: [], projected: null };
+  if (!canopy.existing) canopy.existing = _canopyPending();
+  if (_assessExtent) {
+    var ex = canopy.existing;
+    ex.garden_extent_geojson = _assessExtent;
+    ex.garden_extent_area_sqm = _assessExtentArea;
+    ex.garden_extent_method = 'manual_delineation';
+    ex.garden_extent_captured_at = new Date().toISOString();
+    ex.boundary_type = 'garden_extent';
+  }
+  return canopy;
+}
+
+function _assessBuildHabitatContext(lr) {
+  if (_assessHabitat && _assessHabitat.state === 'value') {
+    return { habitat_value: {
+      value: _assessHabitat.value, scale: '0-100', band: _assessHabitat.band,
+      band_note: 'REG provisional banding — not an official DEECA classification.',
+      lookup_method: 'property_centroid', source: 'DEECA Habitat Value', source_service: 'NatureKit',
+      source_url: HV_SERVICE, dataset_version: null, dataset_date: null, resolution_m: 75,
+      calculated_at: new Date().toISOString(), state: 'value', centroid_value: _assessHabitat.value } };
+  }
+  return (lr && lr.habitat_context) || null;
 }
 
 function populateFormFromRecord(r) {
@@ -1065,6 +1125,103 @@ var ER_APPS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq
 var _maps = {};
 var _markers = {};
 
+/* ---- Spatial context: live Habitat Value lookup + garden-extent draw ---- */
+var HV_SERVICE = 'https://biod-gis.mapshare.vic.gov.au/arcgis/rest/services/NatureKit/habitat_value/MapServer';
+var _assessHabitat = null;      // { state, value, band }
+var _assessExtent = null;       // GeoJSON Polygon geometry
+var _assessExtentArea = null;   // m²
+var _extentGroup = null;
+
+function _hvBand(v) {
+  if (v == null) return null;
+  return v <= 19 ? 'Low' : v <= 39 ? 'Moderate' : v <= 59 ? 'Significant' : v <= 79 ? 'High' : 'Very High';
+}
+
+function assessHabitatLookup(lat, lng) {
+  var out = document.getElementById('assessHv');
+  var bandEl = document.getElementById('assessHvBand');
+  if (!out || !lat || !lng) return;
+  out.textContent = '…';
+  var params = new URLSearchParams({
+    geometry: JSON.stringify({ x: lng, y: lat }), geometryType: 'esriGeometryPoint', sr: '4326',
+    layers: 'all:0', tolerance: '1',
+    mapExtent: (lng - 0.01) + ',' + (lat - 0.01) + ',' + (lng + 0.01) + ',' + (lat + 0.01),
+    imageDisplay: '400,400,96', returnGeometry: 'false', f: 'json'
+  });
+  fetch(HV_SERVICE + '/identify?' + params.toString())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var res = d.results || [];
+      var raw = res.length ? (res[0].attributes || {})['Stretch.Pixel Value'] : null;
+      if (raw == null) { _assessHabitat = { state: 'no_result', value: null }; out.textContent = '—'; if (bandEl) bandEl.textContent = 'outside coverage'; return; }
+      if (String(raw).toLowerCase() === 'nodata') { _assessHabitat = { state: 'nodata', value: null }; out.textContent = 'NoData'; if (bandEl) bandEl.textContent = 'no habitat data (e.g. water)'; return; }
+      var v = Math.round(parseFloat(raw));
+      _assessHabitat = { state: 'value', value: v, band: _hvBand(v) };
+      out.textContent = v + ' / 100';
+      if (bandEl) bandEl.textContent = _hvBand(v) + ' biodiversity context';
+    })
+    .catch(function () { out.textContent = '(lookup failed)'; _assessHabitat = null; });
+}
+
+function _polyAreaM2(latlngs) {
+  if (!latlngs || latlngs.length < 3) return 0;
+  var lat0 = latlngs.reduce(function (s, p) { return s + p.lat; }, 0) / latlngs.length;
+  var mx = Math.cos(lat0 * Math.PI / 180) * 111320, my = 110540, a = 0;
+  for (var i = 0; i < latlngs.length; i++) {
+    var j = (i + 1) % latlngs.length;
+    a += (latlngs[i].lng * mx) * (latlngs[j].lat * my) - (latlngs[j].lng * mx) * (latlngs[i].lat * my);
+  }
+  return Math.abs(a / 2);
+}
+
+function assessDrawExtent() {
+  var map = _maps['garden'];
+  if (!map) { alert('Place the garden pin first (search an address or click the map).'); return; }
+  if (!_extentGroup) { _extentGroup = new L.FeatureGroup().addTo(map); }
+  new L.Draw.Polygon(map, { allowIntersection: false, shapeOptions: { color: '#7a9e5f', weight: 2, fillOpacity: 0.2 } }).enable();
+}
+
+function _onExtentCreated(layer) {
+  if (!_extentGroup) return;
+  _extentGroup.clearLayers();
+  _extentGroup.addLayer(layer);
+  var ll = layer.getLatLngs()[0];
+  _assessExtentArea = Math.round(_polyAreaM2(ll));
+  _assessExtent = layer.toGeoJSON().geometry;
+  var el = document.getElementById('assessExtentArea');
+  if (el) el.textContent = _assessExtentArea.toLocaleString() + ' m² (' + (_assessExtentArea / 4046.86).toFixed(2) + ' ac)';
+}
+
+function assessClearExtent() {
+  if (_extentGroup) _extentGroup.clearLayers();
+  _assessExtent = null; _assessExtentArea = null;
+  var el = document.getElementById('assessExtentArea'); if (el) el.textContent = 'no polygon';
+}
+
+/* Show stored canopy status + load any saved garden-extent polygon for a record. */
+function assessLoadSpatial(lr) {
+  var cs = document.getElementById('assessCanopyStatus');
+  var cx = lr && lr.canopy && lr.canopy.existing;
+  if (cs) {
+    cs.textContent = !cx ? '—'
+      : (cx.canopy_cover_pct != null ? (cx.canopy_cover_pct + '% (' + (cx.boundary_type || 'mapped') + ')')
+        : (cx.garden_extent_geojson ? 'extent captured — % pending' : 'mapping pending'));
+  }
+  var hv = lr && lr.habitat_context && lr.habitat_context.habitat_value;
+  if (hv && hv.value != null) {
+    var out = document.getElementById('assessHv'), b = document.getElementById('assessHvBand');
+    if (out) out.textContent = hv.value + ' / 100';
+    if (b) b.textContent = (hv.band || _hvBand(hv.value)) + ' biodiversity context';
+  }
+  assessClearExtent();
+  if (cx && cx.garden_extent_geojson && _maps['garden'] && _extentGroup) {
+    try {
+      var lyr = L.geoJSON(cx.garden_extent_geojson).getLayers()[0];
+      if (lyr) { _onExtentCreated(lyr); }
+    } catch (e) {}
+  }
+}
+
 function initMiniMap(key, lat, lng) {
   if (_maps[key]) { _maps[key].remove(); }
   var center = (lat && lng) ? [lat, lng] : [-37.8136, 144.9631];
@@ -1078,12 +1235,19 @@ function initMiniMap(key, lat, lng) {
   }).addTo(m);
   _maps[key] = m;
 
+  if (key === 'garden') {
+    _extentGroup = new L.FeatureGroup().addTo(m);
+    m.on(L.Draw.Event.CREATED, function (e) { _onExtentCreated(e.layer); });
+  }
+
   if (lat && lng) { placePin(key, lat, lng); }
 
   m.on('click', function(e) {
     placePin(key, e.latlng.lat, e.latlng.lng);
     renderLive();
   });
+
+  if (key === 'garden') { assessLoadSpatial(_loadedRecord); }
 
   setTimeout(function() { m.invalidateSize(); }, 150);
 }
@@ -1121,6 +1285,8 @@ function saveCoords(key, lat, lng) {
   if (latEl) latEl.value = lat.toFixed(6);
   if (lngEl) lngEl.value = lng.toFixed(6);
   if (disp)  disp.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
+
+  if (key === 'garden') { assessHabitatLookup(lat, lng); }   // live DEECA Habitat Value
 
   if (key === 'garden' && _loadedRecord && _loadedRecord.garden_id) {
     var addrEl  = document.getElementById('f_con_garden_address');
