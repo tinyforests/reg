@@ -1131,6 +1131,31 @@ var _assessHabitat = null;      // { state, value, band }
 var _assessExtent = null;       // GeoJSON Polygon geometry
 var _assessExtentArea = null;   // m²
 var _extentGroup = null;
+var _parcelLayer = null;        // Vicmap property-boundary outlines
+
+/* Draw Vicmap parcel boundaries (outline only) for the current garden-map view,
+   so the extent can be traced against real property lines. Client-side WFS (CORS ok). */
+function assessLoadParcels(map) {
+  if (!map || map.getZoom() < 15) return;   // only when zoomed in enough
+  var b = map.getBounds();
+  var sw = L.CRS.EPSG3857.project(b.getSouthWest());
+  var ne = L.CRS.EPSG3857.project(b.getNorthEast());
+  var url = 'https://opendata.maps.vic.gov.au/geoserver/wfs?' + new URLSearchParams({
+    service: 'WFS', version: '2.0.0', request: 'GetFeature',
+    typeNames: 'open-data-platform:parcel_view', outputFormat: 'application/json',
+    srsName: 'EPSG:4326', count: '600',
+    bbox: sw.x + ',' + sw.y + ',' + ne.x + ',' + ne.y + ',EPSG:3857'
+  });
+  fetch(url).then(function (r) { return r.json(); }).then(function (gj) {
+    if (!_maps['garden']) return;
+    if (_parcelLayer) { _maps['garden'].removeLayer(_parcelLayer); }
+    _parcelLayer = L.geoJSON(gj, {
+      interactive: false,
+      style: { color: '#ffe08a', weight: 1.5, fill: false, opacity: 0.9 }
+    }).addTo(_maps['garden']);
+    if (_extentGroup && _extentGroup.bringToFront) _extentGroup.bringToFront();
+  }).catch(function () {});
+}
 
 function _hvBand(v) {
   if (v == null) return null;
@@ -1224,15 +1249,25 @@ function assessLoadSpatial(lr) {
 
 function initMiniMap(key, lat, lng) {
   if (_maps[key]) { _maps[key].remove(); }
+  var isGarden = (key === 'garden');
   var center = (lat && lng) ? [lat, lng] : [-37.8136, 144.9631];
-  var zoom   = (lat && lng) ? 14 : 11;
+  var zoom   = (lat && lng) ? (isGarden ? 19 : 14) : 11;   // open zoomed-in on the garden for tracing
   var m = L.map('map_' + key, {
     center: center, zoom: zoom,
-    zoomControl: true, scrollWheelZoom: false, attributionControl: false
+    zoomControl: true, scrollWheelZoom: isGarden, attributionControl: false
   });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 19, subdomains: 'abcd'
-  }).addTo(m);
+  if (isGarden) {
+    // Aerial detail so the garden can actually be seen and traced.
+    var aerial = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 22, maxNativeZoom: 19 }).addTo(m);
+    var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 20, subdomains: 'abcd' });
+    L.control.layers({ 'Aerial': aerial, 'Light': light }, {}, { collapsed: true }).addTo(m);
+    // Vicmap property boundaries as vector outlines, refreshed as you pan/zoom.
+    m.on('moveend', function () { assessLoadParcels(m); });
+    setTimeout(function () { assessLoadParcels(m); }, 300);
+  } else {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(m);
+  }
   _maps[key] = m;
 
   if (key === 'garden') {
