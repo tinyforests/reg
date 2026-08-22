@@ -1132,6 +1132,7 @@ var _assessExtent = null;       // GeoJSON Polygon geometry
 var _assessExtentArea = null;   // m²
 var _extentGroup = null;
 var _parcelLayer = null;        // Vicmap property-boundary outlines
+var _resolveTimer = null;       // debounce for the auto EVC/park/nearest-garden engine
 
 /* Draw Vicmap parcel boundaries (outline only) for the current garden-map view,
    so the extent can be traced against real property lines. Client-side WFS (CORS ok). */
@@ -1327,7 +1328,11 @@ function saveCoords(key, lat, lng) {
   if (lngEl) lngEl.value = lng.toFixed(6);
   if (disp)  disp.textContent = lat.toFixed(6) + ', ' + lng.toFixed(6);
 
-  if (key === 'garden') { assessHabitatLookup(lat, lng); }   // live DEECA Habitat Value
+  if (key === 'garden') {
+    assessHabitatLookup(lat, lng);                             // live DEECA Habitat Value
+    clearTimeout(_resolveTimer);                               // auto EVC + nearest park + nearest garden,
+    _resolveTimer = setTimeout(function () { _erResolveFromCoords(lat, lng); }, 600);  // however the garden was located
+  }
 
   if (key === 'garden' && _loadedRecord && _loadedRecord.garden_id) {
     var addrEl  = document.getElementById('f_con_garden_address');
@@ -1368,8 +1373,7 @@ function geocodeAddress(key) {
       var lng = parseFloat(results[0].lon);
       if (!_maps[key]) { initMiniMap(key, lat, lng); }
       else { _maps[key].setView([lat, lng], 16); placePin(key, lat, lng); }
-      if (key === 'garden') _erResolveFromCoords(lat, lng);
-      renderLive();
+      renderLive();   // placePin -> saveCoords now runs the resolve engine (debounced)
     })
     .catch(function() {
       if (disp) disp.textContent = 'Search failed -- check connection';
@@ -1425,8 +1429,7 @@ function _erShowAddrDrop(results, targetInp) {
       var lat = parseFloat(r.lat), lng = parseFloat(r.lon);
       if (!_maps['garden']) initMiniMap('garden', lat, lng);
       else { _maps['garden'].setView([lat, lng], 16); placePin('garden', lat, lng); }
-      saveCoords('garden', lat, lng);
-      _erResolveFromCoords(lat, lng);
+      saveCoords('garden', lat, lng);   // triggers the resolve engine (debounced)
       renderLive();
     });
     ul.appendChild(li);
@@ -1634,6 +1637,8 @@ function _erFindNearestGarden(lat, lng) {
       if (d < best) { best = d; bestLoc = g; }
     });
     if (!bestLoc || best > 2000) return;
+    var existing = document.querySelectorAll('[id^="adj_id_"]');   // don't add a garden already listed
+    for (var ei = 0; ei < existing.length; ei++) { if (existing[ei].value === bestLoc.garden_id) return; }
     var dir = _erBearing(lat, lng, bestLoc.display_lat, bestLoc.display_lng);
     addAdjacentGarden({
       id:         bestLoc.garden_id,
