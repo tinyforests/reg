@@ -1221,6 +1221,7 @@ function handleSaveGardenRecord(payload) {
       record.activity_log = [{
         title:    'Record updated — ' + editor,
         date:     months[dt.getMonth()] + ' ' + dt.getFullYear(),
+        ts:       dt.toISOString(),   // precise timestamp for the updates feed
         type:     'Record Update',
         category: 'record_update',
         public:   true,

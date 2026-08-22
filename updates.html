@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Ecological Registry — Updates</title>
+  <style>
+    :root { --g:#3d4535; --a:#7a9e5f; --paper:#f4f1ea; --line:#d7ccb9; --beige:#fff0dc; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--g);
+      font-family:"IBM Plex Sans",-apple-system,system-ui,sans-serif; font-size:14px; line-height:1.5; }
+    a { color:inherit; }
+    header { padding:22px 24px 14px; border-bottom:1px solid var(--line); }
+    h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-weight:500; font-size:30px; }
+    .sub { font-size:12px; opacity:.6; margin-top:4px; }
+    .bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; padding:12px 24px; border-bottom:1px solid var(--line); }
+    label { font-size:10px; text-transform:uppercase; letter-spacing:.09em; opacity:.55; margin-right:4px; }
+    select, input[type=search] { font:inherit; font-size:13px; padding:.35rem .5rem; border:1px solid var(--line); background:#fff; color:inherit; border-radius:2px; }
+    button { font:inherit; font-size:13px; padding:.4rem .8rem; border:1px solid var(--g); background:var(--g); color:var(--beige); cursor:pointer; border-radius:2px; }
+    main { max-width:1000px; margin:0 auto; padding:8px 24px 60px; }
+    .month { font-size:11px; text-transform:uppercase; letter-spacing:.12em; opacity:.5; margin:22px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+    .row { display:grid; grid-template-columns:132px 150px 1fr; gap:14px; padding:9px 0; border-bottom:1px solid #e7e0d1; align-items:baseline; }
+    .when { font-size:12px; opacity:.7; white-space:nowrap; font-variant-numeric:tabular-nums; }
+    .who { font-size:13px; font-weight:500; }
+    .who a { text-decoration:none; border-bottom:1px solid transparent; }
+    .who a:hover { border-bottom-color:var(--a); }
+    .what { font-size:13px; }
+    .chip { display:inline-block; font-size:10px; text-transform:uppercase; letter-spacing:.05em;
+      padding:.1rem .45rem; border:1px solid var(--line); border-radius:99px; margin-bottom:3px; opacity:.85; }
+    .chip.spatial { border-color:var(--a); color:var(--a); }
+    .chip.record_update { background:#efeadd; }
+    .note { opacity:.85; }
+    .priv { font-size:10px; opacity:.5; }
+    .empty { opacity:.5; padding:30px 0; }
+    @media print {
+      .no-print { display:none !important; }
+      body { background:#fff; font-size:11px; }
+      header, .bar, main { padding-left:0; padding-right:0; }
+      .row { grid-template-columns:110px 130px 1fr; page-break-inside:avoid; }
+      a { color:#000; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Registry Updates</h1>
+  <div class="sub" id="meta">Loading…</div>
+</header>
+
+<div class="bar no-print">
+  <span><label>Garden</label><select id="fGarden"><option value="">All gardens</option></select></span>
+  <span><label>Type</label><select id="fType"><option value="">All types</option></select></span>
+  <span><label>Visibility</label><select id="fVis"><option value="">All</option><option value="public">Public only</option></select></span>
+  <input type="search" id="fSearch" placeholder="Search notes…" />
+  <button onclick="window.print()" style="margin-left:auto">Print</button>
+</div>
+
+<main id="feed"><div class="empty">Loading updates…</div></main>
+
+<script>
+var DATA = null;
+
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function whenLabel(u){
+  if(u.ts){ var d=new Date(u.ts); if(!isNaN(d)){
+    return d.toLocaleDateString('en-AU',{day:'2-digit',month:'short',year:'numeric'}) + ' · ' +
+           d.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+  }}
+  return u.date || '—';
+}
+function monthLabel(u){
+  if(u.ts){ var d=new Date(u.ts); if(!isNaN(d)) return d.toLocaleDateString('en-AU',{month:'long',year:'numeric'}); }
+  return u.date || 'Undated';
+}
+
+function render(){
+  var g=document.getElementById('fGarden').value, t=document.getElementById('fType').value,
+      v=document.getElementById('fVis').value, q=document.getElementById('fSearch').value.toLowerCase();
+  var rows = DATA.updates.filter(function(u){
+    if(g && u.garden_id!==g) return false;
+    if(t && u.type!==t) return false;
+    if(v==='public' && !u.public) return false;
+    if(q && (u.notes||'').toLowerCase().indexOf(q)<0 && (u.garden_name||'').toLowerCase().indexOf(q)<0) return false;
+    return true;
+  });
+  var feed=document.getElementById('feed');
+  if(!rows.length){ feed.innerHTML='<div class="empty">No updates match.</div>'; return; }
+  var html='', curMonth='';
+  rows.forEach(function(u){
+    var mo=monthLabel(u);
+    if(mo!==curMonth){ curMonth=mo; html+='<div class="month">'+esc(mo)+'</div>'; }
+    var who = u.slug ? '<a href="/gardens/'+esc(u.slug)+'/">'+esc(u.garden_name)+'</a>' : esc(u.garden_name);
+    var cls = 'chip ' + (u.category==='spatial'?'spatial':(u.category==='record_update'?'record_update':''));
+    html+='<div class="row">'+
+      '<div class="when">'+esc(whenLabel(u))+'</div>'+
+      '<div class="who">'+who+(u.public?'':' <span class="priv">· private</span>')+'</div>'+
+      '<div class="what"><span class="'+cls+'">'+esc(u.type)+'</span><div class="note">'+esc(u.notes)+'</div></div>'+
+    '</div>';
+  });
+  feed.innerHTML=html;
+}
+
+function boot(data){
+  DATA=data;
+  document.getElementById('meta').textContent =
+    data.count + ' updates across ' + data.gardens + ' gardens · generated ' +
+    new Date(data.generated_at).toLocaleString('en-AU');
+  var gs={}, ts={};
+  data.updates.forEach(function(u){ if(u.garden_id) gs[u.garden_id]=u.garden_name; if(u.type) ts[u.type]=1; });
+  var gsel=document.getElementById('fGarden');
+  Object.keys(gs).sort(function(a,b){return gs[a].localeCompare(gs[b]);}).forEach(function(id){
+    var o=document.createElement('option'); o.value=id; o.textContent=gs[id]; gsel.appendChild(o); });
+  var tsel=document.getElementById('fType');
+  Object.keys(ts).sort().forEach(function(t){ var o=document.createElement('option'); o.value=t; o.textContent=t; tsel.appendChild(o); });
+  ['fGarden','fType','fVis','fSearch'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', render); });
+  render();
+}
+
+fetch('/data/updates.json?' + Date.now())
+  .then(function(r){ return r.json(); })
+  .then(boot)
+  .catch(function(){ document.getElementById('feed').innerHTML='<div class="empty">Could not load /data/updates.json — run <code>python scripts/build_updates.py</code>.</div>'; });
+</script>
+</body>
+</html>
