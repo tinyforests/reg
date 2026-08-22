@@ -362,6 +362,16 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
   </div>
 </section>
 
+<!-- ══════ 04b · WHERE COUNCIL CAN ACT ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">04b · Where Council and community effort goes furthest</span>
+    <h2>Where Council can act.</h2>
+    <p>The recorded gaps across registered gardens, ranked by how many gardens share them — each with the ecological uplift the engine calculates and a natural Council/community response. Computed live from the opportunity engine; every row carries its denominator.</p>
+  </div>
+  <div id="councilAct"><p class="cap">Loading opportunities…</p></div>
+</section>
+
 <!-- ══════ 05 · PROVENANCE / DEMAND / CHANGE ══════ -->
 <section class="sec">
   <div class="head">
@@ -390,6 +400,20 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
       <div id="trajstats"></div>
       <p class="note">Lookup hotspot analysis is pending the real discovery-dataset export from the Registry backend (aggregated to suburb / mesh-block with minimum cohort thresholds — never dots on houses). The figures shown here are illustrative until then.</p>
     </div>
+  </div>
+</section>
+
+<!-- ══════ BOROONDARA ALIGNMENT ══════ -->
+<section class="sec">
+  <div class="head">
+    <span class="lab">Alignment · Boroondara strategy</span>
+    <h2>Built for Boroondara, not re-skinned for it.</h2>
+  </div>
+  <div class="trio">
+    <div><h3>Private land</h3><p class="sb">Urban Biodiversity Strategy — record ecological action occurring outside Council-managed land.</p></div>
+    <div><h3>5,000 native plants / year</h3><p class="sb">Measure species, structure and survival/change over time — not simply plants distributed.</p></div>
+    <div><h3>30% canopy by 2040</h3><p class="sb">Track private-garden canopy contribution and opportunity. Council context: 23.3% private-land canopy today.</p></div>
+    <div><h3>Evidence</h3><p class="sb">Repeatable property-level evidence, current and monitored — without publicly exposing households.</p></div>
   </div>
 </section>
 
@@ -1156,6 +1180,28 @@ function drawBand(){
   });
 }
 
+/* ═════════ WHERE COUNCIL CAN ACT (from the derived opportunity aggregate) ═════════ */
+function renderCouncilAct(CD){
+  const el=document.getElementById("councilAct"); if(!el) return;
+  const O=(CD&&CD.opportunities&&CD.opportunities.ranked)||[];
+  if(!O.length){ el.innerHTML='<p class="cap">No opportunities computed.</p>'; return; }
+  const RESP={corridor_node:"Verification visit to confirm stepping-stone status",rainwater:"Rainwater / water-holding support",
+    nest_boxes:"Species-matched nest-box program",water_feature:"Pond / water-habitat education",logs:"Logs & woody-habitat workshop",
+    rocks:"Rock-refuge workshop",moisture_basin:"Moisture-basin / passive-water support",swale:"Swale / contour water support",
+    indigenous_dominant:"Indigenous plant distribution",fauna_first:"Fauna monitoring support"};
+  const resp=id=>{for(const k in RESP)if(id.indexOf(k)>=0)return RESP[k];
+    if(id.indexOf("species")>=0)return"Indigenous plant distribution";
+    if(id.indexOf("layers")>=0||id.indexOf("canopy")>=0)return"Structural / canopy planting";
+    if(id.indexOf("adjacent")>=0)return"Neighbouring-garden recruitment";
+    if(id.indexOf("verify")>=0||id.indexOf("assessment")>=0)return"Assessment / verification";
+    return"Targeted stewardship support";};
+  el.innerHTML='<div class="lab" style="display:block;margin-bottom:12px">Recorded gap · gardens affected · typical response</div>'
+    +O.map(o=>{const g=o.gardens_affected;
+      return '<div class="bnd"><span class="n">'+o.action+'</span><span class="c">'+g.k+' / '+g.n+'</span>'
+        +'<span class="tr"><i style="width:'+(g.k/(g.n||1)*100)+'%"></i></span>'
+        +'<span class="s">'+resp(o.id)+' · avg +'+o.avg_potential_points+' pts</span></div>';}).join('');
+}
+
 /* ═════════ WIRING ═════════ */
 function renderAll(){
   derive();drawBand();drawNet();drawBands();drawStrata();drawAnat();
@@ -1218,7 +1264,8 @@ fetch('/data/councils/boroondara.json?' + Date.now())
     sub('kArea', '· n=' + B.area_measured_n);
     const sl = B.structural_layers && B.structural_layers.four_plus;
     if (sl) sub('kMid', '· ' + sl.k + ' of ' + sl.n);
-    renderAll();   // "Recorded now" band now reads real derived numbers
+    renderAll();                 // "Recorded now" band now reads real derived numbers
+    renderCouncilAct(CD);        // "Where Council can act" from the opportunity aggregate
   })
   .catch(() => {});
 
