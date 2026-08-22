@@ -1206,7 +1206,7 @@ function assessDrawExtent() {
   new L.Draw.Polygon(map, { allowIntersection: false, shapeOptions: { color: '#7a9e5f', weight: 2, fillOpacity: 0.2 } }).enable();
 }
 
-function _onExtentCreated(layer) {
+function _onExtentCreated(layer, fromDraw) {
   if (!_extentGroup) return;
   _extentGroup.clearLayers();
   _extentGroup.addLayer(layer);
@@ -1214,7 +1214,13 @@ function _onExtentCreated(layer) {
   _assessExtentArea = Math.round(_polyAreaM2(ll));
   _assessExtent = layer.toGeoJSON().geometry;
   var el = document.getElementById('assessExtentArea');
-  if (el) el.textContent = _assessExtentArea.toLocaleString() + ' m² (' + (_assessExtentArea / 4046.86).toFixed(2) + ' ac)';
+  if (el) el.textContent = _assessExtentArea.toLocaleString() + ' m² (' + (_assessExtentArea / 4046.86).toFixed(2) + ' ac)'
+    + (fromDraw ? ' — set as garden area' : '');
+  if (fromDraw) {                                   // a fresh trace updates the garden area
+    var areaEl = document.getElementById('f_area_sqm');
+    if (areaEl) { areaEl.value = _assessExtentArea; }
+    if (typeof renderLive === 'function') renderLive();
+  }
 }
 
 function assessClearExtent() {
@@ -1272,7 +1278,7 @@ function initMiniMap(key, lat, lng) {
 
   if (key === 'garden') {
     _extentGroup = new L.FeatureGroup().addTo(m);
-    m.on(L.Draw.Event.CREATED, function (e) { _onExtentCreated(e.layer); });
+    m.on(L.Draw.Event.CREATED, function (e) { _onExtentCreated(e.layer, true); });
   }
 
   if (lat && lng) { placePin(key, lat, lng); }
