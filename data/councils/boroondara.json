@@ -5,7 +5,7 @@
     "as_at": "2026-08-22",
     "methodology_version": "v1.0",
     "scoring": "js/reg-score.js (five-pillar, parity-tested)",
-    "source_commit": "b1efb79",
+    "source_commit": "848caea",
     "privacy_mode": "de-identified",
     "derived": true,
     "eligibility_definitions": {
@@ -206,6 +206,8 @@
     "n": 11,
     "unique_taxa": 173,
     "species_records": 245,
+    "ecological_area_sqm": 1247,
+    "area_measured_n": 8,
     "indigenous_dominant": {
       "k": 6,
       "n": 11

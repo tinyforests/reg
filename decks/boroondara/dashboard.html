@@ -251,7 +251,14 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
 <div class="mast">
   <div class="who">
     <div class="e">City of Boroondara · Urban Biodiversity &amp; Revegetation</div>
-    <div class="h">The private-land ecological record</div>
+    <div class="h">Private-land biodiversity in Boroondara</div>
+    <div class="e" style="margin-top:4px;opacity:.75">Recorded ecological condition, participation and opportunity across registered gardens.</div>
+    <div class="e mono" id="dataAsAt" style="margin-top:6px;opacity:.6;font-size:10.5px">Data as at: — · Registry methodology — · Boroondara LGA · privacy-protected</div>
+    <div class="e" id="statusLegend" style="margin-top:5px;font-size:10.5px;opacity:.75">
+      <span style="color:var(--signal)">● Verified assessment</span> ·
+      <span>● Site visit</span> ·
+      <span style="opacity:.6">◌ Provisional / self-reported</span>
+    </div>
   </div>
   <div class="ctl">
     <span class="lab">View</span>
@@ -263,16 +270,16 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
     <span class="lab">Theme</span>
     <button id="themeBtn">Understory</button>
   </div>
-  <div class="flag"><i></i> Illustrative build · records to be replaced with live Registry export</div>
+  <div class="flag"><i></i> Headline metrics live from the derived Registry export · network map &amp; per-garden detail illustrative pending privacy-safe spatial aggregation</div>
 </div>
 
 <div class="band" id="band">
-  <div class="st"><div class="n" data-s="gardens">0</div><div class="k">Boroondara gardens on the record</div></div>
-  <div class="st"><div class="n" data-s="species">0</div><div class="k">Indigenous species recorded</div></div>
-  <div class="st"><div class="n" data-s="area">0<small> m²</small></div><div class="k">Assessed planting area</div></div>
-  <div class="st"><div class="n" data-s="score">0</div><div class="k">Mean ecological score</div></div>
-  <div class="st"><div class="n" data-s="mid">0<small>%</small></div><div class="k">Gardens with a middle storey</div></div>
-  <div class="st"><div class="n" data-s="lookups">0</div><div class="k">Boroondara EVC lookups</div></div>
+  <div class="st"><div class="n" data-s="gardens">0</div><div class="k">Boroondara gardens on the record <span id="kGardens" style="opacity:.6"></span></div></div>
+  <div class="st"><div class="n" data-s="species">0</div><div class="k">Unique plant taxa recorded</div></div>
+  <div class="st"><div class="n" data-s="area">0<small> m²</small></div><div class="k">Assessed planting area <span id="kArea" style="opacity:.6"></span></div></div>
+  <div class="st"><div class="n" data-s="score">0</div><div class="k">Median ecological score <span id="kScore" style="opacity:.6"></span></div></div>
+  <div class="st"><div class="n" data-s="mid">0<small>%</small></div><div class="k">Gardens with 4+ structural layers <span id="kMid" style="opacity:.6"></span></div></div>
+  <div class="st"><div class="n" data-s="lookups">0</div><div class="k">Resident EVC lookups <span style="opacity:.5">· pending</span></div></div>
 </div>
 
 <!-- ══════ 01 · CONNECTIVITY NETWORK ══════ -->
@@ -280,13 +287,14 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
   <div class="head">
     <span class="lab">01 · The connectivity network</span>
     <h2>Boroondara's reserves are already joined. The joins run through private gardens.</h2>
-    <p>Every line is a habitat link short enough for small birds, skinks and insects to cross. Drag the threshold to set how far is close enough. Turn on <b style="font-weight:500">missing links</b> to see the gaps — the places where one more registered garden would connect two reserves that are currently separate.</p>
+    <p><b style="font-weight:500">Network adjacency threshold: 300 m.</b> Used to identify nearby ecological assets and potential stepping-stone relationships — an analytical network distance, not a species-movement claim. Drag to change the threshold. Turn on <b style="font-weight:500">candidate gaps</b> to see where one more registered garden could strengthen connectivity between assets.</p>
   </div>
 
   <div class="netwrap">
     <div class="mp">
       <div id="map"></div>
       <div class="offline" id="offline"><p>The basemap needs an internet connection. The network analysis below still works — reconnect and reload to bring the map back.</p></div>
+      <div class="cap" style="padding:8px 10px;border-top:1px solid var(--hair);opacity:.75;font-size:11px"><b style="font-weight:500">Privacy by design.</b> Precise property locations are used to calculate ecological context and network relationships but are never published. Council views receive de-identified garden records and aggregated spatial patterns — no names, no house numbers, no raw coordinate downloads.</div>
 
       <div class="panel-tl">
         <span class="lab">Threshold</span>
@@ -380,7 +388,7 @@ footer .s{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.
       <p class="sb">Each line is one garden re-assessed. The record's whole purpose is the second reading.</p>
       <svg class="chart" id="traj" viewBox="0 0 520 200" aria-label="Garden score trajectories"></svg>
       <div id="trajstats"></div>
-      <p class="note">Greythorn Park sits at the centre of the densest cluster of unregistered lookups in the municipality — the Friends group's planting day catchment and the Registry's warmest territory are the same streets.</p>
+      <p class="note">Lookup hotspot analysis is pending the real discovery-dataset export from the Registry backend (aggregated to suburb / mesh-block with minimum cohort thresholds — never dots on houses). The figures shown here are illustrative until then.</p>
     </div>
   </div>
 </section>
@@ -978,7 +986,7 @@ function drawBands(){
       return '<div class="bnd"><span class="n">'+R.n+'</span><span class="c">'+c+'</span>'
         +'<span class="tr"><i style="width:'+(c/max*100)+'%"></i></span><span class="s">'+R.p+'</span></div>';
     }).join('')
-    +'<p class="note">Greythorn Park is ringed on the map. The Friends group plants there every year; the network shows exactly which private blocks would carry that planting past the fence line — and the corridor-node field is still empty, waiting for someone qualified to confirm the first one.</p>';
+    +'<p class="note">No corridor-node has yet been confirmed by an assessor anywhere in the municipality — the field is empty across all registered gardens, waiting for the first qualified confirmation.</p>';
 }
 
 /* ═════════ STRATA BUTTONS ═════════ */
@@ -1122,14 +1130,28 @@ function animate(node,to,suffix){
 }
 function drawBand(){
   const rs=recs(),ver=rs.filter(r=>r.status!=="provisional");
-  const vals={gardens:rs.length,
-    species:Math.round(ver.reduce((s,r)=>s+r.species,0)*0.6),
-    area:rs.reduce((s,r)=>s+r.area,0),
-    score:Math.round(ver.reduce((s,r)=>s+r.score,0)/(ver.length||1)),
-    mid:Math.round(share("sub")*100),
-    lookups:VIEWS[view].lookups};
+  let vals;
+  if(view==="now" && window.CD){            // Recorded now = the real derived council dataset
+    const C=window.CD, sl=C.biodiversity.structural_layers.four_plus;
+    vals={
+      gardens:C.participation.live_records,
+      species:C.biodiversity.unique_taxa,
+      area:C.biodiversity.ecological_area_sqm,
+      score:C.condition.median_score,        // median, not mean
+      mid:Math.round(sl.k/(sl.n||1)*100),
+      lookups:null                           // demand lives in the backend — not shown as a real headline yet
+    };
+  } else {
+    vals={gardens:rs.length,
+      species:Math.round(ver.reduce((s,r)=>s+r.species,0)*0.6),
+      area:rs.reduce((s,r)=>s+r.area,0),
+      score:Math.round(ver.reduce((s,r)=>s+r.score,0)/(ver.length||1)),
+      mid:Math.round(share("sub")*100),
+      lookups:VIEWS[view].lookups};
+  }
   document.querySelectorAll("[data-s]").forEach(n=>{
     const k=n.dataset.s;
+    if(vals[k]==null){ n.innerHTML='—'; return; }
     animate(n,vals[k],k==="area"?' <small>m²</small>':k==="mid"?' <small>%</small>':"");
   });
 }
@@ -1180,6 +1202,25 @@ if(window.IntersectionObserver){
 
 initMap();
 renderAll();
+
+/* ── Load the DERIVED council dataset and bind the real "Recorded now" view ── */
+fetch('/data/councils/boroondara.json?' + Date.now())
+  .then(r => r.json())
+  .then(CD => {
+    window.CD = CD;
+    const meta = CD.meta || {}, P = CD.participation || {}, C = CD.condition || {}, B = CD.biodiversity || {};
+    const asAt = document.getElementById('dataAsAt');
+    if (asAt) asAt.textContent = 'Data as at: ' + (meta.as_at || '—') + ' · Registry methodology ' +
+      (meta.methodology_version || '—') + ' · Boroondara LGA · privacy-protected · source ' + (meta.source_commit || '—');
+    const sub = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = t; };
+    sub('kGardens', '· ' + P.verified + ' verified / ' + P.site_visit + ' site-visit');
+    sub('kScore', '· range ' + (C.score_range ? C.score_range[0] + '–' + C.score_range[1] : '—') + ' · n=' + C.n);
+    sub('kArea', '· n=' + B.area_measured_n);
+    const sl = B.structural_layers && B.structural_layers.four_plus;
+    if (sl) sub('kMid', '· ' + sl.k + ' of ' + sl.n);
+    renderAll();   // "Recorded now" band now reads real derived numbers
+  })
+  .catch(() => {});
 
 </script>
 </body>

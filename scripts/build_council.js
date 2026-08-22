@@ -117,6 +117,8 @@ function biodiversity(G) {
     eligibility: 'assessed', n: A.length,
     unique_taxa: taxa.size,
     species_records: rows.length,
+    ecological_area_sqm: Math.round(A.reduce((s, g) => s + (num(g.rec.area_sqm) || 0), 0)),
+    area_measured_n: count(A, g => num(g.rec.area_sqm) != null && g.rec.area_sqm > 0),
     indigenous_dominant: denom(count(A, g => (g.rec.biodiversity || {}).indigenous_dominant), A.length),
     species_rich_20: denom(count(A, g => ((g.rec.biodiversity || {}).indigenous_species_current || 0) >= 20), A.length),
     species_rich_30: denom(count(A, g => ((g.rec.biodiversity || {}).indigenous_species_current || 0) >= 30), A.length),
