@@ -1075,8 +1075,23 @@ function obsRows(id,set,cls){
 
 /* ═════════ PROVENANCE / DEMAND / TRAJECTORY ═════════ */
 function drawProv(){
-  const rs=recs(),n=rs.length||1;
-  const set=[
+  let set, n;
+  if(view==="now" && window.CD){                 // real verification breakdown
+    const vb=window.CD.evidence.verification_breakdown||{}; n=window.CD.participation.live_records||1;
+    set=[
+      {k:"Registry verified assessment",c:vb.gardener_and_son_verified||0,col:"var(--signal)",s:"Verified against the published method by a named assessor"},
+      {k:"Site visit",c:vb.site_visit||0,col:"var(--brass)",s:"Assessor site visit"},
+      {k:"Provisional / self-reported",c:(vb.photo_verified||0)+(vb.self_reported||0),col:"var(--ghost)",s:"Publicly visible, hard-quarantined, never aggregated as verified"}
+    ].map(b=>({k:b.k,c:b.c,col:b.col,s:b.s}));
+    document.getElementById("prov").innerHTML=set.map(b=>{
+      const pc=Math.round(b.c/n*100);
+      return '<div class="pv"><span class="n">'+b.k+'</span><span class="c">'+b.c+' of '+n+' · '+pc+'%</span>'
+        +'<span class="tr"><i style="width:'+pc+'%;background:'+b.col+'"></i></span><span class="s">'+b.s+'</span></div>';
+    }).join('');
+    return;
+  }
+  const rs=recs(); n=rs.length||1;
+  set=[
     {k:"Registry site visit",f:r=>r.status==="verified",c:"var(--signal)",s:"Verified against the published method by a named assessor"},
     {k:"Third-party assessment",f:r=>r.status==="third",c:"var(--brass)",s:"Council or program evidence · supplied by the steward, not verified by the Registry"},
     {k:"Steward self-enrolment",f:r=>r.status==="provisional",c:"var(--ghost)",s:"Provisional · publicly visible, hard-quarantined, never aggregated as verified"}
@@ -1202,6 +1217,20 @@ function renderCouncilAct(CD){
         +'<span class="s">'+resp(o.id)+' · avg +'+o.avg_potential_points+' pts</span></div>';}).join('');
 }
 
+/* Scenario labelling — never let a modelled view read as measured uplift. */
+function setScenarioNote(v){
+  const band=document.getElementById("band"); if(!band) return;
+  let n=document.getElementById("scenarioNote");
+  if(!n){ n=document.createElement("div"); n.id="scenarioNote"; n.className="cap";
+    n.style.cssText="max-width:1100px;margin:2px auto 0;padding:6px 24px;font-size:11.5px";
+    band.parentNode.insertBefore(n, band.nextSibling); }
+  n.innerHTML = v==="now"
+    ? '<b style="font-weight:500">Recorded now</b> — live from the derived Registry export. Verified &amp; site-visit records with a completed assessment count toward the ecological score; provisional/design records are excluded.'
+    : v==="pilot"
+    ? '<b style="font-weight:500">Scenario, not forecast.</b> Current evidence plus a selected pilot cohort. Assumes additional participating gardens — not measured ecological uplift.'
+    : '<b style="font-weight:500">Scenario, not forecast.</b> A neighbourhood-scale model assuming many additional participating gardens across the municipality — not measured ecological uplift.';
+}
+
 /* ═════════ WIRING ═════════ */
 function renderAll(){
   derive();drawBand();drawNet();drawBands();drawStrata();drawAnat();
@@ -1212,7 +1241,7 @@ function renderAll(){
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{
   view=b.dataset.view;selected=null;
   document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
-  renderAll();
+  renderAll();setScenarioNote(view);
 }));
 document.querySelectorAll("[data-l]").forEach(c=>c.addEventListener("change",()=>{
   layers[c.dataset.l]=c.checked;drawNet();
@@ -1248,6 +1277,7 @@ if(window.IntersectionObserver){
 
 initMap();
 renderAll();
+setScenarioNote(view);
 
 /* ── Load the DERIVED council dataset and bind the real "Recorded now" view ── */
 fetch('/data/councils/boroondara.json?' + Date.now())
