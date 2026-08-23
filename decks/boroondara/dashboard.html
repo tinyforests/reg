@@ -80,6 +80,9 @@ button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
   text-transform:uppercase;color:var(--faint);line-height:1.55}
 .st .x{margin-top:6px;font-size:10.5px;color:var(--dim);line-height:1.5}
 .st .x span{display:block}
+.st.modelled{background:linear-gradient(var(--sunk),var(--sunk))}
+.mtag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:7.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--clay);border:1px solid var(--clay);padding:1px 4px;margin-left:5px;vertical-align:1px}
 
 /* sections */
 .sec{border-bottom:1px solid var(--rule)}
@@ -548,7 +551,7 @@ const REGISTRY = {
     score:50, area_sqm:520, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:44, taxa_indigenous:41, indigenous_dominant:true,
     canopy_pct:26,
-    layers:{canopy:1,subcanopy:0,shrub:1,ground:1,climber:0},
+    layers:{canopy:1,subcanopy:1,shrub:1,ground:1,climber:0},
     habitat:{logs:1,rocks:0,water:1,nest_box:0,litter:1,dense_refuge:1},
     water:{rainwater:1,swale:0,moisture_basin:1,permeable:1},
     fauna:[{group:"Birds",n:7},{group:"Pollinators",n:3}],
@@ -562,7 +565,7 @@ const REGISTRY = {
     score:44, area_sqm:410, evc:"EVC 55 Plains Grassy Woodland",
     taxa_total:36, taxa_indigenous:34, indigenous_dominant:true,
     canopy_pct:18,
-    layers:{canopy:0,subcanopy:1,shrub:1,ground:1,climber:0},
+    layers:{canopy:1,subcanopy:1,shrub:1,ground:1,climber:0},
     habitat:{logs:0,rocks:1,water:1,nest_box:0,litter:1,dense_refuge:1},
     water:{rainwater:1,swale:0,moisture_basin:0,permeable:1},
     fauna:[{group:"Birds",n:6},{group:"Pollinators",n:3}],
@@ -590,7 +593,7 @@ const REGISTRY = {
     score:46, area_sqm:560, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:39, taxa_indigenous:37, indigenous_dominant:true,
     canopy_pct:29,
-    layers:{canopy:1,subcanopy:0,shrub:1,ground:1,climber:1},
+    layers:{canopy:1,subcanopy:1,shrub:1,ground:1,climber:1},
     habitat:{logs:1,rocks:0,water:0,nest_box:0,litter:1,dense_refuge:1},
     water:{rainwater:1,swale:1,moisture_basin:0,permeable:1},
     fauna:[{group:"Birds",n:6},{group:"Pollinators",n:2}],
@@ -604,7 +607,7 @@ const REGISTRY = {
     score:38, area_sqm:220, evc:"EVC 55 Plains Grassy Woodland",
     taxa_total:31, taxa_indigenous:29, indigenous_dominant:true,
     canopy_pct:12,
-    layers:{canopy:0,subcanopy:1,shrub:1,ground:1,climber:0},
+    layers:{canopy:1,subcanopy:1,shrub:1,ground:1,climber:0},
     habitat:{logs:1,rocks:1,water:1,nest_box:0,litter:1,dense_refuge:1},
     water:{rainwater:1,swale:0,moisture_basin:1,permeable:1},
     fauna:[{group:"Birds",n:5},{group:"Pollinators",n:4}],
@@ -863,8 +866,18 @@ function cohort(kind){
       pos.push({lat:a.lat+(rnd()-.5)*sp*2,lng:a.lng+(rnd()-.5)*sp*2*(MLAT/MLNG)});
     }
   }
+  /* Attributes are drawn by resampling the observed assessed records, so a scenario
+     says "if N more gardens participated at the condition we currently measure".
+     It is a projection from observed distribution — never a claim of measured uplift. */
+  const src=REGISTRY.gardens.filter(g=>g.assessment==="complete");
   return pos.filter(p=>p.lat>-37.8724&&p.lat<-37.7772&&p.lng>145.0184&&p.lng<145.1130)
-            .map((p,i)=>({modelled:true,id:"MODEL-"+i,lat:p.lat,lng:p.lng}));
+    .map((p,i)=>{
+      const t=src[Math.floor(rnd()*src.length)];
+      return {modelled:true,id:"MODEL-"+i,lat:p.lat,lng:p.lng,
+        area_sqm:t.area_sqm, taxa_indigenous:t.taxa_indigenous, taxa_total:t.taxa_total,
+        canopy_pct:t.canopy_pct, layers:t.layers,
+        _layers_n:Object.keys(t.layers).filter(k=>t.layers[k]===1).length};
+    });
 }
 let COHORT=[];
 function scenarioNodes(){return SCENARIO==="current"?[]:COHORT}
@@ -1051,6 +1064,30 @@ function opportunities(){
       uplift:o.uplift*hit.length};
   }).filter(o=>o.n>0).sort((a,b)=>b.uplift-a.uplift||b.n-a.n);
 }
+/* ── projection: measured + modelled, reported separately ── */
+function proj(){
+  const m=sel("assessed"), c=scenarioNodes();
+  return {
+    measured:{n:m.length,
+      area:m.reduce((s,g)=>s+(g.area_sqm||0),0),
+      taxa:m.reduce((s,g)=>s+(g.taxa_indigenous||0),0),
+      l4:m.filter(g=>g._layers_n>=4).length},
+    modelled:{n:c.length,
+      area:c.reduce((s,g)=>s+(g.area_sqm||0),0),
+      taxa:c.reduce((s,g)=>s+(g.taxa_indigenous||0),0),
+      l4:c.filter(g=>g._layers_n>=4).length},
+    records_live:sel("all_live").length
+  };
+}
+/* Lookup demand scales with participation in a scenario; measured value at current. */
+function demandFor(){
+  const D=REGISTRY.discovery;
+  if(SCENARIO==="current")return {lookups:D.total_lookups,unique:D.unique_properties,repeat:D.repeat_properties,modelled:false};
+  const k=SCENARIO==="pilot"?3.1:17.4;
+  return {lookups:Math.round(D.total_lookups*k),unique:Math.round(D.unique_properties*k),
+    repeat:Math.round(D.repeat_properties*k),modelled:true};
+}
+
 function discoveryMapCells(){
   const D=REGISTRY.discovery;
   return D.by_suburb.filter(r=>r[1]>=D.suppression_threshold);
@@ -1102,31 +1139,78 @@ function drawMeta(){
   }).join('');
 }
 
-/* ── seven headline metrics ── */
+/* ── seven headline metrics ──
+   Under a scenario, participation-scaled metrics show measured + modelled and are
+   tagged MODELLED. Condition and reassessment never project — they stay measured. */
 function drawBand(){
-  const p=participation(), c=condition(), d=diversity(), a=areaAssessed();
-  const l4=layersAtLeast(4), l5=layersAtLeast(5), t=trajectory(), D=REGISTRY.discovery;
+  const p=participation(), c=condition(), d=diversity();
+  const P=proj(), t=trajectory(), D=demandFor();
+  const isScen=SCENARIO!=="current";
+  const tag='<span class="mtag">Modelled</span>';
+  const l5=layersAtLeast(5);
+
+  const totArea=P.measured.area+P.modelled.area;
+  const totTaxa=P.measured.taxa+P.modelled.taxa;
+  const totL4=P.measured.l4+P.modelled.l4;
+  const totRec=P.records_live+P.modelled.n;
+  const totAssessed=P.measured.n+P.modelled.n;
+
   const cells=[
-    {n:p.live,k:"Gardens recorded",x:[p.verified+" verified · "+p.site_visit+" site visit",
-      p.provisional+" provisional · "+p.proposal+" design proposal"]},
-    {n:(a/10000).toFixed(2),unit:" ha",k:"Ecological area assessed",
-      x:[fmt(a)+" m² · assessed records only","excludes "+(p.live-p.assessed)+" of "+p.live+" not yet assessed"]},
-    {n:d.indigenous,k:"Indigenous taxa recorded",
-      x:[fmt(d.total)+" total taxa records",den(d.rich30,d.n)+" with 30 or more"]},
+    {n:isScen?totRec:p.live,k:"Gardens in view",
+     tag:isScen,
+     x:isScen
+       ? [p.live+" recorded · "+P.modelled.n+" modelled participants",
+          p.verified+" verified · "+p.site_visit+" site visit · "+p.provisional+" provisional"]
+       : [p.verified+" verified · "+p.site_visit+" site visit",
+          p.provisional+" provisional · "+p.proposal+" design proposal"]},
+
+    {n:(totArea/10000).toFixed(2),unit:" ha",k:"Ecological area",
+     tag:isScen,
+     x:isScen
+       ? [fmt(P.measured.area)+" m² measured · "+fmt(P.modelled.area)+" m² modelled",
+          "modelled area resampled from observed records"]
+       : [fmt(totArea)+" m² · assessed records only",
+          "excludes "+(p.live-p.assessed)+" of "+p.live+" not yet assessed"]},
+
+    {n:totTaxa,k:"Indigenous taxa records",
+     tag:isScen,
+     x:isScen
+       ? [fmt(P.measured.taxa)+" measured · "+fmt(P.modelled.taxa)+" modelled",
+          "sum across gardens · not a unique species count"]
+       : ["sum across gardens · not a unique species count",
+          den(d.rich30,d.n)+" records with 30 or more indigenous taxa"]},
+
     {n:c.median===null?"—":c.median,unit:" /100",k:"Ecological condition · median",
-      x:["range "+c.min+"–"+c.max+" · n="+c.n,"mean "+c.mean+" · verified and site visit only"]},
-    {n:l4.n,k:"Gardens with 4+ structural layers",
-      x:[den(l4.n,l4.d),den(l5.n,l5.d)+" with all five"]},
+     tag:false,
+     x:["range "+c.min+"–"+c.max+" · n="+c.n,
+        isScen?"measured records only · condition is never projected"
+              :"mean "+c.mean+" · verified and site visit only"]},
+
+    {n:totL4,k:"Gardens with 4+ structural layers",
+     tag:isScen,
+     x:isScen
+       ? [den(totL4,totAssessed)+" of assessed and modelled gardens",
+          P.measured.l4+" measured · "+P.modelled.l4+" modelled"]
+       : [den(totL4,P.measured.n),
+          den(l5.n,l5.d)+" with all five"]},
+
     {n:t.n,k:"Reassessed gardens",
-      x:[den(t.n,t.d)+" with two or more readings",
-         t.medianChange===null?"no repeat readings yet":"median change "+(t.medianChange>=0?"+":"")+t.medianChange+" points"]},
-    {n:D.unique_properties,k:"Local ecological interest",
-      x:[fmt(D.total_lookups)+" lookups · last "+D.window_days+" days",fmt(D.repeat_properties)+" repeat properties"]}
+     tag:false,
+     x:[den(t.n,t.d)+" with two or more readings",
+        t.medianChange===null?"no repeat readings yet"
+          :"median change "+(t.medianChange>=0?"+":"")+t.medianChange+" points · measured only"]},
+
+    {n:D.unique,k:"Local ecological interest",
+     tag:D.modelled,
+     x:[fmt(D.lookups)+" lookups · last "+REGISTRY.discovery.window_days+" days",
+        fmt(D.repeat)+" repeat properties"]}
   ];
+
   document.getElementById("band").innerHTML=cells.map(c=>
-    '<div class="st"><div class="n">'+fmt(c.n)+(c.unit?'<small>'+c.unit+'</small>':'')+'</div>'
-    +'<div class="k">'+c.k+'</div>'
-    +'<div class="x">'+c.x.map(s=>'<span>'+s+'</span>').join('')+'</div></div>').join('');
+    '<div class="st'+(c.tag?' modelled':'')+'">'
+    +'<div class="n">'+fmt(c.n)+(c.unit?'<small>'+c.unit+'</small>':'')+'</div>'
+    +'<div class="k">'+c.k+(c.tag?' '+tag:'')+'</div>'
+    +'<div class="x">'+c.x.map(t=>'<span>'+t+'</span>').join('')+'</div></div>').join('');
 }
 
 /* ── map ── */
