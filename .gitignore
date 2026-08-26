@@ -6,3 +6,6 @@ scripts/appsscript/.clasp.json
 *_garden_extent.geojson
 *_parcel.geojson
 data/private/
+
+# Generated audit report (self-scanned; never commit)
+AUDIT-VIC-ASSUMPTIONS.txt

@@ -1,0 +1,7 @@
+{
+  "name": "reg-jurisdiction",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "REG national jurisdiction layer — resolves a property's ecological context through per-jurisdiction adapters. Nothing here imports reg-score.js."
+}
