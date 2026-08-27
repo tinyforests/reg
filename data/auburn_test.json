@@ -12,29 +12,34 @@
   "assessment_date": "Aug 2026",
   "baseline_date": "Aug 2026",
   "stewards": "Test Steward",
-  "designer": null,
+  "designer": "Gardener & Son",
   "designer_id": null,
   "enroller": "Self-enrolled",
   "verifier": "Gardener & Son",
-  "area_sqm": null,
+  "area_sqm": 0,
   "target_score": 60,
   "description": "Self-enrolled garden at 140 Auburn Road, Hawthorn. Registered via the Ecological Registry self-enrolment form. Submission ID: SUB-1785922832618-DG3CE.",
   "evc": {
     "name": "Not assessed",
     "code": "TBC",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
     "indigenous_species_current": 8,
     "indigenous_species_baseline": 8,
+    "indigenous_species_target": 0,
     "indigenous_dominant": true,
     "structural_layers_current": 3,
     "structural_layers_baseline": 3,
     "canopy_cover_pct_current": 20,
     "canopy_cover_pct_baseline": 20,
+    "canopy_cover_pct_target": 0,
     "weed_pressure": "Low",
-    "weed_pressure_baseline": "Low"
+    "weed_pressure_baseline": "Low",
+    "species_list": [],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -43,33 +48,50 @@
     "water_function_score": 3,
     "water_function_baseline": 3,
     "water_function_max": 5,
-    "has_rainwater_system": false,
+    "has_rainwater_system": true,
     "has_moisture_basin": true,
-    "has_swale": false
+    "has_swale": true,
+    "mulch_depth_mm": 0,
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
-    "habitat_nodes": 2,
-    "habitat_nodes_baseline": 2,
-    "has_embedded_logs": false,
+    "habitat_nodes": 4,
+    "habitat_nodes_baseline": 5,
+    "has_embedded_logs": true,
     "has_rock_refuges": true,
-    "has_water_feature": false,
-    "has_nest_boxes": false,
+    "has_water_feature": true,
+    "has_nest_boxes": true,
     "planting_method": "Self-enrolled — details unverified",
-    "fauna_sightings": []
+    "fauna_sightings": [
+      {
+        "species": "Unknown",
+        "date": "Recorded",
+        "location": "Field observation",
+        "verified": true
+      },
+      {
+        "species": "Additional sighting 2",
+        "date": "Recorded",
+        "location": "Field observation",
+        "verified": true
+      }
+    ]
   },
   "connectivity": {
+    "display_lat": -37.8212,
+    "display_lng": 145.0428,
     "adjacent_park": true,
     "park_name": "Local park",
     "park_distance_m": 200,
+    "park_lat": -37.821291,
+    "park_lng": 145.047701,
     "adjacent_registered_gardens": [],
-    "corridor_node_confirmed": false,
+    "corridor_node_confirmed": true,
     "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Hawthorn",
-    "park_lat": -37.820524,
-    "park_lng": 145.031134,
-    "display_lat": -37.8212,
-    "display_lng": 145.0428
+    "cluster": null
   },
   "evidence": {
     "has_photos": true,
@@ -78,8 +100,9 @@
     "has_fauna_record": false,
     "has_professional_assessment": false,
     "verification_level": "site_visit",
-    "verification_label": "Site Visit Verified",
-    "assessor": "Gardener & Son"
+    "verification_label": "Site Visit",
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -109,5 +132,9 @@
       "notes": "Submitted via self-enrolment form. Score 34/100, Habitat Garden. Submission ID: SUB-1785922832618-DG3CE."
     }
   ],
-  "notes": "Test garden created to validate the self-enrolment to registered pipeline. Raw field values derived from form submission scores."
+  "notes": "Test garden created to validate the self-enrolment to registered pipeline. Raw field values derived from form submission scores.",
+  "garden_address": "",
+  "steward_email": "",
+  "ward": null,
+  "yield": null
 }

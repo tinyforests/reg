@@ -1,6 +1,6 @@
 {
   "garden_id": "ER-AU-VIC-MAN-EVE-001",
-  "garden_name": "Evelina",
+  "garden_name": "Magpie Maggies Garden",
   "garden_type": "Wild Native Meadow",
   "suburb": "Mont Albert North",
   "state": "VIC",
@@ -17,8 +17,9 @@
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
     "indigenous_species_current": 30,
@@ -32,7 +33,6 @@
     "canopy_cover_pct_target": 20,
     "weed_pressure": "Low",
     "weed_pressure_baseline": "High",
-    "planting_density": "6-10 plants per m2",
     "species_list": [
       "Anigozanthos Landscape Gold",
       "Poa labillardieri Eskdale",
@@ -64,7 +64,8 @@
       "Poa labillardieri",
       "Calamagrostis x acutiflora Karl Foerster",
       "Hardenbergia violacea"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 4,
@@ -77,7 +78,8 @@
     "has_moisture_basin": false,
     "has_swale": false,
     "mulch_depth_mm": 75,
-    "mulch_type": "Bio Mulch Blend"
+    "mulch_type": "Bio Mulch Blend",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 3,
@@ -87,22 +89,19 @@
     "has_water_feature": false,
     "has_nest_boxes": false,
     "planting_method": "High-density ecological planting -- wild native meadow",
-    "materials": [
-      "Log steppers",
-      "Habitat logs",
-      "Igneous rocks",
-      "Bio mulch blend",
-      "Premium organic soil"
-    ],
     "fauna_sightings": []
   },
   "connectivity": {
-    "adjacent_park": false,
-    "park_name": "",
+    "display_lat": -37.8057,
+    "display_lng": 145.1047,
+    "adjacent_park": true,
+    "park_name": "Gawler Chain",
     "park_distance_m": 0,
+    "park_lat": -37.806733,
+    "park_lng": 145.105169,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.0024,
+    "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Mont Albert North",
     "cluster": {
@@ -110,19 +109,18 @@
       "gardens": 1,
       "area_ha": 0.0024,
       "status": "Emerging"
-    },
-    "display_lat": -37.8033,
-    "display_lng": 145.1112
+    }
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
-    "has_fauna_record": false,
     "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -190,7 +188,7 @@
   "notes": "Compact front garden 3x8m. High-density ecological planting. 29 species installed. Habitat logs and igneous rocks provide immediate habitat structure.",
   "typology": "Wild Native Meadow",
   "registry_role": "Cluster Seed",
-  "trajectory": "Rising",
+  "trajectory": "Emerging",
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
@@ -227,5 +225,63 @@
   },
   "council": "Whitehorse City Council",
   "ward": "Elgar",
-  "lga": "Whitehorse"
+  "lga": "Whitehorse",
+  "garden_address": "",
+  "steward_email": "",
+  "score": {
+    "total": 57,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 17,
+        "max": 25,
+        "notes": [
+          "30+ indigenous species",
+          "Indigenous dominant",
+          "3 structural layers"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 9,
+        "max": 20,
+        "notes": [
+          "Soil health 4/5",
+          "Water function 2/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 9,
+        "max": 20,
+        "notes": [
+          "3-4 habitat nodes",
+          "Embedded logs",
+          "Rock refuges"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 9,
+        "max": 20,
+        "notes": [
+          "Park within 50m",
+          "1 adjacent registered"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 13,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
+  }
 }

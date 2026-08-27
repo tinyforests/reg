@@ -1,6 +1,6 @@
 {
   "garden_id": "ER-AU-VIC-BAL-001",
-  "garden_name": "Parring",
+  "garden_name": "Connected Habitat Garden",
   "garden_type": "Connected Habitat Landscape",
   "suburb": "Balwyn",
   "state": "VIC",
@@ -12,16 +12,17 @@
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
   "verifier": null,
-  "area_sqm": 120,
-  "description": "A Balwyn rear garden transformed from exotic lawn to a structured native planting. Indigenous species now dominate across 120m2. Habitat logs, rock refuges and mycorrhizal planting establish the ecological foundation from day one.",
+  "area_sqm": 20,
+  "description": "Designed as a connected habitat garden, the front and rear spaces work together as one living system, with layered planting creating a series of small habitat zones that provide food, shelter and structure for birds, insects and pollinators. Grasses, groundcovers, flowering plants and shrubs drawn from local plant communities strengthen biodiversity while contributing to a wider network of urban habitat. Guided by the principles of stepping-stone ecology, the garden supports the movement of wildlife between surrounding green spaces and remnant vegetation, helping reconnect a residential property with the ecological systems of its place.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
-    "indigenous_species_current": 28,
+    "indigenous_species_current": 31,
     "indigenous_species_baseline": 2,
     "indigenous_species_target": 35,
     "indigenous_dominant": true,
@@ -64,7 +65,8 @@
       "Liriope muscari",
       "Rosa",
       "Hydrangea macrophylla"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -76,7 +78,9 @@
     "has_rainwater_system": false,
     "has_moisture_basin": false,
     "has_swale": false,
-    "mulch_depth_mm": 75
+    "mulch_depth_mm": 75,
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 3,
@@ -97,33 +101,35 @@
     ]
   },
   "connectivity": {
+    "display_lat": -37.8141,
+    "display_lng": 145.0894,
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 200,
-    "park_lat": -37.8103,
-    "park_lng": 145.0905,
+    "park_lat": -37.810628,
+    "park_lng": 145.092379,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-BAL-PRD-001",
         "garden_id": "ER-AU-VIC-BAL-PRD-001",
         "name": "Parring Stepping Stone",
         "verified": true,
-        "distance_m": 87,
-        "display_lat": -37.8129,
-        "display_lng": 145.0922
+        "distance_m": 78,
+        "display_lat": -37.8126,
+        "display_lng": 145.0925
       },
       {
         "id": "ER-AU-VIC-WHI-YRK-002",
         "garden_id": "ER-AU-VIC-WHI-YRK-002",
         "name": "Sensory Garden",
         "verified": true,
-        "distance_m": 368,
+        "distance_m": 340,
         "display_lat": -37.8114,
         "display_lng": 145.0841
       }
     ],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.12,
+    "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Balwyn",
     "cluster": {
@@ -131,9 +137,7 @@
       "gardens": 1,
       "area_ha": 0.12,
       "status": "Emerging"
-    },
-    "display_lat": -37.8138,
-    "display_lng": 145.0896
+    }
   },
   "canopy": {
     "existing": {
@@ -160,12 +164,13 @@
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
-    "has_fauna_record": true,
     "has_species_list": true,
+    "has_fauna_record": true,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -185,6 +190,14 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Garden name Parring → Connected Habitat Garden."
+    },
     {
       "title": "Baseline assessment -- connected habitat landscape",
       "date": "Mar 2026",
@@ -286,5 +299,65 @@
       "local_context_radius_m": 250.0,
       "local_context_samples": "9/9"
     }
+  },
+  "garden_address": "",
+  "steward_email": "",
+  "score": {
+    "total": 58,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 18,
+        "max": 25,
+        "notes": [
+          "30+ indigenous species",
+          "Indigenous dominant",
+          "3 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": [
+          "Soil health 3/5",
+          "Water function 2/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 9,
+        "max": 20,
+        "notes": [
+          "3-4 habitat nodes",
+          "Rock refuges",
+          "1 fauna sighting"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 8,
+        "max": 20,
+        "notes": [
+          "Park within 300m",
+          "3+ adjacent registered"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 15,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Fauna record",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
   }
 }

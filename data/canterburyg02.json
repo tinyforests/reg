@@ -1,10 +1,10 @@
 {
   "garden_id": "ER-AU-VIC-SH-CAN-0001",
-  "garden_name": "Canterbury G02",
+  "garden_name": "Modern Apartment",
   "garden_type": "Maintained Mixed Garden (pre-design)",
   "typology": "Maintained Garden (pre-intervention)",
-  "registry_role": "Cluster Member",
-  "trajectory": "Pre-intervention baseline",
+  "registry_role": "Connector",
+  "trajectory": "Forming",
   "suburb": "Surrey Hills",
   "state": "VIC",
   "council": "Boroondara City Council",
@@ -21,22 +21,24 @@
   "area_sqm": 60,
   "description": "A 60m² raised-bed garden on the northern face of Canterbury Road, Surrey Hills — 11 species across 142 plants, two strictly local-indigenous (Hardenbergia violacea and Lomandra longifolia) among a mixed palette maintained by G&S via Tend. Surrey Park bounds the southern edge. G&S design intervention commissioned — this baseline captures the pre-intervention state; the trajectory from 16 Jun 2026 will be the registry's first independently-legible before/after evidence for a Tend-maintained property.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
-    "indigenous_species_current": 2,
+    "indigenous_species_current": 11,
     "indigenous_species_baseline": 2,
+    "indigenous_species_target": 14,
     "indigenous_dominant": false,
     "structural_layers_current": 3,
     "structural_layers_baseline": 3,
     "canopy_cover_pct_current": 5,
     "canopy_cover_pct_baseline": 5,
+    "canopy_cover_pct_target": 15,
     "weed_pressure": "Low",
     "weed_pressure_baseline": "Low",
-    "biodiversity_notes": "Of 11 species, only Hardenbergia violacea and Lomandra longifolia are strictly local-indigenous to the Surrey Hills Grassy Woodland EVC. A further 4 species are Australian-native but not local (Syzygium smithii, Syzygium australe, Hymenosporum flavum, Banksia ericifolia) — these contribute to fauna habitat but not local ecological function. The remaining 5 species are exotic ornamentals (Dichondra argentea, Anemone hupehensis, Camellia sp., Ficus pumila, Trachelospermum jasminoides).",
     "species_list": [
       "Syzygium smithii (Lilly Pilly) x25",
       "Syzygium australe (susceptible Lilly Pilly) x5",
@@ -49,7 +51,8 @@
       "Camellia sp. x14",
       "Ficus pumila x1",
       "Trachelospermum jasminoides (Chinese Star Jasmine) x2"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -61,7 +64,9 @@
     "has_rainwater_system": false,
     "has_moisture_basin": false,
     "has_swale": false,
-    "soil_notes": "Imported soil in raised beds. Mulch applied by G&S maintenance team. Drainage is poor — beds retain water and have been observed soggy; future design intervention should address subsurface drainage or convert to in-ground planting on the natural soil profile."
+    "mulch_depth_mm": 125,
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 0,
@@ -70,19 +75,39 @@
     "has_rock_refuges": false,
     "has_water_feature": false,
     "has_nest_boxes": false,
-    "fauna_sightings": [],
-    "habitat_notes": "No habitat features currently present. Future design intervention to introduce logs, rocks, and consider nest box / water feature."
+    "planting_method": "High-density indigenous buffer planting — 39 plants in 5.5m²",
+    "fauna_sightings": []
   },
   "connectivity": {
+    "display_lat": -37.8255,
+    "display_lng": 145.0866,
     "adjacent_park": true,
     "park_name": "Surrey Park",
     "park_distance_m": 30,
-    "park_lat": -37.827,
-    "park_lng": 145.096,
-    "park_description": "Surrey Park, large public park on Canterbury Road, with mature trees and remnant vegetation. Functions as connecting habitat for the garden.",
-    "adjacent_registered_gardens": [],
+    "park_lat": -37.823259,
+    "park_lng": 145.085757,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-SH-SIR-0001",
+        "garden_id": "ER-AU-VIC-SH-SIR-0001",
+        "name": "Sir Garnet",
+        "verified": true,
+        "distance_m": 474,
+        "display_lat": -37.8188,
+        "display_lng": 145.0875
+      },
+      {
+        "id": "ER-AU-VIC-CAN-FLI-001",
+        "garden_id": "ER-AU-VIC-CAN-FLI-001",
+        "name": "Flinders",
+        "verified": true,
+        "distance_m": 368,
+        "display_lat": -37.8238,
+        "display_lng": 145.0848
+      }
+    ],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.006,
+    "effective_ecological_area_ha": 0.01,
     "cluster_area_ha": 0.49,
     "cluster_name": "Surrey Hills",
     "cluster": {
@@ -90,9 +115,7 @@
       "gardens": 4,
       "area_ha": 0.49,
       "status": "Forming"
-    },
-    "display_lat": -37.8271,
-    "display_lng": 145.0958
+    }
   },
   "evidence": {
     "has_photos": true,
@@ -101,8 +124,9 @@
     "has_fauna_record": false,
     "has_professional_assessment": true,
     "verification_level": "site_visit",
-    "verification_label": "Site Visit Verified",
-    "assessor": "Gardener & Son (via Tend maintenance)"
+    "verification_label": "Site Visit",
+    "assessor": "Gardener & Son (via Tend maintenance)",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -127,6 +151,14 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son (via Tend maintenance)",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Garden name Canterbury G02 → Modern Apartment."
+    },
     {
       "title": "Baseline assessment — pre-intervention registration",
       "date": "16 Jun 2026",
@@ -165,6 +197,61 @@
         "action": "Install water feature",
         "annual_yield_increase": 0,
         "notes": "Yield layer not yet active"
+      }
+    ]
+  },
+  "garden_address": "",
+  "steward_email": "",
+  "target_score": 82,
+  "score": {
+    "total": 38,
+    "rating": "Habitat Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 8,
+        "max": 25,
+        "notes": [
+          "6-11 indigenous species",
+          "3 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": [
+          "Soil health 3/5",
+          "Water function 2/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 0,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Connectivity",
+        "score": 10,
+        "max": 20,
+        "notes": [
+          "Park within 50m",
+          "2 adjacent registered"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 12,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Professional assessment",
+          "Site visit"
+        ]
       }
     ]
   }

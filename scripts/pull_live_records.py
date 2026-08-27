@@ -21,7 +21,9 @@ Fields pulled from Apps Script (scored/form fields):
   milestones, activity_log, notes, yield, score
 
 Fields preserved from local file (never overwritten):
-  demo, badges (list in root, not score.categories)
+  demo, badges, rating, upgrade_potential, points_available,
+  canopy, habitat_context (locally managed spatial layers),
+  steward_email, garden_address (PII — never into the public repo),
   Any field present locally but absent from the live record.
 
 Usage:
@@ -52,7 +54,9 @@ LOCAL_ONLY_ROOT_FIELDS = {'demo', 'badges', 'rating', 'upgrade_potential', 'poin
                           # be pulled into the committed repo.
                           'canopy',
                           # habitat_context is managed locally by habitat_value.py (DEECA lookup).
-                          'habitat_context'}
+                          'habitat_context',
+                          # PII: never pull residents' email/street address into the PUBLIC repo.
+                          'steward_email', 'garden_address'}
 
 
 def fetch_live(garden_id):

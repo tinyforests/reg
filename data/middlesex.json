@@ -1,24 +1,25 @@
 {
   "garden_id": "ER-AU-VIC-SH-MID-001",
-  "garden_name": "Middlesex",
+  "garden_name": "Habitat Meadow",
   "garden_type": "Habitat Garden",
   "suburb": "Surrey Hills",
   "state": "VIC",
   "assessment_date": "Mar 2026",
   "baseline_date": "Dec 2025",
   "target_score": 82,
-  "stewards": "Gardener & Son",
+  "stewards": "Sara Foy",
   "designer": "Gardener & Son",
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
   "verifier": null,
   "area_sqm": 200,
-  "description": "A Surrey Hills garden directly adjacent to Surrey Hills Reserve -- one of Melbourne's most significant urban bushland corridors. Twenty indigenous species establish the understorey while the Reserve canopy forms the garden's northern edge.",
+  "description": "This habitat Garden has been designed to bring together native bushland character, wild meadow softness, and selective productive planting. We have created a habitat-rich, low-chemical landscape that supports pollinators, small birds, butterflies, and local insect life while providing a calming daily outlook from the home. The planting palette prioritises Victorian natives, favouring species indigenous to the Surrey Hills area and has been selected for year-round flowering, seasonal movement, and layered ecological function. This forward-thinking design focuses on long-term resilience, sensory experience and supporting the re-establishment of local biodiversity.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "name": "Valley Grassy Forest",
+    "code": "EVC 47",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
     "indigenous_species_current": 20,
@@ -53,7 +54,8 @@
       "Olearia lirata",
       "Einadia nutans",
       "Poa labillardieri Eskdale"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 2,
@@ -63,12 +65,14 @@
     "water_function_baseline": 1,
     "water_function_max": 5,
     "has_rainwater_system": false,
-    "has_moisture_basin": false,
+    "has_moisture_basin": true,
     "has_swale": false,
-    "mulch_depth_mm": 75
+    "mulch_depth_mm": 75,
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
-    "habitat_nodes": 3,
+    "habitat_nodes": 1,
     "habitat_nodes_baseline": 0,
     "has_embedded_logs": true,
     "has_rock_refuges": true,
@@ -78,24 +82,26 @@
     "fauna_sightings": []
   },
   "connectivity": {
+    "display_lat": -37.8311,
+    "display_lng": 145.0864,
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
     "park_distance_m": 120,
-    "park_lat": -37.833,
-    "park_lng": 145.093,
+    "park_lat": -37.828441,
+    "park_lng": 145.089279,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-SH-ARU-0001",
         "garden_id": "ER-AU-VIC-SH-ARU-0001",
         "name": "Arundel",
         "verified": true,
-        "distance_m": 458,
-        "display_lat": -37.8332,
-        "display_lng": 145.0971
+        "distance_m": 457,
+        "display_lat": -37.8336,
+        "display_lng": 145.0969
       }
     ],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.2,
+    "effective_ecological_area_ha": 0.02,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills",
     "cluster": {
@@ -103,9 +109,7 @@
       "gardens": 2,
       "area_ha": 0.48,
       "status": "Forming"
-    },
-    "display_lat": -37.8314,
-    "display_lng": 145.0866
+    }
   },
   "evidence": {
     "has_photos": true,
@@ -115,7 +119,8 @@
     "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -140,6 +145,14 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Garden name Habitat Garden → Habitat Meadow."
+    },
     {
       "title": "The Habitat Garden",
       "date": "Nov 2025",
@@ -241,7 +254,7 @@
   ],
   "typology": "Connected Habitat Landscape",
   "registry_role": "Connector",
-  "trajectory": "Stable",
+  "trajectory": "Emerging",
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
@@ -278,5 +291,67 @@
   },
   "council": "Boroondara City Council",
   "ward": "Gardiner",
-  "lga": "Boroondara"
+  "lga": "Boroondara",
+  "garden_address": "",
+  "steward_email": "",
+  "notes": "",
+  "score": {
+    "total": 54,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 16,
+        "max": 25,
+        "notes": [
+          "20-29 indigenous species",
+          "Indigenous dominant",
+          "3 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": [
+          "Soil health 2/5",
+          "Water function 2/5",
+          "Moisture basin"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 7,
+        "max": 20,
+        "notes": [
+          "1-2 habitat nodes",
+          "Embedded logs",
+          "Rock refuges"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 10,
+        "max": 20,
+        "notes": [
+          "Park within 150m",
+          "1 adjacent registered",
+          "2.1ha cluster"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 13,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
+  }
 }

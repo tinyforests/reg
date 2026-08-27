@@ -1,6 +1,6 @@
 {
   "garden_id": "ER-AU-VIC-NIL-BEL-001",
-  "garden_name": "Wattle Glen Bush Garden",
+  "garden_name": "Bush Garden",
   "garden_type": "Ecological Home Garden",
   "typology": "Deep Ecological Garden",
   "registry_role": "Cluster Seed",
@@ -163,7 +163,7 @@
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
     "assessor": "Gardener & Son",
-    "verification_date": "Aug 2026"
+    "verification_date": null
   },
   "milestones": [
     {
@@ -198,6 +198,14 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Garden name Wattle Glen Bush Garden → Bush Garden."
+    },
     {
       "title": "Record updated — Gardener & Son",
       "date": "Aug 2026",

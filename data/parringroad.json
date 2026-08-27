@@ -14,16 +14,17 @@
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
   "verifier": null,
-  "area_sqm": 0,
+  "area_sqm": 25,
   "description": "The front bed at 4/17 Parring Road has been transformed from an unused strip to a layered native planting. Nine Victorian indigenous species establish groundcover, grass and shrub structure along the street edge. Habitat rocks and thick mulch create conditions for invertebrates and small fauna. The rear garden installation is pending.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
-    "indigenous_species_current": 9,
+    "indigenous_species_current": 11,
     "indigenous_species_baseline": 0,
     "indigenous_species_target": 34,
     "indigenous_dominant": true,
@@ -31,6 +32,7 @@
     "structural_layers_baseline": 0,
     "canopy_cover_pct_current": 0,
     "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 35,
     "weed_pressure": "Low",
     "weed_pressure_baseline": "Unknown",
     "species_list": [
@@ -45,7 +47,8 @@
       "Indigofera australis",
       "Spyridium parvifolium",
       "Poa clivicola Mountain Blue"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -57,7 +60,9 @@
     "has_rainwater_system": false,
     "has_moisture_basin": false,
     "has_swale": false,
-    "mulch_type": "Thick mulch blend"
+    "mulch_depth_mm": 75,
+    "mulch_type": "Thick mulch blend",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 2,
@@ -66,31 +71,33 @@
     "has_rock_refuges": true,
     "has_water_feature": false,
     "has_nest_boxes": false,
-    "fauna_sightings": [],
-    "planting_method": "Ecological planting -- layered front bed"
+    "planting_method": "Ecological planting -- layered front bed",
+    "fauna_sightings": []
   },
   "connectivity": {
+    "display_lat": -37.8126,
+    "display_lng": 145.0925,
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 150,
-    "park_lat": -37.8103,
-    "park_lng": 145.0905,
+    "park_lat": -37.810305,
+    "park_lng": 145.090526,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-BAL-001",
         "garden_id": "ER-AU-VIC-BAL-001",
         "name": "Parring",
         "verified": true,
-        "distance_m": 87,
-        "display_lat": -37.8138,
-        "display_lng": 145.0896
+        "distance_m": 78,
+        "display_lat": -37.8141,
+        "display_lng": 145.0894
       },
       {
         "id": "ER-AU-VIC-WHI-YRK-002",
         "garden_id": "ER-AU-VIC-WHI-YRK-002",
         "name": "Sensory Garden",
         "verified": true,
-        "distance_m": 286,
+        "distance_m": 326,
         "display_lat": -37.8114,
         "display_lng": 145.0841
       }
@@ -104,19 +111,18 @@
       "gardens": 2,
       "area_ha": 0.12,
       "status": "Forming"
-    },
-    "display_lat": -37.8129,
-    "display_lng": 145.0922
+    }
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": false,
-    "has_professional_assessment": true,
-    "has_fauna_record": false,
     "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -194,5 +200,61 @@
   "target_score": 80,
   "council": "Boroondara City Council",
   "ward": "Gardiner",
-  "lga": "Boroondara"
+  "lga": "Boroondara",
+  "garden_address": "",
+  "steward_email": "",
+  "score": {
+    "total": 43,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 11,
+        "max": 25,
+        "notes": [
+          "6-11 indigenous species",
+          "Indigenous dominant",
+          "3 structural layers"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 9,
+        "max": 20,
+        "notes": [
+          "Soil health 3/5",
+          "Water function 3/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 4,
+        "max": 20,
+        "notes": [
+          "1-2 habitat nodes",
+          "Rock refuges"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 8,
+        "max": 20,
+        "notes": [
+          "Park within 150m",
+          "2 adjacent registered"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 11,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Species list",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
+  }
 }

@@ -14,10 +14,10 @@
   "area_sqm": 180,
   "description": "Arundel responds to a fragmented Grassy Woodland and Valley Grassy Forest context, restoring ecological function through layered planting, dense groundcover and woodland structure. The garden reconnects soil, water and habitat to South Surrey Park, contributing to local biodiversity and long-term landscape resilience.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP",
+    "name": "Valley Grassy Forest",
+    "code": "EVC 47",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
     "note": ""
   },
   "biodiversity": {
@@ -92,8 +92,8 @@
     ]
   },
   "connectivity": {
-    "display_lat": -37.8332,
-    "display_lng": 145.0971,
+    "display_lat": -37.8336,
+    "display_lng": 145.0969,
     "adjacent_park": true,
     "park_name": "South Surrey Park",
     "park_distance_m": 45,
@@ -105,9 +105,9 @@
         "garden_id": "ER-AU-VIC-SH-MID-001",
         "name": "Middlesex",
         "verified": true,
-        "distance_m": 458,
-        "display_lat": -37.8314,
-        "display_lng": 145.0866
+        "distance_m": 457,
+        "display_lat": -37.8311,
+        "display_lng": 145.0864
       }
     ],
     "corridor_node_confirmed": false,
@@ -146,7 +146,7 @@
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_species_list": true,
+    "has_species_list": false,
     "has_fauna_record": true,
     "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
@@ -361,17 +361,15 @@
   "ward": "Gardiner",
   "lga": "Boroondara",
   "score": {
-    "total": 60,
-    "rating": "Ecological Garden",
+    "total": 61,
+    "rating": "Registered Ecological Garden",
     "categories": [
       {
         "label": "Biodiversity Structure",
         "score": 8,
         "max": 25,
         "notes": [
-          "20-29 indigenous species",
-          "1 structural layer",
-          "Canopy not yet established"
+          "20-29 indigenous species"
         ]
       },
       {
@@ -390,7 +388,7 @@
         "score": 13,
         "max": 20,
         "notes": [
-          "1 habitat node",
+          "1-2 habitat nodes",
           "Embedded logs",
           "Rock refuges",
           "Water feature",
@@ -399,22 +397,21 @@
       },
       {
         "label": "Connectivity",
-        "score": 12,
+        "score": 15,
         "max": 20,
         "notes": [
           "Park within 50m",
-          "1 adjacent registered",
+          "3+ adjacent registered",
           "2.1ha cluster"
         ]
       },
       {
         "label": "Evidence & Verification",
-        "score": 15,
+        "score": 13,
         "max": 15,
         "notes": [
           "Photos",
           "Field notes",
-          "Species list",
           "Fauna record",
           "Professional assessment",
           "G&S Verified"

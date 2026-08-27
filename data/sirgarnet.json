@@ -1,9 +1,9 @@
 {
   "garden_id": "ER-AU-VIC-SH-SIR-0001",
-  "garden_name": "Sir Garnet",
+  "garden_name": "Native Buffer",
   "garden_type": "Native Buffer Garden",
   "typology": "Native Buffer Garden",
-  "registry_role": "Cluster Member",
+  "registry_role": "Connector",
   "trajectory": "Emerging",
   "suburb": "Surrey Hills",
   "state": "VIC",
@@ -14,16 +14,17 @@
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
   "verifier": null,
-  "area_sqm": 5.5,
+  "area_sqm": 73,
   "description": "A 5.5m indigenous buffer strip along the front boundary of a Surrey Hills property — 39 plants across 18 species, 9 strictly local-indigenous, at ~7 plants per square metre. The narrow ribbon connects a planted yard to a council nature strip with mature trees and remnant vegetation; small parcel, dense planting, real corridor function.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
-    "indigenous_species_current": 9,
+    "indigenous_species_current": 18,
     "indigenous_species_baseline": 0,
     "indigenous_species_target": 14,
     "indigenous_dominant": true,
@@ -53,7 +54,8 @@
       "Xerochrysum 'Dargan Hill Monarch'",
       "Hardenbergia violacea 'Meema'",
       "Kennedia prostrata (Running Postman)"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 5,
@@ -66,7 +68,8 @@
     "has_moisture_basin": false,
     "has_swale": false,
     "mulch_depth_mm": 125,
-    "soil_notes": "3-way soil blend, 100-150mm specialised mulch, mycorrhizal inoculation at planting (standard G&S practice). Topographic management — water retained on site."
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 1,
@@ -79,14 +82,26 @@
     "fauna_sightings": []
   },
   "connectivity": {
+    "display_lat": -37.8188,
+    "display_lng": 145.0875,
     "adjacent_park": true,
     "park_name": "Surrey Hills Council Nature Strip",
     "park_distance_m": 5,
-    "park_lat": -37.821,
-    "park_lng": 145.09,
-    "adjacent_registered_gardens": [],
+    "park_lat": -37.822101,
+    "park_lng": 145.087845,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-SH-CAN-0001",
+        "garden_id": "ER-AU-VIC-SH-CAN-0001",
+        "name": "Canterbury G02",
+        "verified": true,
+        "distance_m": 474,
+        "display_lat": -37.8255,
+        "display_lng": 145.0866
+      }
+    ],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.00055,
+    "effective_ecological_area_ha": 0.01,
     "cluster_area_ha": 0.49,
     "cluster_name": "Surrey Hills",
     "cluster": {
@@ -94,19 +109,18 @@
       "gardens": 3,
       "area_ha": 0.49,
       "status": "Forming"
-    },
-    "display_lat": -37.8185,
-    "display_lng": 145.0871
+    }
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": false,
-    "has_professional_assessment": true,
-    "has_fauna_record": false,
     "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -182,5 +196,62 @@
   },
   "council": "Boroondara City Council",
   "ward": "Gardiner",
-  "lga": "Boroondara"
+  "lga": "Boroondara",
+  "garden_address": "",
+  "steward_email": "",
+  "score": {
+    "total": 56,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 16,
+        "max": 25,
+        "notes": [
+          "12-19 indigenous species",
+          "Indigenous dominant",
+          "4 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 15,
+        "max": 20,
+        "notes": [
+          "Soil health 5/5",
+          "Water function 5/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 4,
+        "max": 20,
+        "notes": [
+          "1-2 habitat nodes",
+          "Rock refuges"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 10,
+        "max": 20,
+        "notes": [
+          "Park within 50m",
+          "2 adjacent registered"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 11,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Species list",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
+  }
 }

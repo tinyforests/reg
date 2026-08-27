@@ -21,10 +21,11 @@
   "target_score": 50,
   "description": "A layered ecological contemporary planting built around Georgia and Dos' palette of silvers, purples, soft greens and smoky blues. Olive, Jacaranda and October Glory Maple form the upper canopy, while Westringia, Rosemary, Euphorbia, Echium and Smokebush anchor the mid structure with year-round form. Through the middle layers, Miscanthus, Gaura, Salvia and Limonium bring movement and extended seasonal colour. Native Violet, Dichondra and Pratia stitch together a living ground layer that protects soil and holds moisture. Designed by Gardener & Son to feel relaxed, immersive and full of seasonal life — a planting that becomes more resilient and ecologically connected as it matures.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
     "indigenous_species_current": 5,
@@ -45,56 +46,7 @@
       "Pycnosorus globosus",
       "Westringia fruticosa"
     ],
-    "species_proposed": [
-      "Viola hederacea",
-      "Dichondra repens",
-      "Pratia puberula",
-      "Pycnosorus globosus",
-      "Westringia fruticosa"
-    ],
-    "all_species": {
-      "trees": [
-        "Olea europaea",
-        "Jacaranda mimosifolia",
-        "Acer rubrum 'October Glory'",
-        "Gleditsia triacanthos"
-      ],
-      "shrubs": [
-        "Cotinus coggygria",
-        "Westringia fruticosa",
-        "Salvia rosmarinus",
-        "Euphorbia sp.",
-        "Echium sp.",
-        "Buddleja davidii",
-        "Tetrapanax papyrifer",
-        "Lavandula sp."
-      ],
-      "perennials_and_grasses": [
-        "Miscanthus sinensis",
-        "Calamagrostis x acutiflora 'Karl Foerster'",
-        "Anemone hupehensis",
-        "Salvia sp.",
-        "Persicaria sp.",
-        "Gaura lindheimeri",
-        "Limonium perezii",
-        "Eryngium sp.",
-        "Knautia macedonica",
-        "Sedum sp.",
-        "Carex sp.",
-        "Pycnosorus globosus",
-        "Helichrysum petiolare",
-        "Asparagus aethiopicus"
-      ],
-      "groundcovers_and_climbers": [
-        "Viola hederacea",
-        "Dichondra repens",
-        "Pratia puberula",
-        "Stachys byzantina",
-        "Parthenocissus tricuspidata",
-        "Mentha sp.",
-        "Fragaria sp."
-      ]
-    }
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 2,
@@ -107,7 +59,8 @@
     "has_moisture_basin": false,
     "has_swale": false,
     "mulch_depth_mm": 75,
-    "mulch_type": "Arborist mulch"
+    "mulch_type": "Arborist mulch",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 0,
@@ -120,30 +73,34 @@
     "fauna_sightings": []
   },
   "connectivity": {
+    "display_lat": -37.7936,
+    "display_lng": 145.0522,
     "adjacent_park": false,
+    "park_name": "Gawler Chain",
     "park_distance_m": 0,
+    "park_lat": -37.815968,
+    "park_lng": 145.146003,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-BOR-WIN-001",
         "garden_id": "ER-AU-VIC-BOR-WIN-001",
         "name": "Windella",
         "verified": true,
-        "distance_m": 286,
-        "display_lat": -37.7978,
-        "display_lng": 145.0499
+        "distance_m": 354,
+        "display_lat": -37.7982,
+        "display_lng": 145.0503
       }
     ],
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0,
+    "cluster_area_ha": 0,
     "cluster_name": "Boroondara",
     "cluster": {
       "name": "Boroondara",
       "gardens": 7,
       "area_ha": 0.68,
       "status": "Forming"
-    },
-    "display_lat": -37.7953,
-    "display_lng": 145.0542
+    }
   },
   "evidence": {
     "has_photos": true,
@@ -153,7 +110,8 @@
     "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -229,6 +187,59 @@
       {
         "action": "Install nest boxes",
         "annual_yield_increase": 15
+      }
+    ]
+  },
+  "garden_address": "",
+  "steward_email": "",
+  "score": {
+    "total": 29,
+    "rating": "Habitat Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 9,
+        "max": 25,
+        "notes": [
+          "1-5 indigenous species",
+          "5 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 4,
+        "max": 20,
+        "notes": [
+          "Soil health 2/5",
+          "Water function 1/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 0,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Connectivity",
+        "score": 3,
+        "max": 20,
+        "notes": [
+          "1 adjacent registered"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 13,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Professional assessment",
+          "G&S Verified"
+        ]
       }
     ]
   }

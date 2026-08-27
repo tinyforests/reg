@@ -63,11 +63,11 @@
       "garden_name": "Arundel",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 60,
+      "score": 58,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 1
+        "points_to_next": 3
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -75,13 +75,12 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Apr 2026",
-      "badge_count": 5,
+      "badge_count": 4,
       "badges": [
         "species_rich_20",
         "amphibian_active",
         "gs_verified",
-        "fauna_record",
-        "full_record"
+        "fauna_record"
       ],
       "profile_url": "/gardens/arundel/index.html",
       "data_file": "data/arundel.json",
@@ -107,11 +106,11 @@
       "garden_name": "Nicholson",
       "suburb": "South Yarra",
       "state": "VIC",
-      "score": 29,
+      "score": 37,
       "rating": {
         "current": "Habitat Garden",
         "next": "Ecological Garden",
-        "points_to_next": 12
+        "points_to_next": 4
       },
       "primary_evc": "Urban Ecological Garden",
       "bioregion": "Inner Melbourne",
@@ -119,9 +118,10 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Feb 2026",
-      "badge_count": 2,
+      "badge_count": 3,
       "badges": [
         "species_rich_20",
+        "species_rich_30",
         "gs_verified"
       ],
       "profile_url": "/gardens/nicholson/index.html",
@@ -145,11 +145,11 @@
       "garden_name": "Parring",
       "suburb": "Balwyn",
       "state": "VIC",
-      "score": 54,
+      "score": 56,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 7
+        "points_to_next": 5
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -157,10 +157,11 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 8,
+      "badge_count": 9,
       "badges": [
         "indigenous_dominant",
         "species_rich_20",
+        "species_rich_30",
         "habitat_builder",
         "amphibian_active",
         "network_connected",
@@ -205,11 +206,10 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Mar 2026",
-      "badge_count": 4,
+      "badge_count": 3,
       "badges": [
         "indigenous_dominant",
         "species_rich_20",
-        "habitat_builder",
         "gs_verified"
       ],
       "profile_url": "/gardens/middlesex/index.html",
@@ -236,11 +236,11 @@
       "garden_name": "Sir Garnet",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 50,
+      "score": 55,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 11
+        "points_to_next": 6
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -267,18 +267,21 @@
       },
       "council": "Boroondara City Council",
       "ward": "Gardiner",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-SH-CAN-0001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-SH-CAN-0001",
       "garden_name": "Canterbury G02",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 32,
+      "score": 38,
       "rating": {
         "current": "Habitat Garden",
         "next": "Ecological Garden",
-        "points_to_next": 9
+        "points_to_next": 3
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -286,8 +289,9 @@
       "verification_level": "site_visit",
       "verification_label": "Site Visit Verified",
       "last_verified": "16 Jun 2026",
-      "badge_count": 1,
+      "badge_count": 2,
       "badges": [
+        "network_connected",
         "site_visit_badge"
       ],
       "profile_url": "/gardens/canterbury/index.html",
@@ -304,7 +308,11 @@
       },
       "council": "Boroondara City Council",
       "ward": "TBC — confirm with Boroondara council",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-SH-SIR-0001",
+        "ER-AU-VIC-CAN-FLI-001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-CAN-MON-001",
@@ -333,11 +341,11 @@
       "garden_name": "Evelina",
       "suburb": "Mont Albert North",
       "state": "VIC",
-      "score": 48,
+      "score": 54,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 13
+        "points_to_next": 7
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -374,11 +382,11 @@
       "garden_name": "Dewrang",
       "suburb": "Blackburn",
       "state": "VIC",
-      "score": 50,
+      "score": 53,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 11
+        "points_to_next": 8
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -682,11 +690,11 @@
       "type": "Wild Mediterranean Garden",
       "suburb": "Canterbury",
       "state": "VIC",
-      "score": 39,
+      "score": 42,
       "rating": {
-        "current": "Habitat Garden",
-        "next": "Ecological Garden",
-        "points_to_next": 2
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 19
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
       "bioregion": "Gippsland Plain",
@@ -711,18 +719,21 @@
       },
       "council": "Boroondara City Council",
       "ward": "Maranoa",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-SH-CAN-0001"
+      ]
     },
     {
       "garden_id": "ER-AU-VIC-HW-AUB-0001",
       "garden_name": "The Auburn Test",
       "suburb": "Hawthorn",
       "state": "VIC",
-      "score": 35,
+      "score": 56,
       "rating": {
-        "current": "Habitat Garden",
-        "next": "Ecological Garden",
-        "points_to_next": 6
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 5
       },
       "primary_evc": "Not assessed (TBC)",
       "bioregion": "Gippsland Plain",
@@ -730,10 +741,15 @@
       "verification_level": "site_visit",
       "verification_label": "Site Visit",
       "last_verified": "Aug 2026",
-      "badge_count": 2,
+      "badge_count": 7,
       "badges": [
         "indigenous_dominant",
-        "site_visit_badge"
+        "habitat_builder",
+        "amphibian_active",
+        "water_wise",
+        "corridor_node",
+        "site_visit_badge",
+        "fauna_record"
       ],
       "profile_url": "/gardens/auburn/index.html",
       "data_file": "data/auburn_test.json",

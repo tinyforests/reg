@@ -1,13 +1,13 @@
 {
   "garden_id": "ER-AU-VIC-SY-NIC-0002",
-  "garden_name": "Nicholson",
+  "garden_name": "Urban Meadow",
   "garden_type": "Urban Ecological Retrofit",
   "suburb": "South Yarra",
   "state": "VIC",
   "assessment_date": "Feb 2026",
   "baseline_date": "Feb 2026",
   "target_score": 80,
-  "stewards": "Gardener & Son",
+  "stewards": "Bethany Lau",
   "designer": "Gardener & Son",
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
@@ -15,13 +15,14 @@
   "area_sqm": 60,
   "description": "A calm, immersive garden where cottage softness meets Japanese restraint. Layered canopy, sculptural natives and seasonal planting create structure and habitat. Permeable surfaces improve drainage and flow, while groundcovers stabilise soil -- forming a resilient, low-maintenance garden for daily life.",
   "evc": {
-    "name": "Urban Ecological Garden",
-    "code": "Urban prototype",
-    "bioregion": "Inner Melbourne",
-    "bioregion_code": "IML"
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
-    "indigenous_species_current": 23,
+    "indigenous_species_current": 36,
     "indigenous_species_baseline": 2,
     "indigenous_species_target": 20,
     "indigenous_dominant": false,
@@ -69,7 +70,8 @@
       "Miscanthus Flamingo",
       "Tulbaghia violacea",
       "Lavandula x intermedia"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 2,
@@ -81,7 +83,9 @@
     "has_rainwater_system": false,
     "has_moisture_basin": false,
     "has_swale": false,
-    "mulch_depth_mm": 60
+    "mulch_depth_mm": 60,
+    "mulch_type": "",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 1,
@@ -94,12 +98,16 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "adjacent_park": false,
-    "park_name": "",
+    "display_lat": -37.8416,
+    "display_lng": 144.9845,
+    "adjacent_park": true,
+    "park_name": "Park",
     "park_distance_m": 0,
+    "park_lat": -37.840557,
+    "park_lng": 144.983675,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.06,
+    "effective_ecological_area_ha": 0.01,
     "cluster_area_ha": 0,
     "cluster_name": "South Yarra",
     "cluster": {
@@ -107,9 +115,7 @@
       "gardens": 1,
       "area_ha": 0.06,
       "status": "Emerging"
-    },
-    "display_lat": -37.8418,
-    "display_lng": 144.9849
+    }
   },
   "canopy": {
     "existing": {
@@ -136,12 +142,13 @@
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
-    "has_fauna_record": false,
     "has_species_list": false,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -161,6 +168,14 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Adjacent park Unnamed park → Park."
+    },
     {
       "title": "Baseline assessment -- urban ecological retrofit",
       "date": "Feb 2026",
@@ -243,5 +258,60 @@
       "local_context_radius_m": 250.0,
       "local_context_samples": "9/9"
     }
+  },
+  "garden_address": "",
+  "steward_email": "",
+  "notes": "",
+  "score": {
+    "total": 37,
+    "rating": "Habitat Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 14,
+        "max": 25,
+        "notes": [
+          "30+ indigenous species",
+          "3 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 4,
+        "max": 20,
+        "notes": [
+          "Soil health 2/5",
+          "Water function 1/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 2,
+        "max": 20,
+        "notes": [
+          "1-2 habitat nodes"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 6,
+        "max": 20,
+        "notes": [
+          "Park within 50m"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 11,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
   }
 }

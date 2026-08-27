@@ -11,7 +11,7 @@
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
   "verifier": null,
-  "area_sqm": 25,
+  "area_sqm": 243,
   "description": "A three-zone ecological front garden in Blackburn -- entrance garden, scented tunnel pathway, and driveway garden across 25m2. Thirty-six indigenous species, five structural layers, and habitat rocks and logs throughout.",
   "zones": [
     {
@@ -77,10 +77,11 @@
     }
   ],
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
-    "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "name": "Swampy Riparian Complex",
+    "code": "EVC 126",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
   },
   "biodiversity": {
     "indigenous_species_current": 36,
@@ -91,6 +92,7 @@
     "structural_layers_baseline": 0,
     "canopy_cover_pct_current": 5,
     "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 20,
     "weed_pressure": "Low",
     "weed_pressure_baseline": "High",
     "species_list": [
@@ -130,7 +132,8 @@
       "Austrostipa elegantissima",
       "Brachyscome Mauve Bliss",
       "Dodonaea viscosa"
-    ]
+    ],
+    "species_note": ""
   },
   "soil_water": {
     "soil_health_score": 3,
@@ -142,48 +145,50 @@
     "has_rainwater_system": false,
     "has_moisture_basin": false,
     "has_swale": false,
-    "mulch_type": "Organic mulch"
+    "mulch_depth_mm": 75,
+    "mulch_type": "Organic mulch",
+    "water_note": ""
   },
   "habitat": {
     "habitat_nodes": 3,
     "habitat_nodes_baseline": 0,
-    "has_embedded_logs": true,
+    "has_embedded_logs": false,
     "has_rock_refuges": true,
     "has_water_feature": false,
     "has_nest_boxes": false,
-    "materials": [
-      "Habitat rocks",
-      "Habitat logs",
-      "Organic soil",
-      "Organic mulch"
-    ],
+    "planting_method": "High-density ecological planting -- wild native meadow",
     "fauna_sightings": []
   },
   "connectivity": {
-    "adjacent_park": false,
+    "display_lat": -37.816,
+    "display_lng": 145.1395,
+    "adjacent_park": true,
+    "park_name": "Gawler Chain",
     "park_distance_m": 0,
+    "park_lat": -37.816652,
+    "park_lng": 145.145438,
     "adjacent_registered_gardens": [],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.0025,
+    "effective_ecological_area_ha": 0.02,
+    "cluster_area_ha": 0,
     "cluster_name": "Blackburn",
     "cluster": {
       "name": "Blackburn",
       "gardens": 1,
       "area_ha": 0.025,
       "status": "Emerging"
-    },
-    "display_lat": -37.8157,
-    "display_lng": 145.1388
+    }
   },
   "evidence": {
     "has_photos": true,
     "has_field_notes": true,
-    "has_professional_assessment": true,
-    "has_fauna_record": false,
     "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": true,
     "verification_level": "gardener_and_son_verified",
     "verification_label": "G&S Verified",
-    "assessor": "Gardener & Son"
+    "assessor": "Gardener & Son",
+    "verification_date": null
   },
   "milestones": [
     {
@@ -280,5 +285,63 @@
   },
   "council": "Whitehorse City Council",
   "ward": "Morack",
-  "lga": "Whitehorse"
+  "lga": "Whitehorse",
+  "garden_address": "",
+  "steward_email": "",
+  "target_score": 82,
+  "score": {
+    "total": 53,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 20,
+        "max": 25,
+        "notes": [
+          "30+ indigenous species",
+          "Indigenous dominant",
+          "4 structural layers",
+          "5-14% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": [
+          "Soil health 3/5",
+          "Water function 2/5"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 6,
+        "max": 20,
+        "notes": [
+          "3-4 habitat nodes",
+          "Rock refuges"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 6,
+        "max": 20,
+        "notes": [
+          "Park within 50m"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 13,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Field notes",
+          "Species list",
+          "Professional assessment",
+          "G&S Verified"
+        ]
+      }
+    ]
+  }
 }

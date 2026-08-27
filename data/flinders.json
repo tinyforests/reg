@@ -107,7 +107,17 @@
     "adjacent_park": true,
     "park_name": "Local green corridor",
     "park_distance_m": 30,
-    "adjacent_registered_gardens": [],
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-SH-CAN-0001",
+        "garden_id": "ER-AU-VIC-SH-CAN-0001",
+        "name": "Canterbury G02",
+        "verified": true,
+        "distance_m": 368,
+        "display_lat": -37.8255,
+        "display_lng": 145.0866
+      }
+    ],
     "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0.0225,
     "cluster_area_ha": 0,
