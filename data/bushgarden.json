@@ -231,7 +231,7 @@
       "notes": "Garden opened to the public through Open Gardens Victoria on 25–26 November 2023. Sam Cox ran garden talks and Q&A at 11am and 2pm both days. Recognised as an exemplar of Australian naturalistic landscape design in private hands. The garden returned to Open Gardens Victoria for a second opening in November 2026."
     }
   ],
-  "notes": "Address: 12 Lorimer Rd, Wattle Glen 3096. Sam Cox Landscape's own home garden — garden and mudbrick house designed as one intent. 1.5 acres (6,070 m²). Species list is steward-reported and subject to further inventory.",
+  "notes": "1.5 acres (6,070 m²). Species list is steward-reported and subject to further inventory.",
   "rating": {
     "current": "High Habitat Garden",
     "next": "Urban Biodiversity Node",
@@ -248,8 +248,8 @@
     "formula_note": null,
     "upgrades": []
   },
-  "garden_address": "12 Lorimer Road, Wattle Glen, Victoria",
-  "steward_email": "sam@samcoxlandscape.com",
+  "garden_address": "",
+  "steward_email": "",
   "score": {
     "total": 83,
     "rating": "High Habitat Garden",
