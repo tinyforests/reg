@@ -107,8 +107,23 @@ def _sanitise_connectivity(record, private_coords, seed):
     c.pop('lat', None)
     c.pop('lng', None)
 
+    # Dedupe adjacent gardens by id first — repeated invites/adds have appended
+    # the same neighbour multiple times, which inflates the connectivity score
+    # (the scorer counts verified entries). Keep first occurrence.
+    adj_list = c.get('adjacent_registered_gardens') or []
+    if adj_list:
+        seen, deduped = set(), []
+        for adj in adj_list:
+            k = adj.get('garden_id') or adj.get('id') or adj.get('garden_name') or adj.get('name')
+            if k in seen:
+                continue
+            seen.add(k)
+            deduped.append(adj)
+        c['adjacent_registered_gardens'] = deduped
+        adj_list = deduped
+
     # Adjacent gardens: fuzz each neighbour's coords too
-    for adj in c.get('adjacent_registered_gardens') or []:
+    for adj in adj_list:
         adj_gid = adj.get('garden_id') or adj.get('id', '')
         adj_prec = private_coords.get(adj_gid)
         if adj_prec:

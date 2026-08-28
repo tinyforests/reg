@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site Envelope — Field Capture Sheet</title>
+<style>
+  :root { --ink:#1a1a1a; --mid:#6b6b6b; --line:#c9c6be; --pale:#f4f2ed; }
+  * { box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         color:var(--ink); line-height:1.45; margin:0; padding:24px; background:#fff;
+         font-size:15px; }
+  .sheet { max-width:760px; margin:0 auto 48px; }
+  h1 { font-size:19px; margin:0 0 2px; font-weight:600; letter-spacing:-0.01em; }
+  .sub { color:var(--mid); font-size:13px; margin:0 0 20px; }
+  h2 { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--mid);
+       margin:24px 0 8px; font-weight:600; border-bottom:1px solid var(--line);
+       padding-bottom:5px; }
+  .row { display:flex; align-items:baseline; gap:10px; padding:6px 0;
+         border-bottom:1px dotted var(--line); }
+  .row label { flex:0 0 210px; font-size:14px; }
+  .fill { flex:1; border-bottom:1px solid var(--line); min-height:20px; }
+  .hint { color:var(--mid); font-size:12px; display:block; margin-top:1px; }
+  .opts { font-size:13px; color:var(--ink); }
+  .opts span { display:inline-block; border:1px solid var(--line); border-radius:3px;
+               padding:1px 7px; margin:2px 3px 2px 0; }
+  .note { background:var(--pale); padding:12px 14px; font-size:13px; margin:16px 0;
+          border-left:2px solid var(--mid); }
+  .note strong { display:block; margin-bottom:3px; }
+  .hdr { display:flex; gap:14px; margin-bottom:4px; }
+  .hdr div { flex:1; }
+  .hdr .fill { min-height:24px; }
+  .two { display:flex; gap:20px; }
+  .two > div { flex:1; }
+  @media print {
+    body { padding:0; font-size:12px; }
+    .sheet { max-width:none; page-break-after:always; margin-bottom:0; }
+    .note { background:none; border-left:2px solid #999; }
+    h2 { margin:14px 0 5px; }
+    .row { padding:4px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <h1>Site Envelope — field capture</h1>
+  <p class="sub">One visit collects everything Method v2 needs. Measure, don't estimate. Photograph anything you're unsure of.</p>
+
+  <div class="hdr">
+    <div><label class="hint">Garden / record id</label><div class="fill"></div></div>
+    <div><label class="hint">Date</label><div class="fill"></div></div>
+    <div><label class="hint">Measured by</label><div class="fill"></div></div>
+  </div>
+
+  <h2>Area — the two numbers are different</h2>
+  <div class="note">
+    <strong>Growing area is not land area.</strong>
+    Growing area is planted substrate only — beds, borders, containers, planters.
+    Exclude paving, decking, structures, driveway and lawn-as-lawn. Land area is
+    recorded for context and never enters any score.
+  </div>
+  <div class="row"><label>Growing area (m²)<span class="hint">planted substrate only — pace or tape, not eyeball</span></label><div class="fill"></div></div>
+  <div class="row"><label>Land / title area (m²)<span class="hint">context only</span></label><div class="fill"></div></div>
+  <div class="row"><label>Method used<span class="hint">tape / laser / paced / title plan / satellite</span></label><div class="fill"></div></div>
+  <div class="row"><label>Sketch attached?<span class="hint">rough plan beats a number alone</span></label><div class="fill"></div></div>
+
+  <h2>Substrate</h2>
+  <div class="row"><label>Substrate class</label>
+    <div class="opts"><span>in ground</span><span>raised ≥600mm</span><span>raised 300–600</span><span>container &lt;300</span><span>epiphytic</span></div></div>
+  <div class="row"><label>Typical depth (mm)<span class="hint">probe or measure a bed edge — don't assume</span></label><div class="fill"></div></div>
+  <div class="row"><label>Sealed / unsealed split<span class="hint">how much of the site is over slab?</span></label><div class="fill"></div></div>
+  <div class="row"><label>Organic matter<span class="hint">low / moderate / high — visual</span></label><div class="fill"></div></div>
+
+  <h2>Vertical envelope — determines what stratum is achievable</h2>
+  <div class="row"><label>Unobstructed height (m)<span class="hint">to eaves, balcony above, powerline, or open sky</span></label><div class="fill"></div></div>
+  <div class="row"><label>What limits it<span class="hint">structure / services / overshadowing / covenant / none</span></label><div class="fill"></div></div>
+  <div class="row"><label>Tallest vegetation now (m)</label><div class="fill"></div></div>
+  <div class="row"><label>Strata occupied<span class="hint">count distinct layers actually present</span></label><div class="fill"></div></div>
+  <div class="row"><label>Structural load limit<span class="hint">balconies / rooftops only — kg/m² if known</span></label><div class="fill"></div></div>
+
+  <h2>Light and exposure</h2>
+  <div class="two">
+    <div>
+      <div class="row"><label style="flex:0 0 110px">Solar hours</label><div class="opts"><span>&lt;2</span><span>2–3</span><span>3–5</span><span>6+</span></div></div>
+      <div class="row"><label style="flex:0 0 110px">Aspect</label><div class="fill"></div></div>
+    </div>
+    <div>
+      <div class="row"><label style="flex:0 0 110px">Wind</label><div class="opts"><span>low</span><span>mod</span><span>high</span><span>extreme</span></div></div>
+      <div class="row"><label style="flex:0 0 110px">Frost pocket?</label><div class="fill"></div></div>
+    </div>
+  </div>
+
+  <h2>Tenure and permission</h2>
+  <div class="row"><label>Tenure</label>
+    <div class="opts"><span>owner</span><span>renter</span><span>strata</span><span>institutional</span></div></div>
+  <div class="row"><label>Dwellings sharing site</label><div class="fill"></div></div>
+  <div class="row"><label>Permitted</label>
+    <div class="opts"><span>excavate</span><span>plant trees</span><span>alter hardscape</span><span>harvest water</span><span>install waterbody</span></div></div>
+  <div class="row"><label>Water access</label>
+    <div class="opts"><span>mains</span><span>tank</span><span>greywater</span><span>none</span></div></div>
+
+  <h2>Envelope provenance <span style="text-transform:none;letter-spacing:0;font-weight:400">(required by the schema — a field visit is assessor_verified)</span></h2>
+  <div class="row"><label>Envelope source</label>
+    <div class="opts"><span>steward_declared</span><span>desktop_inferred</span><span>assessor_verified</span></div></div>
+
+  <h2>Governance <span style="text-transform:none;letter-spacing:0;font-weight:400">(one enum, no scoring effect yet — cheap to capture now)</span></h2>
+  <div class="row"><label>Governance class</label>
+    <div class="opts"><span>individual</span><span>collective</span><span>institutional</span><span>public</span></div></div>
+
+  <h2>Present condition — cross-check against the record</h2>
+  <div class="row"><label>Indigenous species counted</label><div class="fill"></div></div>
+  <div class="row"><label>Record says</label><div class="fill"></div></div>
+  <div class="row"><label>Habitat features present<span class="hint">woody debris / refuge / bare ground / hollow / litter — count each</span></label><div class="fill"></div></div>
+  <div class="row"><label>Fauna water point?</label><div class="fill"></div></div>
+  <div class="row"><label>Waterbody area / edge (m² / m)</label><div class="fill"></div></div>
+
+  <h2>Discrepancies</h2>
+  <div class="row"><label>Anything the record gets wrong<span class="hint">this is why you're here — write it down before you leave</span></label><div class="fill" style="min-height:44px"></div></div>
+  <div class="row"><label>Photos taken<span class="hint">wide, substrate edge, vertical envelope looking up</span></label><div class="fill"></div></div>
+
+  <div class="note" style="margin-top:22px">
+    <strong>Before you drive away</strong>
+    Growing area measured, not paced? Substrate depth actually probed? Vertical
+    envelope looking straight up? If this record was a round number, is the real
+    figure round too — or was it always an estimate?
+  </div>
+
+</div>
+</body>
+</html>

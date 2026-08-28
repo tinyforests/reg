@@ -2,8 +2,8 @@
   {
     "garden_id": "ER-AU-VIC-NIL-BEL-001",
     "garden_name": "Wattle Glen Bush Garden",
-    "display_lat": -37.684537,
-    "display_lng": 145.193461
+    "display_lat": -37.6857,
+    "display_lng": 145.1962
   },
   {
     "garden_id": "ER-AU-VIC-SH-ARU-0001",
@@ -14,8 +14,8 @@
   {
     "garden_id": "ER-AU-VIC-SY-NIC-0002",
     "garden_name": "Nicholson",
-    "display_lat": -37.84279,
-    "display_lng": 144.986561
+    "display_lat": -37.8416,
+    "display_lng": 144.9845
   },
   {
     "garden_id": "ER-AU-VIC-BAL-001",
@@ -26,8 +26,8 @@
   {
     "garden_id": "ER-AU-VIC-SH-MID-001",
     "garden_name": "Middlesex",
-    "display_lat": -37.831705,
-    "display_lng": 145.088767
+    "display_lat": -37.8311,
+    "display_lng": 145.0864
   },
   {
     "garden_id": "ER-AU-VIC-SH-SIR-0001",
@@ -38,8 +38,8 @@
   {
     "garden_id": "ER-AU-VIC-SH-CAN-0001",
     "garden_name": "Canterbury G02",
-    "display_lat": -37.824454,
-    "display_lng": 145.086825
+    "display_lat": -37.8255,
+    "display_lng": 145.0866
   },
   {
     "garden_id": "ER-AU-VIC-CAN-MON-001",
@@ -56,14 +56,14 @@
   {
     "garden_id": "ER-AU-VIC-BLA-DEW-001",
     "garden_name": "Dewrang",
-    "display_lat": -37.816302,
-    "display_lng": 145.141707
+    "display_lat": -37.816,
+    "display_lng": 145.1395
   },
   {
     "garden_id": "ER-AU-VIC-BAL-PRD-001",
     "garden_name": "Parring Stepping Stone",
-    "display_lat": -37.811653,
-    "display_lng": 145.090308
+    "display_lat": -37.8126,
+    "display_lng": 145.0925
   },
   {
     "garden_id": "ER-AU-VIC-NTH-RUP-001",
@@ -74,14 +74,14 @@
   {
     "garden_id": "ER-AU-VIC-BOR-WIN-001",
     "garden_name": "Windella",
-    "display_lat": -37.796367,
-    "display_lng": 145.050346
+    "display_lat": -37.7982,
+    "display_lng": 145.0503
   },
   {
     "garden_id": "ER-AU-VIC-BOR-WIN-002",
     "garden_name": "Smokebush",
-    "display_lat": -37.793232,
-    "display_lng": 145.051086
+    "display_lat": -37.7936,
+    "display_lng": 145.0522
   },
   {
     "garden_id": "ER-AU-VIC-WHI-YRK-001",
@@ -104,8 +104,8 @@
   {
     "garden_id": "ER-AU-VIC-HW-AUB-0001",
     "garden_name": "The Auburn Test",
-    "display_lat": -37.822911,
-    "display_lng": 145.044785
+    "display_lat": -37.8212,
+    "display_lng": 145.0428
   },
   {
     "garden_id": "ER-AU-VIC-WHI-YRK-002",

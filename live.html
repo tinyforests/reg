@@ -20,7 +20,14 @@
   const CONFIG = {
     SHEET_ID: '1Em5FvJhUyCIVLOFYtcmjXUFK--6QZDh452F6NcXDAiQ',
     RANGE:    'A:G',                 // first tab, all seven columns
-    API_KEY:  'AIzaSyBzhuJsiruU1uzO6OtU1tXFc1xepZJ9QUc',        // ← paste your restricted key here
+    // SECURITY: this is a browser-side key — on a static (GitHub Pages) site it is
+    // ALWAYS public. Secrecy is impossible; RESTRICTION is the protection. Before
+    // pasting a key here you MUST, in Google Cloud Console, restrict it to:
+    //   (1) the Google Sheets API only, and
+    //   (2) an HTTP-referrer allowlist of ecologicalregistry.org
+    // The previously committed key (AIzaSy…9QUc) was exposed in this public repo —
+    // REVOKE it in Cloud Console; a revoked key in git history is then harmless.
+    API_KEY:  'YOUR_API_KEY',        // ← paste a RESTRICTED key (see note above)
   };
 </script>
 

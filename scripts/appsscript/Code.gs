@@ -1187,6 +1187,22 @@ function handleSaveGardenRecord(payload) {
   var record   = payload.record;
   if (!gardenId || !record) return jsonResp({ok: false, error: 'Missing garden_id or record'});
 
+  // Dedupe adjacent_registered_gardens by id before storing. Repeated invites /
+  // nearest-garden adds have appended the same neighbour multiple times, which
+  // inflates the connectivity score (the scorer counts verified entries). The
+  // authority for adjacency is sync_registry's 500 m recompute; this just stops
+  // the stored list drifting away from it. Keeps first occurrence.
+  if (record.connectivity && record.connectivity.adjacent_registered_gardens) {
+    var adj = record.connectivity.adjacent_registered_gardens, seen = {}, out = [];
+    for (var ai = 0; ai < adj.length; ai++) {
+      var k = adj[ai].garden_id || adj[ai].id || adj[ai].garden_name || adj[ai].name;
+      if (k && seen[k]) continue;
+      if (k) seen[k] = true;
+      out.push(adj[ai]);
+    }
+    record.connectivity.adjacent_registered_gardens = out;
+  }
+
   var now      = new Date().toISOString();
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
