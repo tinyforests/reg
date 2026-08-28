@@ -9,3 +9,6 @@ data/private/
 
 # Generated audit report (self-scanned; never commit)
 AUDIT-VIC-ASSUMPTIONS.txt
+
+# v2 area-audit worksheet — contains address strings, never commit
+area-audit.csv

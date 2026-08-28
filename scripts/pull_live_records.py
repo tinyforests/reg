@@ -56,7 +56,7 @@ LOCAL_ONLY_ROOT_FIELDS = {'demo', 'badges', 'rating', 'upgrade_potential', 'poin
                           # habitat_context is managed locally by habitat_value.py (DEECA lookup).
                           'habitat_context',
                           # PII: never pull residents' email/street address into the PUBLIC repo.
-                          'steward_email', 'garden_address'}
+                          'steward_email', 'garden_address', 'address'}
 
 
 def fetch_live(garden_id):
