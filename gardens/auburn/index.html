@@ -1344,15 +1344,11 @@ var _liveEndpoint = (typeof RegEndpoint !== 'undefined') ? RegEndpoint : '';
       document.getElementById('heroLevel').textContent = 'Check /data/auburn_test.json';
     });
 
-  /* Live fetch runs in parallel — silently upgrades when ready */
-  if (liveUrl) {
-    fetch(liveUrl)
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d && d.ok && d.data) { G = d.data; render(); _afterRender(); }
-      })
-      .catch(function() {});
-  }
+  /* SINGLE SOURCE OF TRUTH — render only the synced static file. The live
+     Apps Script record is raw (not through sync_registry: coord fuzzing, 500 m
+     adjacency, dedupe, derived fields), so re-rendering it made coords/score/
+     points/curbing jump and leaked precise coords. Updates land via the
+     pipeline: pull_live_records -> sync_registry -> commit -> deploy. */
 })();
 
   /* ---- Notification engine ---- */
