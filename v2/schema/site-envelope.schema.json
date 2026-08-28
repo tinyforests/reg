@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ecologicalregistry.org/schema/site-envelope-0.1.json",
+  "title": "Site Envelope",
+  "description": "The measured physical, tenure and contextual constraints of a registered place. Additive to existing records — nullable during Phase 1 backfill. title_area_m2 is recorded for context only and MUST NOT be read by any scoring function.",
+  "type": "object",
+  "required": ["growing_area_m2", "substrate_class", "vertical_envelope_m", "tenure", "envelope_source"],
+  "properties": {
+    "growing_area_m2": {
+      "type": "number", "minimum": 0,
+      "description": "Planted substrate area. NOT land or title area."
+    },
+    "title_area_m2": {
+      "type": "number", "minimum": 0,
+      "description": "CONTEXT ONLY. Never enters EP, EC or LO. Present so the wealth-neutrality claim is auditable."
+    },
+    "substrate_class": {
+      "enum": ["in_ground", "raised_deep", "raised_shallow", "container", "epiphytic"],
+      "description": "raised_deep >=600mm, raised_shallow 300-600mm, container <300mm."
+    },
+    "soil_volume_m3": { "type": "number", "minimum": 0, "description": "Derived unless measured." },
+    "vertical_envelope_m": {
+      "type": "number", "minimum": 0,
+      "description": "Unobstructed height available to vegetation. This, not area, determines canopy feasibility."
+    },
+    "structural_load_limit_kgm2": { "type": ["number", "null"] },
+    "solar_hours_band": { "enum": ["<2", "2-3", "3-5", "6+"] },
+    "aspect": { "type": "string" },
+    "wind_exposure": { "enum": ["low", "moderate", "high", "extreme"] },
+
+    "tenure": { "enum": ["owner", "renter", "strata", "institutional"] },
+    "dwelling_count": { "type": "integer", "minimum": 1 },
+    "permission_scope": {
+      "type": "array",
+      "items": { "enum": ["can_excavate", "can_plant_trees", "can_alter_hardscape", "can_harvest_water", "can_install_waterbody"] }
+    },
+    "water_access": { "enum": ["mains", "tank", "greywater", "none"] },
+
+    "reference_community_ref": { "type": ["string", "null"], "description": "EVC / PCT / RE / local equivalent." },
+    "urban_matrix_class": { "type": ["string", "null"], "description": "Derived from open data. Not steward-entered." },
+    "network_ids": { "type": "array", "items": { "type": "string" } },
+    "network_types": { "type": "array", "items": { "enum": ["building", "street", "corridor", "cluster", "precinct"] } },
+
+    "envelope_source": {
+      "enum": ["steward_declared", "desktop_inferred", "assessor_verified"],
+      "description": "Verified records require assessor_verified. Anti-gaming control."
+    },
+    "envelope_evidence": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Photo/document references supporting declared constraints (slab photo, strata rules, load certificate)."
+    },
+    "envelope_version": { "type": "integer", "minimum": 1 },
+    "envelope_revised_at": { "type": ["string", "null"], "format": "date" },
+    "envelope_revision_note": { "type": ["string", "null"] }
+  },
+  "$comment": "REVIEW TRIGGER: any revision that reduces a constraint field (growing_area_m2, vertical_envelope_m, permission_scope) AND increases EP must be held for review before publication. Downward envelope revision is the primary fraud path."
+}

@@ -1,0 +1,181 @@
+[
+  {
+    "registry_id": "ER-VIC-XXXX-BAL-0001",
+    "label": "6 m2 Melbourne apartment balcony",
+    "site_envelope": {
+      "growing_area_m2": 2.4,
+      "title_area_m2": 6,
+      "substrate_class": "container",
+      "vertical_envelope_m": 2.6,
+      "structural_load_limit_kgm2": 150,
+      "solar_hours_band": "3-5",
+      "aspect": "N",
+      "wind_exposure": "high",
+      "tenure": "renter",
+      "dwelling_count": 1,
+      "permission_scope": ["can_plant_trees"],
+      "water_access": "mains",
+      "network_types": ["building"]
+    },
+    "observation": {
+      "indigenous_species_count": 9,
+      "indigenous_fraction": 0.85,
+      "tallest_vegetation_m": 1.6,
+      "strata_occupied": 2,
+      "rooting_volume_m3": 0.55,
+      "organic_matter": "high",
+      "soil_biota_evidence": false,
+      "fauna_water_point": true,
+      "chemical_free": true,
+      "waterbody_present": false,
+      "habitat_feature_count": 2,
+      "habitat_features": { "decaying_woody_material": 1, "leaf_litter_retained": 1 },
+      "adjacency_index": 0.4,
+      "network_verified_members": 4,
+      "network_coverage": 0.3,
+      "building_stack_coverage": 0.3,
+      "baseline_documented": true,
+      "years_of_records": 1,
+      "verified_years": 1,
+      "plants": [
+        { "growth_form": "large_shrub", "provenance": "indigenous", "footprint_m2": 0.6, "occupied_height_m": 1.6 },
+        { "growth_form": "shrub", "provenance": "indigenous", "footprint_m2": 0.5, "occupied_height_m": 0.8 },
+        { "growth_form": "grass_tussock", "provenance": "indigenous", "footprint_m2": 0.8, "occupied_height_m": 0.5 },
+        { "growth_form": "groundcover", "provenance": "exotic_benign", "footprint_m2": 0.3, "occupied_height_m": 0.2 }
+      ]
+    }
+  },
+  {
+    "registry_id": "ER-VIC-XXXX-CYD-0002",
+    "label": "35 m2 Melbourne courtyard",
+    "site_envelope": {
+      "growing_area_m2": 22,
+      "title_area_m2": 35,
+      "substrate_class": "in_ground",
+      "vertical_envelope_m": 7,
+      "solar_hours_band": "3-5",
+      "aspect": "E",
+      "wind_exposure": "low",
+      "tenure": "owner",
+      "dwelling_count": 1,
+      "permission_scope": ["can_excavate", "can_plant_trees", "can_alter_hardscape", "can_install_waterbody"],
+      "water_access": "mains",
+      "network_types": []
+    },
+    "observation": {
+      "indigenous_species_count": 18,
+      "indigenous_fraction": 0.7,
+      "tallest_vegetation_m": 3.2,
+      "strata_occupied": 3,
+      "rooting_volume_m3": 9.0,
+      "organic_matter": "moderate",
+      "soil_biota_evidence": true,
+      "fauna_water_point": true,
+      "chemical_free": true,
+      "waterbody_present": false,
+      "waterbody_area_m2": 0,
+      "habitat_feature_count": 3,
+      "habitat_features": { "decaying_woody_material": 2, "thermal_refuge_structure": 1, "leaf_litter_retained": 1 },
+      "adjacency_index": 0.5,
+      "network_verified_members": 1,
+      "baseline_documented": true,
+      "years_of_records": 2,
+      "verified_years": 2,
+      "plants": [
+        { "growth_form": "large_shrub", "provenance": "indigenous", "footprint_m2": 6, "occupied_height_m": 3.2 },
+        { "growth_form": "shrub", "provenance": "indigenous", "footprint_m2": 7, "occupied_height_m": 1.4 },
+        { "growth_form": "grass_tussock", "provenance": "indigenous", "footprint_m2": 8, "occupied_height_m": 0.6 },
+        { "growth_form": "groundcover", "provenance": "native_nonlocal", "footprint_m2": 5, "occupied_height_m": 0.3 }
+      ]
+    }
+  },
+  {
+    "registry_id": "ER-VIC-XXXX-STD-0003",
+    "label": "500 m2 Melbourne suburban property",
+    "site_envelope": {
+      "growing_area_m2": 310,
+      "title_area_m2": 500,
+      "substrate_class": "in_ground",
+      "vertical_envelope_m": 25,
+      "solar_hours_band": "6+",
+      "aspect": "N",
+      "wind_exposure": "moderate",
+      "tenure": "owner",
+      "dwelling_count": 1,
+      "permission_scope": ["can_excavate", "can_plant_trees", "can_alter_hardscape", "can_harvest_water", "can_install_waterbody"],
+      "water_access": "tank",
+      "network_types": ["street"]
+    },
+    "observation": {
+      "indigenous_species_count": 22,
+      "indigenous_fraction": 0.45,
+      "tallest_vegetation_m": 7.0,
+      "strata_occupied": 3,
+      "rooting_volume_m3": 120,
+      "organic_matter": "moderate",
+      "soil_biota_evidence": true,
+      "fauna_water_point": true,
+      "chemical_free": true,
+      "waterbody_present": false,
+      "waterbody_area_m2": 0,
+      "habitat_feature_count": 4,
+      "habitat_features": { "decaying_woody_material": 3, "thermal_refuge_structure": 2, "leaf_litter_retained": 1 },
+      "adjacency_index": 0.55,
+      "network_verified_members": 2,
+      "baseline_documented": true,
+      "years_of_records": 3,
+      "verified_years": 3,
+      "plants": [
+        { "growth_form": "tree", "provenance": "indigenous", "footprint_m2": 45, "occupied_height_m": 7 },
+        { "growth_form": "tree", "provenance": "exotic_benign", "footprint_m2": 60, "occupied_height_m": 9 },
+        { "growth_form": "shrub", "provenance": "indigenous", "footprint_m2": 40, "occupied_height_m": 1.5 },
+        { "growth_form": "turf", "provenance": "exotic_benign", "footprint_m2": 140, "occupied_height_m": 0.1 }
+      ]
+    }
+  },
+  {
+    "registry_id": "ER-SG-XXXX-LND-0004",
+    "label": "1000 m2 Singapore landed property",
+    "site_envelope": {
+      "growing_area_m2": 640,
+      "title_area_m2": 1000,
+      "substrate_class": "in_ground",
+      "vertical_envelope_m": 25,
+      "solar_hours_band": "6+",
+      "aspect": "flat",
+      "wind_exposure": "low",
+      "tenure": "owner",
+      "dwelling_count": 1,
+      "permission_scope": ["can_excavate", "can_plant_trees", "can_alter_hardscape", "can_harvest_water", "can_install_waterbody"],
+      "water_access": "mains",
+      "network_types": ["street"]
+    },
+    "observation": {
+      "indigenous_species_count": 14,
+      "indigenous_fraction": 0.25,
+      "tallest_vegetation_m": 11,
+      "strata_occupied": 3,
+      "rooting_volume_m3": 250,
+      "organic_matter": "moderate",
+      "soil_biota_evidence": true,
+      "fauna_water_point": false,
+      "chemical_free": false,
+      "waterbody_present": true,
+      "waterbody_area_m2": 8,
+      "waterbody_edge_m": 12,
+      "habitat_feature_count": 2,
+      "habitat_features": { "thermal_refuge_structure": 1 },
+      "adjacency_index": 0.6,
+      "network_verified_members": 0,
+      "baseline_documented": true,
+      "years_of_records": 1,
+      "verified_years": 1,
+      "plants": [
+        { "growth_form": "tree", "provenance": "native_nonlocal", "footprint_m2": 120, "occupied_height_m": 11 },
+        { "growth_form": "palm", "provenance": "exotic_benign", "footprint_m2": 60, "occupied_height_m": 8 },
+        { "growth_form": "shrub", "provenance": "exotic_benign", "footprint_m2": 130, "occupied_height_m": 1.6 },
+        { "growth_form": "turf", "provenance": "exotic_benign", "footprint_m2": 300, "occupied_height_m": 0.1 }
+      ]
+    }
+  }
+]
