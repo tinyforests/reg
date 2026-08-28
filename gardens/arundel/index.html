@@ -1150,12 +1150,15 @@ function initCorridorMap(record) {
   /* Collect all bounds from the start */
   var bounds = [[displayLat, displayLng]];
 
-  /* Approximate location circle — no precise pin on public map */
+  /* Privacy circle — the garden is somewhere INSIDE this area, not at the centre.
+     Radius (450 m) exceeds the ~375 m max coordinate fuzz, so the real location is
+     genuinely within the circle, while the centre stays the fuzzed point — no
+     precise coordinate is ever in the public data. The map frames the circle. */
   var primaryCircle = L.circle([displayLat, displayLng], {
-    radius: 75,
+    radius: 450,
     color: '#3d4535',
     fillColor: '#7a9e5f',
-    fillOpacity: 0.15,
+    fillOpacity: 0.12,
     weight: 1.5,
     opacity: 0.5
   }).addTo(_map);
@@ -1191,10 +1194,10 @@ function initCorridorMap(record) {
     }).addTo(_map);
   }
 
-  /* Fit bounds if multiple points */
-  if (bounds.length > 1) {
-    _map.fitBounds(bounds, { padding: [50, 50] });
-  }
+  /* Frame to the privacy circle, plus any park / neighbour points */
+  var frame = primaryCircle.getBounds();
+  for (var _bi = 0; _bi < bounds.length; _bi++) frame.extend(bounds[_bi]);
+  _map.fitBounds(frame, { padding: [40, 40] });
 
   /* Invalidate size after render to fix tile loading */
   setTimeout(function() { _map.invalidateSize(); }, 100);
