@@ -265,12 +265,14 @@ def build_adjacency(coord_index, name_index=None):
                                      "name": name_index.get(b, b),
                                      "lat": lat_b, "lng": lng_b,
                                      "verified": verified_b,
-                                     "distance_m": int(dist)})
+                                     "distance_m": int(dist),
+                                     "source": "geographic"})
                 adjacency[b].append({"id": a, "garden_id": a,
                                      "name": name_index.get(a, a),
                                      "lat": lat_a, "lng": lng_a,
                                      "verified": verified_a,
-                                     "distance_m": int(dist)})
+                                     "distance_m": int(dist),
+                                     "source": "geographic"})
     return adjacency
 
 
@@ -444,6 +446,28 @@ def sync(check_only=False):
                 return sorted((e.get('id') or e.get('garden_id'), e.get('verified'))
                               for e in entries)
             file_adj = (record.get('connectivity') or {}).get('adjacent_registered_gardens') or []
+            # Preserve explicitly-INVITED neighbours (referrals). They count regardless
+            # of the 500 m radius — a steward who brings a neighbour into the Registry
+            # is in a network with them however far apart the gardens are. Union them
+            # with the geographic set, deduped by id; refresh coords from the index.
+            have = {(e.get('id') or e.get('garden_id')) for e in computed_adj}
+            for e in file_adj:
+                if not (e.get('source') == 'invited' or e.get('invited') is True):
+                    continue
+                nid = e.get('id') or e.get('garden_id')
+                if not nid or nid in have:
+                    continue
+                entry = {"id": nid, "garden_id": nid,
+                         "name": (name_index or {}).get(nid) or e.get('name') or nid,
+                         "verified": True, "source": "invited"}
+                if nid in coord_index:
+                    nlat, nlng, _nv = coord_index[nid]
+                    entry["lat"], entry["lng"] = nlat, nlng
+                    if gid in coord_index:
+                        entry["distance_m"] = int(_haversine_m(
+                            coord_index[gid][0], coord_index[gid][1], nlat, nlng))
+                computed_adj = computed_adj + [entry]
+                have.add(nid)
             # Always update in-memory record so score is computed with adjacency.
             record.setdefault('connectivity', {})['adjacent_registered_gardens'] = computed_adj
 

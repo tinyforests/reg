@@ -8,8 +8,8 @@
   {
     "garden_id": "ER-AU-VIC-SH-ARU-0001",
     "garden_name": "Arundel",
-    "display_lat": -37.831609,
-    "display_lng": 145.093977
+    "display_lat": -37.8336,
+    "display_lng": 145.0969
   },
   {
     "garden_id": "ER-AU-VIC-SY-NIC-0002",
@@ -20,8 +20,8 @@
   {
     "garden_id": "ER-AU-VIC-BAL-001",
     "garden_name": "Parring",
-    "display_lat": -37.812265,
-    "display_lng": 145.090761
+    "display_lat": -37.8141,
+    "display_lng": 145.0894
   },
   {
     "garden_id": "ER-AU-VIC-SH-MID-001",
@@ -32,8 +32,8 @@
   {
     "garden_id": "ER-AU-VIC-SH-SIR-0001",
     "garden_name": "Sir Garnet",
-    "display_lat": -37.821293,
-    "display_lng": 145.090446
+    "display_lat": -37.8188,
+    "display_lng": 145.0875
   },
   {
     "garden_id": "ER-AU-VIC-SH-CAN-0001",
@@ -50,8 +50,8 @@
   {
     "garden_id": "ER-AU-VIC-MAN-EVE-001",
     "garden_name": "Evelina",
-    "display_lat": -37.805357,
-    "display_lng": 145.104553
+    "display_lat": -37.8057,
+    "display_lng": 145.1047
   },
   {
     "garden_id": "ER-AU-VIC-BLA-DEW-001",
