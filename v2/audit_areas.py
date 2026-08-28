@@ -102,14 +102,31 @@ def species_count(rec):
     return None
 
 
+SUBSTANCE_BLOCKS = ("biodiversity", "biodiversity_structure", "soil_water",
+                    "habitat", "connectivity", "evidence", "scores",
+                    "assessment", "inputs", "planting")
+
+
 def looks_like_garden(rec):
-    """Shape test, not a filename guess."""
+    """
+    Shape test, not a filename guess.
+
+    id + name is NOT enough — a display-coordinate index and a legacy id list
+    both satisfy it, which is how the first run against the live repo ingested
+    garden-locations.json and gardens.json and reported 41 records for 20
+    gardens. A real record must also carry either an area or a substantive
+    assessment block.
+    """
     if not isinstance(rec, dict):
-        return False
-    has_id = any(k in rec for k in ID_KEYS)
+        return False, "not an object"
+    if not any(k in rec for k in ID_KEYS):
+        return False, "no id field"
     has_area = get_area(rec)[0] is not None
-    has_name = any(k in rec for k in NAME_KEYS)
-    return has_id and (has_area or has_name)
+    has_substance = any(isinstance(rec.get(b), dict) and rec.get(b)
+                        for b in SUBSTANCE_BLOCKS)
+    if not (has_area or has_substance):
+        return False, "id/name only — index or legacy stub, no area or assessment block"
+    return True, ""
 
 
 def pii_findings(rec):
@@ -155,8 +172,12 @@ def audit(records, confirmed):
                 flags.append("IMPLAUSIBLY_SMALL")
             if area > MAX_AREA:
                 flags.append("LARGE_NEEDS_CONFIRMATION")
-            if median and area > 0 and (area > median * 8 or area < median / 8):
-                flags.append("OUTLIER_VS_MEDIAN")
+            # High side only. A genuinely small garden is not an error — it is
+            # the entire point of the v2 work, and the low-side check was
+            # flagging 18 and 20 m2 records simply for being small. Anything
+            # actually implausible is already caught by MIN_AREA above.
+            if median and area > median * 8:
+                flags.append("OUTLIER_HIGH_VS_MEDIAN")
             if float(area).is_integer() and area >= 100 and area % 100 == 0:
                 flags.append("ROUND_NUMBER_LIKELY_ESTIMATED")
             if sc and area > 0:
@@ -194,7 +215,7 @@ def audit(records, confirmed):
 
 
 BLOCKING = {"ZERO_OR_NEGATIVE_AREA", "IMPLAUSIBLY_SMALL", "NO_AREA_FIELD",
-            "LARGE_NEEDS_CONFIRMATION", "OUTLIER_VS_MEDIAN",
+            "LARGE_NEEDS_CONFIRMATION", "OUTLIER_HIGH_VS_MEDIAN",
             "ROUND_NUMBER_LIKELY_ESTIMATED", "SPECIES_DENSITY_HIGH",
             "SPECIES_DENSITY_LOW", "KNOWN_SUSPECT_BACKLOG"}
 
@@ -212,7 +233,7 @@ def main():
 
     confirmed = load_confirmed(a.confirmed or os.path.join(a.data, "confirmed-areas.json"))
 
-    records, skipped = [], 0
+    records, skipped = [], []
     for root, _, files in os.walk(a.data):
         for f in sorted(files):
             if not f.endswith(".json") or f == "confirmed-areas.json":
@@ -224,10 +245,24 @@ def main():
                 print("UNPARSEABLE {}: {}".format(f, e))
                 continue
             for rec in (d if isinstance(d, list) else [d]):
-                if looks_like_garden(rec):
-                    records.append(rec)
+                ok, why = looks_like_garden(rec)
+                if ok:
+                    records.append((f, rec))
                 else:
-                    skipped += 1
+                    skipped.append((f, why))
+
+    # Dedupe by id, keeping the richest record. A duplicate is reported, not
+    # silently merged — two files claiming one id is itself a data problem.
+    by_id, dupes = {}, []
+    for src, rec in records:
+        _, rid = first(rec, ID_KEYS)
+        rid = str(rid)
+        if rid in by_id:
+            dupes.append((rid, by_id[rid][0], src))
+            if len(json.dumps(rec)) <= len(json.dumps(by_id[rid][1])):
+                continue
+        by_id[rid] = (src, rec)
+    records = [rec for _, rec in by_id.values()]
 
     rows = audit(records, confirmed)
     flagged = [r for r in rows if r["flags"]]
@@ -236,8 +271,8 @@ def main():
     pii_rows = [r for r in rows if "PII_FIELD" in r["flags"]]
 
     w = max((len(r["name"]) for r in rows), default=10)
-    print("\nAREA AUDIT v2 — {} garden records ({} non-garden files skipped)\n"
-          .format(len(records), skipped))
+    print("\nAREA AUDIT v2 — {} garden records ({} non-garden entries skipped)\n"
+          .format(len(records), len(skipped)))
     for r in sorted(rows, key=lambda x: (not x["flags"], x["id"])):
         show = ";".join(f for f in r["flags"].split(";")
                         if f and f != "NO_SITE_ENVELOPE")
@@ -248,6 +283,20 @@ def main():
 
     print("\n{} records · {} flagged · {} blocking".format(
         len(rows), len(flagged), len(blocking)))
+
+    if dupes:
+        print("\nDUPLICATE IDS — two files claim the same record:")
+        for rid, a_src, b_src in dupes:
+            print("  {:<24} {} / {}".format(rid, a_src, b_src))
+        print("  Richest record used. Resolve at source.")
+
+    if skipped:
+        seen = {}
+        for f, why in skipped:
+            seen.setdefault(f, why)
+        print("\nSkipped as non-records:")
+        for f, why in sorted(seen.items()):
+            print("  {:<28} {}".format(f, why))
 
     if pii_rows:
         print("\nPII — address-like fields outside the local-only allowlist:")
@@ -261,7 +310,7 @@ def main():
     print("\nGATE: Phase 1 is not complete while any BLOCKING flag remains.")
     print("Field-verify, correct through sync_registry.py, and sign off genuine")
     print("outliers in confirmed-areas.json:")
-    print('  { "<garden_id>": { "area_sqm": 6070, "verified_by": "TL", "date": "2026-08-28" } }\n')
+    print('  { "<the record id, e.g. ER-VIC-NIL-BEL-001>": { "area_sqm": 6070, "verified_by": "TL", "date": "2026-08-28" } }\n')
 
     if a.csv and rows:
         with open(a.csv, "w", newline="") as fh:

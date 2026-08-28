@@ -31,7 +31,7 @@ Exits non-zero while any record carries a flag other than `NO_SITE_ENVELOPE`. Ar
 #   method_version: "1.0"
 #   locale: "AU-VIC"
 python3 scripts/sync_registry.py
-python3 tests/test_parity.py          # must stay 16/16
+python3 tests/test_parity.py          # parity must not change (23/0 at time of writing)
 ```
 
 **Step 3 — wire the real pillar caps (H-001).**
