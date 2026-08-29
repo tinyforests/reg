@@ -80,7 +80,7 @@ def fetch_live(garden_id):
         }
     )
     try:
-        with urllib.request.urlopen(req, timeout=20) as resp:
+        with urllib.request.urlopen(req, timeout=90) as resp:
             raw = resp.read().decode()
     except Exception as e:
         print("  WARN fetch failed for %s: %s" % (garden_id, e))

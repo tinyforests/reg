@@ -38,6 +38,10 @@ def score_js(json_path):
 
 def run():
     verbose = '--verbose' in sys.argv
+    # --parity-only: fail ONLY on JS<->PY engine drift, not on stale stored score
+    # blocks (a garden's own stale block is fixed by sync when it's published, so it
+    # must not block publishing an unrelated garden). Used as publish.py's safety gate.
+    parity_only = '--parity-only' in sys.argv
 
     garden_files = sorted(
         f for f in os.listdir(DATA_DIR)
@@ -109,7 +113,7 @@ def run():
     if failures and not verbose:
         print('Run with --verbose for per-pillar breakdown.\n')
 
-    if failures or stale_blocks:
+    if failures or (stale_blocks and not parity_only):
         for f in failures:
             if 'error' not in f and not verbose:
                 js, py = f['js'], f['py']
