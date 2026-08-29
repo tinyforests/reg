@@ -1254,7 +1254,90 @@ function handleSaveGardenRecord(payload) {
     sh.appendRow([gardenId, now, jsonBlob]);
   }
 
+  // Auto-link invited neighbours: if this garden's steward was invited by another
+  // registered garden, create the mutual invited adjacency link now that it exists.
+  try { linkInvitedNeighbours(gardenId); } catch (e) {}
+
   return jsonResp({ok: true, garden_id: gardenId, updated_at: now});
+}
+
+/* ---- Invited-neighbour auto-link -------------------------------------------
+ * When an invited neighbour registers (this garden now has an id), find any
+ * pending Neighbour Invites addressed to this garden's steward email and create a
+ * MUTUAL invited adjacency link (source:'invited'), which counts regardless of the
+ * 500 m radius and survives sync_registry (which preserves source:'invited').
+ * Idempotent: each invite row is marked 'linked' once actioned. The link reaches
+ * the public profile after the normal pipeline (pull_live_records -> sync -> commit).
+ */
+function linkInvitedNeighbours(gardenId) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var inv = ss.getSheetByName('Neighbour Invites');
+  if (!inv || inv.getLastRow() <= 1) return;
+
+  var emails = _emailsForGarden(gardenId, ss);
+  if (!emails.length) return;
+
+  // cols: 0 garden_id(inviter) 2 inviter_email 3 neighbour_email 6 status
+  var rows = inv.getRange(2, 1, inv.getLastRow() - 1, 7).getValues();
+  for (var i = 0; i < rows.length; i++) {
+    if (String(rows[i][6] || '').toLowerCase() === 'linked') continue;
+    var nEmail = String(rows[i][3] || '').toLowerCase().trim();
+    if (emails.indexOf(nEmail) < 0) continue;
+    var inviterId = String(rows[i][0] || '').trim();
+    if (!inviterId || inviterId === gardenId) continue;
+    _addInvitedLink(inviterId, gardenId, ss);
+    _addInvitedLink(gardenId, inviterId, ss);
+    inv.getRange(i + 2, 7).setValue('linked');
+  }
+}
+
+/* Steward email(s) for a garden: Steward Emails sheet + Submissions (col Z id -> col D email). */
+function _emailsForGarden(gardenId, ss) {
+  var out = [], g = gardenId.toLowerCase();
+  var se = ss.getSheetByName('Steward Emails');
+  if (se && se.getLastRow() > 1) {
+    var sd = se.getRange(2, 1, se.getLastRow() - 1, 2).getValues();
+    for (var i = 0; i < sd.length; i++)
+      if (String(sd[i][0]).toLowerCase() === g && sd[i][1]) out.push(String(sd[i][1]).toLowerCase().trim());
+  }
+  var sub = ss.getSheetByName('Submissions');
+  if (sub && sub.getLastRow() > 1) {
+    var bd = sub.getRange(2, 1, sub.getLastRow() - 1, 26).getValues();
+    for (var j = 0; j < bd.length; j++)
+      if (String(bd[j][25]).toLowerCase() === g && bd[j][3]) out.push(String(bd[j][3]).toLowerCase().trim());
+  }
+  return out;
+}
+
+/* Add a source:'invited' neighbour entry to gardenId's stored record (deduped by id). */
+function _addInvitedLink(gardenId, neighbourId, ss) {
+  var sh = ss.getSheetByName('Records');
+  if (!sh) return;
+  var data = sh.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (String(data[i][0]).trim() !== gardenId) continue;
+    var rec; try { rec = JSON.parse(data[i][2]); } catch (e) { return; }
+    var c = rec.connectivity || (rec.connectivity = {});
+    var adj = c.adjacent_registered_gardens || (c.adjacent_registered_gardens = []);
+    for (var k = 0; k < adj.length; k++)
+      if ((adj[k].garden_id || adj[k].id) === neighbourId) return;  // already linked
+    adj.push({ id: neighbourId, garden_id: neighbourId,
+               name: _gardenName(neighbourId, ss) || neighbourId,
+               verified: true, source: 'invited' });
+    sh.getRange(i + 1, 1, 1, 3).setValues([[gardenId, new Date().toISOString(), JSON.stringify(rec)]]);
+    return;
+  }
+}
+
+function _gardenName(gardenId, ss) {
+  var sh = ss.getSheetByName('Records');
+  if (!sh) return null;
+  var data = sh.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++)
+    if (String(data[i][0]).trim() === gardenId) {
+      try { return JSON.parse(data[i][2]).garden_name || null; } catch (e) { return null; }
+    }
+  return null;
 }
 
 /*
