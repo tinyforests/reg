@@ -30,16 +30,24 @@
     } catch (e) { return ''; }
   }
 
-  /* Link this device + email to a garden. Called after token verification. */
-  function markSteward(gardenId, email) {
+  /* Link this device + email to a garden. Called after token verification.
+     session_token (optional) gates live requests for private data (precise map). */
+  function markSteward(gardenId, email, session_token) {
     if (!gardenId) return;
     try {
       localStorage.setItem(STEWARD_PFX + gardenId, JSON.stringify({
-        email:      (email || '').toLowerCase().trim(),
-        device_id:  getDeviceId(),
-        linked_at:  new Date().toISOString()
+        email:         (email || '').toLowerCase().trim(),
+        session_token: session_token || null,
+        device_id:     getDeviceId(),
+        linked_at:     new Date().toISOString()
       }));
     } catch (e) {}
+  }
+
+  /* The steward's session token for a garden, or null. */
+  function getStewardSession(gardenId) {
+    var s = getSteward(gardenId);
+    return (s && s.session_token) || null;
   }
 
   /* Returns true if this device has been linked to the given garden, or admin override is set. */
@@ -92,7 +100,7 @@
       .then(function (r) { return r.json(); })
       .then(function (json) {
         if (json && json.ok && json.email) {
-          markSteward(gardenId, json.email);
+          markSteward(gardenId, json.email, json.session_token);
           banner.textContent = 'Profile claimed — loading your steward view…';
           setTimeout(function () { window.location.reload(); }, 900);
         } else {
@@ -270,13 +278,14 @@
     };
   }
 
-  var api = { getDeviceId: getDeviceId, markSteward: markSteward, isSteward: isSteward, getSteward: getSteward, mountStewardUnlock: mountStewardUnlock, handleClaimParam: handleClaimParam, endpoint: ENDPOINT };
+  var api = { getDeviceId: getDeviceId, markSteward: markSteward, isSteward: isSteward, getSteward: getSteward, getStewardSession: getStewardSession, mountStewardUnlock: mountStewardUnlock, handleClaimParam: handleClaimParam, endpoint: ENDPOINT };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else {
     root.getDeviceId        = getDeviceId;
     root.markSteward        = markSteward;
     root.isSteward          = isSteward;
     root.getSteward         = getSteward;
+    root.getStewardSession  = getStewardSession;
     root.mountStewardUnlock = mountStewardUnlock;
     root.handleClaimParam   = handleClaimParam;
     root.RegIdentity        = api;

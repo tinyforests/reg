@@ -63,6 +63,7 @@ function doGet(e) {
   if (params.action === 'get_all_coords')        return handleGetAllCoords(params);
   if (params.action === 'get_garden_admin_data') return handleGetGardenAdminData(params);
   if (params.action === 'get_garden_record')     return handleGetGardenRecord(params);
+  if (params.action === 'get_precise_map')       return handleGetPreciseMap(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -280,10 +281,99 @@ function handleVerifyClaimToken(params) {
     // Valid — mark used (sheet row = i + 2, column = iUsed + 1, both 1-indexed)
     tokenSheet.getRange(i + 2, iUsed + 1).setValue(true);
 
-    return jsonResp({ok: true, email: String(row[iEmail])});
+    // Issue a persistent steward session token so the client can later request
+    // gated data (precise map coords) without re-doing the magic-link flow.
+    var session = _issueStewardSession(gardenId, String(row[iEmail]), ss);
+    return jsonResp({ok: true, email: String(row[iEmail]), session_token: session});
   }
 
   return jsonResp({ok: false, error: 'Invalid or expired link.'});
+}
+
+/* ---- Steward sessions + gated precise-map ---------------------------------
+ * Precise garden coordinates are private and never reach the public repo or the
+ * public get_garden_record response. A verified steward gets a long-lived session
+ * token (issued at magic-link verify) which the profile exchanges here for the
+ * precise coords of their own garden — so the accurate network map is drawn only
+ * for the authenticated owner, in the browser, live.
+ */
+var STEWARD_SESSION_SHEET = 'Steward Sessions';
+var STEWARD_SESSION_HEADERS = ['garden_id', 'email', 'session_token', 'issued_at'];
+var STEWARD_SESSION_DAYS = 180;
+
+function _issueStewardSession(gardenId, email, ss) {
+  var sheet = ss.getSheetByName(STEWARD_SESSION_SHEET);
+  if (!sheet) {
+    sheet = ss.insertSheet(STEWARD_SESSION_SHEET);
+    sheet.appendRow(STEWARD_SESSION_HEADERS);
+    sheet.setFrozenRows(1);
+  }
+  var token = generateToken() + generateToken();  // 64 chars
+  sheet.appendRow([gardenId, String(email || '').toLowerCase(), token, new Date().toISOString()]);
+  return token;
+}
+
+function _validStewardSession(gardenId, sessionToken, ss) {
+  var sheet = ss.getSheetByName(STEWARD_SESSION_SHEET);
+  if (!sheet || sheet.getLastRow() <= 1) return false;
+  var data = sheet.getRange(2, 1, sheet.getLastRow() - 1, 4).getValues();
+  var cutoff = new Date(Date.now() - STEWARD_SESSION_DAYS * 86400000);
+  for (var i = 0; i < data.length; i++) {
+    if (String(data[i][0]).toLowerCase() === gardenId.toLowerCase() &&
+        String(data[i][2]) === sessionToken) {
+      var issued = new Date(String(data[i][3]));
+      if (!isNaN(issued.getTime()) && issued > cutoff) return true;
+    }
+  }
+  return false;
+}
+
+/* Load a stored record blob (with its precise coords) from the Records sheet. */
+function _recordBlob(gardenId, ss) {
+  var sh = ss.getSheetByName('Records');
+  if (!sh) return null;
+  var data = sh.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++)
+    if (String(data[i][0]).trim() === gardenId) {
+      try { return JSON.parse(data[i][2]); } catch (e) { return null; }
+    }
+  return null;
+}
+
+/* get_precise_map — precise garden + park + neighbour coords, steward-gated. */
+function handleGetPreciseMap(params) {
+  var gardenId = safeStr((params.garden_id || '').trim(), 40);
+  var token    = safeStr((params.session_token || '').trim(), 160);
+  if (!gardenId || !token) return jsonResp({ok: false, error: 'garden_id and session_token required'});
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!_validStewardSession(gardenId, token, ss)) return jsonResp({ok: false, error: 'Not authorised'});
+
+  var rec = _recordBlob(gardenId, ss);
+  if (!rec) return jsonResp({ok: false, error: 'Not found'});
+  var c = rec.connectivity || {};
+
+  var out = {
+    lat: c.lat != null ? c.lat : c.display_lat,
+    lng: c.lng != null ? c.lng : c.display_lng,
+    park_name: c.park_name || null,
+    park_lat: c.park_lat != null ? c.park_lat : null,
+    park_lng: c.park_lng != null ? c.park_lng : null,
+    neighbours: []
+  };
+  var adj = c.adjacent_registered_gardens || [];
+  for (var i = 0; i < adj.length; i++) {
+    var nid = adj[i].garden_id || adj[i].id;
+    var nrec = nid ? _recordBlob(nid, ss) : null;
+    var nc = (nrec && nrec.connectivity) || {};
+    out.neighbours.push({
+      garden_id: nid, name: adj[i].name || nid,
+      lat: nc.lat != null ? nc.lat : nc.display_lat,
+      lng: nc.lng != null ? nc.lng : nc.display_lng,
+      verified: adj[i].verified === true, source: adj[i].source || null
+    });
+  }
+  return jsonResp({ok: true, precise: out});
 }
 
 /* ---- Auth helper (run once from editor to grant MailApp scope) ---- */
@@ -1358,6 +1448,16 @@ function handleGetGardenRecord(params) {
     if (String(data[i][0]).trim() === gardenId) {
       try {
         var record = JSON.parse(data[i][2]);
+        // Strip precise coordinates — this endpoint is public. Precise coords are
+        // steward-gated via get_precise_map. Fuzzed display_lat/lng + public park
+        // coords remain. (Garden-extent geometry under canopy is left as-is; it is
+        // client-gated on the profile.)
+        var pc = record.connectivity;
+        if (pc) {
+          delete pc.lat; delete pc.lng;
+          var pa = pc.adjacent_registered_gardens || [];
+          for (var k = 0; k < pa.length; k++) { delete pa[k].lat; delete pa[k].lng; }
+        }
         return jsonResp({ok: true, data: record, updated_at: String(data[i][1])});
       } catch (e) {
         return jsonResp({ok: false, error: 'Stored record is invalid JSON'});
