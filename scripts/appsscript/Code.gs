@@ -373,6 +373,11 @@ function handleGetPreciseMap(params) {
       verified: adj[i].verified === true, source: adj[i].source || null
     });
   }
+
+  // Canopy garden-extent geometry is precise property boundary — also steward-only.
+  var cx = (rec.canopy && rec.canopy.existing) || {};
+  out.canopy_extent = cx.garden_extent_geojson || null;
+
   return jsonResp({ok: true, precise: out});
 }
 
@@ -1457,6 +1462,11 @@ function handleGetGardenRecord(params) {
           delete pc.lat; delete pc.lng;
           var pa = pc.adjacent_registered_gardens || [];
           for (var k = 0; k < pa.length; k++) { delete pa[k].lat; delete pa[k].lng; }
+        }
+        // Canopy garden-extent geometry is precise property boundary — steward-gated
+        // via get_precise_map, never public.
+        if (record.canopy && record.canopy.existing) {
+          delete record.canopy.existing.garden_extent_geojson;
         }
         return jsonResp({ok: true, data: record, updated_at: String(data[i][1])});
       } catch (e) {

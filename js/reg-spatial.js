@@ -120,6 +120,23 @@
     setTimeout(function () { map.invalidateSize(); }, 100);
   }
 
+  /* Draw the canopy garden-extent overlay from geometry fetched via the steward-
+     gated endpoint (reg-precise-map.js). Precise property geometry never comes from
+     the static file — only served token-gated to the signed-in steward. */
+  function renderCanopyOverlay(geometry) {
+    var host = el('canopyMap');
+    if (!host || !geometry || typeof L === 'undefined') return;
+    host.innerHTML = ''; host.style.display = 'block';
+    host.style.alignItems = ''; host.style.justifyContent = '';
+    var map = L.map(host, { attributionControl: false, scrollWheelZoom: false });
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 21, maxNativeZoom: 19 }).addTo(map);
+    var boundary = L.geoJSON(geometry, { style: { color: '#7a9e5f', weight: 2, fill: false } }).addTo(map);
+    try { map.fitBounds(boundary.getBounds(), { padding: [20, 20] }); } catch (e) {}
+    var legend = el('canopyMapLegend'); if (legend) legend.style.display = '';
+    setTimeout(function () { map.invalidateSize(); }, 100);
+  }
+
   function renderHabitatContext(R) {
     var sec = el('habitat-context');
     var hv = R && R.habitat_context && R.habitat_context.habitat_value;
@@ -141,5 +158,6 @@
   }
 
   root.renderSpatialSections = renderSpatialSections;
-  if (typeof module !== 'undefined' && module.exports) module.exports = { renderSpatialSections: renderSpatialSections };
+  root.renderCanopyOverlay = renderCanopyOverlay;
+  if (typeof module !== 'undefined' && module.exports) module.exports = { renderSpatialSections: renderSpatialSections, renderCanopyOverlay: renderCanopyOverlay };
 })(typeof window !== 'undefined' ? window : this);

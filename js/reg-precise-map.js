@@ -25,7 +25,14 @@
     fetch(ENDPOINT + '?action=get_precise_map&garden_id=' + encodeURIComponent(gardenId) +
           '&session_token=' + encodeURIComponent(token) + '&_cb=' + Date.now())
       .then(function (r) { return r.json(); })
-      .then(function (d) { if (d && d.ok && d.precise && d.precise.lat != null) _drawPrecise(d.precise); })
+      .then(function (d) {
+        if (!d || !d.ok || !d.precise) return;
+        if (d.precise.lat != null) _drawPrecise(d.precise);
+        // Canopy garden-extent overlay — same steward-gated geometry.
+        if (d.precise.canopy_extent && typeof renderCanopyOverlay === 'function') {
+          renderCanopyOverlay(d.precise.canopy_extent);
+        }
+      })
       .catch(function () {});
   }
 
