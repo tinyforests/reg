@@ -19,11 +19,21 @@
 
   function renderPreciseMapForSteward(gardenId) {
     if (!gardenId) return;
-    if (typeof isSteward !== 'function' || !isSteward(gardenId)) return;   // public → keep the circle
-    var token = (typeof getStewardSession === 'function') ? getStewardSession(gardenId) : null;
-    if (!token) return;   // claimed on an old device without a session token → keep the circle
+    // Admin path: an admin who has stored their token sees precise maps on ANY garden.
+    var adminTok = null;
+    try { adminTok = localStorage.getItem('er_admin_token'); } catch (e) {}
+    var auth;
+    if (adminTok) {
+      auth = '&admin_token=' + encodeURIComponent(adminTok);
+    } else {
+      // Steward path: must be the signed-in owner with a session token.
+      if (typeof isSteward !== 'function' || !isSteward(gardenId)) return;   // public → keep the circle
+      var token = (typeof getStewardSession === 'function') ? getStewardSession(gardenId) : null;
+      if (!token) return;   // claimed before session tokens existed → re-claim to get precise
+      auth = '&session_token=' + encodeURIComponent(token);
+    }
     fetch(ENDPOINT + '?action=get_precise_map&garden_id=' + encodeURIComponent(gardenId) +
-          '&session_token=' + encodeURIComponent(token) + '&_cb=' + Date.now())
+          auth + '&_cb=' + Date.now())
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d || !d.ok || !d.precise) return;

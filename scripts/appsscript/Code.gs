@@ -344,10 +344,15 @@ function _recordBlob(gardenId, ss) {
 function handleGetPreciseMap(params) {
   var gardenId = safeStr((params.garden_id || '').trim(), 40);
   var token    = safeStr((params.session_token || '').trim(), 160);
-  if (!gardenId || !token) return jsonResp({ok: false, error: 'garden_id and session_token required'});
+  var admin    = safeStr((params.admin_token || '').trim(), 160);
+  if (!gardenId) return jsonResp({ok: false, error: 'garden_id required'});
 
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  if (!_validStewardSession(gardenId, token, ss)) return jsonResp({ok: false, error: 'Not authorised'});
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  var isAdmin = stored && admin === stored;
+  if (!isAdmin && !_validStewardSession(gardenId, token, ss)) {
+    return jsonResp({ok: false, error: 'Not authorised'});
+  }
 
   var rec = _recordBlob(gardenId, ss);
   if (!rec) return jsonResp({ok: false, error: 'Not found'});
