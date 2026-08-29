@@ -728,11 +728,11 @@
       "garden_name": "The Auburn Test",
       "suburb": "Hawthorn",
       "state": "VIC",
-      "score": 56,
+      "score": 51,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 5
+        "points_to_next": 10
       },
       "primary_evc": "Not assessed (TBC)",
       "bioregion": "Gippsland Plain",
@@ -740,13 +740,12 @@
       "verification_level": "site_visit",
       "verification_label": "Site Visit",
       "last_verified": "Aug 2026",
-      "badge_count": 7,
+      "badge_count": 6,
       "badges": [
         "indigenous_dominant",
         "habitat_builder",
         "amphibian_active",
         "water_wise",
-        "corridor_node",
         "site_visit_badge",
         "fauna_record"
       ],

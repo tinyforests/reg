@@ -16,12 +16,12 @@
   "designer_id": null,
   "enroller": "Self-enrolled",
   "verifier": "Gardener & Son",
-  "area_sqm": 0,
+  "area_sqm": 15,
   "target_score": 60,
   "description": "Self-enrolled garden at 140 Auburn Road, Hawthorn. Registered via the Ecological Registry self-enrolment form. Submission ID: SUB-1785922832618-DG3CE.",
   "evc": {
-    "name": "Not assessed",
-    "code": "TBC",
+    "name": "Floodplain Riparian Woodland",
+    "code": "EVC 56",
     "bioregion": "Gippsland Plain",
     "bioregion_code": "5.1",
     "note": ""
@@ -79,15 +79,15 @@
     ]
   },
   "connectivity": {
-    "display_lat": -37.8212,
-    "display_lng": 145.0428,
+    "display_lat": -37.8221,
+    "display_lng": 145.0438,
     "adjacent_park": true,
     "park_name": "Local park",
     "park_distance_m": 200,
     "park_lat": -37.821291,
     "park_lng": 145.047701,
     "adjacent_registered_gardens": [],
-    "corridor_node_confirmed": true,
+    "corridor_node_confirmed": false,
     "effective_ecological_area_ha": 0,
     "cluster_area_ha": 0,
     "cluster_name": "Hawthorn",
@@ -118,6 +118,15 @@
   ],
   "activity_log": [
     {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "ts": "2026-08-29T07:38:51.103Z",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological score 56 → 51; Corridor node removed."
+    },
+    {
       "title": "Initial field observation",
       "date": "Aug 2026",
       "type": "Field Note",
@@ -136,5 +145,64 @@
   "garden_address": "",
   "steward_email": "",
   "ward": null,
-  "yield": null
+  "yield": null,
+  "score": {
+    "total": 51,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 13,
+        "max": 25,
+        "notes": [
+          "6-11 indigenous species",
+          "Indigenous dominant",
+          "3 structural layers",
+          "15-29% canopy"
+        ]
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 14,
+        "max": 20,
+        "notes": [
+          "Soil health 3/5",
+          "Water function 3/5",
+          "Rainwater system",
+          "Moisture basin",
+          "Swale installed"
+        ]
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 17,
+        "max": 20,
+        "notes": [
+          "3-4 habitat nodes",
+          "Embedded logs",
+          "Rock refuges",
+          "Water feature",
+          "Nest boxes",
+          "2 fauna sightings"
+        ]
+      },
+      {
+        "label": "Connectivity",
+        "score": 2,
+        "max": 20,
+        "notes": [
+          "Park within 300m"
+        ]
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 5,
+        "max": 15,
+        "notes": [
+          "Photos",
+          "Site visit"
+        ]
+      }
+    ]
+  }
 }

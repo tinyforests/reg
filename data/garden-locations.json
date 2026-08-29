@@ -2,115 +2,115 @@
   {
     "garden_id": "ER-AU-VIC-NIL-BEL-001",
     "garden_name": "Wattle Glen Bush Garden",
-    "display_lat": -37.6857,
-    "display_lng": 145.1962
+    "display_lat": -37.6851,
+    "display_lng": 145.1949
   },
   {
     "garden_id": "ER-AU-VIC-SH-ARU-0001",
     "garden_name": "Arundel",
-    "display_lat": -37.8336,
-    "display_lng": 145.0969
+    "display_lat": -37.8326,
+    "display_lng": 145.0955
   },
   {
     "garden_id": "ER-AU-VIC-SY-NIC-0002",
     "garden_name": "Nicholson",
-    "display_lat": -37.8416,
-    "display_lng": 144.9845
+    "display_lat": -37.8422,
+    "display_lng": 144.9855
   },
   {
     "garden_id": "ER-AU-VIC-BAL-001",
     "garden_name": "Parring",
-    "display_lat": -37.8141,
-    "display_lng": 145.0894
+    "display_lat": -37.8132,
+    "display_lng": 145.0901
   },
   {
     "garden_id": "ER-AU-VIC-SH-MID-001",
     "garden_name": "Middlesex",
-    "display_lat": -37.8311,
-    "display_lng": 145.0864
+    "display_lat": -37.8314,
+    "display_lng": 145.0876
   },
   {
     "garden_id": "ER-AU-VIC-SH-SIR-0001",
     "garden_name": "Sir Garnet",
-    "display_lat": -37.8188,
-    "display_lng": 145.0875
+    "display_lat": -37.8201,
+    "display_lng": 145.089
   },
   {
     "garden_id": "ER-AU-VIC-SH-CAN-0001",
     "garden_name": "Canterbury G02",
-    "display_lat": -37.8255,
-    "display_lng": 145.0866
+    "display_lat": -37.825,
+    "display_lng": 145.0867
   },
   {
     "garden_id": "ER-AU-VIC-CAN-MON-001",
     "garden_name": "Mont Albert",
-    "display_lat": -37.8188,
-    "display_lng": 145.0724
+    "display_lat": -37.8179,
+    "display_lng": 145.0712
   },
   {
     "garden_id": "ER-AU-VIC-MAN-EVE-001",
     "garden_name": "Evelina",
-    "display_lat": -37.8057,
-    "display_lng": 145.1047
+    "display_lat": -37.8055,
+    "display_lng": 145.1046
   },
   {
     "garden_id": "ER-AU-VIC-BLA-DEW-001",
     "garden_name": "Dewrang",
-    "display_lat": -37.816,
-    "display_lng": 145.1395
+    "display_lat": -37.8161,
+    "display_lng": 145.1406
   },
   {
     "garden_id": "ER-AU-VIC-BAL-PRD-001",
     "garden_name": "Parring Stepping Stone",
-    "display_lat": -37.8126,
-    "display_lng": 145.0925
+    "display_lat": -37.8121,
+    "display_lng": 145.0914
   },
   {
     "garden_id": "ER-AU-VIC-NTH-RUP-001",
     "garden_name": "Rupert",
-    "display_lat": -37.774,
-    "display_lng": 145.0027
+    "display_lat": -37.7735,
+    "display_lng": 145.0019
   },
   {
     "garden_id": "ER-AU-VIC-BOR-WIN-001",
     "garden_name": "Windella",
-    "display_lat": -37.7982,
+    "display_lat": -37.7973,
     "display_lng": 145.0503
   },
   {
     "garden_id": "ER-AU-VIC-BOR-WIN-002",
     "garden_name": "Smokebush",
-    "display_lat": -37.7936,
-    "display_lng": 145.0522
+    "display_lat": -37.7934,
+    "display_lng": 145.0517
   },
   {
     "garden_id": "ER-AU-VIC-WHI-YRK-001",
     "garden_name": "York Street",
-    "display_lat": -37.8177,
-    "display_lng": 145.1016
+    "display_lat": -37.8179,
+    "display_lng": 145.1013
   },
   {
     "garden_id": "ER-AU-VIC-WHI-VIC-001",
     "garden_name": "Victoria Crescent",
-    "display_lat": -37.8157,
-    "display_lng": 145.1048
+    "display_lat": -37.8163,
+    "display_lng": 145.1049
   },
   {
     "garden_id": "ER-AU-VIC-CAN-FLI-001",
     "garden_name": "Flinders",
-    "display_lat": -37.8238,
-    "display_lng": 145.0848
+    "display_lat": -37.8229,
+    "display_lng": 145.0844
   },
   {
     "garden_id": "ER-AU-VIC-HW-AUB-0001",
     "garden_name": "The Auburn Test",
-    "display_lat": -37.8212,
-    "display_lng": 145.0428
+    "display_lat": -37.822875,
+    "display_lng": 145.044706
   },
   {
     "garden_id": "ER-AU-VIC-WHI-YRK-002",
     "garden_name": "Sensory Garden",
-    "display_lat": -37.8114,
-    "display_lng": 145.0841
+    "display_lat": -37.8122,
+    "display_lng": 145.0855
   }
 ]
