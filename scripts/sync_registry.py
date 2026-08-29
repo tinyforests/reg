@@ -84,8 +84,8 @@ def _fuzz_coords(lat, lng, garden_id, seed):
     Uses HMAC-SHA256 so the offset cannot be reconstructed from the public JS or JSON.
     Returns (display_lat, display_lng) rounded to 4 dp (≈11 m precision)."""
     digest = hmac.new(seed.encode(), garden_id.encode(), hashlib.sha256).digest()
-    dlat = (struct.unpack('>H', digest[0:2])[0] / 65535 - 0.5) * 0.005  # ±~278 m
-    dlng = (struct.unpack('>H', digest[2:4])[0] / 65535 - 0.5) * 0.006  # ±~250 m at -37°
+    dlat = (struct.unpack('>H', digest[0:2])[0] / 65535 - 0.5) * 0.0025  # ±~139 m
+    dlng = (struct.unpack('>H', digest[2:4])[0] / 65535 - 0.5) * 0.003   # ±~125 m at -37°
     return round(lat + dlat, 4), round(lng + dlng, 4)
 
 

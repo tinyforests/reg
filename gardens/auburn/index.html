@@ -1152,11 +1152,11 @@ function initCorridorMap(record) {
   var bounds = [[displayLat, displayLng]];
 
   /* Privacy circle — the garden is somewhere INSIDE this area, not at the centre.
-     Radius (450 m) exceeds the ~375 m max coordinate fuzz, so the real location is
+     Radius (225 m) exceeds the ~190 m max coordinate fuzz, so the real location is
      genuinely within the circle, while the centre stays the fuzzed point — no
      precise coordinate is ever in the public data. The map frames the circle. */
   var primaryCircle = L.circle([displayLat, displayLng], {
-    radius: 450,
+    radius: 225,
     color: '#3d4535',
     fillColor: '#7a9e5f',
     fillOpacity: 0.12,
