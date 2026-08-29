@@ -54,6 +54,10 @@
   function isSteward(gardenId) {
     if (!gardenId) return false;
     try {
+      // er_admin_token is the single admin key: it authenticates the precise-map
+      // fetch AND marks admin as a steward here, so the unlock bar dismisses and
+      // the steward UI shows. (er_admin === '1' kept for backward compatibility.)
+      if (localStorage.getItem('er_admin_token')) return true;
       if (localStorage.getItem('er_admin') === '1') return true;
       return !!localStorage.getItem(STEWARD_PFX + gardenId);
     } catch (e) { return false; }
