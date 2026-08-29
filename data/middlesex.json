@@ -82,8 +82,8 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "display_lat": -37.8311,
-    "display_lng": 145.0864,
+    "display_lat": -37.8314,
+    "display_lng": 145.0876,
     "adjacent_park": true,
     "park_name": "Surrey Hills Reserve",
     "park_distance_m": 120,
@@ -96,8 +96,9 @@
         "name": "Arundel",
         "verified": true,
         "distance_m": 457,
-        "display_lat": -37.8336,
-        "display_lng": 145.0969
+        "source": "geographic",
+        "display_lat": -37.8326,
+        "display_lng": 145.0955
       }
     ],
     "corridor_node_confirmed": false,

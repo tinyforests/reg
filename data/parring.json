@@ -101,8 +101,8 @@
     ]
   },
   "connectivity": {
-    "display_lat": -37.8141,
-    "display_lng": 145.0894,
+    "display_lat": -37.8132,
+    "display_lng": 145.0901,
     "adjacent_park": true,
     "park_name": "Maranoa Gardens",
     "park_distance_m": 200,
@@ -115,8 +115,9 @@
         "name": "Parring Stepping Stone",
         "verified": true,
         "distance_m": 78,
-        "display_lat": -37.8126,
-        "display_lng": 145.0925
+        "source": "geographic",
+        "display_lat": -37.8121,
+        "display_lng": 145.0914
       },
       {
         "id": "ER-AU-VIC-WHI-YRK-002",
@@ -124,8 +125,9 @@
         "name": "Sensory Garden",
         "verified": true,
         "distance_m": 340,
-        "display_lat": -37.8114,
-        "display_lng": 145.0841
+        "source": "geographic",
+        "display_lat": -37.8122,
+        "display_lng": 145.0855
       }
     ],
     "corridor_node_confirmed": false,

@@ -11,7 +11,7 @@
   "designer_id": "gardener-and-son",
   "enroller": "Gardener & Son",
   "verifier": null,
-  "area_sqm": 180,
+  "area_sqm": 843,
   "description": "Arundel responds to a fragmented Grassy Woodland and Valley Grassy Forest context, restoring ecological function through layered planting, dense groundcover and woodland structure. The garden reconnects soil, water and habitat to South Surrey Park, contributing to local biodiversity and long-term landscape resilience.",
   "evc": {
     "name": "Valley Grassy Forest",
@@ -92,13 +92,13 @@
     ]
   },
   "connectivity": {
-    "display_lat": -37.8336,
-    "display_lng": 145.0969,
+    "display_lat": -37.8326,
+    "display_lng": 145.0955,
     "adjacent_park": true,
     "park_name": "South Surrey Park",
     "park_distance_m": 45,
-    "park_lat": -37.831735,
-    "park_lng": 145.096353,
+    "park_lat": -37.833177,
+    "park_lng": 145.093799,
     "adjacent_registered_gardens": [
       {
         "id": "ER-AU-VIC-SH-MID-001",
@@ -106,12 +106,13 @@
         "name": "Middlesex",
         "verified": true,
         "distance_m": 457,
-        "display_lat": -37.8311,
-        "display_lng": 145.0864
+        "source": "geographic",
+        "display_lat": -37.8314,
+        "display_lng": 145.0876
       }
     ],
     "corridor_node_confirmed": false,
-    "effective_ecological_area_ha": 0.02,
+    "effective_ecological_area_ha": 0.08,
     "cluster_area_ha": 2.1,
     "cluster_name": "Surrey Hills",
     "cluster": {
@@ -182,6 +183,15 @@
     }
   ],
   "activity_log": [
+    {
+      "title": "Record updated — Gardener & Son",
+      "date": "Aug 2026",
+      "ts": "2026-08-29T05:48:00.989Z",
+      "type": "Record Update",
+      "category": "record_update",
+      "public": true,
+      "notes": "Ecological score 61 → 58."
+    },
     {
       "title": "Record updated — Gardener & Son",
       "date": "Aug 2026",
@@ -361,8 +371,8 @@
   "ward": "Gardiner",
   "lga": "Boroondara",
   "score": {
-    "total": 61,
-    "rating": "Registered Ecological Garden",
+    "total": 58,
+    "rating": "Ecological Garden",
     "categories": [
       {
         "label": "Biodiversity Structure",
@@ -397,11 +407,11 @@
       },
       {
         "label": "Connectivity",
-        "score": 15,
+        "score": 12,
         "max": 20,
         "notes": [
           "Park within 50m",
-          "3+ adjacent registered",
+          "1 adjacent registered",
           "2.1ha cluster"
         ]
       },

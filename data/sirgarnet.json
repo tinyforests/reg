@@ -82,8 +82,8 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "display_lat": -37.8188,
-    "display_lng": 145.0875,
+    "display_lat": -37.8201,
+    "display_lng": 145.089,
     "adjacent_park": true,
     "park_name": "Surrey Hills Council Nature Strip",
     "park_distance_m": 5,
@@ -96,8 +96,9 @@
         "name": "Canterbury G02",
         "verified": true,
         "distance_m": 474,
-        "display_lat": -37.8255,
-        "display_lng": 145.0866
+        "source": "geographic",
+        "display_lat": -37.825,
+        "display_lng": 145.0867
       }
     ],
     "corridor_node_confirmed": false,

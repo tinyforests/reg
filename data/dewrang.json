@@ -160,8 +160,8 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "display_lat": -37.816,
-    "display_lng": 145.1395,
+    "display_lat": -37.8161,
+    "display_lng": 145.1406,
     "adjacent_park": true,
     "park_name": "Gawler Chain",
     "park_distance_m": 0,

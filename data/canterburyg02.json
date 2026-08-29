@@ -79,8 +79,8 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "display_lat": -37.8255,
-    "display_lng": 145.0866,
+    "display_lat": -37.825,
+    "display_lng": 145.0867,
     "adjacent_park": true,
     "park_name": "Surrey Park",
     "park_distance_m": 30,
@@ -93,8 +93,9 @@
         "name": "Sir Garnet",
         "verified": true,
         "distance_m": 474,
-        "display_lat": -37.8188,
-        "display_lng": 145.0875
+        "source": "geographic",
+        "display_lat": -37.8201,
+        "display_lng": 145.089
       },
       {
         "id": "ER-AU-VIC-CAN-FLI-001",
@@ -102,8 +103,9 @@
         "name": "Flinders",
         "verified": true,
         "distance_m": 368,
-        "display_lat": -37.8238,
-        "display_lng": 145.0848
+        "source": "geographic",
+        "display_lat": -37.8229,
+        "display_lng": 145.0844
       }
     ],
     "corridor_node_confirmed": false,

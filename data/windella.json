@@ -100,7 +100,7 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "display_lat": -37.7982,
+    "display_lat": -37.7973,
     "display_lng": 145.0503,
     "adjacent_park": false,
     "park_name": "Gawler Chain",
@@ -114,8 +114,9 @@
         "name": "Smokebush",
         "verified": true,
         "distance_m": 354,
-        "display_lat": -37.7936,
-        "display_lng": 145.0522
+        "source": "geographic",
+        "display_lat": -37.7934,
+        "display_lng": 145.0517
       }
     ],
     "corridor_node_confirmed": false,

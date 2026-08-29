@@ -98,8 +98,8 @@
     "fauna_sightings": []
   },
   "connectivity": {
-    "display_lat": -37.8416,
-    "display_lng": 144.9845,
+    "display_lat": -37.8422,
+    "display_lng": 144.9855,
     "adjacent_park": true,
     "park_name": "Park",
     "park_distance_m": 0,

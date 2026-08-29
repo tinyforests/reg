@@ -114,8 +114,9 @@
         "name": "Canterbury G02",
         "verified": true,
         "distance_m": 368,
-        "display_lat": -37.8255,
-        "display_lng": 145.0866
+        "source": "geographic",
+        "display_lat": -37.825,
+        "display_lng": 145.0867
       }
     ],
     "corridor_node_confirmed": false,
@@ -130,8 +131,8 @@
     },
     "park_lat": -37.821874,
     "park_lng": 145.083018,
-    "display_lat": -37.8238,
-    "display_lng": 145.0848
+    "display_lat": -37.8229,
+    "display_lng": 145.0844
   },
   "evidence": {
     "has_photos": true,
