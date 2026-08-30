@@ -50,12 +50,16 @@
     .eco-card .quarantine{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.55; letter-spacing:.04em; color:var(--gardener-green); margin-top:10px; }
     .eco-card .ladder{ margin-top:20px; }
     .eco-card .track{ display:flex; align-items:center; margin:12px 0 0; }
-    .eco-card .dot{ width:10px; height:10px; flex:none; border:1px solid rgba(61,69,53,.55); border-radius:50% !important; background:transparent; }
+    .eco-card .dot{ width:10px; height:10px; flex:none; position:relative; border:1px solid rgba(61,69,53,.55); border-radius:50% !important; background:transparent; }
     .eco-card .dot.done{ background:var(--gardener-green); border-color:var(--gardener-green); }
-    .eco-card .dot.here{ background:var(--beige); border-color:var(--beige); width:14px; height:14px; box-shadow:0 0 0 3px rgba(255,240,220,.28); }
+    .eco-card .dot.here{ background:var(--beige); border-color:var(--beige); width:14px; height:14px; }
+    .eco-card .dot.here::after{ content:""; position:absolute; top:50%; left:50%; width:14px; height:14px; border-radius:50% !important; border:1.5px solid var(--beige); transform:translate(-50%,-50%); opacity:0; animation:ecPulse 2.8s ease-out infinite; pointer-events:none; }
+    @keyframes ecPulse{ 0%{ transform:translate(-50%,-50%) scale(.7); opacity:.6; } 70%{ transform:translate(-50%,-50%) scale(1.7); opacity:0; } 100%{ transform:translate(-50%,-50%) scale(1.7); opacity:0; } }
+    @media (prefers-reduced-motion: reduce){ .eco-card .dot.here::after{ animation:none; opacity:.35; } }
+    .eco-card .dot[data-tier]::before{ content:attr(data-tier); position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(3px); background:var(--gardener-green); color:var(--beige); border:1px solid var(--beige); font-family:'IBM Plex Mono',monospace; font-size:.58rem; letter-spacing:.03em; white-space:nowrap; padding:.25rem .45rem; opacity:0; pointer-events:none; transition:opacity .15s ease, transform .15s ease; z-index:10; }
+    .eco-card .dot[data-tier]:hover::before{ opacity:1; transform:translateX(-50%) translateY(0); }
     .eco-card .seg{ height:1px; flex:1; background:rgba(61,69,53,.35); }
     .eco-card .seg.done{ background:var(--gardener-green); }
-    .eco-card .ends{ display:flex; justify-content:space-between; gap:10px; margin-top:9px; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; }
     .eco-card .next{ font-size:12.5px; color:var(--ink); margin:11px 0 0; line-height:1.4; }
     .eco-card .next b{ font-weight:500; }
     .eco-card .bar-wrap{ margin-top:20px; }
@@ -283,7 +287,6 @@
             <div class="ladder">
               <p class="eyebrow">Level</p>
               <div class="track" id="ecTrack" role="img" aria-label="Level"></div>
-              <div class="ends"><span id="ecEndLo">Basic Garden</span><span id="ecEndHi">Urban Biodiversity Node</span></div>
               <p class="next" id="ecNext"></p>
             </div>
 
@@ -976,8 +979,6 @@ function buildEcoCard(R, result, badges) {
 
   var idx = buildLevelTrack('ecTrack', result.rating,
     { dot: 'dot', seg: 'seg', done: 'done', here: 'here', todo: '', segDone: 'done', segTodo: '' });
-  txt('ecEndLo', LEVEL_TIERS[0]);
-  txt('ecEndHi', LEVEL_TIERS[LEVEL_TIERS.length - 1]);
   var trackEl = document.getElementById('ecTrack');
   if (trackEl) trackEl.setAttribute('aria-label', 'Level ' + (idx + 1) + ' of ' + LEVEL_TIERS.length + ', ' + result.rating);
 
