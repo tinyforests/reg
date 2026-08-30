@@ -54,6 +54,13 @@
 
     /* Score box */
     .score-box { background: var(--signal); color: #3d4535; }
+    .hero-level-track { display:flex; align-items:center; margin:.55rem 0 .55rem; }
+    .hero-level-track .lt-dot { width:11px; height:11px; border-radius:50% !important; flex-shrink:0; border:1.5px solid #3d4535; background:transparent; }
+    .hero-level-track .lt-dot.passed { background:#3d4535; }
+    .hero-level-track .lt-dot.future { opacity:.4; }
+    .hero-level-track .lt-dot.current { width:14px; height:14px; background:#fff0dc; border-color:#fff0dc; }
+    .hero-level-track .lt-seg { flex:1; height:1.5px; background:#3d4535; }
+    .hero-level-track .lt-seg.future { opacity:.3; }
 
     /* Badge pill */
     .badge-pill { border: 1px solid rgba(61,69,53,.2); background: rgba(61,69,53,.06); padding: .25rem .65rem; font-size: .7rem; display: inline-block; margin: .15rem; }
@@ -167,8 +174,10 @@
                 <div style="font-size:.65rem;opacity:.5;margin-top:.3rem;color:#fff0dc">badges</div>
               </div>
             </div>
-            <div style="margin-bottom:.75rem">
-              <span id="heroTier" style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.25rem .6rem;display:inline-block">&nbsp;</span>
+            <div style="margin-bottom:.85rem">
+              <div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#fff0dc;opacity:.55;margin-bottom:.35rem;font-family:'IBM Plex Mono',monospace">Current level</div>
+              <div id="heroTier" style="font-size:1.05rem;font-weight:600;line-height:1.15;color:#fff0dc">&nbsp;</div>
+              <div class="hero-level-track" id="heroTierTrack"></div>
             </div>
             <div class="bar-track"><div id="heroBar" class="bar-fill" style="width:0%;background:#3d4535"></div></div>
             <div class="flex justify-between mt-2" style="font-size:.65rem;opacity:.5">
@@ -620,6 +629,21 @@
 
   function scoreOf(g) { return (g && typeof g.score === 'number') ? g.score : 0; }
 
+  var LEVEL_TIERS = ['Basic Garden','Habitat Garden','Ecological Garden','Registered Ecological Garden','High Habitat Garden','Urban Biodiversity Node'];
+  function buildHeroTier(name) {
+    var track = document.getElementById('heroTierTrack');
+    if (!track) return;
+    var idx = LEVEL_TIERS.indexOf(name);
+    if (idx === -1) idx = 0;
+    var h = '';
+    for (var i = 0; i < LEVEL_TIERS.length; i++) {
+      var cls = i < idx ? 'passed' : (i === idx ? 'current' : 'future');
+      h += '<div class="lt-dot ' + cls + '" title="' + LEVEL_TIERS[i] + '"></div>';
+      if (i < LEVEL_TIERS.length - 1) h += '<div class="lt-seg ' + (i < idx ? '' : 'future') + '"></div>';
+    }
+    track.innerHTML = h;
+  }
+
   function renderHero(g) {
     if (!g) return;
     var rating = g.rating || {};
@@ -629,6 +653,7 @@
     setText('heroScore', scoreOf(g));
     setText('heroBadges', (typeof g.badge_count === 'number') ? g.badge_count : badges.length);
     setText('heroTier', rating.current || g.rating_label || 'Registered');
+    buildHeroTier(rating.current || g.rating_label);
 
     var bar = document.getElementById('heroBar');
     if (bar) bar.style.width = Math.max(0, Math.min(100, scoreOf(g))) + '%';

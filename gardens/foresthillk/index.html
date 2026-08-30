@@ -105,6 +105,9 @@
     .lt-dot { width:11px; height:11px; border-radius:50% !important; flex-shrink:0; border:1.5px solid currentColor; }
     .lt-dot.passed { background:currentColor; }
     .lt-dot.future { background:transparent; opacity:.35; }
+    .hero-level-track { display:flex; align-items:center; margin:.55rem 0 .55rem; }
+    .hero-level-track .lt-dot.current { background:#fff0dc; border-color:#fff0dc; }
+    .hero-level-track .lt-dot.current::after { border-color:#fff0dc; }
     .lt-dot.current { width:15px; height:15px; background:#7a9e5f; border-color:#7a9e5f; }
     .lt-seg { flex:1; height:1.5px; background:currentColor; }
     .lt-seg.future { opacity:.2; }
@@ -211,7 +214,10 @@
           </div>
           <div>
             <div style="margin-bottom:.75rem">
-              <span style="font-size:.7rem;border:1px solid rgba(61,69,53,.3);padding:.25rem .6rem;display:inline-block" id="heroLevel">--</span>
+              <div style="font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#fff0dc;opacity:.55;margin-bottom:.35rem;font-family:'IBM Plex Mono',monospace">Current level</div>
+              <div style="font-size:1.05rem;font-weight:600;line-height:1.15;color:#fff0dc" id="heroLevel">--</div>
+              <div class="hero-level-track" id="heroLevelTrack"></div>
+              <div style="font-size:.62rem;opacity:.7;color:#fff0dc;font-family:'IBM Plex Mono',monospace" id="heroLevelSub">&nbsp;</div>
             </div>
             <div class="bar-track">
               <div class="bar-fill" id="heroScoreBar" style="width:0%;background:#3d4535"></div>
@@ -574,6 +580,28 @@ var LEVEL_TIERS = [
   "Registered Ecological Garden","High Habitat Garden","Urban Biodiversity Node"
 ];
 
+function buildHeroLevel(currentRatingName) {
+  var idx = LEVEL_TIERS.indexOf(currentRatingName);
+  if (idx === -1) idx = 0;
+  var track = document.getElementById('heroLevelTrack');
+  if (track) {
+    var h = '';
+    for (var i = 0; i < LEVEL_TIERS.length; i++) {
+      var cls = i < idx ? 'passed' : (i === idx ? 'current' : 'future');
+      h += '<div class="lt-dot ' + cls + '" data-tier="' + LEVEL_TIERS[i] + '"></div>';
+      if (i < LEVEL_TIERS.length - 1)
+        h += '<div class="lt-seg ' + (i < idx ? '' : 'future') + '"></div>';
+    }
+    track.innerHTML = h;
+  }
+  var sub = document.getElementById('heroLevelSub');
+  if (sub) {
+    sub.textContent = idx >= LEVEL_TIERS.length - 1
+      ? 'Level ' + (idx + 1) + ' of ' + LEVEL_TIERS.length + ' \u00b7 Top tier reached'
+      : 'Level ' + (idx + 1) + ' of ' + LEVEL_TIERS.length + ' \u00b7 Next: ' + LEVEL_TIERS[idx + 1];
+  }
+}
+
 function buildLevelTrack(elId, currentName) {
   var track = el(elId);
   if (!track) return;
@@ -644,6 +672,7 @@ function render() {
   }
     txt('heroScore', result.total);
     txt('heroLevel',    result.level);
+    buildHeroLevel(result.level);
     txt('heroId',       R.garden_id);
     wid('heroScoreBar', result.total);
 
