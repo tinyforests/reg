@@ -69,9 +69,8 @@
     .eco-card .bar-ends{ display:flex; justify-content:space-between; margin-top:13px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.05em; color:var(--ink-soft); }
     .eco-card .badge-head{ display:flex; justify-content:space-between; align-items:baseline; }
     .eco-card .count{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); }
-    .eco-card .badges{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:13px; }
-    .eco-card .badge{ font-size:12.5px; line-height:1.2; padding:9px 11px; background:var(--beige); color:var(--gardener-green); }
-    .eco-card .badge small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; opacity:.62; margin-top:3px; }
+    .eco-card .badges{ display:flex; flex-wrap:wrap; gap:6px; margin-top:13px; }
+    .eco-card .badge{ background:var(--beige); color:var(--gardener-green); padding:.3rem .7rem; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; line-height:1.2; display:inline-block; }
     .eco-card .withheld{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.6; letter-spacing:.04em; color:var(--ink-soft); margin:13px 0 0; }
     .signal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(61,69,53,.15); }
     .dark .signal-grid { background:rgba(255,240,220,.1); }
@@ -658,26 +657,6 @@ function buildLevelTrack(elId, currentRatingName, o) {
 // (see brief §7 / commit 1f7570f). Never called from the live Apps Script fetch.
 var EC_VERIFICATION_BADGES = ['gs_verified', 'site_visit_badge'];
 var EC_BADGE_CATALOGUE = 13;   // 15 defs minus the 2 verification badges
-// Short criteria phrases (3-5 words) for the badge chip subtitle. A badge with no
-// entry renders with no subtitle rather than wrapping the long description.
-// amphibian_active + fauna_record fire on the SAME >=1-fauna condition; they are
-// distinguished here by role (habitat-function score vs evidence record), which is
-// the only thing that genuinely differs between them (see pending-work.md).
-var EC_BADGE_CRITERIA = {
-  indigenous_dominant: 'Majority indigenous',
-  species_rich_20:     '20+ indigenous species',
-  species_rich_30:     '30+ indigenous species',
-  full_canopy:         '30%+ canopy cover',
-  five_layers:         'Five structural layers',
-  habitat_builder:     '3+ habitat nodes',
-  amphibian_active:    'Verified in habitat',
-  pollinator_rich:     '3+ verified fauna',
-  water_wise:          'Rainwater + basin',
-  corridor_node:       'Confirmed corridor node',
-  network_connected:   '2+ adjacent gardens',
-  full_record:         'Complete evidence set',
-  fauna_record:        'Logged as evidence'
-};
 function buildEcoCard(R, result, badges) {
   if (!document.getElementById('ecoCard')) return;
   var isProv = ['Design Proposal', 'Provisional'].indexOf(R.status) !== -1;
@@ -743,8 +722,7 @@ function buildEcoCard(R, result, badges) {
     var g = '';
     for (var i = 0; i < earned.length; i++) {
       var d = BADGE_DEFINITIONS[earned[i]] || {};
-      var crit = EC_BADGE_CRITERIA[earned[i]];
-      g += '<div class="badge">' + (d.name || earned[i]) + (crit ? '<small>' + crit + '</small>' : '') + '</div>';
+      g += '<div class="badge">' + (d.name || earned[i]) + '</div>';
     }
     if (grid) grid.innerHTML = g;
   }
