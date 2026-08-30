@@ -35,7 +35,7 @@
         '</div>' +
         '<div class="lg:col-span-7 border border-rl dark:border-rdl bg-white dark:bg-rdp overflow-hidden">' +
           '<div id="canopyMap" style="height:320px;width:100%;display:flex;align-items:center;justify-content:center">' +
-            '<div class="text-xs opacity-50 text-center px-6" id="canopyMapPending">Canopy overlay appears here once the property is mapped.</div>' +
+            '<div class="text-xs opacity-50 text-center px-6" id="canopyMapPending">The mapped canopy extent is private to the garden’s steward. Unlock this profile to view it.</div>' +
           '</div>' +
           '<div class="px-4 py-3 border-t border-rl dark:border-rdl flex items-center gap-4 text-xs" id="canopyMapLegend" style="display:none">' +
             '<label class="flex items-center gap-1.5 cursor-pointer"><input type="checkbox" id="canopyToggle" checked /> <span>Canopy</span></label>' +
@@ -45,30 +45,12 @@
       '</div>' +
     '</section>';
 
-  var HABITAT_HTML =
-    '<section id="habitat-context" class="stagger">' +
-      '<div class="section-label mb-1">Landscape Context</div>' +
-      '<h2 class="font-serif text-4xl mb-6">Habitat Context</h2>' +
-      '<div class="grid lg:grid-cols-12 gap-6">' +
-        '<div class="lg:col-span-5 border border-rl dark:border-rdl bg-white dark:bg-rdp p-6">' +
-          '<div class="section-label mb-3">Habitat Value</div>' +
-          '<div class="text-2xl font-light mb-1" id="hvValue">--</div>' +
-          '<div class="text-sm opacity-70 mb-5" id="hvBand"></div>' +
-          '<div class="section-label mb-1">Source</div>' +
-          '<div class="text-xs opacity-70" id="hvSource">--</div>' +
-        '</div>' +
-        '<div class="lg:col-span-7 border border-rl dark:border-rdl bg-rs dark:bg-rdp p-6 flex items-center">' +
-          '<p class="text-sm leading-relaxed opacity-80" id="hvExplain"></p>' +
-        '</div>' +
-      '</div>' +
-    '</section>';
-
   function ensureSections() {
-    if (el('canopy') || el('habitat-context')) return;   // already in the page
+    if (el('canopy')) return;   // already in the page
     var species = el('species');
     if (!species || !species.parentNode) return;
     var wrap = document.createElement('div');
-    wrap.innerHTML = CANOPY_HTML + HABITAT_HTML;
+    wrap.innerHTML = CANOPY_HTML;
     while (wrap.firstChild) species.parentNode.insertBefore(wrap.firstChild, species);
   }
 
@@ -137,24 +119,9 @@
     setTimeout(function () { map.invalidateSize(); }, 100);
   }
 
-  function renderHabitatContext(R) {
-    var sec = el('habitat-context');
-    var hv = R && R.habitat_context && R.habitat_context.habitat_value;
-    if (!sec) return;
-    if (!hv || hv.value == null) { sec.style.display = 'none'; return; }
-    txt('hvValue', hv.value + ' / 100');
-    txt('hvBand', hv.band ? (hv.band + ' biodiversity context') : '');
-    txt('hvSource', (hv.source || 'DEECA Habitat Value') + ' · ' + (hv.source_service || 'NatureKit')
-      + (hv.dataset_version ? ' v' + hv.dataset_version : '') + ' · statewide spatial model (~' + (hv.resolution_m || 75) + ' m)');
-    txt('hvExplain', 'Habitat Value describes the relative biodiversity importance of the surrounding '
-      + 'location across Victoria’s statewide modelling. It is landscape context — separate from, '
-      + 'and not a measure of, the ecological condition of this individual garden.');
-  }
-
   function renderSpatialSections(R) {
     ensureSections();
     renderCanopy(R);
-    renderHabitatContext(R);
   }
 
   root.renderSpatialSections = renderSpatialSections;
