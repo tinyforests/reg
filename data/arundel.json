@@ -342,12 +342,12 @@
   "registry_role": "Performer",
   "trajectory": "Rising",
   "rating": {
-    "current": "Registered Ecological Garden",
-    "next": "High Habitat Garden",
-    "points_to_next": 20
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 3
   },
-  "upgrade_potential": 39,
-  "points_available": 19,
+  "upgrade_potential": 42,
+  "points_available": 42,
   "yield": {
     "eligible": true,
     "status": "Active",

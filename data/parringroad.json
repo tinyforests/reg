@@ -167,10 +167,10 @@
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 19
+    "points_to_next": 18
   },
-  "upgrade_potential": 58,
-  "points_available": 58,
+  "upgrade_potential": 57,
+  "points_available": 57,
   "notes": "Front bed installed May 2026. 11 species established, 9 Victorian indigenous. Rear garden pending. Area not yet measured -- yield calculation pending area assessment.",
   "yield": {
     "eligible": true,

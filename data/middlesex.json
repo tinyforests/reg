@@ -261,8 +261,8 @@
     "next": "Registered Ecological Garden",
     "points_to_next": 7
   },
-  "upgrade_potential": 36,
-  "points_available": 36,
+  "upgrade_potential": 46,
+  "points_available": 46,
   "yield": {
     "eligible": true,
     "status": "Active",

@@ -192,10 +192,10 @@
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 13
+    "points_to_next": 7
   },
-  "upgrade_potential": 35,
-  "points_available": 35,
+  "upgrade_potential": 46,
+  "points_available": 46,
   "yield": {
     "eligible": true,
     "status": "Active",
@@ -229,7 +229,7 @@
   "garden_address": "",
   "steward_email": "",
   "score": {
-    "total": 57,
+    "total": 54,
     "rating": "Ecological Garden",
     "categories": [
       {
@@ -263,7 +263,7 @@
       },
       {
         "label": "Connectivity",
-        "score": 9,
+        "score": 6,
         "max": 20,
         "notes": [
           "Park within 50m",

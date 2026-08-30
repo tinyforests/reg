@@ -134,8 +134,6 @@
       "area_ha": null,
       "status": "Potential"
     },
-    "lat": null,
-    "lng": null,
     "lat_note": "Suburb only in G4W report. Full address required from steward or council for geo-lookup."
   },
   "evidence": {
@@ -202,40 +200,210 @@
       }
     ],
     "species": [
-      { "scientific": "Bursaria spinosa",          "common": "Sweet Bursaria",            "layer": "shrub",       "zone": "back" },
-      { "scientific": "Hakea decurrens",            "common": "Bushy Needlewood",          "layer": "shrub",       "zone": "back" },
-      { "scientific": "Acacia acinacea",            "common": "Gold Dust Wattle",          "layer": "shrub",       "zone": "back" },
-      { "scientific": "Correa glabra",              "common": "Rock Correa",               "layer": "shrub",       "zone": "back" },
-      { "scientific": "Correa reflexa",             "common": "Common Correa",             "layer": "shrub",       "zone": "back" },
-      { "scientific": "Xerochrysum spp.",           "common": "Everlasting",               "layer": "groundcover", "zone": "back" },
-      { "scientific": "Brachyscome multifida",      "common": "Leaf Daisy",                "layer": "groundcover", "zone": "back" },
-      { "scientific": "Bulbine bulbosa",            "common": "Bulbine Lily",              "layer": "groundcover", "zone": "back" },
-      { "scientific": "Hardenbergia violacaea",     "common": "Purple Coral Pea",          "layer": "climber",     "zone": "back" },
-      { "scientific": "Kunzea leptospermoides",     "common": "Yarra Burgan",              "layer": "shrub",       "zone": "back" },
-      { "scientific": "Leptospermum continentale",  "common": "Prickly Tea-tree",          "layer": "shrub",       "zone": "back" },
-      { "scientific": "Goodenia ovata",             "common": "Hop Goodenia",              "layer": "shrub",       "zone": "back" },
-      { "scientific": "Prostanthera lasianthos",    "common": "Victorian Christmas Bush",  "layer": "shrub",       "zone": "side" },
-      { "scientific": "Spiridium parvifolium",      "common": "Australian Dusty Miller",   "layer": "shrub",       "zone": "side" },
-      { "scientific": "Adiantum aethiopicum",       "common": "Common Maidenhair",         "layer": "groundcover", "zone": "side" },
-      { "scientific": "Dichondra repens",           "common": "Kidney Weed",               "layer": "groundcover", "zone": "side" },
-      { "scientific": "Viola hederacea",            "common": "Native Violet",             "layer": "groundcover", "zone": "side" },
-      { "scientific": "Wahlenbergia spp.",          "common": "Bluebells",                 "layer": "groundcover", "zone": "side" },
-      { "scientific": "Indigofera australis",       "common": "Austral Indigo",            "layer": "shrub",       "zone": "side" },
-      { "scientific": "Epacris impressa",           "common": "Common Heath",              "layer": "shrub",       "zone": "side" },
-      { "scientific": "Stylidium armeria",          "common": "Grass-leaved Triggerplant", "layer": "groundcover", "zone": "side" },
-      { "scientific": "Poa labillardieri",          "common": "Common Tussock Grass",      "layer": "grass",       "zone": "side" },
-      { "scientific": "Dianella longifolia",        "common": "Pale Flax-lily",            "layer": "grass",       "zone": "side" },
-      { "scientific": "Lomandra filiformis",        "common": "Wattle-mat Rush",           "layer": "grass",       "zone": "side" },
-      { "scientific": "Kennedia prostrata",         "common": "Running Postman",           "layer": "groundcover", "zone": "side" },
-      { "scientific": "Pelargonium australe",       "common": "Austral Stork's Bill",      "layer": "groundcover", "zone": "side" },
-      { "scientific": "Clematis aristata",          "common": "Mountain Clematis",         "layer": "climber",     "zone": "side" },
-      { "scientific": "Acacia mytrifolia",          "common": "Myrtle Wattle",             "layer": "shrub",       "zone": "front" },
-      { "scientific": "Chrysocephalum apiculatum",  "common": "Common Everlasting",        "layer": "groundcover", "zone": "front" },
-      { "scientific": "Olearia lirata",             "common": "Snowy Daisy Bush",          "layer": "shrub",       "zone": "front" },
-      { "scientific": "Acacia verticillata",        "common": "Prickly Moses",             "layer": "shrub",       "zone": "front" },
-      { "scientific": "Enchylaena tomentosa",       "common": "Ruby Saltbush",             "layer": "groundcover", "zone": "front" },
-      { "scientific": "Poa morrisii",               "common": "Velvet Tussock Grass",      "layer": "grass",       "zone": "front" },
-      { "scientific": "Rhyidosperma geniculatum",   "common": "Kneed Wallaby Grass",       "layer": "grass",       "zone": "nature_strip" }
+      {
+        "scientific": "Bursaria spinosa",
+        "common": "Sweet Bursaria",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Hakea decurrens",
+        "common": "Bushy Needlewood",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Acacia acinacea",
+        "common": "Gold Dust Wattle",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Correa glabra",
+        "common": "Rock Correa",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Correa reflexa",
+        "common": "Common Correa",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Xerochrysum spp.",
+        "common": "Everlasting",
+        "layer": "groundcover",
+        "zone": "back"
+      },
+      {
+        "scientific": "Brachyscome multifida",
+        "common": "Leaf Daisy",
+        "layer": "groundcover",
+        "zone": "back"
+      },
+      {
+        "scientific": "Bulbine bulbosa",
+        "common": "Bulbine Lily",
+        "layer": "groundcover",
+        "zone": "back"
+      },
+      {
+        "scientific": "Hardenbergia violacaea",
+        "common": "Purple Coral Pea",
+        "layer": "climber",
+        "zone": "back"
+      },
+      {
+        "scientific": "Kunzea leptospermoides",
+        "common": "Yarra Burgan",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Leptospermum continentale",
+        "common": "Prickly Tea-tree",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Goodenia ovata",
+        "common": "Hop Goodenia",
+        "layer": "shrub",
+        "zone": "back"
+      },
+      {
+        "scientific": "Prostanthera lasianthos",
+        "common": "Victorian Christmas Bush",
+        "layer": "shrub",
+        "zone": "side"
+      },
+      {
+        "scientific": "Spiridium parvifolium",
+        "common": "Australian Dusty Miller",
+        "layer": "shrub",
+        "zone": "side"
+      },
+      {
+        "scientific": "Adiantum aethiopicum",
+        "common": "Common Maidenhair",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Dichondra repens",
+        "common": "Kidney Weed",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Viola hederacea",
+        "common": "Native Violet",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Wahlenbergia spp.",
+        "common": "Bluebells",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Indigofera australis",
+        "common": "Austral Indigo",
+        "layer": "shrub",
+        "zone": "side"
+      },
+      {
+        "scientific": "Epacris impressa",
+        "common": "Common Heath",
+        "layer": "shrub",
+        "zone": "side"
+      },
+      {
+        "scientific": "Stylidium armeria",
+        "common": "Grass-leaved Triggerplant",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Poa labillardieri",
+        "common": "Common Tussock Grass",
+        "layer": "grass",
+        "zone": "side"
+      },
+      {
+        "scientific": "Dianella longifolia",
+        "common": "Pale Flax-lily",
+        "layer": "grass",
+        "zone": "side"
+      },
+      {
+        "scientific": "Lomandra filiformis",
+        "common": "Wattle-mat Rush",
+        "layer": "grass",
+        "zone": "side"
+      },
+      {
+        "scientific": "Kennedia prostrata",
+        "common": "Running Postman",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Pelargonium australe",
+        "common": "Austral Stork's Bill",
+        "layer": "groundcover",
+        "zone": "side"
+      },
+      {
+        "scientific": "Clematis aristata",
+        "common": "Mountain Clematis",
+        "layer": "climber",
+        "zone": "side"
+      },
+      {
+        "scientific": "Acacia mytrifolia",
+        "common": "Myrtle Wattle",
+        "layer": "shrub",
+        "zone": "front"
+      },
+      {
+        "scientific": "Chrysocephalum apiculatum",
+        "common": "Common Everlasting",
+        "layer": "groundcover",
+        "zone": "front"
+      },
+      {
+        "scientific": "Olearia lirata",
+        "common": "Snowy Daisy Bush",
+        "layer": "shrub",
+        "zone": "front"
+      },
+      {
+        "scientific": "Acacia verticillata",
+        "common": "Prickly Moses",
+        "layer": "shrub",
+        "zone": "front"
+      },
+      {
+        "scientific": "Enchylaena tomentosa",
+        "common": "Ruby Saltbush",
+        "layer": "groundcover",
+        "zone": "front"
+      },
+      {
+        "scientific": "Poa morrisii",
+        "common": "Velvet Tussock Grass",
+        "layer": "grass",
+        "zone": "front"
+      },
+      {
+        "scientific": "Rhyidosperma geniculatum",
+        "common": "Kneed Wallaby Grass",
+        "layer": "grass",
+        "zone": "nature_strip"
+      }
     ]
   },
   "activity_log": [
@@ -248,12 +416,12 @@
     }
   ],
   "rating": {
-    "current": "Wildlife Garden",
-    "next": "Registered Ecological Garden",
-    "points_to_next": null
+    "current": "Habitat Garden",
+    "next": "Ecological Garden",
+    "points_to_next": 20
   },
-  "upgrade_potential": null,
-  "points_available": null,
+  "upgrade_potential": 79,
+  "points_available": 79,
   "yield": {
     "eligible": false,
     "status": "Incomplete record — full address and area required",

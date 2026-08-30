@@ -238,10 +238,10 @@
   "rating": {
     "current": "Habitat Garden",
     "next": "Ecological Garden",
-    "points_to_next": 15
+    "points_to_next": 11
   },
-  "upgrade_potential": 55,
-  "points_available": 55,
+  "upgrade_potential": 70,
+  "points_available": 70,
   "yield": {
     "eligible": false,
     "status": "Not yet eligible — minimum score 40 required",

@@ -178,6 +178,48 @@ def rating_object(score):
     return {"current": current, "next": None, "points_to_next": 0}
 
 
+# Canonical pillar order — matches the categories order emitted by reg-score.js
+# (Biodiversity, Soil & Water, Habitat, Connectivity, Evidence).
+_PILLAR_ORDER = ('biodiversity', 'soil_water', 'habitat', 'connectivity', 'evidence')
+
+
+def reconcile_score_block(record, total, result):
+    """Rewrite the data file's embedded `score` block (and the sibling root fields
+    assess writes) so their numbers match the engine. The profile recomputes and
+    the browse card reads registry.json, so nothing user-facing depends on this
+    block — but "score is consequence" must hold inside the data file too, and
+    test_parity flags it when the stored total drifts. Preserves category
+    labels/max/notes; only corrects numbers. Only touches fields already present
+    (never adds new ones). Returns True if anything changed."""
+    changed = False
+    block = record.get('score')
+    if isinstance(block, dict):
+        if block.get('total') != total:
+            block['total'] = total
+            changed = True
+        name = rating_from_score(total)
+        if 'rating' in block and block.get('rating') != name:
+            block['rating'] = name
+            changed = True
+        cats = block.get('categories')
+        if isinstance(cats, list) and len(cats) == len(_PILLAR_ORDER):
+            for cat, pillar in zip(cats, _PILLAR_ORDER):
+                pv = result.get(pillar)
+                if isinstance(pv, (int, float)) and cat.get('score') != pv:
+                    cat['score'] = pv
+                    changed = True
+    if isinstance(record.get('rating'), dict):
+        ro = rating_object(total)
+        if record.get('rating') != ro:
+            record['rating'] = ro
+            changed = True
+    for k in ('upgrade_potential', 'points_available'):
+        if k in record and record.get(k) != 100 - total:
+            record[k] = 100 - total
+            changed = True
+    return changed
+
+
 def award_badges(record):
     """Python port of awardBadges() in js/badge-engine.js.
     Returns a list of badge IDs in the same order as the JS engine.
@@ -557,11 +599,24 @@ def sync(check_only=False):
         # Score: engine output, unless pre-install.
         if g.get('status') in PRE_INSTALL_STATUSES:
             new_score = 0
+            engine_result = None
         else:
-            new_score = score_ecological_registry(record)['total']
+            engine_result = score_ecological_registry(record)
+            new_score = engine_result['total']
         if new_score != g.get('score'):
             changes.append("%s: score %s -> %s" % (gid, g.get('score'), new_score))
             g['score'] = new_score
+
+        # Keep the data file's own embedded score block honest (see reconcile
+        # docstring). Writes the sanitised record so precise coords never leak.
+        if engine_result is not None and reconcile_score_block(record, new_score, engine_result):
+            changes.append("%s: embedded score block reconciled -> %d" % (gid, new_score))
+            if not check_only:
+                pub = _sanitise_connectivity(
+                    json.loads(json.dumps(record)), private_coords, coord_seed)
+                with open(path, 'w') as wf:
+                    json.dump(pub, wf, indent=2, ensure_ascii=False)
+                    wf.write('\n')
 
         # Rating tracks score, except pre-install gardens keep their
         # status-derived label (e.g. "Design Proposal").

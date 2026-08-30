@@ -182,10 +182,10 @@
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 17
+    "points_to_next": 14
   },
-  "upgrade_potential": 58,
-  "points_available": 58,
+  "upgrade_potential": 53,
+  "points_available": 53,
   "yield": {
     "eligible": true,
     "status": "Pending activation",

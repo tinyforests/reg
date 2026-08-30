@@ -173,10 +173,10 @@
   "rating": {
     "current": "Habitat Garden",
     "next": "Ecological Garden",
-    "points_to_next": 9
+    "points_to_next": 3
   },
-  "upgrade_potential": 68,
-  "points_available": 68,
+  "upgrade_potential": 62,
+  "points_available": 62,
   "yield": {
     "eligible": false,
     "status": "Not yet active — yield layer in roadmap",

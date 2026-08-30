@@ -171,12 +171,12 @@
     }
   ],
   "rating": {
-    "current": "Habitat Garden",
-    "next": "Ecological Garden",
-    "points_to_next": 2
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 19
   },
-  "upgrade_potential": 61,
-  "points_available": 61,
+  "upgrade_potential": 58,
+  "points_available": 58,
   "notes": "Wild Mediterranean Garden. 45 species, 6 Victorian indigenous. Installed September 2025. Note: Foeniculum vulgare (Fennel) is a declared environmental weed in Victoria -- monitor and manage. Two points from Ecological Garden rating.",
   "yield": {
     "eligible": false,
