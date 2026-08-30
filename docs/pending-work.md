@@ -4,6 +4,26 @@ Known unfinished items. Move items out of this file as they complete (and into t
 
 ## High priority
 
+### Badge catalogue: duplicate fauna award
+
+Badge catalogue: `fauna_record` and `amphibian_active` fire on the same `>=1`-fauna
+condition — duplicate award inflating badge counts across all records. Affects the
+public "badges awarded" aggregate and the X of N denominator. Needs an audit of the
+full catalogue for other duplicate conditions before any re-award.
+
+### Scorecard: expose `status` on the synced record (provisional variant plumbing)
+
+The new Ecological Function scorecard (`buildEcoCard`, piloted on Arundel) has a
+**provisional variant** gated on `status ∈ {Design Proposal, Provisional}` (NO_BADGE_STATUSES).
+The branch is wired but **inert**: `status` lives only in `registry.json`, not on the
+per-garden data file the card renders from (e.g. `montAlbert.json` has `status: null`).
+So the one provisional garden — **Mont Albert** (`ER-AU-VIC-CAN-MON-001`, Design Proposal) —
+still renders as verified.
+
+**Needed**: `sync_registry.py` should copy each garden's `registry.json` `status` into its
+data file (like it already does for `score`/`rating`), so the card can branch. Until then
+the provisional card cannot fire. (Logged rather than fixed during the scorecard pilot, per instruction.)
+
 ### Admin: garden ID → address mapping
 
 Garden names and URL slugs must never encode a street address or house number (e.g. "88 Windella" → renamed to "Smokebush", `/gardens/windella88/` → `/gardens/smokebush/`). G&S still needs to know the physical address behind each `garden_id` for site visits, verification, and records.
