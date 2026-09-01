@@ -102,6 +102,16 @@
         "source": "geographic",
         "display_lat": -37.8122,
         "display_lng": 145.0855
+      },
+      {
+        "id": "ER-AU-VIC-SH-WEL-0001",
+        "garden_id": "ER-AU-VIC-SH-WEL-0001",
+        "name": "The Welcome Garden",
+        "verified": true,
+        "distance_m": 454,
+        "source": "geographic",
+        "display_lat": -37.8166,
+        "display_lng": 145.0887
       }
     ],
     "corridor_node_confirmed": false,
@@ -167,10 +177,10 @@
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 18
+    "points_to_next": 16
   },
-  "upgrade_potential": 57,
-  "points_available": 57,
+  "upgrade_potential": 55,
+  "points_available": 55,
   "notes": "Front bed installed May 2026. 11 species established, 9 Victorian indigenous. Rear garden pending. Area not yet measured -- yield calculation pending area assessment.",
   "yield": {
     "eligible": true,
@@ -206,7 +216,7 @@
   "garden_address": "",
   "steward_email": "",
   "score": {
-    "total": 43,
+    "total": 45,
     "rating": "Ecological Garden",
     "categories": [
       {
@@ -239,7 +249,7 @@
       },
       {
         "label": "Connectivity",
-        "score": 8,
+        "score": 10,
         "max": 20,
         "notes": [
           "Park within 150m",

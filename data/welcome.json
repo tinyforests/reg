@@ -1,0 +1,173 @@
+{
+  "garden_id": "ER-AU-VIC-SH-WEL-0001",
+  "garden_name": "The Welcome Garden",
+  "garden_type": "Ecological Native Garden",
+  "suburb": "Surrey Hills",
+  "state": "VIC",
+  "assessment_date": "Sep 2026",
+  "baseline_date": "Mar 2025",
+  "stewards": "Gardener & Son",
+  "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": "Gardener & Son",
+  "area_sqm": null,
+  "description": "The Welcome Garden brings a sense of nature into everyday modern living. Reflecting local ecology and geology, informal clumps of indigenous flowering plants weave between naturalistic layers of wood and rock. It reads as natural rather than designed — enhancing a distinct sense of place. Year-round flowering offers constant interest and supports pollinators such as bees, butterflies and birds, with nectar and pollen sources sustaining local ecosystems across the front and rear gardens.",
+  "evc": {
+    "name": "Valley Grassy Forest",
+    "code": "EVC 47",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
+  },
+  "biodiversity": {
+    "indigenous_species_current": 20,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 40,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 10,
+    "canopy_cover_pct_baseline": 0
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Naturalistic indigenous clumps",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": null,
+    "park_distance_m": null,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-BAL-001",
+        "garden_id": "ER-AU-VIC-BAL-001",
+        "name": "Parring",
+        "verified": true,
+        "distance_m": 393,
+        "source": "geographic",
+        "display_lat": -37.8132,
+        "display_lng": 145.0901
+      },
+      {
+        "id": "ER-AU-VIC-BAL-PRD-001",
+        "garden_id": "ER-AU-VIC-BAL-PRD-001",
+        "name": "Parring Stepping Stone",
+        "verified": true,
+        "distance_m": 454,
+        "source": "geographic",
+        "display_lat": -37.8121,
+        "display_lng": 145.0914
+      },
+      {
+        "id": "ER-AU-VIC-WHI-YRK-002",
+        "garden_id": "ER-AU-VIC-WHI-YRK-002",
+        "name": "Sensory Garden",
+        "verified": true,
+        "distance_m": 388,
+        "source": "geographic",
+        "display_lat": -37.8122,
+        "display_lng": 145.0855
+      }
+    ],
+    "corridor_node_confirmed": false,
+    "cluster_area_ha": 0,
+    "display_lat": -37.8166,
+    "display_lng": 145.0887
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": false,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "date": "Mar 2025",
+      "title": "Garden installed",
+      "detail": "The Welcome Garden designed and installed by Gardener & Son."
+    }
+  ],
+  "activity_log": [
+    {
+      "date": "Sep 2026",
+      "type": "Milestone",
+      "title": "Added to the Registry",
+      "notes": "The Welcome Garden joined the Ecological Registry.",
+      "public": true
+    }
+  ],
+  "notes": "Design by Gardener & Son. Front and rear indigenous planting; naturalistic wood and rock layers supporting year-round flowering and pollinators.",
+  "target_score": 82,
+  "typology": "Ecological Native Garden",
+  "registry_role": "Performer",
+  "trajectory": "Rising",
+  "council": "Boroondara City Council",
+  "ward": "Gardiner",
+  "lga": "Boroondara",
+  "garden_address": "Clyde Street, Surrey Hills",
+  "score": {
+    "total": 47,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 18,
+        "max": 25,
+        "notes": []
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 7,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Connectivity",
+        "score": 6,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 8,
+        "max": 15,
+        "notes": []
+      }
+    ]
+  },
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 14
+  },
+  "upgrade_potential": 53,
+  "points_available": 53
+}

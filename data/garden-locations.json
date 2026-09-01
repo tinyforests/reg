@@ -112,5 +112,11 @@
     "garden_name": "Sensory Garden",
     "display_lat": -37.8122,
     "display_lng": 145.0855
+  },
+  {
+    "garden_id": "ER-AU-VIC-SH-WEL-0001",
+    "garden_name": "The Welcome Garden",
+    "display_lat": -37.8166,
+    "display_lng": 145.0887
   }
 ]

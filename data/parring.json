@@ -128,6 +128,16 @@
         "source": "geographic",
         "display_lat": -37.8122,
         "display_lng": 145.0855
+      },
+      {
+        "id": "ER-AU-VIC-SH-WEL-0001",
+        "garden_id": "ER-AU-VIC-SH-WEL-0001",
+        "name": "The Welcome Garden",
+        "verified": true,
+        "distance_m": 393,
+        "source": "geographic",
+        "display_lat": -37.8166,
+        "display_lng": 145.0887
       }
     ],
     "corridor_node_confirmed": false,
@@ -247,10 +257,10 @@
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 5
+    "points_to_next": 3
   },
-  "upgrade_potential": 44,
-  "points_available": 44,
+  "upgrade_potential": 42,
+  "points_available": 42,
   "yield": {
     "eligible": true,
     "status": "Active",
@@ -305,7 +315,7 @@
   "garden_address": "",
   "steward_email": "",
   "score": {
-    "total": 56,
+    "total": 58,
     "rating": "Ecological Garden",
     "categories": [
       {
@@ -340,7 +350,7 @@
       },
       {
         "label": "Connectivity",
-        "score": 6,
+        "score": 8,
         "max": 20,
         "notes": [
           "Park within 300m",

@@ -692,13 +692,13 @@ def sync(check_only=False):
         path = os.path.join(REPO_ROOT, data_file)
         if not os.path.exists(path):
             continue
-        rec = _records.get(gid)
-        if rec is None:
-            try:
-                with open(path) as f:
-                    rec = json.load(f)
-            except Exception:
-                continue
+        # Read the sanitised on-disk record (has display_lat/lng); the in-memory
+        # _records copy may not carry display coords for a brand-new garden's first sync.
+        try:
+            with open(path) as f:
+                rec = json.load(f)
+        except Exception:
+            continue
         c = rec.get('connectivity') or {}
         if c.get('display_lat') and c.get('display_lng'):
             locs.append({
