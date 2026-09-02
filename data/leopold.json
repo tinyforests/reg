@@ -1,0 +1,158 @@
+{
+  "garden_id": "ER-AU-VIC-WHI-LEO-0001",
+  "garden_name": "Katherine's Native Cottage Garden",
+  "garden_type": "Native Cottage Garden",
+  "suburb": "Mont Albert",
+  "state": "VIC",
+  "assessment_date": "Sep 2026",
+  "baseline_date": "2025",
+  "stewards": "Gardener & Son",
+  "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": "Gardener & Son",
+  "area_sqm": null,
+  "description": "Katherine's Native Cottage Garden blends English cottage-garden romance with robust Australian native flora. Informal and abundant, it plays with texture and colour — paper daisies, grevilleas and delicate hibbertia weaving a dynamic tapestry that supports birds, bees and butterflies. A gentle basalt path winds through layers of foliage, with seasonal blooms offering year-round interest and the natural hardiness of natives keeping maintenance low.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "5.1",
+    "note": ""
+  },
+  "biodiversity": {
+    "indigenous_species_current": 13,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 40,
+    "indigenous_dominant": false,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 8,
+    "canopy_cover_pct_baseline": 0,
+    "species_list": [
+      "Stylidium armeria",
+      "Brachyscome multifida",
+      "Indigofera australis",
+      "Glycine clandestina",
+      "Hibbertia pedunculata",
+      "Scaevola aemula",
+      "Xerochrysum bracteatum",
+      "Chrysocephalum apiculatum",
+      "Pycnosorus globosus",
+      "Dichelachne crinata",
+      "Poa sieberiana",
+      "Grevillea lanigera",
+      "Correa reflexa"
+    ],
+    "species_note": "Victorian-indigenous species shown. The native cottage planting also includes Australian natives from other regions (grevillea cultivars, Geraldton wax, flame pea, flowering gum) not counted as locally indigenous. Indigenous status of Juncus australis and Dampiera trigona to confirm vs VicFlora."
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Informal native cottage layers",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": null,
+    "park_distance_m": null,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "cluster_area_ha": 0,
+    "display_lat": -37.8238,
+    "display_lng": 145.1028
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": false,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "date": "2025",
+      "title": "Garden installed",
+      "detail": "Designed and installed by Gardener & Son."
+    }
+  ],
+  "activity_log": [
+    {
+      "date": "Sep 2026",
+      "type": "Milestone",
+      "title": "Added to the Registry",
+      "notes": "Katherine's Native Cottage Garden joined the Ecological Registry.",
+      "public": true
+    }
+  ],
+  "notes": "Design by Gardener & Son. Native cottage planting; species list pending import.",
+  "target_score": 82,
+  "typology": "Native Cottage Garden",
+  "registry_role": "Performer",
+  "trajectory": "Rising",
+  "council": "Whitehorse City Council",
+  "ward": "",
+  "lga": "Whitehorse",
+  "garden_address": "3/7 Leopold Crescent, Mont Albert",
+  "score": {
+    "total": 30,
+    "rating": "Habitat Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 10,
+        "max": 25,
+        "notes": []
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 4,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Connectivity",
+        "score": 0,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 8,
+        "max": 15,
+        "notes": []
+      }
+    ]
+  },
+  "rating": {
+    "current": "Habitat Garden",
+    "next": "Ecological Garden",
+    "points_to_next": 11
+  },
+  "upgrade_potential": 70,
+  "points_available": 70
+}
