@@ -256,7 +256,7 @@ This is a curated, editorial list. New typologies should not be invented per-gar
     "last_updated":    "Mar 2026",
     "total_gardens":   11,
     "data_custodian":  "Gardener & Son",
-    "contact":         "registry@gardenerandson.com.au"
+    "contact":         "hello@gardenerandson.com"
   },
   "statistics": {
     "average_score":         46,        // Averaged over gardens with score > 0
