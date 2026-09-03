@@ -1,6 +1,6 @@
 {
   "garden_id": "ER-AU-VIC-WHI-LEO-0001",
-  "garden_name": "Katherine's Native Cottage Garden",
+  "garden_name": "Native Cottage Garden",
   "garden_type": "Native Cottage Garden",
   "suburb": "Mont Albert",
   "state": "VIC",
@@ -12,7 +12,7 @@
   "enroller": "Gardener & Son",
   "verifier": "Gardener & Son",
   "area_sqm": null,
-  "description": "Katherine's Native Cottage Garden blends English cottage-garden romance with robust Australian native flora. Informal and abundant, it plays with texture and colour — paper daisies, grevilleas and delicate hibbertia weaving a dynamic tapestry that supports birds, bees and butterflies. A gentle basalt path winds through layers of foliage, with seasonal blooms offering year-round interest and the natural hardiness of natives keeping maintenance low.",
+  "description": "This native cottage garden blends English cottage-garden romance with robust Australian native flora. Informal and abundant, it plays with texture and colour — paper daisies, grevilleas and delicate hibbertia weaving a dynamic tapestry that supports birds, bees and butterflies. A gentle basalt path winds through layers of foliage, with seasonal blooms offering year-round interest and the natural hardiness of natives keeping maintenance low.",
   "evc": {
     "name": "Grassy Woodland",
     "code": "EVC 175",
@@ -99,7 +99,7 @@
       "date": "Sep 2026",
       "type": "Milestone",
       "title": "Added to the Registry",
-      "notes": "Katherine's Native Cottage Garden joined the Ecological Registry.",
+      "notes": "Native Cottage Garden joined the Ecological Registry.",
       "public": true
     }
   ],

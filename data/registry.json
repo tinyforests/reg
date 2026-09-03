@@ -11,7 +11,7 @@
   "gardens": [
     {
       "garden_id": "ER-AU-VIC-NIL-BEL-001",
-      "garden_name": "Wattle Glen Bush Garden",
+      "garden_name": "Bush Garden",
       "typology": "Deep Ecological Garden",
       "type": "Ecological Home Garden",
       "suburb": "Wattle Glen",
@@ -27,7 +27,7 @@
       },
       "primary_evc": "Box Ironbark Forest (EVC 61)",
       "bioregion": "Highlands - Southern Fall",
-      "status": "Active \u2014 Corridor Node",
+      "status": "Active — Corridor Node",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Aug 2026",
@@ -102,7 +102,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-SY-NIC-0002",
-      "garden_name": "Nicholson",
+      "garden_name": "Urban Meadow",
       "suburb": "South Yarra",
       "state": "VIC",
       "score": 37,
@@ -141,7 +141,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-BAL-001",
-      "garden_name": "Parring",
+      "garden_name": "Connected Habitat Garden",
       "suburb": "Balwyn",
       "state": "VIC",
       "score": 58,
@@ -191,7 +191,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-SH-MID-001",
-      "garden_name": "Middlesex",
+      "garden_name": "Habitat Meadow",
       "suburb": "Surrey Hills",
       "state": "VIC",
       "score": 54,
@@ -233,7 +233,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-SH-SIR-0001",
-      "garden_name": "Sir Garnet",
+      "garden_name": "Native Buffer",
       "suburb": "Surrey Hills",
       "state": "VIC",
       "score": 56,
@@ -276,7 +276,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-SH-CAN-0001",
-      "garden_name": "Canterbury G02",
+      "garden_name": "Modern Apartment",
       "suburb": "Surrey Hills",
       "state": "VIC",
       "score": 40,
@@ -309,7 +309,7 @@
         "status": "Forming"
       },
       "council": "Boroondara City Council",
-      "ward": "TBC \u2014 confirm with Boroondara council",
+      "ward": "TBC — confirm with Boroondara council",
       "lga": "Boroondara",
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-SIR-0001",
@@ -341,7 +341,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-MAN-EVE-001",
-      "garden_name": "Evelina",
+      "garden_name": "Magpie Maggies Garden",
       "suburb": "Mont Albert North",
       "state": "VIC",
       "score": 54,
@@ -512,7 +512,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-001",
-      "garden_name": "Windella",
+      "garden_name": "The Home Garden",
       "typology": "Ecological Cottage Garden",
       "type": "Ecological Home Garden",
       "suburb": "Kew East",
@@ -767,7 +767,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-WHI-KTE-001",
-      "garden_name": "Kate's Forest Hill Garden",
+      "garden_name": "Forest Hill Garden",
       "suburb": "Forest Hill",
       "state": "VIC",
       "score": 21,
@@ -778,7 +778,7 @@
       },
       "primary_evc": "To be confirmed",
       "bioregion": "Whitehorse",
-      "status": "G4W Assessed \u2014 record active",
+      "status": "G4W Assessed — record active",
       "verification_level": "site_visit",
       "verification_label": "Gardens for Wildlife Verified",
       "last_verified": "30 Oct 2025",
@@ -817,7 +817,7 @@
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
-      "status": "Installed \u2014 design record active",
+      "status": "Installed — design record active",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "Jul 2026",
@@ -829,7 +829,7 @@
       ],
       "profile_url": "/gardens/sensorygarden/index.html",
       "data_file": "data/york42.json",
-      "typology": "Biodiversity Design \u2014 Real Estate",
+      "typology": "Biodiversity Design — Real Estate",
       "registry_role": "Designed Record",
       "trajectory": "Installed",
       "points_available": 55,
@@ -889,7 +889,7 @@
     },
     {
       "garden_id": "ER-AU-VIC-WHI-LEO-0001",
-      "garden_name": "Katherine's Native Cottage Garden",
+      "garden_name": "Native Cottage Garden",
       "type": "Native Cottage Garden",
       "suburb": "Mont Albert",
       "state": "VIC",

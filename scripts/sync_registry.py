@@ -460,8 +460,16 @@ def sync(check_only=False):
             is_verified = g.get('status') not in PRE_INSTALL_STATUSES | {'Provisional'}
             coord_index[gid] = (float(prec['lat']), float(prec['lng']), is_verified)
 
-    name_index = {g.get('garden_id'): g.get('garden_name', '')
-                  for g in registry['gardens'] if g.get('garden_id')}
+    # The per-garden data file is the source of truth for the display name.
+    # Prefer it over the registry snapshot so adjacency neighbour labels (and
+    # the reconciliation below) follow the profile, never a stale registry copy.
+    name_index = {}
+    for g in registry['gardens']:
+        gid = g.get('garden_id')
+        if not gid:
+            continue
+        rec = _records.get(gid)
+        name_index[gid] = (rec.get('garden_name') if rec else None) or g.get('garden_name', '')
     adjacency = build_adjacency(coord_index, name_index)
 
     for g in registry['gardens']:
@@ -485,7 +493,10 @@ def sync(check_only=False):
         computed_adj = adjacency.get(gid, [])
         if gid in coord_index:
             def _adj_sig(entries):
-                return sorted((e.get('id') or e.get('garden_id'), e.get('verified'))
+                # Include name so a neighbour rename (not just a set change)
+                # triggers a rewrite -- keeps map-popup labels in lockstep with
+                # each garden's display name.
+                return sorted((e.get('id') or e.get('garden_id'), e.get('verified'), e.get('name'))
                               for e in entries)
             file_adj = (record.get('connectivity') or {}).get('adjacent_registered_gardens') or []
             # Preserve explicitly-INVITED neighbours (referrals). They count regardless
@@ -595,6 +606,15 @@ def sync(check_only=False):
             g['demo'] = True
         elif 'demo' in g:
             del g['demo']
+
+        # Identity: the data file owns the display name. Keep registry.json in
+        # lockstep so the browse list can never drift from the profile (which
+        # renders from the same data file). Edit the name in data/<garden>.json,
+        # run sync, and every public surface follows.
+        rec_name = record.get('garden_name')
+        if rec_name and rec_name != g.get('garden_name'):
+            changes.append("%s: garden_name %r -> %r" % (gid, g.get('garden_name'), rec_name))
+            g['garden_name'] = rec_name
 
         # Score: engine output, unless pre-install.
         if g.get('status') in PRE_INSTALL_STATUSES:
