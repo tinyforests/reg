@@ -1,0 +1,187 @@
+{
+  "garden_id": "ER-AU-VIC-SH-GTR-0001",
+  "garden_name": "The Garden Trail",
+  "garden_type": "Ecological Native Garden",
+  "suburb": "Surrey Hills",
+  "state": "VIC",
+  "assessment_date": "Sep 2026",
+  "baseline_date": "2024",
+  "stewards": "Gardener & Son",
+  "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": "Gardener & Son",
+  "area_sqm": null,
+  "description": "A native, drought-tolerant garden by Gardener & Son celebrating local flora. Informal clumps of indigenous grasses, groundcovers and flowering shrubs -- kangaroo grass, tussock-grass, running postman, austral indigo and everlasting daisies -- weave through a low-maintenance planting. Year-round flowering supports bees, butterflies and birds, contributing to a healthier local ecosystem.",
+  "evc": {
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "GipP",
+    "note": ""
+  },
+  "biodiversity": {
+    "indigenous_species_current": 13,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 30,
+    "indigenous_dominant": true,
+    "structural_layers_current": 3,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 5,
+    "canopy_cover_pct_baseline": 0,
+    "weed_pressure": "Low",
+    "weed_pressure_baseline": "Medium",
+    "species_list": [
+      "Bulbine bulbosa",
+      "Correa reflexa x pulchella 'Dusky Bells'",
+      "Lomandra longifolia",
+      "Poa labillardierei",
+      "Poa labillardierei 'Eskdale'",
+      "Hardenbergia violacea",
+      "Wahlenbergia stricta",
+      "Xerochrysum bracteatum 'Crimson'",
+      "Xerochrysum bracteatum 'Dargan Hill Monarch'",
+      "Xerochrysum bracteatum 'Pearl'",
+      "Themeda triandra",
+      "Themeda triandra 'True Blue'",
+      "Spyridium parvifolium",
+      "Glycine clandestina",
+      "Stylidium armeria",
+      "Dichelachne crinata",
+      "Indigofera australis",
+      "Kennedia prostrata",
+      "Einadia nutans",
+      "Brachyscome 'Mauve Bliss'"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 2,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false
+  },
+  "habitat": {
+    "habitat_nodes": 2,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Naturalistic indigenous clumps -- drought-tolerant grasses, groundcovers and flowering shrubs",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": null,
+    "park_distance_m": null,
+    "adjacent_registered_gardens": [
+      {
+        "id": "ER-AU-VIC-SH-SIR-0001",
+        "garden_id": "ER-AU-VIC-SH-SIR-0001",
+        "name": "Sir Garnet",
+        "verified": true,
+        "distance_m": 185,
+        "source": "geographic",
+        "display_lat": -37.8201,
+        "display_lng": 145.089
+      },
+      {
+        "id": "ER-AU-VIC-SH-CAN-0001",
+        "garden_id": "ER-AU-VIC-SH-CAN-0001",
+        "name": "Canterbury G02",
+        "verified": true,
+        "distance_m": 320,
+        "source": "geographic",
+        "display_lat": -37.825,
+        "display_lng": 145.0867
+      }
+    ],
+    "corridor_node_confirmed": false,
+    "cluster_area_ha": 0,
+    "display_lat": -37.8226,
+    "display_lng": 145.0911
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": false,
+    "has_species_list": true,
+    "has_fauna_record": false,
+    "has_professional_assessment": false,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "date": "2024",
+      "title": "Garden installed",
+      "detail": "Native drought-tolerant garden designed and installed by Gardener & Son."
+    }
+  ],
+  "activity_log": [
+    {
+      "date": "Sep 2026",
+      "type": "Milestone",
+      "title": "Added to the Registry",
+      "notes": "The Garden Trail joined the Ecological Registry.",
+      "public": true
+    }
+  ],
+  "notes": "Design by Gardener & Son (native drought-tolerant garden). Species list drawn from the G&S planting design. Existing pre-planting weed on site: Genista canariensis (Canary Island Broom) -- not part of the design, excluded from the indigenous palette. Ecological metrics (area, soil, water, habitat, canopy, layers) are provisional G&S estimates modelled on a comparable install and pending on-site assessment.",
+  "target_score": 70,
+  "typology": "Ecological Native Garden",
+  "registry_role": "Performer",
+  "trajectory": "Rising",
+  "council": "Boroondara City Council",
+  "ward": "Gardiner",
+  "lga": "Boroondara",
+  "garden_address": "Croydon Road, Surrey Hills",
+  "score": {
+    "total": 41,
+    "rating": "Ecological Garden",
+    "categories": [
+      {
+        "label": "Biodiversity Structure",
+        "score": 14,
+        "max": 25,
+        "notes": []
+      },
+      {
+        "label": "Soil & Water Function",
+        "score": 8,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Habitat Complexity",
+        "score": 7,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Connectivity",
+        "score": 4,
+        "max": 20,
+        "notes": []
+      },
+      {
+        "label": "Evidence & Verification",
+        "score": 8,
+        "max": 15,
+        "notes": []
+      }
+    ]
+  },
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 20
+  },
+  "upgrade_potential": 59,
+  "points_available": 59
+}

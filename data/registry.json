@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Aug 2026",
-    "total_gardens": 21,
+    "total_gardens": 22,
     "data_custodian": "Gardener & Son",
     "contact": "registry@gardenerandson.com.au",
     "schema_version": "2.0",
@@ -236,11 +236,11 @@
       "garden_name": "Sir Garnet",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 55,
+      "score": 56,
       "rating": {
         "current": "Ecological Garden",
         "next": "Registered Ecological Garden",
-        "points_to_next": 6
+        "points_to_next": 5
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -248,9 +248,10 @@
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
       "last_verified": "May 2026",
-      "badge_count": 2,
+      "badge_count": 3,
       "badges": [
         "indigenous_dominant",
+        "network_connected",
         "gs_verified"
       ],
       "profile_url": "/gardens/sirgarnet30/index.html",
@@ -269,7 +270,8 @@
       "ward": "Gardiner",
       "lga": "Boroondara",
       "adjacent_garden_ids": [
-        "ER-AU-VIC-SH-CAN-0001"
+        "ER-AU-VIC-SH-CAN-0001",
+        "ER-AU-VIC-SH-GTR-0001"
       ]
     },
     {
@@ -277,11 +279,11 @@
       "garden_name": "Canterbury G02",
       "suburb": "Surrey Hills",
       "state": "VIC",
-      "score": 38,
+      "score": 40,
       "rating": {
         "current": "Habitat Garden",
         "next": "Ecological Garden",
-        "points_to_next": 3
+        "points_to_next": 1
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
       "bioregion": "Victorian Volcanic Plain",
@@ -311,7 +313,8 @@
       "lga": "Boroondara",
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-SIR-0001",
-        "ER-AU-VIC-CAN-FLI-001"
+        "ER-AU-VIC-CAN-FLI-001",
+        "ER-AU-VIC-SH-GTR-0001"
       ]
     },
     {
@@ -914,6 +917,43 @@
       "council": "Whitehorse City Council",
       "lga": "Whitehorse",
       "ward": ""
+    },
+    {
+      "garden_id": "ER-AU-VIC-SH-GTR-0001",
+      "garden_name": "The Garden Trail",
+      "type": "Ecological Native Garden",
+      "suburb": "Surrey Hills",
+      "state": "VIC",
+      "score": 41,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 20
+      },
+      "primary_evc": "Grassy Woodland (EVC 175)",
+      "bioregion": "Gippsland Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Sep 2026",
+      "badge_count": 3,
+      "badges": [
+        "indigenous_dominant",
+        "network_connected",
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/gardentrail/index.html",
+      "data_file": "data/gardentrail.json",
+      "typology": "Ecological Native Garden",
+      "registry_role": "Performer",
+      "trajectory": "Rising",
+      "council": "Boroondara City Council",
+      "lga": "Boroondara",
+      "ward": "Gardiner",
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-SH-SIR-0001",
+        "ER-AU-VIC-SH-CAN-0001"
+      ]
     }
   ],
   "last_sync": "2026-08-18T11:18:02.292Z"

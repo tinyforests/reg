@@ -99,6 +99,16 @@
         "source": "geographic",
         "display_lat": -37.825,
         "display_lng": 145.0867
+      },
+      {
+        "id": "ER-AU-VIC-SH-GTR-0001",
+        "garden_id": "ER-AU-VIC-SH-GTR-0001",
+        "name": "The Garden Trail",
+        "verified": true,
+        "distance_m": 185,
+        "source": "geographic",
+        "display_lat": -37.8226,
+        "display_lng": 145.0911
       }
     ],
     "corridor_node_confirmed": false,
@@ -166,10 +176,10 @@
   "rating": {
     "current": "Ecological Garden",
     "next": "Registered Ecological Garden",
-    "points_to_next": 6
+    "points_to_next": 5
   },
-  "upgrade_potential": 45,
-  "points_available": 45,
+  "upgrade_potential": 44,
+  "points_available": 44,
   "yield": {
     "eligible": false,
     "status": "Not yet active — yield layer in roadmap",
@@ -201,7 +211,7 @@
   "garden_address": "",
   "steward_email": "",
   "score": {
-    "total": 55,
+    "total": 56,
     "rating": "Ecological Garden",
     "categories": [
       {
@@ -235,7 +245,7 @@
       },
       {
         "label": "Connectivity",
-        "score": 9,
+        "score": 10,
         "max": 20,
         "notes": [
           "Park within 50m",
