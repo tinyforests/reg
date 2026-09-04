@@ -20,17 +20,33 @@ const now = () => FIXED_NOW;
 
 // --- fixtures ------------------------------------------------------------
 
+// Real GeoServer WFS response shape (captured from opendata.maps.vic.gov.au,
+// nv2005_evcbcs, 4 Sep 2026). Property names/values verbatim; the geometry is a
+// small square that contains the MELBOURNE test point so the client-side
+// point-in-polygon match fires on the primary (Polygon) path.
 const EVC_HIT = {
+  type: 'FeatureCollection',
   features: [{
-    attributes: {
-      X_EVCNAME: 'Grassy Woodland',
-      EVC: 175,
-      EVC_BCS_DESC: 'Endangered',
-      BIOREGION: 'Gippsland Plain'
+    type: 'Feature',
+    id: 'nv2005_evcbcs.fixture',
+    geometry: {
+      type: 'Polygon',
+      coordinates: [[
+        [145.08, -37.83], [145.10, -37.83], [145.10, -37.81], [145.08, -37.81], [145.08, -37.83]
+      ]]
+    },
+    geometry_name: 'geom',
+    properties: {
+      scale: 100000, evc: 175, evc_bcs: 'E', bioregion_no: 5.1,
+      evc_bcs_desc: 'Endangered', bioregion: 'Gippsland Plain', evc_code: '0175',
+      veg_code: 'GipP0175', bioregion_code: 'GipP', x_evcname: 'Grassy Woodland',
+      x_groupname: 'Lower Slopes or Hills Woodlands', x_subgroupname: 'Grassy'
     }
-  }]
+  }],
+  totalFeatures: 1, numberReturned: 1,
+  crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:EPSG::7844' } }
 };
-const EVC_MISS = { features: [] };
+const EVC_MISS = { type: 'FeatureCollection', features: [], totalFeatures: 0 };
 
 const NVIS_HIT = {
   results: [{
@@ -73,28 +89,44 @@ function makeFetch(routes) {
 const MELBOURNE = { lat: -37.8203, lng: 145.0867 }; // Mont Albert, approx
 
 // --- 1. LEGACY BASELINE --------------------------------------------------
-// This is the current Victorian code path, written out longhand: query the EVC
-// service, read the same four fields. The abstraction must reproduce it.
+// This is the current Victorian code path, written out longhand exactly as
+// findmyevc.com runs it (findyourevc/assets/evc-fetch.js): a WFS GetFeature over
+// a 0.05-degree bbox, then client-side point-in-polygon over the returned
+// features, reading the same four fields. The abstraction must reproduce it —
+// same request, same result. Kept independent of wfs.js on purpose.
+function ringContains(pt, ring) {
+  const x = pt[0], y = pt[1];
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+    if (((yi > y) !== (yj > y)) && (x < ((xj - xi) * (y - yi)) / (yj - yi) + xi)) inside = !inside;
+  }
+  return inside;
+}
 
 async function legacyEvcLookup(loc, fetchImpl) {
+  const d = 0.05;
+  const bbox = `${loc.lng - d},${loc.lat - d},${loc.lng + d},${loc.lat + d},EPSG:4326`;
   const params = new URLSearchParams({
-    geometry: `${loc.lng},${loc.lat}`,
-    geometryType: 'esriGeometryPoint',
-    inSR: '4326',
-    spatialRel: 'esriSpatialRelIntersects',
-    outFields: 'X_EVCNAME,EVC,EVC_BCS_DESC,BIOREGION',
-    returnGeometry: 'false',
-    f: 'json'
+    service: 'WFS',
+    version: '1.0.0',
+    request: 'GetFeature',
+    typeName: 'open-data-platform:nv2005_evcbcs',
+    bbox,
+    outputFormat: 'application/json'
   });
-  const res = await fetchImpl(`${EVC_SERVICE}/query?${params}`);
+  const res = await fetchImpl(`${EVC_SERVICE}?${params}`);
   const data = await res.json();
-  const f = data.features[0];
+  const features = (data && data.features) || [];
+  const pt = [loc.lng, loc.lat];
+  let f = features.find(ft => ft.geometry && ft.geometry.type === 'Polygon'
+    && ringContains(pt, ft.geometry.coordinates[0]));
   if (!f) return null;
   return {
-    evc_code: String(f.attributes.EVC),
-    evc_name: f.attributes.X_EVCNAME,
-    bcs: f.attributes.EVC_BCS_DESC,
-    bioregion: f.attributes.BIOREGION
+    evc_code: String(f.properties.evc),
+    evc_name: f.properties.x_evcname,
+    bcs: f.properties.evc_bcs_desc,
+    bioregion: f.properties.bioregion
   };
 }
 
@@ -157,7 +189,7 @@ check('provenance survives the abstraction', () => {
   const p = ctx.original_vegetation.provenance;
   assert.strictEqual(p.authority, 'Victorian Government (DEECA)');
   assert.strictEqual(p.dataset, 'NV2005_EVCBCS');
-  assert.strictEqual(p.lookup_method, 'arcgis:query:point-in-polygon');
+  assert.strictEqual(p.lookup_method, 'wfs:getfeature:point-in-polygon');
   assert.strictEqual(p.service_url, EVC_SERVICE);
   assert.strictEqual(p.queried_at, FIXED_NOW);
   assert.strictEqual(p.jurisdiction, 'VIC');

@@ -11,7 +11,8 @@
  * and have not been observed.
  */
 
-import { EVC_SERVICE } from '../jurisdiction/adapters/vic.js';
+import { EVC_SERVICE, EVC_LAYER } from '../jurisdiction/adapters/vic.js';
+import { wfsGetFeatureUrl } from '../jurisdiction/wfs.js';
 import {
   NVIS_PRE_MVS_SERVICE, IBRA_SUBREGIONS_SERVICE
 } from '../jurisdiction/adapters/au-national.js';
@@ -37,9 +38,8 @@ const targets = [
     inSR: '4326', spatialRel: 'esriSpatialRelIntersects',
     outFields: 'STE_NAME21,STE_CODE21'
   })}`],
-  ['VIC EVC (NV2005_EVCBCS)', `${EVC_SERVICE}/query?${q({
-    inSR: '4326', spatialRel: 'esriSpatialRelIntersects', outFields: '*'
-  })}`],
+  // VIC EVC is a GeoServer WFS (GetFeature + bbox), not an ArcGIS /query.
+  ['VIC EVC (NV2005_EVCBCS)', wfsGetFeatureUrl({ serviceUrl: EVC_SERVICE, layer: EVC_LAYER, lat, lng })],
   ['NVIS 7.0 pre-1750 MVS', `${NVIS_PRE_MVS_SERVICE}/identify?${q({
     sr: '4326', layers: 'all:0', tolerance: '1',
     mapExtent: `${lng - 0.001},${lat - 0.001},${lng + 0.001},${lat + 0.001}`,

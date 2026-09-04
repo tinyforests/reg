@@ -1509,66 +1509,25 @@ function _erResolveFromCoords(lat, lng) {
   _erFindNearestGarden(lat, lng);
 }
 
-/* EVC lookup via VIC WFS */
+/* EVC lookup — routed through the national jurisdiction abstraction so this
+   assessor tool and findmyevc.com share one canonical Victorian lookup (the
+   same DEECA NV2005_EVCBCS WFS). window._erResolveEcoContext is defined by the
+   module bridge near the end of this file; it returns classifications only. */
 function _erLookupEvc(lat, lng) {
-  var statusEl = document.getElementById('f_evc_name');
-  var d = 0.02;
-  var bbox = (lng-d)+','+(lat-d)+','+(lng+d)+','+(lat+d)+',EPSG:4326';
-  var url = _VIC_WFS + '?service=WFS&version=1.0.0&request=GetFeature'
-          + '&typeName=' + encodeURIComponent(_EVC_LAYER)
-          + '&bbox=' + bbox + '&outputFormat=application%2Fjson';
-  fetch(url)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (!data.features || !data.features.length) return;
-      var pt = turf.point([lng, lat]);
-      var match = null;
-      for (var i = 0; i < data.features.length; i++) {
-        var f = data.features[i];
-        try {
-          var geom = f.geometry.type === 'Polygon'
-            ? turf.polygon(f.geometry.coordinates)
-            : (f.geometry.type === 'MultiPolygon' ? turf.multiPolygon(f.geometry.coordinates) : null);
-          if (geom && turf.booleanPointInPolygon(pt, geom)) { match = f; break; }
-        } catch(e) {}
-      }
-      if (!match) {
-        var best = Infinity;
-        for (var j = 0; j < data.features.length; j++) {
-          try {
-            var g2 = data.features[j].geometry.type === 'Polygon'
-              ? turf.polygon(data.features[j].geometry.coordinates)
-              : turf.multiPolygon(data.features[j].geometry.coordinates);
-            var d2 = turf.distance(pt, turf.centroid(g2));
-            if (d2 < best) { best = d2; match = data.features[j]; }
-          } catch(e) {}
-        }
-      }
-      if (!match) return;
-      var p = match.properties;
-      console.info('[EVC WFS properties]', JSON.stringify(p));
+  var resolve = window._erResolveEcoContext;
+  if (typeof resolve !== 'function') { console.warn('[EVC] jurisdiction module not ready'); return; }
+  resolve(lat, lng)
+    .then(function(r) {
+      if (!r || !r.evc_name) return;
+      var evcName    = r.evc_name;
+      var evcCode    = r.evc_code ? 'EVC ' + r.evc_code : '';
+      var bioregion  = r.bioregion || '';
+      var bioregCode = r.bioregion_code || '';
 
-      /* Scan property keys for bioregion name/code regardless of exact naming */
-      function _wfsPick(obj, patterns) {
-        var keys = Object.keys(obj);
-        for (var pi = 0; pi < patterns.length; pi++) {
-          var re = new RegExp(patterns[pi], 'i');
-          for (var ki = 0; ki < keys.length; ki++) {
-            if (re.test(keys[ki]) && obj[keys[ki]]) return String(obj[keys[ki]]);
-          }
-        }
-        return '';
-      }
-
-      var evcCode    = 'EVC ' + (_wfsPick(p, ['^evc$', '^evc_no$', '^evc_num$']) || '');
-      var evcName    = _wfsPick(p, ['^x_evcname$', '^evcname$', '^evc_name$', 'evcname', 'evc_name']);
-      var bioregion  = _wfsPick(p, ['^bioregion_name$', '^biore_name$', '^bioregion$', 'bioregion_name', 'biore_name', 'bioregion']);
-      var bioregCode = _wfsPick(p, ['^bioregion_no$', '^biore_no$', '^bioregion_code$', 'bioregion_no', 'biore_no', 'bioregion_code']);
-
-      var evcEl  = document.getElementById('f_evc_name');         if (evcEl  && evcName)    evcEl.value    = evcName;
-      var codeEl = document.getElementById('f_evc_code');         if (codeEl && evcCode)    codeEl.value   = evcCode;
-      var brEl   = document.getElementById('f_evc_bioregion');    if (brEl   && bioregion)  brEl.value     = bioregion;
-      var brcEl  = document.getElementById('f_evc_bioregion_code'); if (brcEl && bioregCode) brcEl.value  = bioregCode;
+      var evcEl  = document.getElementById('f_evc_name');          if (evcEl  && evcName)    evcEl.value  = evcName;
+      var codeEl = document.getElementById('f_evc_code');          if (codeEl && evcCode)    codeEl.value = evcCode;
+      var brEl   = document.getElementById('f_evc_bioregion');     if (brEl   && bioregion)  brEl.value   = bioregion;
+      var brcEl  = document.getElementById('f_evc_bioregion_code');if (brcEl  && bioregCode) brcEl.value  = bioregCode;
 
       console.info('[EVC fill]', { evcName: evcName, evcCode: evcCode, bioregion: bioregion, bioregCode: bioregCode });
       var statusEl = document.getElementById('evc_status');
@@ -1578,7 +1537,7 @@ function _erLookupEvc(lat, lng) {
       }
       renderLive();
     })
-    .catch(function() {});
+    .catch(function(e) { console.warn('[EVC] resolve failed', e); });
 }
 
 /* Park lookup via Overpass */
@@ -2462,6 +2421,26 @@ renderLive();
   renderLive(); // recompute now that verified inputs are locked out
 })();
 
+</script>
+
+<!-- Jurisdiction bridge: exposes the canonical ecological-context resolver to the
+     legacy inline script above. Module scope keeps the abstraction ESM-only; it
+     returns classifications only, never coordinates. See /jurisdiction. -->
+<script type="module">
+  import { resolveEcologicalContext, toLegacyEvcResult } from '/jurisdiction/index.js';
+  window._erResolveEcoContext = async function (lat, lng) {
+    const ctx = await resolveEcologicalContext({ lat, lng }, { fetchImpl: (u) => fetch(u) });
+    const ov = ctx.original_vegetation;
+    const legacy = ov ? toLegacyEvcResult(ov) : null; // {evc_code,evc_name,bcs,bioregion} | null
+    if (!legacy) return null;
+    return {
+      evc_code: legacy.evc_code,
+      evc_name: legacy.evc_name,
+      bioregion: legacy.bioregion,
+      bcs: legacy.bcs,
+      bioregion_code: (ov.extra && ov.extra.victorian_bioregion_code) || ''
+    };
+  };
 </script>
 </body>
 </html>
