@@ -313,5 +313,73 @@
         ]
       }
     ]
+  },
+  "ecological_context": {
+    "schema_version": "1.0.0-draft",
+    "resolved_at": "2026-09-04T07:30:14.509Z",
+    "jurisdiction": {
+      "country": "AU",
+      "jurisdiction": "VIC",
+      "resolver_method": "trusted_interior",
+      "resolver_source": "Greater Melbourne — wholly within Victoria"
+    },
+    "original_vegetation_state_attempt": {
+      "system": "EVC",
+      "code": null,
+      "name": null,
+      "resolution": "state",
+      "source": "DEECA NV2005_EVCBCS",
+      "status": "nodata",
+      "provenance": {
+        "authority": "Victorian Government (DEECA)",
+        "dataset": "NV2005_EVCBCS",
+        "dataset_version": null,
+        "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
+        "lookup_method": "wfs:getfeature:point-in-polygon",
+        "queried_at": "2026-09-04T07:30:14.169Z",
+        "jurisdiction": "VIC",
+        "reproducible": true
+      }
+    },
+    "original_vegetation": {
+      "system": "NVIS MVS",
+      "code": "9",
+      "name": "Eucalyptus woodlands with a tussock grass understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-04T07:30:14.354Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      }
+    },
+    "bioregion": {
+      "system": "IBRA",
+      "code": "SCP",
+      "name": "South East Coastal Plain",
+      "resolution": "national",
+      "source": "DCCEEW IBRA 7.1",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "IBRA7_Subregions",
+        "dataset_version": "7.1",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
+        "lookup_method": "arcgis:identify:polygon",
+        "queried_at": "2026-09-04T07:30:14.509Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      },
+      "extra": {
+        "subregion": "Gippsland Plain",
+        "subregion_code": "SCP01"
+      }
+    }
   }
 }

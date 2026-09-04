@@ -52,7 +52,12 @@ export async function resolveEcologicalContext(location, opts = {}) {
   const ctx = {
     fetchImpl: opts.fetchImpl,
     now,
-    datasetVersions: opts.datasetVersions || {}
+    datasetVersions: opts.datasetVersions || {},
+    // Enrolment posture: when true, a state adapter must report nodata rather
+    // than guess a nearest/majority polygon for a point it does not contain, so
+    // the national fallback can supply the honest answer. Discovery leaves this
+    // off and keeps each state tool's own client-side matching. (See §6.)
+    strictContainment: opts.strictContainment === true
   };
 
   const jur = await resolveJurisdiction(location.lat, location.lng, {

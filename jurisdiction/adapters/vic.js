@@ -50,7 +50,10 @@ export const vicAdapter = {
       lat: loc.lat,
       lng: loc.lng,
       d: EVC_BBOX_DEGREES,
-      groupBy: 'evc',
+      // Discovery keeps production's majority-then-centroid fallback for a point
+      // that lands in an urban gap; enrolment (strictContainment) does not —
+      // no containing polygon means nodata, and the national layer answers.
+      groupBy: ctx.strictContainment ? null : 'evc',
       fetchImpl: ctx.fetchImpl
     });
 

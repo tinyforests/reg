@@ -30,6 +30,7 @@ import math
 import os
 import shutil
 import struct
+import subprocess
 import sys
 import time
 import urllib.parse
@@ -176,6 +177,40 @@ def rating_object(score):
             return {"current": current, "next": name,
                     "points_to_next": floor - score}
     return {"current": current, "next": None, "points_to_next": 0}
+
+
+# Records under external review keep their current JSON untouched by the
+# ecological-context migration (NATIONAL-ARCHITECTURE.md section 5). Kate's
+# Forest Hill (evc: null) is the no-local-data fallback test case.
+UNDER_REVIEW = {"ER-AU-VIC-WHI-KTE-001"}
+
+# The JS jurisdiction layer is the single source of truth for ecological context
+# (schema + adapters). Python shells out to it rather than porting the schema.
+JURISDICTION_CLI = os.path.join(REPO_ROOT, 'jurisdiction', 'cli.mjs')
+
+
+def resolve_ecological_context(lat, lng):
+    """Resolve a property's ecological context by shelling out to the JS
+    jurisdiction layer. Coordinates are passed as args and never persisted; the
+    CLI returns classifications only. Returns the parsed dict, or None on any
+    failure (missing node, network error, bad JSON) -- a failed lookup must never
+    block a sync or fabricate data."""
+    try:
+        res = subprocess.run(
+            ['node', JURISDICTION_CLI, str(float(lat)), str(float(lng))],
+            capture_output=True, text=True, timeout=90)
+    except Exception as e:
+        print("  WARN ecological_context spawn failed: %s" % e)
+        return None
+    if res.returncode != 0:
+        print("  WARN ecological_context rc=%s: %s" % (
+            res.returncode, (res.stderr or '').strip()[:200]))
+        return None
+    try:
+        return json.loads(res.stdout)
+    except Exception as e:
+        print("  WARN ecological_context bad JSON: %s" % e)
+        return None
 
 
 # Canonical pillar order — matches the categories order emitted by reg-score.js
@@ -597,6 +632,36 @@ def sync(check_only=False):
                     with open(path, 'w') as wf:
                         json.dump(pub, wf, indent=2, ensure_ascii=False)
                         wf.write('\n')
+
+        # Ecological context: resolve original vegetation + national context via
+        # the jurisdiction abstraction, using the PRIVATE precise coordinates that
+        # already live server-side. Written ALONGSIDE the existing `evc` key, which
+        # is left untouched, for one release. Resolved only when absent so sync
+        # stays idempotent (each resolve stamps a timestamp). Skipped for records
+        # under external review and any without private coordinates.
+        # The resolver returns classifications only; we assert no coordinate
+        # reached the output before writing it into the public JSON.
+        if (not check_only and gid in coord_index and gid not in UNDER_REVIEW
+                and 'ecological_context' not in record):
+            prec = private_coords.get(gid)
+            eco = resolve_ecological_context(prec['lat'], prec['lng']) if prec else None
+            if eco is not None:
+                blob = json.dumps(eco)
+                for coord in (prec['lat'], prec['lng']):
+                    if str(coord) in blob:
+                        raise SystemExit(
+                            "ABORT %s: coordinate %s leaked into ecological_context"
+                            % (gid, coord))
+                record['ecological_context'] = eco
+                ov = (eco.get('original_vegetation') or {})
+                changes.append("%s: ecological_context resolved (%s %s / %s)" % (
+                    gid, ov.get('system') or '?', ov.get('code') or '-',
+                    ov.get('status') or '?'))
+                pub = _sanitise_connectivity(
+                    json.loads(json.dumps(record)), private_coords, coord_seed)
+                with open(path, 'w') as wf:
+                    json.dump(pub, wf, indent=2, ensure_ascii=False)
+                    wf.write('\n')
 
         # Demo flag: input file is authoritative.
         demo = bool(record.get('demo')) or bool(g.get('demo'))
