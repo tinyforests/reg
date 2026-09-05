@@ -39,7 +39,7 @@ const targets = [
     outFields: 'STE_NAME21,STE_CODE21'
   })}`],
   // VIC EVC is a GeoServer WFS (GetFeature + bbox), not an ArcGIS /query.
-  ['VIC EVC (NV2005_EVCBCS)', wfsGetFeatureUrl({ serviceUrl: EVC_SERVICE, layer: EVC_LAYER, lat, lng })],
+  ['VIC EVC (NV1750_EVCBCS)', wfsGetFeatureUrl({ serviceUrl: EVC_SERVICE, layer: EVC_LAYER, lat, lng })],
   ['NVIS 7.0 pre-1750 MVS', `${NVIS_PRE_MVS_SERVICE}/identify?${q({
     sr: '4326', layers: 'all:0', tolerance: '1',
     mapExtent: `${lng - 0.001},${lat - 0.001},${lng + 0.001},${lat + 0.001}`,

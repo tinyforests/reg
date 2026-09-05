@@ -41,7 +41,7 @@ export function contextRecord({
   code = null,     // local code as the authority writes it, as a STRING
   name = null,     // local community name, verbatim
   resolution,      // 'state' | 'national'
-  source,          // human-readable authority + dataset, e.g. 'DEECA NV2005_EVCBCS'
+  source,          // human-readable authority + dataset, e.g. 'DEECA NV1750_EVCBCS'
   status,
   extra = null,    // jurisdiction-specific fields that have no national analogue
   provenance
@@ -60,7 +60,7 @@ export function contextRecord({
  */
 export function provenance({
   authority,        // 'Victorian Government (DEECA)'
-  dataset,          // 'NV2005_EVCBCS'
+  dataset,          // 'NV1750_EVCBCS'
   dataset_version = null,
   service_url,      // exact endpoint queried
   lookup_method,    // 'arcgis:query:point-in-polygon' | 'arcgis:identify:raster'

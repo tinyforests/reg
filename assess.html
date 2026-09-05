@@ -1383,8 +1383,8 @@ function geocodeAddress(key) {
 
 /* ---- ADDRESS AUTOCOMPLETE + AUTO-RESOLVE (EVC / PARK / NEAREST GARDEN) ---- */
 
-var _VIC_WFS   = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
-var _EVC_LAYER = 'open-data-platform:nv2005_evcbcs';
+/* EVC resolution moved to the jurisdiction abstraction (DEECA NV1750 pre-1750
+   EVC); see the module bridge at the end of this file. */
 var _OVERPASS  = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
 var _erGardenLocs = null; // cache of [{garden_id, garden_name, display_lat, display_lng}]
 

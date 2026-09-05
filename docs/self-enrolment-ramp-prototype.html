@@ -418,7 +418,7 @@ const speciesList = _p.get('species')
    Populates gardenLat/Lng/Suburb/Region/Country, evcCode/Name, park* vars.
    Non-blocking: submission proceeds with blanks if any lookup fails. */
 const _VIC_WFS   = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
-const _EVC_LAYER = 'open-data-platform:nv2005_evcbcs';
+const _EVC_LAYER = 'open-data-platform:nv1750_evcbcs'; // pre-1750 EVC (NatureKit); never the extant nv2005
 
 function _setGeoResult(row, msg, ok) {
   const el = document.getElementById('geo-val-' + row);

@@ -28,7 +28,7 @@ const EVC_HIT = {
   type: 'FeatureCollection',
   features: [{
     type: 'Feature',
-    id: 'nv2005_evcbcs.fixture',
+    id: 'nv1750_evcbcs.fixture',
     geometry: {
       type: 'Polygon',
       coordinates: [[

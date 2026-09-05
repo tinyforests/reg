@@ -20,6 +20,19 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-09-05 — Original-vegetation lookups use pre-1750 data (VIC = NV1750, never NV2005)
+
+**Decision:** G&S EVC / original-vegetation lookups query **pre-1750 / pre-clearing** vegetation, never the extant layer. In Victoria that is DEECA **NV1750_EVCBCS** (the pre-1750 modelled EVC NatureKit shows), not NV2005_EVCBCS (the extant/2005 remnant layer). EVC is Victoria-specific; other states have their own pre-1750 layers (NSW SVTM 1750 PCT, QLD pre-clear RE, WA Beard, SA pre-European), all falling through to NVIS 7.0 pre-1750 MVS nationally — see `/jurisdiction/PRE-1750-ENDPOINTS.md`.
+
+**Reason:** NV2005 maps only vegetation still present in 2005. Over cleared suburban lots — almost every registered garden and almost every lookup — it has no polygon, so tools fell through to a bbox fallback (nearest-centroid or, worse, the majority-vote urban fallback added in findmyevc commit `8ece90d`) and returned a regional-dominant EVC that didn't match NatureKit. NV1750 has full statewide coverage, so an exact point-in-polygon always resolves the correct original community. It is also the ecologically correct source: G&S plants *to* the pre-clearing EVC, so that is the value that should drive plant lists and Registry context.
+
+**Files affected:**
+- reg: `jurisdiction/adapters/vic.js` (EVC_LAYER), `assess.html`, `docs/self-enrolment-ramp-prototype.html`, `scripts/sync_registry.py`, `AGENTS.md`, `jurisdiction/PRE-1750-ENDPOINTS.md`.
+- findmyevc.com (`findyourevc` repo): `assets/config.js`.
+- findmyecologicalgarden.com (`super-barnacle` repo): `evc-fetch.js`.
+
+**Notes:** The Registry's batch `evc` correction used the street-level coords in `data/private/coords.json`, so a garden on an EVC boundary may need its exact-parcel value confirmed; live lookups (assess.html + both discovery sites) geocode precisely. Loose ends to tidy separately: a stale non-git copy at `~/Downloads/fmeg-project` (not deployed), and `super-barnacle/CLAUDE.md` is a mislabelled Village Rewards copy.
+
 ## 2026-08-13 — Magic-link profile claiming
 
 **Decision:** Stewards claim their garden profile by entering their email in the bottom bar. The backend checks the email against three sources (Steward Emails sheet, Submissions sheet for published gardens, Claims sheet) and — if found — emails a one-use 30-minute magic link. Clicking it verifies the token server-side, marks the device in localStorage, and reloads in steward view. The old `verify_steward` flow (which required a prior opportunity claim) is replaced entirely.
