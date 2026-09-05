@@ -117,7 +117,7 @@ export async function resolveJurisdiction(lat, lng, opts = {}) {
     geometryType: 'esriGeometryPoint',
     inSR: '4326',
     spatialRel: 'esriSpatialRelIntersects',
-    outFields: 'STE_NAME21,STE_CODE21',
+    outFields: 'state_name_2021,state_code_2021',
     returnGeometry: 'false',
     f: 'json'
   });
@@ -134,7 +134,7 @@ export async function resolveJurisdiction(lat, lng, opts = {}) {
   }
 
   const feature = data && data.features && data.features[0];
-  const st = feature ? normaliseStateName(feature.attributes.STE_NAME21) : null;
+  const st = feature ? normaliseStateName(feature.attributes.state_name_2021) : null;
 
   return {
     country: 'AU',

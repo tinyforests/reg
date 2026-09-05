@@ -219,7 +219,7 @@ check('the failed state attempt is preserved, not discarded', () => {
 
 const SYDNEY = { lat: -33.8688, lng: 151.2093 };
 const nswFetch = makeFetch([
-  ['https://geo.abs.gov.au', { features: [{ attributes: { STE_NAME21: 'New South Wales' } }] }],
+  ['https://geo.abs.gov.au', { features: [{ attributes: { state_name_2021: 'New South Wales' } }] }],
   [NVIS_PRE_MVS_SERVICE, NVIS_HIT],
   [IBRA_SUBREGIONS_SERVICE, IBRA_HIT]
 ]);
@@ -237,7 +237,7 @@ check('a NSW property registers with national context before NSW is built', () =
 // --- total absence -------------------------------------------------------
 
 const voidFetch = makeFetch([
-  ['https://geo.abs.gov.au', { features: [{ attributes: { STE_NAME21: 'New South Wales' } }] }],
+  ['https://geo.abs.gov.au', { features: [{ attributes: { state_name_2021: 'New South Wales' } }] }],
   [NVIS_PRE_MVS_SERVICE, NVIS_NODATA],
   [IBRA_SUBREGIONS_SERVICE, { results: [] }]
 ]);
