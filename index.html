@@ -505,7 +505,8 @@
 
   var saved = '';
   try { saved = localStorage.getItem('reg_mode') || ''; } catch(e) {}
-  setMode(saved === 'dark' ? 'dark' : 'light');
+  // Default to Understory (dark); honour an explicit saved Canopy preference.
+  setMode(saved === 'light' ? 'light' : 'dark');
 
   btn.onclick = function() {
     setMode(root.classList.contains('dark') ? 'light' : 'dark');
