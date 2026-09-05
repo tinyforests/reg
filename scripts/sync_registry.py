@@ -657,6 +657,24 @@ def sync(check_only=False):
                 changes.append("%s: ecological_context resolved (%s %s / %s)" % (
                     gid, ov.get('system') or '?', ov.get('code') or '-',
                     ov.get('status') or '?'))
+                # Correct the stored evc from the authoritative pre-1750 point
+                # value (what NatureKit shows) when the state layer contained the
+                # point -- keeps the public evc matching NatureKit.
+                if ov.get('system') == 'EVC' and ov.get('status') == 'ok' and ov.get('code'):
+                    ex = ov.get('extra') or {}
+                    new_evc = {
+                        'name': ov.get('name'),
+                        'code': 'EVC ' + str(ov.get('code')),
+                        'bioregion': ex.get('victorian_bioregion'),
+                        'bioregion_code': ex.get('victorian_bioregion_code'),
+                    }
+                    old_evc = record.get('evc') if isinstance(record.get('evc'), dict) else {}
+                    if old_evc.get('note'):
+                        new_evc['note'] = old_evc['note']
+                    if old_evc != new_evc:
+                        changes.append("%s: evc corrected (%s -> EVC %s %s)" % (
+                            gid, old_evc.get('code') or '-', ov.get('code'), ov.get('name')))
+                        record['evc'] = new_evc
                 pub = _sanitise_connectivity(
                     json.loads(json.dumps(record)), private_coords, coord_seed)
                 with open(path, 'w') as wf:
@@ -680,6 +698,19 @@ def sync(check_only=False):
         if rec_name and rec_name != g.get('garden_name'):
             changes.append("%s: garden_name %r -> %r" % (gid, g.get('garden_name'), rec_name))
             g['garden_name'] = rec_name
+
+        # Denormalised EVC display on the registry entry follows the data file's
+        # (possibly just-corrected) evc block, so the browse list matches the
+        # profile and NatureKit.
+        rec_evc = record.get('evc') or {}
+        if rec_evc.get('name') and rec_evc.get('code'):
+            pe = "%s (%s)" % (rec_evc['name'], rec_evc['code'])
+            if pe != g.get('primary_evc'):
+                changes.append("%s: primary_evc %r -> %r" % (gid, g.get('primary_evc'), pe))
+                g['primary_evc'] = pe
+            if rec_evc.get('bioregion') and rec_evc['bioregion'] != g.get('bioregion'):
+                changes.append("%s: bioregion %r -> %r" % (gid, g.get('bioregion'), rec_evc['bioregion']))
+                g['bioregion'] = rec_evc['bioregion']
 
         # Score: engine output, unless pre-install.
         if g.get('status') in PRE_INSTALL_STATUSES:

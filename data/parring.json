@@ -15,11 +15,10 @@
   "area_sqm": 20,
   "description": "Designed as a connected habitat garden, the front and rear spaces work together as one living system, with layered planting creating a series of small habitat zones that provide food, shelter and structure for birds, insects and pollinators. Grasses, groundcovers, flowering plants and shrubs drawn from local plant communities strengthen biodiversity while contributing to a wider network of urban habitat. Guided by the principles of stepping-stone ecology, the garden supports the movement of wildlife between surrounding green spaces and remnant vegetation, helping reconnect a residential property with the ecological systems of its place.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
     "bioregion": "Gippsland Plain",
-    "bioregion_code": "5.1",
-    "note": ""
+    "bioregion_code": "GipP"
   },
   "biodiversity": {
     "indigenous_species_current": 31,
@@ -374,47 +373,34 @@
   },
   "ecological_context": {
     "schema_version": "1.0.0-draft",
-    "resolved_at": "2026-09-04T07:30:15.166Z",
+    "resolved_at": "2026-09-05T01:05:45.737Z",
     "jurisdiction": {
       "country": "AU",
       "jurisdiction": "VIC",
       "resolver_method": "trusted_interior",
       "resolver_source": "Greater Melbourne — wholly within Victoria"
     },
-    "original_vegetation_state_attempt": {
+    "original_vegetation": {
       "system": "EVC",
-      "code": null,
-      "name": null,
+      "code": "55",
+      "name": "Plains Grassy Woodland",
       "resolution": "state",
-      "source": "DEECA NV2005_EVCBCS",
-      "status": "nodata",
+      "source": "DEECA NV1750_EVCBCS",
+      "status": "ok",
       "provenance": {
         "authority": "Victorian Government (DEECA)",
-        "dataset": "NV2005_EVCBCS",
+        "dataset": "NV1750_EVCBCS",
         "dataset_version": null,
         "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
         "lookup_method": "wfs:getfeature:point-in-polygon",
-        "queried_at": "2026-09-04T07:30:14.864Z",
+        "queried_at": "2026-09-05T01:05:45.225Z",
         "jurisdiction": "VIC",
         "reproducible": true
-      }
-    },
-    "original_vegetation": {
-      "system": "NVIS MVS",
-      "code": "9",
-      "name": "Eucalyptus woodlands with a tussock grass understorey",
-      "resolution": "national",
-      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
-      "status": "ok",
-      "provenance": {
-        "authority": "Australian Government (DCCEEW)",
-        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
-        "dataset_version": "7.0",
-        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
-        "lookup_method": "arcgis:identify:raster",
-        "queried_at": "2026-09-04T07:30:15.007Z",
-        "jurisdiction": "AU",
-        "reproducible": true
+      },
+      "extra": {
+        "bioregional_conservation_status": "Endangered",
+        "victorian_bioregion": "Gippsland Plain",
+        "victorian_bioregion_code": "GipP"
       }
     },
     "bioregion": {
@@ -430,13 +416,31 @@
         "dataset_version": "7.1",
         "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
         "lookup_method": "arcgis:identify:polygon",
-        "queried_at": "2026-09-04T07:30:15.166Z",
+        "queried_at": "2026-09-05T01:05:45.597Z",
         "jurisdiction": "AU",
         "reproducible": true
       },
       "extra": {
         "subregion": "Gippsland Plain",
         "subregion_code": "SCP01"
+      }
+    },
+    "national_vegetation": {
+      "system": "NVIS MVS",
+      "code": "9",
+      "name": "Eucalyptus woodlands with a tussock grass understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-05T01:05:45.737Z",
+        "jurisdiction": "AU",
+        "reproducible": true
       }
     }
   }

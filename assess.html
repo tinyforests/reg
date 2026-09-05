@@ -1511,14 +1511,30 @@ function _erResolveFromCoords(lat, lng) {
 
 /* EVC lookup — routed through the national jurisdiction abstraction so this
    assessor tool and findmyevc.com share one canonical Victorian lookup (the
-   same DEECA NV2005_EVCBCS WFS). window._erResolveEcoContext is defined by the
-   module bridge near the end of this file; it returns classifications only. */
+   DEECA NV1750_EVCBCS pre-1750 EVC, matching NatureKit). window._erResolveEcoContext
+   is defined by the module bridge near the end of this file; it returns
+   classifications only, and null when the address has no Victorian EVC. */
 function _erLookupEvc(lat, lng) {
   var resolve = window._erResolveEcoContext;
   if (typeof resolve !== 'function') { console.warn('[EVC] jurisdiction module not ready'); return; }
   resolve(lat, lng)
     .then(function(r) {
-      if (!r || !r.evc_name) return;
+      var evcEl0  = document.getElementById('f_evc_name');
+      var codeEl0 = document.getElementById('f_evc_code');
+      var brEl0   = document.getElementById('f_evc_bioregion');
+      var brcEl0  = document.getElementById('f_evc_bioregion_code');
+      var statusEl0 = document.getElementById('evc_status');
+      if (!r || !r.evc_name) {
+        // No Victorian EVC here (e.g. an address outside Victoria). Clear any
+        // stale EVC from a previous lookup rather than leaving a wrong value.
+        if (evcEl0)  evcEl0.value  = '';
+        if (codeEl0) codeEl0.value = '';
+        if (brEl0)   brEl0.value   = '';
+        if (brcEl0)  brcEl0.value  = '';
+        if (statusEl0) { statusEl0.textContent = 'No Victorian EVC at this location.'; statusEl0.style.display = ''; }
+        renderLive();
+        return;
+      }
       var evcName    = r.evc_name;
       var evcCode    = r.evc_code ? 'EVC ' + r.evc_code : '';
       var bioregion  = r.bioregion || '';

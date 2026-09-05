@@ -7,21 +7,24 @@
  * part of the abstraction work — that would make the proof meaningless and
  * risk moving a live score.
  *
- * ENDPOINT: this is the exact service findmyevc.com calls in production
- * (findyourevc/assets/evc-fetch.js) and the same one assess.html calls — the
- * DEECA open-data GeoServer WFS for NV2005_EVCBCS. It is a WFS, not an ArcGIS
- * REST service: GetFeature returns every polygon in a bbox and the containing
- * polygon is chosen client-side (see wfs.js). d=0.05 matches production's bbox.
+ * ENDPOINT: the DEECA open-data GeoServer WFS. We query NV1750_EVCBCS — the
+ * pre-1750 modelled EVC, i.e. the site's ORIGINAL ecological community — which is
+ * what NatureKit displays and what has full statewide coverage. (findmyevc.com
+ * and the old assess.html queried NV2005_EVCBCS, the *extant* remnant layer,
+ * which is empty over cleared suburban lots and so returns a fallback guess that
+ * does not match NatureKit. NV1750 is the correct source for "original
+ * vegetation".) It is a WFS, not ArcGIS: GetFeature returns every polygon in a
+ * bbox and the containing polygon is chosen client-side (see wfs.js).
  */
 
 import { queryPolygonWfs } from '../wfs.js';
 import { contextRecord, provenance, STATUS, CAPABILITY } from '../schema.js';
 
 export const EVC_SERVICE = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
-export const EVC_LAYER = 'open-data-platform:nv2005_evcbcs';
+export const EVC_LAYER = 'open-data-platform:nv1750_evcbcs';
 const EVC_BBOX_DEGREES = 0.05;
 
-const DATASET = 'NV2005_EVCBCS';
+const DATASET = 'NV1750_EVCBCS';
 const AUTHORITY = 'Victorian Government (DEECA)';
 
 export const vicAdapter = {
@@ -101,6 +104,10 @@ export const vicAdapter = {
  */
 export function toLegacyEvcResult(record) {
   if (!record || record.status !== STATUS.OK) return null;
+  // Only an actual EVC projects to a legacy EVC result. A national fallback
+  // (NVIS) or any non-EVC record must NOT be relabelled as an EVC — a NSW
+  // address has no EVC, and returning one would be a fabricated Victorian value.
+  if (record.system !== 'EVC') return null;
   return {
     evc_code: record.code,
     evc_name: record.name,

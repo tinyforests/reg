@@ -14,11 +14,10 @@
   "area_sqm": null,
   "description": "This native cottage garden blends English cottage-garden romance with robust Australian native flora. Informal and abundant, it plays with texture and colour — paper daisies, grevilleas and delicate hibbertia weaving a dynamic tapestry that supports birds, bees and butterflies. A gentle basalt path winds through layers of foliage, with seasonal blooms offering year-round interest and the natural hardiness of natives keeping maintenance low.",
   "evc": {
-    "name": "Grassy Woodland",
-    "code": "EVC 175",
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
     "bioregion": "Gippsland Plain",
-    "bioregion_code": "5.1",
-    "note": ""
+    "bioregion_code": "GipP"
   },
   "biodiversity": {
     "indigenous_species_current": 13,
@@ -157,47 +156,34 @@
   "points_available": 70,
   "ecological_context": {
     "schema_version": "1.0.0-draft",
-    "resolved_at": "2026-09-04T07:30:27.134Z",
+    "resolved_at": "2026-09-05T01:05:58.707Z",
     "jurisdiction": {
       "country": "AU",
       "jurisdiction": "VIC",
       "resolver_method": "trusted_interior",
       "resolver_source": "Greater Melbourne — wholly within Victoria"
     },
-    "original_vegetation_state_attempt": {
+    "original_vegetation": {
       "system": "EVC",
-      "code": null,
-      "name": null,
+      "code": "55",
+      "name": "Plains Grassy Woodland",
       "resolution": "state",
-      "source": "DEECA NV2005_EVCBCS",
-      "status": "nodata",
+      "source": "DEECA NV1750_EVCBCS",
+      "status": "ok",
       "provenance": {
         "authority": "Victorian Government (DEECA)",
-        "dataset": "NV2005_EVCBCS",
+        "dataset": "NV1750_EVCBCS",
         "dataset_version": null,
         "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
         "lookup_method": "wfs:getfeature:point-in-polygon",
-        "queried_at": "2026-09-04T07:30:26.634Z",
+        "queried_at": "2026-09-05T01:05:58.263Z",
         "jurisdiction": "VIC",
         "reproducible": true
-      }
-    },
-    "original_vegetation": {
-      "system": "NVIS MVS",
-      "code": "9",
-      "name": "Eucalyptus woodlands with a tussock grass understorey",
-      "resolution": "national",
-      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
-      "status": "ok",
-      "provenance": {
-        "authority": "Australian Government (DCCEEW)",
-        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
-        "dataset_version": "7.0",
-        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
-        "lookup_method": "arcgis:identify:raster",
-        "queried_at": "2026-09-04T07:30:26.854Z",
-        "jurisdiction": "AU",
-        "reproducible": true
+      },
+      "extra": {
+        "bioregional_conservation_status": "Endangered",
+        "victorian_bioregion": "Gippsland Plain",
+        "victorian_bioregion_code": "GipP"
       }
     },
     "bioregion": {
@@ -213,13 +199,31 @@
         "dataset_version": "7.1",
         "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
         "lookup_method": "arcgis:identify:polygon",
-        "queried_at": "2026-09-04T07:30:27.134Z",
+        "queried_at": "2026-09-05T01:05:58.568Z",
         "jurisdiction": "AU",
         "reproducible": true
       },
       "extra": {
         "subregion": "Gippsland Plain",
         "subregion_code": "SCP01"
+      }
+    },
+    "national_vegetation": {
+      "system": "NVIS MVS",
+      "code": "9",
+      "name": "Eucalyptus woodlands with a tussock grass understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-05T01:05:58.707Z",
+        "jurisdiction": "AU",
+        "reproducible": true
       }
     }
   }

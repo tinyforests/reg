@@ -24,7 +24,7 @@
     "name": "Box Ironbark Forest",
     "code": "EVC 61",
     "bioregion": "Highlands - Southern Fall",
-    "bioregion_code": "10.1",
+    "bioregion_code": "HSF_",
     "note": "EVC classification requires confirmation against DELWP NatureKit mapping for this site."
   },
   "biodiversity": {
@@ -343,47 +343,34 @@
   },
   "ecological_context": {
     "schema_version": "1.0.0-draft",
-    "resolved_at": "2026-09-04T07:30:12.553Z",
+    "resolved_at": "2026-09-05T01:05:42.591Z",
     "jurisdiction": {
       "country": "AU",
       "jurisdiction": "VIC",
       "resolver_method": "trusted_interior",
       "resolver_source": "Greater Melbourne — wholly within Victoria"
     },
-    "original_vegetation_state_attempt": {
+    "original_vegetation": {
       "system": "EVC",
-      "code": null,
-      "name": null,
+      "code": "61",
+      "name": "Box Ironbark Forest",
       "resolution": "state",
-      "source": "DEECA NV2005_EVCBCS",
-      "status": "nodata",
+      "source": "DEECA NV1750_EVCBCS",
+      "status": "ok",
       "provenance": {
         "authority": "Victorian Government (DEECA)",
-        "dataset": "NV2005_EVCBCS",
+        "dataset": "NV1750_EVCBCS",
         "dataset_version": null,
         "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
         "lookup_method": "wfs:getfeature:point-in-polygon",
-        "queried_at": "2026-09-04T07:29:58.258Z",
+        "queried_at": "2026-09-05T01:05:41.479Z",
         "jurisdiction": "VIC",
         "reproducible": true
-      }
-    },
-    "original_vegetation": {
-      "system": "NVIS MVS",
-      "code": "60",
-      "name": "Eucalyptus tall open forests and open forests with ferns, herbs, sedges, rushes or wet tussock grasses",
-      "resolution": "national",
-      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
-      "status": "ok",
-      "provenance": {
-        "authority": "Australian Government (DCCEEW)",
-        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
-        "dataset_version": "7.0",
-        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
-        "lookup_method": "arcgis:identify:raster",
-        "queried_at": "2026-09-04T07:30:04.383Z",
-        "jurisdiction": "AU",
-        "reproducible": true
+      },
+      "extra": {
+        "bioregional_conservation_status": "Vulnerable",
+        "victorian_bioregion": "Highlands - Southern Fall",
+        "victorian_bioregion_code": "HSF_"
       }
     },
     "bioregion": {
@@ -399,13 +386,31 @@
         "dataset_version": "7.1",
         "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
         "lookup_method": "arcgis:identify:polygon",
-        "queried_at": "2026-09-04T07:30:12.553Z",
+        "queried_at": "2026-09-05T01:05:42.099Z",
         "jurisdiction": "AU",
         "reproducible": true
       },
       "extra": {
         "subregion": "Highlands-Southern Fall",
         "subregion_code": "SEH01"
+      }
+    },
+    "national_vegetation": {
+      "system": "NVIS MVS",
+      "code": "60",
+      "name": "Eucalyptus tall open forests and open forests with ferns, herbs, sedges, rushes or wet tussock grasses",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-05T01:05:42.591Z",
+        "jurisdiction": "AU",
+        "reproducible": true
       }
     }
   }

@@ -20,10 +20,10 @@ const now = () => FIXED_NOW;
 
 // --- fixtures ------------------------------------------------------------
 
-// Real GeoServer WFS response shape (captured from opendata.maps.vic.gov.au,
-// nv2005_evcbcs, 4 Sep 2026). Property names/values verbatim; the geometry is a
-// small square that contains the MELBOURNE test point so the client-side
-// point-in-polygon match fires on the primary (Polygon) path.
+// Real GeoServer WFS response shape (opendata.maps.vic.gov.au, nv1750_evcbcs —
+// the pre-1750 EVC that NatureKit shows). Property names/values verbatim; the
+// geometry is a small square that contains the MELBOURNE test point so the
+// client-side point-in-polygon match fires on the primary (Polygon) path.
 const EVC_HIT = {
   type: 'FeatureCollection',
   features: [{
@@ -111,7 +111,7 @@ async function legacyEvcLookup(loc, fetchImpl) {
     service: 'WFS',
     version: '1.0.0',
     request: 'GetFeature',
-    typeName: 'open-data-platform:nv2005_evcbcs',
+    typeName: 'open-data-platform:nv1750_evcbcs',
     bbox,
     outputFormat: 'application/json'
   });
@@ -188,7 +188,7 @@ check('national context attaches alongside, not instead of, local identity', () 
 check('provenance survives the abstraction', () => {
   const p = ctx.original_vegetation.provenance;
   assert.strictEqual(p.authority, 'Victorian Government (DEECA)');
-  assert.strictEqual(p.dataset, 'NV2005_EVCBCS');
+  assert.strictEqual(p.dataset, 'NV1750_EVCBCS');
   assert.strictEqual(p.lookup_method, 'wfs:getfeature:point-in-polygon');
   assert.strictEqual(p.service_url, EVC_SERVICE);
   assert.strictEqual(p.queried_at, FIXED_NOW);

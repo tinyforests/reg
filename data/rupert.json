@@ -14,10 +14,10 @@
   "area_sqm": 180,
   "description": "Claire and Tom converted their back lawn in January 2024, after the December heatwave collapsed most of what was growing. Rather than replanting the same, they asked: what was here before the lawn? The answer shifted the direction of the garden entirely.",
   "evc": {
-    "name": "Wet Sclerophyll Forest",
-    "code": "EVC 38",
+    "name": "Grassy Woodland",
+    "code": "EVC 175",
     "bioregion": "Victorian Volcanic Plain",
-    "bioregion_code": "VVP"
+    "bioregion_code": "VVP_"
   },
   "biodiversity": {
     "indigenous_species_current": 22,
@@ -213,47 +213,34 @@
   "demo": true,
   "ecological_context": {
     "schema_version": "1.0.0-draft",
-    "resolved_at": "2026-09-04T07:30:20.841Z",
+    "resolved_at": "2026-09-05T01:05:52.299Z",
     "jurisdiction": {
       "country": "AU",
       "jurisdiction": "VIC",
       "resolver_method": "trusted_interior",
       "resolver_source": "Greater Melbourne — wholly within Victoria"
     },
-    "original_vegetation_state_attempt": {
+    "original_vegetation": {
       "system": "EVC",
-      "code": null,
-      "name": null,
+      "code": "175",
+      "name": "Grassy Woodland",
       "resolution": "state",
-      "source": "DEECA NV2005_EVCBCS",
-      "status": "nodata",
+      "source": "DEECA NV1750_EVCBCS",
+      "status": "ok",
       "provenance": {
         "authority": "Victorian Government (DEECA)",
-        "dataset": "NV2005_EVCBCS",
+        "dataset": "NV1750_EVCBCS",
         "dataset_version": null,
         "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
         "lookup_method": "wfs:getfeature:point-in-polygon",
-        "queried_at": "2026-09-04T07:30:20.418Z",
+        "queried_at": "2026-09-05T01:05:51.916Z",
         "jurisdiction": "VIC",
         "reproducible": true
-      }
-    },
-    "original_vegetation": {
-      "system": "NVIS MVS",
-      "code": "9",
-      "name": "Eucalyptus woodlands with a tussock grass understorey",
-      "resolution": "national",
-      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
-      "status": "ok",
-      "provenance": {
-        "authority": "Australian Government (DCCEEW)",
-        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
-        "dataset_version": "7.0",
-        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
-        "lookup_method": "arcgis:identify:raster",
-        "queried_at": "2026-09-04T07:30:20.660Z",
-        "jurisdiction": "AU",
-        "reproducible": true
+      },
+      "extra": {
+        "bioregional_conservation_status": "Endangered",
+        "victorian_bioregion": "Victorian Volcanic Plain",
+        "victorian_bioregion_code": "VVP_"
       }
     },
     "bioregion": {
@@ -269,13 +256,31 @@
         "dataset_version": "7.1",
         "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
         "lookup_method": "arcgis:identify:polygon",
-        "queried_at": "2026-09-04T07:30:20.841Z",
+        "queried_at": "2026-09-05T01:05:52.178Z",
         "jurisdiction": "AU",
         "reproducible": true
       },
       "extra": {
         "subregion": "Victorian Volcanic Plain",
         "subregion_code": "SVP01"
+      }
+    },
+    "national_vegetation": {
+      "system": "NVIS MVS",
+      "code": "9",
+      "name": "Eucalyptus woodlands with a tussock grass understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-05T01:05:52.298Z",
+        "jurisdiction": "AU",
+        "reproducible": true
       }
     }
   }
