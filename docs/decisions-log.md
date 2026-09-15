@@ -20,6 +20,19 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-09-15 — Close the self-enrolment → registered gap
+
+**Decision:** A self-enrolment is only removed from the public Provisional list once it is actually registered (`published_garden_id` assigned + in `registry.json`). Added a reconciliation check, hardened the Provisional view, and codified the promote pipeline so a verified submission can no longer fall between the two lists.
+
+**Reason:** Marking `review_status = verified` in the Submissions sheet ejected a row from the Provisional tab (which excluded `verified`) but did nothing to register it — no `garden_id`, no `registry.json` entry. Verified-but-unpublished rows became invisible on both the provisional and registered lists. The first two self-enrolments (Harry Street, The Refuge) were lost this way. `verified` was overloaded, there was no verified-but-unpublished state, and `pull_live_records.py` can only refresh gardens already in the registry (it cannot discover new ones).
+
+**Files affected:**
+- reg: `registry.html` (PROV_EXCLUDE no longer contains `verified`; a verified row without `published_garden_id` stays visible, flagged), `scripts/reconcile_submissions.py` (new), `scripts/promote_submission.py` (new), `scripts/appsscript/Code.gs` (new `set_published_id` admin action — **needs manual redeploy**), `docs/self-enrolment-to-registered.md` (new runbook).
+
+**Notes:** Ramp answers are point-bands, not raw figures, so `promote_submission.py` reconstructs canonical inputs as mid-band values marked `TO CONFIRM` — confirm against the site visit before treating a score as final. Harry Street was registered by hand before this; run `set_published_id` (after redeploy) or set its `published_garden_id` manually so reconcile stops flagging it. The Refuge (SUB-1785920220843-UQVX6) is still in the gap — promote it next.
+
+---
+
 ## 2026-09-05 — Original-vegetation lookups use pre-1750 data (VIC = NV1750, never NV2005)
 
 **Decision:** G&S EVC / original-vegetation lookups query **pre-1750 / pre-clearing** vegetation, never the extant layer. In Victoria that is DEECA **NV1750_EVCBCS** (the pre-1750 modelled EVC NatureKit shows), not NV2005_EVCBCS (the extant/2005 remnant layer). EVC is Victoria-specific; other states have their own pre-1750 layers (NSW SVTM 1750 PCT, QLD pre-clear RE, WA Beard, SA pre-European), all falling through to NVIS 7.0 pre-1750 MVS nationally — see `/jurisdiction/PRE-1750-ENDPOINTS.md`.

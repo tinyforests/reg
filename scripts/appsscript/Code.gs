@@ -64,6 +64,7 @@ function doGet(e) {
   if (params.action === 'get_garden_admin_data') return handleGetGardenAdminData(params);
   if (params.action === 'get_garden_record')     return handleGetGardenRecord(params);
   if (params.action === 'get_precise_map')       return handleGetPreciseMap(params);
+  if (params.action === 'set_published_id')       return handleSetPublishedId(params);
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
 }
@@ -1095,6 +1096,38 @@ function handleGetAllCoords(params) {
   }
 
   return jsonResp({ok: true, coords: result});
+}
+
+/*
+ * Assign a garden_id to a verified submission and mark it registered.
+ * Closes the self-enrolment -> registered loop: sets col Z published_garden_id
+ * and col X review_status = 'verified' on the Submissions row, so the row no
+ * longer sits in the gap (verified but unpublished) that hid the first
+ * self-enrolments. Called by scripts/promote_submission.py once the garden is
+ * in registry.json. Protected by ADMIN_TOKEN.
+ */
+function handleSetPublishedId(params) {
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  if (!stored || (params.admin_token || '') !== stored)
+    return jsonResp({ok: false, error: 'Unauthorized'});
+  var subId = String(params.submission_id || '').trim();
+  var gid   = String(params.garden_id || '').trim();
+  if (!subId || !gid) return jsonResp({ok: false, error: 'Missing submission_id or garden_id'});
+
+  var ss    = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Submissions');
+  if (!sheet || sheet.getLastRow() < 2) return jsonResp({ok: false, error: 'No Submissions'});
+
+  var rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+  for (var i = 0; i < rows.length; i++) {
+    if (String(rows[i][1]).trim() === subId) {     // col B submission_id
+      var r = i + 2;
+      sheet.getRange(r, 26).setValue(gid);          // col Z published_garden_id
+      sheet.getRange(r, 24).setValue('verified');   // col X review_status
+      return jsonResp({ok: true, submission_id: subId, published_garden_id: gid});
+    }
+  }
+  return jsonResp({ok: false, error: 'submission_id not found'});
 }
 
 /*

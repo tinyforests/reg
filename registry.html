@@ -450,7 +450,12 @@ function initRegistry() {
 /* ---- PROVISIONAL TAB ---- */
 var provisionalLoaded = false;
 var PROV_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-v90MASzlma0rqxLApLTlMqi1NVHXgfg8AmKy80yXOlogICKA-JGSDxrS_EqnWSCb_QziixcPJHlW/pub?gid=0&single=true&output=csv';
-var PROV_EXCLUDE = ['deleted', 'hidden', 'rejected', 'verified'];
+// Statuses that remove a submission from the provisional list outright.
+// NOTE: 'verified' is deliberately NOT here — a verified submission only leaves
+// the provisional list once it is actually registered (published_garden_id set).
+// A verified row with no published_garden_id is a pipeline gap and must stay
+// visible (flagged) so it can never silently disappear (see renderProvisional).
+var PROV_EXCLUDE = ['deleted', 'hidden', 'rejected'];
 
 function parseCSV(text) {
   var rows = [];
@@ -535,7 +540,7 @@ function buildProvCard(d) {
     '<div class="mt-4 pt-4" style="border-top:1px dashed rgba(180,154,99,0.35)">' +
       '<span style="display:inline-flex;align-items:center;gap:6px;font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B49A63;border:1px dashed #B49A63;padding:4px 10px">' +
         '<span style="width:7px;height:7px;background:#B49A63;display:inline-block;flex-shrink:0"></span>' +
-        'Provisional -- awaiting review' +
+        (d.statusLabel || 'Provisional -- awaiting review') +
       '</span>' +
     '</div>';
   return card;
@@ -570,6 +575,15 @@ function renderProvisional(rows, registryProvisionals) {
     var row    = dataRows[j];
     var status = (row[23] || '').toLowerCase().trim();
     if (PROV_EXCLUDE.indexOf(status) !== -1) continue;
+    var publishedId = (row[25] || '').trim();  // col Z published_garden_id
+    // A verified submission only leaves the provisional list once it has been
+    // registered (published_garden_id assigned). If it is verified but not yet
+    // registered it fell through the pipeline — keep it visible and flagged.
+    if (status === 'verified' && publishedId) continue;
+    var statusLabel = (status === 'verified')
+      ? 'Verified -- awaiting registration'
+      : (status === 'verifying' ? 'Verification in progress'
+                                : 'Provisional -- awaiting review');
     var gardenName = _esc(row[30] || '');
     var street     = _esc(streetFromAddress(row[4] || ''));
     cards.push(buildProvCard({
@@ -578,7 +592,8 @@ function renderProvisional(rows, registryProvisionals) {
       suburb:    _esc(suburbFromAddress(row[4] || '')),
       score:     _esc(row[17] || ''),
       tier:      _esc(row[18] || ''),
-      submitted: _esc(row[0]  || '')
+      submitted: _esc(row[0]  || ''),
+      statusLabel: statusLabel
     }));
   }
 
