@@ -130,5 +130,11 @@
     "garden_name": "The Garden Trail",
     "display_lat": -37.8226,
     "display_lng": 145.0911
+  },
+  {
+    "garden_id": "ER-AU-VIC-BAL-WNM-001",
+    "garden_name": "Winmallee",
+    "display_lat": -37.8078,
+    "display_lng": 145.084
   }
 ]

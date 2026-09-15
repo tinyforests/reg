@@ -1,0 +1,234 @@
+{
+  "garden_id": "ER-AU-VIC-BAL-WNM-001",
+  "garden_name": "Winmallee",
+  "garden_type": "Native Drought-Tolerant Garden",
+  "suburb": "Balwyn",
+  "state": "VIC",
+  "assessment_date": "Sep 2026",
+  "baseline_date": "2024",
+  "target_score": 75,
+  "stewards": "",
+  "designer": "Gardener & Son",
+  "designer_id": "gardener-and-son",
+  "enroller": "Gardener & Son",
+  "verifier": null,
+  "area_sqm": 0,
+  "description": "An installed native, drought-tolerant garden on Winmalee Road, Balwyn (established approx. 2024). The planting pairs Australian-native shrubs, grasses and groundcovers with a poolside softscape, chosen for resilience in dry conditions and low maintenance. Ecological baseline assessment pending.",
+  "evc": {
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Gippsland Plain",
+    "bioregion_code": "GipP"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 0,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 0,
+    "indigenous_dominant": false,
+    "structural_layers_current": 0,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 0,
+    "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 0,
+    "weed_pressure": "",
+    "weed_pressure_baseline": "",
+    "species_list": [
+      "Brachyscome Mauve Bliss",
+      "Chrysocephalum apiculatum",
+      "Convolvulus cneorum",
+      "Correa alba",
+      "Dianella caerulea",
+      "Dodonaea viscosa",
+      "Elaeocarpus reticulatus",
+      "Hardenbergia violacea",
+      "Hardenbergia violacea 'Meema'",
+      "Lomandra longifolia",
+      "Stylidium armeria",
+      "Waterhousia floribunda",
+      "Westringia 'Wynyabbie Gem'",
+      "Westringia fruticosa"
+    ]
+  },
+  "soil_water": {
+    "soil_health_score": 0,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 0,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 0
+  },
+  "habitat": {
+    "habitat_nodes": 0,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": false,
+    "has_rock_refuges": false,
+    "has_water_feature": false,
+    "has_nest_boxes": false,
+    "planting_method": "Layered native drought-tolerant planting with a poolside softscape",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": "",
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0,
+    "cluster_area_ha": 0,
+    "cluster_name": "",
+    "cluster": {
+      "name": "",
+      "gardens": 0,
+      "area_ha": 0,
+      "status": ""
+    },
+    "display_lat": -37.8078,
+    "display_lng": 145.084
+  },
+  "evidence": {
+    "has_photos": false,
+    "has_field_notes": false,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Garden design completed",
+      "date": "2024",
+      "complete": true
+    },
+    {
+      "title": "Garden installed",
+      "date": "2024",
+      "complete": true
+    },
+    {
+      "title": "Registry record created",
+      "date": "Sep 2026",
+      "complete": true
+    },
+    {
+      "title": "Ecological baseline assessment",
+      "date": "TBC",
+      "complete": false
+    },
+    {
+      "title": "First fauna sighting recorded",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Native Drought-Tolerant Garden -- Design",
+      "date": "2025",
+      "type": "Design",
+      "category": "planting",
+      "notes": "A native, drought-tolerant planting for a Balwyn residence. A diverse palette of Australian-native grasses, shrubs and small trees is chosen for resilience to dry conditions and year-round interest, with a poolside softscape. Upper layer includes Elaeocarpus reticulatus and Waterhousia floribunda; mid layer Dodonaea viscosa, Correa alba, Westringia fruticosa and Westringia 'Wynyabbie Gem'; ground and edge layers Lomandra longifolia, Dianella caerulea, Chrysocephalum apiculatum, Stylidium armeria, Brachyscome Mauve Bliss and Hardenbergia violacea. Low maintenance once established."
+    }
+  ],
+  "notes": "Installed native drought-tolerant garden (approx. 2024), imported from the Notion 'Winmallee' garden design. Ecological baseline assessment pending -- biodiversity, canopy, structural-layer and soil/water figures are unset until a site assessment is recorded. Steward name, ward, area and installed date to be confirmed.",
+  "typology": "Native Drought-Tolerant Garden",
+  "registry_role": "Performer",
+  "trajectory": "Emerging",
+  "rating": {
+    "current": "Basic Garden",
+    "next": "Habitat Garden",
+    "points_to_next": 12
+  },
+  "upgrade_potential": 91,
+  "points_available": 91,
+  "yield": {
+    "eligible": false,
+    "status": "Not yet eligible -- minimum score 40 required",
+    "estimated_annual": 0,
+    "potential_annual": 0,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": []
+  },
+  "council": "Boroondara City Council",
+  "ward": "",
+  "lga": "Boroondara",
+  "ecological_context": {
+    "schema_version": "1.0.0-draft",
+    "resolved_at": "2026-09-07T10:23:23.511Z",
+    "jurisdiction": {
+      "country": "AU",
+      "jurisdiction": "VIC",
+      "resolver_method": "trusted_interior",
+      "resolver_source": "Greater Melbourne — wholly within Victoria"
+    },
+    "original_vegetation": {
+      "system": "EVC",
+      "code": "55",
+      "name": "Plains Grassy Woodland",
+      "resolution": "state",
+      "source": "DEECA NV1750_EVCBCS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Victorian Government (DEECA)",
+        "dataset": "NV1750_EVCBCS",
+        "dataset_version": null,
+        "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
+        "lookup_method": "wfs:getfeature:point-in-polygon",
+        "queried_at": "2026-09-07T10:23:10.617Z",
+        "jurisdiction": "VIC",
+        "reproducible": true
+      },
+      "extra": {
+        "bioregional_conservation_status": "Endangered",
+        "victorian_bioregion": "Gippsland Plain",
+        "victorian_bioregion_code": "GipP"
+      }
+    },
+    "bioregion": {
+      "system": "IBRA",
+      "code": "SCP",
+      "name": "South East Coastal Plain",
+      "resolution": "national",
+      "source": "DCCEEW IBRA 7.1",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "IBRA7_Subregions",
+        "dataset_version": "7.1",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
+        "lookup_method": "arcgis:identify:polygon",
+        "queried_at": "2026-09-07T10:23:23.441Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      },
+      "extra": {
+        "subregion": "Gippsland Plain",
+        "subregion_code": "SCP01"
+      }
+    },
+    "national_vegetation": {
+      "system": "NVIS MVS",
+      "code": "9",
+      "name": "Eucalyptus woodlands with a tussock grass understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-07T10:23:23.511Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      }
+    }
+  }
+}

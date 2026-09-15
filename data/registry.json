@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Aug 2026",
-    "total_gardens": 22,
+    "total_gardens": 23,
     "data_custodian": "Gardener & Son",
     "contact": "hello@gardenerandson.com",
     "schema_version": "2.0",
@@ -954,6 +954,34 @@
         "ER-AU-VIC-SH-SIR-0001",
         "ER-AU-VIC-SH-CAN-0001"
       ]
+    },
+    {
+      "garden_id": "ER-AU-VIC-BAL-WNM-001",
+      "garden_name": "Winmallee",
+      "type": "Native Drought-Tolerant Garden",
+      "suburb": "Balwyn",
+      "state": "VIC",
+      "score": 9,
+      "rating": {
+        "current": "Basic Garden",
+        "next": "Habitat Garden",
+        "points_to_next": 12
+      },
+      "primary_evc": "Plains Grassy Woodland (EVC 55)",
+      "bioregion": "Gippsland Plain",
+      "status": "Installed — design record active",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Sep 2026",
+      "badge_count": 1,
+      "badges": [
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/winmallee/index.html",
+      "data_file": "data/winmallee.json",
+      "council": "Boroondara City Council",
+      "ward": "",
+      "lga": "Boroondara"
     }
   ],
   "last_sync": "2026-08-18T11:18:02.292Z"
