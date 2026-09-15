@@ -1,0 +1,221 @@
+{
+  "garden_id": "ER-AU-VIC-THO-HAR-001",
+  "garden_name": "Harry Street",
+  "garden_type": "Ecological Home Garden",
+  "suburb": "Thornbury",
+  "state": "VIC",
+  "assessment_date": "Sep 2026",
+  "baseline_date": "2026",
+  "target_score": 75,
+  "stewards": "Fiona",
+  "designer": "Steward self-enrolled",
+  "designer_id": "self-enrolled",
+  "enroller": "Steward (self-enrolment)",
+  "verifier": "Gardener & Son",
+  "area_sqm": 0,
+  "description": "An established indigenous home garden at Harry Street, Thornbury, enrolled through the Registry's self-enrolment ramp and confirmed by a Gardener & Son site visit -- the Registry's first self-enrolled, verified garden. Indigenous-dominant planting across multiple layers, healthy mulched soil, and habitat features including an embedded log, rock refuge, water feature and nest box.",
+  "evc": {
+    "name": "Plains Grassy Woodland",
+    "code": "EVC 55",
+    "bioregion": "Victorian Volcanic Plain",
+    "bioregion_code": "VVP_"
+  },
+  "biodiversity": {
+    "indigenous_species_current": 8,
+    "indigenous_species_baseline": 0,
+    "indigenous_species_target": 20,
+    "indigenous_dominant": true,
+    "structural_layers_current": 4,
+    "structural_layers_baseline": 0,
+    "canopy_cover_pct_current": 20,
+    "canopy_cover_pct_baseline": 0,
+    "canopy_cover_pct_target": 30,
+    "weed_pressure": "",
+    "weed_pressure_baseline": "",
+    "species_list": []
+  },
+  "soil_water": {
+    "soil_health_score": 5,
+    "soil_health_baseline": 0,
+    "soil_health_max": 5,
+    "water_function_score": 5,
+    "water_function_baseline": 0,
+    "water_function_max": 5,
+    "has_rainwater_system": false,
+    "has_moisture_basin": false,
+    "has_swale": false,
+    "mulch_depth_mm": 75
+  },
+  "habitat": {
+    "habitat_nodes": 3,
+    "habitat_nodes_baseline": 0,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": true,
+    "has_nest_boxes": true,
+    "planting_method": "Indigenous-dominant layered planting across approximately four structural layers, with multiple deliberate habitat features",
+    "fauna_sightings": []
+  },
+  "connectivity": {
+    "adjacent_park": false,
+    "park_name": "",
+    "park_distance_m": 0,
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": false,
+    "effective_ecological_area_ha": 0,
+    "cluster_area_ha": 0,
+    "cluster_name": "",
+    "cluster": {
+      "name": "",
+      "gardens": 0,
+      "area_ha": 0,
+      "status": ""
+    },
+    "display_lat": -37.755,
+    "display_lng": 145.0173
+  },
+  "evidence": {
+    "has_photos": false,
+    "has_field_notes": false,
+    "has_professional_assessment": true,
+    "has_fauna_record": false,
+    "has_species_list": false,
+    "verification_level": "gardener_and_son_verified",
+    "verification_label": "G&S Verified",
+    "assessor": "Gardener & Son"
+  },
+  "milestones": [
+    {
+      "title": "Garden self-enrolled via Registry ramp",
+      "date": "Jul 2026",
+      "complete": true
+    },
+    {
+      "title": "Gardener & Son verification visit",
+      "date": "Sep 2026",
+      "complete": true
+    },
+    {
+      "title": "Registered on the Ecological Registry",
+      "date": "Sep 2026",
+      "complete": true
+    },
+    {
+      "title": "First verified fauna sighting recorded",
+      "date": "TBC",
+      "complete": false
+    }
+  ],
+  "activity_log": [
+    {
+      "title": "Self-enrolment -- provisional baseline",
+      "date": "Jul 2026",
+      "type": "Enrolment",
+      "category": "record_update",
+      "notes": "Garden self-enrolled through the Registry ramp. Self-reported provisional score 47/100 (tier: Ecological Garden). Indigenous-dominant planting, 6-11 local-indigenous species, 15-29% canopy, healthy mulched soil, four habitat features (embedded log, rock refuge, water feature, nest box), regular wildlife observed."
+    },
+    {
+      "title": "Verification visit -- Gardener & Son",
+      "date": "Sep 2026",
+      "type": "Verification",
+      "category": "record_update",
+      "notes": "Site visit confirmed the self-reported inputs. Garden lifted from provisional to verified and registered on the Ecological Registry."
+    }
+  ],
+  "notes": "First self-enrolment to the Ecological Registry (via the ramp), verified by a Gardener & Son site visit. Canonical inputs are derived from the verified enrolment answers, using mid-band values where an exact figure was not captured on the visit -- TO CONFIRM: indigenous species count (band 6-11), structural layers (4), canopy % (band 15-29), habitat zones (band 3-4), mulch depth, species list, fauna species, and which self-kept record type. Steward email and street address are held privately and are not in the public repo.",
+  "typology": "Urban Ecological Retrofit",
+  "registry_role": "Performer",
+  "trajectory": "Emerging",
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Registered Ecological Garden",
+    "points_to_next": 10
+  },
+  "upgrade_potential": 49,
+  "points_available": 49,
+  "yield": {
+    "eligible": false,
+    "status": "Yield not active for this garden",
+    "estimated_annual": 0,
+    "potential_annual": 0,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": []
+  },
+  "council": "Darebin City Council",
+  "ward": "",
+  "lga": "Darebin",
+  "ecological_context": {
+    "schema_version": "1.0.0-draft",
+    "resolved_at": "2026-09-14T23:50:43.644Z",
+    "jurisdiction": {
+      "country": "AU",
+      "jurisdiction": "VIC",
+      "resolver_method": "trusted_interior",
+      "resolver_source": "Greater Melbourne — wholly within Victoria"
+    },
+    "original_vegetation": {
+      "system": "EVC",
+      "code": "55",
+      "name": "Plains Grassy Woodland",
+      "resolution": "state",
+      "source": "DEECA NV1750_EVCBCS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Victorian Government (DEECA)",
+        "dataset": "NV1750_EVCBCS",
+        "dataset_version": null,
+        "service_url": "https://opendata.maps.vic.gov.au/geoserver/wfs",
+        "lookup_method": "wfs:getfeature:point-in-polygon",
+        "queried_at": "2026-09-14T23:50:43.153Z",
+        "jurisdiction": "VIC",
+        "reproducible": true
+      },
+      "extra": {
+        "bioregional_conservation_status": "Endangered",
+        "victorian_bioregion": "Victorian Volcanic Plain",
+        "victorian_bioregion_code": "VVP_"
+      }
+    },
+    "bioregion": {
+      "system": "IBRA",
+      "code": "SVP",
+      "name": "Southern Volcanic Plain",
+      "resolution": "national",
+      "source": "DCCEEW IBRA 7.1",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "IBRA7_Subregions",
+        "dataset_version": "7.1",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
+        "lookup_method": "arcgis:identify:polygon",
+        "queried_at": "2026-09-14T23:50:43.564Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      },
+      "extra": {
+        "subregion": "Victorian Volcanic Plain",
+        "subregion_code": "SVP01"
+      }
+    },
+    "national_vegetation": {
+      "system": "NVIS MVS",
+      "code": "48",
+      "name": "Eucalyptus open woodlands with a grassy understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-09-14T23:50:43.644Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      }
+    }
+  }
+}

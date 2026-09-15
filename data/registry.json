@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Aug 2026",
-    "total_gardens": 23,
+    "total_gardens": 24,
     "data_custodian": "Gardener & Son",
     "contact": "hello@gardenerandson.com",
     "schema_version": "2.0",
@@ -982,6 +982,36 @@
       "council": "Boroondara City Council",
       "ward": "",
       "lga": "Boroondara"
+    },
+    {
+      "garden_id": "ER-AU-VIC-THO-HAR-001",
+      "garden_name": "Harry Street",
+      "type": "Ecological Home Garden",
+      "suburb": "Thornbury",
+      "state": "VIC",
+      "score": 51,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Registered Ecological Garden",
+        "points_to_next": 10
+      },
+      "primary_evc": "Plains Grassy Woodland (EVC 55)",
+      "bioregion": "Victorian Volcanic Plain",
+      "status": "Active / Establishing",
+      "verification_level": "gardener_and_son_verified",
+      "verification_label": "G&S Verified",
+      "last_verified": "Sep 2026",
+      "badge_count": 3,
+      "badges": [
+        "indigenous_dominant",
+        "habitat_builder",
+        "gs_verified"
+      ],
+      "profile_url": "/gardens/harrystreet/index.html",
+      "data_file": "data/harrystreet.json",
+      "council": "Darebin City Council",
+      "ward": "",
+      "lga": "Darebin"
     }
   ],
   "last_sync": "2026-08-18T11:18:02.292Z"

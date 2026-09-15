@@ -136,5 +136,11 @@
     "garden_name": "Winmallee",
     "display_lat": -37.8078,
     "display_lng": 145.084
+  },
+  {
+    "garden_id": "ER-AU-VIC-THO-HAR-001",
+    "garden_name": "Harry Street",
+    "display_lat": -37.755,
+    "display_lng": 145.0173
   }
 ]
