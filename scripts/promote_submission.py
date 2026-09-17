@@ -327,7 +327,7 @@ def main():
         % sub_id,
         'typology': 'Urban Ecological Retrofit', 'registry_role': 'Performer',
         'trajectory': 'Emerging',
-        'rating': {'current': 'Basic Garden', 'next': 'Habitat Garden', 'points_to_next': 0},
+        'rating': {'current': 'Foundation Garden', 'next': 'Habitat Garden', 'points_to_next': 0},
         'upgrade_potential': 100, 'points_available': 100,
         'yield': {'eligible': False, 'status': 'Yield not active for this garden',
                   'estimated_annual': 0, 'potential_annual': 0, 'currency': 'AUD',
@@ -340,7 +340,7 @@ def main():
         'garden_id': gid, 'garden_name': garden_name, 'type': 'Ecological Home Garden',
         'suburb': suburb, 'state': 'VIC', 'score': 0,
         'rating': 'Provisional' if status != 'verified' else
-        {'current': 'Basic Garden', 'next': 'Habitat Garden', 'points_to_next': 0},
+        {'current': 'Foundation Garden', 'next': 'Habitat Garden', 'points_to_next': 0},
         'primary_evc': '', 'bioregion': '',
         'status': 'Active / Establishing' if status == 'verified' else 'Provisional',
         'verification_level': record['evidence']['verification_level'],

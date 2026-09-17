@@ -41,8 +41,8 @@ PILLAR_LABEL = {
     'habitat': 'Habitat Complexity', 'connectivity': 'Connectivity', 'evidence': 'Evidence & Verification',
 }
 TIERS = [
-    (21, 'Habitat Garden'), (41, 'Ecological Garden'), (61, 'Registered Ecological Garden'),
-    (81, 'High Habitat Garden'), (91, 'Urban Biodiversity Node'),
+    (21, 'Habitat Garden'), (41, 'Ecological Garden'), (61, 'Rich Habitat Garden'),
+    (81, 'Ecosystem Garden'), (91, 'Urban Biodiversity Node'),
 ]
 
 
@@ -255,7 +255,7 @@ def build_opportunities(record, opts=None):
     return {
         'summary': {
             'score': base_total,
-            'tier': next((name for minv, name in reversed(TIERS) if base_total >= minv), 'Basic Garden'),
+            'tier': next((name for minv, name in reversed(TIERS) if base_total >= minv), 'Foundation Garden'),
             'nextTier': tier,
             'totalPointsAvailable': sum(o['points'] for o in opps),
             'pathPointsToTier': sum(o['points'] for o in path),

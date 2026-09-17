@@ -142,11 +142,11 @@ from reg_score import score_ecological_registry  # noqa: E402
 # Mirrors ratingFromScore() in js/reg-score.js — keep in lockstep.
 RATING_BANDS = [
     (91, "Urban Biodiversity Node"),
-    (81, "High Habitat Garden"),
-    (61, "Registered Ecological Garden"),
+    (81, "Ecosystem Garden"),
+    (61, "Rich Habitat Garden"),
     (41, "Ecological Garden"),
     (21, "Habitat Garden"),
-    (0,  "Basic Garden"),
+    (0,  "Foundation Garden"),
 ]
 
 # Statuses whose gardens are documented but not yet installed.
@@ -164,7 +164,7 @@ def rating_from_score(score):
     for floor, name in RATING_BANDS:
         if score >= floor:
             return name
-    return "Basic Garden"
+    return "Foundation Garden"
 
 
 def rating_object(score):

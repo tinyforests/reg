@@ -20,6 +20,19 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-09-17 — Rename rating tiers; separate performance from registration
+
+**Decision:** Renamed three of the six rating tiers, keeping all score bands and thresholds unchanged:
+`Basic Garden` → **Foundation Garden** (0–20); `Registered Ecological Garden` → **Rich Habitat Garden** (61–80); `High Habitat Garden` → **Ecosystem Garden** (81–90). `Habitat Garden` (21–40), `Ecological Garden` (41–60) and `Urban Biodiversity Node` (91–100) are unchanged. Also rewrote the `nextLevelFromScore()` benefits strings to describe ecological performance only — removing wording that implied a tier grants registration, "scoring system access", or a verification status.
+
+**Reason:** A rating describes a garden's **measured ecological performance**; registration describes its **inclusion in the Registry**. "Registered Ecological Garden" conflated the two, implying a mid-band score conferred registration. The new names keep the two axes distinct. "Ecosystem Garden" is a performance label only and does not assert a self-sustaining ecosystem.
+
+**Files affected:** Names only, numeric values/thresholds/scores/badges/yield untouched. Engines: `js/reg-score.js` (`ratingFromScore`, `nextLevelFromScore` + benefits copy), `js/reg-opportunities.js`, `scripts/sync_registry.py` (`RATING_BANDS`), `scripts/reg_opportunities.py`, `scripts/promote_submission.py`, `scripts/appsscript/Code.gs` (`KNOWN_TIERS` — **needs Apps Script redeploy**). Stored labels: `data/*.json` + `data/registry.json` rating snapshots. Surfaces: all `gardens/*/index.html` (`LEVEL_TIERS`, `visionText`), `index.html` (`HOME_TIERS`), `registry.html`, `yield-demo.html`, `docs/self-enrolment-ramp-prototype.html`, decks (Boroondara/Whitehorse), `emails/`. Docs: `scoring-methodology.md`, `data-schema.md`, `current-state.md`.
+
+**Notes:** Factual lowercase "registered ecological garden" and garden typologies were preserved (not every occurrence was replaced). Historical decision-log entries retain the old tier names by design. `reg_score.py` carries no tier names (totals only). Parity: `test_parity.py` 28/0; `test_opportunities_parity.py` has a **pre-existing** failure unrelated to this change (`data/foresthillk.json` has `canopy_cover_pct_current: null`, which trips `_next_threshold` — fails identically before the rename).
+
+---
+
 ## 2026-09-15 — Close the self-enrolment → registered gap
 
 **Decision:** A self-enrolment is only removed from the public Provisional list once it is actually registered (`published_garden_id` assigned + in `registry.json`). Added a reconciliation check, hardened the Provisional view, and codified the promote pipeline so a verified submission can no longer fall between the two lists.

@@ -97,18 +97,18 @@ Per `reg-score.js` (`ratingFromScore`), six tiers:
 
 | Score | Rating |
 |---|---|
-| 0–20 | Basic Garden |
+| 0–20 | Foundation Garden |
 | 21–40 | Habitat Garden |
 | 41–60 | Ecological Garden |
-| 61–80 | Registered Ecological Garden |
-| 81–90 | High Habitat Garden |
+| 61–80 | Rich Habitat Garden |
+| 81–90 | Ecosystem Garden |
 | 91–100 | Urban Biodiversity Node |
 
 **Yield eligibility threshold: score ≥ 41 (Ecological Garden and above).** See `/docs/revenue-and-yield-rules.md`.
 
 The scoring engine also returns a `nextLevel` object on every score result — name of the next tier, the gap in points, percent progress to that tier, and a benefits string — for use on profile pages and steward documents.
 
-`nextLevel()` iterates tiers in ascending order and returns the immediate next tier above the score. For a score of 52 it returns Registered Ecological Garden (61, gap 9). Fixed 2026-05-20.
+`nextLevel()` iterates tiers in ascending order and returns the immediate next tier above the score. For a score of 52 it returns Rich Habitat Garden (61, gap 9). Fixed 2026-05-20.
 
 ## Implementation alignment (JS ↔ Python)
 

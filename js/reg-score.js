@@ -183,20 +183,20 @@ function scoreEvidence(r) {
 
 function ratingFromScore(s) {
   if (s >= 91) return "Urban Biodiversity Node";
-  if (s >= 81) return "High Habitat Garden";
-  if (s >= 61) return "Registered Ecological Garden";
+  if (s >= 81) return "Ecosystem Garden";
+  if (s >= 61) return "Rich Habitat Garden";
   if (s >= 41) return "Ecological Garden";
   if (s >= 21) return "Habitat Garden";
-  return "Basic Garden";
+  return "Foundation Garden";
 }
 
 function nextLevelFromScore(score) {
   var levels = [
-    { min: 21, name: "Habitat Garden",               benefits: "Basic habitat recognition and scoring system access." },
-    { min: 41, name: "Ecological Garden",            benefits: "Recognised ecological function and habitat contribution." },
-    { min: 61, name: "Registered Ecological Garden", benefits: "Full registry benefits and ecological infrastructure status." },
-    { min: 81, name: "High Habitat Garden",          benefits: "Advanced habitat verification and corridor-node recognition." },
-    { min: 91, name: "Urban Biodiversity Node",      benefits: "Maximum ecological recognition and network leadership status." }
+    { min: 21, name: "Habitat Garden",          benefits: "Habitat structure that begins to support local wildlife." },
+    { min: 41, name: "Ecological Garden",       benefits: "Measurable ecological function and habitat contribution." },
+    { min: 61, name: "Rich Habitat Garden",     benefits: "Layered, largely indigenous planting with strong habitat value." },
+    { min: 81, name: "Ecosystem Garden",        benefits: "High structural complexity and habitat richness across the garden." },
+    { min: 91, name: "Urban Biodiversity Node", benefits: "Top ecological performance — a keystone patch in the urban habitat network." }
   ];
   for (var i = 0; i < levels.length; i++) {
     if (score < levels[i].min) {

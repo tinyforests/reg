@@ -575,18 +575,18 @@ function scoreEv(r) {
 
 function ratingFromScore(s) {
   if (s >= 91) return 'Urban Biodiversity Node';
-  if (s >= 81) return 'High Habitat Garden';
-  if (s >= 61) return 'Registered Ecological Garden';
+  if (s >= 81) return 'Ecosystem Garden';
+  if (s >= 61) return 'Rich Habitat Garden';
   if (s >= 41) return 'Ecological Garden';
   if (s >= 21) return 'Habitat Garden';
-  return 'Basic Garden';
+  return 'Foundation Garden';
 }
 
 function nextLevel(score) {
   var levels = [
     { min: 91, name: 'Urban Biodiversity Node' },
-    { min: 81, name: 'High Habitat Garden' },
-    { min: 61, name: 'Registered Ecological Garden' },
+    { min: 81, name: 'Ecosystem Garden' },
+    { min: 61, name: 'Rich Habitat Garden' },
     { min: 41, name: 'Ecological Garden' },
     { min: 21, name: 'Habitat Garden' }
   ];

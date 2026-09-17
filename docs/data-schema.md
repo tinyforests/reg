@@ -226,7 +226,7 @@ These are computed by `reg-score.js` and stored on the garden JSON for the regis
 }
 ```
 
-**`rating.next` is currently wrong on most entries.** `reg-score.js` has a bug in `nextLevel()` — it returns the highest tier above the score, not the immediate next tier. For York at 52, next is reported as "Urban Biodiversity Node" (91, gap 39) instead of "Registered Ecological Garden" (61, gap 9). Rupert's entry shows the correct next-tier value, suggesting the bug was patched and re-patched inconsistently. **Fix `reg-score.js`, regenerate all rating snapshots together.** See `/docs/scoring-methodology.md`.
+**`rating.next` is currently wrong on most entries.** `reg-score.js` has a bug in `nextLevel()` — it returns the highest tier above the score, not the immediate next tier. For York at 52, next is reported as "Urban Biodiversity Node" (91, gap 39) instead of "Rich Habitat Garden" (61, gap 9). Rupert's entry shows the correct next-tier value, suggesting the bug was patched and re-patched inconsistently. **Fix `reg-score.js`, regenerate all rating snapshots together.** See `/docs/scoring-methodology.md`.
 
 **The yield section is data-only.** Yield values are stored, but the profile template does not yet render them. When yield is rolled out to the profile UI, it reads from this block.
 

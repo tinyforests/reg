@@ -925,11 +925,11 @@ function _erFetchLogOverrides(gardenId) {
 
 /* ---- LEVEL TRACK ---- */
 var LEVEL_TIERS = [
-  "Basic Garden",
+  "Foundation Garden",
   "Habitat Garden",
   "Ecological Garden",
-  "Registered Ecological Garden",
-  "High Habitat Garden",
+  "Rich Habitat Garden",
+  "Ecosystem Garden",
   "Urban Biodiversity Node"
 ];
 
@@ -1200,7 +1200,7 @@ function render() {
   txt('nextLevelGap',  nl.gap > 0 ? result.total + ' pts - ' + nl.target + ' required - ' + nl.gap + ' to go' : 'Maximum level achieved');
   wid('nextLevelBar',  nl.progress);
   buildLevelTrack('levelTrack', result.rating);
-  txt('visionText', R.garden_name + ' is the Registry\'s first self-enrolled garden — baselined by its steward through the enrolment ramp, then confirmed by a Gardener & Son site visit. Indigenous-dominant planting, healthy mulched soil, and habitat features including an embedded log, rock refuge, water feature and nest box. Continued gains in local-indigenous species, canopy and recorded fauna will lift it toward Registered Ecological Garden status.');
+  txt('visionText', R.garden_name + ' is the Registry\'s first self-enrolled garden — baselined by its steward through the enrolment ramp, then confirmed by a Gardener & Son site visit. Indigenous-dominant planting, healthy mulched soil, and habitat features including an embedded log, rock refuge, water feature and nest box. Continued gains in local-indigenous species, canopy and recorded fauna will lift it toward Rich Habitat Garden status.');
 
   } catch(err) {
     console.error('Render error:', err);

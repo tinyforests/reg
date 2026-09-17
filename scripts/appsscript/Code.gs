@@ -437,8 +437,8 @@ function safeStr(v, maxLen) {
 }
 
 var KNOWN_TIERS = [
-  'Basic Garden', 'Habitat Garden', 'Ecological Garden',
-  'Registered Ecological Garden', 'High Habitat Garden', 'Urban Biodiversity Node'
+  'Foundation Garden', 'Habitat Garden', 'Ecological Garden',
+  'Rich Habitat Garden', 'Ecosystem Garden', 'Urban Biodiversity Node'
 ];
 
 /* ---- Enrolment handler ---- */

@@ -925,11 +925,11 @@ function _erFetchLogOverrides(gardenId) {
 
 /* ---- LEVEL TRACK ---- */
 var LEVEL_TIERS = [
-  "Basic Garden",
+  "Foundation Garden",
   "Habitat Garden",
   "Ecological Garden",
-  "Registered Ecological Garden",
-  "High Habitat Garden",
+  "Rich Habitat Garden",
+  "Ecosystem Garden",
   "Urban Biodiversity Node"
 ];
 
@@ -1200,7 +1200,7 @@ function render() {
   txt('nextLevelGap',  nl.gap > 0 ? result.total + ' pts - ' + nl.target + ' required - ' + nl.gap + ' to go' : 'Maximum level achieved');
   wid('nextLevelBar',  nl.progress);
   buildLevelTrack('levelTrack', result.rating);
-  txt('visionText', R.garden_name + ' is the Gardener & Son studio garden in Canterbury — designed, built, then self-enrolled through the Registry ramp and confirmed by a G&S site visit. Indigenous-dominant planting across five layers, water-sensitive design (rainwater, moisture basin, swale) and habitat features register it as a Registered Ecological Garden. Added habitat nodes and recorded fauna would lift it toward High Habitat Garden status.');
+  txt('visionText', R.garden_name + ' is the Gardener & Son studio garden in Canterbury — designed, built, then self-enrolled through the Registry ramp and confirmed by a G&S site visit. Indigenous-dominant planting across five layers, water-sensitive design (rainwater, moisture basin, swale) and habitat features register it as a Rich Habitat Garden. Added habitat nodes and recorded fauna would lift it toward Ecosystem Garden status.');
 
   } catch(err) {
     console.error('Render error:', err);

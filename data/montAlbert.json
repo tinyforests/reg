@@ -168,7 +168,7 @@
       "date": "Aug 2026",
       "type": "Enrolment",
       "category": "record_update",
-      "notes": "Self-enrolled through the Registry ramp as \"The Refuge\". Self-reported provisional score 70/100 (tier: Registered Ecological Garden)."
+      "notes": "Self-enrolled through the Registry ramp as \"The Refuge\". Self-reported provisional score 70/100 (tier: Rich Habitat Garden)."
     },
     {
       "title": "Verification visit -- Gardener & Son",
@@ -183,8 +183,8 @@
   "registry_role": "Prototype",
   "trajectory": "Rising",
   "rating": {
-    "current": "Registered Ecological Garden",
-    "next": "High Habitat Garden",
+    "current": "Rich Habitat Garden",
+    "next": "Ecosystem Garden",
     "points_to_next": 5
   },
   "upgrade_potential": 24,

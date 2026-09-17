@@ -16,14 +16,14 @@ This file moves. Update it whenever the registry state changes meaningfully. **Q
 
 | # | Garden | Suburb | LGA | Score | Rating | Badges | Notes |
 |---|---|---|---|---|---|---|---|
-| 1 | Arundel | Surrey Hills | Boroondara | 73 | Registered Ecological Garden | 6 | Highest score, longest archive |
+| 1 | Arundel | Surrey Hills | Boroondara | 73 | Rich Habitat Garden | 6 | Highest score, longest archive |
 | 2 | Nicholson | South Yarra | Stonnington | 29 | Habitat Garden | 2 | Inner-Melbourne urban retrofit |
 | 3 | Parring | Balwyn | Boroondara | 50 | Ecological Garden | 6 | |
 | 4 | Middlesex | Surrey Hills | Boroondara | 54 | Ecological Garden | 5 | Adjacent to Surrey Hills Reserve |
 | 5 | Mont Albert | Canterbury | Boroondara | 0 | Design Proposal | 1 | G&S studio garden, proposal stage |
 | 6 | Evelina | Mont Albert North | Whitehorse | 45 | Ecological Garden | 4 | Wild Native Meadow typology |
 | 7 | Dewrang | Blackburn | Whitehorse | 50 | Ecological Garden | 6 | Multi-zone, species_rich_30 earned |
-| 8 | Parring Road | Balwyn | Boroondara | 11 | Basic Garden | 1 | Design proposal stage |
+| 8 | Parring Road | Balwyn | Boroondara | 11 | Foundation Garden | 1 | Design proposal stage |
 | 9 | Rupert | Northcote | Darebin | 52 | Ecological Garden | 5 | **Demo garden** — landing-page example |
 | 10 | Windella | Kew East | Boroondara | 49 | Ecological Garden | 1 | Establishing |
 | 11 | York Street | Mont Albert | Whitehorse | 52 | Ecological Garden | 5 | Cluster Seed, Rising |

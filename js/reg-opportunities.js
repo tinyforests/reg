@@ -63,8 +63,8 @@
   var TIERS = [
     { min: 21, name: 'Habitat Garden' },
     { min: 41, name: 'Ecological Garden' },
-    { min: 61, name: 'Registered Ecological Garden' },
-    { min: 81, name: 'High Habitat Garden' },
+    { min: 61, name: 'Rich Habitat Garden' },
+    { min: 81, name: 'Ecosystem Garden' },
     { min: 91, name: 'Urban Biodiversity Node' }
   ];
 
@@ -265,7 +265,7 @@
     return {
       summary: {
         score: baseTotal,
-        tier: (function () { for (var i = TIERS.length - 1; i >= 0; i--) if (baseTotal >= TIERS[i].min) return TIERS[i].name; return 'Basic Garden'; })(),
+        tier: (function () { for (var i = TIERS.length - 1; i >= 0; i--) if (baseTotal >= TIERS[i].min) return TIERS[i].name; return 'Foundation Garden'; })(),
         nextTier: tier,
         totalPointsAvailable: opps.reduce(function (s, o) { return s + o.points; }, 0),
         pathPointsToTier: path.reduce(function (s, o) { return s + o.points; }, 0)

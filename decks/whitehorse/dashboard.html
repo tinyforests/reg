@@ -484,12 +484,12 @@ const TODAY = [
    pillars:{Biodiversity:40,"Soil & Water":26,Habitat:44,Connectivity:28,Evidence:32}},
 
   {id:"ER-AU-VIC-BLN-KELV-014", name:"Kelvin Grove", suburb:"Blackburn North", lat:-37.8062, lng:145.1548,
-   score:26, tier:"Basic Garden", status:"provisional", source:"Steward self-enrolment",
+   score:26, tier:"Foundation Garden", status:"provisional", source:"Steward self-enrolment",
    area:450, species:18, evc:"EVC 47 Valley Grassy Forest",
    pillars:{Biodiversity:30,"Soil & Water":22,Habitat:28,Connectivity:26,Evidence:14}},
 
   {id:"ER-AU-VIC-VMS-HOLL-016", name:"Holland Road", suburb:"Vermont South", lat:-37.8548, lng:145.1856,
-   score:22, tier:"Basic Garden", status:"provisional", source:"Steward self-enrolment",
+   score:22, tier:"Foundation Garden", status:"provisional", source:"Steward self-enrolment",
    area:580, species:15, evc:"EVC 55 Plains Grassy Woodland",
    pillars:{Biodiversity:24,"Soil & Water":20,Habitat:26,Connectivity:22,Evidence:14}}
 ];
@@ -518,7 +518,7 @@ function generate(count, seed, opts){
       name:NAMES[Math.floor(rnd()*NAMES.length)],
       suburb:sub.charAt(0)+sub.slice(1).toLowerCase(),
       lat, lng, score,
-      tier: score>=50?"Ecological Garden":score>=32?"Habitat Garden":"Basic Garden",
+      tier: score>=50?"Ecological Garden":score>=32?"Habitat Garden":"Foundation Garden",
       status,
       source: status==="third" ? "Whitehorse G4W assessment" : status==="verified" ? "G&S site visit · Registry assessor" : "Steward self-enrolment",
       area: 320+Math.round(rnd()*760),

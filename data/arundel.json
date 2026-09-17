@@ -176,7 +176,7 @@
       "complete": false
     },
     {
-      "title": "High Habitat Garden (81 points)",
+      "title": "Ecosystem Garden (81 points)",
       "date": "End 2026",
       "complete": false
     }
@@ -197,7 +197,7 @@
       "type": "Record Update",
       "category": "record_update",
       "public": true,
-      "notes": "Ecological function score: 61/100 (Registered Ecological Garden). Updated via assessment tool."
+      "notes": "Ecological function score: 61/100 (Rich Habitat Garden). Updated via assessment tool."
     },
     {
       "title": "Record updated — Gardener & Son",
@@ -205,7 +205,7 @@
       "type": "Record Update",
       "category": "record_update",
       "public": true,
-      "notes": "Ecological function score: 74/100 (Registered Ecological Garden). Updated via assessment tool."
+      "notes": "Ecological function score: 74/100 (Rich Habitat Garden). Updated via assessment tool."
     },
     {
       "title": "Pre-design site analysis -- ecological context mapping",
@@ -342,7 +342,7 @@
   "trajectory": "Rising",
   "rating": {
     "current": "Ecological Garden",
-    "next": "Registered Ecological Garden",
+    "next": "Rich Habitat Garden",
     "points_to_next": 3
   },
   "upgrade_potential": 42,

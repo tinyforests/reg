@@ -21,7 +21,7 @@
       "lga": "Nillumbik",
       "score": 83,
       "rating": {
-        "current": "High Habitat Garden",
+        "current": "Ecosystem Garden",
         "next": "Urban Biodiversity Node",
         "points_to_next": 8
       },
@@ -65,7 +65,7 @@
       "score": 58,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 3
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
@@ -147,7 +147,7 @@
       "score": 58,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 3
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -197,7 +197,7 @@
       "score": 54,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 7
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
@@ -239,7 +239,7 @@
       "score": 56,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 5
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -325,8 +325,8 @@
       "state": "VIC",
       "score": 76,
       "rating": {
-        "current": "Registered Ecological Garden",
-        "next": "High Habitat Garden",
+        "current": "Rich Habitat Garden",
+        "next": "Ecosystem Garden",
         "points_to_next": 5
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
@@ -360,7 +360,7 @@
       "score": 54,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 7
       },
       "primary_evc": "Valley Grassy Forest (EVC 47)",
@@ -401,7 +401,7 @@
       "score": 53,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 8
       },
       "primary_evc": "Valley Heathy Forest (EVC 127)",
@@ -444,7 +444,7 @@
       "score": 45,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 16
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -489,7 +489,7 @@
       "score": 56,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 5
       },
       "primary_evc": "Grassy Woodland (EVC 175)",
@@ -536,7 +536,7 @@
       "score": 52,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 9
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -623,7 +623,7 @@
       "score": 55,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 6
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -668,7 +668,7 @@
       "score": 47,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 14
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -710,7 +710,7 @@
       "score": 42,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 19
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -749,7 +749,7 @@
       "score": 51,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 10
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -870,7 +870,7 @@
       "score": 47,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 14
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -940,7 +940,7 @@
       "score": 41,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 20
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
@@ -976,7 +976,7 @@
       "state": "VIC",
       "score": 9,
       "rating": {
-        "current": "Basic Garden",
+        "current": "Foundation Garden",
         "next": "Habitat Garden",
         "points_to_next": 12
       },
@@ -1005,7 +1005,7 @@
       "score": 51,
       "rating": {
         "current": "Ecological Garden",
-        "next": "Registered Ecological Garden",
+        "next": "Rich Habitat Garden",
         "points_to_next": 10
       },
       "primary_evc": "Plains Grassy Woodland (EVC 55)",
