@@ -392,8 +392,10 @@ def main():
     token = os.environ.get('ER_ADMIN_TOKEN', '').strip()
     if token:
         try:
+            # Same web-app deployment as pull_live_records.py — the one that
+            # carries the set_published_id handler (verified live at V33).
             url = ('https://script.google.com/macros/s/'
-                   'AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec'
+                   'AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec'
                    '?' + urllib.parse.urlencode({'action': 'set_published_id',
                                                  'submission_id': sub_id, 'garden_id': gid,
                                                  'admin_token': token}))
