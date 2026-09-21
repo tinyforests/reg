@@ -7,6 +7,9 @@
 <meta name="color-scheme" content="light dark" />
 <meta name="supported-color-schemes" content="light dark" />
 <title>Field Notes — September 2026 — Gardener &amp; Son</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
 <!--
   ============================================================================
@@ -29,9 +32,10 @@
     {{web_version_url}}  -> this page (view in browser)
 
   OUTSTANDING PLACEHOLDERS (search "TODO:") — supply before send:
-    - TODO:YIELD_COPY     one-line Yield description + register-interest URL
+    - TODO:EVC_NAME/PHOTOS/COPY/LOCATION/CULTURAL_PLANTS  featured-EVC field guide
     - TODO:PROFILE_URL    confirm Sir Garnet profile URL pattern
-    DONE: ABN (39 583 219 700), Sir Garnet photo, enrol ramp at /enrol/ w/ ?src=
+    - TODO:YIELD_URL      /yield register-interest page does not exist yet
+    DONE: ABN, Sir Garnet photo, enrol ramp at /enrol/ w/ ?src=, Yield copy
 
   SEND-TIME HEADERS (added by the send layer, NOT here):
     List-Unsubscribe: <{{unsubscribe_url}}>, <mailto:hello@gardenerandson.com?subject=unsubscribe>
@@ -44,6 +48,8 @@
   body { margin:0; padding:0; width:100%; }
   img { border:0; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
   a { color:#5f7a3a; }
+  .hero-line { letter-spacing:-.01em; }
+  .h2 { letter-spacing:-.005em; }
   @media only screen and (max-width:620px){
     .container { width:100% !important; }
     .pad { padding-left:24px !important; padding-right:24px !important; }
@@ -57,6 +63,8 @@
     .bg-paper  { background:#2d3427 !important; }
     .ink       { color:#e6ddc9 !important; }
     .ink-soft  { color:#b9c0a8 !important; }
+    .h2        { color:#f0e9d6 !important; }
+    .mark      { color:#f0e9d6 !important; }
     .rule      { border-color:#4a5340 !important; }
     .mast      { background:#2d3427 !important; }
     .eyebrow   { color:#93b56e !important; }
@@ -93,7 +101,7 @@
           <td class="pad" style="padding:6px 44px 18px;">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-size:22px; font-weight:400; color:#3d4535;">
+                <td class="mark" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-size:22px; font-weight:400; color:#3d4535;">
                   Gardener <span style="color:#7C9A52; font-style:italic;">&amp;</span> Son
                 </td>
                 <td class="mast-issue ink-soft" align="right" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:12px; letter-spacing:.12em; color:#7a7663;">
@@ -148,6 +156,48 @@
         <!-- rule -->
         <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
 
+        <!-- FIELD GUIDE — featured EVC (Country & Culture voice) -->
+        <tr>
+          <td class="pad" style="padding:0 44px 0;">
+            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">Field guide</div>
+            <!-- TODO:EVC_NAME -->
+            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535; letter-spacing:-.005em;">Featured ecology: {{evc_feature_name}}</div>
+          </td>
+        </tr>
+        <!-- two photos, 50/50 (stack on very small screens) — TODO:EVC_PHOTOS -->
+        <tr>
+          <td class="pad" style="padding:16px 44px 6px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="50%" style="padding-right:5px;">
+                  <img src="https://ecologicalregistry.org/assets/letters/2026-09/evc-1.jpg" width="246" alt="TODO: describe photo 1 of the featured EVC" style="display:block; width:100%; max-width:246px; height:auto;" />
+                </td>
+                <td width="50%" style="padding-left:5px;">
+                  <img src="https://ecologicalregistry.org/assets/letters/2026-09/evc-2.jpg" width="246" alt="TODO: describe photo 2 of the featured EVC" style="display:block; width:100%; max-width:246px; height:auto;" />
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad ink" style="padding:16px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
+            <!-- TODO:EVC_COPY — 2-3 sentences on this vegetation community in the Country & Culture voice -->
+            <p style="margin:0 0 16px;">A few sentences on what this community is, how it reads on Country, and why it matters here.</p>
+            <!-- TODO:EVC_LOCATION -->
+            <p style="margin:0 0 16px;"><strong>Where to see it:</strong> {{evc_where_to_see}} &mdash; a remnant or planted stand you can visit.</p>
+            <!-- TODO:CULTURAL_PLANTS — a short list: common name (botanical) — cultural meaning / use -->
+            <p style="margin:0 0 6px;"><strong>Plants that carry meaning</strong></p>
+            <p style="margin:0; font-size:15px; line-height:1.85; color:#3d4535;">
+              Plant one (Botanical name) &mdash; its cultural meaning or use.<br />
+              Plant two (Botanical name) &mdash; its cultural meaning or use.<br />
+              Plant three (Botanical name) &mdash; its cultural meaning or use.
+            </p>
+          </td>
+        </tr>
+
+        <!-- rule -->
+        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
+
         <!-- ON THE RECORD — Sir Garnet -->
         <tr>
           <td class="pad" style="padding:0 44px 0;">
@@ -181,7 +231,7 @@
         <tr>
           <td class="pad ink" style="padding:14px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
             <p style="margin:0 0 16px;">The Ecological Registry is a public record of gardens doing real ecological work. You enrol your own garden through a short online form &mdash; a few questions about what you&rsquo;ve planted, your address, and a photo. Ten minutes, give or take. You don&rsquo;t need a finished garden: a few plants that belong and the intention to add more is enough. The record grows with it.</p>
-            <p style="margin:0 0 8px;"><strong style="color:#3d4535;">The first ten gardens to enrol before 30 September get a Registry sign for their front fence, free.</strong></p>
+            <p style="margin:0 0 8px;"><strong>The first ten gardens to enrol before 30 September get a Registry sign for their front fence, free.</strong></p>
           </td>
         </tr>
         <!-- button (bulletproof) -->
@@ -214,8 +264,7 @@
         </tr>
         <tr>
           <td class="pad ink" style="padding:14px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <!-- TODO:YIELD_COPY — replace this line with Tyson's one-liner, and the link with the register-interest URL -->
-            <p style="margin:0 0 16px;">We&rsquo;re about to launch Yield &mdash; a new way for gardens on the record to turn the ecological work they&rsquo;re already doing into lasting value. More soon; we&rsquo;ll write when it opens.</p>
+            <p style="margin:0 0 16px;"><strong>Earn income by renting your garden out to nature.</strong> That&rsquo;s Yield &mdash; launching soon: a way for gardens on the record to be paid for the ecological work they&rsquo;re already doing. We&rsquo;ll write when it opens.</p>
             <p style="margin:0;"><a href="https://ecologicalregistry.org/yield?src=fmeg-sep26" style="color:#5f7a3a; font-weight:500;">Register your interest &rarr;</a></p>
           </td>
         </tr>
