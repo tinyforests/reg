@@ -1,0 +1,84 @@
+GARDENER & SON — FIELD NOTES — SEPTEMBER 2026
+
+Spring is when the ground says yes.
+
+Hi {{first_name}},
+
+A while ago you looked up the plants that grew on your block before it
+was a block. This is a short letter for everyone who did — three small
+things, and one new one.
+
+
+WHAT TO PLANT THIS MONTH
+
+September into October is the planting window in Melbourne: soil still
+holding winter moisture, days warming, and roots have months to settle
+before summer bites. Plant grasses and groundcovers first — they knit
+the ground and shelter everything that comes after.
+
+See your plant list:
+https://findmyecologicalgarden.com/?src=fmeg-sep26
+
+[Personalised variant, if we hold your EVC: "Your block sits in
+{{evc_name}}. September into October is the window..." ]
+
+
+A GARDEN ON THE RECORD
+
+On Sir Garnet Road in Surrey Hills, Richard and Jenny's front garden
+carries a small sign on its fence. Behind it is a narrow buffer of
+species that belong to that ground, and a public record of what's
+growing there — scored on biodiversity, habitat, soil and water,
+connection, and evidence.
+
+The sign does something the planting alone can't: neighbours stop, read
+it, and ask. Several of the gardens now on the Registry started as
+exactly that conversation.
+
+Read the garden's record:
+https://ecologicalregistry.org/profile.html?g=sirgarnet30&src=fmeg-sep26
+
+
+PUT YOUR GARDEN ON THE RECORD
+
+The Ecological Registry is a public record of gardens doing real
+ecological work. You enrol your own garden through a short online form —
+a few questions about what you've planted, your address, and a photo.
+Ten minutes, give or take. You don't need a finished garden: a few
+plants that belong and the intention to add more is enough. The record
+grows with it.
+
+The first ten gardens to enrol before 30 September get a Registry sign
+for their front fence, free.
+
+Enrol your garden:
+https://ecologicalregistry.org/enrol/?src=fmeg-sep26
+
+Your precise address is never shown publicly.
+
+
+SOMETHING NEW: YIELD
+
+We're about to launch Yield — a new way for gardens on the record to
+turn the ecological work they're already doing into lasting value. More
+soon; we'll write when it opens.   [TODO: Tyson's one-liner]
+
+Register your interest:
+https://ecologicalregistry.org/yield?src=fmeg-sep26
+
+
+KNOW A NEIGHBOUR WHO SHOULD SEE THIS?
+
+Gardens do more when the one next door is doing it too.
+Share the letter: https://ecologicalregistry.org/letters/2026-09/
+
+------------------------------------------------------------------------
+You're receiving this because you signed up for a plant list at
+findmyecologicalgarden.com, where we said we'd send your list plus
+occasional field notes.
+
+Unsubscribe: {{unsubscribe_url}}
+View in browser: {{web_version_url}}
+
+Gardener & Son · ABN 39 583 219 700 · 140 Auburn Road, Hawthorn VIC 3122
+Reply to this email or write to hello@gardenerandson.com

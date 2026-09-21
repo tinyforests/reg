@@ -391,6 +391,17 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 <script>
 const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_/exec';
 
+/* Campaign attribution: capture ?src= on arrival and persist it, so it
+   survives the multi-step ramp and lands in the enrolment payload.
+   Lets us count enrolments per channel (e.g. src=fmeg-sep26). */
+const ENROL_SRC = (function () {
+  try {
+    var s = new URLSearchParams(location.search).get('src') || '';
+    if (s) { sessionStorage.setItem('enrol_src', s); return s.slice(0, 60); }
+    return (sessionStorage.getItem('enrol_src') || '').slice(0, 60);
+  } catch (e) { return ''; }
+})();
+
 /* ---- URL param intake: ?evc_code, ?evc_name, ?species ----
    Passed by the discovery tool (findmyecologicalgarden.com) when linking here.
    ?species is a comma-separated list of botanical names for the EVC.
@@ -1267,7 +1278,8 @@ async function confirmConsent(){
     park_distance_m:             parkDistM !== null ? String(parkDistM) : '',
     has_species_list:            tickedSpecies.length > 0,
     area_sqm:                    gardenAreaSqm || '',
-    effective_ecological_area_ha: gardenAreaSqm ? Math.round(gardenAreaSqm / 10000 * 1000) / 1000 : ''
+    effective_ecological_area_ha: gardenAreaSqm ? Math.round(gardenAreaSqm / 10000 * 1000) / 1000 : '',
+    enrol_src:                   ENROL_SRC
   };
 
   try {

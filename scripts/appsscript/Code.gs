@@ -528,7 +528,8 @@ function handleEnrolment(payload, cache) {
     parkLng,                                       // AK park_lng
     parkDistM,                                     // AL park_distance_m
     parseInt(payload.area_sqm, 10) || '',          // AM area_sqm
-    parseFloat(payload.effective_ecological_area_ha) || ''  // AN effective_ecological_area_ha
+    parseFloat(payload.effective_ecological_area_ha) || '',  // AN effective_ecological_area_ha
+    safeStr(payload.enrol_src || '', 60)                     // AO enrol_src (campaign attribution, e.g. fmeg-sep26)
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
