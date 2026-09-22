@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="canopy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ecological Registry · In detail · Yarra Ranges Council</title>
+<meta name="description" content="How the Ecological Registry works — the method, the steward engagement loop, privacy and governance. Prepared for Yarra Ranges Council.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gardener:#3d4535;
+  --beige:#fff0dc;
+  --signal:#7C9A52;
+  --brass:#B49A63;
+  --clay:#9A6A4F;
+
+  /* Canopy (dark) — default */
+  --bg:#181d14;
+  --panel:#20261b;
+  --panel-2:#262d20;
+  --line:rgba(255,240,220,.14);
+  --line-soft:rgba(255,240,220,.07);
+  --text:#f2e8d6;
+  --text-dim:rgba(242,232,214,.62);
+  --text-faint:rgba(242,232,214,.38);
+}
+html[data-theme="understory"]{
+  --bg:#fff0dc;
+  --panel:#f7e6cd;
+  --panel-2:#f2dfc3;
+  --line:rgba(61,69,53,.20);
+  --line-soft:rgba(61,69,53,.10);
+  --text:#2b3125;
+  --text-dim:rgba(43,49,37,.68);
+  --text-faint:rgba(43,49,37,.42);
+}
+*{box-sizing:border-box;border-radius:0}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-weight:300;-webkit-font-smoothing:antialiased;line-height:1.5;
+  transition:background .45s ease,color .45s ease;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.30;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.5'/></svg>");
+}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.label{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:var(--text-faint)}
+h1,h2,h3,h4{margin:0;font-weight:400}
+a{color:inherit;overflow-wrap:anywhere}
+p,li{overflow-wrap:break-word}
+
+/* ————— top bar ————— */
+header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:stretch;flex-wrap:wrap}
+.crest{display:flex;align-items:center;gap:14px;padding:14px 22px;border-right:1px solid var(--line);flex:1 1 320px;min-width:0}
+.crest svg{flex:none}
+.crest .t1{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.crest .t2{font-family:"Fraunces","Georgia",serif;font-size:19px;letter-spacing:-.01em;line-height:1.15;font-weight:400}
+.ctrl{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--line)}
+.ctrl:last-child{border-right:0}
+button,.btn{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  background:transparent;color:var(--text-dim);border:1px solid var(--line);
+  padding:7px 11px;cursor:pointer;transition:all .18s ease;text-decoration:none;display:inline-block;white-space:nowrap;
+}
+button:hover,.btn:hover{color:var(--text);border-color:var(--brass)}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+/* ————— stat band ————— */
+.band{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line);background:var(--panel-2)}
+.stat{padding:20px 20px 18px;border-right:1px solid var(--line-soft);position:relative;overflow:hidden}
+.stat:last-child{border-right:0}
+.stat .n{font-family:"IBM Plex Mono",monospace;font-size:38px;line-height:1;letter-spacing:-.02em;color:var(--text)}
+.stat .k{margin-top:9px;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--text-faint);line-height:1.5}
+.stat::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--brass);opacity:.45}
+
+/* ————— layout ————— */
+main{max-width:1180px;margin:0 auto;padding:0 0 10px}
+section{border-bottom:1px solid var(--line);padding:46px 22px;scroll-margin-top:84px}
+html{scroll-behavior:smooth}
+.snum{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--brass);display:block;margin-bottom:14px}
+h2{font-family:"Fraunces",Georgia,serif;font-size:30px;letter-spacing:-.015em;line-height:1.18;max-width:22ch}
+.lede{font-size:16.5px;color:var(--text-dim);max-width:66ch;margin-top:16px;line-height:1.62}
+p{max-width:68ch;font-size:14.5px;color:var(--text-dim);line-height:1.68}
+strong{font-weight:500;color:var(--text)}
+em{font-style:italic}
+.pull{font-family:"Fraunces",Georgia,serif;font-size:21px;font-style:italic;color:var(--text);max-width:46ch;line-height:1.45;border-left:2px solid var(--signal);padding-left:18px;margin:30px 0}
+
+/* three moves */
+.moves{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:30px}
+.move{background:var(--bg);padding:24px 22px}
+.move .w{font-family:"Fraunces",Georgia,serif;font-size:32px;letter-spacing:-.02em}
+.move .pn{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-top:6px}
+.move p{font-size:13px;margin-top:12px;max-width:none}
+
+/* pillars table */
+.pill-row{display:grid;grid-template-columns:minmax(150px,1.1fr) 52px minmax(0,2.4fr);gap:18px;align-items:baseline;padding:15px 0;border-bottom:1px solid var(--line-soft)}
+.pill-row:last-child{border-bottom:0}
+.pill-row .nm{font-size:14.5px;color:var(--text)}
+.pill-row .pt{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--signal);text-align:right}
+.pill-row .ds{font-size:12.5px;color:var(--text-dim);line-height:1.55}
+.tiers{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);margin-top:26px}
+.tier{background:var(--bg);padding:14px 12px}
+.tier .r{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--brass);letter-spacing:.08em}
+.tier .t{font-size:12.5px;color:var(--text-dim);margin-top:6px;line-height:1.4}
+
+/* loop */
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin:28px 0 6px}
+.lp{background:var(--panel-2);padding:20px 18px}
+.lp .h{font-family:"Fraunces",Georgia,serif;font-size:20px}
+.lp p{font-size:12.5px;margin-top:9px;max-width:none}
+
+/* steward mechanics list */
+.mech{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:28px}
+.mc{background:var(--bg);padding:22px}
+.mc h4{font-size:15px;color:var(--text);margin-bottom:8px}
+.mc p{font-size:13px;max-width:none}
+.mc.wide{grid-column:1/-1}
+.mc.wide p{max-width:68ch}
+.state{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:3px 7px;border:1px solid;margin-bottom:11px;display:inline-block}
+.state.live{color:var(--signal);border-color:var(--signal)}
+.state.build{color:var(--brass);border-color:var(--brass);border-style:dashed}
+
+/* answers */
+.qa{padding:18px 0;border-bottom:1px solid var(--line-soft)}
+.qa:last-child{border-bottom:0}
+.qa .q{font-family:"Fraunces",Georgia,serif;font-size:17px;font-style:italic;color:var(--text)}
+.qa p{margin-top:9px}
+
+.note{font-size:12.5px;color:var(--text-dim);line-height:1.6;border-left:2px solid var(--brass);padding-left:13px;margin-top:24px;max-width:64ch}
+ul{max-width:68ch;padding-left:19px;color:var(--text-dim);font-size:14.5px;line-height:1.68}
+li{margin-bottom:9px}
+li::marker{color:var(--brass)}
+
+footer{padding:34px 22px 46px;max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end}
+footer .quote{font-family:"Fraunces",Georgia,serif;font-size:17px;font-style:italic;color:var(--text-dim);max-width:52ch;line-height:1.5}
+footer .sig{text-align:right}
+footer .sig .b{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-faint);line-height:1.9}
+
+@media (max-width:900px){
+  .band{grid-template-columns:repeat(3,1fr)}
+  .moves,.loop,.mech,.tiers{grid-template-columns:1fr}
+  h2{font-size:25px}
+  .pill-row{grid-template-columns:1fr 46px;gap:8px}
+  .pill-row .ds{grid-column:1/-1}
+  section{padding:36px 18px}
+  header{position:static}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="crest">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <circle cx="17" cy="17" r="16" fill="none" stroke="currentColor" stroke-width="1" opacity=".28"/>
+      <circle cx="17" cy="17" r="10.5" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
+      <circle cx="17" cy="17" r="5" fill="#7C9A52"/>
+    </svg>
+    <div>
+      <div class="t1">Prepared for Yarra Ranges Council</div>
+      <div class="t2">The Ecological Registry, in detail</div>
+    </div>
+  </div>
+  <div class="ctrl">
+    <a class="btn" href="https://ecologicalregistry.org/decks/yarra-ranges/deck.html">Presentation</a>
+    <a class="btn" href="https://ecologicalregistry.org/decks/yarra-ranges/dashboard.html">Council view</a>
+  </div>
+  <div class="ctrl">
+    <button id="themeBtn" aria-pressed="false">Canopy</button>
+  </div>
+</header>
+
+<div class="band">
+  <div class="stat"><div class="n">24</div><div class="k">Gardens on the register</div></div>
+  <div class="stat"><div class="n">5</div><div class="k">Municipalities</div></div>
+  <div class="stat"><div class="n">273</div><div class="k">Indigenous species recorded</div></div>
+  <div class="stat"><div class="n">47</div><div class="k">Mean ecological score</div></div>
+  <div class="stat"><div class="n">99</div><div class="k">Badges awarded</div></div>
+  <div class="stat"><div class="n mono" style="font-size:19px;padding-top:12px">18 AUG<br>2026</div><div class="k">Figures as at</div></div>
+</div>
+
+<main>
+
+<section>
+  <span class="snum">01 — What it is</span>
+  <h2>A record of what happens on private land, kept over time.</h2>
+  <p class="lede">The Ecological Registry is a register. It holds an assessed ecological record for an individual property — what is growing there, what structure it has, how it connects to the landscape around it, and how all of that changes across years and across owners.</p>
+  <p>It is not a program, a certification scheme or a regulation. It does not ask a council to adopt anything, and it is designed to sit alongside the programs a council already runs rather than compete with them.</p>
+  <p class="pull">One ecological record that belongs to the property, kept in the same form across years and across owners.</p>
+  <p>A property accumulates records over its life — energy, water, structure, title. The living system it sits inside rarely has one that outlasts the person who made it, so when a garden changes hands what was learned about it usually goes with them. The proposition is narrow: if the work is worth doing, the outcome is worth recording, and a record that persists is worth more than one taken once.</p>
+</section>
+
+<section>
+  <span class="snum">02 — Steward engagement</span>
+  <h2>The assessment is the change moment. The record is what makes it last.</h2>
+  <p class="lede">This was the part of the conversation you raised, and it is the part we care most about.</p>
+  <p>Research on wildlife gardening programs has found that the on-site assessment visit, rather than the free plants, is the moment that shifts people's behaviour — and that participants often have little sense of what ecological contribution their gardening actually makes. A visit creates a moment of attention. With a record to hold it, that visit becomes a baseline, and a baseline becomes something a person can move.</p>
+
+  <div class="loop">
+    <div class="lp"><div class="h">Observe</div><p>A baseline is established — from our assessment, from a program report the steward brings themselves, or from their own self-assessment.</p></div>
+    <div class="lp"><div class="h">Improve</div><p>The record shows what would move the score and by how much, ranked, with a do-it-yourself path offered first.</p></div>
+    <div class="lp"><div class="h">Update</div><p>The steward reports what they have done — species, field notes, photographs, a new habitat feature.</p></div>
+    <div class="lp"><div class="h">Recognise</div><p>Confirmed change moves the score, lifts the tier and awards a badge. The trajectory stays visible across years.</p></div>
+  </div>
+
+  <p style="margin-top:30px">What that looks like for the person who owns the property:</p>
+
+  <div class="mech">
+    <div class="mc">
+      <span class="state live">Live</span>
+      <h4>They claim their own record</h4>
+      <p>A steward enters their email on their property's page and receives a single-use link that unlocks the record for them — their name, their precise location, and a privacy panel they control. No accounts and no passwords, which suits a register people visit a few times a year.</p>
+    </div>
+    <div class="mc">
+      <span class="state live">Live</span>
+      <h4>They see what is next, specifically</h4>
+      <p>The record generates ranked next steps by re-running the scoring engine against a proposed change, so a recommendation can never disagree with the method. "A shallow water source: +3 points."</p>
+    </div>
+    <div class="mc">
+      <span class="state live">Live</span>
+      <h4>They mark a step as done</h4>
+      <p>A steward taps "I've done this" and it lodges a claim. It does not award points. A person confirms it, the underlying input changes, and only then does the score recalculate.</p>
+    </div>
+    <div class="mc">
+      <span class="state live">Live</span>
+      <h4>Recognition, not ranking</h4>
+      <p>Eighteen defined badges and six tiers. Progression tracks recorded improvement on the property over time — what has actually changed since the last assessment — never a comparison against another household.</p>
+    </div>
+    <div class="mc">
+      <span class="state live">Live</span>
+      <h4>They add their own observations</h4>
+      <p>A steward can add field notes and species to their record. These never move the assessed score, which is regenerated only from confirmed inputs. Marking steward additions as unconfirmed on the record itself is designed and not yet built.</p>
+    </div>
+    <div class="mc">
+      <span class="state build">In build</span>
+      <h4>The record outlives the owner</h4>
+      <p>Ecological history belongs to the property and should survive a sale; personal information should not. A handover pack for a new owner is designed, and the access-revocation path that has to accompany it is not yet built.</p>
+    </div>
+    <div class="mc wide">
+      <span class="state build">In build</span>
+      <h4>The work could one day attract support</h4>
+      <p>A layer called Yield is being designed, so that a landholder maintaining genuine habitat might one day be backed for it. It is not active, it pays no one, and it never has. We mention it because it is why we are careful about the method: a measure that might one day carry weight has to be defensible long before it does.</p>
+    </div>
+  </div>
+
+  <p class="pull">The inputs are the truth. The score is a consequence.</p>
+  <p>That principle is why a steward's click cannot move a number on its own. A click is not an input — a water bowl is. It costs us engagement friction and we keep it, because a verified record should never be able to absorb an unverified claim.</p>
+</section>
+
+<section>
+  <span class="snum">03 — The method</span>
+  <h2>Five pillars, one hundred points, published openly.</h2>
+  <p class="lede">Every record is scored across five pillars. The method is versioned and public, so it can be cited, argued with and applied by someone with no connection to us.</p>
+
+  <div style="margin-top:26px">
+    <div class="pill-row"><div class="nm">Biodiversity structure</div><div class="pt">25</div><div class="ds">Indigenous species count, indigenous dominance, structural layers present, canopy cover.</div></div>
+    <div class="pill-row"><div class="nm">Soil &amp; water function</div><div class="pt">20</div><div class="ds">Soil health, water function, rainwater capture, moisture basins, swales.</div></div>
+    <div class="pill-row"><div class="nm">Habitat complexity</div><div class="pt">20</div><div class="ds">Habitat nodes, embedded logs, rock refuges, water features, nest boxes, verified fauna sightings.</div></div>
+    <div class="pill-row"><div class="nm">Connectivity</div><div class="pt">20</div><div class="ds">Distance to reserves and bushland, adjacency to other registered properties, confirmed corridor role, contiguous cluster area.</div></div>
+    <div class="pill-row"><div class="nm">Evidence &amp; verification</div><div class="pt">15</div><div class="ds">Photographs, field notes, species list, fauna record, professional assessment, and the verification level of the record.</div></div>
+  </div>
+
+  <div class="tiers">
+    <div class="tier"><div class="r">0–20</div><div class="t">Foundation Garden</div></div>
+    <div class="tier"><div class="r">21–40</div><div class="t">Habitat Garden</div></div>
+    <div class="tier"><div class="r">41–60</div><div class="t">Ecological Garden</div></div>
+    <div class="tier"><div class="r">61–80</div><div class="t">Rich Habitat Garden</div></div>
+    <div class="tier"><div class="r">81–90</div><div class="t">Ecosystem Garden</div></div>
+    <div class="tier"><div class="r">91–100</div><div class="t">Urban Biodiversity Node</div></div>
+  </div>
+
+  <p style="margin-top:28px"><strong>Everything on this page, and every score in the register, comes from this method as it stands today.</strong> The three corrections below are in development. None of them changes a number now, and we will not quote a figure from that work until it has been calibrated against the records we already hold.</p>
+
+  <ul>
+    <li><strong>The score still rewards land area.</strong> A cluster-area component and absolute species thresholds mean a larger property can gain points for being larger. In a shire holding both hectare bush blocks and township courtyards, that is the first thing a fair comparison runs into. A score should say how well a place uses what it has, not how much of it there is — and separating those two things is the correction we are most committed to.</li>
+    <li><strong>Evidence sits inside the total rather than beside it.</strong> Because it is a pillar worth 15 points, a well-documented garden scores above an identical one that is poorly documented. That is defensible — an unevidenced claim should not count for as much — but it does mean the single number mixes ecological condition with how well the place is recorded. Reporting condition and evidence so they can be read independently is part of the work.</li>
+    <li><strong>Verification is still ours.</strong> Independent assessors, and benchmarking each property against the vegetation class that belongs to it, are both required before this could reasonably be called a standard. Until then we describe it as a method in development.</li>
+  </ul>
+</section>
+
+<section>
+  <span class="snum">04 — How the data reaches you</span>
+  <h2>A data layer, not another website to adopt.</h2>
+  <p class="lede">Yarra Ranges already has its own tools for telling residents what belongs where, and species lists to go with them. We are not proposing to replace any of that, and nothing here asks a resident to start somewhere new.</p>
+  <p>The register adds one thing: a consistent record of what happens after the planting, kept in the same shape across properties and across years. The practical question for Council is how that record reaches the systems you already use. There are two routes, and both exist today.</p>
+
+  <div class="moves" style="grid-template-columns:repeat(2,1fr)">
+    <div class="move">
+      <div class="w">A feed</div>
+      <div class="pn">Machine-readable, live now</div>
+      <p>The register publishes as JSON over HTTPS — the full register, each record, and a council-level rollup. No key, no rate limit, nothing to install. A dashboard, a GIS layer or a reporting pipeline can read it directly.</p>
+      <p style="margin-top:10px"><a class="mono" style="font-size:11.5px;color:var(--brass)" href="https://ecologicalregistry.org/data/councils/boroondara.json">ecologicalregistry.org/data/councils/boroondara.json</a></p>
+    </div>
+    <div class="move">
+      <div class="w">A view</div>
+      <div class="pn">Nothing to install</div>
+      <p>For anyone who wants to look rather than integrate, the same data renders as a council page — the map, the structural picture, change over time. It opens in a browser and needs no login.</p>
+      <p style="margin-top:10px"><a class="mono" style="font-size:11.5px;color:var(--brass)" href="https://ecologicalregistry.org/decks/yarra-ranges/dashboard.html">The Yarra Ranges council view</a></p>
+    </div>
+  </div>
+
+  <p style="margin-top:28px">The Boroondara file is a working example rather than a mock-up, and it is worth opening because it shows what makes a figure safe to put in a Council report. It hands you a numerator and a denominator instead of a percentage — four or more structural layers is <span class="mono">k 3, n 11</span>, with the definition of which records count stated in the file. It carries an <span class="mono">as_at</span> date, the methodology version and the exact source commit, so a number quoted later can be traced to what produced it. And every figure is derived from the underlying records at build time, so a summary cannot drift from what it summarises.</p>
+  <p>A Yarra Ranges file would be generated the same way from Yarra Ranges records. If a different shape would fit your systems better — particular fields, a different geography, another format — we would rather build to your specification than ask you to consume ours.</p>
+
+  <div class="note"><strong>The obvious question about a feed is whose data is in it.</strong> The rollup carries no names and no addresses, and nothing we publish resolves a row to a household. It is pseudonymous rather than anonymous, though: each row carries a Registry ID that corresponds to a public record, and we hold the mapping. We would rather state that precisely than claim more. <a href="#privacy" style="color:var(--brass)">Section 05 sets out the commitments in full.</a></div>
+</section>
+
+<section id="privacy">
+  <span class="snum">05 — Privacy and governance</span>
+  <h2>Council never transfers resident information to the register.</h2>
+  <p class="lede">Privacy is the first question councils ask us, and it is the right one. These are written commitments rather than assurances — made to Whitehorse City Council in August 2026 and applying here unchanged. The full document is <em>Council Partnership Principles v1.0</em> and we are happy to provide it.</p>
+
+  <div style="margin-top:22px">
+    <div class="qa">
+      <div class="q">Did we give a private company our residents' data?</div>
+      <p>No. Council sends an invitation to its own participants and the participant list stays with Council. The resident comes to the register themselves and provides their own report directly. We never receive, hold or ask for a resident list, and we do not pre-build a household record and wait for it to be claimed.</p>
+    </div>
+    <div class="qa">
+      <div class="q">Will residents' addresses end up online?</div>
+      <p>No. Public records show a locality and a Registry ID — no steward name and no street address. Map pins are deterministically offset by around 250 metres, which keeps the address off the page; on a large or distinctive rural property it reduces precision rather than guaranteeing that a property could never be identified, and we would rather say that plainly than overstate it. Name, photographs and story are consent settings the steward controls, not defaults.</p>
+    </div>
+    <div class="qa">
+      <div class="q">Why would we point residents at a garden design company's platform?</div>
+      <p>Gardener &amp; Son operates the register and is also a commercial design studio. We state that plainly rather than leave it implicit. For any council pathway we commit to: no design services marketed or solicited to anyone who joins through it; steward-facing materials carrying Registry rather than Gardener &amp; Son branding; and participant information used for register purposes only. We would also like to go through whatever conflict-of-interest or probity process Council would prefer.</p>
+    </div>
+    <div class="qa">
+      <div class="q">Is this Council endorsing a score?</div>
+      <p>No. A council supplying an assessment is not a council verifying a score — they are different claims. Where a record draws on a council program report, the council is recorded as the source of third-party evidence, and a "verified by Council" marker is never applied on that basis.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <span class="snum">06 — A possible next step</span>
+  <h2>Small, and shaped with you.</h2>
+  <p class="lede">There is no budget ask, and no Yarra Ranges property on the register today. That is a plain statement of where we are.</p>
+  <p>One possibility is a small cluster of ten to twenty properties already engaged through Ribbons of Green, Gardens for Wildlife or the Landcare network, where we test whether the information those programs already generate can form a baseline record, with the landholder bringing it to the register themselves.</p>
+  <p>Two checkpoints rather than one. At <strong>three months</strong>, the engagement question: are stewards coming back to their record, are they contributing observations of their own, and do they find the suggested next steps worth acting on? That is the thing we would most want to know, and it is answerable long before anything ecological has had time to change. At <strong>twelve months</strong>, the ecological one: does a repeat assessment show change in vegetation, habitat or ecological condition — rather than a better-documented version of the same garden.</p>
+  <p>On costs: garden verification visits are a paid service, and that is our current commercial product. For a Yarra Ranges pilot we would agree the scope, the responsibilities on each side, the costs and any funding arrangements together, before inviting participants.</p>
+  <p>We would rather work the shape out with you than present one. If it would help, we are very happy to come up to you.</p>
+  <ul style="margin-top:22px">
+    <li><a href="https://ecologicalregistry.org/decks/yarra-ranges/deck.html">The presentation from our meeting</a></li>
+    <li><a href="https://ecologicalregistry.org/decks/yarra-ranges/dashboard.html">The council view</a> — built from the shire's real geography, currently holding no Yarra Ranges data</li>
+    <li><a href="https://ecologicalregistry.org/">The live register</a> — the gardens, the method and how to enrol</li>
+  </ul>
+  <div class="note">Sources. The research in section 02 is Mumaw, L. &amp; Bekessy, S. (2017), <a href="https://doi.org/10.1080/14486563.2017.1309695" style="color:var(--brass)">"Wildlife gardening for collaborative public–private biodiversity conservation"</a>, <em>Australasian Journal of Environmental Management</em> 24(3) — a study of a Victorian Gardens for Wildlife program. Register figures are as at 18 August 2026 and are drawn from <a href="https://ecologicalregistry.org/data/registry.json" style="color:var(--brass)">the register data itself</a>.</div>
+</section>
+
+</main>
+
+<footer>
+  <div class="quote">Because when we change what we value, we change what we measure. What we measure, we improve. What we improve shapes the future.</div>
+  <div class="sig">
+    <div class="b">Gardener &amp; Son</div>
+    <div class="b">Tyson &amp; Natasha Lundbech</div>
+    <div class="b">Ecological design studio · Hawthorn &amp; Mont Albert</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('themeBtn'),h=document.documentElement;
+  function set(t){
+    h.setAttribute('data-theme',t);
+    b.textContent = (t==='canopy') ? 'Canopy' : 'Understory';
+    b.setAttribute('aria-pressed', t==='understory' ? 'true':'false');
+    try{localStorage.setItem('reg-theme', t==='canopy'?'dark':'light');}catch(e){}
+  }
+  var saved;
+  try{saved=localStorage.getItem('reg-theme');}catch(e){}
+  set(saved==='light' ? 'understory' : 'canopy');
+  b.addEventListener('click',function(){
+    set(h.getAttribute('data-theme')==='canopy' ? 'understory' : 'canopy');
+  });
+})();
+</script>
+</body>
+</html>
