@@ -347,38 +347,58 @@ function referralSource(addr){
   return null;
 }
 
+const REFRESH_MS = 60000;
+let loading = false, refreshTimer, lastSuccess = null;
 let RAW=[];  // cleaned base rows (test dropped, excluded months dropped, studio flagged)
 
 async function load(){
   if(CONFIG.API_KEY==='YOUR_API_KEY') return showSetup();
-  const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.RANGE)}?key=${CONFIG.API_KEY}`;
-  let json;
-  try{
-    const res=await fetch(url);
+  if(loading || document.hidden) return;
+  loading = true;
+  clearTimeout(refreshTimer);
+  document.getElementById('m-status').textContent = lastSuccess ? 'Refreshing…' : 'Connecting…';
+  const controller = new AbortController();
+  const timeout = setTimeout(()=>controller.abort(), 20000);
+  try {
+    const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.RANGE)}?key=${CONFIG.API_KEY}`;
+    const res=await fetch(url, {cache:'no-store', signal:controller.signal});
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||('HTTP '+res.status));}
-    json=await res.json();
-  }catch(err){return showError(err.message);}
+    const json=await res.json();
 
-  const rows=(json.values||[]).slice(1); // drop header
-  RAW=rows.map(r=>{
-    const [ts,addr='',lat='',lng='',code='',name='',src='']=r;
-    const d=parseDate(ts);
-    const la=parseFloat(lat), ln=parseFloat(lng);
-    const isTest=String(addr).toLowerCase()==='test'||String(lat).toLowerCase()==='test';
-    const ref=referralSource(addr)||(String(src).toLowerCase().includes('referral')?referralSource(src):null);
-    return {
-      date:d, addr, lat:la, lng:ln,
-      hasGeo:isFinite(la)&&isFinite(ln),
-      code:String(code).trim(), name:String(name).trim(),
-      src:String(src).trim().toLowerCase(),
-      isTest, isReferral:!!ref, refSource:ref,
-      council:parseCouncil(addr),
-      month:d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):null,
-    };
-  }).filter(r=>r.date && !r.isTest && !EXCLUDE_MONTHS.includes(r.month) && (r.code||r.hasGeo));
+    const rows=(json.values||[]).slice(1); // drop header
+    RAW=rows.map(r=>{
+      const [ts,addr='',lat='',lng='',code='',name='',src='']=r;
+      const d=parseDate(ts);
+      const la=parseFloat(lat), ln=parseFloat(lng);
+      const isTest=String(addr).toLowerCase()==='test'||String(lat).toLowerCase()==='test';
+      const ref=referralSource(addr)||(String(src).toLowerCase().includes('referral')?referralSource(src):null);
+      return {
+        date:d, addr, lat:la, lng:ln,
+        hasGeo:isFinite(la)&&isFinite(ln),
+        code:String(code).trim(), name:String(name).trim(),
+        src:String(src).trim().toLowerCase(),
+        isTest, isReferral:!!ref, refSource:ref,
+        council:parseCouncil(addr),
+        month:d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):null,
+      };
+    }).filter(r=>r.date && !r.isTest && !EXCLUDE_MONTHS.includes(r.month) && (r.code||r.hasGeo));
 
-  RAW.forEach(r=>r.isStudio=isStudio(r.lat,r.lng));
-  render();
+    RAW.forEach(r=>r.isStudio=isStudio(r.lat,r.lng));
+    if(!document.getElementById('filter-studio')) mount();
+    lastSuccess = new Date();
+    render();
+    document.getElementById('m-status').textContent='Live · updates every minute';
+  } catch(err) {
+    if(lastSuccess) {
+      document.getElementById('m-status').textContent='Update failed · retrying';
+    } else {
+      showError(err.name === 'AbortError' ? 'The connection timed out. Retrying automatically.' : err.message);
+    }
+  } finally {
+    clearTimeout(timeout);
+    loading = false;
+    refreshTimer = setTimeout(load, REFRESH_MS);
+  }
 }
 
 function render(){
@@ -388,10 +408,9 @@ function render(){
 
   // meta
   const dates=RAW.map(r=>r.date).sort((a,b)=>a-b);
-  document.getElementById('m-status').textContent='Live';
   document.getElementById('m-since').textContent=dates[0]?.toLocaleDateString('en-AU',{month:'short',year:'numeric'})||'—';
   document.getElementById('m-last').textContent=dates.at(-1)?.toLocaleDateString('en-AU',{day:'numeric',month:'short'})||'—';
-  document.getElementById('m-refreshed').textContent=new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('m-refreshed').textContent=lastSuccess?.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',second:'2-digit'})||'—';
 
   const direct=rows.filter(r=>!r.isReferral);
   const referral=rows.filter(r=>r.isReferral);
@@ -442,7 +461,7 @@ function render(){
 
   // map
   drawMap(rows.filter(r=>r.hasGeo));
-  const noGeo=referral.length;
+  const noGeo=referral.filter(r=>!r.hasGeo).length;
   q('[data-c="mapnote"]').textContent=
     `${fmt(rows.filter(r=>r.hasGeo).length)} located lookups plotted · ${fmt(noGeo)} referral lookups carry an EVC but no coordinates, so they’re counted in the channel panel but not shown here.`;
 
@@ -528,22 +547,27 @@ function showSetup(){
 }
 function showError(msg){
   document.getElementById('m-status').textContent='Error';
+  MAP=null; LAYER=null;
   document.getElementById('app').innerHTML=`
     <div class="state"><div class="wrap">
       <h2 class="err">Couldn’t read the sheet</h2>
-      <p class="err mono">${msg}</p>
+      <p class="err mono" id="load-error"></p>
       <p>Check that the API key is valid, the Sheets API is enabled, and the sheet is shared as “Anyone with the link: Viewer”.</p>
     </div></div>`;
+  document.getElementById('load-error').textContent=msg;
 }
+
+document.addEventListener('visibilitychange',()=>{if(!document.hidden) load();});
+window.addEventListener('online',load);
 
 /* boot */
 (function(){
   // build UI shell first so tiles exist, then load (unless setup/err replaces it)
   if(CONFIG.API_KEY==='YOUR_API_KEY'){showSetup();return;}
   mount();
-  load().then(()=>{ if(RAW.length){} }).catch(e=>showError(e.message));
+  load();
 })();
-// re-mount then render once data lands (load() populates RAW then calls render)
+
 </script>
 </body>
 </html>

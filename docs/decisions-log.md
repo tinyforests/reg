@@ -20,6 +20,16 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-09-24 — Refresh the live demand dashboard automatically
+
+**Decision:** Fetch the lookup sheet every minute while the page is visible, and on returning to the page or reconnecting. Preserve the last successful figures on refresh failure and only advance “Refreshed” after a successful fetch.
+
+**Reason:** The dashboard previously fetched once but labelled itself live. Filter changes also advanced the timestamp without fetching. Bound requests to 20 seconds and retry failures automatically.
+
+**Files affected:** `live.html`, `scripts/test_live_refresh.js`, `docs/decisions-log.md`.
+
+---
+
 ## 2026-09-17 — Rename rating tiers; separate performance from registration
 
 **Decision:** Renamed three of the six rating tiers, keeping all score bands and thresholds unchanged:
