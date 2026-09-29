@@ -109,7 +109,7 @@
     .eco-card .score{ font-family:'Abril Fatface',Georgia,serif; font-weight:400; font-size:78px; line-height:.82; letter-spacing:-.02em; color:var(--beige); }
     .eco-card .score-meta{ padding-bottom:5px; }
     .eco-card .of{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; color:rgba(255,240,220,.6); display:block; }
-    .eco-card .tier{ font-family:'Fraunces',Georgia,serif; font-size:16px; color:var(--beige); display:block; margin-top:4px; line-height:1.2; }
+    .eco-card .tier{ font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.04em; color:var(--beige); display:block; margin-top:5px; line-height:1.3; }
     .eco-card .hero.provisional{ background:transparent; border:1px dashed rgba(61,69,53,.55); border-left:4px solid var(--brass); }
     .eco-card .hero.provisional .score{ color:var(--gardener-green); opacity:.85; }
     .eco-card .hero.provisional .of, .eco-card .hero.provisional .tier{ color:var(--gardener-green); }
@@ -663,6 +663,10 @@
   function scoreOf(g) { return (g && typeof g.score === 'number') ? g.score : 0; }
 
   var HOME_TIERS = ['Foundation Garden','Habitat Garden','Ecological Garden','Rich Habitat Garden','Ecosystem Garden','Urban Biodiversity Node'];
+  var HOME_TIER_MIN = [0, 21, 41, 61, 81, 91];
+  // Derive the tier from the numeric score so the card never depends on a stored
+  // rating string (which can be stale after a tier rename / from a live fetch).
+  function tierIdxFromScore(s) { for (var i = HOME_TIER_MIN.length - 1; i >= 0; i--) { if (s >= HOME_TIER_MIN[i]) return i; } return 0; }
   var HOME_VERIF = ['gs_verified','site_visit_badge'];
   function buildHomeLadder(name) {
     var track = document.getElementById('heroTrack'); if (!track) return -1;
@@ -682,17 +686,19 @@
     var setText = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
 
     setText('heroScore', scoreOf(g));
-    var tier = rating.current || g.rating_label || 'Registered';
+    var idx = tierIdxFromScore(scoreOf(g));
+    var tier = HOME_TIERS[idx];
     setText('heroTier', tier);
-    var idx = buildHomeLadder(tier);
+    buildHomeLadder(tier);
     var tr = document.getElementById('heroTrack');
     if (tr) tr.setAttribute('aria-label', 'Level ' + (idx + 1) + ' of ' + HOME_TIERS.length + ', ' + tier);
 
     var nextEl = document.getElementById('heroNext2');
     if (nextEl) {
-      if (rating.next && typeof rating.points_to_next === 'number' && rating.points_to_next > 0)
-        nextEl.innerHTML = '<b>' + rating.points_to_next + (rating.points_to_next === 1 ? ' point' : ' points') + '</b> to ' + rating.next + '.';
-      else nextEl.textContent = 'Top level reached.';
+      if (idx < HOME_TIERS.length - 1) {
+        var toNext = HOME_TIER_MIN[idx + 1] - scoreOf(g);
+        nextEl.innerHTML = '<b>' + toNext + (toNext === 1 ? ' point' : ' points') + '</b> to ' + HOME_TIERS[idx + 1] + '.';
+      } else nextEl.textContent = 'Top level reached.';
     }
 
     var earned = badges.filter(function (id) { return HOME_VERIF.indexOf(id) === -1; });
