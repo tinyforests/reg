@@ -1215,9 +1215,9 @@ function drawBand(){
 
 /* ── map ── */
 let map=null,tiles=null,G={};
-const TILE={understory:"https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-            canopy:"https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"};
-const ATTR='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+const TILE={understory:"https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+            canopy:"https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"};
+const ATTR='Tiles &copy; <a href="https://www.esri.com/">Esri</a>';
 
 function blobLatLng(v,seed){
   const rnd=seeded(seed),n=16,out=[];
@@ -1232,7 +1232,7 @@ function initMap(){
   if(typeof L==="undefined"){document.getElementById("offline").style.display="flex";return false}
   map=L.map("map",{scrollWheelZoom:false,zoomControl:true,preferCanvas:true});
   tiles=L.tileLayer(TILE[document.documentElement.dataset.theme]||TILE.understory,
-    {attribution:ATTR,maxZoom:19,subdomains:"abcd"}).addTo(map);
+    {attribution:ATTR,maxZoom:19,maxNativeZoom:16,subdomains:"abcd"}).addTo(map);
   L.control.scale({imperial:false,position:"bottomleft"}).addTo(map);
   map.fitBounds(L.latLngBounds(BOUNDARY),{padding:[18,18]});
   ["boundary","demand","water","corridor","rings","sites","gaps","links","cohort","gardens"]

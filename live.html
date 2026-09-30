@@ -494,8 +494,8 @@ let MAP,LAYER;
 function drawMap(rows){
   if(!MAP){
     MAP=L.map('map',{scrollWheelZoom:false,attributionControl:true}).setView([-37.9,145.05],9);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{
-      attribution:'© OpenStreetMap · © CARTO',subdomains:'abcd',maxZoom:19
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{
+      attribution:'Tiles &copy; Esri',subdomains:'abcd',maxZoom:19,maxNativeZoom:16
     }).addTo(MAP);
   }
   if(LAYER)MAP.removeLayer(LAYER);

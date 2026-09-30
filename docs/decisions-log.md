@@ -20,6 +20,18 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-09-30 — Swap basemap tiles from CARTO to keyless Esri light/dark gray canvas
+
+**Decision:** Replaced the CARTO basemap tiles (`basemaps.cartocdn.com/light_all`, `light_nolabels`, `dark_all`) with Esri's public Light/Dark Gray Canvas (`server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base` and `World_Dark_Gray_Base`) across every public map. Capped `maxNativeZoom: 16` (Esri Canvas's deepest native level) so deeper zooms upscale rather than 404, and updated tile attribution to Esri.
+
+**Reason:** CARTO began requiring an API key for anonymous basemap tiles, so every map rendered an "API KEY REQUIRED" watermark — most visibly the corridor map on all garden profiles. Esri's Gray Canvas is keyless (same provider family already used for `World_Imagery` in `reg-spatial.js`), preserves the minimal light/muted aesthetic, and needs no key committed to the public repo. OSM standard tiles were rejected as too colourful for the brand; Stadia/Mapbox require keys.
+
+**Files affected:** all 24 `gardens/*/index.html`, `js/reg-precise-map.js`, `assess.html`, `yield-demo.html`, `live.html`, `decks/boroondara/dashboard.html`, `docs/decisions-log.md`.
+
+**Notes:** Tile path order differs (Esri is `{z}/{y}/{x}`, no `{s}`/`{r}`). The private admin-map generator `scripts/gen_admin_map.py` still emits a CARTO `dark_only_labels` overlay — left as-is because it produces a git-ignored local file, not a public surface; convert to `World_Dark_Gray_Reference` if that watermark ever matters. Esri Canvas attribution is owed and now set on the layers that show an attribution control.
+
+---
+
 ## 2026-09-24 — Refresh the live demand dashboard automatically
 
 **Decision:** Fetch the lookup sheet every minute while the page is visible, and on returning to the page or reconnecting. Preserve the last successful figures on refresh failure and only advance “Refreshed” after a successful fetch.

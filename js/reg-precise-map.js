@@ -55,7 +55,7 @@
 
     var map = L.map('corridorMap', { zoomControl: false, scrollWheelZoom: false, attributionControl: false });
     root._map = map;
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, maxNativeZoom: 16, subdomains: 'abcd' }).addTo(map);
 
     var bounds = [[p.lat, p.lng]];
     L.marker([p.lat, p.lng], { icon: L.divIcon({ className: 'map-pin-green', iconSize: [14, 14] }) })
