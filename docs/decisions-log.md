@@ -451,3 +451,12 @@ When in doubt, log it.
 **Reason:** The first phone Gmail test changed Gardener Green to brown. Gmail's current opt-out preserves the authored palette on supported app versions. Actual phone rendering needs a second test. Reference: https://emailmarkup.org/en/blog/2026/gmail-app-dark-mode-update
 
 **Files affected:** `letters/2026-09/index.html`.
+
+
+## 2026-10-08 — Record Field Notes opt-outs and suppress future sends
+
+**Decision:** Use an explicit prefilled email unsubscribe route to hello@gardenerandson.com, and accept replies saying “Unsubscribe”. State that the reader sends the email to request removal. Record confirmed incoming requests privately in the connected Gmail mailbox under `Field Notes/Opt-outs` and a local suppression ledger. Exclude recorded addresses whenever the recipient list is rebuilt, and refresh suppression immediately before a list send.
+
+**Reason:** Provide a working opt-out path while Apps Script authentication is unavailable, with an inspectable request history and protection against future sends. Email delivery records the request; a scheduled scan processes the suppression log. This is an email request workflow, not an HTTP one-click unsubscribe endpoint.
+
+**Files affected:** `letters/2026-09/index.html`, `letters/2026-09/letter.txt`. Private recipient and opt-out records stay outside this public repository.

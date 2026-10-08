@@ -77,7 +77,9 @@ You're receiving this because you signed up for a plant list at
 findmyecologicalgarden.com, where we said we'd send your list plus
 occasional field notes.
 
-Unsubscribe: {{unsubscribe_url}}
+Unsubscribe: mailto:hello@gardenerandson.com?subject=Field%20Notes%20unsubscribe&body=Please%20unsubscribe%20me%20from%20Gardener%20%26%20Son%20Field%20Notes.%0A%0AIf%20the%20address%20to%20remove%20is%20different%20from%20my%20sending%20address%2C%20it%20is%3A%20
+Choose the link and send the prefilled email, or reply with "Unsubscribe".
+We will record your request and remove you from future Field Notes.
 View in browser: {{web_version_url}}
 
 Gardener & Son · ABN 39 583 219 700 · 140 Auburn Road, Hawthorn VIC 3122
