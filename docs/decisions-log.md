@@ -442,3 +442,12 @@ When in doubt, log it.
 **Reason:** Keep the newsletter browser and share links working and prevent the featured photograph from appearing broken. Recipient-specific unsubscribe links remain the responsibility of the mailing pipeline.
 
 **Files affected:** `letters/2026-09/index.html`, `assets/letters/2026-09/evc-coast-banksia.jpg`.
+
+
+## 2026-10-08 — Prevent Gmail dark-mode brand recolouring
+
+**Decision:** Use `color-scheme: light only` in the email meta tag, with a `:root { color-scheme: light dark; }` CSS override to retain the existing custom dark styles in Apple Mail.
+
+**Reason:** The first phone Gmail test changed Gardener Green to brown. Gmail's current opt-out preserves the authored palette on supported app versions. Actual phone rendering needs a second test. Reference: https://emailmarkup.org/en/blog/2026/gmail-app-dark-mode-update
+
+**Files affected:** `letters/2026-09/index.html`.
