@@ -6,81 +6,49 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="color-scheme" content="light dark" />
 <meta name="supported-color-schemes" content="light dark" />
-<title>Field Notes — September 2026 — Gardener &amp; Son</title>
+<title>Field Notes — Spring 2026 — Gardener &amp; Son</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
-<!--
-  ============================================================================
-  FMEG September newsletter · web version + email template
-  Hosted: https://ecologicalregistry.org/letters/2026-09/
-  Send: Thursday 24 September 2026 · offer runs to 30 September
 
-  MERGE FIELDS (send pipeline substitutes; this file renders the GENERIC/web
-  version so the hosted page reads cleanly):
-    {{first_name}}       -> greeting. Fallback: "there"
-    {{evc_name}}         -> personalises PLANTING piece if the gate sheet has an
-                            EVC for the recipient. If blank, use the GENERIC
-                            paragraph shown live here. Personalised variant:
-      "Your block sits in {{evc_name}}. September into October is the window:
-       soil still holding winter moisture, days warming, and roots have months
-       to settle before summer bites. Grasses and groundcovers first, since
-       they knit the ground and shelter everything that comes after. Your full
-       list is still where you left it."
-    {{unsubscribe_url}}  -> per-recipient one-click unsubscribe (footer)
-    {{web_version_url}}  -> this page (view in browser)
-
-  OUTSTANDING PLACEHOLDERS (search "TODO:") — supply before send:
-    - TODO:EVC_NAME/PHOTOS/COPY/LOCATION/CULTURAL_PLANTS  featured-EVC field guide
-    - TODO:PROFILE_URL    confirm Sir Garnet profile URL pattern
-    - TODO:YIELD_URL      /yield register-interest page does not exist yet
-    DONE: ABN, Sir Garnet photo, enrol ramp at /enrol/ w/ ?src=, Yield copy
-
-  SEND-TIME HEADERS (added by the send layer, NOT here):
-    List-Unsubscribe: <{{unsubscribe_url}}>, <mailto:hello@gardenerandson.com?subject=unsubscribe>
-    List-Unsubscribe-Post: List-Unsubscribe=One-Click
-  ============================================================================
--->
 
 <style>
-  /* media queries + dark mode only; everything else is inline */
   body { margin:0; padding:0; width:100%; }
   img { border:0; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
-  a { color:#5f7a3a; }
-  .signal { color:#5f7a3a; }
+  a { color:#3d4535; }
   .hero-line { letter-spacing:-.01em; }
   .h2 { letter-spacing:-.005em; }
   @media only screen and (max-width:620px){
     .container { width:100% !important; }
     .pad { padding-left:24px !important; padding-right:24px !important; }
-    .hero-line { font-size:30px !important; line-height:1.14 !important; }
+    .hero-line { font-size:32px !important; line-height:1.12 !important; }
     .h2 { font-size:22px !important; }
     .mast-issue { display:block !important; text-align:left !important; padding-top:6px !important; }
   }
   @media (prefers-color-scheme: dark){
-    /* Canopy (dark) treatment — keep text light, backgrounds deep green */
     .bg-page   { background:#23281f !important; }
     .bg-paper  { background:#2d3427 !important; }
     .ink       { color:#e6ddc9 !important; }
     .ink-soft  { color:#b9c0a8 !important; }
-    .h2        { color:#f0e9d6 !important; }
-    .mark      { color:#f0e9d6 !important; }
-    .signal    { color:#93b56e !important; }
+    .h2, .mark { color:#f0e9d6 !important; }
+    .signal    { color:#93b773 !important; }
     .rule      { border-color:#4a5340 !important; }
     .mast      { background:#2d3427 !important; }
-    .eyebrow   { color:#93b56e !important; }
-    .foot      { color:#9aa389 !important; }
-    a          { color:#93b56e !important; }
+    .eyebrow   { color:#e6ddc9 !important; }
+    .dim       { color:#7f8870 !important; }
+    .btn-dark        { background:#fff0dc !important; }
+    .btn-dark a, .btn-dark span   { color:#3d4535 !important; }
+    .btn-light a, .btn-light span { color:#3d4535 !important; }
+    a          { color:#e6ddc9 !important; }
   }
 </style>
 </head>
 
 <body class="bg-page" style="margin:0; padding:0; background:#fff0dc;">
 
-<!-- hidden preheader -->
 <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#fff0dc; opacity:0;">
-  Three short pieces for people growing the plants that belong where they live.
+  Put your garden on the record, get five free indigenous plants, and be first in line for Yield.
   &#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;&#8203;&nbsp;
 </div>
 
@@ -88,16 +56,15 @@
   <tr>
     <td align="center" style="padding:22px 12px 48px;">
 
-      <!-- view in browser -->
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container" style="width:600px; max-width:600px;">
         <tr>
-          <td class="pad" style="padding:0 44px 12px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:12px; color:#7a7663;" align="right">
-            <a href="{{web_version_url}}" style="color:#7a7663; text-decoration:underline;">View in browser</a>
+          <td class="pad ink-soft" style="padding:0 44px 12px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:12px; color:#7a7663;" align="right">
+            <a href="https://ecologicalregistry.org/letters/2026-09/" style="color:#7a7663; text-decoration:underline;">View in browser</a>
           </td>
         </tr>
       </table>
 
-      <!-- MASTHEAD -->
+      
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container mast" style="width:600px; max-width:600px; background:#fff0dc;">
         <tr>
           <td class="pad" style="padding:6px 44px 18px;">
@@ -106,8 +73,8 @@
                 <td class="mark" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-size:22px; font-weight:400; color:#3d4535;">
                   Gardener <span style="color:#7C9A52; font-style:italic;">&amp;</span> Son
                 </td>
-                <td class="mast-issue ink-soft" align="right" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:12px; letter-spacing:.12em; color:#7a7663;">
-                  Field Notes &nbsp;·&nbsp; September 2026
+                <td class="mast-issue ink-soft" align="right" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#7a7663;">
+                  Field Notes &nbsp;·&nbsp; Spring 2026
                 </td>
               </tr>
             </table>
@@ -115,205 +82,247 @@
         </tr>
       </table>
 
-      <!-- HERO band (bulletproof dark bgcolor; light text) -->
+      
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container" style="width:600px; max-width:600px;">
         <tr>
-          <td bgcolor="#3d4535" class="pad" style="background:#3d4535; padding:34px 44px;">
-            <div class="hero-line" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:36px; line-height:1.1; color:#fff0dc; margin:0;">
-              Spring is when the ground says yes.
+          <td bgcolor="#3d4535" class="pad" style="background:#3d4535; padding:40px 44px 38px;">
+            <div style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#fff0dc; opacity:.7; margin-bottom:16px;">
+              The Ecological Registry
+            </div>
+            <div class="hero-line" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:38px; line-height:1.08; color:#fff0dc;">
+              Your garden is already doing the work. Put it on the <span style="font-style:italic; color:#7C9A52;">record.</span>
+            </div>
+            <div style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#fff0dc; margin-top:18px;">
+              Free to enrol. Ten minutes. The first ten gardens get five indigenous plants, free.
+            </div>
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:24px;">
+              <tr>
+                <td bgcolor="#fff0dc" class="btn-light" style="background:#fff0dc; border-left:4px solid #7C9A52;">
+                  <a href="https://ecologicalregistry.org/enrol/?src=fmeg-sep26-hero" style="display:inline-block; padding:15px 28px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; font-weight:600; color:#3d4535; text-decoration:none;"><span style="color:#3d4535; text-decoration:none;">Enrol your garden &rarr;</span></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container bg-paper" style="width:600px; max-width:600px; background:#fff0dc;">
+
+        
+        <tr>
+          <td class="pad ink" style="padding:32px 44px 8px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
+            <p style="margin:0 0 16px;">Hi there,</p>
+            <p style="margin:0 0 16px;">A while ago you looked up the plants that grew on your block before it was a block. Now we&rsquo;d like to see what you did with them.</p>
+            <p style="margin:0;">The Ecological Registry is a public record of gardens growing the plants that belong where they are, and what that adds up to. This spring we want yours on it.</p>
+          </td>
+        </tr>
+
+        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
+
+        
+        <tr>
+          <td class="pad" style="padding:0 44px 0;">
+            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#3d4535; margin-bottom:8px;">
+              <span class="signal" style="color:#7C9A52;">&#9632;</span>&nbsp; Discover <span class="dim" style="color:#b3ad98;">&nbsp;&rarr; Plant &rarr; Measure</span>
+            </div>
+            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">Coast Banksia <span class="signal" style="font-style:italic; color:#5f7a3a;">Woodland.</span></div>
+            <div class="ink-soft" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#7a7663; margin-top:6px;">EVC 2 &nbsp;·&nbsp; Vulnerable &nbsp;·&nbsp; Featured ecology</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad" style="padding:16px 44px 0;">
+            <img src="https://ecologicalregistry.org/assets/letters/2026-09/evc-coast-banksia.jpg" width="512" alt="Coast Banksia Woodland behind the dunes at Rosebud: silvery banksias and tea-tree over a low green layer of coastal shrubs and pale tussocks, above white sand." style="display:block; width:100%; max-width:512px; height:auto;" />
+          </td>
+        </tr>
+        <tr>
+          <td class="pad ink-soft" style="padding:8px 44px 0; font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.06em; color:#7a7663;">Behind the dunes, Rosebud. Photo: Gardener &amp; Son.</td>
+        </tr>
+        <tr>
+          <td class="pad ink" style="padding:16px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
+            <p style="margin:0 0 16px;">Before the bay&rsquo;s edge was cleared and built on, this is what stood behind the dunes at Rosebud, on Bunurong Country. Coast Banksia over Coast Tea-tree, Boobialla and Drooping Sheoak, with succulent creepers across the sand that help shield the banksias from fire. Left long enough without fire, coastal tea-tree scrub grows into it.</p>
+            <p style="margin:0 0 22px;">It was once widespread around the Peninsula. Now it&rsquo;s scattered and rare. If your plant list came back with EVC 2, this is what your block is part of.</p>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="pad" style="padding:0 44px;">
+            <div class="ink" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; font-weight:600; color:#3d4535; margin-bottom:8px;">Where to see it</div>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4535;" class="ink">
+              <tr>
+                <td width="34" valign="top" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:12px; color:#3d4535; padding:10px 0; border-top:1px solid #B49A63;" class="ink rule">01</td>
+                <td style="padding:10px 0; border-top:1px solid #B49A63;" class="ink rule"><strong style="font-weight:600;">Rosebud and Capel Sound foreshore.</strong> Remnant patches behind the dunes along the bay, like the one above. Stay on the tracks: the dunes are fragile.</td>
+              </tr>
+              <tr>
+                <td valign="top" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:12px; color:#3d4535; padding:10px 0; border-top:1px solid #B49A63; border-bottom:1px solid #B49A63;" class="ink rule">02</td>
+                <td style="padding:10px 0; border-top:1px solid #B49A63; border-bottom:1px solid #B49A63;" class="ink rule"><strong style="font-weight:600;">Bushrangers Bay track, Cape Schanck.</strong> From the Boneo Road car park, 2.5&nbsp;km along Main Creek through banksia groves to the bay. Mornington Peninsula National Park.</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="pad" style="padding:22px 44px 6px;">
+            <div class="ink" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; font-weight:600; color:#3d4535; margin-bottom:8px;">Plants that carry meaning</div>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr><td style="border-left:3px solid #7C9A52; padding:2px 0 2px 14px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; line-height:1.7; color:#3d4535;" class="ink">
+                <span style="display:block; margin-bottom:8px;">Coast Banksia <span style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:13px; font-style:italic;">Banksia integrifolia</span><br />Nectar-heavy flower cones, soaked in water for a sweet drink.</span>
+                <span style="display:block; margin-bottom:8px;">Coast Beard-heath <span style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:13px; font-style:italic;">Leucopogon parviflorus</span><br />Small white fruit, eaten fresh in summer.</span>
+                <span style="display:block;">Pigface <span style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:13px; font-style:italic;">Carpobrotus rossii</span><br />Salty leaves and a fig-like fruit, both eaten.</span>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
+        
+
+        
+        <tr>
+          <td class="pad" style="padding:0 44px 0;">
+            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#3d4535; margin-bottom:8px;">
+              <span class="dim" style="color:#b3ad98;">Discover &rarr;&nbsp;</span> <span class="signal" style="color:#7C9A52;">&#9632;</span>&nbsp; Plant <span class="dim" style="color:#b3ad98;">&nbsp;&rarr; Measure</span>
+            </div>
+            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">Spring is when the ground says <span class="signal" style="font-style:italic; color:#5f7a3a;">yes.</span></div>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad ink" style="padding:12px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
+            <p style="margin:0 0 16px;">Soil is still holding winter moisture, days are warming, and roots have months to settle before summer bites. Plant grasses and groundcovers first. They knit the ground and shelter everything that comes after. Whatever goes in this month goes on your record.</p>
+            <p style="margin:0;"><a href="https://findmyecologicalgarden.com/?src=fmeg-sep26" style="color:#3d4535; font-weight:600; text-decoration:underline;">See your plant list</a> <span class="signal" style="color:#7C9A52;">&rarr;</span></p>
+          </td>
+        </tr>
+
+        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
+
+        
+        <tr>
+          <td class="pad" style="padding:0 44px 0;">
+            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#3d4535; margin-bottom:8px;">
+              <span class="dim" style="color:#b3ad98;">Discover &rarr; Plant &rarr;&nbsp;</span> <span class="signal" style="color:#7C9A52;">&#9632;</span>&nbsp; Measure
+            </div>
+            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">Put your garden on the <span class="signal" style="font-style:italic; color:#5f7a3a;">record.</span></div>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad ink" style="padding:14px 44px 0; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
+            <p style="margin:0 0 16px;">A short form: what you&rsquo;ve planted, where, and a photo. It doesn&rsquo;t need to be finished. A few plants that belong and the intention to add more is enough. Here&rsquo;s what you get:</p>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad" style="padding:0 44px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; line-height:1.55; color:#3d4535;" class="ink">
+              <tr>
+                <td width="34" valign="top" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:12px; color:#3d4535; padding:10px 0; border-top:1px solid #B49A63;" class="ink rule">01</td>
+                <td style="padding:10px 0; border-top:1px solid #B49A63;" class="ink rule"><strong style="font-weight:600;">A public record of your garden</strong>, scored across five pillars: biodiversity, soil and water, habitat, connectivity and evidence. Yours to share.</td>
+              </tr>
+              <tr>
+                <td valign="top" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:12px; color:#3d4535; padding:10px 0; border-top:1px solid #B49A63;" class="ink rule">02</td>
+                <td style="padding:10px 0; border-top:1px solid #B49A63;" class="ink rule"><strong style="font-weight:600;">A record that grows with the garden.</strong> Add species and field notes as you plant, and watch the score move.</td>
+              </tr>
+              <tr>
+                <td valign="top" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:12px; color:#3d4535; padding:10px 0; border-top:1px solid #B49A63;" class="ink rule">03</td>
+                <td style="padding:10px 0; border-top:1px solid #B49A63;" class="ink rule"><strong style="font-weight:600;">Five indigenous plants, free</strong>, for the first ten gardens to enrol. Tubestock chosen for your EVC. Collect them from our Auburn Road studio in Hawthorn, or we&rsquo;ll post them anywhere in Victoria for $15.</td>
+              </tr>
+              <tr>
+                <td valign="top" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:12px; color:#3d4535; padding:10px 0; border-top:1px solid #B49A63; border-bottom:1px solid #B49A63;" class="ink rule">04</td>
+                <td style="padding:10px 0; border-top:1px solid #B49A63; border-bottom:1px solid #B49A63;" class="ink rule"><strong style="font-weight:600;">First in line for Yield</strong> when it opens. More below.</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad" style="padding:24px 44px 6px;">
+            <table role="presentation" cellpadding="0" cellspacing="0">
+              <tr>
+                <td bgcolor="#3d4535" class="btn-dark" style="background:#3d4535; border-left:4px solid #7C9A52;">
+                  <a href="https://ecologicalregistry.org/enrol/?src=fmeg-sep26" style="display:inline-block; padding:15px 28px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; font-weight:600; color:#fff0dc; text-decoration:none;"><span style="color:#fff0dc; text-decoration:none;">Enrol your garden &rarr;</span></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="pad ink-soft" style="padding:10px 44px 0; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.6; color:#7a7663;">
+            <p style="margin:0;">Free to enrol. Your precise address is not displayed publicly.</p>
+          </td>
+        </tr>
+
+        <tr><td class="pad" style="padding:30px 44px 0;"></td></tr>
+      </table>
+      
+
+      
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container" style="width:600px; max-width:600px;">
+        <tr>
+          <td bgcolor="#3d4535" class="pad" style="background:#3d4535; padding:40px 44px 40px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#fff0dc;">
+            <div style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#fff0dc; opacity:.7; margin-bottom:14px;">
+              <span style="color:#7C9A52; opacity:1;">&#9632;</span>&nbsp; New &nbsp;·&nbsp; Yield
+            </div>
+            <div style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:30px; line-height:1.14; color:#fff0dc; margin-bottom:20px;">
+              What if your garden was supported for the work it does for <span style="font-style:italic; color:#7C9A52;">nature?</span>
+            </div>
+            <p style="margin:0 0 16px;">A garden full of the plants that belong where it grows does real work: habitat for birds and insects the suburbs have lost, soil that holds water, a stepping stone between parks. Nobody pays for any of it.</p>
+            <p style="margin:0 0 16px;">Yield is how we change that. We&rsquo;re matching sponsors with a founding set of gardens on the Registry, so the ecological work a garden does can be supported directly: back to its steward and back into the garden.</p>
+            <p style="margin:0 0 24px;">Yield opens to gardens on the record first. The way in is to enrol.</p>
+            <table role="presentation" cellpadding="0" cellspacing="0">
+              <tr>
+                <td bgcolor="#fff0dc" class="btn-light" style="background:#fff0dc; border-left:4px solid #7C9A52;">
+                  <a href="https://ecologicalregistry.org/enrol/?src=fmeg-sep26-yield" style="display:inline-block; padding:15px 28px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; font-weight:600; color:#3d4535; text-decoration:none;"><span style="color:#3d4535; text-decoration:none;">Enrol and get in line &rarr;</span></a>
+                </td>
+              </tr>
+            </table>
+            <p style="margin:18px 0 0; font-size:14px; color:#d9cfbb;">Not ready to enrol? Reply to this email with &ldquo;Yield&rdquo; and we&rsquo;ll write when it opens.</p>
+            <div style="border-top:1px solid #5a6350; margin-top:30px; padding-top:20px; font-family:'Fraunces',Georgia,'Times New Roman',serif; font-style:italic; font-size:18px; line-height:1.4; color:#fff0dc;">
+              When we change what we value, we change what we measure. What we measure, we improve.
             </div>
           </td>
         </tr>
       </table>
 
-      <!-- PAPER -->
+      
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container bg-paper" style="width:600px; max-width:600px; background:#fff0dc;">
-
-        <!-- intro -->
         <tr>
-          <td class="pad ink" style="padding:32px 44px 8px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <p style="margin:0 0 16px;">Hi {{first_name}},</p>
-            <p style="margin:0;">A while ago you looked up the plants that grew on your block before it was a block. This is a short note for everyone who did &mdash; three small things, and one new one.</p>
-          </td>
-        </tr>
-
-        <!-- rule -->
-        <tr><td class="pad" style="padding:24px 44px 0;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
-
-        <!-- PLANTING -->
-        <tr>
-          <td class="pad" style="padding:22px 44px 0;">
-            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">Planting</div>
-            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">What to plant this month</div>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink" style="padding:12px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <!-- GENERIC (web version). Send pipeline swaps in the {{evc_name}} variant from the head comment when known. -->
-            <p style="margin:0 0 16px;">September into October is the planting window in Melbourne: soil still holding winter moisture, days warming, and roots have months to settle before summer bites. Plant grasses and groundcovers first &mdash; they knit the ground and shelter everything that comes after.</p>
-            <p style="margin:0;"><a href="https://findmyecologicalgarden.com/?src=fmeg-sep26" style="color:#5f7a3a; font-weight:500;">See your plant list &rarr;</a></p>
-          </td>
-        </tr>
-
-        <!-- rule -->
-        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
-
-        <!-- FIELD GUIDE — featured EVC (Country & Culture voice) -->
-        <tr>
-          <td class="pad" style="padding:0 44px 0;">
-            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">Field guide</div>
-            <!-- TODO:EVC_NAME -->
-            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535; letter-spacing:-.005em;">Featured ecology: {{evc_feature_name}}</div>
-          </td>
-        </tr>
-        <!-- two photos, 50/50 (stack on very small screens) — TODO:EVC_PHOTOS -->
-        <tr>
-          <td class="pad" style="padding:16px 44px 6px;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                <td width="50%" style="padding-right:5px;">
-                  <img src="https://ecologicalregistry.org/assets/letters/2026-09/evc-1.jpg" width="246" alt="TODO: describe photo 1 of the featured EVC" style="display:block; width:100%; max-width:246px; height:auto;" />
-                </td>
-                <td width="50%" style="padding-left:5px;">
-                  <img src="https://ecologicalregistry.org/assets/letters/2026-09/evc-2.jpg" width="246" alt="TODO: describe photo 2 of the featured EVC" style="display:block; width:100%; max-width:246px; height:auto;" />
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink" style="padding:16px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <!-- TODO:EVC_COPY — 2-3 sentences on this vegetation community in the Country & Culture voice -->
-            <p style="margin:0 0 16px;">A few sentences on what this community is, how it reads on Country, and why it matters here.</p>
-            <!-- TODO:EVC_LOCATION -->
-            <p style="margin:0 0 16px;"><strong>Where to see it:</strong> {{evc_where_to_see}} &mdash; a remnant or planted stand you can visit.</p>
-            <!-- TODO:CULTURAL_PLANTS — a short list: common name (botanical) — cultural meaning / use -->
-            <p style="margin:0 0 6px;"><strong>Plants that carry meaning</strong></p>
-            <p class="signal" style="margin:0; font-size:15px; line-height:1.85; color:#5f7a3a;">
-              Plant one (Botanical name) &mdash; its cultural meaning or use.<br />
-              Plant two (Botanical name) &mdash; its cultural meaning or use.<br />
-              Plant three (Botanical name) &mdash; its cultural meaning or use.
-            </p>
-          </td>
-        </tr>
-
-        <!-- rule -->
-        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
-
-        <!-- ON THE RECORD — Sir Garnet -->
-        <tr>
-          <td class="pad" style="padding:0 44px 0;">
-            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">On the record</div>
-            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">A garden on the record</div>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad" style="padding:16px 44px 6px;">
-            <img src="https://ecologicalregistry.org/assets/letters/2026-09/sirgarnet.jpg" width="512" alt="A Gardener &amp; Son Ecological Registry sign staked in a mulched garden bed at 30 Sir Garnet Road, Surrey Hills, in front of an indigenous buffer planting." style="display:block; width:100%; max-width:512px; height:auto;" />
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink" style="padding:16px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <p style="margin:0 0 16px;">On Sir Garnet Road in Surrey Hills, Richard and Jenny&rsquo;s front garden carries a small sign on its fence. Behind it is a narrow buffer of species that belong to that ground, and a public record of what&rsquo;s growing there &mdash; scored on biodiversity, habitat, soil and water, connection, and evidence.</p>
-            <p style="margin:0 0 16px;">The sign does something the planting alone can&rsquo;t: neighbours stop, read it, and ask. Several of the gardens now on the Registry started as exactly that conversation.</p>
-            <p style="margin:0;"><a href="https://ecologicalregistry.org/profile.html?g=sirgarnet30&amp;src=fmeg-sep26" style="color:#5f7a3a; font-weight:500;">Read the garden&rsquo;s record &rarr;</a></p>
-          </td>
-        </tr>
-
-        <!-- rule -->
-        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
-
-        <!-- ENROL — the one CTA -->
-        <tr>
-          <td class="pad" style="padding:0 44px 0;">
-            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">Enrol</div>
-            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">Put your garden on the record</div>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink" style="padding:14px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <p style="margin:0 0 16px;">The Ecological Registry is a public record of gardens doing real ecological work. You enrol your own garden through a short online form &mdash; a few questions about what you&rsquo;ve planted, your address, and a photo. Ten minutes, give or take. You don&rsquo;t need a finished garden: a few plants that belong and the intention to add more is enough. The record grows with it.</p>
-            <p style="margin:0 0 8px;"><strong>The first ten gardens to enrol before 30 September get a Registry sign for their front fence, free.</strong></p>
-          </td>
-        </tr>
-        <!-- button (bulletproof) -->
-        <tr>
-          <td class="pad" style="padding:16px 44px 6px;">
-            <table role="presentation" cellpadding="0" cellspacing="0">
-              <tr>
-                <td bgcolor="#7C9A52" style="background:#7C9A52;">
-                  <a href="https://ecologicalregistry.org/enrol/?src=fmeg-sep26" style="display:inline-block; padding:15px 30px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; font-weight:600; color:#fff0dc; text-decoration:none;">Enrol your garden &rarr;</a>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink-soft" style="padding:12px 44px 0; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:13px; line-height:1.6; color:#7a7663;">
-            <p style="margin:0;">Your precise address is never shown publicly.</p>
-          </td>
-        </tr>
-
-        <!-- rule -->
-        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
-
-        <!-- NEW — Yield -->
-        <tr>
-          <td class="pad" style="padding:0 44px 0;">
-            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">New</div>
-            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:24px; line-height:1.2; color:#3d4535;">Something new: Yield</div>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink" style="padding:14px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <p style="margin:0 0 16px;"><strong>Earn income by renting your garden out to nature.</strong> That&rsquo;s Yield &mdash; launching soon: a way for gardens on the record to be paid for the ecological work they&rsquo;re already doing. We&rsquo;ll write when it opens.</p>
-            <p style="margin:0;"><a href="https://ecologicalregistry.org/yield?src=fmeg-sep26" style="color:#5f7a3a; font-weight:500;">Register your interest &rarr;</a></p>
-          </td>
-        </tr>
-
-        <!-- rule -->
-        <tr><td class="pad" style="padding:26px 44px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
-
-        <!-- SHARE -->
-        <tr>
-          <td class="pad" style="padding:0 44px 0;">
-            <div class="eyebrow" style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#5f7a3a; margin-bottom:8px;">Pass it on</div>
-            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:22px; line-height:1.2; color:#3d4535;">Know a neighbour who should see this?</div>
-          </td>
-        </tr>
-        <tr>
-          <td class="pad ink" style="padding:12px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
-            <p style="margin:0 0 14px;">Gardens do more when the one next door is doing it too.</p>
+          <td class="pad ink" style="padding:34px 44px 6px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:16px; line-height:1.66; color:#3d4535;">
+            <p style="margin:0 0 10px; font-family:'Fraunces',Georgia,'Times New Roman',serif; font-size:20px; line-height:1.3;" class="h2">Gardens do more when the one next door is on the record too.</p>
             <p style="margin:0; font-size:15px; line-height:2;">
-              <a href="mailto:?subject=A%20garden%20worth%20a%20look&amp;body=Thought%20of%20you%20%E2%80%94%20plants%20that%20belong%20where%20you%20live%2C%20and%20a%20public%20record%20of%20gardens%20doing%20the%20work.%0A%0Ahttps%3A%2F%2Fecologicalregistry.org%2Fletters%2F2026-09%2F%3Fsrc%3Dshare-email" style="color:#5f7a3a; font-weight:500;">Email a neighbour</a>
+              <a href="mailto:?subject=Put%20your%20garden%20on%20the%20record&amp;body=Thought%20of%20you%20%E2%80%94%20a%20public%20record%20of%20gardens%20growing%20the%20plants%20that%20belong%20where%20they%20are.%0A%0Ahttps%3A%2F%2Fecologicalregistry.org%2Fletters%2F2026-09%2F%3Fsrc%3Dshare-email" style="color:#3d4535; font-weight:600;">Email a neighbour</a>
               &nbsp;&nbsp;·&nbsp;&nbsp;
-              <a href="https://wa.me/?text=Plants%20that%20belong%20where%20you%20live%2C%20and%20a%20public%20record%20of%20gardens%20doing%20the%20work%3A%20https%3A%2F%2Fecologicalregistry.org%2Fletters%2F2026-09%2F%3Fsrc%3Dshare-whatsapp" style="color:#5f7a3a; font-weight:500;">WhatsApp</a>
+              <a href="https://wa.me/?text=A%20public%20record%20of%20gardens%20growing%20the%20plants%20that%20belong%20where%20they%20are%3A%20https%3A%2F%2Fecologicalregistry.org%2Fletters%2F2026-09%2F%3Fsrc%3Dshare-whatsapp" style="color:#3d4535; font-weight:600;">WhatsApp</a>
               &nbsp;&nbsp;·&nbsp;&nbsp;
-              <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fecologicalregistry.org%2Fletters%2F2026-09%2F%3Fsrc%3Dshare-facebook" style="color:#5f7a3a; font-weight:500;">Facebook</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fecologicalregistry.org%2Fletters%2F2026-09%2F%3Fsrc%3Dshare-facebook" style="color:#3d4535; font-weight:600;">Facebook</a>
             </p>
-            <p style="margin:12px 0 0; font-size:13px; color:#7a7663;">Or copy the link: https://ecologicalregistry.org/letters/2026-09/</p>
           </td>
         </tr>
-
-        <!-- FOOTER -->
-        <tr><td class="pad" style="padding:30px 44px 8px;"><hr class="rule" style="border:0; border-top:1px solid #B49A63; margin:0;" /></td></tr>
         <tr>
-          <td class="pad foot" style="padding:10px 44px 40px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:12px; line-height:1.7; color:#7a7663;">
+          <td class="pad" style="padding:34px 44px 34px;">
+            <div class="h2" style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-weight:400; font-size:22px; line-height:1.3; color:#3d4535;">
+              Every address is part of Country. Every garden can take part in its <span style="font-style:italic; color:#5f7a3a;" class="signal">repair.</span>
+            </div>
+            <div class="ink" style="font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:15px; color:#3d4535; margin-top:14px;">Tyson &amp; Natasha</div>
+          </td>
+        </tr>
+      </table>
+
+      
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" class="container" style="width:600px; max-width:600px;">
+        <tr>
+          <td bgcolor="#3d4535" class="pad" style="background:#3d4535; padding:30px 44px 34px; font-family:'IBM Plex Sans',Helvetica,Arial,sans-serif; font-size:12px; line-height:1.7; color:#d9cfbb;">
+            <div style="font-family:'Fraunces',Georgia,'Times New Roman',serif; font-size:20px; color:#fff0dc;">Gardener <span style="color:#7C9A52; font-style:italic;">&amp;</span> Son</div>
+            <div style="font-family:'IBM Plex Mono','Courier New',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#d9cfbb; margin:4px 0 18px;">Gardens of this place</div>
             <p style="margin:0 0 12px;">You&rsquo;re receiving this because you signed up for a plant list at findmyecologicalgarden.com, where we said we&rsquo;d send your list plus occasional field notes.</p>
             <p style="margin:0 0 12px;">
-              <a href="{{unsubscribe_url}}" style="color:#3d4535; font-weight:600; text-decoration:underline;">Unsubscribe</a>
+              <a href="mailto:hello@gardenerandson.com?subject=Unsubscribe" style="color:#fff0dc; font-weight:600; text-decoration:underline;">Unsubscribe</a>
               &nbsp;·&nbsp;
-              <a href="{{web_version_url}}" style="color:#7a7663; text-decoration:underline;">View in browser</a>
+              <a href="https://ecologicalregistry.org/letters/2026-09/" style="color:#d9cfbb; text-decoration:underline;">View in browser</a>
             </p>
             <p style="margin:0;">
               Gardener &amp; Son &nbsp;·&nbsp; ABN 39 583 219 700 &nbsp;·&nbsp; 140 Auburn Road, Hawthorn VIC 3122<br />
-              Reply to this email or write to <a href="mailto:hello@gardenerandson.com" style="color:#7a7663; text-decoration:underline;">hello@gardenerandson.com</a>
+              Reply to this email or write to <a href="mailto:hello@gardenerandson.com" style="color:#d9cfbb; text-decoration:underline;">hello@gardenerandson.com</a>
             </p>
           </td>
         </tr>
-
       </table>
-      <!-- /PAPER -->
 
     </td>
   </tr>

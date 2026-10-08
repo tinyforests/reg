@@ -433,3 +433,12 @@ That's a lot. Most are small, but #2 (the build pipeline) and #1 (the `nextLevel
 - Minor visual tweaks within the existing design system
 
 When in doubt, log it.
+
+
+## 2026-10-08 — Publish Spring Field Notes and featured EVC image
+
+**Decision:** Replace the older September web draft at `/letters/2026-09/` with the supplied Spring 2026 letter. Resolve the web greeting to “there”, use the canonical browser URL and a mailto unsubscribe for the public archive. Add the supplied Coast Banksia photograph at the exact image URL used by the email.
+
+**Reason:** Keep the newsletter browser and share links working and prevent the featured photograph from appearing broken. Recipient-specific unsubscribe links remain the responsibility of the mailing pipeline.
+
+**Files affected:** `letters/2026-09/index.html`, `assets/letters/2026-09/evc-coast-banksia.jpg`.
