@@ -460,3 +460,14 @@ When in doubt, log it.
 **Reason:** Provide a working opt-out path while Apps Script authentication is unavailable, with an inspectable request history and protection against future sends. Email delivery records the request; a scheduled scan processes the suppression log. This is an email request workflow, not an HTTP one-click unsubscribe endpoint.
 
 **Files affected:** `letters/2026-09/index.html`, `letters/2026-09/letter.txt`. Private recipient and opt-out records stay outside this public repository.
+
+
+## 2026-10-08 — Raise enrolment capacity for Field Notes send
+
+**Decision:** Raise the global enrolment cap from 20 to 500 per hour until midnight at the end of 8 October 2026, Melbourne time. Restore 20 automatically thereafter. Preserve per-email dedup and claims limits. Expose the effective cap and expiry on the existing health check.
+
+**Deployment:** Live enrolment URL moved from version 22 to version 34. Version 34 uses the original version 22 code with only this capacity and health-check change. Preserve the newer project code in the Apps Script editor with the same narrow change; the other deployment stays at version 33.
+
+**Reason:** Avoid locking out genuine enrolments following the authorised newsletter list send without introducing unrelated code changes.
+
+**Files affected:** `scripts/appsscript/Code.gs`.

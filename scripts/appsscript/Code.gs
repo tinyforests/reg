@@ -38,7 +38,12 @@
    ============================================================ */
 
 var NOTIFY_EMAIL     = 'hello@lundbech.me';
-var RATE_GLOBAL_MAX  = 20;   // max enrolment submissions per hour (all users)
+var RATE_GLOBAL_MAX  = 20;   // default max enrolments per hour (all users)
+var RATE_NEWSLETTER_MAX = 500;
+var RATE_NEWSLETTER_UNTIL = Date.parse('2026-10-09T00:00:00+11:00');
+function enrolmentGlobalMax() {
+  return Date.now() < RATE_NEWSLETTER_UNTIL ? RATE_NEWSLETTER_MAX : RATE_GLOBAL_MAX;
+}
 var CLAIM_RATE_MAX   = 40;   // max claims per hour (all users)
 var CLAIM_EMAIL_MAX  = 10;   // max claims per email per hour
 var RATE_CACHE_TTL   = 3600; // cache entry lifetime in seconds (1 hour)
@@ -66,7 +71,7 @@ function doGet(e) {
   if (params.action === 'get_precise_map')       return handleGetPreciseMap(params);
   if (params.action === 'set_published_id')       return handleSetPublishedId(params);
 
-  return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString()});
+  return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString(), enrolment_global_limit: enrolmentGlobalMax(), newsletter_limit_until: new Date(RATE_NEWSLETTER_UNTIL).toISOString()});
 }
 
 /*
@@ -447,7 +452,7 @@ function handleEnrolment(payload, cache) {
   var globalKey   = 'global_' + bucket;
   var globalCount = parseInt(cache.get(globalKey) || '0', 10);
 
-  if (globalCount >= RATE_GLOBAL_MAX) {
+  if (globalCount >= enrolmentGlobalMax()) {
     return jsonResp({ok: false, error: 'Too many submissions -- try again in an hour.'});
   }
 
@@ -528,8 +533,7 @@ function handleEnrolment(payload, cache) {
     parkLng,                                       // AK park_lng
     parkDistM,                                     // AL park_distance_m
     parseInt(payload.area_sqm, 10) || '',          // AM area_sqm
-    parseFloat(payload.effective_ecological_area_ha) || '',  // AN effective_ecological_area_ha
-    safeStr(payload.enrol_src || '', 60)                     // AO enrol_src (campaign attribution, e.g. fmeg-sep26)
+    parseFloat(payload.effective_ecological_area_ha) || ''  // AN effective_ecological_area_ha
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
