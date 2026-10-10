@@ -522,3 +522,5 @@ When in doubt, log it.
 **Validation:** Apps Script migration completed with three addresses preserved; address-gate and public-response tests passed; computed colours match Next Level in both themes.
 
 **Files affected:** Three garden JSON files (address removal only), Apps Script, shared home/profile styles.
+
+**Deployment verification:** The profile-service deployment is now version 36. The editor-only migration completed with three addresses preserved; the live public JSON files and tested public record responses contain no address fields. The newsletter enrolment deployment remains unchanged at version 34.
