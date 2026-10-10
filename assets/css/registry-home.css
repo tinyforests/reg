@@ -6,7 +6,7 @@ a,button{touch-action:manipulation}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--fg);outline-offset:5px}
 .registry-nav{border-top:3px solid var(--signal)}
 .registry-nav>div{min-height:86px}
-.registry-nav a:first-child{max-width:220px;line-height:1.5;letter-spacing:.15em;font-size:12px}
+.registry-nav>div>a:first-child{max-width:220px;line-height:1.5;letter-spacing:.15em;font-size:12px}
 .registry-nav .btn-outline{border-color:var(--fg);font-weight:500;padding:11px 18px}
 #themeToggle{padding:10px 0 10px 16px;border-left:1px solid var(--hair);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.07em}
 .registry-hero{min-height:0;position:relative}
@@ -66,10 +66,54 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .registry-close{padding-top:88px;padding-bottom:88px}
 .gs-badge{bottom:14px;right:14px;font-size:8px;padding:7px 10px}
 @media(max-width:1023px){.hero-record{padding-left:0;max-width:560px}.registry-hero>div{padding-top:56px;padding-bottom:56px}.registry-section{padding-top:64px;padding-bottom:64px}}
-@media(max-width:639px){.registry-nav>div{min-height:76px;gap:12px;padding-left:20px;padding-right:20px}.registry-nav a:first-child{font-size:10px;max-width:135px}.registry-nav .flex.items-center{gap:12px}.registry-nav .btn-outline{font-size:10px;padding:10px;min-height:40px;max-width:110px}#themeToggle{font-size:9px;padding-left:10px}.registry-hero h1{font-size:clamp(2.8rem,12vw,4rem)}.registry-hero>div{padding-top:42px;padding-bottom:44px}.registry-hero .hero-copy>p{font-size:16px}.hero-copy .btn-outline,.hero-copy .btn-signal{width:100%}.hero-copy>.flex:last-child{gap:5px 10px}.eco-card .card{padding:23px!important}.eco-card .score{font-size:90px}.eco-card .hero{padding:25px 20px}.registry-section{padding-top:48px;padding-bottom:48px}.registry-context .space-y-4{grid-template-columns:1fr}.registry-context .space-y-4>div{min-height:0;padding:24px}.registry-badges>.max-w-7xl>.flex{grid-template-columns:1fr 1fr;gap:8px}.registry-badges .chip{font-size:9px;padding:12px 10px}.registry-paths .grid>div{padding:26px}.gs-badge{position:static;display:block;text-align:center;border:0;border-bottom:1px solid var(--hair);padding:10px;opacity:.65}.gs-badge br{display:none}.registry-privacy h2{font-size:30px}}
+@media(max-width:639px){.registry-nav>div{min-height:76px;gap:12px;padding-left:20px;padding-right:20px}.registry-nav>div>a:first-child{font-size:10px;max-width:135px}.registry-nav .flex.items-center{gap:12px}.registry-nav .btn-outline{font-size:10px;padding:10px;min-height:40px;max-width:110px}#themeToggle{font-size:9px;padding-left:10px}.registry-hero h1{font-size:clamp(2.8rem,12vw,4rem)}.registry-hero>div{padding-top:42px;padding-bottom:44px}.registry-hero .hero-copy>p{font-size:16px}.hero-copy .btn-outline,.hero-copy .btn-signal{width:100%}.hero-copy>.flex:last-child{gap:5px 10px}.eco-card .card{padding:23px!important}.eco-card .score{font-size:90px}.eco-card .hero{padding:25px 20px}.registry-section{padding-top:48px;padding-bottom:48px}.registry-context .space-y-4{grid-template-columns:1fr}.registry-context .space-y-4>div{min-height:0;padding:24px}.registry-badges>.max-w-7xl>.flex{grid-template-columns:1fr 1fr;gap:8px}.registry-badges .chip{font-size:9px;padding:12px 10px}.registry-paths .grid>div{padding:26px}.gs-badge{position:static;display:block;text-align:center;border:0;border-bottom:1px solid var(--hair);padding:10px;opacity:.65}.gs-badge br{display:none}.registry-privacy h2{font-size:30px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.fade-in{animation:none;opacity:1;transform:none}body,.bar-fill{transition:none}}
 /* Keep endpoint tooltips inside the level track on narrow screens. */
 .eco-card .dot:first-child::before{left:0;transform:translateY(3px)}
 .eco-card .dot:first-child:hover::before{transform:translateY(0)}
 .eco-card .dot:last-child::before{left:auto;right:0;transform:translateY(3px)}
 .eco-card .dot:last-child:hover::before{transform:translateY(0)}
+
+/* Navigation labels share one interface treatment; brand remains distinct. */
+.registry-nav>div>.flex>a,.registry-nav #themeToggle{font-family:"IBM Plex Sans",sans-serif;font-size:13px;font-weight:400;letter-spacing:0;line-height:1.4}
+.registry-nav>div>.flex>a{white-space:nowrap}
+.registry-nav>div>.flex>.btn-outline{font-weight:500;max-width:none}
+.registry-nav>div{min-height:76px}
+html{scroll-padding-top:76px}
+/* A screen per content section, with natural growth for longer content. */
+@media(min-width:1024px){
+ .registry-hero,.registry-section{min-height:calc(100svh - 76px);display:flex;align-items:center;scroll-margin-top:0}
+ .registry-hero>div,.registry-section>div{width:100%}
+ .registry-hero>div{padding-block:clamp(28px,5svh,64px)}
+ .registry-section{padding-block:clamp(32px,5svh,64px)}
+ .registry-hero h1{font-size:clamp(3.5rem,min(6.3vw,9.4svh),6.15rem)}
+ .registry-section h2{font-size:clamp(2.1rem,min(3.4vw,6.4svh),3.4rem)}
+}
+@media(min-width:1024px) and (max-height:800px){
+ .hero-copy>.chip{margin-bottom:20px}
+ .registry-hero h1{margin-bottom:20px}
+ .registry-hero .hero-copy>p{margin-bottom:22px;font-size:17px;line-height:1.6}
+ .eco-card .card{padding:24px!important}
+ .eco-card .hero{min-height:128px;padding:23px 20px}
+ .eco-card .score{font-size:90px}
+ .eco-card .ladder{margin-top:20px}
+ .registry-context .space-y-4>div{min-height:0;padding:22px}
+ .registry-paths .grid>div{padding:28px}
+}
+@media(max-width:639px){
+ .registry-nav>div>.flex>a,.registry-nav #themeToggle{font-size:11px}
+ .registry-nav>div>.flex>.btn-outline{max-width:110px;white-space:normal}
+}
+.registry-nav>div{min-height:72px;padding-top:12px;padding-bottom:12px}
+.registry-nav .btn-outline{min-height:40px}
+@media(min-width:1024px){.registry-hero.registry-hero{min-height:calc(100svh - 76px)}}
+@media(min-width:1024px) and (max-height:800px){
+ .registry-badges .chip{min-height:52px;padding:12px}
+ .registry-badges .items-end{margin-bottom:24px}
+ .registry-paths .grid>div{padding:24px}
+ .registry-paths .grid>div>.chip{margin-bottom:16px}
+ .registry-paths .grid>div>.space-y-2{margin-bottom:22px}
+ .registry-paths h3{font-size:28px}
+}
+@media(min-width:1024px) and (max-height:800px){.registry-section{padding-block:30px}}
+@media(min-width:1024px) and (max-height:800px){.registry-section.registry-section{padding-block:28px}.registry-paths .grid>div{padding:20px}}

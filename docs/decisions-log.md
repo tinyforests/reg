@@ -489,3 +489,12 @@ When in doubt, log it.
 **Reason:** Carry the approved homepage refinement through the existing experience without changing the product. Align enrolment surfaces with the Registry palette and fix assessment and level-tooltip mobile overflow.
 
 **Files affected:** `assets/css/registry-pages.css`, linked operational HTML pages, `gardens/**/*.html`, `enrol/index.html`.
+
+
+## 2026-10-10 — Consistent menu labels and viewport-aware sections
+
+**Decision:** Scope homepage brand styling to the direct brand link and unify navigation-label typography. Size desktop content sections to the viewport below the sticky header; adapt spacing and type on shorter screens. Let long records, directories and mobile layouts flow naturally without clipping or forced scroll snapping.
+
+**Reason:** Fix inconsistent menu text and provide a comfortable section-by-section reading rhythm while preserving all content and interactions. Verified homepage sections at 1366 × 768, profile header/section alignment, and mobile overflow.
+
+**Files affected:** `assets/css/registry-home.css`, `assets/css/registry-pages.css`.
