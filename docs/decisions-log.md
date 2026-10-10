@@ -471,3 +471,12 @@ When in doubt, log it.
 **Reason:** Avoid locking out genuine enrolments following the authorised newsletter list send without introducing unrelated code changes.
 
 **Files affected:** `scripts/appsscript/Code.gs`.
+
+
+## 2026-10-10 — Homepage UI refresh within the existing Registry
+
+**Decision:** Redesign homepage presentation through a scoped stylesheet and explicit section classes. Retain the existing text, section order, enrolment links, theme behaviour, registry data and all JavaScript. Preserve Gardener Green / Registry Beige, Abril and IBM Plex, and square geometry.
+
+**Reason:** Improve visual hierarchy and steward entry points while staying faithful to the repository’s Registry experience. Existing ecological scores and threshold badges carry the incentive; no separate game or points system is introduced.
+
+**Files affected:** `index.html`, `assets/css/registry-home.css`.

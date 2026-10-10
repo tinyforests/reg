@@ -141,13 +141,14 @@
     .eco-card .badge{ background:var(--beige); color:var(--gardener-green); padding:.3rem .7rem; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; line-height:1.2; display:inline-block; }
     .eco-card .withheld{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.6; letter-spacing:.04em; color:var(--ink-soft); margin:13px 0 0; }
   </style>
+  <link rel="stylesheet" href="/assets/css/registry-home.css" />
 </head>
 <body>
 
 <a href="https://www.gardenerandson.com" class="gs-badge" target="_blank" rel="noopener noreferrer">Powered by<br/>Gardener & Son</a>
 
 <!-- NAV -->
-<nav class="sticky top-0 z-40 backdrop-blur-md">
+<nav aria-label="Main navigation" class="registry-nav sticky top-0 z-40 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
     <a href="/" class="text-xs tracking-[.2em] uppercase font-medium">Ecological Registry</a>
     <div class="flex items-center gap-6 text-sm">
@@ -161,11 +162,11 @@
 </nav>
 
 <!-- HERO -->
-<section class="min-h-screen flex items-center border-b" style="border-color:var(--hair)">
+<section class="registry-hero min-h-screen flex items-center border-b" style="border-color:var(--hair)">
   <div class="max-w-7xl mx-auto px-6 py-20 w-full">
     <div class="grid lg:grid-cols-12 gap-10 items-center">
 
-      <div class="lg:col-span-7 fade-in">
+      <div class="hero-copy lg:col-span-7 fade-in">
         <div class="chip mb-6">Melbourne, Australia -- Est. 2026</div>
         <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl leading-[.95] tracking-tight mb-6">
           Your garden<br/>has an ecological<br/>score.
@@ -193,7 +194,7 @@
       </div>
 
       <!-- Live score preview -->
-      <div class="lg:col-span-5 fade-in">
+      <div class="hero-record lg:col-span-5 fade-in">
         <div class="border" style="border-color:var(--hair)">
           <!-- Score box -->
           <div class="eco-card">
@@ -235,7 +236,7 @@
 </section>
 
 <!-- WHAT IS IT -->
-<section class="border-b py-20 md:py-24" style="border-color:var(--hair)">
+<section class="registry-section registry-context border-b py-20 md:py-24" style="border-color:var(--hair)">
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid lg:grid-cols-2 gap-12 items-start">
       <div>
@@ -278,7 +279,7 @@
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="border-b py-20 md:py-24" style="border-color:var(--hair);background:var(--wash)">
+<section class="registry-section registry-steps border-b py-20 md:py-24" style="border-color:var(--hair);background:var(--wash)">
   <div class="max-w-7xl mx-auto px-6">
     <div class="chip mb-8">How it works</div>
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -307,7 +308,7 @@
 </section>
 
 <!-- SCORING PILLARS -->
-<section class="border-b py-20 md:py-24" style="border-color:var(--hair)">
+<section class="registry-section registry-pillars border-b py-20 md:py-24" style="border-color:var(--hair)">
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid lg:grid-cols-2 gap-12 items-start">
       <div>
@@ -361,7 +362,7 @@
 </section>
 
 <!-- BADGES -->
-<section class="border-b py-20 md:py-24" style="border-color:var(--hair);background:var(--wash)">
+<section class="registry-section registry-badges border-b py-20 md:py-24" style="border-color:var(--hair);background:var(--wash)">
   <div class="max-w-7xl mx-auto px-6">
     <div class="chip mb-5">Badges</div>
     <div class="grid lg:grid-cols-2 gap-12 items-end mb-10">
@@ -388,7 +389,7 @@
 </section>
 
 <!-- TWO PATHS -->
-<section class="border-b py-20 md:py-24" style="border-color:var(--hair)">
+<section class="registry-section registry-paths border-b py-20 md:py-24" style="border-color:var(--hair)">
   <div class="max-w-7xl mx-auto px-6">
     <div class="chip mb-8">Two ways in</div>
     <div class="grid md:grid-cols-2 gap-6">
@@ -429,7 +430,7 @@
 </section>
 
 <!-- REGISTERED GARDENS STRIP -->
-<section class="border-b py-20 md:py-24" style="border-color:var(--hair);background:var(--wash)">
+<section class="registry-section registry-gardens border-b py-20 md:py-24" style="border-color:var(--hair);background:var(--wash)">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex items-end justify-between gap-6 mb-8">
       <div>
@@ -445,7 +446,7 @@
 </section>
 
 <!-- PRIVACY -->
-<section class="border-b py-16" style="border-color:var(--hair)">
+<section class="registry-section registry-privacy border-b py-16" style="border-color:var(--hair)">
   <div class="max-w-4xl mx-auto px-6 text-center">
     <div class="chip mb-5 mx-auto" style="display:inline-block">Privacy</div>
     <h2 class="font-serif text-3xl md:text-4xl mb-4">Your address stays private. Your garden's story doesn't.</h2>
@@ -459,7 +460,7 @@
 </section>
 
 <!-- FINAL CTA -->
-<section class="py-24" style="background:var(--fg);color:var(--bg)">
+<section class="registry-section registry-close py-24" style="background:var(--fg);color:var(--bg)">
   <div class="max-w-4xl mx-auto px-6 text-center">
     <div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;opacity:.5;margin-bottom:1.5rem">Join the registry</div>
     <h2 class="font-serif text-4xl md:text-6xl leading-tight mb-6">
