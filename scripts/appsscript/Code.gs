@@ -410,6 +410,8 @@ function doPost(e) {
   try {
     var payload = JSON.parse(e.postData.contents);
 
+    if (payload.submission_type === 'designer_portal') return handleDesignerPortal(payload);
+
     // Claims bypass enrolment rate limits -- route first.
     if (payload.submission_type === 'opportunity_claim') {
       return handleClaim(payload, cache);
@@ -1609,4 +1611,203 @@ function migrateLegacyGardenAddresses() {
     preserved++;
   });
   console.log('Private address migration complete: ' + preserved + ' garden addresses preserved.');
+}
+
+/* Invited designer pilot. Credentials and submissions stay in private sheets. */
+var DESIGNER_PRACTICE_HEADERS = ['designer_id', 'name', 'contact_email', 'token_hash', 'created_at', 'status'];
+var DESIGNER_SUBMISSION_HEADERS = ['submission_id', 'designer_id', 'created_at', 'updated_at', 'review_status', 'published_garden_id', 'payload_json', 'review_note'];
+function _designerHash(token) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, token, Utilities.Charset.UTF_8)
+    .map(function (b) { return ('0' + ((b + 256) % 256).toString(16)).slice(-2); }).join('');
+}
+function _designerTable(ss, name, headers, create) {
+  var sheet = ss.getSheetByName(name);
+  if (!sheet && create) { sheet = ss.insertSheet(name); sheet.appendRow(headers); sheet.setFrozenRows(1); }
+  return sheet;
+}
+function _designerRows(sheet, width) { return sheet && sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, width).getValues() : []; }
+function _designerPractice(row) { return {designer_id: String(row[0]), name: String(row[1]), contact_email: String(row[2]), created_at: String(row[4]), status: String(row[5])}; }
+function _designerAuthorise(token, ss) {
+  if (!token || token.length > 160) return null;
+  var hash = _designerHash(token), rows = _designerRows(ss.getSheetByName('Designer Practices'), 6);
+  for (var i = 0; i < rows.length; i++) if (String(rows[i][3]) === hash && String(rows[i][5]) === 'active') return _designerPractice(rows[i]);
+  return null;
+}
+function _designerNumber(value, min, max, integer, required) {
+  if (value == null || value === '') { if (required) throw new Error('A required measurement is missing'); return null; }
+  var n = Number(value);
+  if (!isFinite(n) || n < min || n > max || (integer && Math.floor(n) !== n)) throw new Error('Measurement outside its permitted range');
+  return n;
+}
+function _designerCandidate(input, practice) {
+  input = input || {};
+  var text = function (key, max) { return safeStr(input[key] || '', max); };
+  var name = text('garden_name', 120), suburb = text('suburb', 80), state = text('state', 3).toUpperCase();
+  var email = text('steward_email', 254).toLowerCase(), address = text('garden_address', 200);
+  if (!name || !suburb || !address || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Garden name, suburb, address and a valid steward email are required');
+  if (['VIC','NSW','QLD','SA','WA','TAS','ACT','NT'].indexOf(state) < 0) throw new Error('Select an Australian state or territory');
+  if (input.consent_record !== true || input.consent_public_profile !== true) throw new Error('Steward permission and public-profile consent are required');
+  var species = (text('species_list', 6000).split(/\n|,/)).map(function (s) { return s.trim(); }).filter(Boolean);
+  species = species.filter(function (s, i) { return species.indexOf(s) === i; });
+  if (species.length > 250) throw new Error('Use no more than 250 species per submission');
+  var count = _designerNumber(input.indigenous_species_current, 0, 10000, true, true);
+  if (species.length > count) throw new Error('The species list cannot exceed the stated indigenous species count');
+  var candidate = {
+    garden_name: name, garden_type: 'Ecological Home Garden', suburb: suburb, state: state,
+    description: text('description', 2000), stewards: text('public_steward_name', 120),
+    designer: practice.name, designer_id: practice.designer_id, enroller: practice.name,
+    managed_by: {type: 'designer', designer_id: practice.designer_id}, verifier: null, status: 'Provisional',
+    area_sqm: _designerNumber(input.area_sqm, 0.1, 10000000, false, true), target_score: null,
+    evc: {name: text('evc_name', 200), code: text('evc_code', 60), bioregion: '', bioregion_code: ''},
+    biodiversity: {indigenous_species_current: count, indigenous_dominant: input.indigenous_dominant === true,
+      structural_layers_current: _designerNumber(input.structural_layers_current, 0, 5, true, true),
+      canopy_cover_pct_current: _designerNumber(input.canopy_cover_pct_current, 0, 100, false, true),
+      indigenous_species_baseline: null, structural_layers_baseline: null, canopy_cover_pct_baseline: null,
+      species_list: species, weed_pressure: ''},
+    soil_water: {soil_health_score: _designerNumber(input.soil_health_score, 0, 5, false, false), soil_health_max: 5,
+      water_function_score: _designerNumber(input.water_function_score, 0, 5, false, false), water_function_max: 5,
+      soil_health_baseline: null, water_function_baseline: null, has_moisture_basin: input.has_moisture_basin === true,
+      has_swale: input.has_swale === true, has_mulch: input.has_mulch === true},
+    habitat: {habitat_nodes: _designerNumber(input.habitat_nodes, 0, 1000, true, true), habitat_nodes_baseline: null,
+      has_embedded_logs: input.has_embedded_logs === true, has_rock_refuges: input.has_rock_refuges === true,
+      has_water_feature: input.has_water_feature === true, has_nest_boxes: input.has_nest_boxes === true,
+      fauna_sightings: [], planting_method: text('planting_method', 200)},
+    connectivity: {park_distance_m: _designerNumber(input.park_distance_m, 0, 100000, false, false),
+      park_name: '', adjacent_registered_gardens: [], corridor_node_confirmed: false,
+      effective_ecological_area_ha: null, cluster_area_ha: null, display_lat: null, display_lng: null},
+    evidence: {has_photos: false, has_field_notes: false, has_species_list: species.length > 0, has_fauna_record: false,
+      has_professional_assessment: false, verification_level: 'self_reported', verification_label: 'Self-reported', assessor: practice.name},
+    milestones: [], activity_log: [], council: '', ward: '', lga: '', typology: 'Designer-submitted garden',
+    registry_role: 'Performer', trajectory: 'Emerging', notes: 'Designer-submitted inputs. Independent review required.'
+  };
+  var evidenceUrl = text('evidence_url', 1000);
+  if (evidenceUrl && !/^https:\/\//i.test(evidenceUrl)) throw new Error('Evidence links must use HTTPS');
+  return {candidate: candidate, garden_address: address, steward_email: email, evidence_url: evidenceUrl,
+    private_notes: text('private_notes', 4000), consent_record: true, consent_public_profile: true};
+}
+function _designerSubmission(row, admin) {
+  var data; try { data = JSON.parse(String(row[6])); } catch (e) { data = {}; }
+  var result = {submission_id: String(row[0]), designer_id: String(row[1]), created_at: String(row[2]), updated_at: String(row[3]),
+    review_status: String(row[4]), published_garden_id: String(row[5] || ''), review_note: String(row[7] || ''),
+    garden_name: (data.candidate || {}).garden_name || '', suburb: (data.candidate || {}).suburb || ''};
+  if (admin) result.payload = data;
+  return result;
+}
+function _designerFindSubmission(ss, id) {
+  var sheet = ss.getSheetByName('Designer Submissions'), rows = _designerRows(sheet, 8);
+  for (var i = 0; i < rows.length; i++) if (String(rows[i][0]) === id) return {sheet: sheet, row: rows[i], index: i + 2};
+  return null;
+}
+function _designerPublicPortfolio(id) {
+  var cache = CacheService.getScriptCache(), key = 'designer_public_registry_v1', content = cache.get(key);
+  if (!content) {
+    var response = UrlFetchApp.fetch('https://ecologicalregistry.org/data/registry.json', {muteHttpExceptions: false});
+    content = response.getContentText(); cache.put(key, content, 60);
+  }
+  return (JSON.parse(content).gardens || []).filter(function (g) { return g.designer_id === id && !g.demo; }).map(function (g) {
+    return {garden_id: g.garden_id, garden_name: g.garden_name, suburb: g.suburb, state: g.state, score: g.score,
+      rating: g.rating, badge_count: g.badge_count, verification_label: g.verification_label, status: g.status, profile_url: g.profile_url};
+  });
+}
+function handleDesignerPortal(payload) {
+  try {
+    if (JSON.stringify(payload).length > 50000) return jsonResp({ok: false, error: 'Submission too large'});
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), action = String(payload.action || '');
+    var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+    var admin = !!(stored && payload.admin_token === stored);
+    var practice = admin ? null : _designerAuthorise(String(payload.designer_token || ''), ss);
+    if (!admin && !practice) return jsonResp({ok: false, error: 'This access link is invalid or has been revoked.'});
+    if (action === 'get_portfolio' && practice) {
+      var own = _designerRows(ss.getSheetByName('Designer Submissions'), 8).filter(function (r) { return String(r[1]) === practice.designer_id; });
+      return jsonResp({ok: true, practice: {designer_id: practice.designer_id, name: practice.name},
+        gardens: _designerPublicPortfolio(practice.designer_id), submissions: own.map(function (r) { return _designerSubmission(r, false); })});
+    }
+    if (action === 'get_submission' && practice) {
+      var owned = _designerFindSubmission(ss, safeStr(payload.submission_id, 80));
+      if (!owned || String(owned.row[1]) !== practice.designer_id) return jsonResp({ok: false, error: 'Submission not found'});
+      return jsonResp({ok: true, submission: _designerSubmission(owned.row, true)});
+    }
+    if (action === 'admin_overview' && admin) return jsonResp({ok: true,
+      practices: _designerRows(ss.getSheetByName('Designer Practices'), 6).map(_designerPractice),
+      submissions: _designerRows(ss.getSheetByName('Designer Submissions'), 8).map(function (r) { return _designerSubmission(r, true); })});
+    if (action === 'export_submission' && admin) {
+      var exportRow = _designerFindSubmission(ss, safeStr(payload.submission_id, 80));
+      if (!exportRow || ['ready','published'].indexOf(String(exportRow.row[4])) < 0) return jsonResp({ok: false, error: 'Review the submission and mark it ready first.'});
+      return jsonResp({ok: true, submission: _designerSubmission(exportRow.row, true)});
+    }
+    var lock = LockService.getScriptLock();
+    if (!lock.tryLock(10000)) return jsonResp({ok: false, error: 'Please try again shortly.'});
+    try {
+      var now = new Date().toISOString();
+      if (action === 'create_practice' && admin) {
+        var name = safeStr(payload.name, 120), email = safeStr(payload.contact_email, 254).toLowerCase();
+        if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('A practice name and valid contact email are required');
+        var id = safeStr(payload.designer_id || ('designer-' + Utilities.getUuid().replace(/-/g, '').slice(0,12)), 80);
+        if (!/^[a-z0-9][a-z0-9-]{2,79}$/.test(id)) throw new Error('Designer ID must use lowercase letters, numbers and hyphens');
+        var ps = _designerTable(ss, 'Designer Practices', DESIGNER_PRACTICE_HEADERS, true), pr = _designerRows(ps, 6);
+        if (pr.some(function (r) { return String(r[0]) === id || String(r[2]).toLowerCase() === email; })) throw new Error('That designer ID or contact email is already registered');
+        var token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+        ps.appendRow([id, name, email, _designerHash(token), now, 'active']);
+        return jsonResp({ok: true, designer_id: id, access_link: 'https://ecologicalregistry.org/designer-dashboard.html#access=' + token});
+      }
+      if (action === 'rotate_practice_token' && admin) {
+        var rs = ss.getSheetByName('Designer Practices'), rotations = _designerRows(rs, 6);
+        for (var q = 0; q < rotations.length; q++) if (String(rotations[q][0]) === payload.designer_id) {
+          var rotated = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+          rs.getRange(q+2,4).setValue(_designerHash(rotated)); rs.getRange(q+2,6).setValue('active');
+          return jsonResp({ok: true, access_link: 'https://ecologicalregistry.org/designer-dashboard.html#access=' + rotated});
+        }
+        throw new Error('Practice not found');
+      }
+      if (action === 'update_submission' && practice) {
+        var edit = _designerFindSubmission(ss, safeStr(payload.submission_id, 80));
+        if (!edit || String(edit.row[1]) !== practice.designer_id || ['pending','needs_changes'].indexOf(String(edit.row[4])) < 0) throw new Error('Submission is not available to revise');
+        var revised = _designerCandidate(payload.garden, practice);
+        edit.sheet.getRange(edit.index,4).setValue(now); edit.sheet.getRange(edit.index,5).setValue('pending'); edit.sheet.getRange(edit.index,7).setValue(JSON.stringify(revised));
+        return jsonResp({ok: true, submission_id: String(edit.row[0])});
+      }
+      if (action === 'revoke_practice' && admin) {
+        var prs = ss.getSheetByName('Designer Practices'), rr = _designerRows(prs, 6);
+        for (var r = 0; r < rr.length; r++) if (String(rr[r][0]) === payload.designer_id) { prs.getRange(r+2,6).setValue('revoked'); return jsonResp({ok: true}); }
+        throw new Error('Practice not found');
+      }
+      if (action === 'submit_garden' && practice) {
+        var request = safeStr(payload.request_id, 80);
+        if (!/^[a-zA-Z0-9-]{16,80}$/.test(request)) throw new Error('Refresh the form before submitting');
+        var table = _designerTable(ss, 'Designer Submissions', DESIGNER_SUBMISSION_HEADERS, true), existing = _designerRows(table, 8);
+        var submissionId = 'DSG-' + request;
+        for (var d = 0; d < existing.length; d++) if (String(existing[d][0]) === submissionId) {
+          if (String(existing[d][1]) !== practice.designer_id) throw new Error('Submission identifier unavailable');
+          return jsonResp({ok: true, submission_id: submissionId, duplicate: true});
+        }
+        if (existing.filter(function (row) { return String(row[1]) === practice.designer_id && String(row[2]).slice(0,10) === now.slice(0,10); }).length >= 20) throw new Error('The pilot accepts up to 20 gardens per practice per day');
+        var candidate = _designerCandidate(payload.garden, practice);
+        table.appendRow([submissionId, practice.designer_id, now, now, 'pending', '', JSON.stringify(candidate), '']);
+        return jsonResp({ok: true, submission_id: submissionId});
+      }
+      if (action === 'review_submission' && admin) {
+        var review = _designerFindSubmission(ss, safeStr(payload.submission_id, 80)), status = String(payload.review_status || '');
+        if (!review || String(review.row[4]) === 'published') throw new Error('Submission unavailable for review');
+        if (['pending','needs_changes','ready'].indexOf(status) < 0) throw new Error('Invalid review status');
+        review.sheet.getRange(review.index,4).setValue(now); review.sheet.getRange(review.index,5).setValue(status);
+        review.sheet.getRange(review.index,8).setValue(safeStr(payload.review_note, 2000));
+        return jsonResp({ok: true});
+      }
+      if (action === 'mark_published' && admin) {
+        var row = _designerFindSubmission(ss, safeStr(payload.submission_id, 80)), gid = safeStr(payload.garden_id, 60);
+        if (!row || !/^[A-Z0-9-]{8,60}$/.test(gid) || ['ready','published'].indexOf(String(row.row[4])) < 0) throw new Error('A reviewed submission and valid garden ID are required');
+        if (row.row[5] && String(row.row[5]) !== gid) throw new Error('This submission is already linked to another garden');
+        var live = JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/data/' + _neutralGardenSlug(gid) + '.json').getContentText());
+        if (live.garden_id !== gid || live.designer_id !== String(row.row[1])) throw new Error('Publish the matching garden record before confirming publication');
+        var privateData = JSON.parse(String(row.row[6]));
+        if (String(row.row[4]) !== 'published') {
+          _designerTable(ss, 'Garden Addresses', ['garden_id','address','updated_at'], true).appendRow([gid, privateData.garden_address, now]);
+          _designerTable(ss, 'Steward Emails', ['garden_id','steward_email','notes'], true).appendRow([gid, privateData.steward_email, 'Designer submission ' + row.row[0]]);
+        }
+        row.sheet.getRange(row.index,4).setValue(now); row.sheet.getRange(row.index,5).setValue('published'); row.sheet.getRange(row.index,6).setValue(gid);
+        return jsonResp({ok: true, garden_id: gid});
+      }
+      return jsonResp({ok: false, error: 'Action not permitted'});
+    } finally { lock.releaseLock(); }
+  } catch (error) { return jsonResp({ok: false, error: error.message || 'Unable to complete this request'}); }
 }

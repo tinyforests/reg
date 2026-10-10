@@ -55,7 +55,9 @@
         "gardens": 1,
         "area_ha": 0.607,
         "status": "Seed"
-      }
+      },
+      "designer": "Private design studio",
+      "designer_id": "sam-cox-landscape"
     },
     {
       "garden_id": "ER-AU-VIC-SH-ARU-0001",
@@ -98,7 +100,9 @@
       "lga": "Boroondara",
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-MID-001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-SY-NIC-0002",
@@ -137,7 +141,9 @@
       },
       "council": "Stonnington City Council",
       "ward": "Central",
-      "lga": "Stonnington"
+      "lga": "Stonnington",
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-BAL-001",
@@ -187,7 +193,9 @@
         "ER-AU-VIC-BAL-PRD-001",
         "ER-AU-VIC-WHI-YRK-002",
         "ER-AU-VIC-SH-WEL-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-SH-MID-001",
@@ -229,7 +237,9 @@
       "lga": "Boroondara",
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-ARU-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-SH-SIR-0001",
@@ -272,7 +282,9 @@
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-CAN-0001",
         "ER-AU-VIC-SH-GTR-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-SH-CAN-0001",
@@ -315,7 +327,8 @@
         "ER-AU-VIC-SH-SIR-0001",
         "ER-AU-VIC-CAN-FLI-001",
         "ER-AU-VIC-SH-GTR-0001"
-      ]
+      ],
+      "designer": "Gardener & Son (planned — design phase commencing within 1-3 months)"
     },
     {
       "garden_id": "ER-AU-VIC-CAN-MON-001",
@@ -350,7 +363,9 @@
       "data_file": "data/montAlbert.json",
       "council": "Boroondara City Council",
       "ward": "Maranoa",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-MAN-EVE-001",
@@ -391,7 +406,9 @@
       },
       "council": "Whitehorse City Council",
       "ward": "Elgar",
-      "lga": "Whitehorse"
+      "lga": "Whitehorse",
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-BLA-DEW-001",
@@ -432,7 +449,9 @@
       },
       "council": "Whitehorse City Council",
       "ward": "Morack",
-      "lga": "Whitehorse"
+      "lga": "Whitehorse",
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-BAL-PRD-001",
@@ -477,7 +496,9 @@
         "ER-AU-VIC-BAL-001",
         "ER-AU-VIC-WHI-YRK-002",
         "ER-AU-VIC-SH-WEL-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-NTH-RUP-001",
@@ -521,7 +542,9 @@
       "council": "Darebin City Council",
       "ward": "Merri",
       "lga": "Darebin",
-      "demo": true
+      "demo": true,
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-001",
@@ -566,7 +589,9 @@
       },
       "adjacent_garden_ids": [
         "ER-AU-VIC-BOR-WIN-002"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-BOR-WIN-002",
@@ -608,7 +633,9 @@
       },
       "adjacent_garden_ids": [
         "ER-AU-VIC-BOR-WIN-001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-WHI-YRK-001",
@@ -653,7 +680,9 @@
       },
       "adjacent_garden_ids": [
         "ER-AU-VIC-WHI-VIC-001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-WHI-VIC-001",
@@ -698,7 +727,9 @@
       },
       "adjacent_garden_ids": [
         "ER-AU-VIC-WHI-YRK-001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-CAN-FLI-001",
@@ -739,7 +770,9 @@
       "lga": "Boroondara",
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-CAN-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-HW-AUB-0001",
@@ -776,7 +809,8 @@
       "council": "Boroondara City Council",
       "lga": "Boroondara",
       "ward": "",
-      "adjacent_garden_ids": []
+      "adjacent_garden_ids": [],
+      "designer": "Gardener & Son"
     },
     {
       "garden_id": "ER-AU-VIC-WHI-KTE-001",
@@ -859,7 +893,9 @@
         "ER-AU-VIC-BAL-001",
         "ER-AU-VIC-BAL-PRD-001",
         "ER-AU-VIC-SH-WEL-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-SH-WEL-0001",
@@ -898,7 +934,9 @@
         "ER-AU-VIC-BAL-001",
         "ER-AU-VIC-BAL-PRD-001",
         "ER-AU-VIC-WHI-YRK-002"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-WHI-LEO-0001",
@@ -929,7 +967,9 @@
       "trajectory": "Rising",
       "council": "Whitehorse City Council",
       "lga": "Whitehorse",
-      "ward": ""
+      "ward": "",
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-SH-GTR-0001",
@@ -966,7 +1006,9 @@
       "adjacent_garden_ids": [
         "ER-AU-VIC-SH-SIR-0001",
         "ER-AU-VIC-SH-CAN-0001"
-      ]
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-BAL-WNM-001",
@@ -994,7 +1036,9 @@
       "data_file": "data/winmallee.json",
       "council": "Boroondara City Council",
       "ward": "",
-      "lga": "Boroondara"
+      "lga": "Boroondara",
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     },
     {
       "garden_id": "ER-AU-VIC-THO-HAR-001",
@@ -1024,7 +1068,9 @@
       "data_file": "data/harrystreet.json",
       "council": "Darebin City Council",
       "ward": "",
-      "lga": "Darebin"
+      "lga": "Darebin",
+      "designer": "Steward self-enrolled",
+      "designer_id": "self-enrolled"
     }
   ],
   "last_sync": "2026-08-18T11:18:02.292Z"

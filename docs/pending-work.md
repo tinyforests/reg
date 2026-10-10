@@ -502,3 +502,11 @@ gardens/*/index.html call awardBadges() live via badge-engine.js, bypassing NO_B
 - [ ] Populate Steward Emails sheet for the 15 G&S-installed gardens.
 - [ ] Rebuild Whitehorse one-pager: two-stream privacy, separation section,
       Registry masthead with G&S named as operator.
+
+
+### Designer pilot update — 10 Oct 2026
+
+The functional invited pilot supersedes the earlier public `data/designers.json`
+access-token proposal. Practice credential hashes and private submissions live in
+private sheets. See [designer-pilot.md](designer-pilot.md) for onboarding, review
+and publication. Ongoing designer field-note editing and billing remain future work.

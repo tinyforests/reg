@@ -524,3 +524,19 @@ When in doubt, log it.
 **Files affected:** Three garden JSON files (address removal only), Apps Script, shared home/profile styles.
 
 **Deployment verification:** The profile-service deployment is now version 36. The editor-only migration completed with three addresses preserved; the live public JSON files and tested public record responses contain no address fields. The newsletter enrolment deployment remains unchanged at version 34.
+
+
+## 10 Oct 2026 — Functional invited designer pilot
+
+Replace the illustrative dashboard with private per-practice access, exact-input
+garden submissions and an admin review queue. Store credential hashes and client
+details in private Apps Script sheets, not a public designers JSON. Designer
+attribution remains separate from verification. Publication uses an explicit
+reviewed repository tool and live confirmation; default records remain provisional.
+This makes designer outreach actionable without inventing activity, evidence or
+yield payments. Yield data and concept pages remain available, with profile
+rendering hidden. Files: designer-dashboard.html, designer-invite.html, index.html,
+assets/css/designer-portal.css, js/designer-portal.js, scripts/appsscript/Code.gs,
+scripts/promote_designer_submission.py, scripts/sync_registry.py, data/registry.json,
+scripts/test_designer_portal.cjs, scripts/test_designer_publication.py and
+docs/designer-pilot.md.

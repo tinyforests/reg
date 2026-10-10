@@ -699,6 +699,13 @@ def sync(check_only=False):
             changes.append("%s: garden_name %r -> %r" % (gid, g.get('garden_name'), rec_name))
             g['garden_name'] = rec_name
 
+        # Practice attribution is canonical; credentials remain in private sheets.
+        for key in ('designer', 'designer_id', 'managed_by'):
+            value = record.get(key)
+            if value is not None and g.get(key) != value:
+                g[key] = value
+                changes.append('%s: %s attribution updated' % (gid, key))
+
         # Denormalised EVC display on the registry entry follows the data file's
         # (possibly just-corrected) evc block, so the browse list matches the
         # profile and NatureKit.
