@@ -1,0 +1,82 @@
+/* Shared UI refinement; scoped to Registry pages, never embedded maps. */
+body.reg-ui{--reg-ui-ink:#3d4535;--reg-ui-paper:#fff0dc;--reg-ui-panel:#f7ead6;--reg-ui-line:#d7ccb9;--reg-ui-signal:#7a9e5f;line-height:1.65}
+html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#3d4535;--reg-ui-panel:#485141;--reg-ui-line:rgba(255,240,220,.12)}
+.reg-ui a,.reg-ui button{touch-action:manipulation}
+.reg-ui a:focus-visible,.reg-ui button:focus-visible,.reg-ui input:focus-visible,.reg-ui select:focus-visible,.reg-ui textarea:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.reg-ui>header:not(.hero),.reg-ui>nav,.reg-ui .rail{border-top:3px solid var(--reg-ui-signal)}
+.reg-ui>header:not(.hero)>div:first-child,.reg-ui>nav>div:first-child{min-height:78px}
+.reg-ui>header h1{letter-spacing:-.03em}
+.reg-ui #themeToggle{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.04em;min-height:38px;padding:10px 13px}
+.reg-ui>main.max-w-6xl{max-width:1280px;padding:54px 32px 72px}
+.reg-ui h1.font-serif{font-size:clamp(2.7rem,5.4vw,5.2rem);letter-spacing:-.035em;line-height:1.06}
+.reg-ui h2.font-serif{letter-spacing:-.025em;line-height:1.16}
+.reg-ui .section-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;opacity:.65;line-height:1.65}
+.reg-ui .shadow-card{box-shadow:none}
+.reg-ui .category-header{border-left:3px solid var(--reg-ui-signal)}
+.reg-ui .badge-pill,.reg-ui .badge-chip{font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.6;padding:5px 9px}
+/* Profiles retain their canonical hero, signals, evidence and network order. */
+.reg-ui-profile main>section{scroll-margin-top:110px}
+.reg-ui-profile main>section+section{margin-top:64px}
+.reg-ui-profile main>section:first-child>.grid{gap:24px}
+.reg-ui-profile main>section:first-child>.grid>div:first-child{background:var(--reg-ui-panel);border-top:3px solid var(--reg-ui-signal)}
+.reg-ui-profile #heroDesc{font-size:17px;line-height:1.8;max-width:580px}
+.reg-ui-profile #heroId{overflow-wrap:anywhere;line-height:1.6}
+.reg-ui-profile .eco-card{--ground:var(--reg-ui-panel);--ink:var(--reg-ui-ink);--ink-soft:var(--reg-ui-ink);--rule:var(--reg-ui-line)}
+.reg-ui-profile .eco-card .eyebrow{font-size:10px;letter-spacing:.12em;opacity:.7}
+.reg-ui-profile .eco-card .hero{padding:27px 20px;gap:16px;min-height:145px}
+.reg-ui-profile .eco-card .score{font-size:94px}
+.reg-ui-profile .eco-card .next{line-height:1.6}
+.reg-ui-profile .eco-card .badge{border:1px solid var(--reg-ui-line);background:var(--reg-ui-paper);color:var(--reg-ui-ink);font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.5;padding:6px 8px}
+.reg-ui-profile .eco-card .dot,.reg-ui-profile .eco-card .dot.here:after,.reg-ui-profile .lt-dot,.reg-ui-profile .lt-dot:after{border-radius:0!important}
+.reg-ui-profile .eco-card .dot{border-color:var(--reg-ui-ink)}
+.reg-ui-profile .eco-card .dot.done{background:var(--reg-ui-signal);border-color:var(--reg-ui-signal)}
+.reg-ui-profile .eco-card .dot.here{background:var(--reg-ui-ink);border-color:var(--reg-ui-ink)}
+.reg-ui-profile .eco-card .dot.here:after{border-color:var(--reg-ui-ink);animation:none;opacity:.3}
+.reg-ui-profile .eco-card .seg{background:var(--reg-ui-line)}
+.reg-ui-profile .eco-card .seg.done{background:var(--reg-ui-signal)}
+.reg-ui-profile .eco-card .dot:first-child::before,.reg-ui-profile .lt-dot:first-child::before{left:0;transform:translateY(3px)}
+.reg-ui-profile .eco-card .dot:last-child::before,.reg-ui-profile .lt-dot:last-child::before{left:auto;right:0;transform:translateY(3px)}
+.reg-ui-profile .eco-card .dot:first-child:hover::before,.reg-ui-profile .lt-dot:first-child:hover::before,.reg-ui-profile .eco-card .dot:last-child:hover::before,.reg-ui-profile .lt-dot:last-child:hover::before{transform:translateY(0)}
+.reg-ui-profile #signals .border,.reg-ui-profile #score .border,.reg-ui-profile #trajectory .border,.reg-ui-profile #record .border{background:var(--reg-ui-panel)}
+/* Browser: persistent filters, readable cards and tabular identifiers. */
+.reg-ui-registry #overview>div{padding-top:72px;padding-bottom:72px}
+.reg-ui-registry #overview .sb{background:var(--reg-ui-panel);border-top:2px solid var(--reg-ui-signal)}
+.reg-ui-registry #gardens aside{padding:24px;border:1px solid var(--reg-ui-line);background:var(--reg-ui-panel)}
+.reg-ui-registry .filter-btn,.reg-ui-registry .score-btn,.reg-ui-registry .lga-btn{font-size:11px;min-height:36px;line-height:1.5}
+.reg-ui-registry .card{border-top:2px solid var(--reg-ui-signal);background:var(--reg-ui-panel);transition:border-color .2s}
+.reg-ui-registry .card:hover{border-color:var(--reg-ui-signal);background:var(--reg-ui-panel)}
+/* Reference and assessment UI. */
+.reg-ui-badges .category-header{padding:26px}
+.reg-ui-badges #overview{margin-bottom:64px}
+.reg-ui-badges input,.reg-ui-badges select,.reg-ui-assess input:not([type=checkbox]):not([type=radio]):not([type=range]),.reg-ui-assess select{min-height:42px}
+.reg-ui-assess .pillar-panel{padding:26px}
+.reg-ui-assess button:not(.leaflet-control button){min-height:36px}
+.reg-ui-assess>header>div{gap:18px;flex-wrap:wrap;padding-top:14px;padding-bottom:14px}
+/* Enrolment: use the Registry palette, retain every screen and consent step. */
+.reg-ui-enrol{--understory:#fff0dc;--understory-2:#f7ead6;--canopy:#3d4535;--canopy-2:#485141;--ink:#3d4535;--ink-soft:rgba(61,69,53,.72);--hairline:#d7ccb9;--hairline-on-dark:rgba(255,240,220,.12)}
+.reg-ui-enrol .rail-inner{padding-top:19px;padding-bottom:19px}
+.reg-ui-enrol section.band{padding-top:78px;padding-bottom:78px}
+.reg-ui-enrol h1{font-family:'Abril Fatface',serif;font-weight:400;font-size:clamp(2.6rem,5vw,4.6rem);line-height:1.08;letter-spacing:-.03em}
+.reg-ui-enrol .card{padding:28px;border-top:2px solid var(--signal)}
+.reg-ui-enrol .btn{min-height:46px;padding:15px 22px;font-size:11px}
+.reg-ui-enrol input:not([type=checkbox]):not([type=radio]):not([type=range]),.reg-ui-enrol select{min-height:44px}
+/* Live and partner instruments: preserve map/chart geometry and data labels. */
+.reg-ui-live .hero,.reg-ui-designer-dashboard .hero{padding-top:78px}
+.reg-ui-live .hero h1,.reg-ui-designer-dashboard .hero h1{letter-spacing:-.035em;line-height:1.08}
+.reg-ui-live .hero .meta{gap:32px}
+.reg-ui-designer-dashboard .gcard,.reg-ui-designer-dashboard .mcard{box-shadow:none;border-top:2px solid var(--reg-ui-signal)}
+.reg-ui-demand>section:first-of-type h1{font-size:clamp(2.5rem,5vw,4.6rem);line-height:1.08}
+.reg-ui-note main{line-height:1.8}
+.reg-ui-note h1{letter-spacing:-.025em;line-height:1.12}
+.reg-ui-updates{background:#fff0dc}
+.reg-ui-updates>header,.reg-ui-updates>.bar{max-width:1100px;margin:auto;padding:26px 24px}
+.reg-ui-updates .bar{gap:16px}
+.reg-ui-updates .row{padding:18px 0;line-height:1.7}
+.reg-ui-updates .chip,.reg-ui-updates button,.reg-ui-updates input,.reg-ui-updates select{border-radius:0!important}
+.reg-ui-updates select,.reg-ui-updates input,.reg-ui-updates button{min-height:40px}
+@media(max-width:767px){.reg-ui>main.max-w-6xl{padding:32px 20px 48px}.reg-ui>header:not(.hero)>div:first-child{padding:16px 20px;gap:12px;flex-wrap:wrap}.reg-ui-profile main>section+section{margin-top:44px}.reg-ui-profile main>section:first-child>.grid>div:first-child{padding:26px}.reg-ui-profile #heroDesc{font-size:16px}.reg-ui-profile .eco-card .score{font-size:86px}.reg-ui-profile .eco-card .tier{overflow-wrap:anywhere}.reg-ui-badges>header>div>div:first-child{min-width:0}.reg-ui-badges #themeToggle{font-size:10px}.reg-ui-registry #overview>div{padding:44px 20px}.reg-ui-registry #gardens aside{padding:20px}.reg-ui-enrol section.band{padding:48px 0}.reg-ui-enrol .rail-inner{padding:12px 20px;gap:6px 14px}.reg-ui-enrol .rail-step{font-size:9px;margin-right:0}.reg-ui-enrol .card{padding:22px}.reg-ui-updates .row{grid-template-columns:1fr;gap:4px}.reg-ui-updates .bar>span,.reg-ui-updates .bar>input{width:100%}.reg-ui-updates .bar select{max-width:100%}.reg-ui-live .hero,.reg-ui-designer-dashboard .hero{padding-top:48px}.reg-ui-assess>header>div>.flex:last-child{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.reg-ui .stagger,.reg-ui .fade-in,.reg-ui .reveal{animation:none!important;opacity:1!important;transform:none!important}.reg-ui .bar-fill{transition:none!important}}
+@media print{.reg-ui-updates>header,.reg-ui-updates>.bar{padding:0}.reg-ui-updates .row{padding:9px 0}}
+.reg-ui-assess main .grid>*,.reg-ui-profile main .grid>*{min-width:0}
+.reg-ui-assess input,.reg-ui-assess select,.reg-ui-assess textarea{max-width:100%}
+@media(max-width:639px){.reg-ui-assess main>.grid>div{max-width:100%}.reg-ui-assess .pillar-panel .flex{flex-wrap:wrap}}

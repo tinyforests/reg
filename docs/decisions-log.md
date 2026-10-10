@@ -480,3 +480,12 @@ When in doubt, log it.
 **Reason:** Improve visual hierarchy and steward entry points while staying faithful to the repository’s Registry experience. Existing ecological scores and threshold badges carry the incentive; no separate game or points system is introduced.
 
 **Files affected:** `index.html`, `assets/css/registry-home.css`.
+
+
+## 2026-10-10 — Extend the restrained UI refresh through Registry pages
+
+**Decision:** Use one shared, page-scoped stylesheet for 74 existing pages: garden browsing, profiles and field records, assessment, enrolment, badges, score, demand/live, updates and partner/concept pages. Give operational pages clearer typography, spacing, panels and controls; keep documentary pages lightly treated. Retain all copy, links, JavaScript, data, scoring and consent behaviour. Preserve map geometry and canonical square UI.
+
+**Reason:** Carry the approved homepage refinement through the existing experience without changing the product. Align enrolment surfaces with the Registry palette and fix assessment and level-tooltip mobile overflow.
+
+**Files affected:** `assets/css/registry-pages.css`, linked operational HTML pages, `gardens/**/*.html`, `enrol/index.html`.
