@@ -26,7 +26,7 @@ the provisional card cannot fire. (Logged rather than fixed during the scorecard
 
 ### Admin: garden ID → address mapping
 
-Garden names and URL slugs must never encode a street address or house number (e.g. "88 Windella" → renamed to "Smokebush", `/gardens/windella88/` → `/gardens/smokebush/`). G&S still needs to know the physical address behind each `garden_id` for site visits, verification, and records.
+Garden names and URL slugs must never encode a street address or house number (e.g. "88 Windella" → renamed to "Smokebush", `/gardens/windella88/` → `/gardens/g-f41e67766569/`). G&S still needs to know the physical address behind each `garden_id` for site visits, verification, and records.
 
 **Needed**: a private admin page (password-gated or assessor-key-gated) that lists `garden_id → steward name → street address → council` for internal use. Could live at `/admin/gardens.html` reading from a separate `data/garden-addresses.json` not committed to the public repo, or using an assessor key to show a hidden column in assess.html.
 

@@ -128,7 +128,7 @@
     if (document.getElementById('er-steward-unlock')) return;
     try { if (sessionStorage.getItem('er_unlock_dismissed:' + gardenId) === '1') return; } catch (e) {}
 
-    // Derive the garden slug from the pathname (e.g. /gardens/arundel/ -> arundel)
+    // Derive the garden slug from the pathname (e.g. /gardens/g-2942b7a03783/ -> arundel)
     var pathParts  = window.location.pathname.replace(/\/$/, '').split('/').filter(function(p) { return p && p !== 'index.html'; });
     var gardenSlug = pathParts[pathParts.length - 1] || '';
 

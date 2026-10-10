@@ -32,6 +32,7 @@ Usage:
 """
 
 import json
+import hashlib
 import os
 import re
 import subprocess
@@ -44,7 +45,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY = os.path.join(REPO_ROOT, 'data', 'registry.json')
 COORDS = os.path.join(REPO_ROOT, 'data', 'private', 'coords.json')
 GARDENS_DIR = os.path.join(REPO_ROOT, 'gardens')
-PROFILE_TEMPLATE = os.path.join(GARDENS_DIR, 'montalbert', 'index.html')
+PROFILE_TEMPLATE = os.path.join(GARDENS_DIR, 'g-95a9948e6de3', 'index.html')
 
 PROV_CSV = (
     'https://docs.google.com/spreadsheets/d/e/'
@@ -266,7 +267,7 @@ def main():
     if gid in existing:
         sys.exit('%s already in registry.json — nothing to do.' % gid)
 
-    slug = slugify(garden_name if garden_name else street)
+    slug = 'g-' + hashlib.sha256(gid.encode('utf-8')).hexdigest()[:12]
     data_file = 'data/%s.json' % slug
     if os.path.exists(os.path.join(REPO_ROOT, data_file)):
         sys.exit('%s already exists — this garden appears to be registered already '

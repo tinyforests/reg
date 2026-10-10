@@ -56,6 +56,8 @@ var CLAIM_TOKEN_HEADERS = ['token', 'garden_id', 'email', 'created_at', 'expires
 function doGet(e) {
   var params = (e && e.parameter) ? e.parameter : {};
 
+  if (params.action === 'get_private_garden_details') return handleGetPrivateGardenDetails(params);
+
   if (params.action === 'verify_steward')    return handleVerifySteward(params);
   if (params.action === 'request_claim')     return handleRequestClaim(params);
   if (params.action === 'verify_claim')      return handleVerifyClaimToken(params);
@@ -214,7 +216,7 @@ function handleRequestClaim(params) {
   tokenSheet.appendRow([token, gardenId, email, now.toISOString(), expiresAt.toISOString(), false]);
 
   // Build and send magic link
-  var link = BASE_URL + (gardenSlug ? gardenSlug + '/' : '') + '?claim=' + token;
+  var link = BASE_URL + _neutralGardenSlug(gardenId) + '/?claim=' + token;
   try {
     MailApp.sendEmail({
       to:      email,
@@ -1532,4 +1534,39 @@ function jsonResp(obj) {
   return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/* Private garden address: server-verified admin or garden-scoped steward session. */
+function handleGetPrivateGardenDetails(params) {
+  var gardenId = safeStr(String(params.garden_id || '').trim(), 60);
+  var session = safeStr(String(params.session_token || '').trim(), 160);
+  var admin = safeStr(String(params.admin_token || '').trim(), 160);
+  if (!gardenId) return jsonResp({ok: false, error: 'garden_id required'});
+  var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!(stored && admin === stored) && !(session && _validStewardSession(gardenId, session, ss))) {
+    return jsonResp({ok: false, error: 'Not authorised'});
+  }
+  var address = '';
+  var submissions = ss.getSheetByName('Submissions');
+  if (submissions && submissions.getLastRow() > 1) {
+    var rows = submissions.getRange(2, 1, submissions.getLastRow() - 1, Math.max(26, submissions.getLastColumn())).getValues();
+    for (var i = 0; i < rows.length; i++) {
+      if (String(rows[i][25] || '').trim().toLowerCase() === gardenId.toLowerCase()) address = String(rows[i][4] || '').trim();
+    }
+  }
+  // The latest explicitly recorded address wins; do not reverse-geocode private data.
+  var coords = ss.getSheetByName('Garden Coords');
+  if (coords && coords.getLastRow() > 1) {
+    var points = coords.getRange(2, 1, coords.getLastRow() - 1, 5).getValues();
+    for (var j = 0; j < points.length; j++) {
+      if (String(points[j][1] || '').trim().toLowerCase() === gardenId.toLowerCase() && String(points[j][4] || '').trim()) address = String(points[j][4]).trim();
+    }
+  }
+  return jsonResp({ok: true, garden_id: gardenId, address: address});
+}
+
+function _neutralGardenSlug(gardenId) {
+  return 'g-' + Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, gardenId, Utilities.Charset.UTF_8)
+    .map(function (b) { return ('0' + ((b + 256) % 256).toString(16)).slice(-2); }).join('').slice(0, 12);
 }

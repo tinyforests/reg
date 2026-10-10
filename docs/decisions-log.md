@@ -498,3 +498,14 @@ When in doubt, log it.
 **Reason:** Fix inconsistent menu text and provide a comfortable section-by-section reading rhythm while preserving all content and interactions. Verified homepage sections at 1366 × 768, profile header/section alignment, and mobile overflow.
 
 **Files affected:** `assets/css/registry-home.css`, `assets/css/registry-pages.css`.
+
+
+## 2026-10-10 — Private address facts and neutral garden routes
+
+**Decision:** Load garden addresses only from the token-gated private-address endpoint into Garden Facts. Require a verified garden-scoped steward session or ADMIN_TOKEN; the legacy er_admin flag is display-only and offers a token-unlock control. No addresses are added to public JSON, HTML or browser storage. Use stable SHA-256-derived neutral public profile slugs. Move field records with profiles and keep noindex legacy redirects preserving claim queries and section anchors. Update registry/profile links and future profile generation; preserve all garden IDs and scoring.
+
+**Reason:** Make addresses available to authorised stewards/admins without publishing them, and remove street names from visible profile URLs without breaking old links.
+
+**Validation:** Auth denial/success and UI non-disclosure tests; canonical-link and document migration checks; promotion self-test.
+
+**Files affected:** Garden profiles/field-note routes, data URL fields, referring pages/docs, private-detail JS, Apps Script endpoint, promotion script.

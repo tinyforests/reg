@@ -33,7 +33,7 @@ The garden JSON carries **both inputs and snapshotted outputs**:
 
 ## File naming conventions
 
-**Garden directories:** lowercase short name + street number where useful: `arundel08`, `evelina23`, `dewrang17` (note: actual Dewrang directory is `dewrang1a`), `rupert14`, `windella40`, `york12`, `parringroad17`, `montAlbert100`, `middlesex80`, `nicholson10`, `parring11`. Numbering is inconsistent — confirm against `registry.json` `profile_url` before linking.
+**Garden directories (legacy):** formerly lowercase short name + street number where useful: `arundel08`, `evelina23`, `dewrang17` (note: actual Dewrang directory is `dewrang1a`), `rupert14`, `windella40`, `york12`, `parringroad17`, `montAlbert100`, `middlesex80`, `nicholson10`, `parring11`. Numbering is inconsistent — confirm against `registry.json` `profile_url` before linking.
 
 **Garden JSON files:** lowercase short name, no number. `arundel.json`, `york.json`. One garden = one JSON file at `/data/[short_name].json`. The path is stored in `registry.json` as `data_file`.
 
@@ -374,3 +374,10 @@ Provisional structure (confirm against the real `species.json`):
 ## Encoding
 
 All JSON files are written ASCII-only. When generating via Python, write with `encoding='ascii', errors='replace'`. This avoids encoding issues on static hosting and keeps diffs clean. No smart quotes, no em-dashes inside JSON string values — use ASCII equivalents. (`york.json` already uses `--` instead of em-dashes in prose.)
+
+
+## Neutral public profile routes
+
+Garden profiles now use `/gardens/g-<12-character SHA-256 prefix>/index.html`, derived from the stable `garden_id`. New profiles use the same rule in `promote_submission.py`. Garden IDs, display names and data-file identities do not change. Existing street-name profile and field-note paths are noindex redirects that preserve the query string and fragment. The canonical profile paths and field-note references are updated in the public registry and garden records.
+
+Precise garden addresses are never stored in these public records. The private Garden Facts address row calls `get_private_garden_details` with a verified garden-scoped steward session or an admin token. `er_admin = 1` is a UI flag only; it cannot authorise that request.
