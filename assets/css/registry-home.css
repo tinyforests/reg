@@ -117,3 +117,11 @@ html{scroll-padding-top:76px}
 }
 @media(min-width:1024px) and (max-height:800px){.registry-section{padding-block:30px}}
 @media(min-width:1024px) and (max-height:800px){.registry-section.registry-section{padding-block:28px}.registry-paths .grid>div{padding:20px}}
+
+/* The homepage preview uses the same highlighted panel as profile scorecards. */
+.hero-record .eco-card .card{--ground:var(--fg);--ink:var(--bg);--ink-soft:var(--bg);--rule:color-mix(in srgb,var(--bg) 25%,transparent)}
+.hero-record .eco-card .dot{border-color:var(--bg)}
+.hero-record .eco-card .dot.here{background:var(--bg);border-color:var(--bg)}
+.hero-record .eco-card .dot.here:after{border-color:var(--bg)}
+.hero-record .eco-card .seg{background:color-mix(in srgb,var(--bg) 25%,transparent)}
+.hero-record .eco-card .seg.done{background:var(--signal)}

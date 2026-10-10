@@ -1502,9 +1502,11 @@ function handleGetGardenRecord(params) {
         // steward-gated via get_precise_map. Fuzzed display_lat/lng + public park
         // coords remain. (Garden-extent geometry under canopy is left as-is; it is
         // client-gated on the profile.)
+        delete record.garden_address; delete record.street_address; delete record.address;
         var pc = record.connectivity;
         if (pc) {
           delete pc.lat; delete pc.lng;
+          delete pc.address; delete pc.garden_address; delete pc.street_address;
           var pa = pc.adjacent_registered_gardens || [];
           for (var k = 0; k < pa.length; k++) { delete pa[k].lat; delete pa[k].lng; }
         }
@@ -1547,7 +1549,15 @@ function handleGetPrivateGardenDetails(params) {
   if (!(stored && admin === stored) && !(session && _validStewardSession(gardenId, session, ss))) {
     return jsonResp({ok: false, error: 'Not authorised'});
   }
-  var address = '';
+  var record = _recordBlob(gardenId, ss) || {};
+  var address = String(record.garden_address || record.street_address || record.address || (record.connectivity || {}).address || '').trim();
+  var addressSheet = ss.getSheetByName('Garden Addresses');
+  if (addressSheet && addressSheet.getLastRow() > 1) {
+    var savedAddresses = addressSheet.getRange(2, 1, addressSheet.getLastRow() - 1, 3).getValues();
+    for (var a = 0; a < savedAddresses.length; a++) {
+      if (String(savedAddresses[a][0]).trim().toLowerCase() === gardenId.toLowerCase() && String(savedAddresses[a][1] || '').trim()) address = String(savedAddresses[a][1]).trim();
+    }
+  }
   var submissions = ss.getSheetByName('Submissions');
   if (submissions && submissions.getLastRow() > 1) {
     var rows = submissions.getRange(2, 1, submissions.getLastRow() - 1, Math.max(26, submissions.getLastColumn())).getValues();
@@ -1569,4 +1579,34 @@ function handleGetPrivateGardenDetails(params) {
 function _neutralGardenSlug(gardenId) {
   return 'g-' + Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, gardenId, Utilities.Charset.UTF_8)
     .map(function (b) { return ('0' + ((b + 256) % 256).toString(16)).slice(-2); }).join('').slice(0, 12);
+}
+
+/* One-off editor-only migration. Logs counts, never addresses; safe to repeat. */
+function migrateLegacyGardenAddresses() {
+  var sources = [
+    ['leopold', 'ER-AU-VIC-WHI-LEO-0001'],
+    ['gardentrail', 'ER-AU-VIC-SH-GTR-0001'],
+    ['welcome', 'ER-AU-VIC-SH-WEL-0001']
+  ];
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName('Garden Addresses');
+  if (!sheet) {
+    sheet = ss.insertSheet('Garden Addresses');
+    sheet.appendRow(['garden_id', 'address', 'updated_at']); sheet.setFrozenRows(1);
+  }
+  var saved = {};
+  if (sheet.getLastRow() > 1) {
+    sheet.getRange(2, 1, sheet.getLastRow() - 1, 3).getValues().forEach(function (row) { saved[String(row[0])] = String(row[1]); });
+  }
+  var preserved = 0;
+  sources.forEach(function (source) {
+    var response = UrlFetchApp.fetch('https://ecologicalregistry.org/data/' + source[0] + '.json', {muteHttpExceptions: false});
+    var record = JSON.parse(response.getContentText());
+    if (record.garden_id !== source[1]) throw new Error('Garden ID mismatch');
+    var address = String(record.garden_address || saved[source[1]] || '').trim();
+    if (!address) throw new Error('Legacy address unavailable for ' + source[1]);
+    if (saved[source[1]] !== address) sheet.appendRow([source[1], address, new Date().toISOString()]);
+    preserved++;
+  });
+  console.log('Private address migration complete: ' + preserved + ' garden addresses preserved.');
 }

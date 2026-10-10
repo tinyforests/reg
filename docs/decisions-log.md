@@ -511,3 +511,14 @@ When in doubt, log it.
 **Files affected:** Garden profiles/field-note routes, data URL fields, referring pages/docs, private-detail JS, Apps Script endpoint, promotion script.
 
 **Deployment:** Profile-service Apps Script deployment advanced from version 33 to version 35 on 10 October 2026. The edited source was read back and matched the tested repository source exactly (length 68,703 characters; hash 72d2117c). The separate newsletter enrolment deployment remains at version 34. A live unauthenticated private-address request is denied without returning an address.
+
+
+## 2026-10-10 — Preserve legacy addresses privately and match highlighted scorecards
+
+**Decision:** Preserve three existing public address values in the private Garden Addresses sheet before removing their public JSON fields. The authenticated address endpoint reads private saved addresses and records; public record responses strip address fields. The one-off migration is editor-only and logs counts, never addresses. Match profile and homepage scorecard surfaces to the highlighted Next Level panel in both themes, including track/marker contrast.
+
+**Reason:** Complete address privacy for the current public data and provide the requested consistent panel treatment. Historical public Git copies are not rewritten by this change.
+
+**Validation:** Apps Script migration completed with three addresses preserved; address-gate and public-response tests passed; computed colours match Next Level in both themes.
+
+**Files affected:** Three garden JSON files (address removal only), Apps Script, shared home/profile styles.

@@ -115,3 +115,15 @@ html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#
 .reg-ui-profile #trajectory .border:has(> #nextLevelName)>.h-1\.5{background:color-mix(in srgb,currentColor 18%,transparent)}
 .reg-ui-profile #levelTrack{margin-top:24px}
 @media(max-width:639px){.reg-ui-profile #trajectory .border:has(> #nextLevelName){padding:24px}.reg-ui-profile #nextLevelGap{font-size:10px}}
+
+/* Match the highlighted Next Level treatment across the entire scorecard. */
+body.reg-ui-profile .eco-card{--ground:var(--reg-ui-ink);--ink:var(--reg-ui-paper);--ink-soft:var(--reg-ui-paper);--rule:color-mix(in srgb,var(--reg-ui-paper) 25%,transparent)}
+body.reg-ui-profile .eco-card .dot{border-color:var(--reg-ui-paper)}
+body.reg-ui-profile .eco-card .dot.here{background:var(--reg-ui-paper);border-color:var(--reg-ui-paper)}
+body.reg-ui-profile .eco-card .dot.here:after{border-color:var(--reg-ui-paper)}
+body.reg-ui-profile .eco-card .seg{background:color-mix(in srgb,var(--reg-ui-paper) 25%,transparent)}
+body.reg-ui-profile .eco-card .seg.done{background:var(--reg-ui-signal)}
+body.reg-ui-profile .eco-card .bar{background:color-mix(in srgb,var(--reg-ui-paper) 25%,transparent)}
+body.reg-ui-profile .eco-card .fill,body.reg-ui-profile .eco-card .marker{background:var(--reg-ui-paper)}
+body.reg-ui-profile .eco-card .gap{background:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--reg-ui-paper) 45%,transparent) 0 2px,transparent 2px 5px)}
+body.reg-ui-profile .eco-card .hero.provisional .score,body.reg-ui-profile .eco-card .hero.provisional .of,body.reg-ui-profile .eco-card .hero.provisional .tier{color:var(--reg-ui-paper)}
