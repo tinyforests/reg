@@ -105,6 +105,9 @@ def render_profile(template, record, entry):
     rendered = rendered.replace("'Part of ' + c.cluster_name + ' cluster.'", "'Cluster not recorded.'")
     rendered = rendered.replace("txt('curbingNote',   'This garden", "txt('curbingNote', c.cluster_name ? 'This garden")
     rendered = rendered.replace("'ha of measured ecological function.' : '.'));", "'ha of measured ecological function.' : '.') : 'Connectivity will be documented through Registry review.');")
+    rendered = rendered.replace("+ b.weed_pressure_baseline +", "+ (b.weed_pressure_baseline == null ? '—' : b.weed_pressure_baseline) +")
+    rendered = rendered.replace('Logs + voids', 'Designer-submitted count')
+    rendered = rendered.replace('No coordinates in data', 'Garden location not yet mapped')
     return rendered
 
 

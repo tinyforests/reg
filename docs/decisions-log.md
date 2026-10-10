@@ -540,3 +540,10 @@ assets/css/designer-portal.css, js/designer-portal.js, scripts/appsscript/Code.g
 scripts/promote_designer_submission.py, scripts/sync_registry.py, data/registry.json,
 scripts/test_designer_portal.cjs, scripts/test_designer_publication.py and
 docs/designer-pilot.md.
+
+Validation: practice-isolation and publication tests passed, including consent,
+revocation, idempotency and privacy. All 28 scoring parity fixtures passed.
+Local browser submission, lock and 390px mobile layout passed. Profile service
+deployed as version 37; unauthorised live read/admin/submit requests were denied.
+The required enrolment reconciliation retains the same two pre-existing missing
+publication-ID gaps (SUB-1785378850902-TPUDI, SUB-1785920220843-UQVX6).
