@@ -509,3 +509,5 @@ When in doubt, log it.
 **Validation:** Auth denial/success and UI non-disclosure tests; canonical-link and document migration checks; promotion self-test.
 
 **Files affected:** Garden profiles/field-note routes, data URL fields, referring pages/docs, private-detail JS, Apps Script endpoint, promotion script.
+
+**Deployment:** Profile-service Apps Script deployment advanced from version 33 to version 35 on 10 October 2026. The edited source was read back and matched the tested repository source exactly (length 68,703 characters; hash 72d2117c). The separate newsletter enrolment deployment remains at version 34. A live unauthenticated private-address request is denied without returning an address.
