@@ -106,3 +106,12 @@ html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#
 @media(min-width:1024px) and (max-height:800px){.reg-ui-profile main>section:not([style*="display:none"]):not([style*="display: none"]){padding-block:28px}}
 @media(min-width:1024px){body.reg-ui-profile>header>div:first-child{min-height:72px}}
 @media(min-width:1024px){body.reg-ui.reg-ui-profile>header>div:first-child{min-height:72px}}
+
+/* Trajectory: keep the next-level panel readable in both themes. */
+.reg-ui-profile #trajectory .border:has(> #nextLevelName){background:var(--reg-ui-ink);color:var(--reg-ui-paper);padding:28px;border-color:var(--reg-ui-line)}
+.reg-ui-profile #nextLevelName{font-family:"Abril Fatface",serif;font-size:clamp(1.8rem,2.7vw,2.5rem);font-weight:400;line-height:1.15;letter-spacing:-.025em;max-width:20ch;margin-bottom:18px;text-wrap:balance}
+.reg-ui-profile #nextLevelGap{font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.8;letter-spacing:.015em;opacity:1;margin-bottom:22px}
+.reg-ui-profile #nextLevelBar{background:currentColor}
+.reg-ui-profile #trajectory .border:has(> #nextLevelName)>.h-1\.5{background:color-mix(in srgb,currentColor 18%,transparent)}
+.reg-ui-profile #levelTrack{margin-top:24px}
+@media(max-width:639px){.reg-ui-profile #trajectory .border:has(> #nextLevelName){padding:24px}.reg-ui-profile #nextLevelGap{font-size:10px}}
