@@ -547,3 +547,27 @@ Local browser submission, lock and 390px mobile layout passed. Profile service
 deployed as version 37; unauthorised live read/admin/submit requests were denied.
 The required enrolment reconciliation retains the same two pre-existing missing
 publication-ID gaps (SUB-1785378850902-TPUDI, SUB-1785920220843-UQVX6).
+
+
+## 12 Oct 2026 — Developer principles and evidence-led government pathway
+
+At Tyson’s request, add For developers to the homepage and publish a dedicated
+development entry describing proposed baseline, retention, delivery, establishment
+and handover principles. Use the existing garden method without inventing a new
+star system, legal mandate, partner, threshold, ecological gain or permit benefit.
+Research NatHERS adoption from primary government/CSIRO sources; distinguish
+minimum building regulation from disclosure. Frame a costed independent pilot as
+the first government ask, complementing existing garden, canopy and vegetation
+controls. Explicitly expand VISION’s earlier record-keeping-only framing for this
+developer proposal while retaining binding council privacy/probity commitments.
+The enquiry form prepares a user-reviewed email draft locally; no server storage
+or automatic transmission. Files: developers.html, js/developers.js,
+assets/css/developers.css, index.html, assets/css/registry-home.css, VISION.md,
+docs/developer-policy-roadmap.md, docs/developer-government-brief.md and this log.
+
+Validation: desktop and 390px/1024px responsive checks passed with no horizontal
+overflow; professional links are visible at the top on mobile. Local enquiry
+preparation and stale-draft clearing passed; no email was sent. IDs, anchors,
+internal routes and JS syntax passed. No garden data, scoring or backend changed.
+The existing submission reconciliation still reports the same two earlier missing
+publication-ID gaps; this presentation/policy work does not change those records.

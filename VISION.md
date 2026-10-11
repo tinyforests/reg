@@ -67,7 +67,7 @@ Regulatory framing reads as a threat to voluntary programs and to the residents 
 
 ### 3. Disclosure as the long-term mechanism
 
-Measured building performance became standard not through prohibition but through **disclosure** — a rating that has to be revealed at the point of sale or lease.
+Building energy ratings became embedded through minimum performance requirements in building regulation. **Disclosure** is a complementary pathway for making performance visible at property transfer; it is not the sole explanation for adoption. See `docs/developer-policy-roadmap.md` for the researched history.
 
 Ecological performance disclosed at property transfer is the equivalent, and the Steward Vault / Share Pack is already the vehicle. A garden's ecological record travels with the title. The next steward inherits the data, not a blank slate.
 
@@ -88,3 +88,15 @@ Everything above is unavailable until these close.
 ## The measure of the whole thing
 
 Because when we change what we value, we change what we measure. What we measure, we improve. What we improve shapes the future.
+
+
+## Developer pathway — 12 October 2026
+
+At Tyson’s explicit direction, develop a public developer entry and a researched
+path towards government recognition and ecological accountability. This expands
+the earlier record-keeping-only framing for development sites. The immediate
+proposal is a voluntary, independently evaluated pilot, not an operative compliance
+standard. Existing council privacy, consent and commercial-separation commitments
+remain unchanged. Preserve the distinction between a garden score and proven net
+biodiversity gain; reference benchmarking and independent verification remain
+prerequisites for policy use. See `docs/developer-policy-roadmap.md`.

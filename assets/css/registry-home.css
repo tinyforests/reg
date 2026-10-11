@@ -125,3 +125,9 @@ html{scroll-padding-top:76px}
 .hero-record .eco-card .dot.here:after{border-color:var(--bg)}
 .hero-record .eco-card .seg{background:color-mix(in srgb,var(--bg) 25%,transparent)}
 .hero-record .eco-card .seg.done{background:var(--signal)}
+
+/* Professional entry points remain at the top on small screens. */
+.registry-mobile-audiences{display:none}
+@media(min-width:768px) and (max-width:1099px){.registry-nav>div{flex-wrap:wrap;gap:10px}.registry-nav>div>.flex{width:100%;justify-content:space-between;gap:12px}}
+@media(max-width:767px){.registry-nav>div{flex-wrap:wrap;row-gap:10px}.registry-mobile-audiences{display:flex;flex-basis:100%;gap:22px;font:11px/1.5 "IBM Plex Sans",sans-serif;padding-top:8px;border-top:1px solid var(--hair)}.registry-mobile-audiences a{color:var(--muted)}}
+@media(min-width:1024px) and (max-width:1099px){html{scroll-padding-top:96px}.registry-hero.registry-hero,.registry-section{min-height:calc(100svh - 96px)}}
