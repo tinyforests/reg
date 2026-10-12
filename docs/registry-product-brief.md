@@ -14,9 +14,9 @@ In practice this means:
 - The Registry is the data source for Yield once activated. Yield reads scores, eligibility, and area from the Registry. The integrity of those values is the integrity of the entire economic layer downstream.
 - The Registry's public surface should communicate measurement, not marketing. Per AI_CONTEXT.md: do not make the registry sound like a directory.
 
-## The three operational audiences
+## The five operational audiences
 
-The four-stage spine in SUPER_MIND.md describes the *system*. Inside the Registry product, there are three audiences whose needs the build must serve:
+The four-stage spine in SUPER_MIND.md describes the *system*. Inside the Registry product, there are five audiences whose needs the build must serve:
 
 **Stewards.** Homeowners with ecological gardens. Their primary surface is the profile page. Their need is recognition, evidence of permanence, and eventually income for ecological work. Profile pages travel with the property. Frame: legacy.
 
@@ -24,7 +24,11 @@ The four-stage spine in SUPER_MIND.md describes the *system*. Inside the Registr
 
 **Investors and sponsors.** Foundations, corporate sustainability programs, philanthropic. Their primary surface is the Yield framing and aggregated impact. Their need is verified biodiversity outcomes. Frame: biodiversity infrastructure, honestly stated.
 
-Every page in the Registry should be legible to all three without alienating any.
+**Designers.** Invited practices use `/designer-dashboard.html` for their own private submissions and real attributed public portfolio. `/designer-invite.html` is the introduction. The server fixes attribution and self-reported status; Registry review and repository publication remain distinct from independent verification. See [designer-pilot.md](designer-pilot.md).
+
+**Developers.** `/developers.html` introduces proposed pre-works baselines, retention, delivery, establishment and handover principles. It prepares a user-reviewed email enquiry locally. There is no developer account, project submission backend, statutory rating, confirmed pilot cohort or government endorsement. See [developer-government-brief.md](developer-government-brief.md) and [developer-policy-roadmap.md](developer-policy-roadmap.md).
+
+Audience entry points should share the method, record and trust boundaries while serving their distinct needs.
 
 ## The honest revenue sequence
 
@@ -53,3 +57,12 @@ Reinforced from SUPER_MIND.md as engineering invariants:
 - Not a plant ID app. Plant ID lives in fmeg/fmevc/fmnp.
 
 If a feature request drifts toward any of these, surface the conflict before building. Refer to SUPER_MIND.md.
+
+## Developer policy boundary
+
+The current garden score remains unchanged. A future regulatory method needs
+independent verification, reference-relative benchmarks, baseline continuity,
+area/retention measures and establishment evidence. Extra points do not prove
+biodiversity net gain or authorise removal of protected vegetation. Developer
+pilot fees and responsibility terms are to be scoped; they are not a new active
+revenue line. Council privacy and commercial-separation commitments apply unchanged.

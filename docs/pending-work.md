@@ -11,28 +11,22 @@ condition — duplicate award inflating badge counts across all records. Affects
 public "badges awarded" aggregate and the X of N denominator. Needs an audit of the
 full catalogue for other duplicate conditions before any re-award.
 
-### Scorecard: expose `status` on the synced record (provisional variant plumbing)
+### Canonical/index status consistency — audit remains open
 
-The new Ecological Function scorecard (`buildEcoCard`, piloted on Arundel) has a
-**provisional variant** gated on `status ∈ {Design Proposal, Provisional}` (NO_BADGE_STATUSES).
-The branch is wired but **inert**: `status` lives only in `registry.json`, not on the
-per-garden data file the card renders from (e.g. `montAlbert.json` has `status: null`).
-So the one provisional garden — **Mont Albert** (`ER-AU-VIC-CAN-MON-001`, Design Proposal) —
-still renders as verified.
+The scorecard’s provisional variant depends on the canonical record’s `status`.
+Some existing records still differ from the registry index: The Refuge
+(ER-AU-VIC-CAN-MON-001) has canonical `status: null` while its index is
+`Active / Establishing`, score 76. The earlier description of that record as a
+score-zero Design Proposal is obsolete. Audit and reconcile source ownership
+before changing status propagation; do not infer verification from a missing field.
+New designer records explicitly carry Provisional status by default.
 
-**Needed**: `sync_registry.py` should copy each garden's `registry.json` `status` into its
-data file (like it already does for `score`/`rating`), so the card can branch. Until then
-the provisional card cannot fire. (Logged rather than fixed during the scorecard pilot, per instruction.)
+### Private address access — profile row shipped; admin directory remains open
 
-### Admin: garden ID → address mapping
-
-Garden names and URL slugs must never encode a street address or house number (e.g. "88 Windella" → renamed to "Smokebush", `/gardens/windella88/` → `/gardens/g-f41e67766569/`). G&S still needs to know the physical address behind each `garden_id` for site visits, verification, and records.
-
-**Needed**: a private admin page (password-gated or assessor-key-gated) that lists `garden_id → steward name → street address → council` for internal use. Could live at `/admin/gardens.html` reading from a separate `data/garden-addresses.json` not committed to the public repo, or using an assessor key to show a hidden column in assess.html.
-
-No public surface should ever display or derive a physical address from a garden name or URL slug.
-
-
+Neutral profile routes and a server-authenticated Garden Facts address row shipped
+10 Oct 2026. Private `Garden Addresses` and other authorised private sources supply
+the address. `er_admin=1` is a UI flag, not authentication. A separate bulk admin
+directory is not built; do not expose an address mapping in public JSON.
 
 ### Self-Enrolment ramp → assess.html bootstrap — TOP PRIORITY
 
@@ -85,7 +79,7 @@ DONE:
 3. Wiring — DONE for profiles + assess.html (commit 99d0974). Piloted on Arundel, then rolled the identical template change to the other 14 profiles. Profiles lead with ecological moves + a 'Strengthen your record' group; assess.html uses enrolment framing (pts-to-next-tier + ranked moves). Delivery routes shown by LABEL ONLY — no cost on either public surface. designer_install stays dormant until managed_by lands.
 
 STILL TO DO:
-4. Designer portal (designer.html) — still NOT built on main and NOT wired. Separate product decision; needs its own scoping conversation before it exists. This is the one surface where cost bands and designer-filtered gardens are meant to appear, so it pairs with the designer-attribution build below.
+4. Designer opportunity routing, cost-band presentation and ongoing management remain unbuilt. The invited submission/review/portfolio portal shipped 10 Oct 2026 at designer-dashboard.html; it does not implement this later commercial workflow.
 
 Small follow-up noticed during wiring: the engine's own renderOpportunities(_, 'steward') helper includes cost in its delivery line, which contradicts the no-cost-on-public decision. The wired profiles/assess do NOT use that helper (they render inline, cost-free), so nothing leaks today — but the helper itself should be reconciled (drop cost from steward mode) before anything else consumes it.
 
@@ -129,42 +123,46 @@ STILL TO DO:
 
 All JS modules (reg-score, reg-opportunities, reg-claims, badge-engine) are loaded where they should be, and no <script src> points at a missing file. What is NOT wired:
 - assess.html — zero inbound links (see entry above).
-- designer-invite.html — an "An Invitation to Designers" page exists but nothing links to it, and it has no token, no portal link, and no managed_by awareness. It predates the access model and pairs with the designer-attribution build.
+- designer-invite.html — now linked from the homepage and to the functional invited portal. Ongoing opportunity routing remains pending.
 - designer_install delivery paths — built, parity-tested, and dormant. Invisible until a garden carries managed_by.
 - data/badge-definitions.json — DEAD. badge-engine.js embeds its definitions inline instead, so this JSON is an unread duplicate and a drift risk. Safe to delete.
 - data/gardens.json — appears superseded by registry.json, which is what every surface actually reads. Safe to delete after a check.
 - Legacy orphans (index-old.html, profile.html, score.html, badges.html, yield-demo.html, nicholson-field-report001.html) — mostly intentional standalones, low priority, deliberately untouched.
 
-### Designer attribution + portal access model — scoped, not built
+### Designer pilot — shipped 10 Oct 2026; ongoing management remains open
 
-Purpose (from Tyson): the designer portal (designer.html, drafted from a Fable 5 review, not yet wired to anything live) isn't just an internal G&S work queue — it's meant to onboard EXTERNAL designers who add their own client gardens to the registry, then keep managing those gardens over time. When a designer's garden shows an opportunity (e.g. steward wants 4 more indigenous plants), it surfaces to the DESIGNER who has that client relationship, not generically to G&S. This is a retention + revenue mechanism for designers, and a growth mechanism for the registry (every external designer who joins adds gardens for free and has an ongoing reason to keep engaging with the platform).
+See [designer-pilot.md](designer-pilot.md). Active: admin invitations, per-practice
+authentication, private exact-input submissions and revisions, review queue,
+public portfolio attribution, reviewed repository publication and live confirmation.
+Credential hashes and private contacts live in private sheets. The earlier public
+`data/designers.json` token proposal is superseded and must not be implemented.
+New designer records carry `managed_by`; existing records are not blanket-assigned
+management relationships. Attribution does not grant verification.
 
-Decided:
-1. Access model: unique unguessable link per designer (e.g. designer.html?key=<token>), NOT a shared password and NOT full login/account infrastructure. Reasoning: delivers real per-designer privacy (each only sees their own gardens' opportunities) without building a full auth system before there's evidence designers will use this. Revisit real accounts (login + sessions) if/when designer volume outgrows manual link management.
-2. Onboarding: MANUAL for now — Tyson adds each designer himself (mirrors how gardens were added originally), generates their token, shares their link personally. Not self-service yet. Revisit self-registration (mirroring the Self-Enrolment Ramp pattern) if manual onboarding becomes a bottleneck.
-3. Data model:
-   - New data/designers.json: array of { designer_id, name, contact_email, access_token, added_date }
-   - Each garden record gets a managed_by field: { type: 'gs' | 'designer' | 'self', designer_id: <only if type is designer> } — existing 14 G&S gardens get type 'gs', Self-Enrolment Ramp gardens (e.g. Separation Creek) get type 'self', future designer-added gardens get type 'designer' + their designer_id.
-4. Designer portal (designer.html) needs rework once this lands: read the ?key= token from the URL, resolve to a designer_id via designers.json, filter the gardens list to only managed_by.designer_id === that designer. Currently the portal shows ALL gardens with no filtering — that's the main change needed, on top of whatever the delivery-model redesign (see separate pending-work entry) requires for opportunity rendering.
+Open: ongoing field-note/photo editing for designers, opportunity routing,
+commercial terms/billing and any later self-registration decision.
 
-NOT YET DONE:
-- designers.json doesn't exist
-- managed_by field doesn't exist on any garden record
-- designer.html has no token-reading or filtering logic
-- No process yet for HOW a designer actually adds a new garden to the registry (this is presumably a new form/flow, separate from both the G&S-verified path and the Self-Enrolment Ramp — needs its own scoping)
-- No decision yet on what a designer sees/can do beyond viewing opportunities (can they edit garden records? add photos? that's a permissions question not yet addressed)
+### Developer policy pathway — public entry shipped; validation and adoption pending
 
-This sits alongside (and should probably be sequenced together with) the opportunity engine delivery-model redesign (see 'Opportunity engine — landed, unwired, delivery model redesign in progress' entry) — the designer_install delivery path only makes sense once a garden actually has a designer attached to route it to.
+`developers.html` and homepage links shipped 12 Oct 2026. The local enquiry prepares
+an email draft; there is no developer submission backend or funded/approved pilot.
+See [developer-policy-roadmap.md](developer-policy-roadmap.md) and
+[developer-government-brief.md](developer-government-brief.md).
 
-#### How a designer adds a garden — scoped
+Next: independent ecological review, reference benchmarks and hard retention gates,
+assessor reliability tests, costed cohort/comparison design, consent/probity/legal
+review, agreed establishment responsibilities and follow-up. Pilot outcomes precede
+any proposed statutory minimum, government recognition or property disclosure.
 
-Submission method: MANUAL for now, same process Tyson already uses for G&S gardens. Designer tells Tyson about the garden (email/call), Tyson creates the garden record and attaches managed_by: { type: 'designer', designer_id: <theirs> }. No new form built yet.
+### Designer publication verification mismatch — resolve before third-party use
 
-Rationale: a designer knows precise data (exact species count, exact layer structure from their own planting plan) rather than a homeowner's guess — reusing the public Self-Enrolment Ramp form as-is would waste that precision by asking imprecise, homeowner-friendly questions. But building a dedicated professional-precision form is real work worth deferring until the manual process has run a few times and reveals what actually needs asking. Natural evolution once patterns emerge: same 12 pillar fields, relabeled for professional precision (e.g. 'exact indigenous species count from your planting plan' instead of 'roughly how many species would you say').
-
-Trust level: designer-added gardens get NO special trust shortcut. They land as 'pending' in the exact same review workflow as any public steward self-enrolment — same Provisional tab, same visual quarantine, same manual review-and-verify step before appearing on the Registered tab. Rationale: fast-tracking designer submissions to verified without review risks a designer (even unintentionally) inflating their own client's score straight onto the public Registered tab alongside G&S-verified gardens — since 'verified' currently means the same thing everywhere, any credibility gap discovered later would damage trust in every verified garden, not just that one. Personal relationship with a manually-onboarded designer can make review FASTER in practice without needing a coded fast-track tier. Revisit a real trusted-designer tier only if/when a specific designer has an established track record (e.g. multiple gardens reviewed clean with no corrections) — earned by evidence, not granted upfront.
-
-Designer account creation: happens BEFORE any garden submission (confirmed earlier in this entry) — matches the manual-onboarding decision; giving a designer their unique link is also the natural moment to explain how garden submission works.
+`promote_designer_submission.py` accepts `third_party_verified`, but the current
+JS/Python scoring engines do not recognise that value as a verification tier.
+The helper can label a record verified while the profile engine displays Unverified.
+Do not use that option as an independent verification credential until the schema,
+labels, status and engines are aligned and meaningfully tested. This documentation
+review does not change scoring or silently award a new tier. The default
+self-reported publication path remains the documented starting point.
 
 ### Sitewide mailto: sweep + modal semantic refresh
 

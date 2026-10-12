@@ -2,7 +2,7 @@
 
 **Ecological Registry — the standard measure of ecological performance for gardens**
 
-Status: v1.0 · 8 August 2026 · Tyson Lundbech, Gardener & Son
+Status: v1.1 · updated 12 October 2026 · Tyson Lundbech, Gardener & Son
 
 ---
 
@@ -34,7 +34,7 @@ Whoever eventually acquires this buys ledger authority and institutional trust. 
 
 Permit-stage greening tools already exist and are becoming mandatory in parts of Melbourne. They score a *proposal*: canopy area, permeable surface, green roofs and walls, modelled at the point of application and assessed once.
 
-That is a prediction of intent. It is assessed before a single plant goes in the ground and never revisited. It does not distinguish an indigenous understorey from a row of exotic hedging with equivalent leaf area. It holds no record of what was on the site before.
+Design-stage tools assess intended outcomes. Existing planning instruments can also require retention, delivery or maintenance; their coverage varies. The Registry proposes a continuing record linking the pre-works baseline, installation and established condition, with ecological context and evidence visible at each stage.
 
 The Registry occupies the other half of the pair:
 
@@ -42,8 +42,8 @@ The Registry occupies the other half of the pair:
 |---|---|---|
 | When | At permit | As built, then ongoing |
 | Measures | Proposed green infrastructure | What is actually growing and functioning |
-| Lifespan | One assessment | Persistent record, updated over time |
-| Holds a baseline | No | Yes |
+| Lifespan | Depends on tool and planning requirements | Persistent record, updated over time |
+| Holds a baseline | Depends on tool and evidence | A dated baseline where evidence exists; gaps labelled |
 
 Both are needed. Only one of them can tell you whether anything actually happened.
 
@@ -53,15 +53,15 @@ Both are needed. Only one of them can tell you whether anything actually happene
 
 The reason nobody can be held accountable for a wiped block is not a missing rule. It is a missing *before*.
 
-Native vegetation offsets do not trigger, because a planted suburban garden is not native vegetation. Canopy controls protect a trunk, not an ecosystem. There is no record of the soil, the understorey, the habitat structure, or the species present — so there is nothing to be accountable *to*.
+Native-vegetation and canopy protections must be considered for the particular site. They do not provide a universal substitute for a dated record of garden soil, understorey, habitat and species. The opportunity is to complement existing controls with ecological continuity, not assert that development is unregulated.
 
-Capture the baseline and the accountability question answers itself later. A future requirement to rebuild ecological performance has no alternative dataset to reference, because no other dataset exists.
+Capture the baseline before disturbance so later delivery and recovery claims can be compared with evidence. A useful record supports accountability; an obligation still needs a lawful mechanism, independent governance and an evaluated method.
 
 Practically: baseline records captured at point of sale, at subdivision, and at design-proposal stage — before the machines arrive.
 
 ### 2. Record-keeping, not regulation
 
-The Registry is never presented to councils as a future compliance burden or an accountability mechanism. It is presented as ecological record-keeping infrastructure that makes their existing work persistent.
+For voluntary residential council programs, the Registry is presented as ecological record-keeping infrastructure that makes existing work persistent. The developer pathway separately explores future policy recognition through a voluntary, independently evaluated pilot; it does not impose a compliance obligation on participants in existing programs.
 
 Regulatory framing reads as a threat to voluntary programs and to the residents inside them. It costs goodwill now for leverage that may be a decade away. The record is the durable thing; the leverage is a consequence of holding it.
 
@@ -69,13 +69,13 @@ Regulatory framing reads as a threat to voluntary programs and to the residents 
 
 Building energy ratings became embedded through minimum performance requirements in building regulation. **Disclosure** is a complementary pathway for making performance visible at property transfer; it is not the sole explanation for adoption. See `docs/developer-policy-roadmap.md` for the researched history.
 
-Ecological performance disclosed at property transfer is the equivalent, and the Steward Vault / Share Pack is already the vehicle. A garden's ecological record travels with the title. The next steward inherits the data, not a blank slate.
+Ecological performance disclosed at property transfer is the equivalent, and the Steward Vault / Share Pack is already the vehicle. The proposed ecological history follows property handover; it is not currently a title-registered obligation. The next steward inherits the data, not a blank slate.
 
 ## The two gaps that disqualify a standard
 
 Everything above is unavailable until these close.
 
-**Independent verification.** A standard that only its author can apply is a private opinion with good typography. `verifier` is currently null on every record. The method must be applicable, repeatably, by a trained third party — G&S, stewards, designers, council officers — with source and verification status recorded honestly rather than pretending all evidence is equivalent.
+**Independent verification.** A standard that only its author can apply is a private opinion with good typography. Independent verification infrastructure remains incomplete; verification must be described from the actual record and method, not assumed from a designer attribution or a supplied third-party report. The method must be applicable, repeatably, by a trained third party — G&S, stewards, designers, council officers — with source and verification status recorded honestly rather than pretending all evidence is equivalent.
 
 **Reference-relative benchmarking.** Fixed absolute species-count thresholds produce a *score*. Benchmarking against the reference community for the site produces a *measure*. A 40-species garden in a grassland EVC and a 40-species garden in a wet forest EVC are not the same ecological result, and any statutory or institutional use will fail the framework at exactly this point.
 

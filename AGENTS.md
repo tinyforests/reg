@@ -83,6 +83,10 @@ If there is no test or precedent to confirm intent, surface the conflict before 
 
 | Topic | File |
 |---|---|
+| Documentation index and implementation status | `/docs/README.md` |
+| Developer principles and government discussion brief | `/docs/developer-government-brief.md` |
+| Energy-rating research and policy adoption roadmap | `/docs/developer-policy-roadmap.md` |
+| Invited designer portal and publication runbook | `/docs/designer-pilot.md` |
 | Engineering-specific product brief (audiences, revenue sequence) | `/docs/registry-product-brief.md` |
 | Scoring engine, rating tiers, verification, badges | `/docs/scoring-methodology.md` |
 | Garden JSON, registry.json, repository structure | `/docs/data-schema.md` |
@@ -99,6 +103,6 @@ For strategic frame, tone, and cross-property context: `/SUPER_MIND.md` and `/AI
 
 ## A note on this file
 
-`CLAUDE.md` mirrors this file for Claude compatibility. **`AGENTS.md` is canonical** in the engineering layer. If they ever drift, AGENTS.md wins and CLAUDE.md should be re-synced.
+`CLAUDE.md` is a thin compatibility pointer to this file. **`AGENTS.md` is canonical** in the engineering layer; maintain the pointer rather than duplicating an operating brief that can drift.
 
 `SUPER_MIND.md` sits above both and is canonical for intent, tone, and cross-property frame.

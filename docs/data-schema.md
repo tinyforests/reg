@@ -17,7 +17,7 @@ The garden JSON carries **both inputs and snapshotted outputs**:
 /index.html                                  Landing page
 /registry.html                               Public registry list (reads registry.json snapshots)
 /gardens/
-  /[name][number]/index.html                 Profile page (reads /data/[name].json, recomputes)
+  /g-[12 hex characters]/index.html                 Profile page (reads /data/[canonical data_file].json, recomputes)
   /[name][number]/field-notes/YYYY-MM-DD.html
 /data/
   /registry.json                             Master snapshot file
@@ -25,8 +25,8 @@ The garden JSON carries **both inputs and snapshotted outputs**:
   /species.json                               Master species database
 /assets/                                     Images (target — base64 migration in progress)
 /docs/                                       Subsystem docs (this folder)
-/reg-score.js                                Scoring engine (canonical, ES5)
-/badge-engine.js                             Badge engine (canonical, ES5)
+/js/reg-score.js                                Scoring engine (canonical, ES5)
+/js/badge-engine.js                             Badge engine (canonical, ES5)
 /AGENTS.md
 /CLAUDE.md
 ```
@@ -157,13 +157,13 @@ Shape taken from `york.json`. Fields are grouped by purpose.
     "gardens":  3,
     "area_ha":  0.074,
     "status":   "Forming"
-  },           // Garden coordinates — required for Leaflet map
+  },           // Privacy-safe display coordinates are optional; precise coordinates stay private
 }
 ```
 
 **Connectivity field duplication is a real schema bug.** `cluster_area_ha` (flat) and `cluster.area_ha` (nested) can disagree — in York's data they do: `0` and `0.074`. The scoring engine reads the flat one and assigns 0 cluster-area points; the list page reads the nested one and shows 0.074ha. Either field can be wrong without the other catching it. Consolidate when the schema is next refactored.
 
-**Map coordinates are optional.** If `connectivity.lat` and `connectivity.lng` are missing, the Leaflet map renders a "No coordinates in data" fallback. York's data is missing these — the map won't render. Add coordinates when populating new gardens.
+**Map coordinates are optional.** If `connectivity.lat` and `connectivity.lng` are missing, the Leaflet map renders a "No coordinates in data" fallback. York's data is missing these — the map won't render. Use reviewed privacy-safe display coordinates when available; unmeasured coordinates remain unknown and precise coordinates belong in private storage.
 
 ### Evidence (read by engines)
 
@@ -248,103 +248,83 @@ This is a curated, editorial list. New typologies should not be invented per-gar
 
 `registry.json` is the master snapshot. It is read by the registry list page and other surfaces (council reports, public summaries) without running the engines.
 
-```jsonc
+The current shape contains metadata and a `gardens` array. The following is a
+source-derived example as at 12 Oct 2026; its numbers are an illustration, not a
+second source of truth. Aggregate `statistics`, `network` and `leaderboard` blocks
+are not maintained: client views derive them from the appropriate record cohort.
+
+```json
 {
-  "registry_metadata": {
-    "version":         "1.0",
-    "schema_version":  "2.0",
-    "last_updated":    "Mar 2026",
-    "total_gardens":   11,
-    "data_custodian":  "Gardener & Son",
-    "contact":         "hello@gardenerandson.com"
-  },
-  "statistics": {
-    "average_score":         46,        // Averaged over gardens with score > 0
-    "total_badges_awarded":  42
-  },
-  "network": {
-    "total_gardens":           7,        // STALE — see below
-    "total_area_ha":           1.187,
-    "active_clusters":         6,
-    "gardens_in_establishment":5,
-    "avg_score":               50,       // STALE — disagrees with statistics.average_score
-    "total_species":           143,      // STALE — disagrees with species.json metadata
-    "total_badges":            30,       // STALE — disagrees with statistics.total_badges_awarded
-    "total_estimated_yield_aud": 1150,
-    "yield_note":              "Estimated annual yield if sponsor model activated. Formula v1.",
-    "yield_status":            "Pre-activation -- sponsor model pending",
-    "councils":                { "Boroondara": 6, "Stonnington": 1, "Whitehorse": 3, "Darebin": 1 },
-    "total_councils":          4
-  },
-  "leaderboard": {
-    "top_garden":                "Arundel",
-    "top_score":                 73,
-    "most_badges":               "Arundel",
-    "highest_upgrade_potential": "Nicholson",
-    "rankings": [
-      { "garden": "Arundel", "score": 73 }
-    ]
-  },
   "gardens": [
     {
-      "garden_id":          "ER-AU-VIC-WHI-YRK-001",
-      "garden_name":        "York Street",
-      "typology":           "Urban Ecological Retrofit",
-      "type":               "Ecological Home Garden",     // Legacy field — present on some entries
-      "suburb":             "Mont Albert",
-      "state":              "VIC",
-      "council":            "Whitehorse City Council",
-      "ward":               "Elgar",
-      "lga":                "Whitehorse",
-      "score":              52,
-      "rating":             { "current": "...", "next": "...", "points_to_next": 39 },
-      "primary_evc":        "Grassy Woodland (EVC 175)",
-      "bioregion":          "Victorian Volcanic Plain",
-      "status":             "Active / Establishing",
+      "garden_id": "ER-AU-VIC-WHI-YRK-001",
+      "garden_name": "York Street",
+      "typology": "Urban Ecological Retrofit",
+      "type": "Ecological Home Garden",
+      "suburb": "Mont Albert",
+      "state": "VIC",
+      "council": "Whitehorse City Council",
+      "ward": "Elgar",
+      "lga": "Whitehorse",
+      "score": 55,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Rich Habitat Garden",
+        "points_to_next": 6
+      },
+      "primary_evc": "Plains Grassy Woodland (EVC 55)",
+      "bioregion": "Gippsland Plain",
+      "status": "Active / Establishing",
       "verification_level": "gardener_and_son_verified",
       "verification_label": "G&S Verified",
-      "last_verified":      "Apr 2026",
-      "badge_count":        5,
-      "badges":             [ "gs_verified", "indigenous_dominant", ... ],
-      "profile_url":        "/gardens/york12/index.html",
-      "data_file":          "data/york.json",
-      "registry_role":      "Cluster Seed",
-      "trajectory":         "Rising",
-      "points_available":   48,
-      "cluster":            { "name": "Whitehorse", "gardens": 3, "area_ha": 0.074, "status": "Forming" }
+      "last_verified": "Apr 2026",
+      "badge_count": 5,
+      "badges": [
+        "indigenous_dominant",
+        "habitat_builder",
+        "amphibian_active",
+        "gs_verified",
+        "fauna_record"
+      ],
+      "profile_url": "/gardens/g-ddaa8ef4d381/index.html",
+      "data_file": "data/york.json",
+      "registry_role": "Cluster Seed",
+      "trajectory": "Rising",
+      "points_available": 48,
+      "cluster": {
+        "name": "Whitehorse",
+        "gardens": 3,
+        "area_ha": 0.074,
+        "status": "Forming"
+      },
+      "adjacent_garden_ids": [
+        "ER-AU-VIC-WHI-VIC-001"
+      ],
+      "designer": "Gardener & Son",
+      "designer_id": "gardener-and-son"
     }
   ]
 }
 ```
 
-## Known issues in registry.json
+## Registry snapshot discipline and remaining issues
 
-These need a coordinated cleanup pass. Logging here so they are not forgotten.
+`scripts/sync_registry.py` regenerates derived scores/ratings/badges from canonical
+inputs and maintains index attribution. Run its check mode under its documented
+private-coordinate requirements before applying a data migration. It removes
+stored aggregate blocks; public views compute aggregates for the intended cohort.
 
-1. **Two stats blocks disagree.** `statistics.average_score: 46` ≠ `network.avg_score: 50`. `statistics.total_badges_awarded: 42` ≠ `network.total_badges: 30`. `network.total_gardens: 7` but actual count is 11. The `network` block is stale. Either delete it or regenerate it; do not let two sources of truth coexist.
+After a garden change, reconcile canonical derived fields and the matching index
+entry together. Preserve private coordinate/address boundaries. The reviewed
+designer publication helper creates the canonical record, neutral profile and
+index entry as one source change; live confirmation then links private details.
 
-2. **`network.total_species: 143` is stale.** Project state says 166. Confirm against `species.json` metadata.
-
-3. **`type` vs `typology` drift.** Mont Albert has only `type`. Parring Road, Rupert, Windella, York Street have both. Arundel, Nicholson, Parring, Middlesex, Evelina, Dewrang have only `typology`. Pick one; migrate. Recommendation: `typology` is canonical.
-
-4. **`rating` shape inconsistency.** Mont Albert has `rating: "Design Proposal"` as a string. All others have `rating: {current, next, points_to_next}` as an object. The list page must handle both; ideally Mont Albert uses `rating: {current: "Design Proposal", next: null, points_to_next: 0}`.
-
-5. **`rating.next` bug.** Most entries report the maximum-tier as next instead of the immediate-next tier (see `reg-score.js` `nextLevel` bug above). Rupert is correct; everything else needs regeneration after the engine fix.
-
-6. **Some garden entries are missing fields.** Mont Albert lacks `registry_role`, `trajectory`, `points_available`, `cluster`. Each garden should have a complete shape — backfill or document why these are optional.
-
-## Registry.json strategy = Strategy A (snapshot)
-
-The list page reads scores and badges directly from `registry.json` rather than recomputing. This is fast but requires a build script (or careful manual process) that runs after every garden change:
-
-1. Read garden JSON.
-2. Run `scoreEcologicalRegistry(record)` and `awardBadges(record)`.
-3. Update garden JSON's `rating`, `upgrade_potential`, `points_available`, `yield` snapshot fields.
-4. Update the matching entry in `registry.json` (`score`, `rating`, `badges`, `badge_count`, `points_available`, `verification_level`, etc.).
-5. Recompute `statistics.average_score`, `statistics.total_badges_awarded`, `network.councils`, etc.
-6. Delete or regenerate the stale `network` block.
-
-Until a build script exists, this is manual. Easy to miss a step — flag it as the next infrastructure investment.
+Remaining audits include canonical/index status consistency, optional field
+coverage, legacy `type`/`typology` naming and advisory cluster scope. Historical
+May figures and earlier rating bugs are not current source assertions; use
+[current-state.md](current-state.md), [pending-work.md](pending-work.md) and actual
+JSON when checking drift. Yield remains inactive and must not be inferred from an
+aggregate or a score update.
 
 ## Species.json structure
 
@@ -381,3 +361,20 @@ All JSON files are written ASCII-only. When generating via Python, write with `e
 Garden profiles now use `/gardens/g-<12-character SHA-256 prefix>/index.html`, derived from the stable `garden_id`. New profiles use the same rule in `promote_submission.py`. Garden IDs, display names and data-file identities do not change. Existing street-name profile and field-note paths are noindex redirects that preserve the query string and fragment. The canonical profile paths and field-note references are updated in the public registry and garden records.
 
 Precise garden addresses are never stored in these public records. The private Garden Facts address row calls `get_private_garden_details` with a verified garden-scoped steward session or an admin token. `er_admin = 1` is a UI flag only; it cannot authorise that request.
+
+## Designer pilot private/public boundary
+
+Private `Designer Practices` holds identity, contact email, credential hash and
+status. Private `Designer Submissions` holds the candidate, address, steward email,
+evidence link, consents and review history. These are not public JSON files.
+
+The server derives practice identity from a validated token and forces initial
+self-reported/Provisional status. Public canonical records carry `designer`,
+`designer_id`, `managed_by: {type: "designer", designer_id: "..."}` and
+`source_submission_id`; these are attribution, not credentials or verification.
+`sync_registry.py` copies attribution into the public registry index. New designer
+JSON files and profiles use neutral IDs. See [designer-pilot.md](designer-pilot.md).
+
+The developer enquiry currently creates no stored project record or new schema.
+Proposed lifecycle assessments and policy thresholds require separately reviewed
+schema/method work; do not treat page principles as existing engine fields.

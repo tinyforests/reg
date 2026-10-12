@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file mirrors `AGENTS.md` for Claude compatibility. **`AGENTS.md` is the canonical agent operating brief.**
+This file points to `AGENTS.md` for Claude compatibility. **`AGENTS.md` is the canonical agent operating brief.**
 
 If you are Claude (Claude Code, Claude.ai, or any other surface), read `AGENTS.md` and the relevant files in `/docs/` before making changes.
 

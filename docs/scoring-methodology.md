@@ -117,13 +117,13 @@ Two implementations exist:
 - **JavaScript** — `js/reg-score.js`, client-side, runs in the browser on profile pages and in `assess.html`
 - **Python** — `scripts/reg_score.py`, for build scripts and server-side use
 
-Both produce identical scores for identical inputs. Run `python scripts/test_parity.py` to verify. The test runs all 13 garden JSONs through both engines and asserts identical pillar scores and totals.
+Both produce identical scores for identical inputs. Run `python scripts/test_parity.py` to verify. The test runs the available garden JSON fixtures through both engines and asserts identical pillar scores and totals. Fixture count changes as records are added.
 
 When changing scoring:
 
 1. Update the JavaScript implementation (`js/reg-score.js`).
 2. Update the Python implementation (`scripts/reg_score.py`) to match.
-3. Run `python scripts/test_parity.py` — must be 13/13 before committing.
+3. Run `python scripts/test_parity.py` — all selected fixtures must pass before committing.
 4. Update the **Pillar point allocations** section above to match.
 5. Recalculate every garden's score and rating (and `score_breakdown` if it's stored — see open question in `/docs/data-schema.md`).
 6. Recalculate `registry.json` statistics.
@@ -322,3 +322,16 @@ Two qualitative fields on every garden:
 - **`trajectory`**: `Rising` | `Stable` | `Emerging`
 
 These are assigned editorially, not algorithmically. They give the registry a narrative layer beyond the score and are used in council and investor documents.
+
+## Developer policy use — proposed, not implemented
+
+The developer entry does not change weights, tiers, badges or verification rules.
+A score increase alone does not establish biodiversity net gain, restoration of
+removed mature habitat or functioning connectivity. Future policy use requires
+independent repeatability testing, reference-relative benchmarks, pre-works
+baselines, retained-asset and area measures, and establishment evidence.
+See [developer-policy-roadmap.md](developer-policy-roadmap.md).
+
+`third_party_verified` is not a recognised current engine level. The designer
+publication helper’s option needs reconciliation before it can represent a verified
+third-party outcome; see [pending-work.md](pending-work.md).

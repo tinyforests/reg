@@ -571,3 +571,19 @@ preparation and stale-draft clearing passed; no email was sent. IDs, anchors,
 internal routes and JS syntax passed. No garden data, scoring or backend changed.
 The existing submission reconciliation still reports the same two earlier missing
 publication-ID gaps; this presentation/policy work does not change those records.
+
+
+## 12 Oct 2026 — Documentation reconciliation after professional entry launches
+
+Verified the government brief and policy roadmap already tracked in the public
+repo are byte-identical to the supplied Markdown deliverables. Add a docs index
+and link both briefs from agent/product context. Reconcile five audiences, the
+shipped designer pilot, proposed developer pathway, private credential/data
+boundaries, theme/scorecard presentation and source-derived current inventory.
+Archive the May inventory instead of treating it as current. Qualify broad
+regulatory/baseline claims in VISION and retain council commitments unchanged.
+Record the existing third-party verification option/engine mismatch as unresolved;
+this docs-only task changes no scoring, records, backend or policy mandate.
+Files: AGENTS.md, CLAUDE.md, AI_CONTEXT.md, VISION.md, docs/README.md,
+registry-product-brief.md, current-state.md and its archive, pending-work.md,
+designer-pilot.md, data-schema.md, design-system.md, scoring-methodology.md and this log.

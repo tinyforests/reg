@@ -1,6 +1,6 @@
 # Design System
 
-The Registry uses Tailwind CSS (CDN build) with a custom colour palette and a single global geometry rule. These are the actual tokens from the profile template — match these exactly when adding new pages.
+The legacy/profile surfaces use Tailwind CSS (CDN build); the designer and developer entries use dedicated plain CSS with the same palette, typography and geometry. These are the actual tokens from the profile template — match these exactly when adding new pages.
 
 ## Palette (Tailwind tokens)
 
@@ -14,7 +14,7 @@ The Registry uses Tailwind CSS (CDN build) with a custom colour palette and a si
 | `rdl` | `rgba(255,240,220,0.12)` | Registry Dark Line — borders on dark surfaces |
 | `signal` | `#7a9e5f` | Signal Green — the hero score box, fauna sighting cues, map markers |
 
-The Tailwind config in every page header must include all seven tokens. Do not introduce additional colours without a decision-log entry.
+Tailwind pages include the seven tokens; plain-CSS pages provide equivalent variables. Do not introduce additional colours without a decision-log entry.
 
 **Note on Signal Green:** The Registry uses `#7a9e5f`. Village Rewards uses `#a8c285` (lighter, brighter). These are different products with different signal greens — do not unify them by accident.
 
@@ -23,7 +23,7 @@ The Tailwind config in every page header must include all seven tokens. Do not i
 - **Canopy** = dark mode = `<html class="dark">`. **This is the default.**
 - **Understory** = light mode = `<html class="light">` (or absence of `dark`).
 
-The theme toggle button labels itself with the **current** mode (button says "Canopy" while in dark mode, "Understory" while in light mode). Preference is stored at `localStorage['reg-theme']` as `'dark'` or `'light'`.
+The theme toggle button labels itself with the **current** mode (button says "Canopy" while in dark mode, "Understory" while in light mode). New entry pages and the homepage store `localStorage['reg_mode']` as `'dark'` or `'light'`; entry pages accept the legacy `reg-theme` value when no newer preference exists.
 
 **Inversion rule:** the palette is paired (`rg ↔ rb`, `rs ↔ rdp`, `rl ↔ rdl`) and Tailwind's `dark:` variant handles the flip. Do not write per-component dark mode overrides outside the token system. Bar tracks in Canopy mode use `rgba(255,240,220,0.12)`.
 
@@ -57,14 +57,13 @@ Some sibling products use different display fonts (YIELD uses Fraunces, Heirloom
 
 ## Hero score box
 
-Embedded in the hero on the right (lg:col-span-4). Background uses the Signal Green token (`#7a9e5f`) with `color: #3d4535`. Contents:
-
-- Two stacked panels: score (4.5rem digits) and badges (4.5rem digits)
-- Rating tier label as a small pill below
-- Progress bar from 0 to score with baseline and target markers underneath
-- Earned badges as a flex-wrap row of pills at the bottom, verification and corridor-node badges shown stronger
-
-This box appears on every profile page. It is rendered from `scoreEcologicalRegistry(record)` and `awardBadges(record)` — do not hard-code values.
+The Ecological Function scorecard is rendered from the scoring and badge engines.
+The highlighted card uses the inverse green/beige pairing, matching the trajectory
+Next Level panel: beige in Canopy and green in Understory. It contains score,
+verification/provisional context, a tier track, next-level text and earned badges.
+Site-potential display is conditional on `target_score`; no target is invented.
+The scorecard’s provisional variant withholds badge awards when the canonical record carries the appropriate status; see the status-consistency audit in pending work. See the current profile code and
+`assets/css/registry-home.css` / `assets/css/registry-pages.css` for implementation.
 
 ## Profile page section order
 
@@ -92,7 +91,7 @@ The Network Position section embeds a Leaflet map with the CARTO `light_all` til
 
 Three marker classes (`.reg-marker`, `.park-marker`, `.adj-marker`) provide the only allowed circles in the design system. Popup wrappers respect the no-radius rule. Map zoom defaults to 14, scroll-wheel zoom disabled.
 
-If the garden JSON is missing `connectivity.lat` / `connectivity.lng`, the map renders a fallback "No coordinates in data" message. Always supply coordinates.
+If the garden JSON is missing `connectivity.lat` / `connectivity.lng`, the map renders a fallback "No coordinates in data" message. Leave an unmeasured location unknown; never invent or publish precise property coordinates to make a map appear. Use reviewed privacy-safe display coordinates when available.
 
 ## Notification system
 
@@ -116,3 +115,15 @@ The landing page is also the public registry entry point. It carries:
 - Steward signup CTA
 
 The landing page is the visual reference. If a profile and the landing page disagree visually, the landing page wins and the profile re-syncs.
+
+## Professional entry pages and viewport layout
+
+`designer-dashboard.html` uses `assets/css/designer-portal.css`; `developers.html`
+uses `assets/css/developers.css`. Both share square cards, paired colours and the
+three Registry font families. Public entry states must distinguish active features
+from proposed pilot or policy functionality.
+
+Homepage professional links appear in the desktop navigation and a top secondary
+row on mobile. Short desktop sections use the viewport below the sticky header;
+long forms, principle grids and mobile content grow naturally without cropping.
+Maintain the actual header allowance at tablet widths and check for overflow.

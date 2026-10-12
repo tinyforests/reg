@@ -37,9 +37,13 @@ python3 scripts/promote_designer_submission.py DSG-<submission-id> --check
 python3 scripts/promote_designer_submission.py DSG-<submission-id>
 ```
 
-The default is Provisional / Self-reported, with no awarded badges. Only after
-independent evidence review, choose `--verification third_party_verified` or
-`--verification gardener_and_son_verified` and supply `--verifier` explicitly.
+The default is Provisional / Self-reported, with no awarded badges. The helper
+requires `--verifier` for a verified option, but that flag alone does not establish
+independence. Only use `gardener_and_son_verified` when that actual assessment was
+performed. **Do not use `third_party_verified` as a recognised verification tier:**
+the helper accepts it but the current scoring engines do not recognise it. Resolve
+the mismatch described in [pending-work.md](pending-work.md) before third-party
+verified publication.
 The garden receives a deterministic neutral ID and URL. Review the generated
 canonical JSON, profile and registry entry together; deploy all three through the
 normal repository workflow. Existing garden files are never overwritten.

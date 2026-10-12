@@ -88,3 +88,11 @@ Before making edits, ask:
 5. Are the gardens, objects, registry, discovery, and incentives still connected?
 
 If the answer to any of these is no, stop and surface the conflict before proceeding.
+
+## Current Registry entry points
+
+Designers have an active invited pilot; developers have published proposed
+principles and a government-pilot discussion pathway. Read `docs/README.md`,
+`docs/designer-pilot.md` and `docs/developer-policy-roadmap.md` for current scope.
+Published developer principles are not a statutory standard or an ecological-gain
+certificate. Existing council partnership commitments remain binding.
