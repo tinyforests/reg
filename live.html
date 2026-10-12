@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -192,9 +192,9 @@
     <p class="lede">Every ecological vegetation class lookup across the Find My EVC network, mapped as it happens. A live read on where the appetite for indigenous planting is growing.</p>
     <div class="meta">
       <div><span class="live-dot"></span>Status<b id="m-status">Connecting…</b></div>
-      <div>Logging since<b id="m-since">—</b></div>
-      <div>Last lookup<b id="m-last">—</b></div>
-      <div>Refreshed<b id="m-refreshed" class="mono">—</b></div>
+      <div>Shown since<b id="m-since">—</b></div>
+      <div>Latest included lookup<b id="m-last">—</b></div>
+      <div>Feed checked<b id="m-refreshed" class="mono">—</b></div>
     </div>
   </div>
 </header>
@@ -213,7 +213,7 @@
   <!-- tiles -->
   <div class="wrap">
     <div class="tiles">
-      <div class="tile"><div class="n mono" data-t="total">—</div><div class="k">Organic lookups</div><div class="sub" data-t="totalsub"></div></div>
+      <div class="tile"><div class="n mono" data-t="total">—</div><div class="k">Lookups shown</div><div class="sub" data-t="totalsub"></div></div>
       <div class="tile"><div class="n mono" data-t="direct">—</div><div class="k">Direct searches</div><div class="sub" data-t="directsub"></div></div>
       <div class="tile"><div class="n mono" data-t="evcs">—</div><div class="k">Distinct EVCs</div><div class="sub">of ~300 statewide</div></div>
       <div class="tile"><div class="n mono" data-t="lgas">—</div><div class="k">LGAs reached</div><div class="sub" data-t="lgasub"></div></div>
@@ -226,9 +226,10 @@
       <label class="toggle">
         <input type="checkbox" id="filter-studio" checked>
         <span class="box"></span>
-        Exclude studio &amp; test pings
+        Exclude studio calibration pings
       </label>
       <span class="hidden-count mono" id="hidden-count"></span>
+      <button id="refresh-now" type="button" style="border:1px solid var(--green);background:transparent;color:inherit;padding:10px 16px;cursor:pointer;font:12px 'IBM Plex Sans',sans-serif">Refresh now</button>
     </div>
   </section>
 
@@ -237,7 +238,7 @@
     <div class="wrap">
       <div class="eyebrow">Volume</div>
       <h2 class="section">Lookups over time</h2>
-      <p class="section-note">Monthly organic lookups. The early months skew low once studio calibration pings are removed.</p>
+      <p class="section-note">Monthly lookups for the selected studio filter. Explicit tests and the November–December 2025 calibration period remain excluded.</p>
       <div class="chart">
         <div class="bar-row" data-c="bars"></div>
         <div class="bar-labels" data-c="labels"></div>
@@ -257,7 +258,7 @@
       <div>
         <div class="eyebrow">Geography</div>
         <h2 class="section">Reach by council</h2>
-        <p class="section-note">Local government areas parsed from geocoded lookups.</p>
+        <p class="section-note">Approximate Victorian council grouping from recorded locations. Lookups without an identified council remain unassigned.</p>
         <ul class="rank" data-c="lga"></ul>
       </div>
     </div>
@@ -294,7 +295,8 @@
       <div class="rule"></div>
       <p class="mono" data-c="foot"></p>
       <p class="mono">Source · Find My EVC lookup log &nbsp;|&nbsp; Ecological Registry · ecologicalregistry.org<br>
-      Test rows and repeated studio-calibration pings are excluded from all figures above by default.</p>
+      Explicit test rows and the November–December 2025 calibration period are always excluded. The studio toggle controls the two documented studio clusters.<br>
+      Council boundaries: <a href="https://plan-gis.mapshare.vic.gov.au/arcgis/rest/services/Planning/VicPlan_Other/MapServer/1">State of Victoria · VicPlan / Vicmap Admin</a>, snapshot 12 Oct 2026. Grouping is approximate, not a cadastral determination.</p>
     </div>
   </footer>
 </template>
@@ -332,10 +334,58 @@ function isStudio(lat,lng){
   return STUDIO_CLUSTERS.some(c=>haversine(lat,lng,c.lat,c.lng)<=c.r);
 }
 function parseDate(s){
-  const m=String(s).match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+):(\d+)/);
+  const text=String(s||'').trim();
+  if(/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:?\d{2})$/.test(text)) {
+    const date=new Date(text);return isFinite(date.getTime())?date:null;
+  }
+  // Google Forms timestamps in this source are M/D/YYYY, Melbourne wall time.
+  const m=text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
   if(!m)return null;
-  return new Date(+m[3],+m[1]-1,+m[2],+m[4],+m[5],+m[6]);
+  const values=[+m[3],+m[1]-1,+m[2],+m[4],+m[5],+(m[6]||0)];
+  const check=new Date(Date.UTC(...values));
+  if(check.getUTCFullYear()!==values[0]||check.getUTCMonth()!==values[1]||check.getUTCDate()!==values[2]||values[3]>23||values[4]>59||values[5]>59)return null;
+  const desired=check.getTime();let utc=desired;
+  const formatter=new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Melbourne',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+  for(let i=0;i<2;i++){
+    const parts=Object.fromEntries(formatter.formatToParts(new Date(utc)).filter(p=>p.type!=='literal').map(p=>[p.type,+p.value]));
+    const actual=Date.UTC(parts.year,parts.month-1,parts.day,parts.hour,parts.minute,parts.second);
+    utc+=desired-actual;
+  }
+  return new Date(utc);
 }
+function monthKey(date){return new Intl.DateTimeFormat('en-CA',{timeZone:'Australia/Melbourne',year:'numeric',month:'2-digit'}).format(date).replace(/^(\d{2})\/(\d{4})$/,'$2-$1');}
+
+let COUNCILS=null;
+const COUNCIL_CACHE=new Map();
+function prepareCouncils(data){
+  if(data.type!=='FeatureCollection'||!data.features?.length)throw new Error('Council boundaries unavailable');
+  return data.features.map(f=>{
+    const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[];
+    const points=polygons.flat(2);
+    return {name:f.properties.name,polygons,bounds:[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))]};
+  });
+}
+async function loadCouncils(signal){
+  if(COUNCILS)return;
+  const response=await fetch('/data/live-victorian-lgas.geojson',{cache:'no-cache',signal});
+  if(!response.ok)throw new Error('Council boundaries unavailable');
+  COUNCILS=prepareCouncils(await response.json());COUNCIL_CACHE.clear();
+}
+function inRing(x,y,ring){
+  let inside=false;
+  for(let i=0,j=ring.length-1;i<ring.length;j=i++){
+    const [xi,yi]=ring[i],[xj,yj]=ring[j];
+    if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)inside=!inside;
+  }
+  return inside;
+}
+function locatedCouncil(lat,lng){
+  if(!COUNCILS||!isFinite(lat)||!isFinite(lng))return null;
+  const key=lat+','+lng;if(COUNCIL_CACHE.has(key))return COUNCIL_CACHE.get(key);
+  const match=COUNCILS.find(c=>lng>=c.bounds[0]&&lat>=c.bounds[1]&&lng<=c.bounds[2]&&lat<=c.bounds[3]&&c.polygons.some(p=>inRing(lng,lat,p[0])&&!p.slice(1).some(h=>inRing(lng,lat,h))));
+  const name=match?.name||null;COUNCIL_CACHE.set(key,name);return name;
+}
+
 function parseCouncil(addr){
   const m=String(addr).match(/(?:City|Shire|Rural City|Borough) of ([^,]+)/);
   return m?m[1].trim():null;
@@ -350,23 +400,28 @@ function referralSource(addr){
 
 const REFRESH_MS = 60000;
 let loading = false, refreshTimer, lastSuccess = null;
+let SOURCE_ROWS=0, SOURCE_IGNORED=0;
 let RAW=[];  // cleaned base rows (test dropped, excluded months dropped, studio flagged)
 
 async function load(){
   if(CONFIG.API_KEY==='YOUR_API_KEY') return showSetup();
   if(loading || document.hidden) return;
   loading = true;
+  const refreshButton=document.getElementById('refresh-now');if(refreshButton)refreshButton.disabled=true;
   clearTimeout(refreshTimer);
   document.getElementById('m-status').textContent = lastSuccess ? 'Refreshing…' : 'Connecting…';
   const controller = new AbortController();
   const timeout = setTimeout(()=>controller.abort(), 20000);
   try {
     const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.RANGE)}?key=${CONFIG.API_KEY}`;
-    const res=await fetch(url, {cache:'no-store', signal:controller.signal});
+    const [sheet,boundaries]=await Promise.allSettled([fetch(url,{cache:'no-store',signal:controller.signal}),loadCouncils(controller.signal)]);
+    if(sheet.status==='rejected')throw sheet.reason;
+    const res=sheet.value;
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||('HTTP '+res.status));}
     const json=await res.json();
 
     const rows=(json.values||[]).slice(1); // drop header
+    SOURCE_ROWS=rows.filter(r=>String(r[0]||'').trim()).length;
     RAW=rows.map(r=>{
       const [ts,addr='',lat='',lng='',code='',name='',src='']=r;
       const d=parseDate(ts);
@@ -375,15 +430,16 @@ async function load(){
       const ref=referralSource(addr)||(String(src).toLowerCase().includes('referral')?referralSource(src):null);
       return {
         date:d, addr, lat:la, lng:ln,
-        hasGeo:isFinite(la)&&isFinite(ln),
+        hasGeo:isFinite(la)&&isFinite(ln)&&Math.abs(la)<=90&&Math.abs(ln)<=180&&!(la===0&&ln===0),
         code:String(code).trim(), name:String(name).trim(),
         src:String(src).trim().toLowerCase(),
         isTest, isReferral:!!ref, refSource:ref,
-        council:parseCouncil(addr),
-        month:d?d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'):null,
+        council:locatedCouncil(la,ln)||parseCouncil(addr),
+        month:d?monthKey(d):null,
       };
     }).filter(r=>r.date && !r.isTest && !EXCLUDE_MONTHS.includes(r.month) && (r.code||r.hasGeo));
 
+    SOURCE_IGNORED=SOURCE_ROWS-RAW.length;
     RAW.forEach(r=>r.isStudio=isStudio(r.lat,r.lng));
     if(!document.getElementById('filter-studio')) mount();
     lastSuccess = new Date();
@@ -398,6 +454,7 @@ async function load(){
   } finally {
     clearTimeout(timeout);
     loading = false;
+    const button=document.getElementById('refresh-now');if(button)button.disabled=false;
     refreshTimer = setTimeout(load, REFRESH_MS);
   }
 }
@@ -408,10 +465,10 @@ function render(){
   const hidden=RAW.length-rows.length;
 
   // meta
-  const dates=RAW.map(r=>r.date).sort((a,b)=>a-b);
-  document.getElementById('m-since').textContent=dates[0]?.toLocaleDateString('en-AU',{month:'short',year:'numeric'})||'—';
-  document.getElementById('m-last').textContent=dates.at(-1)?.toLocaleDateString('en-AU',{day:'numeric',month:'short'})||'—';
-  document.getElementById('m-refreshed').textContent=lastSuccess?.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',second:'2-digit'})||'—';
+  const dates=rows.map(r=>r.date).sort((a,b)=>a-b);
+  document.getElementById('m-since').textContent=dates[0]?.toLocaleDateString('en-AU',{timeZone:'Australia/Melbourne',month:'short',year:'numeric'})||'—';
+  document.getElementById('m-last').textContent=dates.at(-1)?.toLocaleDateString('en-AU',{timeZone:'Australia/Melbourne',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})||'—';
+  document.getElementById('m-refreshed').textContent=lastSuccess?.toLocaleTimeString('en-AU',{timeZone:'Australia/Melbourne',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'})||'—';
 
   const direct=rows.filter(r=>!r.isReferral);
   const referral=rows.filter(r=>r.isReferral);
@@ -419,15 +476,15 @@ function render(){
   const lgaSet=new Set(rows.filter(r=>r.council).map(r=>r.council));
 
   set('total',fmt(rows.length));
-  set('totalsub',hidden?`${fmt(hidden)} studio/test hidden`:'unfiltered');
+  set('totalsub',excludeStudio ? (hidden?`${fmt(hidden)} studio lookups hidden`:'No studio matches hidden') : 'Studio filter off');
   set('direct',fmt(direct.length));
   set('directsub',`${Math.round(direct.length/rows.length*100)||0}% of volume`);
   set('evcs',fmt(evcSet.size));
   set('lgas',fmt(lgaSet.size));
-  set('lgasub',`${fmt(rows.filter(r=>r.council).length)} geocoded`);
+  set('lgasub',`${fmt(rows.filter(r=>r.council).length)} assigned · ${fmt(rows.filter(r=>!r.council).length)} unassigned`);
 
   document.getElementById('hidden-count').textContent =
-    excludeStudio ? `— ${fmt(hidden)} calibration & test rows hidden` : '— showing all rows including studio pings';
+    excludeStudio ? `— ${fmt(hidden)} studio calibration rows hidden` : '— showing all rows including studio pings';
 
   // month trend
   const byMonth={};
@@ -467,7 +524,7 @@ function render(){
     `${fmt(rows.filter(r=>r.hasGeo).length)} located lookups plotted · ${fmt(noGeo)} referral lookups carry an EVC but no coordinates, so they’re counted in the channel panel but not shown here.`;
 
   q('[data-c="foot"]').textContent=
-    `${fmt(RAW.length)} total logged rows · ${fmt(rows.length)} organic after filtering · ${fmt(evcSet.size)} EVCs · ${fmt(lgaSet.size)} LGAs`;
+    `${fmt(SOURCE_ROWS)} timestamped source rows · ${fmt(SOURCE_IGNORED)} outside this view (excluded months/tests/invalid rows) · ${fmt(RAW.length)} included before studio filter · ${fmt(rows.length)} shown · ${fmt(evcSet.size)} EVCs · ${fmt(lgaSet.size)} LGAs${COUNCILS ? '' : ' · Council boundaries unavailable; address labels only'}`;
 }
 
 /* helpers */
@@ -476,13 +533,14 @@ function tally(arr,keyFn,nameFn){
   arr.forEach(r=>{const k=keyFn(r);if(!k)return;(m[k]=m[k]||{ct:0,name:nameFn?nameFn(r):''}).ct++;});
   return Object.entries(m).map(([k,v])=>({k,ct:v.ct,name:v.name})).sort((a,b)=>b.ct-a.ct);
 }
+function escapeHTML(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function rankList(sel,data,showCode){
   const el=q(sel);el.innerHTML='';
   const top=data.slice(0,8), max=Math.max(1,...top.map(d=>d.ct));
   top.forEach(d=>{
     const li=document.createElement('li');
-    li.innerHTML=`${showCode?`<span class="code">EVC ${d.k}</span>`:`<span></span>`}
-      <div class="track"><div class="fill" style="width:0"></div><span class="name">${showCode?d.name:d.k}</span></div>
+    li.innerHTML=`${showCode?`<span class="code">EVC ${escapeHTML(d.k)}</span>`:`<span></span>`}
+      <div class="track"><div class="fill" style="width:0"></div><span class="name">${escapeHTML(showCode?d.name:d.k)}</span></div>
       <span class="ct">${d.ct}</span>`;
     el.appendChild(li);
     const fill=li.querySelector('.fill');
@@ -518,7 +576,7 @@ function drawMap(rows){
       }).addTo(LAYER);
     });
     L.circleMarker([p.lat,p.lng],{radius:base,color:'transparent',fillOpacity:0})
-      .bindPopup(`<b>${p.ct} lookup${p.ct>1?'s':''}</b><br>${p.name||'—'}<br>${p.lat}, ${p.lng}`)
+      .bindPopup(`<b>${p.ct} lookup${p.ct>1?'s':''}</b><br>${escapeHTML(p.name)||'—'}<br>${p.lat}, ${p.lng}`)
       .addTo(LAYER);
   });
 }
@@ -529,6 +587,7 @@ function mount(){
   app.innerHTML='';
   app.appendChild(document.getElementById('tpl-dash').content.cloneNode(true));
   document.getElementById('filter-studio').addEventListener('change',render);
+  document.getElementById('refresh-now').addEventListener('click',load);
 }
 function q(s){return document.querySelector(s);}
 function set(t,v){const el=q(`[data-t="${t}"]`);if(el)el.textContent=v;}

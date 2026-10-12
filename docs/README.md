@@ -14,6 +14,7 @@
 | Document | Purpose |
 |---|---|
 | [Product brief](registry-product-brief.md) | Audiences, active features and product boundaries |
+| [Live demand dashboard](live-demand-dashboard.md) | Feed polling, filters, council attribution and freshness |
 | [Current state](current-state.md) | Dated source-derived record inventory and shipped surfaces |
 | [Designer pilot](designer-pilot.md) | Invitations, private submissions, review and repository publication |
 | [Data schema](data-schema.md) | Canonical inputs, public records, private stores and neutral routes |

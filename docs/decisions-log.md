@@ -587,3 +587,17 @@ this docs-only task changes no scoring, records, backend or policy mandate.
 Files: AGENTS.md, CLAUDE.md, AI_CONTEXT.md, VISION.md, docs/README.md,
 registry-product-brief.md, current-state.md and its archive, pending-work.md,
 designer-pilot.md, data-schema.md, design-system.md, scoring-methodology.md and this log.
+
+
+## 12 Oct 2026 — Repair apparently stale live-demand panels
+
+The sheet is current and polls every minute, but council attribution depended on
+old address text present in very few recent rows. Use locally evaluated official
+Victorian council polygons, with unmatched coverage and boundary-load failures
+explicit. Correct source-versus-view counts and studio/test filter labels, validate
+Melbourne/ISO timestamps, expose a manual refresh, and escape feed text used in
+HTML. Preserve existing source/channel rules, source privacy and unknown locations.
+No source rows or garden records are modified. The point grouping is approximate,
+not a statutory boundary determination. Files: live.html,
+data/live-victorian-lgas.geojson, scripts/test_live_refresh.js,
+docs/live-demand-dashboard.md, docs/README.md and this log.
