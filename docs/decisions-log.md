@@ -601,3 +601,20 @@ No source rows or garden records are modified. The point grouping is approximate
 not a statutory boundary determination. Files: live.html,
 data/live-victorian-lgas.geojson, scripts/test_live_refresh.js,
 docs/live-demand-dashboard.md, docs/README.md and this log.
+
+
+## 13 Oct 2026 — For brands entry and Yield sponsorship proposition
+
+At Tyson’s request, publish a brand sponsorship entry for ecological gardens,
+stepping stones and corridors, linked from the homepage on desktop and mobile.
+Explain benefits for local ecology and brands through care, evidence, staff
+learning, consented stories and continuity. Use the existing paired design system.
+Open enquiries without claiming current payouts, invented sponsors/prices or
+verified ecological gain. Sponsor acknowledgement stays separate from assessment;
+replace the outdated sponsor-policy reference to offsetting infrastructure with
+a contribution model pending separately reviewed methodology. Canonical scoring
+and garden/yield data are unchanged. The form prepares a reviewed email draft,
+with no automatic send, payment or stored submission. Files: brands.html,
+js/brands.js, assets/css/brands.css, index.html, assets/css/registry-home.css,
+docs/brand-sponsorship.md, revenue-and-yield-rules.md, registry-product-brief.md,
+README.md, pending-work.md and this log.

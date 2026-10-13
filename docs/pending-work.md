@@ -508,3 +508,16 @@ The functional invited pilot supersedes the earlier public `data/designers.json`
 access-token proposal. Practice credential hashes and private submissions live in
 private sheets. See [designer-pilot.md](designer-pilot.md) for onboarding, review
 and publication. Ongoing designer field-note editing and billing remain future work.
+
+
+### Brand sponsorship / Yield — entry shipped 13 Oct 2026; programme remains pending
+
+`brands.html` and homepage links introduce contribution benefits and garden,
+stepping-stone and corridor support pathways. The form prepares a local email
+draft only. See [brand-sponsorship.md](brand-sponsorship.md).
+
+Next: consenting cohorts and ecological review, costed partnership scope,
+allocation/administration disclosures, agreements and payment arrangements,
+conflict/verification rules, follow-up and claims review. No checkout, sponsor
+portal, active payout, approved offset methodology or automatic eligibility
+is created by this launch.

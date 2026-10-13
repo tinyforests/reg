@@ -21,6 +21,7 @@
 | [Scoring methodology](scoring-methodology.md) | Existing pillars, tiers, evidence and known limitations |
 | [Design system](design-system.md) | Palette, themes, typography, geometry and page treatments |
 | [Council commitments](COUNCIL-PARTNERSHIP-PRINCIPLES.md) | Binding consent, privacy and commercial-separation commitments |
+| [Brand sponsorship](brand-sponsorship.md) | Public enquiry, contribution benefits and activation prerequisites |
 | [Revenue and Yield](revenue-and-yield-rules.md) | Active revenue versus inactive future payments |
 | [Pending work](pending-work.md) | Outstanding work, including policy-readiness gaps |
 | [Decision log](decisions-log.md) | Product and implementation decisions over time |

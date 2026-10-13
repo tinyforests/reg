@@ -22,7 +22,7 @@ The four-stage spine in SUPER_MIND.md describes the *system*. Inside the Registr
 
 **Councils.** Local government. Their primary surface is the aggregated data — `registry.json`, the council distribution, the cluster maps. Their need is measurable urban biodiversity infrastructure. Frame: data infrastructure, not advocacy.
 
-**Investors and sponsors.** Foundations, corporate sustainability programs, philanthropic. Their primary surface is the Yield framing and aggregated impact. Their need is verified biodiversity outcomes. Frame: biodiversity infrastructure, honestly stated.
+**Investors and sponsors.** Foundations, corporate sustainability programs, philanthropic. Their primary surface is the Yield framing and aggregated impact. Their need is verified biodiversity outcomes. Frame: biodiversity infrastructure, honestly stated. Brand enquiries now enter through `/brands.html`, introducing proposed Yield sponsorship of gardens, stepping stones and corridors. The page prepares an email draft; funding, reporting and steward payments still require separately agreed programme arrangements. See [brand-sponsorship.md](brand-sponsorship.md).
 
 **Designers.** Invited practices use `/designer-dashboard.html` for their own private submissions and real attributed public portfolio. `/designer-invite.html` is the introduction. The server fixes attribution and self-reported status; Registry review and repository publication remain distinct from independent verification. See [designer-pilot.md](designer-pilot.md).
 

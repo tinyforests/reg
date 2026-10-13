@@ -96,7 +96,7 @@ The Yield layer is the value proposition. The truthful framing:
 - Sponsors fund the annual yield pool.
 - Yield flows to stewards via the Registry based on a transparent formula.
 - Sponsors get verified biodiversity outcomes and aggregated impact reporting.
-- This is biodiversity offsetting infrastructure, framed honestly.
+- Sponsorship is proposed support for agreed ecological care and documented outcomes. It is not an approved biodiversity offset or credit scheme.
 
 Do not present sponsor relationships as carbon offsetting unless we have verified carbon methodology in place (we don't yet).
 
@@ -111,3 +111,12 @@ When the first sponsor is signed and the first yield disbursement happens, the f
 5. Public copy across G&S surfaces is reviewed for accuracy
 
 Until that happens, every word about yield is in future tense.
+
+## Brand entry — 13 Oct 2026
+
+`brands.html` opens founding sponsorship enquiries for gardens, stepping stones
+and corridors. It describes proposed benefits and funding arrangements; it does
+not activate payouts, a financial product, fixed pricing or the placeholder yield
+formula. Sponsor acknowledgement is separate from verification and requires
+steward consent. See [brand-sponsorship.md](brand-sponsorship.md) for the launch
+scope and prerequisites. The existing council-pilot/sponsor readiness gates remain.
