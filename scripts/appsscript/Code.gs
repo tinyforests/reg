@@ -1627,10 +1627,63 @@ function _designerTable(ss, name, headers, create) {
 }
 function _designerRows(sheet, width) { return sheet && sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, width).getValues() : []; }
 function _designerPractice(row) { return {designer_id: String(row[0]), name: String(row[1]), contact_email: String(row[2]), created_at: String(row[4]), status: String(row[5])}; }
+var DESIGNER_ACCESS_HEADERS = ['token_hash', 'designer_id', 'created_at', 'expires_at', 'used'];
+var DESIGNER_SESSION_HEADERS = ['token_hash', 'designer_id', 'created_at', 'expires_at'];
+function _designerRandomToken() { return Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, ''); }
+function _designerRequestAccess(payload, ss) {
+  var message = 'If this email belongs to an active invited practice, a link has been sent. It expires in 30 minutes.';
+  var email = safeStr(String(payload.email || '').toLowerCase(), 254);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return jsonResp({ok: true, message: message});
+  var cache = CacheService.getScriptCache(), bucket = Math.floor(Date.now() / 3600000);
+  var rateKey = 'designer_access_' + bucket + '_' + _designerHash(email);
+  var count = Number(cache.get(rateKey) || 0);
+  if (count >= 3) return jsonResp({ok: true, message: message});
+  cache.put(rateKey, String(count + 1), 3600);
+  var rows = _designerRows(ss.getSheetByName('Designer Practices'), 6);
+  var row = rows.filter(function (r) { return String(r[2]).toLowerCase() === email && String(r[5]) === 'active'; })[0];
+  if (!row) return jsonResp({ok: true, message: message});
+  var token = _designerRandomToken(), now = new Date();
+  _designerTable(ss, 'Designer Access Tokens', DESIGNER_ACCESS_HEADERS, true).appendRow([_designerHash(token), String(row[0]), now.toISOString(), new Date(now.getTime() + TOKEN_EXPIRY_MS).toISOString(), false]);
+  try { MailApp.sendEmail({to: email, subject: 'Open your Ecological Registry designer portal', body: ['Open your practice portal using this one-use link:', '', 'https://ecologicalregistry.org/designer-dashboard.html#designer_claim=' + token, '', 'The link expires in 30 minutes. If you did not request it, ignore this email.'].join('\n')}); }
+  catch (e) { console.error('Designer access email could not be sent'); }
+  return jsonResp({ok: true, message: message});
+}
+function _designerVerifyAccess(payload, ss) {
+  var token = String(payload.token || '');
+  if (!/^[a-f0-9]{64}$/i.test(token)) return jsonResp({ok: false, error: 'Invalid or expired link. Request a new link.'});
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) return jsonResp({ok: false, error: 'Please try again.'});
+  try {
+    var sheet = ss.getSheetByName('Designer Access Tokens'), rows = _designerRows(sheet, 5), now = new Date();
+    var practices = _designerRows(ss.getSheetByName('Designer Practices'), 6);
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (String(row[0]) !== _designerHash(token)) continue;
+      var expiry = new Date(String(row[3])).getTime();
+      var practice = practices.filter(function (r) { return String(r[0]) === String(row[1]) && String(r[5]) === 'active'; })[0];
+      if (row[4] === true || String(row[4]) === 'true' || !isFinite(expiry) || expiry <= now.getTime() || !practice) break;
+      sheet.getRange(i + 2, 5).setValue(true);
+      var session = _designerRandomToken();
+      _designerTable(ss, 'Designer Sessions', DESIGNER_SESSION_HEADERS, true).appendRow([_designerHash(session), String(row[1]), now.toISOString(), new Date(now.getTime() + STEWARD_SESSION_DAYS * 86400000).toISOString()]);
+      return jsonResp({ok: true, session_token: session, designer_id: String(row[1])});
+    }
+    return jsonResp({ok: false, error: 'Invalid or expired link. Request a new link.'});
+  } finally { lock.releaseLock(); }
+}
+function _designerExpireAccess(id, ss) {
+  [['Designer Sessions', 4, 4], ['Designer Access Tokens', 5, 4]].forEach(function (spec) {
+    var sheet = ss.getSheetByName(spec[0]), rows = _designerRows(sheet, spec[1]);
+    rows.forEach(function (row, i) { if (String(row[1]) === id) sheet.getRange(i + 2, spec[2]).setValue(new Date().toISOString()); });
+  });
+}
 function _designerAuthorise(token, ss) {
   if (!token || token.length > 160) return null;
   var hash = _designerHash(token), rows = _designerRows(ss.getSheetByName('Designer Practices'), 6);
   for (var i = 0; i < rows.length; i++) if (String(rows[i][3]) === hash && String(rows[i][5]) === 'active') return _designerPractice(rows[i]);
+  var sessions = _designerRows(ss.getSheetByName('Designer Sessions'), 4);
+  for (var j = 0; j < sessions.length; j++) if (String(sessions[j][0]) === hash && new Date(String(sessions[j][3])).getTime() > Date.now()) {
+    for (var k = 0; k < rows.length; k++) if (String(rows[k][0]) === String(sessions[j][1]) && String(rows[k][5]) === 'active') return _designerPractice(rows[k]);
+  }
   return null;
 }
 function _designerNumber(value, min, max, integer, required) {
@@ -1706,13 +1759,15 @@ function _designerPublicPortfolio(id) {
   }
   return (JSON.parse(content).gardens || []).filter(function (g) { return g.designer_id === id && !g.demo; }).map(function (g) {
     return {garden_id: g.garden_id, garden_name: g.garden_name, suburb: g.suburb, state: g.state, score: g.score,
-      rating: g.rating, badge_count: g.badge_count, verification_label: g.verification_label, status: g.status, profile_url: g.profile_url};
+      rating: g.rating, badge_count: g.badge_count, verification_level: g.verification_level, verification_label: g.verification_label, status: g.status, profile_url: g.profile_url};
   });
 }
 function handleDesignerPortal(payload) {
   try {
     if (JSON.stringify(payload).length > 50000) return jsonResp({ok: false, error: 'Submission too large'});
     var ss = SpreadsheetApp.getActiveSpreadsheet(), action = String(payload.action || '');
+    if (action === 'request_designer_access') return _designerRequestAccess(payload, ss);
+    if (action === 'verify_designer_access') return _designerVerifyAccess(payload, ss);
     var stored = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN') || '';
     var admin = !!(stored && payload.admin_token === stored);
     var practice = admin ? null : _designerAuthorise(String(payload.designer_token || ''), ss);
@@ -1754,6 +1809,7 @@ function handleDesignerPortal(payload) {
         var rs = ss.getSheetByName('Designer Practices'), rotations = _designerRows(rs, 6);
         for (var q = 0; q < rotations.length; q++) if (String(rotations[q][0]) === payload.designer_id) {
           var rotated = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+          _designerExpireAccess(String(rotations[q][0]), ss);
           rs.getRange(q+2,4).setValue(_designerHash(rotated)); rs.getRange(q+2,6).setValue('active');
           return jsonResp({ok: true, access_link: 'https://ecologicalregistry.org/designer-dashboard.html#access=' + rotated});
         }
@@ -1768,7 +1824,7 @@ function handleDesignerPortal(payload) {
       }
       if (action === 'revoke_practice' && admin) {
         var prs = ss.getSheetByName('Designer Practices'), rr = _designerRows(prs, 6);
-        for (var r = 0; r < rr.length; r++) if (String(rr[r][0]) === payload.designer_id) { prs.getRange(r+2,6).setValue('revoked'); return jsonResp({ok: true}); }
+        for (var r = 0; r < rr.length; r++) if (String(rr[r][0]) === payload.designer_id) { _designerExpireAccess(String(rr[r][0]), ss); prs.getRange(r+2,6).setValue('revoked'); return jsonResp({ok: true}); }
         throw new Error('Practice not found');
       }
       if (action === 'submit_garden' && practice) {

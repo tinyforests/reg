@@ -21,12 +21,13 @@
     var gardens = data.gardens || [], submissions = data.submissions || [];
     $('#portfolioCount').textContent = gardens.length;
     $('#pendingCount').textContent = submissions.filter(function (s) { return s.review_status !== 'published'; }).length;
-    var scored = gardens.filter(function (g) { return typeof g.score === 'number' && g.status !== 'Design Proposal'; });
+    var scored = gardens.filter(function (g) { return typeof g.score === 'number' && !['Provisional','Design Proposal'].includes(g.status) && ['gardener_and_son_verified','site_visit','photo_verified'].includes(g.verification_level); });
     $('#averageScore').textContent = scored.length ? Math.round(scored.reduce(function (n,g) { return n+g.score; },0)/scored.length) : '—';
     var cards = $('#portfolioCards'); cards.replaceChildren();
     gardens.forEach(function (g) {
-      var card = node('article',null,'garden-card'); card.append(node('span',g.garden_id,'label'),node('h3',g.garden_name),node('p',g.suburb+', '+g.state,'small'));
-      card.append(node('strong',g.status === 'Design Proposal' ? '—' : g.score),node('p',g.verification_label || 'Verification not recorded','small'));
+      var quarantined = ['Provisional','Design Proposal'].includes(g.status);
+      var card = node('article',null,'garden-card' + (quarantined ? ' provisional' : '')); card.append(node('span',g.garden_id,'label'),node('h3',g.garden_name),node('p',g.suburb+', '+g.state,'small'));
+      card.append(node('strong',quarantined ? '—' : g.score),node('p',quarantined ? 'Unverified · awaiting review' : (g.verification_label || 'Verification not recorded'),'small'));
       var tier = typeof g.rating === 'object' && g.rating ? g.rating.current : g.rating;
       card.append(node('p',tier || g.status,'small'));
       if (/^\/gardens\/g-[a-f0-9]{12}\//.test(g.profile_url || '')) { var link = node('a','View garden record →'); link.href = g.profile_url; card.append(link); }
@@ -83,8 +84,18 @@
     return api(adminToken ? 'admin_overview' : 'get_portfolio').then(function (data) {
       $('#accessPanel').hidden=true; $('#adminView').hidden=!adminToken; $('#designerView').hidden=!!adminToken; $('#signOut').hidden=false;
       if (adminToken) renderAdmin(data); else renderPortfolio(data); message('');
-    }).catch(function (error) { message(error.message); throw error; });
+    }).catch(function (error) { $('#designerView').hidden=true;$('#adminView').hidden=true;$('#accessPanel').hidden=false;$('#signOut').hidden=true;token='';adminToken='';sessionStorage.removeItem('reg_designer_access');sessionStorage.removeItem('reg_designer_admin');message(error.message); throw error; });
   }
+  function publicData(path){return fetch(path).then(function(r){if(!r.ok)throw Error('Public records unavailable.');return r.json();});}
+  Promise.all([publicData('/data/designers.json'),publicData('/data/designers-derived.json'),publicData('/data/registry.json')]).then(function(data){
+    var select=$('#publicPractice');data[0].designers.forEach(function(d){var option=node('option',d.practice_name);option.value=d.designer_id;select.append(option);});
+    var requested=new URLSearchParams(location.search).get('designer');if(data[0].designers.some(function(d){return d.designer_id===requested;}))select.value=requested;
+    var generation=0;
+    function renderPublic(){var selected=select.value,version=++generation,summary=data[1].designers[selected] || {};$('#publicCount').textContent=summary.garden_count ?? '—';$('#publicVerified').textContent=summary.verified_count ?? '—';$('#publicMean').textContent=summary.mean_verified_score ?? '—';$('#publicDesignerLink').href='/designers/'+selected+'/';$('#publicCards').replaceChildren();
+      Promise.all(data[2].gardens.filter(function(g){return g.designer_id===selected;}).map(function(g){return publicData('/'+g.data_file.replace(/^\//,'')).then(function(r){return {garden:g,record:r};});})).then(function(rows){if(version!==generation)return;var cards=$('#publicCards');rows.forEach(function(row){var g=row.garden,q=['Provisional','Design Proposal'].includes(g.status)||['Provisional','Design Proposal'].includes(row.record.status);var card=node('article',null,'garden-card'+(q?' provisional':''));card.append(node('h3',g.garden_name),node('p',g.suburb,'small'),node('strong',q?'—':g.score),node('p',q?'Unverified · '+(row.record.status||g.status):g.status,'small'));var a=node('a','View garden record →');a.href=g.profile_url;card.append(a);cards.append(card);});if(!rows.length)cards.append(node('p','No attributed gardens recorded.','empty'));}).catch(function(e){message(e.message);});
+    }
+    select.addEventListener('change',renderPublic);renderPublic();
+  }).catch(function(e){message(e.message);});
   var form=$('#gardenForm');
   function readGarden() {
     var values={};Array.from(form.elements).forEach(function (e) { if (!e.name) return;values[e.name]=e.type==='checkbox'?e.checked:e.value; });return values;
@@ -106,7 +117,7 @@
     busy($('#submitGarden'),api(action,{request_id:requestId,submission_id:editingId,garden:readGarden()}).then(function (r) { $('#formStatus').textContent='Submission '+r.submission_id+' saved for Registry review.';clearGarden();return load(); }).catch(function (e) { $('#formStatus').textContent=e.message; }));
   });
   $('#clearDraft').addEventListener('click',clearGarden);
-  $('#accessForm').addEventListener('submit',function (event) { event.preventDefault();var raw=$('#accessLink').value.trim();try{token=new URL(raw).hash.slice(1);token=new URLSearchParams(token).get('access') || '';}catch(e){token=raw;}adminToken='';if(!token){message('Paste your practice’s access link or token.');return;}load().then(function(){sessionStorage.setItem('reg_designer_access',token);$('#accessLink').value='';}).catch(function(){}); });
+  $('#accessForm').addEventListener('submit',function (event) { event.preventDefault();busy(event.target.querySelector('button'),api('request_designer_access',{email:$('#accessLink').value.trim()}).then(function(r){message(r.message);$('#accessLink').value='';}).catch(function(e){message(e.message);})); });
   $('#adminLogin').addEventListener('submit',function (event) { event.preventDefault();adminToken=$('#adminToken').value.trim();token='';load().then(function(){sessionStorage.setItem('reg_designer_admin',adminToken);$('#adminToken').value='';}).catch(function(){}); });
   $('#practiceForm').addEventListener('submit',function (event) { event.preventDefault();var f=new FormData(event.target);busy(event.target.querySelector('button'),api('create_practice',Object.fromEntries(f)).then(function(r){showLink(r.access_link);event.target.reset();return load();}).catch(function(e){message(e.message);})); });
   $('#copyLink').addEventListener('click',function(){navigator.clipboard.writeText($('#privateLink').value).then(function(){message('Private access link copied. Share it only with the practice.');}).catch(function(){message('Select and copy the private link above.');});});
@@ -114,7 +125,9 @@
   document.querySelectorAll('.refresh').forEach(function(b){b.addEventListener('click',function(){busy(b,load().catch(function(){}));});});
   function theme(mode){document.documentElement.classList.toggle('dark',mode==='dark');$('#themeToggle').textContent=mode==='dark'?'Canopy':'Understory';try{localStorage.setItem('reg_mode',mode);}catch(e){}}
   var mode='dark';try{mode=localStorage.getItem('reg_mode') || localStorage.getItem('reg-theme') || 'dark';}catch(e){}theme(mode);$('#themeToggle').addEventListener('click',function(){theme(document.documentElement.classList.contains('dark')?'light':'dark');});
+  var claim=new URLSearchParams(location.hash.slice(1)).get('designer_claim');
+  if(claim){history.replaceState(null,'',location.pathname+location.search);token='';adminToken='';api('verify_designer_access',{token:claim}).then(function(r){token=r.session_token;sessionStorage.setItem('reg_designer_access',token);sessionStorage.removeItem('reg_designer_admin');return load();}).catch(function(e){token='';message(e.message);});}
   var incoming=new URLSearchParams(location.hash.slice(1)).get('access');
   if(incoming){history.replaceState(null,'',location.pathname+location.search);token=incoming;adminToken='';load().then(function(){sessionStorage.setItem('reg_designer_access',token);}).catch(function(){});}
-  else {try{token=sessionStorage.getItem('reg_designer_access') || '';adminToken=token?'':sessionStorage.getItem('reg_designer_admin') || '';}catch(e){}if(token || adminToken)load().catch(function(){});}
+  else if(!claim) {try{token=sessionStorage.getItem('reg_designer_access') || '';adminToken=token?'':sessionStorage.getItem('reg_designer_admin') || '';}catch(e){}if(token || adminToken)load().catch(function(){});}
 })();

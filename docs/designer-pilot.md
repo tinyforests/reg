@@ -13,6 +13,11 @@ Create a practice with its name and contact email. For an existing attributed pr
 use its canonical `designer_id` to connect existing records. Otherwise leave ID blank.
 Copy the returned private link and share it personally. Treat it as a credential.
 Only its SHA-256 hash is stored in the private `Designer Practices` sheet.
+Practices may also request a one-use, 30-minute link by contact email from the
+portal. Verification consumes the link under a script lock and issues a hashed
+180-day session, matching steward access. Sessions remain in this browser tab
+only and Lock portal clears them. Revocation or link rotation expires sessions
+and outstanding email links. Invalid or expired links leave the public view.
 Reissuing the link invalidates the old one; revocation disables practice access.
 The URL fragment is removed as soon as the portal opens; credentials are retained
 only in this tab's session storage until Lock portal is used.
@@ -74,3 +79,20 @@ public-file privacy, neutral URLs and scoring against the canonical engine.
 
 Yield remains in the canonical schema and concept pages. Profile rendering stays
 hidden and payments remain inactive.
+
+
+## Public portfolio and email access — Phase 2
+
+Without credentials, the portal reads the public practice directory, derived
+verified-only totals and canonical garden data. Practice selection links to a
+public approximate corridor map. Provisional and Design Proposal cards remain
+quarantined, without a verified score. The original illustrative dashboard is
+archived at `/archive/designer-dashboard-concept.html`, clearly marked as a concept.
+Existing invited private submissions and admin review remain available.
+
+Profile-service Apps Script deployment updated to version 38 on 15 Oct 2026.
+Deployment ID and `/exec` URL remain `AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC`.
+The separate newsletter deployment remains unchanged. New private sheets are
+`Designer Access Tokens` (hashed token, practice ID, creation, expiry, used)
+and `Designer Sessions` (hashed token, practice ID, creation, expiry).
+No practice contact email or credential is written to public JSON.

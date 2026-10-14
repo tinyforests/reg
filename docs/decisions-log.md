@@ -644,3 +644,17 @@ data/designers*.json, attribution inputs/index, scripts/designer_registry.py,
 scripts/sync_registry.py, scripts/test_designer_registry.py, scripts/test_parity.py,
 profile templates, designers/*/index.html, shared attribution/public scripts and CSS,
 this log, data-schema.md and pending-work.md.
+
+
+## 15 Oct 2026 — Public designer portal and email magic links
+
+Extend the existing pilot rather than replacing its private submission/review
+workflow. Public practice portfolios read only actual canonical records, with
+quarantined provisional cards and verified-only aggregates. Archive the original
+illustrative dashboard. Email access reuses the steward one-use 30-minute pattern
+with hashed private tokens, locked consumption, tab-local sessions and revocation.
+Saved editor source was read back and matched repository source exactly. The
+profile-service deployment is version 38 at the same ID and URL; the newsletter
+deployment is unchanged. Files: designer-dashboard.html, js/designer-portal.js,
+scripts/appsscript/Code.gs, scripts/test_designer_magic.cjs, archived concept,
+designer-pilot.md, data-schema.md, pending-work.md and this log.

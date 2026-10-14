@@ -404,3 +404,14 @@ For an attribution-only migration, run `python3 scripts/sync_registry.py
 updates attribution and designer aggregates, and leaves ecological inputs,
 ratings, badges, scores and coordinates unchanged. Full ecological sync retains
 its existing private-coordinate/seed requirement. `--check` is read-only for both.
+
+
+## Designer email access — Phase 2
+
+The existing private `Designer Practices` sheet is the contact-email authority.
+`Designer Access Tokens` stores token hashes, designer ID, creation, expiry and
+a used flag. Links expire after 30 minutes and can be consumed once under a lock.
+`Designer Sessions` stores token hashes, designer ID, creation and 180-day expiry.
+Practice revocation/rotation expires both outstanding links and sessions. Public
+views read public JSON only. Unrecognised emails receive the same success message
+as recognised ones; a hashed per-email counter limits requests to three per hour.
