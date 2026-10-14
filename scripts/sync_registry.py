@@ -400,7 +400,45 @@ def resolve_nearest_park(lat, lng):
     return (name or 'Unnamed park', round(plat, 6), round(plng, 6), int(best_dist))
 
 
-def sync(check_only=False):
+def sync(check_only=False, attribution_only=False):
+    # Validate all attribution before any private or public file can be mutated.
+    from designer_registry import load_designers, validate_records, derive
+    designers = load_designers(REPO_ROOT)
+    with open(REGISTRY) as source:
+        validation_registry = json.load(source)
+    attribution_records = {}
+    for garden in validation_registry['gardens']:
+        path = os.path.join(REPO_ROOT, garden['data_file'].lstrip('/'))
+        with open(path) as source:
+            attribution_records[garden['garden_id']] = json.load(source)
+    validate_records(designers, attribution_records.values())
+    if attribution_only:
+        # Attribution-only changes never read private coordinates or rewrite scores.
+        # Refuse stale scores rather than silently changing ecological inputs.
+        for garden in validation_registry['gardens']:
+            record = attribution_records[garden['garden_id']]
+            expected = 0 if garden.get('status') in PRE_INSTALL_STATUSES else score_ecological_registry(record)['total']
+            if garden.get('score') != expected:
+                raise ValueError('Score drift: ' + garden['garden_id'] + '; run full sync before attribution')
+            for key in ('designer', 'designer_id', 'managed_by'):
+                garden[key] = record.get(key)
+        derived = derive(designers, validation_registry, attribution_records)
+        outputs = [(REGISTRY, validation_registry), (os.path.join(REPO_ROOT, 'data', 'designers-derived.json'), derived)]
+        changed = []
+        for path, value in outputs:
+            old = None
+            if os.path.exists(path):
+                with open(path) as source:
+                    old = json.load(source)
+            if old != value:
+                changed.append(os.path.basename(path))
+                if not check_only:
+                    with open(path, 'w') as output:
+                        json.dump(value, output, indent=2, ensure_ascii=False)
+                        output.write('\n')
+        print('Attribution sync: ' + (', '.join(changed) if changed else 'no changes'))
+        return 1 if check_only and changed else 0
+
     # Load private coords + seed — fails loudly if either is missing.
     private_coords, coord_seed = _load_private_coords()
 
@@ -702,7 +740,7 @@ def sync(check_only=False):
         # Practice attribution is canonical; credentials remain in private sheets.
         for key in ('designer', 'designer_id', 'managed_by'):
             value = record.get(key)
-            if value is not None and g.get(key) != value:
+            if g.get(key) != value:
                 g[key] = value
                 changes.append('%s: %s attribution updated' % (gid, key))
 
@@ -785,6 +823,15 @@ def sync(check_only=False):
         changes.append("metadata: demo_gardens %s -> %s" % (meta.get('demo_gardens'), demos))
         meta['demo_gardens'] = demos
 
+    designer_derived = derive(designers, registry, _records)
+    derived_path = os.path.join(REPO_ROOT, 'data', 'designers-derived.json')
+    existing_derived = None
+    if os.path.exists(derived_path):
+        with open(derived_path) as source:
+            existing_derived = json.load(source)
+    if existing_derived != designer_derived:
+        changes.append('designer aggregates regenerated')
+
     if not changes:
         print("Registry in sync. No changes.")
         return 0
@@ -796,6 +843,10 @@ def sync(check_only=False):
     if check_only:
         print("\n--check: registry.json NOT written.")
         return 1
+
+    with open(derived_path, 'w') as output:
+        json.dump(designer_derived, output, indent=2)
+        output.write('\n')
 
     # Write to /tmp, validate round-trip, then copy into data/.
     with open(TMP_OUT, 'w') as f:
@@ -840,4 +891,4 @@ def sync(check_only=False):
 
 
 if __name__ == '__main__':
-    sys.exit(sync(check_only='--check' in sys.argv))
+    sys.exit(sync(check_only='--check' in sys.argv, attribution_only='--attribution-only' in sys.argv))
