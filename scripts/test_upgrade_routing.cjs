@@ -1,0 +1,32 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+class Sheet{constructor(){this.rows=[]}appendRow(r){this.rows.push([...r])}setFrozenRows(){}getLastRow(){return this.rows.length}getRange(r,c,n=1,w=1){return{getValues:()=>this.rows.slice(r-1,r-1+n).map(row=>row.slice(c-1,c-1+w)),setValue:v=>{this.rows[r-1][c-1]=v}}}}
+const sheets={},ss={getSheetByName:n=>sheets[n]||null,insertSheet:n=>sheets[n]=new Sheet()},mails=[],props={ADMIN_TOKEN:'fixture-admin',ROUTING_RESPONSE_MINUTES:'1'};
+const record={garden_id:'ER-AU-VIC-FIXTURE',designer_id:'sam-cox-landscape',biodiversity:{indigenous_species_current:12},evidence:{verification_level:'site_visit'}},unchanged=JSON.stringify(record);
+const context={console,Date,TOKEN_EXPIRY_MS:1800000,STEWARD_SESSION_DAYS:180,STEWARD_SESSION_SHEET:'Steward Sessions',NOTIFY_EMAIL:'fallback@example.invalid',_validStewardSession:(gid,token)=>gid===record.garden_id&&token==='fixture-steward',SpreadsheetApp:{getActiveSpreadsheet:()=>ss},PropertiesService:{getScriptProperties:()=>({getProperty:k=>props[k]||null})},Utilities:{DigestAlgorithm:{SHA_256:1},Charset:{UTF_8:1},computeDigest:(a,t)=>[...crypto.createHash('sha256').update(t).digest()],getUuid:()=>crypto.randomUUID()},LockService:{getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})},CacheService:{getScriptCache:()=>({get:()=>null,put(){}})},MailApp:{sendEmail:m=>mails.push(m)},UrlFetchApp:{fetch:u=>({getContentText:()=>JSON.stringify(u.endsWith('registry.json')?{gardens:[{garden_id:record.garden_id,data_file:'data/fixture.json'}]}:record)})},safeStr:(v,n)=>String(v||'').trim().slice(0,n),jsonResp:v=>v};
+vm.createContext(context);let source=fs.readFileSync(__dirname+'/appsscript/Code.gs','utf8');vm.runInContext(source.slice(source.indexOf('/* Invited designer pilot.')),context);
+const portal=(action,data={})=>context.handleDesignerPortal({action,...data}),routing=(action,data={})=>context.handleRouting({action,...data});
+function invite(id){return portal('create_practice',{admin_token:'fixture-admin',designer_id:id,name:id,contact_email:id+'@example.invalid'}).access_link.split('#access=')[1];}
+let sam=invite('sam-cox-landscape'),other=invite('other-practice'),gs=invite('gardener-and-son');
+const steward=new Sheet();steward.appendRow(['garden_id','email','session_token','issued_at']);steward.appendRow([record.garden_id,'steward@example.invalid','fixture-steward',new Date().toISOString()]);sheets['Steward Sessions']=steward;
+let params={garden_id:record.garden_id,opportunity_id:'water_feature',session_token:'fixture-steward',steward_consent:true};
+assert.equal(routing('create_request',{...params,session_token:'forged'}).ok,false);
+assert.equal(routing('create_request',{...params,steward_consent:false}).ok,false);assert.equal(mails.length,0);
+assert.equal(routing('create_request',{...params,opportunity_id:'verify_gs'}).ok,false);
+let created=routing('create_request',params);assert.equal(created.ok,true);assert.equal(created.request.status,'offered');assert.equal(created.request.steward_email,undefined);assert.equal(routing('create_request',params).duplicate,true);
+assert.equal(sheets.Routing.rows.length,2);assert.equal(new Date(sheets.Routing.rows[1][9])-new Date(sheets.Routing.rows[1][4]),60000);
+assert.ok(!mails.find(m=>m.to==='sam-cox-landscape@example.invalid').body.includes('steward@example.invalid'));
+assert.equal(routing('get_queue',{designer_token:sam}).requests[0].steward_email,undefined);
+assert.equal(routing('get_queue',{designer_token:other}).requests.length,0);
+assert.equal(routing('respond',{designer_token:other,request_id:created.request.request_id,response:'accepted'}).ok,false);
+let accepted=routing('respond',{designer_token:sam,request_id:created.request.request_id,response:'accepted'});assert.equal(accepted.request.steward_email,'steward@example.invalid');
+assert.equal(routing('complete',{designer_token:sam,request_id:created.request.request_id}).ok,false);
+assert.equal(routing('complete',{admin_token:'fixture-admin',request_id:created.request.request_id}).ok,true);
+let expiring=routing('create_request',params);sheets.Routing.rows[2][9]=new Date(Date.now()-1).toISOString();context.releaseExpiredRouting();assert.equal(sheets.Routing.rows[2][5],'released');assert.equal(routing('get_queue',{designer_token:sam}).requests.some(r=>r.request_id===expiring.request.request_id),false);
+assert.equal(routing('get_queue',{designer_token:gs}).requests.find(r=>r.request_id===expiring.request.request_id).steward_email,'steward@example.invalid');
+assert.equal(routing('respond',{designer_token:sam,request_id:expiring.request.request_id,response:'accepted'}).ok,false);
+assert.equal(routing('respond',{designer_token:gs,request_id:expiring.request.request_id,response:'accepted'}).ok,true);
+assert.equal(routing('get_queue',{designer_token:sam}).requests.some(r=>r.request_id===expiring.request.request_id&&r.steward_email),false);
+let decline=routing('create_request',{...params,opportunity_id:'logs'});assert.equal(routing('respond',{designer_token:sam,request_id:decline.request.request_id,response:'declined'}).ok,true);assert.equal(sheets.Routing.rows[3][5],'released');
+record.designer_id=null;let fallback=routing('create_request',{...params,opportunity_id:'rocks'});assert.equal(fallback.request.status,'released');record.designer_id='sam-cox-landscape';
+assert.equal(JSON.stringify(record),unchanged);assert.ok(sheets['Routing History'].rows.length>=8);
+console.log('Upgrade routing: garden-scoped auth, per-request consent, isolation, deduplication, acceptance/contact gating, decline, one-minute expiry, fallback, audit and unchanged inputs passed.');

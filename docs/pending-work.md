@@ -540,3 +540,13 @@ No Apps Script changes or deployment were made in Phase 1. Phase 2 backend is
 deployed as profile-service version 38 at the existing URL; public frontend
 publication is pending. Real-email access has not been exercised using private
 practice contacts; hashing/expiry/one-use/revocation/rate limits pass fixture tests.
+
+### Upgrade routing — Phase 3 ready for review; authorization required
+
+Tested: garden-scoped stewardship, consent per request, practice isolation,
+duplicate request handling, accepted contact gating, declines, one-minute expiry,
+G&S fallback, admin-only completion and unchanged ecological inputs. Public
+profiles and the private portal are wired. No live notification/request was sent.
+The editor holds tested Phase 3 source; deployment remains version 38. Google
+requires fresh authorization to install the 15-minute automatic-release trigger.
+Do not claim scheduled expiry is active until that trigger is installed and verified.

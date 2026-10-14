@@ -488,6 +488,7 @@
 <script src="/js/reg-private-details.js"></script>
 <script src="/js/reg-precise-map.js"></script>
 <script src="/js/reg-claims.js"></script>
+<script src="/js/reg-routing.js"></script>
 <script src="/js/reg-invite.js"></script>
 <script src="/js/reg-spatial.js"></script>
 <script src="/js/badge-engine.js"></script>
@@ -1140,6 +1141,7 @@ function render() {
   }
   html('opportunityList', oh);
   if (typeof attachClaims === 'function') attachClaims(R);
+  if (typeof attachUpgradeRouting === 'function') attachUpgradeRouting(R);
   if (typeof attachNeighbourInvite === 'function') attachNeighbourInvite(R);
   if (typeof renderSpatialSections === 'function') renderSpatialSections(R);
 

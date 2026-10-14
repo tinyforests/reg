@@ -658,3 +658,15 @@ profile-service deployment is version 38 at the same ID and URL; the newsletter
 deployment is unchanged. Files: designer-dashboard.html, js/designer-portal.js,
 scripts/appsscript/Code.gs, scripts/test_designer_magic.cjs, archived concept,
 designer-pilot.md, data-schema.md, pending-work.md and this log.
+
+## 15 Oct 2026 — Upgrade routing with original-designer priority
+
+Implement Tyson's confirmed 14-day response window, consent per request and G&S
+fallback. Server-authenticated steward identity and canonical attribution determine
+the route. Original designers cannot retrieve contact before accepting; declines,
+expired offers and unassigned gardens release to G&S. History records transitions;
+manual completion never changes scoring inputs. Fixture tests exercise a one-minute
+window without a real request or mail. Scheduled job setup requires fresh Google
+authorization; source is saved but deployment remains version 38 pending that step.
+Files: scripts/appsscript/Code.gs, scripts/test_upgrade_routing.cjs, js/reg-routing.js,
+profile templates, designer-dashboard.html, js/designer-portal.js and routing docs.
