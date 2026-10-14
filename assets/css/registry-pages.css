@@ -16,7 +16,7 @@ html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#
 .reg-ui .badge-pill,.reg-ui .badge-chip{font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.6;padding:5px 9px}
 /* Profiles retain their canonical hero, signals, evidence and network order. */
 .reg-ui-profile main>section{scroll-margin-top:110px}
-.reg-ui-profile main>section+section{margin-top:64px}
+body.reg-ui.reg-ui-profile main.space-y-12>section+section:not([hidden]){margin-top:40px}
 .reg-ui-profile main>section:first-child>.grid{gap:24px}
 .reg-ui-profile main>section:first-child>.grid>div:first-child{background:var(--reg-ui-panel);border-top:3px solid var(--reg-ui-signal)}
 .reg-ui-profile #heroDesc{font-size:17px;line-height:1.8;max-width:580px}
@@ -74,19 +74,18 @@ html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#
 .reg-ui-updates .row{padding:18px 0;line-height:1.7}
 .reg-ui-updates .chip,.reg-ui-updates button,.reg-ui-updates input,.reg-ui-updates select{border-radius:0!important}
 .reg-ui-updates select,.reg-ui-updates input,.reg-ui-updates button{min-height:40px}
-@media(max-width:767px){.reg-ui>main.max-w-6xl{padding:32px 20px 48px}.reg-ui>header:not(.hero)>div:first-child{padding:16px 20px;gap:12px;flex-wrap:wrap}.reg-ui-profile main>section+section{margin-top:44px}.reg-ui-profile main>section:first-child>.grid>div:first-child{padding:26px}.reg-ui-profile #heroDesc{font-size:16px}.reg-ui-profile .eco-card .score{font-size:86px}.reg-ui-profile .eco-card .tier{overflow-wrap:anywhere}.reg-ui-badges>header>div>div:first-child{min-width:0}.reg-ui-badges #themeToggle{font-size:10px}.reg-ui-registry #overview>div{padding:44px 20px}.reg-ui-registry #gardens aside{padding:20px}.reg-ui-enrol section.band{padding:48px 0}.reg-ui-enrol .rail-inner{padding:12px 20px;gap:6px 14px}.reg-ui-enrol .rail-step{font-size:9px;margin-right:0}.reg-ui-enrol .card{padding:22px}.reg-ui-updates .row{grid-template-columns:1fr;gap:4px}.reg-ui-updates .bar>span,.reg-ui-updates .bar>input{width:100%}.reg-ui-updates .bar select{max-width:100%}.reg-ui-live .hero,.reg-ui-designer-dashboard .hero{padding-top:48px}.reg-ui-assess>header>div>.flex:last-child{flex-wrap:wrap}}
+@media(max-width:767px){.reg-ui>main.max-w-6xl{padding:32px 20px 48px}.reg-ui>header:not(.hero)>div:first-child{padding:16px 20px;gap:12px;flex-wrap:wrap}body.reg-ui.reg-ui-profile main.space-y-12>section+section:not([hidden]){margin-top:32px}.reg-ui-profile main>section:first-child>.grid>div:first-child{padding:26px}.reg-ui-profile #heroDesc{font-size:16px}.reg-ui-profile .eco-card .score{font-size:86px}.reg-ui-profile .eco-card .tier{overflow-wrap:anywhere}.reg-ui-badges>header>div>div:first-child{min-width:0}.reg-ui-badges #themeToggle{font-size:10px}.reg-ui-registry #overview>div{padding:44px 20px}.reg-ui-registry #gardens aside{padding:20px}.reg-ui-enrol section.band{padding:48px 0}.reg-ui-enrol .rail-inner{padding:12px 20px;gap:6px 14px}.reg-ui-enrol .rail-step{font-size:9px;margin-right:0}.reg-ui-enrol .card{padding:22px}.reg-ui-updates .row{grid-template-columns:1fr;gap:4px}.reg-ui-updates .bar>span,.reg-ui-updates .bar>input{width:100%}.reg-ui-updates .bar select{max-width:100%}.reg-ui-live .hero,.reg-ui-designer-dashboard .hero{padding-top:48px}.reg-ui-assess>header>div>.flex:last-child{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.reg-ui .stagger,.reg-ui .fade-in,.reg-ui .reveal{animation:none!important;opacity:1!important;transform:none!important}.reg-ui .bar-fill{transition:none!important}}
 @media print{.reg-ui-updates>header,.reg-ui-updates>.bar{padding:0}.reg-ui-updates .row{padding:9px 0}}
 .reg-ui-assess main .grid>*,.reg-ui-profile main .grid>*{min-width:0}
 .reg-ui-assess input,.reg-ui-assess select,.reg-ui-assess textarea{max-width:100%}
 @media(max-width:639px){.reg-ui-assess main>.grid>div{max-width:100%}.reg-ui-assess .pillar-panel .flex{flex-wrap:wrap}}
 
-/* Align section starts to a viewport below the persistent header. */
+/* Profiles flow with their content; entry pages retain viewport sections. */
 @media(min-width:1024px){
  .reg-ui-profile>header>div:first-child{min-height:76px}
- .reg-ui-profile>main{padding-top:0;padding-bottom:0}
- .reg-ui-profile main>section:not([style*="display:none"]):not([style*="display: none"]){min-height:calc(100svh - 76px);padding-block:clamp(32px,5svh,64px);scroll-margin-top:76px;display:flex;flex-direction:column;justify-content:center}
- .reg-ui-profile main>section+section{margin-top:0}
+ .reg-ui-profile>main{padding-top:40px;padding-bottom:48px}
+ .reg-ui-profile main>section:not([style*="display:none"]):not([style*="display: none"]){scroll-margin-top:88px}
  .reg-ui-profile h1.font-serif{font-size:clamp(2.7rem,min(5.4vw,9svh),5.2rem)}
  .reg-ui-registry #overview,.reg-ui-registry #why{min-height:calc(100svh - 78px);display:flex;align-items:center;scroll-margin-top:78px}
  .reg-ui-registry #overview>div,.reg-ui-registry #why>div{width:100%}
@@ -103,7 +102,6 @@ html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#
  .reg-ui-profile .eco-card .score{font-size:82px}
 }
 @media(min-width:1024px){.reg-ui-profile>header>div:first-child{min-height:72px;padding-top:12px;padding-bottom:12px}}
-@media(min-width:1024px) and (max-height:800px){.reg-ui-profile main>section:not([style*="display:none"]):not([style*="display: none"]){padding-block:28px}}
 @media(min-width:1024px){body.reg-ui-profile>header>div:first-child{min-height:72px}}
 @media(min-width:1024px){body.reg-ui.reg-ui-profile>header>div:first-child{min-height:72px}}
 

@@ -618,3 +618,13 @@ with no automatic send, payment or stored submission. Files: brands.html,
 js/brands.js, assets/css/brands.css, index.html, assets/css/registry-home.css,
 docs/brand-sponsorship.md, revenue-and-yield-rules.md, registry-product-brief.md,
 README.md, pending-work.md and this log.
+
+
+## 14 Oct 2026 — Compact profile sections and simplify navigation
+
+At Tyson’s request, remove the Example link from the homepage header and let
+profile sections follow their content instead of filling a desktop viewport.
+Use 40px between sections on tablet/desktop and 32px on mobile, retaining
+sticky-header anchor clearance and the existing section order. This reduces
+empty scrolling between ecological evidence panels. Files: index.html,
+assets/css/registry-pages.css and this log.
