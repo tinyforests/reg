@@ -65,6 +65,9 @@ def located_council(point,boundaries):
 def aggregate(raw,enrolments,coords,calibration,registry,boundaries):
     # Exact normalised-address matches only. Never infer a conversion from proximity.
     converted={normal(field(row,'Garden address','Address','garden_address')) for row in enrolments}
+    # Canonical legacy gardens may predate the current enrolment sheet.
+    registered_ids={g['garden_id'] for g in registry['gardens'] if not g.get('demo')}
+    converted.update(normal(coords[gid].get('address')) for gid in registered_ids if gid in coords)
     converted.discard('')
     cleaned=[]
     for row in raw:

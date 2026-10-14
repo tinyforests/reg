@@ -14,7 +14,8 @@ consented leads. No new gardens or ecological inputs are generated.
 
 The four bands are disjoint: 0–50m, >50–150m, >150–300m and >300–1000m. A lookup
 near several gardens is counted once for that practice, by its nearest garden.
-An exact normalised address match to an enrolment excludes that row from latent
+An exact normalised address match to an enrolment or a canonical garden’s private
+address excludes that row from latent
 demand. This is a conservative recorded-match rule, not proof that all remaining
 lookups failed to convert. Rows without identifying address text cannot be linked
 to an enrolment; disclose that limitation. Tests, November/December 2025 calibration

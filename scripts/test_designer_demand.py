@@ -19,6 +19,14 @@ class DemandTests(unittest.TestCase):
         out=aggregate([],[],{},[],registry,{'features':[]});d=out['designers']['practice']
         self.assertFalse(d['available']);self.assertEqual(set(d['bands'].values()),{'<5'});self.assertEqual(out['public']['total'],'<5')
 
+    def test_legacy_canonical_address_also_excludes_conversion(self):
+        row={'timestamp':'10/15/2026 12:00:00','address':'Legacy enrolled fixture','latitude':'0.01','longitude':'0.01','evccode':'55'}
+        coords={'A':{'lat':0.01,'lng':0.01,'address':'Legacy enrolled fixture'}}
+        registry={'gardens':[{'garden_id':'A','designer_id':'practice'}]}
+        out=aggregate([row],[],coords,[],registry,{'features':[]})
+        self.assertEqual(out['designers']['practice']['bands']['0-50m'],'<5')
+        self.assertEqual(out['designers']['practice']['months'],{})
+
     def test_months_validate_and_use_melbourne(self):
         self.assertIsNone(month('2/30/2026 12:00:00'))
         self.assertEqual(month('2026-09-30T15:00:00Z'),'2026-10')
