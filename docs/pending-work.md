@@ -550,3 +550,15 @@ profiles and the private portal are wired. No live notification/request was sent
 The editor holds tested Phase 3 source; deployment remains version 38. Google
 requires fresh authorization to install the 15-minute automatic-release trigger.
 Do not claim scheduled expiry is active until that trigger is installed and verified.
+
+### Private latent demand — Phase 4 prepared; real input/import/privacy gates open
+
+The private exact-distance calculation, small-count suppression, practice-scoped
+API, portal panels and aggregate-only public dashboard are prepared and tested.
+The raw public export is deleted on the phase branch; the export helper now writes
+to git-ignored private storage. Do not publish the frontend until real private
+lookup/enrolment CSVs have been processed and actual aggregates imported.
+Current source-sheet sharing still needs restriction. Existing public Git history
+is not rewritten. See designer-demand.md. No synthetic demand or new garden count
+was published. The requested ten real gardens also need actual records and steward
+consent; no additional record has been invented.
