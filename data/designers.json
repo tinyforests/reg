@@ -1,0 +1,20 @@
+{
+  "designers": [
+    {
+      "designer_id": "gardener-and-son",
+      "display_name": "Gardener & Son",
+      "practice_name": "Gardener & Son",
+      "url": null,
+      "status": "active",
+      "joined": null
+    },
+    {
+      "designer_id": "sam-cox-landscape",
+      "display_name": "Sam Cox Landscape",
+      "practice_name": "Sam Cox Landscape",
+      "url": null,
+      "status": "invited",
+      "joined": null
+    }
+  ]
+}

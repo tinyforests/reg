@@ -481,6 +481,7 @@
   </div>
 </footer>
 
+<script src="/js/reg-designer-attribution.js"></script>
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
 <script src="/js/reg-identity.js"></script>
@@ -1184,6 +1185,7 @@ function render() {
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Method</dt><dd class="font-medium text-right">' + h.planting_method + '</dd></div>' +
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Designed by</dt><dd class="font-medium text-right">' + R.designer + '</dd></div>'
   );
+    renderDesignerAttribution(R);
     if (typeof renderPrivateGardenDetails === "function") renderPrivateGardenDetails(R.garden_id);
 
   /* Species list */

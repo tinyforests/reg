@@ -43,10 +43,14 @@ def run():
     # must not block publishing an unrelated garden). Used as publish.py's safety gate.
     parity_only = '--parity-only' in sys.argv
 
-    garden_files = sorted(
-        f for f in os.listdir(DATA_DIR)
-        if f.endswith('.json') and f not in SKIP_FILES
-    )
+    garden_files = []
+    for filename in sorted(os.listdir(DATA_DIR)):
+        if not filename.endswith('.json') or filename in SKIP_FILES:
+            continue
+        with open(os.path.join(DATA_DIR, filename)) as source:
+            candidate = json.load(source)
+        if isinstance(candidate, dict) and candidate.get('garden_id'):
+            garden_files.append(filename)
 
     passed = failed = 0
     failures = []

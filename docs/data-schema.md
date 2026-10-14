@@ -378,3 +378,29 @@ JSON files and profiles use neutral IDs. See [designer-pilot.md](designer-pilot.
 The developer enquiry currently creates no stored project record or new schema.
 Proposed lifecycle assessments and policy thresholds require separately reviewed
 schema/method work; do not treat page principles as existing engine fields.
+
+## Designer attribution registry — Phase 1
+
+`data/designers.json` contains a `designers` array of stable `designer_id`,
+`display_name`, `practice_name`, `url`, `status` (`active` / `invited`) and `joined`.
+Unknown URLs and joining dates remain null. Contact emails and credentials stay
+in private sheets. `designer_id: null` means no design practice is attributed;
+self-enrolment is provenance rather than a practice.
+
+`sync_registry.py` rejects unknown designer IDs and a practice verifying its own
+work, except Gardener & Son under Tyson's explicit dogfooding exception. This is
+studio verification, not an independent assessment. Scores remain governed by
+existing ecological inputs and verification levels; attribution is never scored.
+
+Sync writes `data/designers-derived.json`, keyed under `designers`, with
+`garden_count`, `verified_count`, and `mean_verified_score`. Demo gardens are
+excluded. Verified means an existing recognised level (`gardener_and_son_verified`,
+`site_visit`, `photo_verified`), with neither canonical nor index status Provisional
+or Design Proposal. Unrecognised `third_party_verified` is excluded. No verified
+gardens means a null mean. Public pages use approximate display coordinates only.
+
+For an attribution-only migration, run `python3 scripts/sync_registry.py
+--attribution-only`. This path validates existing scores against the engine,
+updates attribution and designer aggregates, and leaves ecological inputs,
+ratings, badges, scores and coordinates unchanged. Full ecological sync retains
+its existing private-coordinate/seed requirement. `--check` is read-only for both.

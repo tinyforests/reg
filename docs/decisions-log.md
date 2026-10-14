@@ -628,3 +628,19 @@ Use 40px between sections on tablet/desktop and 32px on mobile, retaining
 sticky-header anchor clearance and the existing section order. This reduces
 empty scrolling between ecological evidence panels. Files: index.html,
 assets/css/registry-pages.css and this log.
+
+## 14 Oct 2026 — Designer attribution and studio dogfooding
+
+Prepare the first phase of Tyson's designer-routing brief: public practice
+identities, linked profile attribution, public portfolios with approximate maps,
+and validated, sync-derived aggregates. Bush Garden is the Sam Cox record Tyson
+identified. G&S remains a designer and is explicitly allowed to verify its own
+work; this exception does not imply independent verification. Other practices may
+not verify their own gardens. Self-enrolment is not a design-practice ID.
+Attribution-only sync refuses score drift and leaves all ecological values intact,
+avoiding an unrelated coordinate/data migration. Unknown URLs and joining dates
+stay null. Private contacts never enter the public directory. Phase 1 files:
+data/designers*.json, attribution inputs/index, scripts/designer_registry.py,
+scripts/sync_registry.py, scripts/test_designer_registry.py, scripts/test_parity.py,
+profile templates, designers/*/index.html, shared attribution/public scripts and CSS,
+this log, data-schema.md and pending-work.md.

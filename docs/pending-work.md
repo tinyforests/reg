@@ -521,3 +521,18 @@ allocation/administration disclosures, agreements and payment arrangements,
 conflict/verification rules, follow-up and claims review. No checkout, sponsor
 portal, active payout, approved offset methodology or automatic eligibility
 is created by this launch.
+
+### Designer routing brief — Phase 1 prepared, later phases pending
+
+Phase 1 adds public practice identities, profile attribution links, public designer
+pages and sync-derived practice aggregates. G&S self-verification is explicitly
+allowed by Tyson for dogfooding; other designers require a separate verifier.
+Bush Garden is the confirmed Sam Cox attribution; no additional Lorimer record
+was invented. Attribution-only sync preserves existing ecological scores.
+
+Before Phase 2, deploy Phase 1 and verify its public routes. Phase 2 extends the
+existing invited pilot with public view and email magic links rather than removing
+working submission/review features. Phase 3 response window: 14 days, explicit
+consent per request, released work falls back to G&S (confirmed 14 Oct 2026).
+Phase 4 remains private aggregate computation with small-count suppression.
+No Apps Script changes or deployment were made in Phase 1.

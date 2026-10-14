@@ -1,0 +1,14 @@
+{
+  "designers": {
+    "gardener-and-son": {
+      "garden_count": 20,
+      "verified_count": 20,
+      "mean_verified_score": 46.3
+    },
+    "sam-cox-landscape": {
+      "garden_count": 1,
+      "verified_count": 1,
+      "mean_verified_score": 83.0
+    }
+  }
+}

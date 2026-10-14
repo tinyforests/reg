@@ -606,6 +606,7 @@
   </div>
 </div>
 
+<script src="/js/reg-designer-attribution.js"></script>
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
 <script src="/js/reg-identity.js"></script>
@@ -1011,6 +1012,7 @@ function render() {
       factRow('Area',      '<span class="null-field">To be confirmed</span>') +
       factRow('Visit',     ds.visit_date || '—')
     );
+    renderDesignerAttribution(R);
     if (typeof renderPrivateGardenDetails === "function") renderPrivateGardenDetails(R.garden_id);
 
     /* Animate bars */
