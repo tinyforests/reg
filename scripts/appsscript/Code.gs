@@ -1760,8 +1760,15 @@ function _designerPublicPortfolio(id) {
     content = response.getContentText(); cache.put(key, content, 60);
   }
   return (JSON.parse(content).gardens || []).filter(function (g) { return g.designer_id === id && !g.demo; }).map(function (g) {
-    return {garden_id: g.garden_id, garden_name: g.garden_name, suburb: g.suburb, state: g.state, score: g.score,
-      rating: g.rating, badge_count: g.badge_count, verification_level: g.verification_level, verification_label: g.verification_label, status: g.status, profile_url: g.profile_url};
+    var status=g.status;
+    if (/^data\/[a-zA-Z0-9_-]+\.json$/.test(g.data_file || '')) {
+      var canonical=JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/' + g.data_file).getContentText());
+      if (canonical.garden_id !== g.garden_id) throw Error('Canonical garden record unavailable');
+      if (['Provisional','Design Proposal'].indexOf(canonical.status)>=0) status=canonical.status;
+    }
+    var quarantined=['Provisional','Design Proposal'].indexOf(status)>=0;
+    return {garden_id: g.garden_id, garden_name: g.garden_name, suburb: g.suburb, state: g.state, score: quarantined ? null : g.score,
+      rating: g.rating, badge_count: quarantined ? 0 : g.badge_count, verification_level: g.verification_level, verification_label: quarantined ? 'Unverified' : g.verification_label, status: status, profile_url: g.profile_url};
   });
 }
 function handleDesignerPortal(payload) {
