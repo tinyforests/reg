@@ -15,6 +15,7 @@ carries managed_by.type == 'designer'.
 Run parity:  python scripts/test_opportunities_parity.py
 """
 
+import math
 import copy
 
 try:
@@ -58,7 +59,13 @@ def _total(record):
     return score_ecological_registry(record)['total']
 
 
+def _n(val):
+    """Mirror JS numeric coercion for nulled inputs: null < 5 and null + 1 treat null as 0."""
+    return 0 if val is None else val
+
+
 def _next_threshold(val, steps):
+    val = _n(val)
     for s in steps:
         if val < s:
             return s
@@ -81,9 +88,9 @@ def _catalogue(record):
     C = []
 
     # --- Biodiversity ---
-    sp_next = _next_threshold(b.get('indigenous_species_current', 0), [6, 12, 20, 30])
-    if sp_next is not None and b.get('indigenous_species_current', 0) < species_target:
-        add_n = sp_next - (b.get('indigenous_species_current', 0))
+    sp_next = _next_threshold(_n(b.get('indigenous_species_current')), [6, 12, 20, 30])
+    if sp_next is not None and _n(b.get('indigenous_species_current')) < species_target:
+        add_n = sp_next - (_n(b.get('indigenous_species_current')))
         C.append({
             'id': 'species_to_%d' % sp_next, 'pillar': 'biodiversity',
             'label': 'Add %d indigenous species (to %d)' % (add_n, sp_next),
@@ -95,13 +102,13 @@ def _catalogue(record):
             'id': 'indigenous_dominant', 'pillar': 'biodiversity', 'effort': 'project',
             'delivery_options': [{'path': 'gs_install', 'cost': '$$'}, {'path': 'designer_install', 'cost': '$$'}],
             'mutate': lambda r: r['biodiversity'].__setitem__('indigenous_dominant', True)})
-    ly_next = _next_threshold(b.get('structural_layers_current', 0), [2, 3, 4, 5])
+    ly_next = _next_threshold(_n(b.get('structural_layers_current')), [2, 3, 4, 5])
     if ly_next is not None:
         C.append({
             'id': 'layers_to_%d' % ly_next, 'pillar': 'biodiversity', 'effort': 'project',
             'delivery_options': [{'path': 'diy', 'cost': '$'}, {'path': 'gs_install', 'cost': '$$'}, {'path': 'designer_install', 'cost': '$$'}],
             'mutate': lambda r, v=ly_next: r['biodiversity'].__setitem__('structural_layers_current', v)})
-    ca_next = _next_threshold(b.get('canopy_cover_pct_current', 0), [5, 15, 30, 50])
+    ca_next = _next_threshold(_n(b.get('canopy_cover_pct_current')), [5, 15, 30, 50])
     if ca_next is not None and ca_next <= canopy_target + 5:
         C.append({
             'id': 'canopy_to_%d' % ca_next, 'pillar': 'biodiversity', 'effort': 'project', 'season': 'Autumn–winter planting',
@@ -109,16 +116,16 @@ def _catalogue(record):
             'mutate': lambda r, v=ca_next: r['biodiversity'].__setitem__('canopy_cover_pct_current', v)})
 
     # --- Soil & Water ---
-    if sw.get('soil_health_score', 0) < (sw.get('soil_health_max') or 5):
+    if _n(sw.get('soil_health_score')) < (sw.get('soil_health_max') or 5):
         C.append({
             'id': 'soil_health_up', 'pillar': 'soil_water', 'effort': 'moderate',
             'delivery_options': [{'path': 'diy', 'cost': '$'}, {'path': 'tend', 'cost': '$$'}],
-            'mutate': lambda r: r['soil_water'].__setitem__('soil_health_score', (r['soil_water'].get('soil_health_score', 0)) + 1)})
-    if sw.get('water_function_score', 0) < (sw.get('water_function_max') or 5):
+            'mutate': lambda r: r['soil_water'].__setitem__('soil_health_score', (_n(r['soil_water'].get('soil_health_score'))) + 1)})
+    if _n(sw.get('water_function_score')) < (sw.get('water_function_max') or 5):
         C.append({
             'id': 'water_function_up', 'pillar': 'soil_water', 'effort': 'moderate',
             'delivery_options': [{'path': 'diy', 'cost': '$'}, {'path': 'gs_install', 'cost': '$$'}, {'path': 'designer_install', 'cost': '$$'}],
-            'mutate': lambda r: r['soil_water'].__setitem__('water_function_score', (r['soil_water'].get('water_function_score', 0)) + 1)})
+            'mutate': lambda r: r['soil_water'].__setitem__('water_function_score', (_n(r['soil_water'].get('water_function_score'))) + 1)})
     if not sw.get('has_moisture_basin'):
         C.append({'id': 'moisture_basin', 'pillar': 'soil_water', 'effort': 'moderate',
                   'delivery_options': [{'path': 'diy', 'cost': '$'}, {'path': 'gs_install', 'cost': '$$'}, {'path': 'designer_install', 'cost': '$$'}],
@@ -133,7 +140,7 @@ def _catalogue(record):
                   'mutate': lambda r: r['soil_water'].__setitem__('has_swale', True)})
 
     # --- Habitat ---
-    nd_next = _next_threshold(h.get('habitat_nodes', 0), [1, 3, 5])
+    nd_next = _next_threshold(_n(h.get('habitat_nodes')), [1, 3, 5])
     if nd_next is not None:
         C.append({'id': 'nodes_to_%d' % nd_next, 'pillar': 'habitat', 'effort': 'quick',
                   'delivery_options': [{'path': 'gs_install', 'cost': '$'}, {'path': 'designer_install', 'cost': '$'}],
@@ -162,7 +169,7 @@ def _catalogue(record):
 
     # --- Connectivity ---
     adj = len([g for g in (c.get('adjacent_registered_gardens') or []) if g.get('verified')])
-    in_corridor = (c.get('adjacent_park') and (c.get('park_distance_m') or 9999) <= 500) or adj >= 1
+    in_corridor = (c.get('adjacent_park') and (9999 if c.get('park_distance_m') is None else c.get('park_distance_m')) <= 500) or adj >= 1
     if not c.get('corridor_node_confirmed') and in_corridor:
         C.append({'id': 'corridor_node', 'pillar': 'connectivity', 'effort': 'moderate',
                   'delivery_options': [{'path': 'verification', 'cost': '$$'}],
@@ -225,7 +232,7 @@ def build_opportunities(record, opts=None):
             'group': _group_of(o['pillar'], delivery_options),
             'action': o.get('label'), 'points': points, 'effort': o['effort'],
             'delivery_options': delivery_options, 'season': o.get('season'),
-            'priority': round(priority, 2),
+            'priority': math.floor(priority * 100 + 0.5) / 100,  # JS Math.round, not banker's rounding
         })
     opps.sort(key=lambda x: -x['priority'])
 
