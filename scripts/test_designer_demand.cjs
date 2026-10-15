@@ -1,0 +1,16 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+class Sheet{constructor(){this.rows=[]}appendRow(r){this.rows.push([...r])}setFrozenRows(){}getLastRow(){return this.rows.length}getRange(r,c,n=1,w=1){return{getValues:()=>this.rows.slice(r-1,r-1+n).map(row=>row.slice(c-1,c-1+w)),setValue:v=>{this.rows[r-1][c-1]=v}}}}
+const sheets={},ss={getSheetByName:n=>sheets[n]||null,insertSheet:n=>sheets[n]=new Sheet()};
+const context={console,SpreadsheetApp:{getActiveSpreadsheet:()=>ss},PropertiesService:{getScriptProperties:()=>({getProperty:()=> 'fixture-admin'})},LockService:{getScriptLock:()=>({tryLock:()=>true,releaseLock(){}})},UrlFetchApp:{fetch:u=>({getContentText:()=>JSON.stringify(u.endsWith('designers.json')?{designers:[{designer_id:'practice-a'},{designer_id:'practice-b'}]}:{features:[{properties:{name:'Fixture Council'}}]})})},_designerAuthorise:t=>t==='fixture-a'?{designer_id:'practice-a'}:t==='fixture-b'?{designer_id:'practice-b'}:null,_designerRows:(s,w)=>s&&s.getLastRow()>1?s.getRange(2,1,s.getLastRow()-1,w).getValues():[],_designerTable:(s,n,h)=>{let t=s.getSheetByName(n);if(!t){t=s.insertSheet(n);t.appendRow(h);}return t;},jsonResp:v=>v};
+vm.createContext(context);const source=fs.readFileSync(__dirname+'/appsscript/Code.gs','utf8');vm.runInContext(source.slice(source.indexOf('/* Only suppressed aggregates')),context);
+const call=(action,data={})=>context.handleDesignerDemand({action,...data});
+const aggregate={available:true,location_coverage:{attributed_gardens:1,with_private_locations:1},bands:{'0-50m':'<5','50-150m':6,'150-300m':'<5','300-1000m':'<5'},months:{'2026-10':6},evcs:{'55':6}};
+const data={designers:{'practice-a':aggregate},public:{total:6,months:{'2026-10':6},evcs:{'55':6},councils:{'Fixture Council':6},channels:{'Direct / untagged':6}}};
+assert.equal(call('get_public').ok,false);assert.equal(call('import',{aggregates:data}).ok,false);
+let invalid=JSON.parse(JSON.stringify(data));invalid.designers['practice-a'].bands['0-50m']=4;assert.equal(call('import',{admin_token:'fixture-admin',aggregates:invalid}).ok,false);assert.equal(Object.keys(sheets).length,0);
+invalid=JSON.parse(JSON.stringify(data));invalid.designers['practice-a'].address='PRIVATE FIXTURE';assert.equal(call('import',{admin_token:'fixture-admin',aggregates:invalid}).ok,false);
+invalid=JSON.parse(JSON.stringify(data));invalid.public.months={'2026-10-15T12:00:00Z':6};assert.equal(call('import',{admin_token:'fixture-admin',aggregates:invalid}).ok,false);
+assert.equal(call('import',{admin_token:'fixture-admin',aggregates:data}).ok,true);
+assert.equal(call('get',{designer_token:'forged'}).ok,false);assert.equal(call('get',{designer_token:'fixture-a',designer_id:'practice-b'}).aggregate.bands['50-150m'],6);assert.equal(call('get',{designer_token:'fixture-b',designer_id:'practice-a'}).available,false);
+let pub=call('get_public');assert.equal(pub.ok,true);assert.equal(pub.aggregate.total,6);for(let term of ['designer_id','latitude','longitude','address','lookup_rows'])assert.ok(!JSON.stringify(pub).includes(term));
+console.log('Designer demand: private practice isolation, admin import, small-count rejection, field allowlists, timestamp rejection and public aggregate boundary passed.');

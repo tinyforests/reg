@@ -670,3 +670,16 @@ window without a real request or mail. Scheduled job setup requires fresh Google
 authorization; source is saved but deployment remains version 38 pending that step.
 Files: scripts/appsscript/Code.gs, scripts/test_upgrade_routing.cjs, js/reg-routing.js,
 profile templates, designer-dashboard.html, js/designer-portal.js and routing docs.
+
+## 15 Oct 2026 — Private latent demand and aggregate public views
+
+Prepare exact private distance computation, recorded-address conversion matching,
+calibration exclusions and disjoint bands so one lookup is counted once per practice.
+Return only suppressed counts by band/month/EVC to the authenticated practice.
+Replace public raw-row exports and point maps with suppressed council/month/EVC/
+channel aggregates. No exact source or garden point enters a public response.
+Publication waits for real private input exports, aggregate import, source-sheet
+sharing restriction and Phase 3 authorization; no figures were invented.
+Files: private demand script/tests, Apps Script aggregate API, portal panels,
+live.html, demand.html, removed public evc-demand.json, private export path,
+aggregate dashboard tests, schema/pending/private-demand docs and this log.

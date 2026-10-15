@@ -434,3 +434,17 @@ The default response window is 14 days. `ROUTING_RESPONSE_MINUTES` is an optiona
 private script-property test override (minimum one minute); never publish it.
 `installRoutingReleaseTrigger` installs one idempotent 15-minute release job;
 queue reads also reconcile expired offers under the same lock.
+
+## Designer demand aggregates — Phase 4 (pending)
+
+Private `Designer Demand`: designer_id, aggregate_json, updated_at. Aggregate
+keys: available, location_coverage (attributed_gardens / with_private_locations),
+bands (four disjoint distance bands), months (YYYY-MM), evcs (code). Every lookup
+count is either an integer >=5 or `<5`. No address, point or individual timestamp
+is accepted or returned. Private script inputs stay git-ignored.
+
+Private `Public Demand`: aggregate_json, updated_at. Public keys: total, months,
+evcs, councils, channels. These are suppressed groups, not lookup rows. The public
+site switches to this feed only after actual private calculation and import.
+See [designer-demand.md](designer-demand.md) for conversion/exclusion limits and
+publication gates. Neither schema contributes to ecological scoring.

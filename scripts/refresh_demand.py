@@ -1,6 +1,6 @@
 """
 refresh_demand.py
-Exports EVC lookup data from the G&S Google Sheet to data/evc-demand.json.
+Exports EVC lookup data from the G&S Google Sheet to git-ignored data/private/evc-demand.json.
 
 Usage:
   python scripts/refresh_demand.py
@@ -26,7 +26,7 @@ import sys
 from datetime import datetime
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_PATH  = os.path.join(REPO_ROOT, 'data', 'evc-demand.json')
+OUT_PATH  = os.path.join(REPO_ROOT, 'data', 'private', 'evc-demand.json')
 
 SHEET_ID  = '1Em5FvJhUyCIVLOFYtcmjXUFK--6QZDh452F6NcXDAiQ'
 RANGE     = 'Sheet1!A2:F'
@@ -104,6 +104,7 @@ def main():
         'lookups':   rows
     }
 
+    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, 'w') as f:
         json.dump(out, f, separators=(',', ':'))
 

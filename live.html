@@ -5,35 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Demand Signal · Ecological Registry</title>
 
-<!-- ============================================================
-     CONFIG  —  edit these three values, then deploy.
-     Setup (one-time):
-       1. console.cloud.google.com → enable "Google Sheets API"
-       2. Create an API key. For production, restrict it to the
-          Sheets API and add an HTTP-referrer restriction for
-          ecologicalregistry.org (leave unrestricted while testing
-          from a local file, or the preview origin will be blocked).
-       3. Open the log sheet → Share → "Anyone with the link:
-          Viewer". The key can only read a link-viewable sheet.
-     ============================================================ -->
-<script>
-  const CONFIG = {
-    SHEET_ID: '1Em5FvJhUyCIVLOFYtcmjXUFK--6QZDh452F6NcXDAiQ',
-    RANGE:    'A:G',                 // first tab, all seven columns
-    // SECURITY: this is a browser-side key — on a static (GitHub Pages) site it is
-    // ALWAYS public. Secrecy is impossible; RESTRICTION is the protection. Before
-    // pasting a key here you MUST, in Google Cloud Console, restrict it to:
-    //   (1) the Google Sheets API only, and
-    //   (2) an HTTP-referrer allowlist of ecologicalregistry.org
-    // The old key (AIzaSy…9QUc) was exposed in this public repo and has been
-    // ROTATED OUT — deleted/replaced in Cloud Console, so its history copy is dead.
-    // This replacement is restricted to the Google Sheets API + ecologicalregistry.org
-    // referrers, so its (necessarily public) value can only read this one sheet from
-    // the site's own pages.
-    API_KEY:  'AIzaSyCXkw3I7Nu30ah6QReS9PEr_8cerNE2p88',
-  };
-</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -193,7 +164,7 @@
     <div class="meta">
       <div><span class="live-dot"></span>Status<b id="m-status">Connecting…</b></div>
       <div>Shown since<b id="m-since">—</b></div>
-      <div>Latest included lookup<b id="m-last">—</b></div>
+      <div>Latest included month<b id="m-last">—</b></div>
       <div>Feed checked<b id="m-refreshed" class="mono">—</b></div>
     </div>
   </div>
@@ -238,7 +209,7 @@
     <div class="wrap">
       <div class="eyebrow">Volume</div>
       <h2 class="section">Lookups over time</h2>
-      <p class="section-note">Monthly lookups for the selected studio filter. Explicit tests and the November–December 2025 calibration period remain excluded.</p>
+      <p class="section-note">Monthly aggregate lookups. Tests, calibration months and documented studio clusters are excluded. Counts below five are suppressed.</p>
       <div class="chart">
         <div class="bar-row" data-c="bars"></div>
         <div class="bar-labels" data-c="labels"></div>
@@ -295,338 +266,31 @@
       <div class="rule"></div>
       <p class="mono" data-c="foot"></p>
       <p class="mono">Source · Find My EVC lookup log &nbsp;|&nbsp; Ecological Registry · ecologicalregistry.org<br>
-      Explicit test rows and the November–December 2025 calibration period are always excluded. The studio toggle controls the two documented studio clusters.<br>
+      Explicit test rows and the November–December 2025 calibration period are always excluded. The documented studio clusters are always excluded.<br>
       Council boundaries: <a href="https://plan-gis.mapshare.vic.gov.au/arcgis/rest/services/Planning/VicPlan_Other/MapServer/1">State of Victoria · VicPlan / Vicmap Admin</a>, snapshot 12 Oct 2026. Grouping is approximate, not a cadastral determination.</p>
     </div>
   </footer>
 </template>
 
 <script>
-/* ============================================================
-   Months excluded from every figure on this page (YYYY-MM).
-   Applied at the source, before any other filtering — these
-   rows never enter the dataset, so they stay hidden whether or
-   not the studio toggle is on.
-   ============================================================ */
-const EXCLUDE_MONTHS = ['2025-11','2025-12'];
-
-/* ============================================================
-   Studio / dev clusters to exclude (organic-demand filter).
-   These two points each repeat dozens of times — calibration,
-   not organic traffic. Proximity in metres. 'test' rows always drop.
-   ============================================================ */
-const STUDIO_CLUSTERS = [
-  {lat:-37.8060, lng:145.0830, r:150},  // Balwyn Rd / Nungerner cluster
-  {lat:-37.8229, lng:145.0449, r:150},  // Auburn Rd, Hawthorn studio
-];
-
-const fmt = n => n.toLocaleString('en-AU');
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-function haversine(a,b,c,d){
-  const R=6371000,t=x=>x*Math.PI/180;
-  const dLat=t(c-a),dLng=t(d-b);
-  const s=Math.sin(dLat/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dLng/2)**2;
-  return 2*R*Math.asin(Math.sqrt(s));
+const ENDPOINT='https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec';
+let DATA=null,loading=false,lastSuccess=null,refreshTimer=null,MAP,LAYER;
+const q=s=>document.querySelector(s),fmt=v=>typeof v==='number'?v.toLocaleString('en-AU'):String(v ?? '—');
+function set(k,v){const e=q(`[data-t="${k}"]`);if(e)e.textContent=v;}
+function list(selector,counts){const host=q(selector);host.replaceChildren();Object.entries(counts||{}).forEach(([label,value])=>{const li=document.createElement('li');li.style.display='flex';li.style.justifyContent='space-between';const name=document.createElement('span'),count=document.createElement('span');name.textContent=label;count.textContent=fmt(value);li.append(name,count);host.append(li);});}
+function render(){if(!DATA)return;const a=DATA.aggregate;
+ set('total',fmt(a.total));set('totalsub','Excluded: tests and documented calibration clusters');set('direct',fmt(a.channels['Direct / untagged'] ?? '<5'));set('directsub','Aggregate lookup activity');set('evcs',String(Object.keys(a.evcs).length));set('lgas',String(Object.keys(a.councils).filter(k=>k!=='Unassigned').length));set('lgasub','Council totals; small groups suppressed');
+ const months=Object.keys(a.months).sort();document.getElementById('m-since').textContent=months[0]||'—';document.getElementById('m-last').textContent=months.at(-1)||'—';document.getElementById('m-refreshed').textContent=lastSuccess.toLocaleString('en-AU',{timeZone:'Australia/Melbourne'});
+ const bars=q('[data-c="bars"]'),labels=q('[data-c="labels"]');bars.replaceChildren();labels.replaceChildren();const max=Math.max(1,...Object.values(a.months).filter(n=>typeof n==='number'));
+ months.forEach(m=>{const bar=document.createElement('div');bar.className='bar';bar.style.height=(typeof a.months[m]==='number'?a.months[m]/max*100:1)+'%';const count=document.createElement('span');count.className='v';count.textContent=fmt(a.months[m]);bar.append(count);bars.append(bar);const label=document.createElement('span');label.textContent=m;labels.append(label);});
+ list('[data-c="evc"]',a.evcs);list('[data-c="lga"]',a.councils);list('[data-c="sources"]',a.channels);q('[data-c="ld"]').textContent=fmt(a.channels['Direct / untagged']??'<5');q('[data-c="lr"]').textContent='See channel counts';q('[data-c="split"]').textContent='Small channel counts are suppressed.';
+ q('[data-c="mapnote"]').textContent='Council-level aggregates only. Individual lookup locations are not sent to this page.';q('[data-c="foot"]').textContent='Suppressed aggregate dataset updated '+new Date(DATA.updated_at).toLocaleString('en-AU',{timeZone:'Australia/Melbourne'})+'. Lookups measure activity, not unique people or registered gardens.';
+ document.getElementById('hidden-count').textContent='— calibration clusters are always excluded';
 }
-function isStudio(lat,lng){
-  if(!isFinite(lat)||!isFinite(lng))return false;
-  return STUDIO_CLUSTERS.some(c=>haversine(lat,lng,c.lat,c.lng)<=c.r);
-}
-function parseDate(s){
-  const text=String(s||'').trim();
-  if(/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:?\d{2})$/.test(text)) {
-    const date=new Date(text);return isFinite(date.getTime())?date:null;
-  }
-  // Google Forms timestamps in this source are M/D/YYYY, Melbourne wall time.
-  const m=text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
-  if(!m)return null;
-  const values=[+m[3],+m[1]-1,+m[2],+m[4],+m[5],+(m[6]||0)];
-  const check=new Date(Date.UTC(...values));
-  if(check.getUTCFullYear()!==values[0]||check.getUTCMonth()!==values[1]||check.getUTCDate()!==values[2]||values[3]>23||values[4]>59||values[5]>59)return null;
-  const desired=check.getTime();let utc=desired;
-  const formatter=new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Melbourne',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
-  for(let i=0;i<2;i++){
-    const parts=Object.fromEntries(formatter.formatToParts(new Date(utc)).filter(p=>p.type!=='literal').map(p=>[p.type,+p.value]));
-    const actual=Date.UTC(parts.year,parts.month-1,parts.day,parts.hour,parts.minute,parts.second);
-    utc+=desired-actual;
-  }
-  return new Date(utc);
-}
-function monthKey(date){return new Intl.DateTimeFormat('en-CA',{timeZone:'Australia/Melbourne',year:'numeric',month:'2-digit'}).format(date).replace(/^(\d{2})\/(\d{4})$/,'$2-$1');}
-
-let COUNCILS=null;
-const COUNCIL_CACHE=new Map();
-function prepareCouncils(data){
-  if(data.type!=='FeatureCollection'||!data.features?.length)throw new Error('Council boundaries unavailable');
-  return data.features.map(f=>{
-    const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[];
-    const points=polygons.flat(2);
-    return {name:f.properties.name,polygons,bounds:[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))]};
-  });
-}
-async function loadCouncils(signal){
-  if(COUNCILS)return;
-  const response=await fetch('/data/live-victorian-lgas.geojson',{cache:'no-cache',signal});
-  if(!response.ok)throw new Error('Council boundaries unavailable');
-  COUNCILS=prepareCouncils(await response.json());COUNCIL_CACHE.clear();
-}
-function inRing(x,y,ring){
-  let inside=false;
-  for(let i=0,j=ring.length-1;i<ring.length;j=i++){
-    const [xi,yi]=ring[i],[xj,yj]=ring[j];
-    if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)inside=!inside;
-  }
-  return inside;
-}
-function locatedCouncil(lat,lng){
-  if(!COUNCILS||!isFinite(lat)||!isFinite(lng))return null;
-  const key=lat+','+lng;if(COUNCIL_CACHE.has(key))return COUNCIL_CACHE.get(key);
-  const match=COUNCILS.find(c=>lng>=c.bounds[0]&&lat>=c.bounds[1]&&lng<=c.bounds[2]&&lat<=c.bounds[3]&&c.polygons.some(p=>inRing(lng,lat,p[0])&&!p.slice(1).some(h=>inRing(lng,lat,h))));
-  const name=match?.name||null;COUNCIL_CACHE.set(key,name);return name;
-}
-
-function parseCouncil(addr){
-  const m=String(addr).match(/(?:City|Shire|Rural City|Borough) of ([^,]+)/);
-  return m?m[1].trim():null;
-}
-function referralSource(addr){
-  const a=String(addr).toLowerCase();
-  if(a.includes('findmynativeplants'))return'Find My Native Plants';
-  if(a.includes('findmyevc'))return'Find My EVC';
-  if(a.includes('referral'))return'Other referral';
-  return null;
-}
-
-const REFRESH_MS = 60000;
-let loading = false, refreshTimer, lastSuccess = null;
-let SOURCE_ROWS=0, SOURCE_IGNORED=0;
-let RAW=[];  // cleaned base rows (test dropped, excluded months dropped, studio flagged)
-
-async function load(){
-  if(CONFIG.API_KEY==='YOUR_API_KEY') return showSetup();
-  if(loading || document.hidden) return;
-  loading = true;
-  const refreshButton=document.getElementById('refresh-now');if(refreshButton)refreshButton.disabled=true;
-  clearTimeout(refreshTimer);
-  document.getElementById('m-status').textContent = lastSuccess ? 'Refreshing…' : 'Connecting…';
-  const controller = new AbortController();
-  const timeout = setTimeout(()=>controller.abort(), 20000);
-  try {
-    const url=`https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.RANGE)}?key=${CONFIG.API_KEY}`;
-    const [sheet,boundaries]=await Promise.allSettled([fetch(url,{cache:'no-store',signal:controller.signal}),loadCouncils(controller.signal)]);
-    if(sheet.status==='rejected')throw sheet.reason;
-    const res=sheet.value;
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||('HTTP '+res.status));}
-    const json=await res.json();
-
-    const rows=(json.values||[]).slice(1); // drop header
-    SOURCE_ROWS=rows.filter(r=>String(r[0]||'').trim()).length;
-    RAW=rows.map(r=>{
-      const [ts,addr='',lat='',lng='',code='',name='',src='']=r;
-      const d=parseDate(ts);
-      const la=parseFloat(lat), ln=parseFloat(lng);
-      const isTest=String(addr).toLowerCase()==='test'||String(lat).toLowerCase()==='test';
-      const ref=referralSource(addr)||(String(src).toLowerCase().includes('referral')?referralSource(src):null);
-      return {
-        date:d, addr, lat:la, lng:ln,
-        hasGeo:isFinite(la)&&isFinite(ln)&&Math.abs(la)<=90&&Math.abs(ln)<=180&&!(la===0&&ln===0),
-        code:String(code).trim(), name:String(name).trim(),
-        src:String(src).trim().toLowerCase(),
-        isTest, isReferral:!!ref, refSource:ref,
-        council:locatedCouncil(la,ln)||parseCouncil(addr),
-        month:d?monthKey(d):null,
-      };
-    }).filter(r=>r.date && !r.isTest && !EXCLUDE_MONTHS.includes(r.month) && (r.code||r.hasGeo));
-
-    SOURCE_IGNORED=SOURCE_ROWS-RAW.length;
-    RAW.forEach(r=>r.isStudio=isStudio(r.lat,r.lng));
-    if(!document.getElementById('filter-studio')) mount();
-    lastSuccess = new Date();
-    render();
-    document.getElementById('m-status').textContent='Live · updates every minute';
-  } catch(err) {
-    if(lastSuccess) {
-      document.getElementById('m-status').textContent='Update failed · retrying';
-    } else {
-      showError(err.name === 'AbortError' ? 'The connection timed out. Retrying automatically.' : err.message);
-    }
-  } finally {
-    clearTimeout(timeout);
-    loading = false;
-    const button=document.getElementById('refresh-now');if(button)button.disabled=false;
-    refreshTimer = setTimeout(load, REFRESH_MS);
-  }
-}
-
-function render(){
-  const excludeStudio=document.getElementById('filter-studio')?.checked ?? true;
-  const rows=RAW.filter(r=>excludeStudio ? !r.isStudio : true);
-  const hidden=RAW.length-rows.length;
-
-  // meta
-  const dates=rows.map(r=>r.date).sort((a,b)=>a-b);
-  document.getElementById('m-since').textContent=dates[0]?.toLocaleDateString('en-AU',{timeZone:'Australia/Melbourne',month:'short',year:'numeric'})||'—';
-  document.getElementById('m-last').textContent=dates.at(-1)?.toLocaleDateString('en-AU',{timeZone:'Australia/Melbourne',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})||'—';
-  document.getElementById('m-refreshed').textContent=lastSuccess?.toLocaleTimeString('en-AU',{timeZone:'Australia/Melbourne',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'})||'—';
-
-  const direct=rows.filter(r=>!r.isReferral);
-  const referral=rows.filter(r=>r.isReferral);
-  const evcSet=new Set(rows.filter(r=>r.code).map(r=>r.code));
-  const lgaSet=new Set(rows.filter(r=>r.council).map(r=>r.council));
-
-  set('total',fmt(rows.length));
-  set('totalsub',excludeStudio ? (hidden?`${fmt(hidden)} studio lookups hidden`:'No studio matches hidden') : 'Studio filter off');
-  set('direct',fmt(direct.length));
-  set('directsub',`${Math.round(direct.length/rows.length*100)||0}% of volume`);
-  set('evcs',fmt(evcSet.size));
-  set('lgas',fmt(lgaSet.size));
-  set('lgasub',`${fmt(rows.filter(r=>r.council).length)} assigned · ${fmt(rows.filter(r=>!r.council).length)} unassigned`);
-
-  document.getElementById('hidden-count').textContent =
-    excludeStudio ? `— ${fmt(hidden)} studio calibration rows hidden` : '— showing all rows including studio pings';
-
-  // month trend
-  const byMonth={};
-  rows.forEach(r=>{if(r.month)byMonth[r.month]=(byMonth[r.month]||0)+1;});
-  const months=Object.keys(byMonth).sort();
-  const max=Math.max(1,...Object.values(byMonth));
-  const bars=q('[data-c="bars"]'), labels=q('[data-c="labels"]');
-  bars.innerHTML='';labels.innerHTML='';
-  months.forEach(m=>{
-    const [y,mo]=m.split('-');
-    const b=document.createElement('div');b.className='bar';
-    b.style.height='2px';
-    b.innerHTML=`<span class="v">${byMonth[m]}</span>`;
-    bars.appendChild(b);
-    requestAnimationFrame(()=>b.style.height=(byMonth[m]/max*100)+'%');
-    const l=document.createElement('span');
-    l.textContent=MONTHS[+mo-1]+(mo==='01'?" '"+y.slice(2):'');
-    labels.appendChild(l);
-  });
-
-  rankList('[data-c="evc"]', tally(rows.filter(r=>r.code),r=>r.code,r=>r.name), true);
-  rankList('[data-c="lga"]', tally(rows.filter(r=>r.council),r=>r.council), false);
-
-  // channel split
-  const dc=direct.length, rc=referral.length, tot=dc+rc||1;
-  const split=q('[data-c="split"]');
-  split.innerHTML=`<div class="seg direct" style="flex-basis:${dc/tot*100}%">${Math.round(dc/tot*100)}%</div>
-                   <div class="seg referral" style="flex-basis:${rc/tot*100}%">${Math.round(rc/tot*100)}%</div>`;
-  q('[data-c="ld"]').textContent=fmt(dc);
-  q('[data-c="lr"]').textContent=fmt(rc);
-  rankList('[data-c="sources"]', tally(referral,r=>r.refSource||'Untagged'), false);
-
-  // map
-  drawMap(rows.filter(r=>r.hasGeo));
-  const noGeo=referral.filter(r=>!r.hasGeo).length;
-  q('[data-c="mapnote"]').textContent=
-    `${fmt(rows.filter(r=>r.hasGeo).length)} located lookups plotted · ${fmt(noGeo)} referral lookups carry an EVC but no coordinates, so they’re counted in the channel panel but not shown here.`;
-
-  q('[data-c="foot"]').textContent=
-    `${fmt(SOURCE_ROWS)} timestamped source rows · ${fmt(SOURCE_IGNORED)} outside this view (excluded months/tests/invalid rows) · ${fmt(RAW.length)} included before studio filter · ${fmt(rows.length)} shown · ${fmt(evcSet.size)} EVCs · ${fmt(lgaSet.size)} LGAs${COUNCILS ? '' : ' · Council boundaries unavailable; address labels only'}`;
-}
-
-/* helpers */
-function tally(arr,keyFn,nameFn){
-  const m={};
-  arr.forEach(r=>{const k=keyFn(r);if(!k)return;(m[k]=m[k]||{ct:0,name:nameFn?nameFn(r):''}).ct++;});
-  return Object.entries(m).map(([k,v])=>({k,ct:v.ct,name:v.name})).sort((a,b)=>b.ct-a.ct);
-}
-function escapeHTML(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function rankList(sel,data,showCode){
-  const el=q(sel);el.innerHTML='';
-  const top=data.slice(0,8), max=Math.max(1,...top.map(d=>d.ct));
-  top.forEach(d=>{
-    const li=document.createElement('li');
-    li.innerHTML=`${showCode?`<span class="code">EVC ${escapeHTML(d.k)}</span>`:`<span></span>`}
-      <div class="track"><div class="fill" style="width:0"></div><span class="name">${escapeHTML(showCode?d.name:d.k)}</span></div>
-      <span class="ct">${d.ct}</span>`;
-    el.appendChild(li);
-    const fill=li.querySelector('.fill');
-    requestAnimationFrame(()=>fill.style.width=(d.ct/max*100)+'%');
-  });
-  if(!top.length)el.innerHTML='<li style="grid-template-columns:1fr;color:var(--ink-soft)">No data in this view.</li>';
-}
-
-let MAP,LAYER;
-function drawMap(rows){
-  if(!MAP){
-    MAP=L.map('map',{scrollWheelZoom:false,attributionControl:true}).setView([-37.9,145.05],9);
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{
-      attribution:'Tiles &copy; Esri',subdomains:'abcd',maxZoom:19,maxNativeZoom:16
-    }).addTo(MAP);
-  }
-  if(LAYER)MAP.removeLayer(LAYER);
-  LAYER=L.layerGroup().addTo(MAP);
-  // cluster by rounded coord
-  const cl={};
-  rows.forEach(r=>{
-    const k=r.lat.toFixed(3)+','+r.lng.toFixed(3);
-    (cl[k]=cl[k]||{lat:+r.lat.toFixed(3),lng:+r.lng.toFixed(3),ct:0,name:r.name}).ct++;
-  });
-  const pts=Object.values(cl);
-  const max=Math.max(1,...pts.map(p=>p.ct));
-  pts.forEach(p=>{
-    const base=6+Math.log(p.ct+1)/Math.log(max+1)*22;
-    [base,base*0.62,base*0.3].forEach((rad,i)=>{
-      L.circleMarker([p.lat,p.lng],{
-        radius:rad,color:'#7A9E5F',weight:1,
-        fillColor:'#7A9E5F',fillOpacity:i===2?0.5:0.06
-      }).addTo(LAYER);
-    });
-    L.circleMarker([p.lat,p.lng],{radius:base,color:'transparent',fillOpacity:0})
-      .bindPopup(`<b>${p.ct} lookup${p.ct>1?'s':''}</b><br>${escapeHTML(p.name)||'—'}<br>${p.lat}, ${p.lng}`)
-      .addTo(LAYER);
-  });
-}
-
-/* state swaps */
-function mount(){
-  const app=document.getElementById('app');
-  app.innerHTML='';
-  app.appendChild(document.getElementById('tpl-dash').content.cloneNode(true));
-  document.getElementById('filter-studio').addEventListener('change',render);
-  document.getElementById('refresh-now').addEventListener('click',load);
-}
-function q(s){return document.querySelector(s);}
-function set(t,v){const el=q(`[data-t="${t}"]`);if(el)el.textContent=v;}
-function showSetup(){
-  document.getElementById('m-status').textContent='Setup needed';
-  document.getElementById('app').innerHTML=`
-    <div class="state"><div class="wrap">
-      <h2>Add your API key to go live</h2>
-      <p>The dashboard is wired to the lookup sheet — it just needs read access.</p>
-      <div class="setup"><ol>
-        <li>In <code>console.cloud.google.com</code>, enable the <b>Google Sheets API</b>.</li>
-        <li>Create an API key. Restrict it to the Sheets API, and (for production) add an HTTP-referrer rule for <code>ecologicalregistry.org</code>.</li>
-        <li>Open the log sheet → <b>Share → Anyone with the link: Viewer</b>.</li>
-        <li>Paste the key into <code>CONFIG.API_KEY</code> at the top of this file and reload.</li>
-      </ol></div>
-    </div></div>`;
-}
-function showError(msg){
-  document.getElementById('m-status').textContent='Error';
-  MAP=null; LAYER=null;
-  document.getElementById('app').innerHTML=`
-    <div class="state"><div class="wrap">
-      <h2 class="err">Couldn’t read the sheet</h2>
-      <p class="err mono" id="load-error"></p>
-      <p>Check that the API key is valid, the Sheets API is enabled, and the sheet is shared as “Anyone with the link: Viewer”.</p>
-    </div></div>`;
-  document.getElementById('load-error').textContent=msg;
-}
-
-document.addEventListener('visibilitychange',()=>{if(!document.hidden) load();});
-window.addEventListener('online',load);
-
-/* boot */
-(function(){
-  // build UI shell first so tiles exist, then load (unless setup/err replaces it)
-  if(CONFIG.API_KEY==='YOUR_API_KEY'){showSetup();return;}
-  mount();
-  load();
-})();
+async function drawMap(){try{const r=await fetch('/data/live-victorian-lgas.geojson');if(!r.ok)return;const geo=await r.json();if(!MAP){MAP=L.map('map',{scrollWheelZoom:false}).setView([-37.9,145.05],9);L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',{attribution:'Tiles © Esri'}).addTo(MAP);}if(LAYER)MAP.removeLayer(LAYER);LAYER=L.geoJSON(geo,{style:f=>({color:'#3d4535',weight:1,fillColor:'#7a9e5f',fillOpacity:typeof DATA.aggregate.councils[f.properties.name]==='number'?.4:.08}),onEachFeature:(f,layer)=>{const label=document.createElement('span');label.textContent=f.properties.name+': '+fmt(DATA.aggregate.councils[f.properties.name]??'<5');layer.bindPopup(label);}}).addTo(MAP);}catch(_){q('[data-c="mapnote"]').textContent='Council map unavailable. Aggregate counts remain visible.';}}
+async function load(){if(loading||document.hidden)return;loading=true;clearTimeout(refreshTimer);const button=document.getElementById('refresh-now');button.disabled=true;const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);document.getElementById('m-status').textContent=lastSuccess?'Refreshing…':'Connecting…';try{const r=await fetch(ENDPOINT,{method:'POST',cache:'no-store',signal:controller.signal,headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({submission_type:'designer_demand',action:'get_public'})});if(!r.ok)throw Error('Aggregate service unavailable');const data=await r.json();if(!data.ok)throw Error(data.error);DATA=data;lastSuccess=new Date();render();await drawMap();document.getElementById('m-status').textContent='Aggregate feed';}catch(e){document.getElementById('m-status').textContent=lastSuccess?'Refresh failed; showing last aggregate':'Aggregate data unavailable';const error=document.getElementById('load-error');if(error)error.textContent=e.message;if(!lastSuccess)q('[data-c="foot"]').textContent=e.message;}finally{clearTimeout(timeout);loading=false;button.disabled=false;refreshTimer=setTimeout(load,60000);}}
+function mount(){const app=document.getElementById('app');app.replaceChildren(document.getElementById('tpl-dash').content.cloneNode(true));const filter=document.getElementById('filter-studio');filter.checked=true;filter.disabled=true;document.getElementById('refresh-now').addEventListener('click',load);}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();});window.addEventListener('online',load);mount();load();
 
 </script>
 </body>

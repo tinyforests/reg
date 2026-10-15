@@ -410,6 +410,8 @@ function doPost(e) {
   try {
     var payload = JSON.parse(e.postData.contents);
 
+    if (payload.submission_type === 'designer_demand') return handleDesignerDemand(payload);
+
     if (payload.submission_type === 'upgrade_routing') return handleRouting(payload);
 
     if (payload.submission_type === 'designer_portal') return handleDesignerPortal(payload);
@@ -1985,4 +1987,61 @@ function handleRouting(payload) {
     if(action==='complete' && admin && String(selected[5])==='accepted'){selected[5]='completed';sheet.getRange(index+2,6).setValue('completed');sheet.getRange(index+2,12).setValue(new Date().toISOString());_routingAudit(ss,selected,'registry-admin','Manually confirmed; scoring inputs remain unchanged');return jsonResp({ok:true});}
     throw Error('Action not permitted');
   }catch(e){return jsonResp({ok:false,error:e.message});}finally{lock.releaseLock();}
+}
+
+/* Only suppressed aggregates cross the private-demand boundary. No raw-row API. */
+function _demandCounts(data, keyPattern, allowed) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) throw Error('Invalid count groups');
+  var clean={};Object.keys(data).forEach(function(key){
+    var value=data[key];
+    if(!keyPattern.test(key) || allowed && allowed.indexOf(key)<0)throw Error('Invalid aggregate label');
+    if(value!=='<5' && !(typeof value==='number' && isFinite(value) && Math.floor(value)===value && value>=5))throw Error('Counts below five must be suppressed');
+    clean[key]=value;
+  });return clean;
+}
+function _demandValidate(value, designer) {
+  var expected=designer?['available','location_coverage','bands','months','evcs']:['total','months','evcs','councils','channels'];
+  if(!value || Object.keys(value).some(function(k){return expected.indexOf(k)<0;}) || expected.some(function(k){return !(k in value);}))throw Error('Unexpected aggregate fields');
+  var out={months:_demandCounts(value.months,/^\d{4}-(0[1-9]|1[0-2])$/),evcs:_demandCounts(value.evcs,/^[a-zA-Z0-9-]{1,40}$/)};
+  if(designer) {
+    var coverage=value.location_coverage;
+    if(typeof value.available!=='boolean' || !coverage || Object.keys(coverage).sort().join(',')!=='attributed_gardens,with_private_locations' || !Number.isInteger(coverage.attributed_gardens) || !Number.isInteger(coverage.with_private_locations) || coverage.with_private_locations<0 || coverage.with_private_locations>coverage.attributed_gardens)throw Error('Invalid location coverage');
+    out.available=value.available;out.location_coverage=coverage;
+    out.bands=_demandCounts(value.bands,/^(0-50m|50-150m|150-300m|300-1000m)$/);
+    if(Object.keys(out.bands).length!==4)throw Error('All distance bands are required');
+  }else {
+    out.total=_demandCounts({total:value.total},/^total$/).total;
+    var names=JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/data/live-victorian-lgas.geojson').getContentText()).features.map(function(f){return f.properties.name;});names.push('Unassigned');
+    out.councils=_demandCounts(value.councils,/^[a-zA-Z '&-]{1,80}$/,names);
+    out.channels=_demandCounts(value.channels,/^[a-zA-Z /]+$/,['Find My Native Plants','Find My EVC','Other referral','Direct / untagged']);
+  }return out;
+}
+function handleDesignerDemand(payload) {
+  try {
+    var ss=SpreadsheetApp.getActiveSpreadsheet(),action=String(payload.action||''),stored=PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN'),admin=!!(stored && stored===payload.admin_token);
+    if(action==='import') {
+      if(!admin)throw Error('Not authorised');
+      if(JSON.stringify(payload).length>250000)throw Error('Aggregate import too large');
+      var data=payload.aggregates;if(!data || Object.keys(data).sort().join(',')!=='designers,public')throw Error('Invalid aggregate import');
+      var known=JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/data/designers.json').getContentText()).designers.map(function(d){return d.designer_id;});
+      var clean={};Object.keys(data.designers).forEach(function(id){if(known.indexOf(id)<0)throw Error('Unknown practice');clean[id]=_demandValidate(data.designers[id],true);});
+      var publicData=_demandValidate(data.public,false),lock=LockService.getScriptLock();if(!lock.tryLock(10000))throw Error('Please try again');
+      try {
+        var sheet=_designerTable(ss,'Designer Demand',['designer_id','aggregate_json','updated_at'],true),rows=_designerRows(sheet,3),now=new Date().toISOString();
+        Object.keys(clean).forEach(function(id){var index=rows.findIndex(function(r){return String(r[0])===id;});if(index<0)sheet.appendRow([id,JSON.stringify(clean[id]),now]);else {sheet.getRange(index+2,2).setValue(JSON.stringify(clean[id]));sheet.getRange(index+2,3).setValue(now);}});
+        var pub=_designerTable(ss,'Public Demand',['aggregate_json','updated_at'],true);if(pub.getLastRow()<2)pub.appendRow([JSON.stringify(publicData),now]);else {pub.getRange(2,1).setValue(JSON.stringify(publicData));pub.getRange(2,2).setValue(now);}
+      }finally{lock.releaseLock();}return jsonResp({ok:true});
+    }
+    if(action==='get_public') {
+      var rows=_designerRows(ss.getSheetByName('Public Demand'),2);
+      if(!rows.length)return jsonResp({ok:false,error:'Aggregate demand data has not been published yet.'});
+      return jsonResp({ok:true,aggregate:_demandValidate(JSON.parse(String(rows[0][0])),false),updated_at:String(rows[0][1])});
+    }
+    var practice=admin?null:_designerAuthorise(String(payload.designer_token||''),ss);if(!practice && !admin)throw Error('Unlock your designer portal first');
+    if(action!=='get')throw Error('Action not permitted');
+    var id=practice?practice.designer_id:String(payload.designer_id||''),rows=_designerRows(ss.getSheetByName('Designer Demand'),3);
+    var row=rows.filter(function(r){return String(r[0])===id;})[0];
+    if(!row)return jsonResp({ok:true,available:false,message:'Private demand aggregates have not been published for this practice.'});
+    return jsonResp({ok:true,available:true,aggregate:_demandValidate(JSON.parse(String(row[1])),true),updated_at:String(row[2])});
+  }catch(e){return jsonResp({ok:false,error:e.message});}
 }
