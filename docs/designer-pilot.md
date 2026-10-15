@@ -97,7 +97,7 @@ The separate newsletter deployment remains unchanged. New private sheets are
 and `Designer Sessions` (hashed token, practice ID, creation, expiry).
 No practice contact email or credential is written to public JSON.
 
-## Upgrade routing — Phase 3 prepared
+## Upgrade routing — Phase 3 merged; Apps Script deployment pending
 
 Garden profiles offer “Get help with this upgrade” on physical ecological moves.
 The steward must unlock their garden using the existing email session and consent
@@ -110,8 +110,23 @@ verified ecological inputs still follow the existing review/sync process. Every
 transition is timestamped in private Routing History. Notifications contain no
 precise location. No live request or notification was sent during fixture testing.
 
-Automatic expiry requires editor authorization for `installRoutingReleaseTrigger`.
-That setup prompted for fresh Google permissions on 15 Oct 2026; it was cancelled
-without granting access. Phase 3 source is saved in the editor but NOT deployed;
-profile-service deployment remains version 38. Finish authorization and verify
-one `releaseExpiredRouting` time trigger before advancing the deployment.
+Phase 3 merged to main on 15 Oct 2026. All seven release test commands pass;
+25 garden scores are unchanged. Apps Script deployment remains pending: the last
+recorded profile-service deployment is version 38; the next version is 39 (confirm
+in Manage deployments if another version has since been created). No backend
+deployment or Google authorization was performed for this release.
+
+### Apps Script editor release checklist
+
+1. Deploy the current `scripts/appsscript/Code.gs` as a new version on the existing
+   profile-service deployment. Keep the same deployment ID and `/exec` URL above.
+2. Run `installRoutingReleaseTrigger` once and approve the MailApp and ScriptApp
+   scopes. Confirm one `releaseExpiredRouting` time trigger exists (every 15 minutes).
+3. Confirm `ROUTING_RESPONSE_MINUTES` is **not set** in Script Properties. It is the
+   one-minute test override; production uses the default 14-day response window.
+4. Confirm `sam-cox-landscape` and `gardener-and-son` are both `active` in the
+   private Designer Practices sheet.
+
+Phase 4 is not merged. It remains gated on the real private aggregate import and
+other publication gates in [designer-demand.md](designer-demand.md). Public
+frontend publication does not establish that the new backend routing is active.

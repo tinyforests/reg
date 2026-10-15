@@ -522,7 +522,7 @@ conflict/verification rules, follow-up and claims review. No checkout, sponsor
 portal, active payout, approved offset methodology or automatic eligibility
 is created by this launch.
 
-### Designer routing brief — Phase 1 shipped; Phase 2 prepared; routing pending
+### Designer routing brief — Phases 1–3 merged; Phase 3 backend deployment pending
 
 Phase 1 adds public practice identities, profile attribution links, public designer
 pages and sync-derived practice aggregates. G&S self-verification is explicitly
@@ -537,16 +537,25 @@ working submission/review features. Phase 3 response window: 14 days, explicit
 consent per request, released work falls back to G&S (confirmed 14 Oct 2026).
 Phase 4 remains private aggregate computation with small-count suppression.
 No Apps Script changes or deployment were made in Phase 1. Phase 2 backend is
-deployed as profile-service version 38 at the existing URL; public frontend
-publication is pending. Real-email access has not been exercised using private
+deployed as profile-service version 38 at the existing URL; Phase 2 public frontend
+is merged and published. Real-email access has not been exercised using private
 practice contacts; hashing/expiry/one-use/revocation/rate limits pass fixture tests.
 
-### Upgrade routing — Phase 3 ready for review; authorization required
+### Upgrade routing — Phase 3 merged 15 Oct 2026; Apps Script deployment pending
 
-Tested: garden-scoped stewardship, consent per request, practice isolation,
-duplicate request handling, accepted contact gating, declines, one-minute expiry,
-G&S fallback, admin-only completion and unchanged ecological inputs. Public
-profiles and the private portal are wired. No live notification/request was sent.
-The editor holds tested Phase 3 source; deployment remains version 38. Google
-requires fresh authorization to install the 15-minute automatic-release trigger.
-Do not claim scheduled expiry is active until that trigger is installed and verified.
+Phase 3 is merged to main, including the Python opportunities JS-semantics parity
+fix. All seven requested release test commands pass: scoring parity 25/25,
+opportunities parity 26/26, designer registry, publication, upgrade routing,
+portal and magic links. All 25 registry garden scores are unchanged.
+
+Apps Script remains at the last recorded deployed version 38; prepare version 39
+on the existing deployment, keeping the same ID and `/exec` URL. Follow the editor
+checklist in [designer-pilot.md](designer-pilot.md): deploy Code.gs, authorise and
+install the release trigger, remove the test response-window override, and verify
+both participating practices are active. No backend deployment, live notification
+or request was performed by this release task.
+
+Phase 4 is not merged or deployed. It remains gated on the real private aggregate
+import and publication checks in [designer-demand.md](designer-demand.md). Its
+prepared documentation is retained here for the gate only; no Phase 4 code or
+private data is included in this release.
