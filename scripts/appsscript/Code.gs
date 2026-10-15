@@ -410,6 +410,8 @@ function doPost(e) {
   try {
     var payload = JSON.parse(e.postData.contents);
 
+    if (payload.submission_type === 'upgrade_routing') return handleRouting(payload);
+
     if (payload.submission_type === 'designer_portal') return handleDesignerPortal(payload);
 
     // Claims bypass enrolment rate limits -- route first.
@@ -1758,8 +1760,15 @@ function _designerPublicPortfolio(id) {
     content = response.getContentText(); cache.put(key, content, 60);
   }
   return (JSON.parse(content).gardens || []).filter(function (g) { return g.designer_id === id && !g.demo; }).map(function (g) {
-    return {garden_id: g.garden_id, garden_name: g.garden_name, suburb: g.suburb, state: g.state, score: g.score,
-      rating: g.rating, badge_count: g.badge_count, verification_level: g.verification_level, verification_label: g.verification_label, status: g.status, profile_url: g.profile_url};
+    var status=g.status;
+    if (/^data\/[a-zA-Z0-9_-]+\.json$/.test(g.data_file || '')) {
+      var canonical=JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/' + g.data_file).getContentText());
+      if (canonical.garden_id !== g.garden_id) throw Error('Canonical garden record unavailable');
+      if (['Provisional','Design Proposal'].indexOf(canonical.status)>=0) status=canonical.status;
+    }
+    var quarantined=['Provisional','Design Proposal'].indexOf(status)>=0;
+    return {garden_id: g.garden_id, garden_name: g.garden_name, suburb: g.suburb, state: g.state, score: quarantined ? null : g.score,
+      rating: g.rating, badge_count: quarantined ? 0 : g.badge_count, verification_level: g.verification_level, verification_label: quarantined ? 'Unverified' : g.verification_label, status: status, profile_url: g.profile_url};
   });
 }
 function handleDesignerPortal(payload) {
@@ -1866,4 +1875,114 @@ function handleDesignerPortal(payload) {
       return jsonResp({ok: false, error: 'Action not permitted'});
     } finally { lock.releaseLock(); }
   } catch (error) { return jsonResp({ok: false, error: error.message || 'Unable to complete this request'}); }
+}
+
+/* Upgrade requests: private routing only. No scoring inputs are changed. */
+var ROUTING_HEADERS = ['request_id','garden_id','opportunity_id','designer_id','created','status','steward_consent','released_at','steward_email','response_deadline','accepted_by','updated_at'];
+var ROUTING_AUDIT_HEADERS = ['request_id','timestamp','state','actor','note'];
+function _routingWindowMs() {
+  var minutes = Number(PropertiesService.getScriptProperties().getProperty('ROUTING_RESPONSE_MINUTES'));
+  return isFinite(minutes) && minutes >= 1 ? minutes * 60000 : 14 * 86400000;
+}
+function _routingOpportunity(id) {
+  var names = {indigenous_dominant:'Establish indigenous-dominant planting',soil_health_up:'Improve soil health',water_function_up:'Improve water function',moisture_basin:'Install a seasonal moisture basin',rainwater:'Add rainwater capture',swale:'Cut a swale on contour',logs:'Embed habitat logs',water_feature:'Add a small water feature',rocks:'Build rock refuges',nest_boxes:'Install nest boxes'};
+  if (names[id]) return names[id];
+  if (/^species_to_(6|12|20|30)$/.test(id)) return 'Increase indigenous species to ' + id.split('_').pop();
+  if (/^layers_to_(2|3|4|5)$/.test(id)) return 'Establish structural layer ' + id.split('_').pop();
+  if (/^canopy_to_(5|15|30|50)$/.test(id)) return 'Grow canopy cover to ' + id.split('_').pop() + '%';
+  if (/^nodes_to_(1|3|5)$/.test(id)) return 'Establish habitat node ' + id.split('_').pop();
+  return null;
+}
+function _routingRecord(gid) {
+  var content = UrlFetchApp.fetch('https://ecologicalregistry.org/data/registry.json').getContentText();
+  var garden = (JSON.parse(content).gardens || []).filter(function (g) { return g.garden_id === gid; })[0];
+  if (!garden || garden.demo || !/^data\/[a-zA-Z0-9_-]+\.json$/.test(garden.data_file || '')) throw new Error('Garden record unavailable');
+  var record = JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/' + garden.data_file).getContentText());
+  if (record.garden_id !== gid) throw new Error('Garden record unavailable');
+  return record;
+}
+function _routingSteward(gid, token, ss) {
+  if (!_validStewardSession(gid, token, ss)) return null;
+  var rows = _designerRows(ss.getSheetByName(STEWARD_SESSION_SHEET), 4);
+  for (var i = 0; i < rows.length; i++) if (String(rows[i][0]).toLowerCase() === gid.toLowerCase() && String(rows[i][2]) === token) return String(rows[i][1]);
+  return null;
+}
+function _routingPractice(id, ss) {
+  var row = _designerRows(ss.getSheetByName('Designer Practices'),6).filter(function (r) { return String(r[0]) === id && String(r[5]) === 'active'; })[0];
+  return row ? _designerPractice(row) : null;
+}
+function _routingAudit(ss, row, actor, note) {
+  _designerTable(ss,'Routing History',ROUTING_AUDIT_HEADERS,true).appendRow([row[0],new Date().toISOString(),row[5],actor,note || '']);
+}
+function _routingMail(ss, row, to, subject, body) {
+  try { MailApp.sendEmail({to:to,subject:subject,body:body}); }
+  catch (e) { _routingAudit(ss,row,'system','Notification failed; Registry follow-up required'); }
+}
+function _routingRelease(ss, sheet, index, row, reason) {
+  var now = new Date().toISOString();row[5]='released';row[7]=now;row[11]=now;
+  sheet.getRange(index,6).setValue('released');sheet.getRange(index,8).setValue(now);sheet.getRange(index,12).setValue(now);
+  _routingAudit(ss,row,'system',reason);
+  _routingMail(ss,row,NOTIFY_EMAIL,'Upgrade request released to Gardener & Son',[row[0],row[1],_routingOpportunity(row[2]),'Open the private Registry queue. Contact is available only through the consented request.'].join('\n'));
+  _routingMail(ss,row,String(row[8]),'Your upgrade request is with Gardener & Son','Request '+row[0]+' has been released to Gardener & Son for follow-up. No work or payment has been committed.');
+}
+function _routingExpire(ss) {
+  var sheet=ss.getSheetByName('Routing'),rows=_designerRows(sheet,ROUTING_HEADERS.length),now=Date.now();
+  rows.forEach(function(row,i){if(String(row[5])==='offered' && new Date(String(row[9])).getTime()<=now)_routingRelease(ss,sheet,i+2,row,'Designer response window elapsed');});
+}
+function releaseExpiredRouting() {
+  var lock=LockService.getScriptLock();if(!lock.tryLock(10000))return;
+  try{_routingExpire(SpreadsheetApp.getActiveSpreadsheet());}finally{lock.releaseLock();}
+}
+function installRoutingReleaseTrigger() {
+  if (!ScriptApp.getProjectTriggers().some(function(t){return t.getHandlerFunction()==='releaseExpiredRouting';})) ScriptApp.newTrigger('releaseExpiredRouting').timeBased().everyMinutes(15).create();
+}
+function _routingView(row, practice, admin) {
+  var result={request_id:String(row[0]),garden_id:String(row[1]),opportunity_id:String(row[2]),opportunity_label:_routingOpportunity(String(row[2])),designer_id:String(row[3]),created:String(row[4]),status:String(row[5]),response_deadline:String(row[9]),released_at:String(row[7]||'')};
+  var accepted=String(row[5])==='accepted' && practice && String(row[10])===practice.designer_id;
+  var fallback=String(row[5])==='released' && (admin || practice && practice.designer_id==='gardener-and-son');
+  if ((accepted || fallback || admin) && (row[6]===true || String(row[6])==='true')) result.steward_email=String(row[8]);
+  return result;
+}
+function handleRouting(payload) {
+  var ss=SpreadsheetApp.getActiveSpreadsheet(),lock=LockService.getScriptLock();
+  if(!lock.tryLock(10000))return jsonResp({ok:false,error:'Please try again.'});
+  try {
+    var action=String(payload.action||''),stored=PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN'),admin=!!(stored && payload.admin_token===stored);
+    var practice=admin?null:_designerAuthorise(String(payload.designer_token||''),ss);
+    if(action==='create_request') {
+      var gid=String(payload.garden_id||''),email=_routingSteward(gid,String(payload.session_token||''),ss),opp=String(payload.opportunity_id||'');
+      if(!email)throw Error('Unlock your garden with a valid steward link first.');
+      if(payload.steward_consent!==true)throw Error('Consent is required for each request.');
+      if(!_routingOpportunity(opp))throw Error('This opportunity cannot be routed.');
+      var record=_routingRecord(gid),designer=record.designer_id || '',target=_routingPractice(designer,ss);
+      var table=_designerTable(ss,'Routing',ROUTING_HEADERS,true),rows=_designerRows(table,ROUTING_HEADERS.length);
+      var duplicate=rows.filter(function(r){return String(r[1])===gid && String(r[2])===opp && String(r[5])!=='completed';})[0];
+      if(duplicate)return jsonResp({ok:true,duplicate:true,request:_routingView(duplicate,null,false)});
+      var now=new Date(),id='ROUTE-'+Utilities.getUuid(),deadline=new Date(now.getTime()+_routingWindowMs()).toISOString();
+      var row=[id,gid,opp,designer,now.toISOString(),target?'offered':'released',true,target?'':now.toISOString(),email,deadline,'',now.toISOString()];
+      table.appendRow(row);_routingAudit(ss,row,'steward','Consent: original designer first; Gardener & Son fallback; contact shared on accepted/released request');
+      if(target)_routingMail(ss,row,target.contact_email,'New upgrade request for your attributed garden',[id,gid,_routingOpportunity(opp),'Respond by '+deadline,'Open https://ecologicalregistry.org/designer-dashboard.html to accept or decline. Steward contact is withheld until acceptance.'].join('\n'));
+      else _routingMail(ss,row,NOTIFY_EMAIL,'New upgrade request for Gardener & Son',[id,gid,_routingOpportunity(opp),'No active original designer; see private fallback queue.'].join('\n'));
+      _routingMail(ss,row,email,'Your upgrade request is recorded',[id,_routingOpportunity(opp),target?'The request goes first to your garden’s original designer, with a 14-day response window.':'The request is with Gardener & Son.','Contact is shared only under your request-specific consent. This is an enquiry, not a booking or payment.'].join('\n'));
+      return jsonResp({ok:true,request:_routingView(row,null,false)});
+    }
+    if(!admin && !practice)throw Error('Unlock your designer portal first.');
+    _routingExpire(ss);
+    var sheet=ss.getSheetByName('Routing'),all=_designerRows(sheet,ROUTING_HEADERS.length);
+    if(action==='get_queue')return jsonResp({ok:true,requests:all.filter(function(r){return admin || String(r[3])===practice.designer_id && String(r[5])!=='released' || practice.designer_id==='gardener-and-son' && String(r[5])==='released';}).map(function(r){return _routingView(r,practice,admin);})});
+    var index=all.findIndex(function(r){return String(r[0])===String(payload.request_id||'');});if(index<0)throw Error('Request not found');var selected=all[index];
+    if(action==='respond') {
+      var fallback=String(selected[5])==='released' && (admin || practice && practice.designer_id==='gardener-and-son');
+      var original=String(selected[5])==='offered' && practice && String(selected[3])===practice.designer_id;
+      if(!fallback && !original)throw Error('Request not available to this practice.');
+      if(payload.response==='declined' && original){_routingRelease(ss,sheet,index+2,selected,'Original designer declined');return jsonResp({ok:true});}
+      if(payload.response!=='accepted')throw Error('Invalid response');
+      var now=new Date().toISOString(),acceptedBy=practice?practice.designer_id:'gardener-and-son';selected[5]='accepted';selected[10]=acceptedBy;selected[11]=now;
+      sheet.getRange(index+2,6).setValue('accepted');sheet.getRange(index+2,11).setValue(acceptedBy);sheet.getRange(index+2,12).setValue(now);_routingAudit(ss,selected,acceptedBy,'Accepted; request-specific contact consent recorded');
+      _routingMail(ss,selected,String(selected[8]),'Your designer accepted the upgrade request','Request '+selected[0]+' was accepted by '+(practice?practice.name:'Gardener & Son')+'. Your consented contact is now available to that practice. Arrange any scope and price directly.');
+      return jsonResp({ok:true,request:_routingView(selected,practice,admin)});
+    }
+    if(action==='complete' && admin && String(selected[5])==='accepted'){selected[5]='completed';sheet.getRange(index+2,6).setValue('completed');sheet.getRange(index+2,12).setValue(new Date().toISOString());_routingAudit(ss,selected,'registry-admin','Manually confirmed; scoring inputs remain unchanged');return jsonResp({ok:true});}
+    throw Error('Action not permitted');
+  }catch(e){return jsonResp({ok:false,error:e.message});}finally{lock.releaseLock();}
 }

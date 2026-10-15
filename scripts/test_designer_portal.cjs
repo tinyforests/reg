@@ -32,5 +32,10 @@ assert.equal(admin('mark_published',{submission_id:id,garden_id:'ER-AU-VIC-OTHER
 assert.equal(admin('review_submission',{submission_id:id,review_status:'ready'}).ok,false);
 admin('rotate_practice_token',{designer_id:'practice-a'});assert.equal(call('get_portfolio',{designer_token:a}).ok,false);
 admin('revoke_practice',{designer_id:'practice-b'});assert.equal(call('get_portfolio',{designer_token:b}).ok,false);
+
+const bAgain=admin('rotate_practice_token',{designer_id:'practice-b'}).access_link.split('#access=')[1];
+context.UrlFetchApp.fetch=u=>({getContentText:()=>JSON.stringify(u.endsWith('registry.json')?{gardens:[{garden_id:'QUARANTINE-FIXTURE',designer_id:'practice-b',data_file:'data/fixture.json',garden_name:'Fixture',status:'Active',score:90,badge_count:10}]}:{garden_id:'QUARANTINE-FIXTURE',status:'Provisional'})});
+const quarantine=call('get_portfolio',{designer_token:bAgain});assert.equal(quarantine.gardens[0].status,'Provisional');assert.equal(quarantine.gardens[0].score,null);assert.equal(quarantine.gardens[0].badge_count,0);
+
 fs.writeFileSync('/tmp/designer-submission-fixture.json',JSON.stringify(owned.submission));
 console.log('Designer portal: permissions, practice isolation, input validation, idempotency, review and private publication linkage passed.');

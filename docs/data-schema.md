@@ -415,3 +415,22 @@ a used flag. Links expire after 30 minutes and can be consumed once under a lock
 Practice revocation/rotation expires both outstanding links and sessions. Public
 views read public JSON only. Unrecognised emails receive the same success message
 as recognised ones; a hashed per-email counter limits requests to three per hour.
+
+## Upgrade routing — Phase 3 (pending deployment)
+
+Private `Routing` rows: request_id, garden_id, opportunity_id, designer_id,
+created, status, steward_consent, released_at, steward_email, response_deadline,
+accepted_by, updated_at. The server obtains steward email from a valid existing
+garden-scoped session and designer attribution from the canonical public record;
+neither identity is accepted from request-supplied email/designer fields.
+`Routing History` records request ID, timestamp, state, actor and notification
+failures. No routing field enters scoring or public JSON.
+
+Offer contact is withheld until original-practice acceptance. Released requests
+are visible to G&S/admin with the request-specific consented email. States:
+offered → accepted → completed; declined/expired/unassigned → released → accepted.
+Completion is Registry-admin-only and does not apply ecological input changes.
+The default response window is 14 days. `ROUTING_RESPONSE_MINUTES` is an optional
+private script-property test override (minimum one minute); never publish it.
+`installRoutingReleaseTrigger` installs one idempotent 15-minute release job;
+queue reads also reconcile expired offers under the same lock.

@@ -96,3 +96,22 @@ The separate newsletter deployment remains unchanged. New private sheets are
 `Designer Access Tokens` (hashed token, practice ID, creation, expiry, used)
 and `Designer Sessions` (hashed token, practice ID, creation, expiry).
 No practice contact email or credential is written to public JSON.
+
+## Upgrade routing — Phase 3 prepared
+
+Garden profiles offer “Get help with this upgrade” on physical ecological moves.
+The steward must unlock their garden using the existing email session and consent
+to that individual request, including original-designer priority, 14 days to respond
+and G&S fallback. A click is an enquiry, not a completion claim or score change.
+
+Designer queue: accept or decline an offer. Before acceptance, no steward contact
+is returned. G&S/admin receive released requests. Only admin can confirm completion;
+verified ecological inputs still follow the existing review/sync process. Every
+transition is timestamped in private Routing History. Notifications contain no
+precise location. No live request or notification was sent during fixture testing.
+
+Automatic expiry requires editor authorization for `installRoutingReleaseTrigger`.
+That setup prompted for fresh Google permissions on 15 Oct 2026; it was cancelled
+without granting access. Phase 3 source is saved in the editor but NOT deployed;
+profile-service deployment remains version 38. Finish authorization and verify
+one `releaseExpiredRouting` time trigger before advancing the deployment.
