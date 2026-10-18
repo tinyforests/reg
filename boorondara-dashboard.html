@@ -199,9 +199,9 @@
 </nav>
 
 <div class="marquee"><div class="mt">
-  <span>9 gardens registered in Boroondara</span><span>143 species documented</span><span>Accounting for Nature aligned methodology</span>
+  <span class="mqBoro">14 gardens registered in Boroondara</span><span class="mqSpecies">168 species documented</span><span>Accounting for Nature aligned methodology</span>
   <span>Single canonical scoring engine</span><span>Every figure provenance tagged</span>
-  <span>9 gardens registered in Boroondara</span><span>143 species documented</span><span>Accounting for Nature aligned methodology</span>
+  <span class="mqBoro">14 gardens registered in Boroondara</span><span class="mqSpecies">168 species documented</span><span>Accounting for Nature aligned methodology</span>
   <span>Single canonical scoring engine</span><span>Every figure provenance tagged</span>
 </div></div>
 
@@ -209,14 +209,14 @@
   <div class="glow"></div>
   <div class="wrap">
     <div class="eyebrow"><span class="live-dot"></span>City of Boroondara — intelligence briefing — 14 August 2026</div>
-    <h1>Private gardens are the largest untapped ecological asset in Boroondara. <em>Nine of them are already measured.</em></h1>
+    <h1>Private gardens are the largest untapped ecological asset in Boroondara. <em><span id="proseBoro">14</span> of them are already measured.</em></h1>
     <p>This briefing sets out what the Registry currently holds for the municipality, what can be derived from it, and what it projects at scale — with every figure tagged by how it was obtained. Nothing here is presented as measured unless it was.</p>
     <div class="strip">
-      <div class="stat"><div class="num" data-count="9">0</div><div class="label">Registered gardens in Boroondara</div></div>
-      <div class="stat"><div class="num" data-count="15">0</div><div class="label">Verified gardens network-wide</div></div>
-      <div class="stat"><div class="num" data-count="143">0<span class="suf">+</span></div><div class="label">Species documented across the Registry</div></div>
-      <div class="stat"><div class="num" data-count="44">0</div><div class="label">Average score, 0–100 scale</div></div>
-      <div class="stat"><div class="num" data-count="46">0</div><div class="label">Ecological badges awarded</div></div>
+      <div class="stat"><div class="num" data-count="14" id="sBoro">0</div><div class="label">Registered gardens in Boroondara</div></div>
+      <div class="stat"><div class="num" data-count="24" id="sTotal">0</div><div class="label">Verified gardens network-wide</div></div>
+      <div class="stat"><div class="num" data-count="168" id="sSpecies">0<span class="suf">+</span></div><div class="label">Species documented across the Registry</div></div>
+      <div class="stat"><div class="num" data-count="46.7" id="sMean">0</div><div class="label">Average score, 0–100 scale</div></div>
+      <div class="stat"><div class="num" data-count="99" id="sBadges">0</div><div class="label">Ecological badges awarded</div></div>
     </div>
   </div>
   <div class="wrap">
@@ -241,7 +241,7 @@
 <section id="cohort" class="reveal">
   <div class="wrap">
     <div class="sh"><h2>The Boroondara cohort</h2><div class="n">Pillar performance</div></div>
-    <p class="lede">Every registered garden is scored across five pillars on a fixed 100-point scale. The weights are structural — they do not change between gardens, councils, or years. This is how the nine Boroondara gardens sit against each pillar's ceiling.</p>
+    <p class="lede">Every registered garden is scored across five pillars on a fixed 100-point scale. The weights are structural — they do not change between gardens, councils, or years. This is how the <span id="proseBoro2">14</span> Boroondara gardens sit against each pillar&rsquo;s ceiling.</p>
 
     <div>
       <div class="pil"><div class="nm">Biodiversity structure<small>Species count · layers · canopy · dominance</small></div>
@@ -262,20 +262,10 @@
 
     <div class="sh" style="margin-top:64px"><h2>Gardens on the Registry</h2><div class="n">Boroondara, July 2026</div></div>
     <table>
-      <thead><tr><th>Registry ID</th><th>Suburb</th><th>Tier</th><th>Score</th><th>Verification</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">ER-VIC-BOR-0041</td><td>Surrey Hills</td><td>Urban Biodiversity Node</td><td class="mono">96</td><td><span class="pill pv">Site visit verified</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0038</td><td>Canterbury</td><td>Ecological Garden</td><td class="mono">52</td><td><span class="pill pv">Site visit verified</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0035</td><td>Balwyn</td><td>Ecological Garden</td><td class="mono">48</td><td><span class="pill pv">Site visit verified</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0031</td><td>Hawthorn</td><td>Habitat Garden</td><td class="mono">34</td><td><span class="pill pp">Self-reported</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0027</td><td>Camberwell</td><td>Habitat Garden</td><td class="mono">31</td><td><span class="pill pv">Site visit verified</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0022</td><td>Mont Albert</td><td>Ecological Garden</td><td class="mono">45</td><td><span class="pill pv">Site visit verified</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0019</td><td>Kew</td><td>Habitat Garden</td><td class="mono">30</td><td><span class="pill pp">Self-reported</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0014</td><td>Canterbury</td><td>Habitat Garden</td><td class="mono">32</td><td><span class="pill pv">Site visit verified</span></td></tr>
-        <tr><td class="mono">ER-VIC-BOR-0009</td><td>Surrey Hills</td><td>Habitat Garden</td><td class="mono">33</td><td><span class="pill pv">Site visit verified</span></td></tr>
-      </tbody>
+      <thead><tr><th>Garden</th><th>Suburb</th><th>Tier</th><th>Score</th><th>Verification</th></tr></thead>
+      <tbody id="boroRows"><tr><td colspan="5" class="mono">Loading from the Registry ledger…</td></tr></tbody>
     </table>
-    <div class="note">Row detail is placeholder structure — IDs, suburbs and scores to be replaced with the live Boroondara cut. The count of nine is confirmed. Self-reported entries are never counted in verified totals or averages.</div>
+    <div class="note">Rows are rendered live from the Registry ledger, newest first. Street addresses are never published. Self-reported and provisional entries are excluded from verified totals and averages.</div>
   </div>
 </section>
 
@@ -320,7 +310,7 @@
     <div class="mgrid">
       <div class="mcard"><div class="top"><h4>Canopy at maturity</h4><span class="tg2 t-x">Modelled</span></div>
         <div class="big" id="canopyHero">1,350<span class="suf">m²</span></div>
-        <p>Projected crown area from canopy-layer species already planted across the nine gardens, at mature spread.</p>
+        <p>Projected crown area from canopy-layer species already planted across the registered Boroondara gardens, at mature spread.</p>
         <div class="assume">Assumes 3 canopy trees per garden at 50 m² mature crown (≈8 m diameter). Excludes existing retained trees.</div></div>
       <div class="mcard"><div class="top"><h4>Stormwater retained</h4><span class="tg2 t-x">Modelled</span></div>
         <div class="big" id="waterHero">115<span class="suf">kL</span></div>
@@ -396,7 +386,7 @@
 <section id="model" class="dark reveal">
   <div class="wrap">
     <div class="sh"><h2>What this looks like at scale</h2><div class="n">Interactive — adjust the assumptions</div></div>
-    <p class="lede">Nine gardens is a proof, not a program. This model projects the same per-garden characteristics across a larger registered population. Every input is exposed and adjustable — change any assumption and watch the output move. Nothing is hidden inside the projection.</p>
+    <p class="lede">A pilot cohort is a proof, not a program. This model projects the same per-garden characteristics across a larger registered population. Every input is exposed and adjustable — change any assumption and watch the output move. Nothing is hidden inside the projection.</p>
 
     <div class="model">
       <div class="controls">
@@ -451,7 +441,7 @@
         <li>Every figure carries its provenance tag. Modelled figures are labelled, their assumptions printed, and their inputs adjustable.</li>
       </ul>
       <div>
-        <div class="callout">Boroondara's nine gardens arrived through a funnel the council does not fund and does not run. The ask is recognition of a measurement standard — not delivery of a program.<span class="at">The proposition, in one paragraph</span></div>
+        <div class="callout">Boroondara&rsquo;s registered gardens arrived through a funnel the council does not fund and does not run. The ask is recognition of a measurement standard — not delivery of a program.<span class="at">The proposition, in one paragraph</span></div>
         <div class="mcard" style="margin-top:26px"><div class="top"><h4>What a pilot would involve</h4><span class="tg2 t-m">The ask</span></div>
           <p>A written acknowledgement that the Registry's methodology is fit for citation in Boroondara's biodiversity reporting, and a route to align with the Backyard Biodiversity Project as the record layer beneath it.</p></div>
       </div>
@@ -491,7 +481,8 @@ const cio = new IntersectionObserver(es => es.forEach(e => {
   const t0 = performance.now();
   (function tick(now){
     const p = Math.min(1, (now - t0) / 1200), k = 1 - Math.pow(1 - p, 3);
-    el.innerHTML = nf(Math.round(k * target)) + sufHTML;
+    var dec = (String(target).split('.')[1]||'').length;
+    el.innerHTML = (dec ? (k*target).toFixed(dec) : nf(Math.round(k*target))) + sufHTML;
     if (p < 1) requestAnimationFrame(tick);
   })(t0);
 }), {threshold:.6});
@@ -511,10 +502,10 @@ const sio = new IntersectionObserver(es => es.forEach(e => {
 sio.observe($('#stack'));
 
 const evts = [
-  ['NEW BASELINE','Camberwell VIC'], ['TIER UPGRADE → Ecological','ER-VIC-BOR-0038'],
+  ['NEW BASELINE','Camberwell VIC'], ['TIER UPGRADE → Ecological','Canterbury VIC'],
   ['SITE VISIT VERIFIED','Surrey Hills VIC'], ['EVC LOOKUP → NUDGE SHOWN','Kew VIC'],
   ['GARDEN REGISTERED','Balwyn VIC'], ['HEALTH CHECK BOOKED','Hawthorn VIC'],
-  ['SPECIES LIST DOWNLOADED','Canterbury VIC'], ['SCORE RECALCULATED','ER-VIC-BOR-0014'],
+  ['SPECIES LIST DOWNLOADED','Canterbury VIC'], ['SCORE RECALCULATED','Balwyn VIC'],
   ['FAUNA SIGHTING LOGGED','Mont Albert VIC'], ['BADGE AWARDED → Corridor Node','Deepdene VIC']
 ];
 let ago = 14;
@@ -531,6 +522,44 @@ function addRow(){
 }
 for (let i=0;i<6;i++) addRow();
 setInterval(addRow, 2700);
+
+
+/* ---- live figures from the Registry ledger ---- */
+(function(){
+  function setTxt(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  Promise.all([
+    fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}),
+    fetch('/data/species.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;})
+  ]).then(function(res){
+    var reg=res[0], spp=res[1];
+    if(spp){var n=Array.isArray(spp)?spp.length:(spp.species?spp.species.length:Object.keys(spp).length);
+      setTxt('sSpecies',n);[].forEach.call(document.querySelectorAll('.mqSpecies'),function(e){e.textContent=n+' species documented';});}
+    if(!reg||!reg.gardens)return;
+    var g=reg.gardens.filter(function(x){return !x.demo;});
+    var boro=g.filter(function(x){return String(x.council||'').indexOf('Boroondara')>-1;});
+    var sc=g.map(function(x){return x.score;}).filter(function(n){return typeof n==='number';});
+    var mean=sc.length?(sc.reduce(function(a,b){return a+b;},0)/sc.length).toFixed(1):'—';
+    var badges=g.reduce(function(a,x){return a+(x.badge_count||0);},0);
+    function apply(){setTxt('sBoro',boro.length);setTxt('sTotal',g.length);setTxt('sMean',mean);setTxt('sBadges',badges);}
+    apply();setTimeout(apply,1500);
+    setTxt('proseBoro',boro.length);setTxt('proseBoro2',boro.length);
+    [].forEach.call(document.querySelectorAll('.mqBoro'),function(e){e.textContent=boro.length+' gardens registered in Boroondara';});
+    var tb=document.getElementById('boroRows');
+    if(tb){
+      if(!boro.length){tb.innerHTML='<tr><td colspan="5" class="mono">No Boroondara gardens in the ledger.</td></tr>';return;}
+      boro.sort(function(a,b){return (b.score||0)-(a.score||0);});
+      tb.innerHTML=boro.map(function(x){
+        var lvl=String(x.verification_level||'');
+        var verified=lvl&&lvl!=='self_reported';
+        var lab=x.verification_label||(verified?'Verified':'Self-reported');
+        var tier=(x.rating&&x.rating.current)||x.typology||'—';
+        return '<tr><td class="mono">'+(x.garden_name||'—')+'</td><td>'+(x.suburb||'—')+'</td><td>'+tier+
+               '</td><td class="mono">'+(typeof x.score==='number'?x.score:'—')+
+               '</td><td><span class="pill '+(verified?'pv':'pp')+'">'+lab+'</span></td></tr>';
+      }).join('');
+    }
+  });
+})();
 
 const S = {g:'#sGardens', a:'#sArea', i:'#sIndig', t:'#sTrees', c:'#sCrown', w:'#sWater'};
 function compute(){
