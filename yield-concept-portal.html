@@ -80,7 +80,17 @@
   .rung .val{font-family:'IBM Plex Mono',monospace; font-size:13px; text-align:right;}
   .rung .val em{font-style:normal; opacity:.45; font-size:11px;}
 
-  /* estimator */
+  /* live supply-side figures from the ledger */
+fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+  if(!d||!d.gardens)return;var g=d.gardens.filter(function(x){return !x.demo;});
+  var sc=g.map(function(x){return x.score;}).filter(function(n){return typeof n==='number';});
+  function set(){var a=document.getElementById('ySupply'),b=document.getElementById('yMean');
+    if(a)a.textContent=g.length;
+    if(b&&sc.length)b.textContent=(sc.reduce(function(x,y){return x+y;},0)/sc.length).toFixed(1);}
+  set();setTimeout(set,1500);
+}).catch(function(){});
+
+/* estimator */
   .model{display:grid; grid-template-columns:340px 1fr; gap:50px; align-items:start;}
   .controls{border:1px solid var(--line); padding:28px 26px;}
   .ctl{margin-bottom:24px;} .ctl:last-child{margin-bottom:0;}
@@ -182,8 +192,8 @@
     <h1>The garden already does the work. <em>YIELD is the question of who pays for it.</em></h1>
     <p>A registered garden holds water, carries a corridor, shelters fauna and builds soil — services a city would otherwise fund through infrastructure. YIELD asks whether the households doing that work can be paid for it, by the organisations that need the outcome. This portal sets out how that could function, and where it might not.</p>
     <div class="strip">
-      <div class="stat"><div class="num" data-count="15">0</div><div class="label">Verified gardens — the current supply side</div></div>
-      <div class="stat"><div class="num" data-count="44">0</div><div class="label">Average score across the network</div></div>
+      <div class="stat"><div class="num" data-count="24" id="ySupply">0</div><div class="label">Verified gardens — the current supply side</div></div>
+      <div class="stat"><div class="num" data-count="46.7" id="yMean">0</div><div class="label">Average score across the network</div></div>
       <div class="stat"><div class="num" data-count="0">0</div><div class="label">Sponsors contracted to date</div></div>
       <div class="stat"><div class="num" data-count="0">0</div><div class="label">Dollars paid to stewards to date</div></div>
     </div>
@@ -356,7 +366,8 @@ const cio = new IntersectionObserver(es => es.forEach(e => {
   const t0 = performance.now();
   (function tick(now){
     const p = Math.min(1,(now-t0)/1200), k = 1-Math.pow(1-p,3);
-    el.innerHTML = nf(Math.round(k*target)) + sufHTML;
+    var dec=(String(target).split('.')[1]||'').length;
+    el.innerHTML = (dec?(k*target).toFixed(dec):nf(Math.round(k*target))) + sufHTML;
     if (p<1) requestAnimationFrame(tick);
   })(t0);
 }), {threshold:.6});
