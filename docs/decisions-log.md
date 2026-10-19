@@ -670,3 +670,22 @@ window without a real request or mail. Scheduled job setup requires fresh Google
 authorization; source is saved but deployment remains version 38 pending that step.
 Files: scripts/appsscript/Code.gs, scripts/test_upgrade_routing.cjs, js/reg-routing.js,
 profile templates, designer-dashboard.html, js/designer-portal.js and routing docs.
+
+## 19 Oct 2026 — Plant Studio replaces Notion for plants and project palettes
+
+Tyson is retiring Notion to stop paying for it. The plant library now comes from
+tinyforests/plants (all 1,152 Notion plant pages exported and merged into the
+canonical build; 1,299 species). The Registry serves a generated, public-fields-only
+copy at data/plant-library.json — the one sanctioned copy outside the plants repo,
+written only by `python3 -m canonical.publish --reg`. Projects (client gardens or
+beds) and their chosen plants live in Apps Script sheets, not in this public repo,
+because project names carry client names. Clients read one project through an
+unguessable view token that returns only the client-facing title, intro and plant
+list. Record edits made in the studio are logged per field, overlaid immediately on
+both pages, and pulled nightly into tinyforests/plants where they take precedence.
+Plant Studio does not touch scoring or any garden record; `garden_id` on a project
+is a link only. Files: plants/studio.html, plants/view.html, js/plant-library.js,
+assets/css/plants.css, data/plant-library.json, scripts/appsscript/Plants.gs,
+scripts/appsscript/Code.gs (routing only), scripts/test_plant_studio.cjs,
+docs/plant-studio.md. Deployment: Plants.gs must be added to the Apps Script
+project and a new version deployed before the studio works live.

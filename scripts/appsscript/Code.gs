@@ -72,6 +72,8 @@ function doGet(e) {
   if (params.action === 'get_garden_record')     return handleGetGardenRecord(params);
   if (params.action === 'get_precise_map')       return handleGetPreciseMap(params);
   if (params.action === 'set_published_id')       return handleSetPublishedId(params);
+  if (params.action === 'plants_view')            return handlePlantsView(params);        // Plants.gs
+  if (params.action === 'plants_export_edits')    return handlePlantsExportEdits(params); // Plants.gs
 
   return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString(), enrolment_global_limit: enrolmentGlobalMax(), newsletter_limit_until: new Date(RATE_NEWSLETTER_UNTIL).toISOString()});
 }
@@ -413,6 +415,8 @@ function doPost(e) {
     if (payload.submission_type === 'upgrade_routing') return handleRouting(payload);
 
     if (payload.submission_type === 'designer_portal') return handleDesignerPortal(payload);
+
+    if (payload.submission_type === 'plant_studio') return handlePlantStudio(payload); // Plants.gs
 
     // Claims bypass enrolment rate limits -- route first.
     if (payload.submission_type === 'opportunity_claim') {
