@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
 <title>YIELD — Concept Portal · Ecological Registry</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -195,7 +196,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
       <div class="stat"><div class="num" data-count="24" id="ySupply">0</div><div class="label">Verified gardens — the current supply side</div></div>
       <div class="stat"><div class="num" data-count="46.7" id="yMean">0</div><div class="label">Average score across the network</div></div>
       <div class="stat"><div class="num" data-count="0">0</div><div class="label">Sponsors contracted to date</div></div>
-      <div class="stat"><div class="num" data-count="0">0</div><div class="label">Dollars paid to stewards to date</div></div>
+      <div class="stat"><div class="num" data-count="0">0</div><div class="label">Dollars paid to stewards to date — yield is not active</div></div>
     </div>
   </div>
 </div>
@@ -209,12 +210,12 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
       <div class="fstep"><div class="i">01</div><h4>Garden is verified</h4><p>An independent site assessment produces a score across five pillars. This happens whether or not YIELD exists, and is never adjusted for value.</p><span class="arrow">→</span></div>
       <div class="fstep"><div class="i">02</div><h4>Function becomes units</h4><p>Verified ecological function converts to units on a published, fixed conversion. Units track the garden's actual condition, and fall if it declines.</p><span class="arrow">→</span></div>
       <div class="fstep"><div class="i">03</div><h4>A sponsor contracts</h4><p>A council, developer, water authority or corporate program contracts units against a stated obligation or commitment. Contracts are multi-year.</p><span class="arrow">→</span></div>
-      <div class="fstep"><div class="i">04</div><h4>The steward is paid</h4><p>Payment flows to the household holding the garden, on condition of continued verification. Non-verification stops payment.</p></div>
+      <div class="fstep"><div class="i">04</div><h4>The steward receives yield</h4><p>Yield would flow to the household holding the garden, on condition of continued verification. Non-verification would stop it.</p></div>
     </div>
 
     <div class="mgrid" style="margin-top:44px">
       <div class="mcard"><div class="top"><h4>Who holds the risk</h4><span class="tg2 t-x">Design intent</span></div>
-        <p>The steward is paid for condition maintained, not for a promise. If a garden's verified score falls, units fall with it — the ledger has no mechanism to pay for function that is not there.</p></div>
+        <p>A steward would be paid for condition maintained, not for a promise. If a garden's verified score falls, units fall with it — the ledger has no mechanism to pay for function that is not there.</p></div>
       <div class="mcard"><div class="top"><h4>What a sponsor buys</h4><span class="tg2 t-x">Design intent</span></div>
         <p>A contracted claim on verified private-land ecological function, in a named locality, auditable to individual properties, with a documented methodology behind it.</p></div>
       <div class="mcard"><div class="top"><h4>What G&amp;S takes</h4><span class="tg2 t-x">Undecided</span></div>
@@ -270,13 +271,14 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
         </div>
       </div>
 
+      <div id="eligBar" class="note" style="margin:0 0 18px;border:1px solid var(--brass);padding:14px 18px;font-style:normal"></div>
       <div class="outputs">
         <div class="out"><div class="k">Units generated</div><div class="v"><span id="oUnits">1,562</span></div>
           <div class="sub">Annual units from verified function, before any price is attached. This figure exists whether or not a sponsor ever contracts it.</div></div>
-        <div class="out"><div class="k">Illustrative annual payment</div><div class="v">$<span id="oAnnual">730</span></div>
-          <div class="sub">To the steward, net of platform margin, at the unit rate set on the left. Not an offer, not a forecast, not a rate anyone has agreed to.</div></div>
-        <div class="out"><div class="k">Over the contract term</div><div class="v">$<span id="oTotal">3,650</span></div>
-          <div class="sub">Assumes verified condition is held for the full term. A score decline reduces units and therefore payment.</div></div>
+        <div class="out"><div class="k">Potential annual yield</div><div class="v">$<span id="oAnnual">730</span></div>
+          <div class="sub">Potential, not payable. Net of platform margin at the unit rate set on the left. Estimated yield today is $0 — the program is not active and no rate has been agreed.</div></div>
+        <div class="out"><div class="k">Potential over the term</div><div class="v">$<span id="oTotal">3,650</span></div>
+          <div class="sub">A forecast, not a balance. Assumes verified condition is held for the full term; a score decline would reduce units and therefore yield.</div></div>
         <div class="out"><div class="k">Against installation cost</div><div class="v"><span id="oPct">—</span><span class="suf">%</span></div>
           <div class="sub">Share of a <span id="oInstall">$25,000</span> ecological garden installation recovered across the term. This is the number that decides whether YIELD changes anyone's behaviour.</div></div>
       </div>
@@ -294,7 +296,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
     <div class="two">
       <ul class="mlist">
         <li>Measurement is separated from sale. The verified score is produced by an assessment process that has no visibility of what a garden is worth to any sponsor, and no figure is ever reverse-engineered to reach a target.</li>
-        <li>Payment is conditional on re-verification, not on a one-off assessment. Function that lapses stops earning.</li>
+        <li>Yield would be conditional on re-verification, not on a one-off assessment. Function that lapses would stop earning.</li>
         <li>Self-reported gardens generate no units under any circumstances. Only site-visit-verified condition enters the ledger.</li>
         <li>Units are not offsets and must not be sold as a licence to damage elsewhere. If sponsors want offsets, this is the wrong instrument and they should be told so.</li>
         <li>Additionality is the unresolved problem, stated plainly: paying for a garden that would have existed anyway buys nothing real. Any credible version of YIELD needs a defensible answer here, and does not yet have one.</li>
@@ -411,12 +413,22 @@ function compute(){
   $('#lTerm').textContent = tm + (tm === 1 ? ' yr' : ' yrs');
   $('#lMar').textContent = Math.round(mr*100) + '%';
 
-  const units = Math.round(sc * ar / 10 * co);
+  // docs/revenue-and-yield-rules.md formula v1:
+  // yield = score x area_factor x connectivity_factor x verification_factor
+  const areaFactor = ar / 100;          // per 100 m2
+  const verifFactor = 1;                // verified only; self-reported generates nothing
+  const units = Math.round(sc * areaFactor * co * verifFactor);
   const gross = units * rt;
   const annual = gross * (1 - mr);
   const total = annual * tm;
 
   $('#oUnits').textContent = nf(units);
+  var eb = document.getElementById('eligBar');
+  if (eb) {
+    eb.innerHTML = sc >= 41
+      ? '<b>Yield: pending activation.</b> At a score of ' + sc + ' this garden would be eligible when the program activates. Estimated yield today: $0.'
+      : '<b>Yield: not yet eligible.</b> A score of ' + sc + ' sits below the eligibility threshold of 41. Estimated yield today: $0.';
+  }
   $('#oAnnual').textContent = nf(Math.round(annual));
   $('#oTotal').textContent = nf(Math.round(total));
   $('#oPct').textContent = (total / INSTALL * 100).toFixed(1);
