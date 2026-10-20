@@ -1,14 +1,22 @@
 # Plant Studio
 
-Choose plants for a project, share them with the client, and keep the plant
-library correct — without Notion.
+Plant Studio now lives in tinyforests/gardenerandson:
+https://www.gardenerandson.com/plants/studio.html
+
+Client lists use https://www.gardenerandson.com/plants/view.html?p=TOKEN.
+The Registry's former pages redirect there, preserving query parameters and
+fragments so existing client links continue working. Frontend source and styling
+are maintained in that repository; this repository owns the shared library and
+Apps Script backend. Both sites read the same data/plant-library.json published
+from tinyforests/plants. No plant records or backend data were moved.
 
 | page | who | what |
 |---|---|---|
 | `/plants/studio.html` | G&S (admin key) | projects, plant search, add to areas, qty/size/notes, edit plant records, add new plants, import Notion themes |
 | `/plants/view.html?p=TOKEN` | the client | their plant list as cards, grouped by area, printable |
 
-Both pages read `/data/plant-library.json` through `js/plant-library.js`.
+The Gardener & Son pages read `https://ecologicalregistry.org/data/plant-library.json`
+through their local `plants/plant-library.js`.
 Add `?mock=1` to either page to try it with an in-browser demo store (no backend).
 
 ## Data
@@ -63,5 +71,5 @@ edit whitelisting, token rotation, archive, idempotent import.
 1. Apps Script editor → add a file `Plants` → paste `scripts/appsscript/Plants.gs`.
 2. Paste the updated `Code.gs` (two routing lines added).
 3. Deploy → Manage deployments → edit → **New version**. The /exec URL is unchanged.
-4. Open `/plants/studio.html`, sign in with the admin key, and use
+4. Open `https://www.gardenerandson.com/plants/studio.html`, sign in with the admin key, and use
    **Import Notion projects…** with `migration/notion-projects.json` from tinyforests/plants.
