@@ -226,6 +226,7 @@ function _plGetProject(projectId) {
 }
 
 function _plSaveProject(p) {
+  if (String(p.internal_notes || '').length > 40000) return jsonResp({ok:false,error:'Project notes exceed safe cell size'});
   var sh = _plSheet(PL_PROJECTS, PL_PROJECT_HEADERS);
   var now = new Date();
   var id = _plStr(p.project_id, 40);
@@ -247,7 +248,7 @@ function _plSaveProject(p) {
     cur.created_at || now,
     now,
     p.archived != null ? !!p.archived : !!cur.archived,
-    _plStr(p.internal_notes != null ? p.internal_notes : cur.internal_notes, 4000)
+    _plStr(p.internal_notes != null ? p.internal_notes : cur.internal_notes, 40000)
   ];
   if (row) sh.getRange(row, 1, 1, vals.length).setValues([vals]);
   else sh.appendRow(vals);
@@ -318,15 +319,18 @@ function _plImport(projects) {
   for (var k = 0; k < projects.length && k < 400; k++) {
     var p = projects[k] || {};
     var src = _plStr(p.source, 80);
+    if (String(p.internal_notes || '').length > 40000) throw new Error('Project notes exceed safe cell size');
+    if (p.garden_id && (typeof _frGarden !== 'function' || !_frGarden(p.garden_id))) throw new Error('Unknown garden');
     if (src && have[src]) { skipped++; continue; }
     var id = 'PRJ-' + Utilities.formatDate(now, 'Australia/Melbourne', 'yyMMdd') + '-' + _plToken().slice(0, 6);
-    prow.push([id, _plStr(p.name, 160), '', '', 'Imported', _plToken(), '', src, now, now, false, '']);
+    prow.push([id, _plStr(p.name, 160), '', '', 'Imported', _plToken(), p.garden_id || '', src, now, now, false, _plStr(p.internal_notes, 40000)]);
     var lines = p.lines || [];
     for (var j = 0; j < lines.length && j < 500; j++) {
       var slug = _plStr(lines[j].slug, 120);
       if (slug) lrow.push([id, slug, _plStr(lines[j].area, 80), '', '', '', j + 1, now]);
     }
     made++;
+    if (src) have[src] = 1;
   }
   if (prow.length) sh.getRange(sh.getLastRow() + 1, 1, prow.length, PL_PROJECT_HEADERS.length).setValues(prow);
   if (lrow.length) lsh.getRange(lsh.getLastRow() + 1, 1, lrow.length, PL_LINE_HEADERS.length).setValues(lrow);
