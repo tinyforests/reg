@@ -1,124 +1,20 @@
 <!doctype html>
-<html lang="en-AU" class="light">
+<html lang="en-AU">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<title>Your plants · Gardener &amp; Son</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/plants.css">
+<title>Plant Studio has moved · Gardener &amp; Son</title>
+<link rel="canonical" href="https://www.gardenerandson.com/plants/view.html">
 <script>
-(function(){try{var m=localStorage.getItem('reg_mode');if(m==='dark')document.documentElement.className='dark';}catch(e){}})();
+location.replace('https://www.gardenerandson.com/plants/view.html' + location.search + location.hash);
 </script>
 </head>
 <body>
-<header class="top">
-  <a class="brand" href="https://gardenerandson.com" rel="noopener">Gardener &amp; Son</a>
-  <nav><button type="button" id="themeToggle">Understory</button></nav>
-</header>
-
-<main class="cv" id="cv">
-  <div class="cv-missing small" id="status">Gathering your plants…</div>
-</main>
-
-<script src="/js/plant-library.js"></script>
+<p>Plant Studio is now at Gardener &amp; Son. <a id="destination" href="https://www.gardenerandson.com/plants/view.html">Continue to your plants.</a></p>
 <script>
-(function () {
-  'use strict';
-  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec';
-  var PL = window.PlantLibrary, esc = PL.esc;
-  var token = (location.search.match(/[?&]p=([A-Za-z0-9]+)/) || [])[1] || '';
-  var MOCK = /[?&]mock=1/.test(location.search);
-
-  var tt = document.getElementById('themeToggle');
-  function setTheme(m) { document.documentElement.className = m; tt.textContent = m === 'dark' ? 'Canopy' : 'Understory'; try { localStorage.setItem('reg_mode', m); } catch (e) {} }
-  tt.onclick = function () { setTheme(document.documentElement.className === 'dark' ? 'light' : 'dark'); };
-  setTheme(document.documentElement.className === 'dark' ? 'dark' : 'light');
-
-  function fetchProject() {
-    if (MOCK) {
-      var db = JSON.parse(localStorage.getItem('pl-mock') || '{"projects":[],"lines":{},"edits":[]}');
-      var p = db.projects.filter(function (x) { return x.view_token === token && !x.archived; })[0];
-      if (!p) return Promise.resolve({ok: false});
-      var edits = {}; db.edits.forEach(function (e) { (edits[e.slug] = edits[e.slug] || {})[e.field] = e.value; });
-      return Promise.resolve({ok: true, project: {title: p.client_title || 'Your planting', intro: p.intro || '', updated_at: p.updated_at}, lines: db.lines[p.project_id] || [], edits: edits});
-    }
-    return fetch(ENDPOINT + '?action=plants_view&t=' + encodeURIComponent(token)).then(function (r) { return r.json(); });
-  }
-
-  function missing(msg) {
-    document.getElementById('cv').innerHTML = '<div class="cv-missing"><span class="label">Gardener &amp; Son</span><h1 style="font-size:40px;margin:16px 0">' + esc(msg) + '</h1><p class="small">If you were sent this link by the studio, ask us for a fresh one — hello@gardenerandson.com</p></div>';
-  }
-
-  if (!token) return missing('This plant list link is incomplete.');
-
-  Promise.all([PL.load(), fetchProject()]).then(function (res) {
-    var d = res[1];
-    if (!d || !d.ok) return missing('We couldn’t find this plant list.');
-    PL.applyEdits(d.edits || {});
-    render(d.project, d.lines || []);
-  }).catch(function () { missing('We couldn’t load your plants just now.'); });
-
-  function facts(r) {
-    var rows = [];
-    var sz = PL.size(r); if (sz) rows.push(['Grows to', sz]);
-    var fl = PL.flowering(r); if (fl) rows.push(['Flowers', fl + (r.flower_colour && r.flower_colour.length ? ' · ' + r.flower_colour.join(', ') : '')]);
-    if (r.conditions && r.conditions.length) rows.push(['Likes', r.conditions.map(function (c) { return String(c).replace(/-/g, ' '); }).join(', ')]);
-    if (r.plant_density) rows.push(['Spacing', r.plant_density]);
-    if (r.edible && /toxic/i.test(r.edible)) rows.push(['Note', 'Toxic to people and pets']);
-    else if (r.edible === 'Yes') rows.push(['Edible', 'Yes']);
-    return rows.length ? '<dl class="facts">' + rows.map(function (x) { return '<dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd>'; }).join('') + '</dl>' : '';
-  }
-
-  function card(l) {
-    var r = PL.get(l.slug) || {botanical_name: l.slug.replace(/-/g, ' ')};
-    var tags = [];
-    if (r.evcs && r.evcs.length) tags.push('<span class="chip native">Indigenous</span>');
-    else if (r.australian_native) tags.push('<span class="chip native">Australian native</span>');
-    if (r.display_band) tags.push('<span class="chip">' + esc(PL.BANDS[r.display_band]) + '</span>');
-    var img = r.image_url
-      ? '<div class="img" role="img" aria-label="' + esc(r.botanical_name) + '" style="background-image:url(&quot;' + esc(r.image_url) + '&quot;)"></div>' + (r.image_credit ? '<div class="credit">Photo: ' + esc(r.image_credit) + '</div>' : '')
-      : '<div class="img none" aria-hidden="true"><span>' + esc((r.botanical_name || '?').charAt(0)) + '</span></div>';
-    var desc = r.description || r.blurb || '';
-    return '<article class="card">' + img + '<div class="txt">' +
-      (l.qty ? '<div class="qty">' + esc(l.qty) + (l.size ? ' × ' + esc(l.size) : ' plants') + '</div>' : (l.size ? '<div class="qty">' + esc(l.size) + '</div>' : '')) +
-      '<h3>' + esc(r.botanical_name) + '</h3>' +
-      '<div class="common">' + esc(r.common_name || '') + '</div>' +
-      '<div>' + tags.join('') + '</div>' +
-      facts(r) +
-      (desc ? '<p>' + esc(desc) + '</p>' : '') +
-      (l.note ? '<div class="note">' + esc(l.note) + '</div>' : '') +
-      (r.maintenance ? '<details><summary>Looking after it</summary><p>' + esc(r.maintenance) + '</p></details>' : '') +
-      '</div></article>';
-  }
-
-  function render(p, lines) {
-    document.title = p.title + ' · Gardener & Son';
-    var areas = [], by = {};
-    lines.forEach(function (l) { var a = l.area || ''; if (!by[a]) { by[a] = []; areas.push(a); } by[a].push(l); });
-    var total = lines.reduce(function (s, l) { return s + (Number(l.qty) || 0); }, 0);
-    var indig = lines.filter(function (l) { var r = PL.get(l.slug); return r && r.evcs && r.evcs.length; }).length;
-    var named = areas.filter(Boolean);
-    var html = '<section class="cv-intro"><span class="label">Gardener &amp; Son · plant list' + (p.updated_at ? ' · updated ' + new Date(p.updated_at).toLocaleDateString('en-AU', {day: 'numeric', month: 'short', year: 'numeric'}) : '') + '</span>' +
-      '<h1>' + esc(p.title) + '</h1>' + (p.intro ? '<p>' + esc(p.intro) + '</p>' : '') +
-      '<div class="cv-stats"><div><strong>' + lines.length + '</strong><span>species</span></div>' +
-      (total ? '<div><strong>' + total + '</strong><span>plants</span></div>' : '') +
-      (indig ? '<div><strong>' + indig + '</strong><span>indigenous to Victoria</span></div>' : '') +
-      (named.length > 1 ? '<div><strong>' + named.length + '</strong><span>planting areas</span></div>' : '') + '</div></section>';
-    if (named.length > 1) {
-      html += '<nav class="cv-tools" aria-label="Planting areas">' + areas.map(function (a, i) { return '<a class="btn" href="#a' + i + '">' + esc(a || 'Other plants') + '</a>'; }).join('') + '<button class="btn ghost" type="button" onclick="print()">Print</button></nav>';
-    }
-    html += areas.map(function (a, i) {
-      return '<section class="cv-area" id="a' + i + '">' + (a || areas.length > 1 ? '<span class="label">' + by[a].length + ' species</span><h2>' + esc(a || 'Other plants') + '</h2>' : '') +
-        '<div class="cards">' + by[a].map(card).join('') + '</div></section>';
-    }).join('');
-    if (!lines.length) html += '<p class="cv-missing small">The studio hasn’t added plants to this list yet.</p>';
-    html += '<footer class="cv-foot">Prepared by Gardener &amp; Son, 140 Auburn Road, Hawthorn. Plant details describe each species in general; how it grows in your garden depends on your soil, light and water. Questions — hello@gardenerandson.com</footer>';
-    document.getElementById('cv').innerHTML = html;
-  }
-})();
+document.getElementById('destination').href += location.search + location.hash;
 </script>
 </body>
 </html>
