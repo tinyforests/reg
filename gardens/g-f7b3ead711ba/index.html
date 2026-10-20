@@ -485,6 +485,7 @@
 <script src="/js/reg-score.js"></script>
 <script src="/js/reg-opportunities.js"></script>
 <script src="/js/reg-identity.js"></script>
+<script src="/js/reg-field-records.js"></script>
 <script src="/js/reg-private-details.js"></script>
 <script src="/js/reg-precise-map.js"></script>
 <script src="/js/reg-claims.js"></script>
@@ -1190,6 +1191,7 @@ function render() {
   );
     renderDesignerAttribution(R);
     if (typeof renderPrivateGardenDetails === "function") renderPrivateGardenDetails(R.garden_id);
+    if (typeof renderImportedFieldRecords === "function") renderImportedFieldRecords(R.garden_id);
 
   /* Species list */
   var speciesSection = document.getElementById('speciesSection');

@@ -416,6 +416,7 @@ function doPost(e) {
 
     if (payload.submission_type === 'designer_portal') return handleDesignerPortal(payload);
 
+    if (payload.submission_type === 'field_record') return handleFieldRecord(payload); // FieldRecords.gs
     if (payload.submission_type === 'plant_studio') return handlePlantStudio(payload); // Plants.gs
 
     // Claims bypass enrolment rate limits -- route first.

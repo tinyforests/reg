@@ -700,3 +700,16 @@ quantities are complete. Missing quantities remain unknown, not zero.
 
 Files: scripts/appsscript/Plants.gs, scripts/test_plant_studio.cjs,
 docs/plant-studio.md. Frontend lives in tinyforests/gardenerandson.
+
+## 20 October 2026 — Private Notion field records
+
+Import journal text into a separate private Sheets store, never public garden JSON
+or Git. Admin and backend-verified sessions for the corresponding garden may read;
+only that garden's verified steward can publish or revoke publication. Unmatched
+projects remain admin-only until an explicit Registry match. Reassigning a note
+resets publication to private. Preserve original attachment references for later
+media storage; no photos or videos are uploaded in this migration. Source IDs make
+retries idempotent; imports never silently overwrite an existing published note.
+
+Files: FieldRecords.gs, Code.gs routing, Plants.gs import metadata,
+js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
