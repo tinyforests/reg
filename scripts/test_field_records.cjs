@@ -25,6 +25,8 @@ assert.equal(admin({op:'import',entries:[{...entry,source_id:'d'.repeat(32),body
 assert.equal(admin({op:'import',entries:[{...entry,garden_id:'fake'}]}).ok,false);
 // Explicit project matching links pending notes and revokes old publication.
 ctx._plImport([{name:'Private project',source:'notion-design:'+'b'.repeat(32),internal_notes:'Private narrative'}]);
+var project=ctx._plListProjects()[0];
+assert.equal(ctx._plSaveProject({...project,garden_id:other}).ok,false);
 assert.equal(admin({op:'link_project',project_id:'b'.repeat(32),garden_id:other}).linked,2);
 assert.equal(call({op:'list',garden_id:garden,session_token:'owner'}).records.length,0);
 assert.equal(call({op:'list',garden_id:other,session_token:'other'}).records.length,2);
