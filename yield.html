@@ -1,0 +1,165 @@
+<!doctype html><html lang="en-AU" class="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Yield · How it would work · Ecological Registry</title><meta name="description" content="How the Ecological Registry's yield layer would work, what it would cost to verify, and the questions it has not yet answered. Yield is not active."><link rel="canonical" href="https://ecologicalregistry.org/yield.html"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="/assets/css/developers.css"><link rel="stylesheet" href="/assets/css/yield.css"></head><body>
+<header class="developer-header"><a class="brand" href="/">Ecological Registry</a><nav aria-label="Yield navigation"><a href="#how">How it would work</a><a href="#model">Model</a><a href="#integrity">Integrity</a><a href="#open">Open questions</a><a href="/brands.html" class="nav-cta">For brands</a><button id="themeToggle" type="button">Canopy</button></nav></header>
+
+<main>
+<section class="developer-hero">
+  <div class="hero-copy">
+    <span class="eyebrow">THE ECONOMIC LAYER</span>
+    <h1>The garden already does the work. Yield is the question of who pays for it.</h1>
+    <p class="lead">A registered garden holds water, carries a corridor, shelters fauna and builds soil — services a city would otherwise fund through infrastructure. Yield asks whether the households doing that work could be paid for it, by the organisations that need the outcome.</p>
+    <p class="status-note"><strong>Yield is not active.</strong> No sponsor has contracted units, no steward has received a payment, and estimated yield today is $0 for every garden on the Registry. This page describes a mechanism under design and the questions it has not yet answered. It is not an offer and no figure on it is payable.</p>
+  </div>
+  <div class="record-panel">
+    <span class="phase-label">THE HONEST SEQUENCE</span>
+    <ol class="record-stages">
+      <li><span>01</span><div><strong>Steward Review</strong><p>Paid ecological assessment by G&amp;S. The only current commercial product, and the active revenue line.</p></div></li>
+      <li><span>02</span><div><strong>Council pilot</strong><p>Paid partnership for measurement and reporting, once a council reaches credibility density.</p></div></li>
+      <li><span>03</span><div><strong>Yield at scale</strong><p>Sponsor-funded, disbursed to stewards. Activated only when councils are active and a sponsor pipeline is real.</p></div></li>
+    </ol>
+    <p class="small" style="margin-top:22px">Stages are not skipped. Yield sits third deliberately — it needs a verified ledger of real depth behind it before any payment mechanism is credible.</p>
+  </div>
+</section>
+
+<section id="how" class="developer-section">
+  <div class="section-intro"><span class="eyebrow">FOUR PARTIES, ONE LEDGER</span><h2>How it would work.</h2>
+  <p>Yield would not create a new measurement. It would attach a contribution to a measurement that already exists — the verified Registry score, produced independently of anyone buying anything. That separation is the whole design: the assessor never knows what a garden is worth to a sponsor.</p></div>
+  <div class="flow-grid">
+    <div><span class="phase-label">01 · VERIFIED</span><h3>A garden is verified</h3><p>An independent site assessment produces a score across five pillars. This happens whether or not yield exists, and is never adjusted for value.</p></div>
+    <div><span class="phase-label">02 · UNITS</span><h3>Function becomes units</h3><p>Verified function would convert to units on a published conversion. Units would track actual condition and fall if it declined. Self-reported gardens generate nothing.</p></div>
+    <div><span class="phase-label">03 · CONTRACTED</span><h3>A sponsor contracts</h3><p>A council, water authority, developer or corporate program would contract units against a stated obligation or commitment.</p></div>
+    <div><span class="phase-label">04 · SPLIT</span><h3>The contribution splits</h3><p>A contribution would divide three ways: to the household holding the garden, to the verification that makes the unit real, and to running the ledger.</p></div>
+  </div>
+  <p class="measure-note">Verification is funded from the contribution itself, not by the steward and not by the sponsor of that particular garden. Allocations would pool, so nobody pays for the assessment of the garden they are buying — the cost of proof sits inside the instrument rather than depending on goodwill.</p>
+</section>
+
+<section id="model" class="developer-section">
+  <div class="section-intro"><span class="eyebrow">INTERACTIVE — EVERY ASSUMPTION EXPOSED</span><h2>What the numbers would depend on.</h2>
+  <p>The only honest way to show yield economics is as a sensitivity model with no fixed price in it. The unit rate is the most uncertain input in the entire concept, so it sits on a slider rather than in a headline. Move it and the whole proposition changes.</p></div>
+
+  <div class="yield-model">
+    <div class="yield-controls">
+      <div class="yield-ctl"><label>Garden score <b id="lScore">62</b></label><input type="range" id="sScore" min="20" max="100" value="62" step="1" aria-label="Garden score"></div>
+      <div class="yield-ctl"><label>Garden area <b id="lArea">420 m²</b></label><input type="range" id="sArea" min="80" max="1200" value="420" step="10" aria-label="Garden area"></div>
+      <div class="yield-ctl"><label>Connectivity factor <b id="lCorr">1.2×</b></label><input type="range" id="sCorr" min="100" max="200" value="120" step="5" aria-label="Connectivity factor"></div>
+      <div class="yield-ctl"><label>Unit rate — unknown <b id="lRate">$0.55</b></label><input type="range" id="sRate" min="10" max="300" value="55" step="5" aria-label="Unit rate in dollars"></div>
+      <div class="yield-ctl"><label>Term <b id="lTerm">5 yrs</b></label><input type="range" id="sTerm" min="1" max="25" value="5" step="1" aria-label="Contract term in years"></div>
+      <div class="yield-ctl"><label>Verification allocation <b id="lVer">25%</b></label><input type="range" id="sVer" min="0" max="50" value="25" step="1" aria-label="Verification allocation percentage"></div>
+      <div class="yield-ctl"><label>Platform margin <b id="lMar">15%</b></label><input type="range" id="sMar" min="0" max="40" value="15" step="1" aria-label="Platform margin percentage"></div>
+      <div class="yield-presets">
+        <button type="button" data-s="32" data-a="250">Habitat garden</button>
+        <button type="button" data-s="62" data-a="420" class="on">Ecological garden</button>
+        <button type="button" data-s="94" data-a="700">Biodiversity node</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="split-panel">
+        <span class="phase-label">WHERE A CONTRIBUTION WOULD GO</span>
+        <div class="split-bar"><div class="seg seg-steward" id="segSteward"></div><div class="seg seg-verif" id="segVerif"></div><div class="seg seg-plat" id="segPlat"></div></div>
+        <div class="split-key"><span><i style="background:var(--signal)"></i>Steward</span><span><i style="background:#b49a63"></i>Verification</span><span><i style="background:var(--muted)"></i>Platform</span></div>
+      </div>
+      <p class="elig-bar" id="eligBar"></p>
+      <div class="yield-outputs">
+        <div class="yield-out"><div class="k">Units generated</div><div class="v"><span id="oUnits">—</span></div><div class="sub">Annual units from verified function, before any price is attached. This figure would exist whether or not a sponsor ever contracted it.</div></div>
+        <div class="yield-out"><div class="k">Potential annual yield</div><div class="v">$<span id="oAnnual">—</span></div><div class="sub">Potential, not payable. Net of verification and platform allocations at the unit rate set alongside. Estimated yield today is $0 — the program is not active and no rate has been agreed.</div></div>
+        <div class="yield-out"><div class="k">Potential over the term</div><div class="v">$<span id="oTotal">—</span></div><div class="sub">A forecast, not a balance. Assumes verified condition is held for the full term; a score decline would reduce units and therefore yield.</div></div>
+        <div class="yield-out"><div class="k">Against installation cost</div><div class="v"><span id="oPct">—</span><span class="suf">%</span></div><div class="sub">Share of a <span id="oInstall">$25,000</span> ecological garden installation that the term would recover. This is the number that decides whether yield would change anyone's behaviour.</div></div>
+      </div>
+    </div>
+  </div>
+  <p class="measure-note"><span class="yield-chip">Modelled</span> &nbsp;Units follow formula v1 — score × area factor × connectivity factor × verification factor — which is deliberately placeholder and will be finalised when a sponsor pipeline is confirmed and a first council pilot is signed. Installation baseline fixed at $25,000 for comparison only. The split bar shows how a contribution would divide before anything reached a steward: verification is funded first, because a unit nobody checked is worth nothing. If the recovery percentage looks too small to motivate a household, that is a real finding about the concept, not a display error.</p>
+</section>
+
+<section id="integrity" class="developer-section">
+  <div class="section-intro"><span class="eyebrow">INTEGRITY CONSTRAINTS</span><h2>What would stop this being greenwashing.</h2>
+  <p>Every voluntary environmental market has been damaged by the same failures: unverifiable claims, additionality that was never real, and measurement paid for by the party who benefits from a high number. Yield is only worth building if it is designed against those failures from the start.</p></div>
+  <div class="two-columns">
+    <ul>
+      <li>Measurement is separated from sale. The verified score is produced by an assessment process with no visibility of what a garden is worth to any sponsor, and no figure is ever reverse-engineered to reach a target.</li>
+      <li>Verification is funded from the contribution, with allocations pooled so no sponsor funds the assessment of the garden it is contracting.</li>
+      <li>Yield would be conditional on re-verification, not on a one-off assessment. Function that lapses would stop earning.</li>
+      <li>Self-reported gardens generate no units under any circumstances. Only site-visit-verified condition would enter the ledger.</li>
+      <li>Units are not offsets and must not be sold as a licence to damage elsewhere. If sponsors want offsets, this is the wrong instrument and they should be told so.</li>
+      <li>The methodology is published, versioned, and open to audit against Accounting for Nature's framework. A ledger nobody can inspect is worth nothing.</li>
+    </ul>
+    <div class="highlight">
+      <p>The inputs are the truth, the score is the consequence — and the price is a separate conversation that must never reach back into either.</p>
+      <p class="source-note">The constraint yield has to hold</p>
+    </div>
+  </div>
+</section>
+
+<section id="open" class="developer-section">
+  <div class="section-intro"><span class="eyebrow">UNRESOLVED BY DESIGN</span><h2>Open questions.</h2>
+  <p>These decide whether yield is a real instrument or a nice idea. They are published rather than hidden because a concept that only shows its strengths is not a concept, it is a pitch.</p></div>
+  <div class="policy-grid">
+    <div>
+      <div class="q-item"><h3>Who actually pays, and under what obligation?</h3><p>Voluntary corporate spend is fragile and first to be cut. Obligation-driven demand — offset requirements, water authority targets, developer conditions — is durable but brings regulatory scrutiny this methodology has not yet faced.</p></div>
+      <div class="q-item"><h3>Can additionality be demonstrated?</h3><p>Most registered gardens were built because their owners wanted them, not because of a payment. Paying for what would have happened anyway is the failure mode that has discredited every market like this one.</p></div>
+      <div class="q-item"><h3>Is the amount large enough to matter?</h3><p>Run the model at any plausible rate. If a household would recover a small fraction of installation cost over five years, yield is recognition rather than incentive — which may still be worth building, but is a different product.</p></div>
+    </div>
+    <div>
+      <div class="q-item"><h3>What happens when a property sells?</h3><p>Contracts would run for years; households move sooner. Either the obligation travels with the title, or the ledger accepts churn — both have consequences for what a sponsor is actually buying.</p></div>
+      <div class="q-item"><h3>Who verifies at scale?</h3><p>A ledger verified by the same studio that designs and installs the gardens cannot support a payment mechanism. Funding verification from the contribution answers who pays for assessment; it does not answer who carries it out. Independent capacity is a precondition, not a later refinement.</p></div>
+      <div class="q-item"><h3>Does the money change the gardens?</h3><p>The moment function has a price, the incentive to optimise for the metric rather than the ecology appears. Every scoring pillar becomes a target, and targets distort. This one has no clean solution.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="developer-section">
+  <div class="enquiry-panel">
+    <span class="eyebrow">TALK TO US</span>
+    <h2>Published to be argued with.</h2>
+    <p>Nothing here has been built, contracted or offered to anyone. If you are a council, water authority or sponsor weighing whether this could work, the objections above are the right place to start.</p>
+    <p class="actions"><a class="button" href="mailto:hello@gardenerandson.com?subject=Yield%20mechanism">Discuss the mechanism</a> <a class="text-link" href="/brands.html">Support a garden today →</a></p>
+  </div>
+</section>
+</main>
+
+<footer><a class="brand" href="/">Ecological Registry</a><span>Yield · Mechanism under design · Not active</span><a href="/brands.html">For brands</a><a href="/designer-invite.html">For designers</a></footer>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s);},nf=function(n){return n.toLocaleString('en-AU');};
+var t=document.getElementById('themeToggle');
+function setMode(m){document.documentElement.classList.toggle('dark',m==='dark');t.textContent=m==='dark'?'Canopy':'Understory';try{localStorage.setItem('reg_mode',m);}catch(e){}}
+var m='dark';try{m=localStorage.getItem('reg_mode')||localStorage.getItem('reg-theme')||'dark';}catch(e){}setMode(m);
+t.addEventListener('click',function(){setMode(document.documentElement.classList.contains('dark')?'light':'dark');});
+
+var S={s:'#sScore',a:'#sArea',c:'#sCorr',r:'#sRate',t:'#sTerm',v:'#sVer',m:'#sMar'},INSTALL=25000;
+function compute(){
+  var sc=+$(S.s).value,ar=+$(S.a).value,co=+$(S.c).value/100,rt=+$(S.r).value/100,
+      tm=+$(S.t).value,vr=+$(S.v).value/100,mr=+$(S.m).value/100;
+  $('#lScore').textContent=sc;$('#lArea').textContent=nf(ar)+' m²';$('#lCorr').textContent=co.toFixed(2)+'×';
+  $('#lRate').textContent='$'+rt.toFixed(2);$('#lTerm').textContent=tm+(tm===1?' yr':' yrs');
+  $('#lVer').textContent=Math.round(vr*100)+'%';$('#lMar').textContent=Math.round(mr*100)+'%';
+
+  // formula v1: score x area factor x connectivity factor x verification factor
+  var units=Math.round(sc*(ar/100)*co*1),gross=units*rt,
+      verifCut=gross*vr,platCut=gross*mr,annual=Math.max(0,gross-verifCut-platCut),total=annual*tm;
+
+  $('#oUnits').textContent=nf(units);
+  $('#oAnnual').textContent=nf(Math.round(annual));
+  $('#oTotal').textContent=nf(Math.round(total));
+  $('#oPct').textContent=(total/INSTALL*100).toFixed(1);
+  $('#oInstall').textContent='$'+nf(INSTALL);
+
+  $('#eligBar').innerHTML = sc>=41
+    ? '<strong>Yield: pending activation.</strong> At a score of '+sc+' this garden would be eligible when the program activates. Estimated yield today: $0.'
+    : '<strong>Yield: not yet eligible.</strong> A score of '+sc+' sits below the eligibility threshold of 41. Estimated yield today: $0.';
+
+  var tot=gross||1;
+  [['segSteward',annual/tot*100,'Steward'],['segVerif',verifCut/tot*100,'Verification'],['segPlat',platCut/tot*100,'Platform']]
+    .forEach(function(x){var el=document.getElementById(x[0]);if(!el)return;
+      el.style.flexBasis=Math.max(0,x[1])+'%';
+      el.textContent=x[1]>=14?x[2]+' '+Math.round(x[1])+'%':'';});
+}
+Object.keys(S).forEach(function(k){$(S[k]).addEventListener('input',function(){
+  [].forEach.call(document.querySelectorAll('.yield-presets button'),function(b){b.classList.remove('on');});compute();});});
+[].forEach.call(document.querySelectorAll('.yield-presets button'),function(b){b.addEventListener('click',function(){
+  [].forEach.call(document.querySelectorAll('.yield-presets button'),function(x){x.classList.remove('on');});
+  b.classList.add('on');$(S.s).value=b.dataset.s;$(S.a).value=b.dataset.a;compute();});});
+compute();
+})();
+</script>
+</body></html>
