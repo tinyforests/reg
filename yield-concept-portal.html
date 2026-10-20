@@ -210,7 +210,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
       <div class="fstep"><div class="i">01</div><h4>Garden is verified</h4><p>An independent site assessment produces a score across five pillars. This happens whether or not YIELD exists, and is never adjusted for value.</p><span class="arrow">→</span></div>
       <div class="fstep"><div class="i">02</div><h4>Function becomes units</h4><p>Verified ecological function converts to units on a published, fixed conversion. Units track the garden's actual condition, and fall if it declines.</p><span class="arrow">→</span></div>
       <div class="fstep"><div class="i">03</div><h4>A sponsor contracts</h4><p>A council, developer, water authority or corporate program contracts units against a stated obligation or commitment. Contracts are multi-year.</p><span class="arrow">→</span></div>
-      <div class="fstep"><div class="i">04</div><h4>The steward receives yield</h4><p>Yield would flow to the household holding the garden, on condition of continued verification. Non-verification would stop it.</p></div>
+      <div class="fstep"><div class="i">04</div><h4>The contribution splits</h4><p>A contribution would divide three ways: to the household holding the garden, to the verification that makes the unit real, and to running the ledger. Continued verification would be the condition of the first.</p></div>
     </div>
 
     <div class="mgrid" style="margin-top:44px">
@@ -219,7 +219,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
       <div class="mcard"><div class="top"><h4>What a sponsor buys</h4><span class="tg2 t-x">Design intent</span></div>
         <p>A contracted claim on verified private-land ecological function, in a named locality, auditable to individual properties, with a documented methodology behind it.</p></div>
       <div class="mcard"><div class="top"><h4>What G&amp;S takes</h4><span class="tg2 t-x">Undecided</span></div>
-        <p>A platform margin on contracted units, structured so the Registry earns from throughput rather than from any garden scoring higher. The rate is not set.</p></div>
+        <p>A platform margin on contracted units, structured so the Registry earns from throughput rather than from any garden scoring higher. A separate allocation funds verification itself. Neither rate is set.</p></div>
     </div>
   </div>
 </section>
@@ -262,6 +262,8 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
           <input type="range" id="sRate" min="10" max="300" value="55" step="5" aria-label="Unit rate in dollars"></div>
         <div class="ctl"><label>Contract term <b id="lTerm">5 yrs</b></label>
           <input type="range" id="sTerm" min="1" max="25" value="5" step="1" aria-label="Contract term in years"></div>
+        <div class="ctl"><label>Verification allocation <b id="lVer">25%</b></label>
+          <input type="range" id="sVer" min="0" max="50" value="25" step="1" aria-label="Verification allocation percentage"></div>
         <div class="ctl"><label>Platform margin <b id="lMar">15%</b></label>
           <input type="range" id="sMar" min="0" max="40" value="15" step="1" aria-label="Platform margin percentage"></div>
         <div class="presets">
@@ -271,6 +273,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
         </div>
       </div>
 
+      <div class="figure" style="padding:22px;margin-bottom:18px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--brass)">Where a contribution goes</span><div class="stack" id="splitBar" style="margin-top:14px;height:44px"><div class="seg seg-i" id="segSteward"></div><div class="seg seg-n" id="segVerif"></div><div class="seg seg-e" id="segPlat"></div></div><div class="stack-key"><span><i style="background:var(--signal)"></i>Steward</span><span><i style="background:var(--brass)"></i>Verification</span><span><i style="background:rgba(61,69,53,.35)"></i>Platform</span></div></div>
       <div id="eligBar" class="note" style="margin:0 0 18px;border:1px solid var(--brass);padding:14px 18px;font-style:normal"></div>
       <div class="outputs">
         <div class="out"><div class="k">Units generated</div><div class="v"><span id="oUnits">1,562</span></div>
@@ -295,7 +298,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
     <p class="lede">Every voluntary environmental market has been damaged by the same failures: unverifiable claims, additionality that was never real, and measurement paid for by the party who benefits from a high number. YIELD is only worth building if it is designed against those failures from the start.</p>
     <div class="two">
       <ul class="mlist">
-        <li>Measurement is separated from sale. The verified score is produced by an assessment process that has no visibility of what a garden is worth to any sponsor, and no figure is ever reverse-engineered to reach a target.</li>
+        <li>Measurement is separated from sale. The verified score is produced by an assessment process that has no visibility of what a garden is worth to any sponsor, and no figure is ever reverse-engineered to reach a target.</li><li>Verification is funded from the contribution itself, not by the steward and not by the sponsor of that particular garden. Allocations pool, so no one pays for the assessment of the garden they are buying — the cost of proof sits inside the instrument rather than depending on goodwill.</li>
         <li>Yield would be conditional on re-verification, not on a one-off assessment. Function that lapses would stop earning.</li>
         <li>Self-reported gardens generate no units under any circumstances. Only site-visit-verified condition enters the ledger.</li>
         <li>Units are not offsets and must not be sold as a licence to damage elsewhere. If sponsors want offsets, this is the wrong instrument and they should be told so.</li>
@@ -329,7 +332,7 @@ fetch('/data/registry.json',{cache:'no-store'}).then(function(r){return r.ok?r.j
         <div class="q"><h4>What happens when a property sells?</h4>
           <p>Contracts run for years; households move sooner. Either the obligation travels with the title, or the ledger accepts churn — both have consequences for what a sponsor is actually buying.</p></div>
         <div class="q"><h4>Who verifies at scale?</h4>
-          <p>A ledger verified by the same studio that designs and installs the gardens cannot support a payment mechanism. Independent verification capacity is a precondition, not a later refinement.</p></div>
+          <p>A ledger verified by the same studio that designs and installs the gardens cannot support a payment mechanism. Funding verification from the contribution answers who pays for it; it does not answer who does it. Independent capacity is a precondition, not a later refinement.</p></div>
         <div class="q"><h4>Does the money change the gardens?</h4>
           <p>The moment function has a price, the incentive to optimise for the metric rather than the ecology appears. Every scoring pillar becomes a target, and targets distort. This one has no clean solution.</p></div>
       </div>
@@ -400,17 +403,18 @@ document.querySelectorAll('.toggle button').forEach(b => b.addEventListener('cli
 }));
 
 /* estimator */
-const S = {s:'#sScore', a:'#sArea', c:'#sCorr', r:'#sRate', t:'#sTerm', m:'#sMar'};
+const S = {s:'#sScore', a:'#sArea', c:'#sCorr', r:'#sRate', t:'#sTerm', v:'#sVer', m:'#sMar'};
 const INSTALL = 25000;
 function compute(){
   const sc = +$(S.s).value, ar = +$(S.a).value, co = +$(S.c).value/100,
-        rt = +$(S.r).value/100, tm = +$(S.t).value, mr = +$(S.m).value/100;
+        rt = +$(S.r).value/100, tm = +$(S.t).value, vr = +$(S.v).value/100, mr = +$(S.m).value/100;
 
   $('#lScore').textContent = sc;
   $('#lArea').textContent = nf(ar) + ' m²';
   $('#lCorr').textContent = co.toFixed(2) + '×';
   $('#lRate').textContent = '$' + rt.toFixed(2);
   $('#lTerm').textContent = tm + (tm === 1 ? ' yr' : ' yrs');
+  $('#lVer').textContent = Math.round(vr*100) + '%';
   $('#lMar').textContent = Math.round(mr*100) + '%';
 
   // docs/revenue-and-yield-rules.md formula v1:
@@ -419,7 +423,9 @@ function compute(){
   const verifFactor = 1;                // verified only; self-reported generates nothing
   const units = Math.round(sc * areaFactor * co * verifFactor);
   const gross = units * rt;
-  const annual = gross * (1 - mr);
+  const verifCut = gross * vr;
+  const platCut  = gross * mr;
+  const annual   = Math.max(0, gross - verifCut - platCut);
   const total = annual * tm;
 
   $('#oUnits').textContent = nf(units);
@@ -433,6 +439,11 @@ function compute(){
   $('#oTotal').textContent = nf(Math.round(total));
   $('#oPct').textContent = (total / INSTALL * 100).toFixed(1);
   $('#oInstall').textContent = '$' + nf(INSTALL);
+  var tot = gross || 1, pc = function(x){ return Math.max(0, x/tot*100); };
+  [['segSteward', pc(annual), 'Steward'], ['segVerif', pc(verifCut), 'Verification'], ['segPlat', pc(platCut), 'Platform']]
+    .forEach(function(x){ var el = document.getElementById(x[0]); if(!el) return;
+      el.style.flexBasis = x[1] + '%';
+      el.textContent = x[1] >= 14 ? x[2] + ' ' + Math.round(x[1]) + '%' : ''; });
 }
 Object.values(S).forEach(sel => $(sel).addEventListener('input', () => {
   document.querySelectorAll('.presets button').forEach(x => x.classList.remove('on'));
