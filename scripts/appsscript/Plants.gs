@@ -26,6 +26,8 @@
 var PL_PROJECTS = 'Plant Projects';
 var PL_LINES    = 'Project Plants';
 var PL_EDITS    = 'Plant Edits';
+var PL_AREAS = 'Plant Areas';
+var PL_AREA_HEADERS = ['project_id', 'area', 'area_m2', 'updated_at'];
 
 var PL_PROJECT_HEADERS = ['project_id', 'name', 'client_title', 'intro', 'status',
   'view_token', 'garden_id', 'source', 'created_at', 'updated_at', 'archived', 'internal_notes'];
@@ -95,6 +97,32 @@ function _plLinesFor(projectId) {
   return out;
 }
 
+function _plAreasFor(projectId) {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(PL_AREAS);
+  if (!sh) return [];
+  return _plRows(sh, PL_AREA_HEADERS.length).filter(function (r) {
+    return String(r[0]) === projectId;
+  }).map(function (r) { return {area: String(r[1] || ''), area_m2: Number(r[2])}; });
+}
+
+function _plCleanAreas(areas) {
+  if (!Array.isArray(areas) || areas.length > 100) throw Error('Invalid planting areas');
+  var seen = {};
+  return areas.map(function (a) {
+    var name = _plStr(a && a.area, 80), value = a && a.area_m2;
+    if (typeof value !== 'number' || !isFinite(value) || value <= 0 || value > 10000000 || seen['area:' + name]) throw Error('Enter a positive m² area for each zone');
+    seen['area:' + name] = true;
+    return {area: name, area_m2: value};
+  });
+}
+
+function _plWriteAreas(projectId, areas, now) {
+  var sh = _plSheet(PL_AREAS, PL_AREA_HEADERS), ids = _plRows(sh, 1);
+  for (var i = ids.length - 1; i >= 0; i--) if (String(ids[i][0]) === projectId) sh.deleteRow(i + 2);
+  var rows = areas.map(function (a) { return [projectId, a.area, a.area_m2, now]; });
+  if (rows.length) sh.getRange(sh.getLastRow() + 1, 1, rows.length, PL_AREA_HEADERS.length).setValues(rows);
+}
+
 /* ---------- public ---------- */
 
 function handlePlantsView(params) {
@@ -111,7 +139,7 @@ function handlePlantsView(params) {
       for (var k = 0; k < lines.length; k++) if (all[lines[k].slug]) edits[lines[k].slug] = all[lines[k].slug];
       return jsonResp({ok: true, project: {
         title: p.client_title || 'Your planting', intro: p.intro || '',
-        updated_at: p.updated_at ? new Date(p.updated_at).toISOString() : ''
+        updated_at: p.updated_at ? new Date(p.updated_at).toISOString() : '', areas: _plAreasFor(p.project_id)
       }, lines: lines, edits: edits});
     }
   }
@@ -158,7 +186,7 @@ function handlePlantStudio(payload) {
   if (!lock.tryLock(10000)) return jsonResp({ok: false, error: 'Busy — try again'});
   try {
     if (op === 'save_project')    return _plSaveProject(payload.project || {});
-    if (op === 'save_lines')      return _plSaveLines(String(payload.project_id || ''), payload.lines || []);
+    if (op === 'save_lines')      return _plSaveLines(String(payload.project_id || ''), payload.lines || [], payload.areas);
     if (op === 'save_edits')      return _plSaveEdits(payload.edits || [], payload.editor);
     if (op === 'rotate_token')    return _plRotateToken(String(payload.project_id || ''));
     if (op === 'import_projects') return _plImport(payload.projects || []);
@@ -193,6 +221,7 @@ function _plGetProject(projectId) {
   var row = _plFind(sh, projectId);
   if (!row) return jsonResp({ok: false, error: 'No such project'});
   var p = _plProject(sh.getRange(row, 1, 1, PL_PROJECT_HEADERS.length).getValues()[0]);
+  p.areas = _plAreasFor(projectId);
   return jsonResp({ok: true, project: p, lines: _plLinesFor(projectId)});
 }
 
@@ -225,7 +254,10 @@ function _plSaveProject(p) {
   return jsonResp({ok: true, project: _plProject(vals)});
 }
 
-function _plSaveLines(projectId, lines) {
+function _plSaveLines(projectId, lines, areas) {
+  if (areas !== undefined) {
+    try { areas = _plCleanAreas(areas); } catch (e) { return jsonResp({ok: false, error: e.message}); }
+  }
   if (!projectId) return jsonResp({ok: false, error: 'Missing project_id'});
   var psh = _plSheet(PL_PROJECTS, PL_PROJECT_HEADERS);
   var prow = _plFind(psh, projectId);
@@ -245,6 +277,7 @@ function _plSaveLines(projectId, lines) {
     out.push([projectId, slug, _plStr(l.area, 80), q, _plStr(l.size, 40), _plStr(l.note, 600), out.length + 1, now]);
   }
   if (out.length) sh.getRange(sh.getLastRow() + 1, 1, out.length, PL_LINE_HEADERS.length).setValues(out);
+  if (areas !== undefined) _plWriteAreas(projectId, areas, now);
   psh.getRange(prow, PL_PROJECT_HEADERS.indexOf('updated_at') + 1).setValue(now);
   return jsonResp({ok: true, count: out.length, updated_at: now.toISOString()});
 }

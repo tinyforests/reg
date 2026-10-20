@@ -689,3 +689,14 @@ assets/css/plants.css, data/plant-library.json, scripts/appsscript/Plants.gs,
 scripts/appsscript/Code.gs (routing only), scripts/test_plant_studio.cjs,
 docs/plant-studio.md. Deployment: Plants.gs must be added to the Apps Script
 project and a new version deployed before the studio works live.
+
+## 20 October 2026 — Plant Studio planting areas
+
+Store planted-bed m² per project zone in a separate Plant Areas sheet. Preserve
+existing project/line schemas and tokens; accept optional measurements alongside
+save_lines and expose them only through the existing authorised project views.
+Gardener & Son calculates descriptive plants/m² only when measurements and plant
+quantities are complete. Missing quantities remain unknown, not zero.
+
+Files: scripts/appsscript/Plants.gs, scripts/test_plant_studio.cjs,
+docs/plant-studio.md. Frontend lives in tinyforests/gardenerandson.
