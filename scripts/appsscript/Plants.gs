@@ -236,6 +236,7 @@ function _plSaveProject(p) {
     id = 'PRJ-' + Utilities.formatDate(now, 'Australia/Melbourne', 'yyMMdd') + '-' + _plToken().slice(0, 6);
     cur = {project_id: id, view_token: _plToken(), created_at: now, source: _plStr(p.source, 80)};
   }
+  if (cur.source && cur.source.indexOf('notion-design:') === 0 && p.garden_id != null && String(p.garden_id) !== String(cur.garden_id || '')) return jsonResp({ok:false,error:'Use Project journal archive to change this garden match and move its notes together'});
   var vals = [
     id,
     _plStr(p.name != null ? p.name : cur.name, 160),
