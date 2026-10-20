@@ -58,11 +58,28 @@ assert.strictEqual(sheets['Project Plants'].rows.length - 1, 1);
 // customer view: only client-facing fields
 let v = ctx.handlePlantsView({ t: tok });
 assert.ok(v.ok);
-assert.deepStrictEqual(Object.keys(v.project).sort(), ['intro', 'title', 'updated_at']);
+assert.deepStrictEqual(Object.keys(v.project).sort(), ['areas', 'intro', 'title', 'updated_at']);
 assert.ok(!JSON.stringify(v).includes('gate code') && !JSON.stringify(v).includes('Sally'));
 assert.strictEqual(v.lines[0].slug, 'correa-reflexa');
 assert.strictEqual(ctx.handlePlantsView({ t: 'short' }).ok, false);
 assert.strictEqual(ctx.handlePlantsView({ t: 'x'.repeat(40) }).ok, false);
+
+// Areas persist across old-client saves, stay project-scoped, and validate before replacement.
+assert.deepStrictEqual(v.project.areas, []);
+r = studio({op: 'save_lines', project_id: id, lines: [{slug: 'correa-reflexa', area: 'Front', qty: 126}], areas: [{area: 'Front', area_m2: 42.5}]});
+assert.ok(r.ok);
+assert.strictEqual(studio({op: 'get_project', project_id: id}).project.areas[0].area_m2, 42.5);
+assert.strictEqual(ctx.handlePlantsView({t: tok}).project.areas[0].area_m2, 42.5);
+assert.strictEqual(studio({op: 'save_lines', project_id: id, lines: [], areas: [{area: 'Front', area_m2: -1}]}).ok, false);
+assert.strictEqual(studio({op: 'get_project', project_id: id}).lines[0].qty, 126);
+assert.strictEqual(studio({op: 'save_lines', project_id: id, lines: [], areas: [{area: 'Front', area_m2: Infinity}]}).ok, false);
+assert.strictEqual(studio({op: 'save_lines', project_id: id, lines: [], areas: [{area: 'Front', area_m2: 1}, {area: 'Front', area_m2: 2}]}).ok, false);
+studio({op: 'save_lines', project_id: id, lines: [{slug: 'correa-reflexa', area: 'Front', qty: 2}]});
+assert.strictEqual(ctx.handlePlantsView({t: tok}).project.areas[0].area_m2, 42.5);
+const another = studio({op: 'save_project', project: {name: 'Another project'}}).project;
+assert.deepStrictEqual(ctx.handlePlantsView({t: another.view_token}).project.areas, []);
+studio({op: 'save_lines', project_id: id, lines: [{slug: 'correa-reflexa', area: 'Front', qty: 2}], areas: []});
+assert.deepStrictEqual(ctx.handlePlantsView({t: tok}).project.areas, []);
 
 // edits: whitelisted fields only, scoped to the project's plants in the view
 r = studio({ op: 'save_edits', edits: [
@@ -95,7 +112,7 @@ const imp = [{ name: 'Sally (Rose Garden)', source: 'notion:abc', lines: [{ slug
 assert.strictEqual(studio({ op: 'import_projects', projects: imp }).imported, 1);
 assert.strictEqual(studio({ op: 'import_projects', projects: imp }).imported, 0);
 const list = studio({ op: 'list_projects' }).projects;
-assert.strictEqual(list.length, 2);
+assert.strictEqual(list.length, 3);
 assert.strictEqual(list.find(p => p.source === 'notion:abc').count, 2);
 
 console.log('plant studio: all checks passed');

@@ -73,3 +73,12 @@ edit whitelisting, token rotation, archive, idempotent import.
 3. Deploy → Manage deployments → edit → **New version**. The /exec URL is unchanged.
 4. Open `https://www.gardenerandson.com/plants/studio.html`, sign in with the admin key, and use
    **Import Notion projects…** with `migration/notion-projects.json` from tinyforests/plants.
+
+## Planting zones and density
+
+Gardener & Son stores each zone's planted-bed measurement in the new Plant Areas
+sheet: project_id, area, area_m2, updated_at. save_lines accepts an optional areas
+array of {area, area_m2}; omitting it preserves measurements for older clients.
+The get_project response and token-scoped client project include areas. No
+internal notes or garden IDs are added to client responses. Positive finite
+measurements and unique zone names are validated before replacing any lines.
