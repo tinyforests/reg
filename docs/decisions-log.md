@@ -713,3 +713,8 @@ retries idempotent; imports never silently overwrite an existing published note.
 
 Files: FieldRecords.gs, Code.gs routing, Plants.gs import metadata,
 js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
+
+
+## 22 Oct 2026 — Reconcile Plant Studio brandbook edits
+
+Keep Plant Studio frontend ownership in gardenerandson and preserve Registry redirects. Recover only the three applicable Registry Signal Green token updates; retain superseded local plant edits in a stash rather than restoring the retired frontend. Reason: current main already incorporates the brandbook migration and newer features. Files: assets/css/designer-portal.css, assets/css/developers.css, assets/css/registry-pages.css; docs/cto-plant-studio-reconciliation-2026-10-22.md.
