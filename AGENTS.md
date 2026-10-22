@@ -41,6 +41,8 @@ These are repo-level invariants. SUPER_MIND.md and AI_CONTEXT.md cover the cultu
 - Do not use US spelling or US date formats. AU English. `28 Nov 2025`.
 - Original-vegetation lookups use **pre-1750 / pre-clearing** data, never the extant layer. In **Victoria** that means the EVC 1750 layer (`nv1750_evcbcs`), never the extant `nv2005_evcbcs` — NV2005 is empty over cleared land and returns a fallback guess that does not match NatureKit. This binds every G&S product resolving a Victorian EVC (the Registry, findmyevc.com, findmyecologicalgarden.com). Other jurisdictions use their own pre-1750 layer (NSW SVTM 1750 PCT, QLD pre-clear RE, …), falling through to NVIS 7.0 pre-1750 MVS. See `/docs/decisions-log.md` (2026-09-05) and `/jurisdiction/PRE-1750-ENDPOINTS.md`.
 - Do not commit partial registry states.
+- Never hardcode a Registry figure. Garden counts, averages, badge totals and per-council counts are computed from `data/registry.json` (excluding `demo: true`), never typed in, never recalled from chat or an earlier page. Do not read `registry_metadata.total_gardens` or `last_updated` — both lag the `gardens` array. Pages render figures by fetching the ledger, with current values as static fallback so the page is right if the fetch fails. See `/docs/registry-figures.md`.
+- Tag any derived or projected figure as such on the surface that shows it, with its assumptions printed. Measured means recorded on a garden; derived means arithmetic on measured records; modelled means a projection. Never present a modelled figure as measured.
 - The code and JSON are source of truth. Chat history is not.
 
 ---
@@ -87,6 +89,7 @@ If there is no test or precedent to confirm intent, surface the conflict before 
 | Developer principles and government discussion brief | `/docs/developer-government-brief.md` |
 | Energy-rating research and policy adoption roadmap | `/docs/developer-policy-roadmap.md` |
 | Invited designer portal and publication runbook | `/docs/designer-pilot.md` |
+| Computing and rendering Registry figures; provenance tagging | `/docs/registry-figures.md` |
 | Engineering-specific product brief (audiences, revenue sequence) | `/docs/registry-product-brief.md` |
 | Scoring engine, rating tiers, verification, badges | `/docs/scoring-methodology.md` |
 | Garden JSON, registry.json, repository structure | `/docs/data-schema.md` |
