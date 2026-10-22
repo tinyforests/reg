@@ -1,5 +1,5 @@
 /* Shared UI refinement; scoped to Registry pages, never embedded maps. */
-body.reg-ui{--reg-ui-ink:#3d4535;--reg-ui-paper:#fff0dc;--reg-ui-panel:#f7ead6;--reg-ui-line:#d7ccb9;--reg-ui-signal:#7a9e5f;line-height:1.65}
+body.reg-ui{--reg-ui-ink:#3d4535;--reg-ui-paper:#fff0dc;--reg-ui-panel:#f7ead6;--reg-ui-line:#d7ccb9;--reg-ui-signal:#7C9A52;line-height:1.65}
 html.dark body.reg-ui,body.reg-ui-registry{--reg-ui-ink:#fff0dc;--reg-ui-paper:#3d4535;--reg-ui-panel:#485141;--reg-ui-line:rgba(255,240,220,.12)}
 .reg-ui a,.reg-ui button{touch-action:manipulation}
 .reg-ui a:focus-visible,.reg-ui button:focus-visible,.reg-ui input:focus-visible,.reg-ui select:focus-visible,.reg-ui textarea:focus-visible{outline:2px solid currentColor;outline-offset:4px}
