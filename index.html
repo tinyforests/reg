@@ -99,47 +99,6 @@
     /* Gs badge */
     .gs-badge { position: fixed; bottom: 24px; right: 24px; z-index: 50; background: var(--bg); border: 1px solid var(--hair); padding: 8px 12px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; color: var(--fg); text-decoration: none; line-height: 1.3; transition: opacity .2s; }
     .gs-badge:hover { opacity: 1; }
-    /* ---- Ecological Function scorecard (docs/handoff/ecological-function-card.html) ---- */
-    .eco-card{ --gardener-green:#3d4535; --beige:#fff0dc; --signal-green:#7a9e5f; --brass:#B49A63;
-      --ground:#8CA173; --ink:#fff0dc; --ink-soft:rgba(255,240,220,.78); --rule:rgba(61,69,53,.28); }
-    .eco-card .card{ background:var(--ground); padding:26px 26px 28px; color:var(--ink); }
-    .eco-card .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-soft); margin:0; }
-    .eco-card .rule{ height:1px; background:var(--rule); border:0; margin:20px 0; }
-    .eco-card .hero{ background:var(--gardener-green); margin-top:14px; padding:20px 22px 18px; display:flex; align-items:flex-end; gap:16px; border-left:4px solid var(--signal-green); }
-    .eco-card .score{ font-family:'Abril Fatface',Georgia,serif; font-weight:400; font-size:78px; line-height:.82; letter-spacing:-.02em; color:var(--beige); }
-    .eco-card .score-meta{ padding-bottom:5px; }
-    .eco-card .of{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; color:rgba(255,240,220,.6); display:block; }
-    .eco-card .tier{ font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.04em; color:var(--beige); display:block; margin-top:5px; line-height:1.3; }
-    .eco-card .hero.provisional{ background:transparent; border:1px dashed rgba(61,69,53,.55); border-left:4px solid var(--brass); }
-    .eco-card .hero.provisional .score{ color:var(--gardener-green); opacity:.85; }
-    .eco-card .hero.provisional .of, .eco-card .hero.provisional .tier{ color:var(--gardener-green); }
-    .eco-card .quarantine{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.55; letter-spacing:.04em; color:var(--gardener-green); margin-top:10px; }
-    .eco-card .ladder{ margin-top:20px; }
-    .eco-card .track{ display:flex; align-items:center; margin:12px 0 0; }
-    .eco-card .dot{ width:10px; height:10px; flex:none; position:relative; border:1px solid rgba(61,69,53,.55); border-radius:50% !important; background:transparent; }
-    .eco-card .dot.done{ background:var(--gardener-green); border-color:var(--gardener-green); }
-    .eco-card .dot.here{ background:var(--beige); border-color:var(--beige); width:14px; height:14px; }
-    .eco-card .dot.here::after{ content:""; position:absolute; top:50%; left:50%; width:14px; height:14px; border-radius:50% !important; border:1.5px solid var(--beige); transform:translate(-50%,-50%); opacity:0; animation:ecPulse 2.8s ease-out infinite; pointer-events:none; }
-    @keyframes ecPulse{ 0%{ transform:translate(-50%,-50%) scale(.7); opacity:.6; } 70%{ transform:translate(-50%,-50%) scale(1.7); opacity:0; } 100%{ transform:translate(-50%,-50%) scale(1.7); opacity:0; } }
-    @media (prefers-reduced-motion: reduce){ .eco-card .dot.here::after{ animation:none; opacity:.35; } }
-    .eco-card .dot[data-tier]::before{ content:attr(data-tier); position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(3px); background:var(--gardener-green); color:var(--beige); border:1px solid var(--beige); font-family:'IBM Plex Mono',monospace; font-size:.58rem; letter-spacing:.03em; white-space:nowrap; padding:.25rem .45rem; opacity:0; pointer-events:none; transition:opacity .15s ease, transform .15s ease; z-index:10; }
-    .eco-card .dot[data-tier]:hover::before{ opacity:1; transform:translateX(-50%) translateY(0); }
-    .eco-card .seg{ height:1px; flex:1; background:rgba(61,69,53,.35); }
-    .eco-card .seg.done{ background:var(--gardener-green); }
-    .eco-card .next{ font-size:12.5px; color:var(--ink); margin:11px 0 0; line-height:1.4; }
-    .eco-card .next b{ font-weight:500; }
-    .eco-card .bar-wrap{ margin-top:20px; }
-    .eco-card .bar{ position:relative; height:8px; margin-top:15px; background:rgba(61,69,53,.30); }
-    .eco-card .fill{ position:absolute; inset:0 auto 0 0; background:var(--gardener-green); }
-    .eco-card .gap{ position:absolute; top:0; bottom:0; background:repeating-linear-gradient(-45deg, rgba(255,240,220,.42) 0 2px, transparent 2px 5px); }
-    .eco-card .marker{ position:absolute; top:-8px; bottom:-8px; width:2px; background:var(--beige); }
-    .eco-card .marker span{ position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink); }
-    .eco-card .bar-ends{ display:flex; justify-content:space-between; margin-top:13px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.05em; color:var(--ink-soft); }
-    .eco-card .badge-head{ display:flex; justify-content:space-between; align-items:baseline; }
-    .eco-card .count{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); }
-    .eco-card .badges{ display:flex; flex-wrap:wrap; gap:6px; margin-top:13px; }
-    .eco-card .badge{ background:var(--beige); color:var(--gardener-green); padding:.3rem .7rem; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; line-height:1.2; display:inline-block; }
-    .eco-card .withheld{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.6; letter-spacing:.04em; color:var(--ink-soft); margin:13px 0 0; }
   </style>
   <link rel="stylesheet" href="/assets/css/registry-home.css" />
 </head>
@@ -196,42 +155,28 @@
         </div>
       </div>
 
-      <!-- Live score preview -->
+      <!-- Signal scorecard: current record, refreshed from the Registry below. -->
       <div class="hero-record lg:col-span-5 fade-in">
-        <div class="border" style="border-color:var(--hair)">
-          <!-- Score box -->
-          <div class="eco-card">
-            <div class="card" style="padding:26px 26px 24px">
-              <p class="eyebrow">Ecological function</p>
-              <div class="hero">
-                <div class="score" id="heroScore">--</div>
-                <div class="score-meta">
-                  <span class="of">OF 100</span>
-                  <span class="tier" id="heroTier">--</span>
-                </div>
-              </div>
-              <div class="ladder">
-                <p class="eyebrow">Level</p>
-                <div class="track" id="heroTrack" role="img" aria-label="Level"></div>
-                <p class="next" id="heroNext2"></p>
-              </div>
-              <hr class="rule">
-              <div class="badge-head">
-                <p class="eyebrow">Badges</p>
-                <span class="count" id="heroBadgeCount"></span>
-              </div>
-              <div class="badges" id="heroBadgePills"></div>
+        <article class="signal-card" aria-label="Featured garden ecological record">
+          <header class="signal-card-head"><span>Ecological Registry</span><span class="signal-card-light" aria-hidden="true"></span></header>
+          <div class="signal-card-main">
+            <div class="signal-card-identity">
+              <h2 id="heroIdentity">Bush Garden</h2>
+              <p id="heroLocation">Wattle Glen · VIC</p>
+            </div>
+            <div class="signal-card-display" role="group" aria-label="Ecological score out of 100">
+              <span id="heroScore">83</span>
+              <span class="signal-card-scale">/ 100</span>
             </div>
           </div>
-          <!-- Garden identity strip -->
-          <div class="p-4 flex items-center justify-between" style="background:var(--wash);border-top:1px solid var(--hair)">
-            <div>
-              <div id="heroIdentity" style="font-size:.65rem;opacity:.5;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem">&nbsp;</div>
-              <div id="heroGardenId" style="font-size:.7rem;font-family:'IBM Plex Mono',monospace;opacity:.5">&nbsp;</div>
-            </div>
-            <a id="heroProfileLink" href="/registry.html" class="chip text-xs hover:opacity-70 transition-opacity">View profile</a>
+          <p id="heroTier">Ecosystem Garden</p>
+          <div class="signal-card-record">
+            <div><span>Verification</span><strong id="heroVerification">G&amp;S Verified</strong></div>
+            <div><span id="heroDateLabel">Last verified</span><strong id="heroVerifiedDate">Aug 2026</strong></div>
           </div>
-        </div>
+          <p id="heroGardenId">ER-AU-VIC-NIL-BEL-001</p>
+        </article>
+        <a id="heroProfileLink" class="signal-card-profile" href="/gardens/g-a8fd930bda96/index.html">View garden record <span aria-hidden="true">↗</span></a>
       </div>
 
     </div>
@@ -653,20 +598,10 @@
    Homepage registry surfaces -- single source of truth.
    Hero preview + Registered-gardens strip both render from
    /data/registry.json through the canonical fields. Demo gardens are
-   never shown. If this file is unreachable the surfaces stay blank
-   rather than showing stale numbers.
+   never shown. The signal-card retains a ledger-derived static fallback
+   if the initial request fails; its verification date remains visible.
    ------------------------------------------------------------------ */
 (function () {
-  function prettyBadge(slug) {
-    return String(slug)
-      .replace(/_/g, ' ')
-      .replace(/\b\d+\b/g, '')
-      .replace(/\bgs\b/i, 'G&S')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .replace(/\b\w/g, function (c) { return c.toUpperCase(); });
-  }
-
   function scoreOf(g) { return (g && typeof g.score === 'number') ? g.score : 0; }
 
   var HOME_TIERS = ['Foundation Garden','Habitat Garden','Ecological Garden','Rich Habitat Garden','Ecosystem Garden','Urban Biodiversity Node'];
@@ -674,55 +609,21 @@
   // Derive the tier from the numeric score so the card never depends on a stored
   // rating string (which can be stale after a tier rename / from a live fetch).
   function tierIdxFromScore(s) { for (var i = HOME_TIER_MIN.length - 1; i >= 0; i--) { if (s >= HOME_TIER_MIN[i]) return i; } return 0; }
-  var HOME_VERIF = ['gs_verified','site_visit_badge'];
-  function buildHomeLadder(name) {
-    var track = document.getElementById('heroTrack'); if (!track) return -1;
-    var idx = HOME_TIERS.indexOf(name); if (idx === -1) idx = 0;
-    var h = '';
-    for (var i = 0; i < HOME_TIERS.length; i++) {
-      var cls = i < idx ? 'done' : (i === idx ? 'here' : '');
-      h += '<div class="dot' + (cls ? ' ' + cls : '') + '" data-tier="' + HOME_TIERS[i] + '"></div>';
-      if (i < HOME_TIERS.length - 1) h += '<div class="seg' + (i < idx ? ' done' : '') + '"></div>';
-    }
-    track.innerHTML = h; return idx;
-  }
   function renderHero(g) {
     if (!g) return;
-    var rating = g.rating || {};
-    var badges = Array.isArray(g.badges) ? g.badges : [];
-    var setText = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
-
+    var setText = function (id, value) { document.getElementById(id).textContent = value; };
+    var provisional = /provisional|self.reported/i.test(g.status || '') ||
+      !/^(gardener_and_son_verified|site_visit|photo_verified)$/.test(g.verification_level || '');
     setText('heroScore', scoreOf(g));
-    var idx = tierIdxFromScore(scoreOf(g));
-    var tier = HOME_TIERS[idx];
-    setText('heroTier', tier);
-    buildHomeLadder(tier);
-    var tr = document.getElementById('heroTrack');
-    if (tr) tr.setAttribute('aria-label', 'Level ' + (idx + 1) + ' of ' + HOME_TIERS.length + ', ' + tier);
-
-    var nextEl = document.getElementById('heroNext2');
-    if (nextEl) {
-      if (idx < HOME_TIERS.length - 1) {
-        var toNext = HOME_TIER_MIN[idx + 1] - scoreOf(g);
-        nextEl.innerHTML = '<b>' + toNext + (toNext === 1 ? ' point' : ' points') + '</b> to ' + HOME_TIERS[idx + 1] + '.';
-      } else nextEl.textContent = 'Top level reached.';
-    }
-
-    var earned = badges.filter(function (id) { return HOME_VERIF.indexOf(id) === -1; });
-    setText('heroBadgeCount', earned.length + ' of 13');
-    var pills = document.getElementById('heroBadgePills');
-    if (pills) {
-      pills.innerHTML = '';
-      earned.forEach(function (b) {
-        var d = document.createElement('div'); d.className = 'badge';
-        d.textContent = (typeof BADGE_DEFINITIONS !== 'undefined' && BADGE_DEFINITIONS[b] && BADGE_DEFINITIONS[b].name) || prettyBadge(b); pills.appendChild(d);
-      });
-    }
-
-    setText('heroIdentity', (g.garden_name || '') + ' — ' + (g.suburb || '') + ' ' + (g.state || ''));
+    setText('heroTier', (provisional ? 'Provisional · ' : '') + HOME_TIERS[tierIdxFromScore(scoreOf(g))]);
+    setText('heroIdentity', g.garden_name || 'Registered garden');
+    setText('heroLocation', [g.suburb, g.state].filter(Boolean).join(' · '));
+    setText('heroVerification', provisional ? 'Provisional / unverified' : (g.verification_label || 'Verified'));
+    setText('heroDateLabel', provisional ? 'Verification' : 'Last verified');
+    setText('heroVerifiedDate', provisional ? 'Pending' : (g.last_verified || 'Not recorded'));
     setText('heroGardenId', g.garden_id || '');
-    var link = document.getElementById('heroProfileLink');
-    if (link && g.profile_url) link.setAttribute('href', g.profile_url);
+    document.querySelector('.signal-card').classList.toggle('is-provisional', provisional);
+    document.getElementById('heroProfileLink').setAttribute('href', g.profile_url || '/registry.html');
   }
 
   function stripCard(g) {
@@ -787,6 +688,7 @@
       status:             live.status              || existing.status,
       verification_level: (live.evidence && live.evidence.verification_level) || existing.verification_level,
       verification_label: (live.evidence && live.evidence.verification_label) || existing.verification_label,
+      last_verified:      live.assessment_date || existing.last_verified,
       typology:           live.typology            || existing.typology,
       registry_role:      live.registry_role       || existing.registry_role,
       trajectory:         live.trajectory          || existing.trajectory,

@@ -127,3 +127,13 @@ Homepage professional links appear in the desktop navigation and a top secondary
 row on mobile. Short desktop sections use the viewport below the sticky header;
 long forms, principle grids and mobile content grow naturally without cropping.
 Maintain the actual header allowance at tablet widths and check for overflow.
+
+### Homepage Signal scorecard — 31 Oct 2026
+
+The homepage uses the Signal treatment: fixed dark green surface, square
+edges, garden identity above a large IBM Plex Mono score illuminated in `#b3ff6c`, garden identity, rating,
+verification status and date. The display colour is scoped to this component.
+The existing highest-score selection and live record refresh remain; a static
+fallback is generated from the ledger. Provisional records are explicitly labelled
+and use a muted brass signal. The light represents the recorded ecological score,
+not sensor connectivity. Detailed badges and progression remain on profiles.
