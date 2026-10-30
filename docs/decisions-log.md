@@ -713,3 +713,19 @@ retries idempotent; imports never silently overwrite an existing published note.
 
 Files: FieldRecords.gs, Code.gs routing, Plants.gs import metadata,
 js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
+
+## 31 Oct 2026 — Homepage Gateplate scorecard
+
+**Decision:** Replace the homepage's tier ladder and badge panel with the approved Gateplate design: a square dark face, illuminated green score, garden identity, rating, verification status and verification date. Keep the existing highest-score selection and record link. Profiles retain their detailed scorecards. The bright green is a functional display treatment, not a sitewide palette replacement.
+
+**Reason:** Establish the website face of a future connected garden sign. Display the latest recorded score without implying continuous ecological sensing. Preserve a ledger-derived static fallback and distinguish provisional records. Physical hardware remains a future project.
+
+**Files affected:** `index.html`, `assets/css/registry-home.css`, `docs/design-system.md`, `docs/decisions-log.md`.
+
+## 31 Oct 2026 — Signal supersedes Gateplate
+
+**Decision:** At Tyson's direction, switch the homepage to the Signal concept: garden identity above a large illuminated score, rating below, followed by verification and record identity. Carry Signal forward as the design direction for a future physical garden sign, subject to later daylight and night-time legibility testing.
+
+**Reason:** A single vertical reading order gives the score greater prominence and unifies the intended website and garden-sign identity. This supersedes the Gateplate layout above; data selection, scoring and verification behaviour are unchanged.
+
+**Files affected:** `index.html`, `assets/css/registry-home.css`, `docs/design-system.md`, `docs/decisions-log.md`.
