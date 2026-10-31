@@ -24,8 +24,8 @@
                             to care, or within 5km only with a seasonal
                             reason or strong garden link (distance stated);
                             often nothing qualifies, and nothing is drafted
-                          nearby fauna (Atlas of Living Australia, 30 days)
-                          flowering from the garden's own species list
+                          nearby fauna / flowering -- older notes, OFF in the
+                            pilot (SIGNALS_LEGACY_OBS=on to re-enable)
 
    SAFETY RULES
      - Draft content is frozen: recipients, subject, plain text and the
@@ -195,6 +195,11 @@ function _sigShowPreview(r) {
   var out = HtmlService.createHtmlOutput(meta + String(r.html)).setWidth(640).setHeight(720);
   SpreadsheetApp.getUi().showModalDialog(out, 'Signal preview: ' + String(r.garden_name));
   return out;
+}
+
+function _sigProp(name) {
+  return String(PropertiesService.getScriptProperties().getProperty(name) || '')
+    .split(',').map(function (x) { return x.trim().toLowerCase(); }).filter(String);
 }
 
 function _sigSendingOn() {
@@ -399,9 +404,14 @@ function _sigRunLocked(opts) {
   var weekly = opts.forceWeekly || _sigMelbDay(now) === SIG_WEEKLY_DAY;
   var fetchedAt = now.toISOString();
   var weather = _sigFetchWeather(gardens);
-  var nearby = weekly ? _sigFetchNearby(gardens) : {};
+  // The older 'nearby' (unfiltered 30-day sightings) and 'flowering'
+  // (the garden's own plant list) notes are OFF for the pilot: they fail
+  // the reliability checks or explain the garden to its own steward.
+  // Script property SIGNALS_LEGACY_OBS=on re-enables them.
+  var legacy = _sigProp('SIGNALS_LEGACY_OBS').indexOf('on') > -1;
+  var nearby = weekly && legacy ? _sigFetchNearby(gardens) : {};
   var season = weekly ? _sigFetchSeason(gardens, now) : {};
-  var library = weekly ? _sigPlantLibrary() : null;
+  var library = weekly && legacy ? _sigPlantLibrary() : null;
   var log = _sigLogIndex(ss);
   var month = _sigMelbMonth(now);
   var drafts = [], logRows = [];
@@ -418,10 +428,10 @@ function _sigRunLocked(opts) {
       if (season[g.garden_id] && !_sigCooling(log, g.garden_id, 'season', now)) {
         var sn = _sigSeasonSignal(g, season[g.garden_id], log, now, fetchedAt); if (sn) items.push(sn);
       }
-      if (nearby[g.garden_id] && !_sigCooling(log, g.garden_id, 'nearby', now)) {
+      if (legacy && nearby[g.garden_id] && !_sigCooling(log, g.garden_id, 'nearby', now)) {
         var n = _sigNearbySignal(g, nearby[g.garden_id], log, fetchedAt); if (n) items.push(n);
       }
-      if (library && !_sigCooling(log, g.garden_id, 'flowering', now)) {
+      if (legacy && library && !_sigCooling(log, g.garden_id, 'flowering', now)) {
         var f = _sigFloweringSignal(g, library, month, log); if (f) items.push(f);
       }
     }
@@ -679,13 +689,13 @@ function _sigNearbySignal(g, res, log, fetchedAt) {
 var SIG_SEASON_DAYS = 30, SIG_SEASON_UNC_M = 1000, SIG_LOCAL_M = 1500, SIG_LANDSCAPE_M = 5000;
 var SIG_GRIIS_LIST = 'dr9884';   // GRIIS: Global Register of Introduced and Invasive Species - Australia
 
-/* Curated "why now" notes. Short, conservative, reviewed by a person
-   before being added. Keyed by binomial, or by family for groups. */
+/* Curated "why now" notes. Short, conservative, checked against a cited
+   source and reviewed by a person before being added. An entry without a
+   source is ignored. Keyed by binomial, or by 'family:<name>'. */
 var SIG_WHY_NOW = {
   'Agrotis infusa': { months: [9, 10, 11, 12],
-    text: 'Bogong Moths migrate in spring from the inland plains to the Australian Alps, and many pass over Melbourne on the way, so this is the time of year to notice them.' },
-  'family:Orchidaceae': { months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    text: 'Many ground orchids flower for only a few weeks, so a fresh record marks the moment they are up.' }
+    text: 'Bogong Moths migrate each spring from inland Queensland, New South Wales and western Victoria to the Australian Alps, and can turn up around Melbourne along the way.',
+    source: { name: 'Zoos Victoria: Bogong Moths', url: 'https://www.zoo.org.au/moths', checked: '2026-10-31' } }
 };
 
 function _sigFetchSeason(gardens, now) {
@@ -788,10 +798,11 @@ function _sigTheme(o) {
   return '';
 }
 
-function _sigWhyNow(sp, month) {
+function _sigWhyNowEntry(sp, month) {
   var w = SIG_WHY_NOW[sp.sci] || SIG_WHY_NOW['family:' + sp.family];
-  return w && w.months.indexOf(month) > -1 ? w.text : '';
+  return w && w.source && w.source.url && w.months.indexOf(month) > -1 ? w : null;
 }
+function _sigWhyNow(sp, month) { var w = _sigWhyNowEntry(sp, month); return w ? w.text : ''; }
 
 function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   var month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
@@ -861,7 +872,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       distance_note: 'measured from the garden\'s public display coordinates (offset ~250m)',
       excluded: rejected,
       lead: { scientific: sp.sci, common: sp.common, tier: lead.local ? 'local' : 'landscape', reason: lead.reason,
-              why_now: lead.whyNow, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
+              why_now: lead.whyNow, why_now_source: (_sigWhyNowEntry(sp, month) || {}).source || null, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
       other_candidates: eligible.slice(1, 6).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, reason: c.reason, observed: c.rec.observed, distance_m: c.rec.distance_m, url: c.rec.url }; }),
       found_but_no_reason: considered.filter(function (c) { return !c.reason; }).slice(0, 8).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, distance_m: c.rec.distance_m, observed: c.rec.observed }; }),
       wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; ask, don\'t assume' },

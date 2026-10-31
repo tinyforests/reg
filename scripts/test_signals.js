@@ -71,7 +71,7 @@ function env(opts) {
   }
   let active = null;
   const ss = { getActiveSheet: () => active && active.sh, getActiveRange: () => active && active.sh.getRange(active.r, 1), getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = new Sheet(n)), getUrl: () => 'https://docs.google.com/spreadsheets/d/TEST' };
-  const props = {}, gmail = [], mail = [], fetched = [], triggers = [], dialogs = [], cache = {};
+  const props = { SIGNALS_LEGACY_OBS: opts.legacy === false ? '' : 'on' }, gmail = [], mail = [], fetched = [], triggers = [], dialogs = [], cache = {};
   const resp = (code, t) => ({ getResponseCode: () => code, getContentText: () => t });
   function fetch(u) {
     u = typeof u === 'string' ? u : u.url; fetched.push(u);
@@ -501,7 +501,7 @@ test('ALA request stays within the page size the service accepts', () => {
 /* ---------- season around you ---------- */
 const BUSH = 'ER-AU-VIC-NIL-BEL-001';
 const NOW = '2026-10-31T18:30:00+11:00';
-function bush(opts) { const e = env(Object.assign({ now: NOW, seasonFixture: 'ala-recent-bushgarden.json' }, opts || {})); e.pilot([[BUSH, 'sam@example.com']]); return e; }
+function bush(opts) { const e = env(Object.assign({ now: NOW, seasonFixture: 'ala-recent-bushgarden.json', legacy: false }, opts || {})); e.pilot([[BUSH, 'sam@example.com']]); return e; }
 
 test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, asked not assumed', () => {
   const e = bush(); e.ctx.previewSignalsNow();
@@ -511,12 +511,14 @@ test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, 
   ok(r[e.col('subject')] === 'Bush Garden · a Bogong Moth about 3km away', r[e.col('subject')]);
   ok(/^Hi Sam,/.test(body), 'greeting');
   ok(/A Bogong Moth \(Agrotis infusa\) was recorded about 3km from Bush Garden on 18 October:\nhttps:\/\/biocache\.ala\.org\.au\/occurrences\/f2689fa7/.test(body), 'dated, distance stated, linked');
-  ok(/migrate in spring/.test(body), 'explains why it is interesting now');
+  ok(/migrate each spring from inland Queensland, New South Wales and western Victoria to the Australian Alps, and can turn up around Melbourne along the way/.test(body), 'sourced why-now wording');
+  ok(!/many pass over Melbourne/.test(body), 'unsupported route claim gone');
   ok(/Have you noticed any at Bush Garden this spring\?/.test(body) && !/lights/.test(body), 'asks, does not assume');
   ok(!/rare|only record|walking distance|in your garden was/i.test(body), 'no overstated claims');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
   ok(ev.lead.tier === 'landscape' && ev.lead.reason === 'seasonal' && ev.lead.record.age_days === 12, 'tier/reason/age: ' + JSON.stringify(ev.lead));
   ok(ev.lead.record.observed === '2026-10-18' && ev.retrieved_at, 'observation and retrieval dates kept');
+  ok(ev.lead.why_now_source && ev.lead.why_now_source.url === 'https://www.zoo.org.au/moths', 'why-now source in evidence');
   ok(ev.found_but_no_reason.some(c => /Tachyglossus/.test(c.scientific)), 'echidna found ~4.8km but no reason at that distance');
   ok(ev.excluded.identification > 0, 'needs-ID records excluded');
 });
@@ -551,13 +553,33 @@ test('season: beyond 5km and obscured locations never qualify', () => {
   ok(!/Beard-orchid/.test(b.queue()[0][b.col('body')]), 'orchid ~6km away excluded');
 });
 
-test('season: a species featured in the last 30 days is skipped; the next worthwhile record leads', () => {
+test('season: once Bogong is sent, unsourced orchids do not fill the gap; nothing is drafted', () => {
   const e = bush(); e.ctx.previewSignalsNow();
   e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
   e.setNow('2026-11-07T18:30:00+11:00'); e.ctx.previewSignalsNow();
-  const second = e.queue()[1];
-  ok(second && !/Bogong/.test(second[e.col('body')]), 'Bogong not repeated');
-  ok(second && /orchid/i.test(second[e.col('body')]) && /Many ground orchids flower for only a few weeks/.test(second[e.col('body')]), 'orchid with seasonal reason leads instead');
+  ok(e.queue().length === 1, 'no second draft, got ' + (e.queue().length - 1));
+});
+
+test('season: SKIP means nothing this week, not "try the next candidate"', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
+  e.setCell(0, 'status', 'SKIP');
+  e.setNow('2026-11-01T18:30:00+11:00'); e.ctx.previewSignalsNow();
+  e.setNow('2026-11-04T18:30:00+11:00'); e.ctx.previewSignalsNow();
+  ok(e.queue().length === 1, 'no replacement within the week after SKIP, got ' + (e.queue().length - 1));
+  const sk = e.ctx._sigKeysFor(e.ctx._sigLogIndex(e.ss), BUSH, 'season', 30);
+  ok(sk.indexOf('agrotis infusa') > -1, 'skipped species held back for 30 days');
+});
+
+test('pilot default: legacy nearby/flowering notes are off', () => {
+  const e = env({ legacy: false, weather: () => 'normal' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  ok(e.queue().length === 0, 'no legacy drafts, got ' + e.queue().map(r => r[e.col('signals')]).join(' | '));
+  ok(!e.fetched.some(u => u.includes('biocache') && !u.includes('coordinate_uncertainty')), 'legacy sightings not even fetched');
+});
+
+test('season: why-now entries without a source are ignored', () => {
+  const e = env();
+  e.ctx.SIG_WHY_NOW['family:Orchidaceae'] = { months: [10], text: 'unsourced claim' };
+  ok(e.ctx._sigWhyNow({ sci: 'Caladenia parva', family: 'Orchidaceae' }, 10) === '', 'unsourced note not used');
 });
 
 test('season: unresolved observation outranks recorded habitat', () => {
