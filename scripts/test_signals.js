@@ -67,8 +67,9 @@ function env(opts) {
     getRange(r, c, nr, nc) { return new Range(this, r, c, nr, nc); }
     setFrozenRows() {} setColumnWidth() {} hideColumns() {} getSheetId() { return this.id; }
   }
-  const ss = { getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = new Sheet(n)), getUrl: () => 'https://docs.google.com/spreadsheets/d/TEST' };
-  const props = {}, gmail = [], mail = [], fetched = [], triggers = [];
+  let active = null;
+  const ss = { getActiveSheet: () => active && active.sh, getActiveRange: () => active && active.sh.getRange(active.r, 1), getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = new Sheet(n)), getUrl: () => 'https://docs.google.com/spreadsheets/d/TEST' };
+  const props = {}, gmail = [], mail = [], fetched = [], triggers = [], dialogs = [];
   const resp = (code, t) => ({ getResponseCode: () => code, getContentText: () => t });
   function fetch(u) {
     u = typeof u === 'string' ? u : u.url; fetched.push(u);
@@ -98,7 +99,8 @@ function env(opts) {
   const ctx = {
     console, JSON, Math, Date: FD, NOTIFY_EMAIL: 'hello@lundbech.me',
     UrlFetchApp: { fetch, fetchAll: r => r.map(fetch) },
-    SpreadsheetApp: { getActiveSpreadsheet: () => ss, flush() { if (hooks.onFlush) { const f = hooks.onFlush; hooks.onFlush = null; f(); } }, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
+    HtmlService: { createHtmlOutput: h => { const o = { html: h, setWidth() { return o; }, setHeight() { return o; } }; return o; } },
+    SpreadsheetApp: { getUi: () => ({ showModalDialog: (o, title) => dialogs.push({ html: o.html, title }) }), getActiveSpreadsheet: () => ss, flush() { if (hooks.onFlush) { const f = hooks.onFlush; hooks.onFlush = null; f(); } }, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => props[k] || null, setProperty: (k, v) => { props[k] = v; } }) },
     LockService: { getScriptLock: () => { let mine = false; return {
       tryLock: () => { if (!lockFree || lockHeld) return false; lockHeld = mine = true; return true; },
@@ -125,7 +127,8 @@ function env(opts) {
   };
   vm.createContext(ctx); vm.runInContext(SRC, ctx);
   const api = {
-    ctx, ss, sheets, props, gmail, mail, fetched, hooks, triggers,
+    ctx, ss, sheets, props, gmail, mail, fetched, hooks, triggers, dialogs,
+    select: (sheetName, r) => { active = { sh: sheets[sheetName], r }; },
     setNow: d => { now = new Date(d); },
     setLock: b => { lockFree = b; },
     pilot: rows => { ctx.installSignals(); if (!opts.draftOnly) props.SIGNALS_SENDING = 'on';
@@ -429,6 +432,33 @@ test('enableSending() needs the alias; disableSending() stops sends again', () =
   ok(e.ctx.sendApprovedSignals() === 0 && e.triggers.indexOf('sendApprovedSignals') === -1, 'off again');
   e.ctx.installSignals();
   ok(e.props.SIGNALS_SENDING === 'off' && e.triggers.indexOf('sendApprovedSignals') === -1, 'reinstall resets to draft-only');
+});
+
+/* ---------- read-only preview ---------- */
+test('previewSignalEmail shows the stored HTML and changes nothing', () => {
+  const e = env({ draftOnly: true }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  const before = JSON.stringify(e.sheets['Signals Queue'].rows), props = JSON.stringify(e.props);
+  const r = e.queue()[1];
+  e.ctx.previewSignalEmail(r[e.col('message_id')]);
+  ok(e.dialogs.length === 1 && e.dialogs[0].html.indexOf(r[e.col('html')]) > -1, 'dialog contains the stored html');
+  ok(/PREVIEW ONLY/.test(e.dialogs[0].html) && e.dialogs[0].html.indexOf(r[e.col('subject')].replace(/'/g, '&#39;').split(':')[0]) > -1, 'labelled with subject');
+  ok(JSON.stringify(e.sheets['Signals Queue'].rows) === before && JSON.stringify(e.props) === props, 'queue + properties unchanged');
+  ok(e.gmail.length === 0 && e.mail.length <= 1, 'nothing sent');
+  let threw = false; try { e.ctx.previewSignalEmail('nope'); } catch (err) { threw = true; }
+  ok(threw, 'unknown id throws');
+});
+
+test('previewSelectedSignal uses the selected row; flags HTML out of sync', () => {
+  const e = env({ draftOnly: true }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.select('Signals Queue', 3);
+  e.ctx.previewSelectedSignal();
+  ok(e.dialogs[0].title === 'Signal preview: ' + e.queue()[1][e.col('garden_name')], 'row 3 = second draft');
+  e.setCell(1, 'body', 'changed without the trigger');
+  e.ctx.previewSelectedSignal();
+  ok(/does not match/.test(e.dialogs[1].html), 'stale html flagged');
+  e.select('Signals Pilot', 2);
+  let threw = false; try { e.ctx.previewSelectedSignal(); } catch (err) { threw = true; }
+  ok(threw, 'wrong sheet refused');
 });
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');

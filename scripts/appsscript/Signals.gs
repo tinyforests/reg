@@ -63,6 +63,10 @@
         even if called by hand.
      3. Add 2-3 gardens to "Signals Pilot" (garden_id, email).
      4. Run previewSignalsNow() and review the "Signals Queue" sheet.
+     5. To see a draft's email layout: click any cell in its row and run
+        previewSelectedSignal(), or call previewSignalEmail(messageId).
+        Read-only: it opens a dialog in the sheet, sends nothing and
+        changes nothing.
 
    TURNING SENDING ON (later, deliberately)
      enableSending()   checks the send-as alias, sets SIGNALS_SENDING=on
@@ -145,6 +149,47 @@ function disableSending() {
   _sigDeleteTriggers(['sendApprovedSignals']);
   PropertiesService.getScriptProperties().setProperty('SIGNALS_SENDING', 'off');
   Logger.log('Sending OFF. Drafting continues; APPROVED rows wait.');
+}
+
+/* ---------------------------------------------------------------
+   Read-only layout preview (draft-only trial)
+   --------------------------------------------------------------- */
+
+/* Show the stored, approved-for-sending HTML for one queue row in a
+   dialog. Sends nothing; writes nothing. */
+function previewSignalEmail(messageId) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(SIG_QUEUE);
+  if (!sh || sh.getLastRow() < 2) throw new Error('No Signals Queue rows to preview.');
+  var ids = sh.getRange(2, SIG_C.message_id, sh.getLastRow() - 1, 1).getValues();
+  for (var i = 0; i < ids.length; i++) {
+    if (String(ids[i][0]) === String(messageId)) return _sigShowPreview(_sigRow(sh, i + 2));
+  }
+  throw new Error('No queue row with message_id ' + messageId);
+}
+
+/* Same, for the queue row of the currently selected cell. */
+function previewSelectedSignal() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getActiveSheet();
+  var row = ss.getActiveRange() ? ss.getActiveRange().getRow() : 0;
+  if (!sh || sh.getName() !== SIG_QUEUE || row < 2) throw new Error('Select a cell in a Signals Queue row first.');
+  return _sigShowPreview(_sigRow(sh, row));
+}
+
+function _sigShowPreview(r) {
+  var esc = function (x) { return String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var stale = _sigHash(r.to, r.subject, r.body, r.html) !== String(r.content_hash);
+  var meta = '<div style="font:12px/1.6 Menlo,monospace;color:#555;background:#f4f1ea;border:1px solid #ddd;padding:10px 12px;margin:0 0 16px">' +
+    '<b>PREVIEW ONLY — nothing is sent from this window</b><br>' +
+    'To: ' + esc(r.to) + '<br>From: ' + esc(SIG_FROM_NAME) + ' &lt;' + esc(SIG_FROM) + '&gt;<br>' +
+    'Subject: ' + esc(r.subject) + '<br>' +
+    'Status: ' + esc(r.status) + ' · expires ' + esc(r.expires_at) + ' · signals: ' + esc(r.signals) +
+    (stale ? '<br><b style="color:#a33">Stored HTML does not match the text cells -- edit or re-approve before sending.</b>' : '') +
+    '</div>';
+  var out = HtmlService.createHtmlOutput(meta + String(r.html)).setWidth(640).setHeight(720);
+  SpreadsheetApp.getUi().showModalDialog(out, 'Signal preview: ' + String(r.garden_name));
+  return out;
 }
 
 function _sigSendingOn() {
