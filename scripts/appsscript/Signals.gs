@@ -28,8 +28,17 @@
        body regenerates the HTML and resets status to DRAFT. A hash
        mismatch at send time also resets to DRAFT.
      - Every draft has expires_at. Weather drafts expire before the event
-       they describe; expired rows become EXPIRED and are never sent. To
-       resend, generate a fresh draft (previewSignalsNow) and approve it.
+       they describe; expired rows become EXPIRED and are never sent. An
+       expired or failed draft doesn't hold a cooldown, so the next run
+       (or previewSignalsNow) drafts a fresh replacement to approve.
+     - Cooldowns count SENT messages. A pending draft only blocks a
+       duplicate until it expires; a SKIPped draft blocks that same event.
+     - The sender re-reads each row just before claiming it and again just
+       after, and the edit trigger waits on the same lock, so an edit made
+       while other rows are sending always wins.
+     - installSignals() archives Signals sheets from an older column layout
+       (renamed, approvals marked ARCHIVED). Until it is run, nothing drafts
+       or sends against an old layout.
      - Sends run under a script lock with a persistent SENDING state and a
        unique message_id. A row found in SENDING at the start of a run
        (crash mid-send) becomes CHECK for manual review; it is never
@@ -69,7 +78,7 @@ var SIG_C = {};  // column index (1-based) by header name
 SIG_QUEUE_HEADERS.forEach(function (h, i) { SIG_C[h] = i + 1; });
 var SIG_EDITABLE = ['to', 'subject', 'body'];
 var SIG_LOG_HEADERS = ['logged_at', 'garden_id', 'signal', 'key', 'message_id'];
-var SIG_STATUSES = ['DRAFT', 'APPROVED', 'SKIP', 'SENDING', 'SENT', 'CHECK', 'EXPIRED', 'ERROR'];
+var SIG_STATUSES = ['DRAFT', 'APPROVED', 'SKIP', 'SENDING', 'SENT', 'CHECK', 'EXPIRED', 'ERROR', 'ARCHIVED'];
 
 /* Thresholds */
 var SIG_HEAT_C = 35, SIG_FROST_C = 1, SIG_RAIN_MM = 20;
@@ -99,6 +108,7 @@ var SIG_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'
 
 function installSignals() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var archived = _sigArchiveOldSchema(ss);
   _sigQueueSheet(ss);
   _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS);
   _sigSheet(ss, SIG_PILOT, ['garden_id', 'email', 'added_at', 'note']);
@@ -111,8 +121,51 @@ function installSignals() {
   ScriptApp.newTrigger('sendApprovedSignals').timeBased().everyMinutes(30).create();
   ScriptApp.newTrigger('onSignalsEdit').forSpreadsheet(ss).onEdit().create();
   var mode = _sigSendMode();
+  if (archived.length) Logger.log('Older Signals sheets archived (not migrated; approvals in them will never send): ' + archived.join(', '));
   Logger.log('Signals installed. Sending as ' + SIG_FROM + ': ' +
     (mode ? 'OK (' + mode + ')' : 'NOT AVAILABLE -- add it as a Gmail send-as alias before approving anything'));
+}
+
+/* A queue or log whose header row doesn't match this version is renamed
+   to "<name> (archived <date>)". Nothing is copied across, so an old
+   approval can never be sent by this code. Archived rows have their
+   APPROVED/SENDING statuses changed to ARCHIVED for the same reason. */
+function _sigArchiveOldSchema(ss) {
+  var out = [], stamp = Utilities.formatDate(new Date(), SIG_TZ, 'yyyy-MM-dd HHmm');
+  [[SIG_QUEUE, SIG_QUEUE_HEADERS], [SIG_LOG, SIG_LOG_HEADERS]].forEach(function (spec) {
+    var sh = ss.getSheetByName(spec[0]);
+    if (!sh || _sigHeadersMatch(sh, spec[1])) return;
+    var name = spec[0] + ' (archived ' + stamp + ')';
+    if (sh.getLastRow() > 1 && sh.getLastColumn() > 0) {
+      var hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(String);
+      var sc = hdr.indexOf('status');
+      if (sc > -1) {
+        var rng = sh.getRange(2, sc + 1, sh.getLastRow() - 1, 1), vals = rng.getValues();
+        rng.setValues(vals.map(function (r) { return [/^(APPROVED|SENDING|DRAFT)$/.test(String(r[0])) ? 'ARCHIVED' : r[0]]; }));
+      }
+    }
+    sh.setName(name);
+    out.push(name);
+  });
+  return out;
+}
+
+function _sigHeadersMatch(sh, headers) {
+  if (sh.getLastColumn() < headers.length) return false;
+  var hdr = sh.getRange(1, 1, 1, headers.length).getValues()[0].map(String);
+  return headers.every(function (h, i) { return hdr[i] === h; });
+}
+
+/* Refuse to run against a sheet this version didn't create. */
+function _sigSchemaOk(ss) {
+  var q = ss.getSheetByName(SIG_QUEUE), l = ss.getSheetByName(SIG_LOG);
+  var ok = (!q || _sigHeadersMatch(q, SIG_QUEUE_HEADERS)) && (!l || _sigHeadersMatch(l, SIG_LOG_HEADERS));
+  if (!ok) {
+    Logger.log('Signals: sheet columns are from an older version. Run installSignals() to archive them. Nothing drafted or sent.');
+    try { MailApp.sendEmail(NOTIFY_EMAIL, 'Garden signals paused: run installSignals()',
+      'The Signals Queue / Log sheets are from an older version of Signals.gs. Nothing will be drafted or sent until installSignals() is run, which archives them.'); } catch (e) {}
+  }
+  return ok;
 }
 
 function runSignals() { return _sigRun({ forceWeekly: false }); }
@@ -128,7 +181,23 @@ function onSignalsEdit(e) {
   var touched = SIG_EDITABLE.some(function (h) { return SIG_C[h] >= c0 && SIG_C[h] <= c1; });
   if (!touched) return;
   var r0 = Math.max(2, e.range.getRow()), r1 = e.range.getRow() + e.range.getNumRows() - 1;
-  for (var r = r0; r <= r1; r++) _sigRefreeze(sh, r, 'Edited ' + new Date().toISOString() + ' -- re-approve');
+  // Wait for any send in progress to finish. If we still can't get the
+  // lock, refreeze anyway: the sender re-checks each row after claiming
+  // it, so a row edited mid-send is never delivered in its old form.
+  var lock = LockService.getScriptLock(), held = false;
+  try { held = lock.tryLock(25000); } catch (err) {}
+  try {
+    for (var r = r0; r <= r1; r++) {
+      var st = String(sh.getRange(r, SIG_C.status).getValue());
+      if (/^(SENT|SENDING|CHECK)$/.test(st)) {
+        // Sent history is not rewritten. Restore a single-cell edit if we can.
+        if (r0 === r1 && e.range.getNumColumns() === 1 && e.oldValue !== undefined) e.range.setValue(e.oldValue);
+        _sigSet(sh, r, { note: 'Edit ignored: this message is ' + st + '. The sent version is what was approved.' });
+        continue;
+      }
+      _sigRefreeze(sh, r, 'Edited ' + new Date().toISOString() + ' -- re-approve');
+    }
+  } finally { if (held) lock.releaseLock(); }
 }
 
 function sendApprovedSignals() {
@@ -136,49 +205,52 @@ function sendApprovedSignals() {
   if (!lock.tryLock(20000)) return 0;
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
+    if (!_sigSchemaOk(ss)) return 0;
     var sh = _sigQueueSheet(ss);
     if (sh.getLastRow() < 2) return 0;
-    var rows = sh.getRange(2, 1, sh.getLastRow() - 1, SIG_QUEUE_HEADERS.length).getValues();
     var props = PropertiesService.getScriptProperties();
     var pilot = _sigPilot(ss), optout = _sigOptouts(ss);
-    var now = Date.now(), mode = null, sent = 0;
+    var mode = null, sent = 0;
 
-    for (var i = 0; i < rows.length; i++) {
-      var r = rows[i], row = i + 2, v = function (h) { return r[SIG_C[h] - 1]; };
-      var status = String(v('status')), id = String(v('message_id'));
+    // The snapshot only finds candidate rows. Each one is re-read just
+    // before it is claimed, and again after the claim, so an edit or
+    // status change made while earlier rows were sending always wins.
+    var statuses = sh.getRange(2, SIG_C.status, sh.getLastRow() - 1, 1).getValues();
+    var candidates = [];
+    statuses.forEach(function (s, i) { if (/^(APPROVED|SENDING)$/.test(String(s[0]))) candidates.push(i + 2); });
+
+    for (var c = 0; c < candidates.length; c++) {
+      var row = candidates[c];
+      var r = _sigRow(sh, row), status = String(r.status), id = String(r.message_id);
 
       // A row left in SENDING means a previous run stopped mid-send.
       if (status === 'SENDING') {
         if (props.getProperty('sent:' + id)) _sigSet(sh, row, { status: 'SENT', note: 'Reconciled from send record' });
-        else _sigSet(sh, row, { status: 'CHECK', note: 'Delivery uncertain -- check Sent mail for "' + v('subject') + '" before doing anything. Not retried.' });
+        else _sigSet(sh, row, { status: 'CHECK', note: 'Delivery uncertain -- check Sent mail for "' + r.subject + '" before doing anything. Not retried.' });
         continue;
       }
       if (status !== 'APPROVED') continue;
 
-      if (props.getProperty('sent:' + id)) { _sigSet(sh, row, { status: 'SENT', note: 'Already sent (' + props.getProperty('sent:' + id) + ')' }); continue; }
-      if (!id) { _sigSet(sh, row, { status: 'ERROR', note: 'Missing message_id' }); continue; }
-      var exp = Date.parse(String(v('expires_at')));
-      if (!isFinite(exp) || now > exp) { _sigSet(sh, row, { status: 'EXPIRED', note: 'Expired ' + v('expires_at') + ' -- not sent' }); continue; }
-      if (_sigHash(v('to'), v('subject'), v('body'), v('html')) !== String(v('content_hash'))) {
-        _sigRefreeze(sh, row, 'Content changed after approval -- re-approve'); continue;
-      }
-      var to = _sigEmails(v('to'));
-      var allowed = pilot[String(v('garden_id'))] || [];
-      var blocked = to.filter(function (e) { return allowed.indexOf(e) === -1 || optout.indexOf(e) > -1; });
-      if (!to.length || blocked.length) {
-        _sigSet(sh, row, { status: 'SKIP', note: to.length ? 'Not in pilot or opted out: ' + blocked.join(', ') : 'No recipients' }); continue;
-      }
+      var problem = _sigSendCheck(r, props, pilot, optout, sh, row);
+      if (problem) continue;
       if (mode === null) mode = _sigSendMode();
       if (!mode) { _sigSet(sh, row, { status: 'ERROR', note: 'Cannot send as ' + SIG_FROM + ' (no send-as alias) -- not sent' }); continue; }
 
+      // Claim, then confirm nothing changed between the read and the claim.
       _sigSet(sh, row, { status: 'SENDING', note: 'Sending ' + new Date().toISOString() });
       SpreadsheetApp.flush();
+      var now2 = _sigRow(sh, row);
+      if (now2.message_id !== r.message_id ||
+          _sigHash(now2.to, now2.subject, now2.body, now2.html) !== String(r.content_hash) ||
+          String(now2.content_hash) !== String(r.content_hash)) {
+        _sigRefreeze(sh, row, 'Changed while being claimed for sending -- re-approve', true);
+        continue;
+      }
       try {
-        var opts = { name: SIG_FROM_NAME, replyTo: SIG_FROM, htmlBody: String(v('html')) };
+        var opts = { name: SIG_FROM_NAME, replyTo: SIG_FROM, htmlBody: String(r.html) };
         if (mode === 'alias') opts.from = SIG_FROM;          // primary account: omit `from`
-        GmailApp.sendEmail(to.join(','), String(v('subject')), String(v('body')), opts);
+        GmailApp.sendEmail(_sigEmails(r.to).join(','), String(r.subject), String(r.body), opts);
       } catch (err) {
-        // The send threw: nothing reached Gmail's outbox as far as we know.
         _sigSet(sh, row, { status: 'ERROR', note: String(err).slice(0, 300) });
         continue;
       }
@@ -193,12 +265,45 @@ function sendApprovedSignals() {
   }
 }
 
+/* Returns true (and marks the row) if this approved row must not send. */
+function _sigSendCheck(r, props, pilot, optout, sh, row) {
+  var id = String(r.message_id);
+  if (!id) { _sigSet(sh, row, { status: 'ERROR', note: 'Missing message_id' }); return true; }
+  if (props.getProperty('sent:' + id)) { _sigSet(sh, row, { status: 'SENT', note: 'Already sent (' + props.getProperty('sent:' + id) + ')' }); return true; }
+  var exp = Date.parse(String(r.expires_at));
+  if (!isFinite(exp) || Date.now() > exp) { _sigSet(sh, row, { status: 'EXPIRED', note: 'Expired ' + r.expires_at + ' -- not sent' }); return true; }
+  if (_sigHash(r.to, r.subject, r.body, r.html) !== String(r.content_hash)) {
+    _sigRefreeze(sh, row, 'Content changed after approval -- re-approve'); return true;
+  }
+  var to = _sigEmails(r.to);
+  var allowed = pilot[String(r.garden_id)] || [];
+  var blocked = to.filter(function (e) { return allowed.indexOf(e) === -1 || optout.indexOf(e) > -1; });
+  if (!to.length || blocked.length) {
+    _sigSet(sh, row, { status: 'SKIP', note: to.length ? 'Not in pilot or opted out: ' + blocked.join(', ') : 'No recipients' }); return true;
+  }
+  return false;
+}
+
+/* One queue row, freshly read, as {header: value}. */
+function _sigRow(sh, row) {
+  var vals = sh.getRange(row, 1, 1, SIG_QUEUE_HEADERS.length).getValues()[0], o = {};
+  SIG_QUEUE_HEADERS.forEach(function (h, i) { o[h] = vals[i]; });
+  return o;
+}
+
 /* ---------------------------------------------------------------
    Drafting run
    --------------------------------------------------------------- */
 
 function _sigRun(opts) {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(60000)) { Logger.log('Signals: another run holds the lock'); return []; }
+  try { return _sigRunLocked(opts); } finally { lock.releaseLock(); }
+}
+
+function _sigRunLocked(opts) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!_sigSchemaOk(ss)) return [];
   var now = new Date();
   var pilot = _sigPilot(ss), optout = _sigOptouts(ss);
   var gardens = _sigGardens(Object.keys(pilot));
@@ -218,7 +323,7 @@ function _sigRun(opts) {
     if (!to.length) return;
     var items = [];
     if (weather[g.garden_id]) _sigWeatherSignals(g, weather[g.garden_id], month, fetchedAt).forEach(function (s) {
-      if (!_sigCooling(log, g.garden_id, s.type, now)) items.push(s);
+      if (!_sigCooling(log, g.garden_id, s.type, now, s.key)) items.push(s);
     });
     var last = _sigLastAny(log, g.garden_id, SIG_OBS);
     if (weekly && (!last || (now - last) / 864e5 >= SIG_GARDEN_GAP_DAYS)) {
@@ -250,6 +355,7 @@ function _sigRun(opts) {
     chosen.forEach(function (s) { logRows.push([fetchedAt, g.garden_id, s.type, s.key || '', id]); });
   });
 
+  _sigExpireStale(ss);
   if (drafts.length) {
     var q = _sigQueueSheet(ss);
     q.getRange(q.getLastRow() + 1, 1, drafts.length, SIG_QUEUE_HEADERS.length).setValues(drafts);
@@ -583,12 +689,12 @@ function _sigHtml(body, card) {
 
 /* Rebuild the frozen HTML + hash from the row's current to/subject/body
    and send it back to DRAFT. Used by onSignalsEdit and the send check. */
-function _sigRefreeze(sh, row, note) {
+function _sigRefreeze(sh, row, note, fromOwnClaim) {
   var vals = sh.getRange(row, 1, 1, SIG_QUEUE_HEADERS.length).getValues()[0];
   var v = function (h) { return vals[SIG_C[h] - 1]; };
   if (!v('message_id')) return;
   var st = String(v('status'));
-  if (st === 'SENT' || st === 'SENDING' || st === 'CHECK') return;   // history is not rewritten
+  if (st === 'SENT' || st === 'CHECK' || (st === 'SENDING' && !fromOwnClaim)) return;   // history is not rewritten
   var card = {}; try { card = JSON.parse(String(v('card') || '{}')); } catch (e) {}
   var html = _sigHtml(v('body'), card);
   _sigSet(sh, row, { html: html, content_hash: _sigHash(v('to'), v('subject'), v('body'), html),
@@ -658,32 +764,66 @@ function _sigEmails(s) {
   return String(s || '').split(',').map(function (x) { return x.trim().toLowerCase(); }).filter(String);
 }
 
+/* Log entries joined to the outcome of the draft they went into.
+   state: 'sent'    -- SENT, SENDING or CHECK (counts for cooldowns)
+          'pending' -- DRAFT/APPROVED and not yet expired (blocks duplicates)
+          'skipped' -- SKIP: you declined it (blocks that same event/species)
+          'dead'    -- EXPIRED, ERROR, archived or expired-unsent (blocks nothing) */
 function _sigLogIndex(ss) {
   var sh = _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS), out = {};
   if (sh.getLastRow() < 2) return out;
-  sh.getRange(2, 1, sh.getLastRow() - 1, 4).getValues().forEach(function (r) {
+  var outcome = {}, q = ss.getSheetByName(SIG_QUEUE), now = Date.now();
+  if (q && q.getLastRow() > 1) q.getRange(2, 1, q.getLastRow() - 1, SIG_QUEUE_HEADERS.length).getValues().forEach(function (r) {
+    var st = String(r[SIG_C.status - 1]), exp = Date.parse(String(r[SIG_C.expires_at - 1]));
+    var state = /^(SENT|SENDING|CHECK)$/.test(st) ? 'sent'
+      : /^(DRAFT|APPROVED)$/.test(st) ? (isFinite(exp) && now <= exp ? 'pending' : 'dead')
+      : st === 'SKIP' ? 'skipped' : 'dead';
+    outcome[String(r[SIG_C.message_id - 1])] = state;
+  });
+  sh.getRange(2, 1, sh.getLastRow() - 1, SIG_LOG_HEADERS.length).getValues().forEach(function (r) {
     var k = r[1] + '::' + r[2];
-    (out[k] = out[k] || []).push({ at: new Date(r[0]), key: String(r[3]) });
+    (out[k] = out[k] || []).push({ at: new Date(r[0]), key: String(r[3]), state: outcome[String(r[4])] || 'dead' });
   });
   return out;
 }
 
-function _sigCooling(log, gid, type, now) {
-  var e = log[gid + '::' + type];
-  if (!e || !e.length) return false;
-  var last = Math.max.apply(null, e.map(function (x) { return x.at.getTime(); }));
-  return (now.getTime() - last) / 864e5 < (SIG_COOLDOWN[type] || 7);
+/* Sent messages cool down for SIG_COOLDOWN days. A pending draft blocks a
+   duplicate until it expires. A skipped draft blocks only the same event
+   (same key). Expired or failed drafts never block a replacement. */
+function _sigCooling(log, gid, type, now, key) {
+  return (log[gid + '::' + type] || []).some(function (x) {
+    if (x.state === 'pending') return true;
+    if (x.state === 'skipped') return !!key && x.key === key;
+    if (x.state === 'sent') return (now.getTime() - x.at.getTime()) / 864e5 < (SIG_COOLDOWN[type] || 7);
+    return false;
+  });
 }
 
 function _sigLastAny(log, gid, types) {
   var last = 0;
-  types.forEach(function (t) { (log[gid + '::' + t] || []).forEach(function (x) { last = Math.max(last, x.at.getTime()); }); });
+  types.forEach(function (t) { (log[gid + '::' + t] || []).forEach(function (x) {
+    if (x.state !== 'dead') last = Math.max(last, x.at.getTime());   // a skipped weekly note uses up the week
+  }); });
   return last ? new Date(last) : null;
+}
+
+/* Unsent DRAFT/APPROVED rows past their expiry become EXPIRED. */
+function _sigExpireStale(ss) {
+  var q = ss.getSheetByName(SIG_QUEUE);
+  if (!q || q.getLastRow() < 2) return;
+  var now = Date.now();
+  q.getRange(2, 1, q.getLastRow() - 1, SIG_QUEUE_HEADERS.length).getValues().forEach(function (r, i) {
+    var st = String(r[SIG_C.status - 1]), exp = Date.parse(String(r[SIG_C.expires_at - 1]));
+    if (/^(DRAFT|APPROVED)$/.test(st) && (!isFinite(exp) || now > exp))
+      _sigSet(q, i + 2, { status: 'EXPIRED', note: 'Expired ' + r[SIG_C.expires_at - 1] + ' -- not sent' });
+  });
 }
 
 function _sigKeysFor(log, gid, type, days) {
   var cut = Date.now() - days * 864e5, out = [];
-  (log[gid + '::' + type] || []).forEach(function (x) { if (x.at.getTime() >= cut) out = out.concat(x.key.split('|')); });
+  (log[gid + '::' + type] || []).forEach(function (x) {
+    if (x.state !== 'dead' && x.at.getTime() >= cut) out = out.concat(x.key.split('|'));
+  });
   return out;
 }
 

@@ -62,6 +62,8 @@ function env(opts) {
     _set(r, c, x) { (this.rows[r - 1] = this.rows[r - 1] || [])[c - 1] = x; }
     _get(r, c) { const v = (this.rows[r - 1] || [])[c - 1]; return v === undefined ? '' : v; }
     getName() { return this.n; } getLastRow() { return this.rows.length; }
+    getLastColumn() { return this.rows.reduce((m, r) => Math.max(m, (r || []).length), 0); }
+    setName(n) { delete sheets[this.n]; this.n = n; sheets[n] = this; return this; }
     getRange(r, c, nr, nc) { return new Range(this, r, c, nr, nc); }
     setFrozenRows() {} setColumnWidth() {} hideColumns() {} getSheetId() { return this.id; }
   }
@@ -84,7 +86,8 @@ function env(opts) {
   }
   const RealDate = Date;
   class FD extends RealDate { constructor(...a) { a.length ? super(...a) : super(now.getTime()); } static now() { return now.getTime(); } }
-  let lockFree = opts.lockFree !== false;
+  let lockFree = opts.lockFree !== false, lockHeld = false;
+  const hooks = { onSend: null, onFlush: null };
   const fmt = (d, tz, f) => {
     const p = Object.fromEntries(new Intl.DateTimeFormat('en-AU', { timeZone: tz, year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short' })
       .formatToParts(d).map(x => [x.type, x.value]));
@@ -95,12 +98,15 @@ function env(opts) {
   const ctx = {
     console, JSON, Math, Date: FD, NOTIFY_EMAIL: 'hello@lundbech.me',
     UrlFetchApp: { fetch, fetchAll: r => r.map(fetch) },
-    SpreadsheetApp: { getActiveSpreadsheet: () => ss, flush() {}, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
+    SpreadsheetApp: { getActiveSpreadsheet: () => ss, flush() { if (hooks.onFlush) { const f = hooks.onFlush; hooks.onFlush = null; f(); } }, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => props[k] || null, setProperty: (k, v) => { props[k] = v; } }) },
-    LockService: { getScriptLock: () => ({ tryLock: () => lockFree, releaseLock() {} }) },
+    LockService: { getScriptLock: () => { let mine = false; return {
+      tryLock: () => { if (!lockFree || lockHeld) return false; lockHeld = mine = true; return true; },
+      releaseLock() { if (mine) { lockHeld = mine = false; } } }; } },
     Logger: { log: () => {} },
     MailApp: { sendEmail: (...a) => mail.push(a) },
-    GmailApp: { sendEmail: (...a) => { if (opts.gmailThrows) throw new Error('Service invoked too many times'); gmail.push(a); },
+    GmailApp: { sendEmail: (...a) => { if (opts.gmailThrows) throw new Error('Service invoked too many times'); gmail.push(a);
+                  if (hooks.onSend) { const f = hooks.onSend; hooks.onSend = null; f(); } },
                 getAliases: () => opts.aliases || ['hello@gardenerandson.com'] },
     Session: { getEffectiveUser: () => ({ getEmail: () => opts.account || 'hello@lundbech.me' }) },
     ScriptApp: { getProjectTriggers: () => [], deleteTrigger() {}, newTrigger: () => { const t = new Proxy({}, { get: (o, k) => () => t }); return t; } },
@@ -117,7 +123,7 @@ function env(opts) {
   };
   vm.createContext(ctx); vm.runInContext(SRC, ctx);
   const api = {
-    ctx, ss, sheets, props, gmail, mail, fetched,
+    ctx, ss, sheets, props, gmail, mail, fetched, hooks,
     setNow: d => { now = new Date(d); },
     setLock: b => { lockFree = b; },
     pilot: rows => { ctx.installSignals(); const p = sheets['Signals Pilot']; rows.forEach(r => p.rows.push([r[0], r[1], '', ''])); },
@@ -126,10 +132,13 @@ function env(opts) {
     col: h => ctx.SIG_QUEUE_HEADERS.indexOf(h),
     setCell: (rowIdx, h, v) => { sheets['Signals Queue'].rows[rowIdx + 1][ctx.SIG_QUEUE_HEADERS.indexOf(h)] = v; },
     edit: (rowIdx, h, v) => {
+      const old = sheets['Signals Queue'].rows[rowIdx + 1][ctx.SIG_QUEUE_HEADERS.indexOf(h)];
       api.setCell(rowIdx, h, v);
       const sh = sheets['Signals Queue'];
-      ctx.onSignalsEdit({ range: sh.getRange(rowIdx + 2, ctx.SIG_QUEUE_HEADERS.indexOf(h) + 1) });
-    }
+      ctx.onSignalsEdit({ range: sh.getRange(rowIdx + 2, ctx.SIG_QUEUE_HEADERS.indexOf(h) + 1), oldValue: old });
+    },
+    idx: gid => api.queue().findIndex(r => r[api.col('garden_id')] === gid),
+    status: i => api.queue()[i][api.col('status')]
   };
   return api;
 }
@@ -293,6 +302,83 @@ test('cooldowns: a second same-day run drafts nothing new', () => {
 test('ALA outage drops sightings, other signals still draft', () => {
   const e = env({ weather: () => 'rain', alaDown: true }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
   ok(e.queue().every(r => !/nearby/.test(r[e.col('signals')]) && /^rain/.test(r[e.col('signals')])), 'rain only');
+});
+
+/* ---------- second review ---------- */
+test('edit made while an earlier row is sending wins (row is not sent in its old form)', () => {
+  const e = env(); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.queue().forEach((_, i) => e.setCell(i, 'status', 'APPROVED'));
+  const second = 1;
+  e.hooks.onSend = () => e.edit(second, 'body', 'Hi,\n\nRewritten while the first email was sending.\n\nTyson');
+  e.ctx.sendApprovedSignals();
+  ok(e.status(second) === 'DRAFT', 'edited row back to DRAFT, got ' + e.status(second));
+  ok(!e.gmail.some(g => g[0] === e.queue()[second][e.col('to')].replace(/, /g, ',')), 'edited row not sent');
+  ok(e.gmail.length === 2, 'the other two still sent, got ' + e.gmail.length);
+  e.setCell(second, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
+  ok(e.gmail.length === 3 && /Rewritten while/.test(e.gmail[2][2]), 're-approved edit sends the new text');
+});
+
+test('content changed between claim and send is caught after the claim', () => {
+  const e = env(); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.setCell(0, 'status', 'APPROVED');
+  e.hooks.onFlush = () => e.setCell(0, 'body', 'Changed right after SENDING was written');
+  e.ctx.sendApprovedSignals();
+  ok(e.gmail.length === 0 && e.status(0) === 'DRAFT', 'not sent, back to DRAFT');
+});
+
+test('editing a SENT row restores it and leaves history intact', () => {
+  const e = env(); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
+  const sentBody = e.queue()[0][e.col('body')];
+  e.edit(0, 'body', 'tampered');
+  ok(e.queue()[0][e.col('body')] === sentBody && e.status(0) === 'SENT', 'restored + still SENT');
+});
+
+test('an expired, unsent heat draft is replaced by a fresh one', () => {
+  const e = env({ weather: () => 'heat' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  const n0 = e.queue().length;
+  e.setNow('2026-11-03T06:00:00+11:00');            // heat continues: forecast now for 4 Nov
+  e.ctx.runSignals();
+  const fresh = e.queue().slice(n0);
+  ok(fresh.length === 3 && fresh.every(r => /^heat/.test(r[e.col('signals')])), 'three fresh heat drafts, got ' + fresh.length);
+  ok(fresh.every(r => /4 November/.test(r[e.col('body')])), 'new forecast date');
+  ok(e.queue().slice(0, n0).every(r => r[e.col('status')] === 'EXPIRED'), 'old drafts marked EXPIRED');
+});
+
+test('a SENT heat note still cools down the next day', () => {
+  const e = env({ weather: () => 'heat' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.queue().forEach((_, i) => e.setCell(i, 'status', 'APPROVED')); e.ctx.sendApprovedSignals();
+  e.setNow('2026-11-03T06:00:00+11:00'); e.ctx.runSignals();
+  ok(e.queue().length === 3, 'no new heat drafts within the cooldown');
+});
+
+test('a SKIPped event is not redrafted; a new event is', () => {
+  const e = env({ weather: () => 'heat' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.queue().forEach((_, i) => e.setCell(i, 'status', 'SKIP'));
+  e.ctx.runSignals();
+  ok(e.queue().length === 3, 'same 3 Nov heat event not redrafted');
+  e.setNow('2026-11-03T06:00:00+11:00'); e.ctx.runSignals();
+  ok(e.queue().length === 6, 'heat on a new date is drafted, got ' + (e.queue().length - 3));
+});
+
+test('v1 sheets are archived on reinstall; old approvals never send; nothing runs before reinstall', () => {
+  const e = env();
+  const v1 = e.ss.insertSheet('Signals Queue');
+  v1.rows.push(['created_at', 'garden_id', 'garden_name', 'to', 'signals', 'subject', 'body', 'status', 'sent_at', 'note']);
+  v1.rows.push(['2026-10-31', PILOT[0], 'Native Buffer', 'richard@example.com', 'heat', 'old', 'old body', 'APPROVED', '', '']);
+  const l1 = e.ss.insertSheet('Signals Log');
+  l1.rows.push(['logged_at', 'garden_id', 'signal', 'key']);
+  ok(e.ctx.previewSignalsNow().length === 0 && e.ctx.sendApprovedSignals() === 0 && e.gmail.length === 0, 'refuses old layout');
+  ok(/installSignals/.test((e.mail[0] || [])[1] || ''), 'tells you to run installSignals');
+  e.pilot(pilotRows);                                 // runs installSignals()
+  const names = Object.keys(e.sheets);
+  const arch = names.find(n => /^Signals Queue \(archived /.test(n));
+  ok(arch && names.some(n => /^Signals Log \(archived /.test(n)), 'queue + log archived: ' + names.join(' | '));
+  ok(arch && e.sheets[arch].rows[1][7] === 'ARCHIVED', 'old APPROVED → ARCHIVED');
+  ok(e.sheets['Signals Queue'].rows[0].join() === e.ctx.SIG_QUEUE_HEADERS.join(), 'fresh queue has new columns');
+  e.ctx.previewSignalsNow(); e.queue().forEach((_, i) => e.setCell(i, 'status', 'APPROVED'));
+  e.ctx.sendApprovedSignals();
+  ok(e.gmail.length === 3 && !e.gmail.some(g => g[1] === 'old'), 'only new-format drafts sent');
 });
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
