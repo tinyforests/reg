@@ -439,7 +439,7 @@ function _sigRunLocked(opts) {
     if (chosen.length && chosen[0].type === 'season') {
       var cond = _sigSeasonSoFar(g, now);
       if (cond) {
-        var at = chosen[0].paragraphs.length - (chosen[0].also && chosen[0].also.length ? 1 : 0);
+        var at = chosen[0].paragraphs.length - 1 - (chosen[0].also && chosen[0].also.length ? 1 : 0);
         chosen[0].paragraphs.splice(at, 0, cond.text);
         chosen[0].evidence.conditions = cond.evidence;
       }
@@ -897,7 +897,6 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   if (lead.whyNow) lines.push(lead.whyNow);
   if (lead.plant) lines.push(lead.plant.text);
   if (lead.link.text) lines.push(lead.link.text);
-  lines.push('The record: ' + rec.url);
 
   // Also recorded around the garden lately: up to four other reliable,
   // recent, native records within 5km, one per theme for variety.
@@ -913,9 +912,11 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
     var km2 = Math.max(0.5, Math.round(c.rec.distance_m / 500) / 2);
     return '– ' + (c.sp.common ? c.sp.common + ' (' + c.sp.sci + ')' : c.sp.sci) + ', ' +
       (c.rec.distance_m <= SIG_LOCAL_M ? 'nearby' : 'about ' + km2 + 'km away') + ', ' +
-      _sigDate(c.rec.observed, true).replace(/^\w+ /, '') + '  ' + c.rec.url;
+      _sigDate(c.rec.observed).replace(/^\w+ /, '');
   });
-  if (alsoLines.length) lines.push('Also recorded around ' + g.garden_name + ' in the past few weeks:\n' + alsoLines.join('\n'));
+  if (alsoLines.length) lines.push('Also recorded around ' + g.garden_name + ' in the past few weeks:\n' + alsoLines.join('\n') + '.');
+  // Record links stay in the evidence for review, not in the email.
+  lines.push('Add your own sightings to ' + g.garden_name + '\'s record: ' + g.profile);
   var subject = lead.local ? article + name + ' recorded nearby' : article + name + ' about ' + km + 'km away';
 
   return { type: 'season', key: sp.sci.toLowerCase(), subject: subject,
@@ -1121,20 +1122,23 @@ function _sigHtml(body, card) {
   var parts = String(body).split(/\n--\n/);
   var main = parts[0], small = parts.slice(1).join(' ');
   var paras = esc(main).split(/\n{2,}/).map(function (p) {
+    p = p.replace(/^(Add your own sightings to .*?): (https:\/\/\S+)$/, '<a href="$2" style="color:#2b2f26">$1 ↗</a>');
     p = p.replace(/https:\/\/biocache\.ala\.org\.au\/occurrences\/([0-9a-f-]{36})/g,
       '<a href="https://biocache.ala.org.au/occurrences/$1" style="color:#2b2f26">View record ↗</a>');
     return '<p style="margin:0 0 16px;font:16px/1.6 Georgia,serif;color:#2b2f26">' + p.replace(/\n/g, '<br>') + '</p>';
   }).join('');
   var foot = '';
   if (card && card.garden_name) {
-    var light = card.provisional ? '#d4bb87' : '#b3ff6c';
-    foot = '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0 0;width:100%;max-width:360px;background:#11170f;border:1px solid #47513e">' +
-      '<tr><td style="padding:18px 20px">' +
-      '<div style="font:11px/1.5 Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#d2dbca">Ecological Registry <span style="color:' + light + '">●</span></div>' +
-      '<div style="font:18px/1.3 Helvetica,Arial,sans-serif;color:#fff0dc;margin-top:12px">' + esc(card.garden_name) + '</div>' +
-      '<div style="font:11px/1.6 Menlo,monospace;text-transform:uppercase;color:' + light + ';margin-top:4px">' + esc(card.rating || '') + (card.provisional ? ' · provisional' : '') + '</div>' +
-      (typeof card.score === 'number' ? '<div style="font:500 56px/1.1 Menlo,monospace;color:' + light + ';margin-top:8px">' + card.score + '<span style="font-size:13px;color:#a4af9c"> / 100</span></div>' : '') +
-      '<a href="' + esc(card.profile) + '" style="display:block;margin-top:12px;font:13px/1.5 Helvetica,Arial,sans-serif;color:#fff0dc">View your garden\'s record ↗</a>' +
+    // Beige card: Gmail strips dark backgrounds, so the Signal panel's
+    // dark-green plate doesn't survive in the inbox.
+    var accent = card.provisional ? '#a8873f' : '#5f7f47';
+    foot = '<table role="presentation" cellpadding="0" cellspacing="0" bgcolor="#f4ecdc" style="margin:28px 0 0;width:100%;max-width:360px;background-color:#f4ecdc;border:1px solid #d9ccb2">' +
+      '<tr><td bgcolor="#f4ecdc" style="padding:18px 20px;background-color:#f4ecdc">' +
+      '<div style="font:11px/1.5 Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#5b6152">Ecological Registry <span style="color:' + accent + '">●</span></div>' +
+      '<div style="font:18px/1.3 Helvetica,Arial,sans-serif;color:#2b2f26;margin-top:12px">' + esc(card.garden_name) + '</div>' +
+      '<div style="font:11px/1.6 Menlo,monospace;text-transform:uppercase;color:' + accent + ';margin-top:4px">' + esc(card.rating || '') + (card.provisional ? ' · provisional' : '') + '</div>' +
+      (typeof card.score === 'number' ? '<div style="font:500 56px/1.1 Menlo,monospace;color:' + accent + ';margin-top:8px">' + card.score + '<span style="font-size:13px;color:#8a8f80"> / 100</span></div>' : '') +
+      '<a href="' + esc(card.profile) + '" style="display:block;margin-top:12px;font:13px/1.5 Helvetica,Arial,sans-serif;color:#2b2f26">View your garden\'s record ↗</a>' +
       '</td></tr></table>';
   }
   var note = small ? '<p style="margin:24px 0 0;font:12px/1.6 Helvetica,Arial,sans-serif;color:#7d8574">' + esc(small).replace(/\n/g, ' ') + '</p>' : '';

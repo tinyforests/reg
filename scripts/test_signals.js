@@ -523,11 +523,13 @@ test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, 
   ok(r[e.col('subject')] === 'Bush Garden · a Bogong Moth about 3km away', r[e.col('subject')]);
   ok(/^Hi Sam,/.test(body), 'greeting');
   ok(/A Bogong Moth \(Agrotis infusa\) was recorded about 3km from Bush Garden on 18 October\./.test(body), 'dated, distance stated');
-  ok(/The record: https:\/\/biocache\.ala\.org\.au\/occurrences\/f2689fa7/.test(body), 'linked');
+  ok(!/biocache\.ala\.org\.au/.test(body), 'no record links in the email');
+  ok(/Add your own sightings to Bush Garden's record: https:\/\/ecologicalregistry\.org\/gardens\//.test(body), 'sightings line with profile link');
+  ok(/Add your own sightings to Bush Garden's record ↗<\/a>/.test(r[e.col('html')]) && /#f4ecdc/.test(r[e.col('html')]) && !/#11170f/.test(r[e.col('html')]), 'html: linked sightings line, beige card');
   ok(/migrate each spring from inland Queensland, New South Wales and western Victoria to the Australian Alps, and can turn up around Melbourne along the way/.test(body), 'sourced why-now wording');
   ok(!/many pass over Melbourne/.test(body), 'unsupported route claim gone');
   const main = body.split('\n--')[0];
-  ok(!/\?/.test(main) && !/photo|reply|let us know|send us|have you/i.test(main), 'shares, asks nothing: ' + main);
+  ok(!/\?/.test(main) && !/photo|reply|let us know|send us|have you/i.test(main), 'no questions: ' + main);
   ok(!/rare|only record|walking distance|in your garden was/i.test(body), 'no overstated claims');
   ok(/The Correas and eucalypts growing at Bush Garden are among the native plants Bogong Moths are known to feed on\./.test(body), 'horticultural link to the garden planting');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
@@ -620,12 +622,12 @@ test('season note adds what else was recorded around the garden, one per theme, 
   const sect = body.split('Also recorded around Bush Garden in the past few weeks:\n')[1] || '';
   const items = sect.split('\n').filter(l => l.startsWith('– '));
   ok(items.length >= 3 && items.length <= 4, 'three or four items, got ' + items.length + '\n' + sect);
-  ok(items.every(l => /about [\d.]+km away|nearby/.test(l) && /https:\/\/biocache\.ala\.org\.au\/occurrences\//.test(l)), 'distance + link on each');
+  ok(items.every(l => /about [\d.]+km away|nearby/.test(l) && /\d{1,2} [A-Z][a-z]+\.?$/.test(l)), 'distance + full date on each: ' + items.join(' | '));
   ok(items.some(l => /orchid/i.test(l)) && items.some(l => /Tachyglossus/.test(l)), 'orchid and echidna included');
   ok(!items.some(l => /Bogong/.test(l)), 'lead species not repeated');
   ok(!/Spotted Medic|Leopard Slug|Cellar Spider/.test(sect), 'introduced species never listed');
   const ev = JSON.parse(e.queue()[0][e.col('evidence')]).signals[0].evidence;
-  ok(ev.also_recorded.length === items.length, 'also-recorded kept in evidence');
+  ok(ev.also_recorded.length === items.length && ev.also_recorded.every(a => a.record.url), 'also-recorded and their record links kept in evidence');
 });
 
 test('season note adds the season so far at the garden from 30 years of modelled weather', () => {
