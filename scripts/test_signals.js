@@ -517,10 +517,12 @@ test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, 
   const main = body.split('\n--')[0];
   ok(!/\?/.test(main) && !/photo|reply|let us know|send us|have you/i.test(main), 'shares, asks nothing: ' + main);
   ok(!/rare|only record|walking distance|in your garden was/i.test(body), 'no overstated claims');
+  ok(/The Correas and eucalypts growing at Bush Garden are among the native plants Bogong Moths are known to feed on\./.test(body), 'horticultural link to the garden planting');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
   ok(ev.lead.tier === 'landscape' && ev.lead.reason === 'seasonal' && ev.lead.record.age_days === 12, 'tier/reason/age: ' + JSON.stringify(ev.lead));
   ok(ev.lead.record.observed === '2026-10-18' && ev.retrieved_at, 'observation and retrieval dates kept');
   ok(ev.lead.why_now_source && ev.lead.why_now_source.url === 'https://www.zoo.org.au/moths', 'why-now source in evidence');
+  ok(ev.lead.plant_link && ev.lead.plant_link.source.url.indexOf('ps.org.au') > -1 && ev.lead.plant_link.garden_plants.length === 5, 'plant link source + garden plants in evidence: ' + JSON.stringify(ev.lead.plant_link));
   ok(ev.found_but_no_reason.some(c => /Tachyglossus/.test(c.scientific)), 'echidna found ~4.8km but no reason at that distance');
   ok(ev.excluded.identification > 0, 'needs-ID records excluded');
 });
@@ -576,6 +578,13 @@ test('pilot default: legacy nearby/flowering notes are off', () => {
   const e = env({ legacy: false, weather: () => 'normal' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
   ok(e.queue().length === 0, 'no legacy drafts, got ' + e.queue().map(r => r[e.col('signals')]).join(' | '));
   ok(!e.fetched.some(u => u.includes('biocache') && !u.includes('coordinate_uncertainty')), 'legacy sightings not even fetched');
+});
+
+test('season: no plant link when the garden grows none of the plants', () => {
+  const e = env();
+  ok(e.ctx._sigPlantLink({ garden_name: 'X', species: ['Lomandra longifolia', 'Poa labillardierei'] }, 'Agrotis infusa') === null, 'no overlap → no line');
+  const l = e.ctx._sigPlantLink({ garden_name: 'X', species: ['Grevillea rosmarinifolia'] }, 'Agrotis infusa');
+  ok(l && l.text === 'The grevilleas growing at X are among the native plants Bogong Moths are known to feed on.', l && l.text);
 });
 
 test('season: why-now entries without a source are ignored', () => {

@@ -798,6 +798,32 @@ function _sigTheme(o) {
   return '';
 }
 
+/* Curated horticultural links: plant genera an animal is documented
+   using. Only shown when the garden's own species list includes them.
+   Same rules as SIG_WHY_NOW: cited source, checked by a person. */
+var SIG_PLANT_LINKS = {
+  'Agrotis infusa': {
+    genera: ['Correa', 'Eucalyptus', 'Grevillea', 'Epacris', 'Leucopogon', 'Prostanthera'],
+    relation: 'among the native plants Bogong Moths are known to feed on',
+    source: { name: 'PlantingSeeds: Bringing back the Bogong Moth (Alice Owen)', url: 'https://www.ps.org.au/articles/bringing-back-the-bogong-moth', checked: '2026-10-31' } }
+};
+var SIG_GENUS_LABEL = { Correa: 'Correas', Eucalyptus: 'eucalypts', Grevillea: 'grevilleas', Epacris: 'heaths',
+  Leucopogon: 'beard-heaths', Prostanthera: 'mint-bushes', Acacia: 'wattles', Banksia: 'banksias' };
+
+function _sigPlantLink(g, sci) {
+  var L = SIG_PLANT_LINKS[sci];
+  if (!L || !L.source || !L.source.url) return null;
+  var found = [], plants = [];
+  g.species.forEach(function (raw) {
+    var genus = String(raw).trim().split(/\s+/)[0];
+    if (L.genera.indexOf(genus) > -1) { plants.push(raw); if (found.indexOf(genus) === -1) found.push(genus); }
+  });
+  if (!found.length) return null;
+  var labels = found.map(function (x) { return SIG_GENUS_LABEL[x] || x; });
+  return { text: 'The ' + _sigJoin(labels) + ' growing at ' + g.garden_name + ' are ' + L.relation + '.',
+           genera: found, garden_plants: plants, source: L.source };
+}
+
 function _sigWhyNowEntry(sp, month) {
   var w = SIG_WHY_NOW[sp.sci] || SIG_WHY_NOW['family:' + sp.family];
   return w && w.source && w.source.url && w.months.indexOf(month) > -1 ? w : null;
@@ -835,10 +861,10 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
     var sp = bySp[k];
     sp.records.sort(function (a, b) { return (a.distance_m - b.distance_m) || b.observed.localeCompare(a.observed); });
     var best = sp.records[0], local = best.distance_m <= SIG_LOCAL_M;
-    var whyNow = _sigWhyNow(sp, month), link = _sigThemeLink(g, sp.theme);
-    var reason = local ? (whyNow ? 'seasonal' : link.score >= 1 ? 'garden link: ' + link.why : '')
-                       : (whyNow ? 'seasonal' : link.score >= 2 ? 'garden link: ' + link.why : '');
-    return { sp: sp, rec: best, local: local, whyNow: whyNow, link: link, reason: reason,
+    var whyNow = _sigWhyNow(sp, month), link = _sigThemeLink(g, sp.theme), plant = _sigPlantLink(g, sp.sci);
+    var reason = local ? (whyNow ? 'seasonal' : plant ? 'garden planting' : link.score >= 1 ? 'garden link: ' + link.why : '')
+                       : (whyNow ? 'seasonal' : plant ? 'garden planting' : link.score >= 2 ? 'garden link: ' + link.why : '');
+    return { sp: sp, rec: best, local: local, whyNow: whyNow, link: link, plant: plant, reason: reason,
              featured: featuredCount[sp.sci.toLowerCase()] || 0 };
   });
   var eligible = considered.filter(function (c) { return c.reason; });
@@ -848,7 +874,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   // Local first; then a seasonal reason; then a strong garden link; then
   // species not featured before; then the freshest record; then nearest.
   eligible.sort(function (a, b) {
-    return (b.local - a.local) || (!!b.whyNow - !!a.whyNow) || ((b.link.score >= 2) - (a.link.score >= 2)) ||
+    return (b.local - a.local) || (!!b.whyNow - !!a.whyNow) || (!!b.plant - !!a.plant) || ((b.link.score >= 2) - (a.link.score >= 2)) ||
       (a.featured - b.featured) || b.rec.observed.localeCompare(a.rec.observed) || (a.rec.distance_m - b.rec.distance_m);
   });
   var lead = eligible[0], sp = lead.sp, rec = lead.rec;
@@ -861,6 +887,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   // interesting now, and the record. No questions, no asks.
   var lines = [article.charAt(0).toUpperCase() + article.slice(1) + name + (sp.common ? ' (' + sp.sci + ')' : '') + ' was recorded ' + where + ' on ' + when + '.'];
   if (lead.whyNow) lines.push(lead.whyNow);
+  if (lead.plant) lines.push(lead.plant.text);
   if (lead.link.text) lines.push(lead.link.text);
   lines.push('The record: ' + rec.url);
   var subject = lead.local ? article + name + ' recorded nearby' : article + name + ' about ' + km + 'km away';
@@ -873,7 +900,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       distance_note: 'measured from the garden\'s public display coordinates (offset ~250m)',
       excluded: rejected,
       lead: { scientific: sp.sci, common: sp.common, tier: lead.local ? 'local' : 'landscape', reason: lead.reason,
-              why_now: lead.whyNow, why_now_source: (_sigWhyNowEntry(sp, month) || {}).source || null, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
+              why_now: lead.whyNow, why_now_source: (_sigWhyNowEntry(sp, month) || {}).source || null, plant_link: lead.plant, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
       other_candidates: eligible.slice(1, 6).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, reason: c.reason, observed: c.rec.observed, distance_m: c.rec.distance_m, url: c.rec.url }; }),
       found_but_no_reason: considered.filter(function (c) { return !c.reason; }).slice(0, 8).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, distance_m: c.rec.distance_m, observed: c.rec.observed }; }),
       wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; share, never ask the steward to do anything' },
