@@ -381,5 +381,28 @@ test('v1 sheets are archived on reinstall; old approvals never send; nothing run
   ok(e.gmail.length === 3 && !e.gmail.some(g => g[1] === 'old'), 'only new-format drafts sent');
 });
 
+/* ---------- third review ---------- */
+test('a status change during the send claim is respected (SKIP is not sent)', () => {
+  const e = env(); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.setCell(0, 'status', 'APPROVED');
+  e.hooks.onFlush = () => e.setCell(0, 'status', 'SKIP');
+  e.ctx.sendApprovedSignals();
+  ok(e.gmail.length === 0, 'not sent');
+  ok(e.status(0) === 'SKIP', 'stays SKIP, got ' + e.status(0));
+  ok(!Object.keys(e.props).length, 'no send record');
+});
+
+test('sent-message cooldown runs from sent_at, not the draft date', () => {
+  const e = env({ weather: () => 'heat' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();   // drafted Mon 2 Nov
+  e.queue().forEach((_, i) => { e.setCell(i, 'status', 'APPROVED'); e.setCell(i, 'expires_at', '2026-12-31T00:00:00Z'); });
+  e.queue().forEach((_, i) => e.setCell(i, 'content_hash', e.ctx._sigHash(e.queue()[i][e.col('to')], e.queue()[i][e.col('subject')], e.queue()[i][e.col('body')], e.queue()[i][e.col('html')])));
+  e.setNow('2026-11-08T06:00:00+11:00'); e.ctx.sendApprovedSignals();                     // sent Sun 8 Nov
+  ok(e.gmail.length === 3, 'sent on 8 Nov');
+  e.setNow('2026-11-10T06:00:00+11:00'); e.ctx.runSignals();                              // 2 days after send, 8 after draft
+  ok(!e.queue().slice(3).some(r => /heat/.test(r[e.col('signals')])), 'heat still cooling 2 days after send');
+  e.setNow('2026-11-14T06:00:00+11:00'); e.ctx.runSignals();                              // 6 days after send
+  ok(e.queue().slice(3).some(r => /^heat/.test(r[e.col('signals')])), 'heat drafts again once 5 days past sent_at');
+});
+
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
 process.exit(failures ? 1 : 0);

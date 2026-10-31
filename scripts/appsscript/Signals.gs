@@ -240,6 +240,11 @@ function sendApprovedSignals() {
       _sigSet(sh, row, { status: 'SENDING', note: 'Sending ' + new Date().toISOString() });
       SpreadsheetApp.flush();
       var now2 = _sigRow(sh, row);
+      if (String(now2.status) !== 'SENDING') {
+        // Someone cancelled or changed the status during the claim: respect it.
+        _sigSet(sh, row, { note: 'Not sent: status changed to ' + now2.status + ' while being claimed' });
+        continue;
+      }
       if (now2.message_id !== r.message_id ||
           _sigHash(now2.to, now2.subject, now2.body, now2.html) !== String(r.content_hash) ||
           String(now2.content_hash) !== String(r.content_hash)) {
@@ -778,16 +783,20 @@ function _sigLogIndex(ss) {
     var state = /^(SENT|SENDING|CHECK)$/.test(st) ? 'sent'
       : /^(DRAFT|APPROVED)$/.test(st) ? (isFinite(exp) && now <= exp ? 'pending' : 'dead')
       : st === 'SKIP' ? 'skipped' : 'dead';
-    outcome[String(r[SIG_C.message_id - 1])] = state;
+    var sentAt = Date.parse(String(r[SIG_C.sent_at - 1]));
+    outcome[String(r[SIG_C.message_id - 1])] = { state: state, sentAt: isFinite(sentAt) ? new Date(sentAt) : null };
   });
   sh.getRange(2, 1, sh.getLastRow() - 1, SIG_LOG_HEADERS.length).getValues().forEach(function (r) {
     var k = r[1] + '::' + r[2];
-    (out[k] = out[k] || []).push({ at: new Date(r[0]), key: String(r[3]), state: outcome[String(r[4])] || 'dead' });
+    var o = outcome[String(r[4])] || { state: 'dead', sentAt: null };
+    // Delivered messages are timed from when they were sent; a SENDING/CHECK
+    // row with no sent_at falls back to the draft time (conservative).
+    (out[k] = out[k] || []).push({ at: (o.state === 'sent' && o.sentAt) || new Date(r[0]), key: String(r[3]), state: o.state });
   });
   return out;
 }
 
-/* Sent messages cool down for SIG_COOLDOWN days. A pending draft blocks a
+/* Sent messages cool down for SIG_COOLDOWN days from sent_at. A pending draft blocks a
    duplicate until it expires. A skipped draft blocks only the same event
    (same key). Expired or failed drafts never block a replacement. */
 function _sigCooling(log, gid, type, now, key) {
