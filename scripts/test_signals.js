@@ -643,5 +643,14 @@ test('season note adds the season so far at the garden from 30 years of modelled
   ok(d.queue().length === 1 && !/so far around/.test(d.queue()[0][d.col('body')]), 'archive down: note still drafts, without the line');
 });
 
+test('optional studio note appears before the sightings line, verbatim with the garden name filled in', () => {
+  const e = bush(); e.props.SIGNALS_STUDIO_NOTE = "Something we're building: a Registry garden sign with its own sensors. We'd love {garden} to have the first.";
+  e.ctx.previewSignalsNow();
+  const body = e.queue()[0][e.col('body')];
+  ok(/Something we're building: a Registry garden sign with its own sensors\. We'd love Bush Garden to have the first\.\n\nAdd your own sightings/.test(body), body);
+  const n = bush(); n.ctx.previewSignalsNow();
+  ok(!/Something we're building/.test(n.queue()[0][n.col('body')]), 'absent unless set');
+});
+
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
 process.exit(failures ? 1 : 0);

@@ -916,6 +916,10 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   });
   if (alsoLines.length) lines.push('Also recorded around ' + g.garden_name + ' in the past few weeks:\n' + alsoLines.join('\n') + '.');
   // Record links stay in the evidence for review, not in the email.
+  // Optional studio note written by you (Script Property SIGNALS_STUDIO_NOTE),
+  // e.g. what we're building. {garden} is replaced with the garden's name.
+  var studio = String(PropertiesService.getScriptProperties().getProperty('SIGNALS_STUDIO_NOTE') || '').trim();
+  if (studio) lines.push(studio.replace(/\{garden\}/g, g.garden_name));
   lines.push('Add your own sightings to ' + g.garden_name + '\'s record: ' + g.profile);
   var subject = lead.local ? article + name + ' recorded nearby' : article + name + ' about ' + km + 'km away';
 
