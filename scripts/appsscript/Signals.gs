@@ -55,12 +55,20 @@
      adds the address to the "Signals Optout" sheet. That takes effect
      immediately, including for rows already APPROVED.
 
-   SETUP (once)
+   SETUP -- draft-only trial
      1. Add this file to the project as Signals.gs and save.
-     2. Run installSignals() and grant permissions. Check the log line
-        about the hello@gardenerandson.com send-as alias.
+     2. Run installSignals() and grant permissions. This installs the
+        daily drafting trigger and the edit trigger ONLY. Sending is off:
+        no send trigger exists, and sendApprovedSignals() refuses to run
+        even if called by hand.
      3. Add 2-3 gardens to "Signals Pilot" (garden_id, email).
      4. Run previewSignalsNow() and review the "Signals Queue" sheet.
+
+   TURNING SENDING ON (later, deliberately)
+     enableSending()   checks the send-as alias, sets SIGNALS_SENDING=on
+                       and installs the 30-minute send trigger.
+     disableSending()  removes the trigger and sets SIGNALS_SENDING=off.
+                       APPROVED rows stay put until sending is on again.
    ============================================================ */
 
 var SIG_SITE      = 'https://ecologicalregistry.org';
@@ -113,17 +121,40 @@ function installSignals() {
   _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS);
   _sigSheet(ss, SIG_PILOT, ['garden_id', 'email', 'added_at', 'note']);
   _sigSheet(ss, SIG_OPTOUT, ['email', 'added_at', 'note']);
-  ScriptApp.getProjectTriggers().forEach(function (t) {
-    var f = t.getHandlerFunction();
-    if (f === 'runSignals' || f === 'sendApprovedSignals' || f === 'onSignalsEdit') ScriptApp.deleteTrigger(t);
-  });
+  _sigDeleteTriggers(['runSignals', 'sendApprovedSignals', 'onSignalsEdit']);
   ScriptApp.newTrigger('runSignals').timeBased().everyDays(1).atHour(6).inTimezone(SIG_TZ).create();
-  ScriptApp.newTrigger('sendApprovedSignals').timeBased().everyMinutes(30).create();
   ScriptApp.newTrigger('onSignalsEdit').forSpreadsheet(ss).onEdit().create();
-  var mode = _sigSendMode();
+  PropertiesService.getScriptProperties().setProperty('SIGNALS_SENDING', 'off');
   if (archived.length) Logger.log('Older Signals sheets archived (not migrated; approvals in them will never send): ' + archived.join(', '));
-  Logger.log('Signals installed. Sending as ' + SIG_FROM + ': ' +
-    (mode ? 'OK (' + mode + ')' : 'NOT AVAILABLE -- add it as a Gmail send-as alias before approving anything'));
+  var mode = _sigSendMode();
+  Logger.log('Signals installed in DRAFT-ONLY mode (no send trigger). Send-as ' + SIG_FROM + ': ' +
+    (mode ? 'OK (' + mode + ')' : 'not available yet -- needed before enableSending()'));
+}
+
+/* Deliberate switch: only after the draft-only trial. */
+function enableSending() {
+  var mode = _sigSendMode();
+  if (!mode) throw new Error('Cannot send as ' + SIG_FROM + ': add it as a Gmail send-as alias first. Sending left OFF.');
+  _sigDeleteTriggers(['sendApprovedSignals']);
+  PropertiesService.getScriptProperties().setProperty('SIGNALS_SENDING', 'on');
+  ScriptApp.newTrigger('sendApprovedSignals').timeBased().everyMinutes(30).create();
+  Logger.log('Sending ON (' + mode + '). APPROVED rows go out within 30 minutes.');
+}
+
+function disableSending() {
+  _sigDeleteTriggers(['sendApprovedSignals']);
+  PropertiesService.getScriptProperties().setProperty('SIGNALS_SENDING', 'off');
+  Logger.log('Sending OFF. Drafting continues; APPROVED rows wait.');
+}
+
+function _sigSendingOn() {
+  return PropertiesService.getScriptProperties().getProperty('SIGNALS_SENDING') === 'on';
+}
+
+function _sigDeleteTriggers(names) {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (names.indexOf(t.getHandlerFunction()) > -1) ScriptApp.deleteTrigger(t);
+  });
 }
 
 /* A queue or log whose header row doesn't match this version is renamed
@@ -201,6 +232,7 @@ function onSignalsEdit(e) {
 }
 
 function sendApprovedSignals() {
+  if (!_sigSendingOn()) { Logger.log('Signals: sending is OFF (run enableSending() when ready). Nothing sent.'); return 0; }
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(20000)) return 0;
   try {

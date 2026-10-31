@@ -68,7 +68,7 @@ function env(opts) {
     setFrozenRows() {} setColumnWidth() {} hideColumns() {} getSheetId() { return this.id; }
   }
   const ss = { getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = new Sheet(n)), getUrl: () => 'https://docs.google.com/spreadsheets/d/TEST' };
-  const props = {}, gmail = [], mail = [], fetched = [];
+  const props = {}, gmail = [], mail = [], fetched = [], triggers = [];
   const resp = (code, t) => ({ getResponseCode: () => code, getContentText: () => t });
   function fetch(u) {
     u = typeof u === 'string' ? u : u.url; fetched.push(u);
@@ -109,7 +109,9 @@ function env(opts) {
                   if (hooks.onSend) { const f = hooks.onSend; hooks.onSend = null; f(); } },
                 getAliases: () => opts.aliases || ['hello@gardenerandson.com'] },
     Session: { getEffectiveUser: () => ({ getEmail: () => opts.account || 'hello@lundbech.me' }) },
-    ScriptApp: { getProjectTriggers: () => [], deleteTrigger() {}, newTrigger: () => { const t = new Proxy({}, { get: (o, k) => () => t }); return t; } },
+    ScriptApp: { getProjectTriggers: () => triggers.map(n => ({ getHandlerFunction: () => n })),
+                 deleteTrigger: x => { const i = triggers.indexOf(x.getHandlerFunction()); if (i > -1) triggers.splice(i, 1); },
+                 newTrigger: n => { const t = new Proxy({}, { get: (o, k) => k === 'create' ? () => { triggers.push(n); return t; } : () => t }); return t; } },
     Utilities: {
       formatDate: fmt, getUuid: () => crypto.randomUUID(),
       parseDate: (s, tz) => {               // 'yyyy-MM-dd HH:mm' in Melbourne
@@ -123,10 +125,11 @@ function env(opts) {
   };
   vm.createContext(ctx); vm.runInContext(SRC, ctx);
   const api = {
-    ctx, ss, sheets, props, gmail, mail, fetched, hooks,
+    ctx, ss, sheets, props, gmail, mail, fetched, hooks, triggers,
     setNow: d => { now = new Date(d); },
     setLock: b => { lockFree = b; },
-    pilot: rows => { ctx.installSignals(); const p = sheets['Signals Pilot']; rows.forEach(r => p.rows.push([r[0], r[1], '', ''])); },
+    pilot: rows => { ctx.installSignals(); if (!opts.draftOnly) props.SIGNALS_SENDING = 'on';
+                     const p = sheets['Signals Pilot']; rows.forEach(r => p.rows.push([r[0], r[1], '', ''])); },
     optout: e => sheets['Signals Optout'].rows.push([e, '', '']),
     queue: () => (sheets['Signals Queue'] ? sheets['Signals Queue'].rows.slice(1) : []),
     col: h => ctx.SIG_QUEUE_HEADERS.indexOf(h),
@@ -291,7 +294,7 @@ test('opt-out or removal from pilot after approval blocks the send', () => {
 test('Gmail failure marks ERROR and records no send', () => {
   const e = env({ gmailThrows: true }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
   e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
-  ok(e.queue()[0][e.col('status')] === 'ERROR' && !Object.keys(e.props).length, 'ERROR, no sent record');
+  ok(e.queue()[0][e.col('status')] === 'ERROR' && !Object.keys(e.props).some(k => k.startsWith('sent:')), 'ERROR, no sent record');
 });
 
 test('cooldowns: a second same-day run drafts nothing new', () => {
@@ -389,7 +392,7 @@ test('a status change during the send claim is respected (SKIP is not sent)', ()
   e.ctx.sendApprovedSignals();
   ok(e.gmail.length === 0, 'not sent');
   ok(e.status(0) === 'SKIP', 'stays SKIP, got ' + e.status(0));
-  ok(!Object.keys(e.props).length, 'no send record');
+  ok(!Object.keys(e.props).some(k => k.startsWith('sent:')), 'no send record');
 });
 
 test('sent-message cooldown runs from sent_at, not the draft date', () => {
@@ -402,6 +405,30 @@ test('sent-message cooldown runs from sent_at, not the draft date', () => {
   ok(!e.queue().slice(3).some(r => /heat/.test(r[e.col('signals')])), 'heat still cooling 2 days after send');
   e.setNow('2026-11-14T06:00:00+11:00'); e.ctx.runSignals();                              // 6 days after send
   ok(e.queue().slice(3).some(r => /^heat/.test(r[e.col('signals')])), 'heat drafts again once 5 days past sent_at');
+});
+
+/* ---------- draft-only trial ---------- */
+test('installSignals() is draft-only: no send trigger, and a manual send does nothing', () => {
+  const e = env({ draftOnly: true, weather: () => 'heat' }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  ok(e.triggers.indexOf('runSignals') > -1 && e.triggers.indexOf('onSignalsEdit') > -1, 'drafting + edit triggers installed');
+  ok(e.triggers.indexOf('sendApprovedSignals') === -1, 'no send trigger');
+  e.queue().forEach((_, i) => e.setCell(i, 'status', 'APPROVED'));
+  ok(e.ctx.sendApprovedSignals() === 0 && e.gmail.length === 0, 'manual send refused');
+  ok(e.queue().every(r => r[e.col('status')] === 'APPROVED'), 'approved rows left untouched');
+});
+
+test('enableSending() needs the alias; disableSending() stops sends again', () => {
+  const a = env({ draftOnly: true, aliases: [] }); a.pilot(pilotRows);
+  let threw = false; try { a.ctx.enableSending(); } catch (err) { threw = true; }
+  ok(threw && a.triggers.indexOf('sendApprovedSignals') === -1 && a.props.SIGNALS_SENDING === 'off', 'no alias: stays off');
+  const e = env({ draftOnly: true }); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  e.ctx.enableSending();
+  ok(e.triggers.filter(n => n === 'sendApprovedSignals').length === 1, 'one send trigger');
+  e.setCell(0, 'status', 'APPROVED'); ok(e.ctx.sendApprovedSignals() === 1, 'sends when on');
+  e.ctx.disableSending(); e.setCell(1, 'status', 'APPROVED');
+  ok(e.ctx.sendApprovedSignals() === 0 && e.triggers.indexOf('sendApprovedSignals') === -1, 'off again');
+  e.ctx.installSignals();
+  ok(e.props.SIGNALS_SENDING === 'off' && e.triggers.indexOf('sendApprovedSignals') === -1, 'reinstall resets to draft-only');
 });
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
