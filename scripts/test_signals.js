@@ -33,6 +33,8 @@ function daily(now, kind) {
   if (kind === 'dry-null-rain') { o.et0_fao_evapotranspiration = o.et0_fao_evapotranspiration.map(() => 4.5); o.precipitation_sum = o.precipitation_sum.map(() => null); }
   return o;
 }
+const GRIIS = ['Allium triquetrum', 'Cirsium vulgare', 'Briza minor', 'Centaurium erythraea', 'Linaria pelisseriana',
+  'Moenchia erecta', 'Oxalis articulata', 'Veronica arvensis', 'Acridotheres tristis', 'Apis mellifera'];
 const ALA = { occurrences: [
   { uuid: 'u1', eventDate: Date.parse('2026-10-20'), scientificName: 'Malurus cyaneus', vernacularName: 'Superb Fairywren', classs: 'Aves', dataResourceName: 'iNaturalist Australia' },
   { uuid: 'u2', eventDate: Date.parse('2026-10-22'), scientificName: 'Malurus cyaneus', vernacularName: 'Superb Fairywren', classs: 'Aves' },
@@ -69,7 +71,7 @@ function env(opts) {
   }
   let active = null;
   const ss = { getActiveSheet: () => active && active.sh, getActiveRange: () => active && active.sh.getRange(active.r, 1), getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = new Sheet(n)), getUrl: () => 'https://docs.google.com/spreadsheets/d/TEST' };
-  const props = {}, gmail = [], mail = [], fetched = [], triggers = [], dialogs = [];
+  const props = {}, gmail = [], mail = [], fetched = [], triggers = [], dialogs = [], cache = {};
   const resp = (code, t) => ({ getResponseCode: () => code, getContentText: () => t });
   function fetch(u) {
     u = typeof u === 'string' ? u : u.url; fetched.push(u);
@@ -81,6 +83,15 @@ function env(opts) {
       const lat = +u.match(/latitude=([-\d.]+)/)[1];
       const g = LOCS.find(l => Math.abs(l.display_lat - lat) < 0.001);
       return resp(200, JSON.stringify({ daily: daily(now, weatherKind(g && g.garden_id)) }));
+    }
+    if (u.includes('lists-ws.ala.org.au')) {
+      if (opts.griisDown) return resp(503, '');
+      const n = decodeURIComponent(u.split('q=')[1] || '');
+      return resp(200, JSON.stringify(GRIIS.indexOf(n) > -1 ? [{ scientificName: n }] : []));
+    }
+    if (u.includes('biocache') && u.includes('coordinate_uncertainty')) {
+      if (opts.alaDown) return resp(503, '');
+      return resp(200, opts.seasonFixture ? fs.readFileSync(path.join(REPO, 'scripts/fixtures', opts.seasonFixture), 'utf8') : '{"totalRecords":0,"occurrences":[]}');
     }
     if (u.includes('biocache')) return resp(opts.alaDown ? 500 : 200, JSON.stringify(ALA));
     return resp(404, '');
@@ -101,6 +112,7 @@ function env(opts) {
     UrlFetchApp: { fetch, fetchAll: r => r.map(fetch) },
     HtmlService: { createHtmlOutput: h => { const o = { html: h, setWidth() { return o; }, setHeight() { return o; } }; return o; } },
     SpreadsheetApp: { getUi: () => ({ showModalDialog: (o, title) => dialogs.push({ html: o.html, title }) }), getActiveSpreadsheet: () => ss, flush() { if (hooks.onFlush) { const f = hooks.onFlush; hooks.onFlush = null; f(); } }, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
+    CacheService: { getScriptCache: () => ({ get: k => cache[k] || null, put: (k, v) => { cache[k] = v; } }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => props[k] || null, setProperty: (k, v) => { props[k] = v; } }) },
     LockService: { getScriptLock: () => { let mine = false; return {
       tryLock: () => { if (!lockFree || lockHeld) return false; lockHeld = mine = true; return true; },
@@ -481,6 +493,56 @@ test('ALA request stays within the page size the service accepts', () => {
   const e = env(); e.pilot(pilotRows); e.ctx.previewSignalsNow();
   const u = e.fetched.find(x => x.includes('biocache'));
   ok(/pageSize=100\b/.test(u), 'pageSize=100 in ' + u);
+});
+
+/* ---------- season around you ---------- */
+const BUSH = 'ER-AU-VIC-NIL-BEL-001';
+test('Bush Garden (real Atlas records): one standalone frogs note tied to the garden record', () => {
+  const e = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json' });
+  e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
+  const r = e.queue()[0];
+  ok(r && r[e.col('signals')] === 'season', 'season only, got ' + (r && r[e.col('signals')]));
+  const body = r[e.col('body')];
+  ok(/^Hi Sam,/.test(body), 'greeting');
+  ok(/Bush Garden · frogs recorded nearby in these weeks/.test(r[e.col('subject')]), r[e.col('subject')]);
+  ok(/Verreaux's Frog/.test(body) && /Spotted Marsh Frog, though it hasn't been confirmed yet/.test(body), 'frogs + garden link');
+  ok(/surrounding area/.test(body) && /not from your garden/.test(body), 'nearby vs garden distinguished');
+  ok(!/walking distance|rare|only record|likely to appear|nest box/i.test(body), 'no overstated claims');
+  ok(/What's calling at Bush Garden this spring\?/.test(body), 'asks, does not tell');
+  ok(/– Verreaux's Frog \(Litoria verreauxii\): 20 Nov 2021  https:\/\/biocache\.ala\.org\.au\/occurrences\/4bb24e91/.test(body), 'dated line with record link');
+  ok(/View record ↗/.test(r[e.col('html')]), 'record links in html');
+  const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
+  ok(ev.excluded['already in garden record'] >= 2 && ev.excluded.introduced >= 3, 'garden species + introduced excluded: ' + JSON.stringify(ev.excluded));
+  ok(ev.excluded.location >= 1 && ev.excluded.date >= 1 && ev.excluded.identification >= 1, 'quality filters applied');
+  ok(ev.theme_scores.length >= 2 && ev.chosen_theme === 'frogs', 'themes scored: ' + JSON.stringify(ev.theme_scores));
+  ok(ev.species.every(s => s.records.every(x => x.url && x.id && x.date && x.uncertainty_m <= 1000)), 'evidence keeps id/date/url/uncertainty');
+});
+
+test('season: obscured locations, needs-ID and introduced records never qualify', () => {
+  const e = env(); const now = new Date('2026-10-31T07:30:00Z');
+  const beard = { taxonRank: 'species', coordinateUncertaintyInMeters: 28359, eventDate: Date.parse('2026-10-15'), assertions: ['COORDINATE_ROUNDED'],
+                  identificationVerificationStatus: 'research', dataResourceName: 'iNaturalist Australia', scientificName: 'Calochilus robertsonii' };
+  ok(e.ctx._sigSeasonReject(beard, now, { 'Calochilus robertsonii': false }) === 'location', 'Beard-orchid (28km uncertainty) rejected');
+  ok(e.ctx._sigSeasonReject(Object.assign({}, beard, { coordinateUncertaintyInMeters: 20, identificationVerificationStatus: 'needs_id' }), now, { 'Calochilus robertsonii': false }) === 'identification', 'needs_id rejected');
+  ok(e.ctx._sigSeasonReject(Object.assign({}, beard, { coordinateUncertaintyInMeters: 20 }), now, {}) === 'native status unknown', 'unknown native status rejected');
+  ok(e.ctx._sigSeasonReject(Object.assign({}, beard, { coordinateUncertaintyInMeters: 20 }), now, { 'Calochilus robertsonii': false }) === '', 'good record passes');
+});
+
+test('season: nothing worth saying means no season note', () => {
+  const e = env({ now: '2026-10-31T18:30:00+11:00' }); e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
+  ok(!e.queue().some(r => /season/.test(r[e.col('signals')])), 'empty records → no season');
+  const g = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json', griisDown: true });
+  g.pilot([[BUSH, 'sam@example.com']]); g.ctx.previewSignalsNow();
+  ok(!g.queue().some(r => /season/.test(r[g.col('signals')])), 'native status unavailable → no season');
+});
+
+test('season: same species are not repeated the following week', () => {
+  const e = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json' });
+  e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
+  e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
+  e.setNow('2026-11-09T06:00:00+11:00'); e.ctx.runSignals();
+  const second = e.queue()[1];
+  ok(!second || !/Verreaux/.test(second[e.col('body')]), 'Verreaux not repeated');
 });
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
