@@ -774,7 +774,11 @@ function _sigTheme(o) {
 
 function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   var Y = now.getUTCFullYear(), month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
-  var mentioned = _sigKeysFor(log, g.garden_id, 'season', 120);
+  // Species featured to this steward before: excluded if featured in the
+  // last 30 days, otherwise down-ranked by how often they've been featured.
+  var recentlyFeatured = _sigKeysFor(log, g.garden_id, 'season', 30);
+  var featuredCount = {};
+  _sigKeysFor(log, g.garden_id, 'season', 3650).forEach(function (k) { featuredCount[k] = (featuredCount[k] || 0) + 1; });
   var own = g.species.map(_sigSci).map(function (n) { return n.toLowerCase(); });
   var ownFauna = g.fauna;
   var rejected = {}, themes = {};
@@ -784,7 +788,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       var sci = _sigSci(o.scientificName), common = String(o.vernacularName || '').trim();
       if (own.indexOf(sci.toLowerCase()) > -1) why = 'already in garden record';
       else if (common && ownFauna.some(function (f) { return f && (f === common.toLowerCase() || common.toLowerCase().indexOf(f) > -1); })) why = 'already in garden record';
-      else if (mentioned.indexOf(sci.toLowerCase()) > -1) why = 'mentioned recently';
+      else if (recentlyFeatured.indexOf(sci.toLowerCase()) > -1) why = 'featured in the last 30 days';
     }
     if (why) { rejected[why] = (rejected[why] || 0) + 1; return; }
     var th = _sigTheme(o);
@@ -797,9 +801,10 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       url: 'https://biocache.ala.org.au/occurrences/' + o.uuid });
   });
 
-  // Interest to this steward: connection to the garden first, then a
-  // fresh record this season, recurrence across years, and breadth.
-  // Never the smallest record count.
+  // Interest to this steward: a supported connection to the garden's
+  // recorded habitat or an unresolved observation first, then a fresh
+  // record this season, recurrence across years, and breadth. Never the
+  // smallest record count.
   var scored = Object.keys(themes).map(function (k) {
     var T = themes[k], list = Object.keys(T.species).map(function (n) { return T.species[n]; });
     var years = {}, fresh = false;
@@ -807,13 +812,25 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
     var recent = Object.keys(years).some(function (y) { return Y - Number(y) <= 3; });
     var link = _sigThemeLink(g, k);
     var score = link.score + (fresh ? 3 : recent ? 1 : 0) + (Object.keys(years).length >= 2 ? 1 : 0) + Math.min(list.length, 3) * 0.5;
-    list.sort(function (a, b) { return b.records[0].date.localeCompare(a.records[0].date); });
+    // Within a theme: species featured to this steward before go last;
+    // then species recorded in fewer nearby years come first (frequency is
+    // used only to order, never described as rarity or familiarity);
+    // then the most recent record.
+    list.forEach(function (sp) {
+      var ys = {}; sp.records.forEach(function (r) { ys[r.date.slice(0, 4)] = true; });
+      sp.yearsRecorded = Object.keys(ys).sort();
+      sp.featured = featuredCount[sp.sci.toLowerCase()] || 0;
+    });
+    list.sort(function (a, b) {
+      return (a.featured - b.featured) || (a.yearsRecorded.length - b.yearsRecorded.length) ||
+             b.records[0].date.localeCompare(a.records[0].date);
+    });
     return { theme: k, score: score, fresh: fresh, link: link, list: list, years: Object.keys(years).sort() };
   }).sort(function (a, b) { return (b.score - a.score) || (b.link.score - a.link.score); });   // ties: closer link to this garden wins
 
   var best = scored[0];
   if (!best || best.score < SIG_SEASON_MIN_SCORE) return null;
-  var pick = best.list.slice(0, 3);
+  var pick = best.list.slice(0, 2), supporting = best.list.slice(2);
   var fmt = function (sp) {
     var dates = sp.records.map(function (r) { return r.date; }).filter(function (d, i, a) { return a.indexOf(d) === i; }).slice(0, 2);
     return '– ' + (sp.common ? sp.common + ' (' + sp.sci + ')' : sp.sci) + ': ' +
@@ -821,16 +838,19 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       '  ' + sp.records[0].url;
   };
   var lines = [];
-  lines.push((best.fresh
-    ? 'Recorded in the surrounding area around this time of year, including this ' + seasonName + ':'
-    : 'Records returned for the surrounding area from these weeks in past years include:') + '\n' + pick.map(fmt).join('\n'));
+  var leadYears = {};
+  pick.forEach(function (sp) { sp.yearsRecorded.forEach(function (y) { leadYears[y] = true; }); });
+  var label = { frogs: 'These frogs were', birds: 'These birds were', orchids: 'These orchids were', wildflowers: 'These plants were',
+    reptiles: 'These reptiles were', mammals: 'These mammals were' }[best.theme] || 'These were';
+  lines.push(label + ' recorded in the surrounding area in ' + seasonName + ' ' + _sigJoin(Object.keys(leadYears).sort()) + ':\n' + pick.map(fmt).join('\n'));
   if (best.link.text) lines.push(best.link.text);
+  var which = pick.length === 2 ? 'either' : 'any';
   var ask = {
-    frogs: 'What\'s calling at ' + g.garden_name + ' this ' + seasonName + '? We\'d be interested in what you\'re hearing, and whether these frogs are already familiar to you locally.',
-    birds: 'What\'s been around ' + g.garden_name + ' this ' + seasonName + '? We\'d be interested in what you\'re seeing and hearing, and whether these birds are already familiar to you locally.',
-    orchids: 'Has anything unexpected emerged at ' + g.garden_name + ' this ' + seasonName + '? We\'d be interested in what you\'re seeing, and whether these orchids are already familiar to you locally.',
-    wildflowers: 'Has anything unexpected emerged at ' + g.garden_name + ' this ' + seasonName + '? We\'d be interested in what you\'re seeing, and whether these plants are already familiar to you locally.'
-  }[best.theme] || 'Have any of these turned up at ' + g.garden_name + ' this ' + seasonName + '? We\'d be interested in what you\'re seeing, and whether they\'re already familiar to you locally.';
+    frogs: 'What\'s calling at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar voices?',
+    birds: 'What\'s been around ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar?',
+    orchids: 'What\'s come up at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar to you locally?',
+    wildflowers: 'What\'s come up at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar to you locally?'
+  }[best.theme] || 'What have you been seeing at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar?';
   lines.push(ask);
   lines.push('A photo' + (/frogs|birds/.test(best.theme) ? ', a sound recording' : '') + ' or a few lines would help us build that seasonal picture with you.');
   var subjectTheme = { frogs: 'frogs recorded nearby in these weeks', orchids: 'orchids recorded nearby in these weeks',
@@ -844,29 +864,28 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       filters: 'coordinate uncertainty <= ' + SIG_SEASON_UNC_M + 'm; species rank; exact dates; iNaturalist research grade; not on GRIIS; not already in garden record',
       excluded: rejected, chosen_theme: best.theme, link_to_garden: best.link.why,
       theme_scores: scored.map(function (t) { return { theme: t.theme, score: t.score, species: t.list.length, years: t.years }; }),
-      species: pick.map(function (sp) { return { scientific: sp.sci, common: sp.common, records: sp.records.slice(0, 5) }; }),
+      species: pick.map(function (sp) { return { scientific: sp.sci, common: sp.common, years_recorded_nearby: sp.yearsRecorded, previously_featured: sp.featured, records: sp.records.slice(0, 5) }; }),
+      supporting_species: supporting.map(function (sp) { return { scientific: sp.sci, common: sp.common, years_recorded_nearby: sp.yearsRecorded, previously_featured: sp.featured, records: sp.records.slice(0, 5) }; }),
+      ordering: 'species featured before last; then fewer nearby years first (ordering only, not a rarity or familiarity claim); then most recent',
       wording_rules: 'nearby records are context, not garden observations; no rarity claims from record counts' },
     paragraphs: lines,
     text: lines.join('\n\n') };
 }
 
-/* How a theme connects to this particular garden's record. */
+/* How a theme connects to this particular garden's record. An unresolved
+   observation (unverified record in the same group) is the strongest
+   link; recorded habitat next; a verified record in the group last. */
 function _sigThemeLink(g, theme) {
-  var frogs = g.faunaRecs.filter(function (f) { return /frog|froglet/i.test(f.name); });
-  if (theme === 'frogs') {
-    if (frogs.length) {
-      var f = frogs[0];
-      return { score: 3, why: 'garden record lists ' + f.name + (f.verified ? '' : ' (unverified)'),
-        text: 'Your garden\'s record already lists ' + f.name + (f.verified ? '' : ', though it hasn\'t been confirmed yet') + '.' };
-    }
-    if (g.water) return { score: 2, why: 'garden has water habitat', text: '' };
-    return { score: 0, why: 'none', text: '' };
-  }
-  if (theme === 'orchids' || theme === 'wildflowers')
-    return g.species.length >= 15 ? { score: 2, why: 'established indigenous planting (' + g.species.length + ' species recorded)', text: '' } : { score: 1, why: 'planted garden', text: '' };
-  var cls = { birds: /wren|bill|eater|bird|robin|thornbill|pardalote|parrot|cockatoo|owl|magpie|kookaburra/i, reptiles: /skink|lizard|snake|dragon/i, mammals: /possum|glider|bat|echidna|wallaby|phascogale|antechinus/i }[theme];
-  if (cls && g.faunaRecs.some(function (f) { return cls.test(f.name); }))
-    return { score: 1, why: 'garden record has ' + theme, text: '' };
+  var pat = { frogs: /frog|froglet|toadlet/i, birds: /wren|bill|eater|bird|robin|thornbill|pardalote|parrot|cockatoo|owl|magpie|kookaburra|rosella|whistler/i,
+    reptiles: /skink|lizard|snake|dragon|goanna/i, mammals: /possum|glider|bat|echidna|wallaby|kangaroo|phascogale|antechinus|bandicoot/i }[theme];
+  var recs = pat ? g.faunaRecs.filter(function (f) { return pat.test(f.name); }) : [];
+  var open = recs.filter(function (f) { return !f.verified; })[0];
+  if (open) return { score: 3, why: 'unresolved observation: ' + open.name + ' (unverified)',
+    text: 'Your garden\'s record already lists ' + open.name + ', though it hasn\'t been confirmed yet.' };
+  if (theme === 'frogs' && g.water) return { score: 2, why: 'recorded water habitat', text: '' };
+  if (recs.length) return { score: 1, why: 'garden record has verified ' + theme, text: '' };
+  if ((theme === 'orchids' || theme === 'wildflowers') && g.species.length >= 15)
+    return { score: 1, why: 'established indigenous planting (' + g.species.length + ' species recorded)', text: '' };
   return { score: 0, why: 'none', text: '' };
 }
 

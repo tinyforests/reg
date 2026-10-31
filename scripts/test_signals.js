@@ -508,7 +508,9 @@ test('Bush Garden (real Atlas records): one standalone frogs note tied to the ga
   ok(/Verreaux's Frog/.test(body) && /Spotted Marsh Frog, though it hasn't been confirmed yet/.test(body), 'frogs + garden link');
   ok(/surrounding area/.test(body) && /not from your garden/.test(body), 'nearby vs garden distinguished');
   ok(!/walking distance|rare|only record|likely to appear|nest box/i.test(body), 'no overstated claims');
-  ok(/What's calling at Bush Garden this spring\?/.test(body), 'asks, does not tell');
+  ok(/What's calling at Bush Garden this spring, and are either of these familiar voices\?/.test(body), 'asks, does not tell');
+  ok(/These frogs were recorded in the surrounding area in spring 2021:/.test(body), 'historical context explicit: ' + body.split('\n')[2]);
+  ok(/Verreaux's Frog/.test(body) && /Eastern Banjo Frog/.test(body) && !/Common Eastern Froglet/.test(body), 'leads with Verreaux + Banjo, froglet held back');
   ok(/– Verreaux's Frog \(Litoria verreauxii\): 20 Nov 2021  https:\/\/biocache\.ala\.org\.au\/occurrences\/4bb24e91/.test(body), 'dated line with record link');
   ok(/View record ↗/.test(r[e.col('html')]), 'record links in html');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
@@ -516,6 +518,7 @@ test('Bush Garden (real Atlas records): one standalone frogs note tied to the ga
   ok(ev.excluded.location >= 1 && ev.excluded.date >= 1 && ev.excluded.identification >= 1, 'quality filters applied');
   ok(ev.theme_scores.length >= 2 && ev.chosen_theme === 'frogs', 'themes scored: ' + JSON.stringify(ev.theme_scores));
   ok(ev.species.every(s => s.records.every(x => x.url && x.id && x.date && x.uncertainty_m <= 1000)), 'evidence keeps id/date/url/uncertainty');
+  ok(ev.supporting_species.some(s => s.common === 'Common Eastern Froglet' && s.years_recorded_nearby.join() === '2021,2022'), 'froglet kept as supporting evidence');
 });
 
 test('season: obscured locations, needs-ID and introduced records never qualify', () => {
@@ -543,6 +546,29 @@ test('season: same species are not repeated the following week', () => {
   e.setNow('2026-11-09T06:00:00+11:00'); e.ctx.runSignals();
   const second = e.queue()[1];
   ok(!second || !/Verreaux/.test(second[e.col('body')]), 'Verreaux not repeated');
+});
+
+test('season: species featured before are down-ranked, not dropped forever', () => {
+  const e = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json' });
+  e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
+  e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
+  e.setNow('2026-12-07T06:00:00+11:00');                   // 5 weeks later, same records still in window for the test
+  const log = e.ctx._sigLogIndex(e.ss), g = { garden_id: BUSH, garden_name: 'Bush Garden', species: [], fauna: ['spotted marsh frog'],
+    faunaRecs: [{ name: 'Spotted Marsh Frog', verified: false }], water: true };
+  const fx = JSON.parse(require('fs').readFileSync(require('path').join(REPO, 'scripts/fixtures/ala-season-bushgarden.json'), 'utf8'));
+  const intro = {}; fx.occurrences.forEach(o => { intro[e.ctx._sigSci(o.scientificName)] = GRIIS.indexOf(e.ctx._sigSci(o.scientificName)) > -1; });
+  const sig = e.ctx._sigSeasonSignal(g, { query: 'q', total: 1, occurrences: fx.occurrences, introduced: intro }, log, new Date('2026-10-31T07:30:00Z'), 'now');
+  ok(sig && /Common Eastern Froglet/.test(sig.text), 'previously featured frogs move down; froglet now leads');
+  ok(sig && sig.evidence.species.concat(sig.evidence.supporting_species).some(s => s.previously_featured > 0), 'feature history recorded');
+});
+
+test('season: unresolved observation outranks recorded habitat', () => {
+  const e = env();
+  const base = { species: [], fauna: [], water: true };
+  const a = e.ctx._sigThemeLink(Object.assign({}, base, { faunaRecs: [{ name: 'Spotted Marsh Frog', verified: false }] }), 'frogs');
+  const b = e.ctx._sigThemeLink(Object.assign({}, base, { faunaRecs: [] }), 'frogs');
+  const c = e.ctx._sigThemeLink(Object.assign({}, base, { water: false, faunaRecs: [{ name: 'Spotted Marsh Frog', verified: true }] }), 'frogs');
+  ok(a.score > b.score && b.score > c.score, [a.score, b.score, c.score].join(' > '));
 });
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
