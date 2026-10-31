@@ -436,6 +436,14 @@ function _sigRunLocked(opts) {
       }
     }
     var chosen = _sigChoose(items);
+    if (chosen.length && chosen[0].type === 'season') {
+      var cond = _sigSeasonSoFar(g, now);
+      if (cond) {
+        var at = chosen[0].paragraphs.length - (chosen[0].also && chosen[0].also.length ? 1 : 0);
+        chosen[0].paragraphs.splice(at, 0, cond.text);
+        chosen[0].evidence.conditions = cond.evidence;
+      }
+    }
     if (!chosen.length) return;
 
     var id = Utilities.getUuid();
@@ -890,6 +898,24 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   if (lead.plant) lines.push(lead.plant.text);
   if (lead.link.text) lines.push(lead.link.text);
   lines.push('The record: ' + rec.url);
+
+  // Also recorded around the garden lately: up to four other reliable,
+  // recent, native records within 5km, one per theme for variety.
+  var themeOrder = ['orchids', 'mammals', 'birds', 'wildflowers', 'frogs', 'reptiles', 'moths and butterflies', 'insects'];
+  var others = considered.filter(function (c) { return c.sp.sci !== sp.sci; });
+  others.sort(function (a, b) { return (themeOrder.indexOf(a.sp.theme) - themeOrder.indexOf(b.sp.theme)) || b.rec.observed.localeCompare(a.rec.observed); });
+  var seenTheme = {}, also = [];
+  others.forEach(function (c) {
+    if (also.length >= 4 || seenTheme[c.sp.theme]) return;
+    seenTheme[c.sp.theme] = true; also.push(c);
+  });
+  var alsoLines = also.map(function (c) {
+    var km2 = Math.max(0.5, Math.round(c.rec.distance_m / 500) / 2);
+    return '– ' + (c.sp.common ? c.sp.common + ' (' + c.sp.sci + ')' : c.sp.sci) + ', ' +
+      (c.rec.distance_m <= SIG_LOCAL_M ? 'nearby' : 'about ' + km2 + 'km away') + ', ' +
+      _sigDate(c.rec.observed, true).replace(/^\w+ /, '') + '  ' + c.rec.url;
+  });
+  if (alsoLines.length) lines.push('Also recorded around ' + g.garden_name + ' in the past few weeks:\n' + alsoLines.join('\n'));
   var subject = lead.local ? article + name + ' recorded nearby' : article + name + ' about ' + km + 'km away';
 
   return { type: 'season', key: sp.sci.toLowerCase(), subject: subject,
@@ -901,10 +927,59 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       excluded: rejected,
       lead: { scientific: sp.sci, common: sp.common, tier: lead.local ? 'local' : 'landscape', reason: lead.reason,
               why_now: lead.whyNow, why_now_source: (_sigWhyNowEntry(sp, month) || {}).source || null, plant_link: lead.plant, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
+      also_recorded: also.map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, theme: c.sp.theme, record: c.rec }; }),
       other_candidates: eligible.slice(1, 6).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, reason: c.reason, observed: c.rec.observed, distance_m: c.rec.distance_m, url: c.rec.url }; }),
       found_but_no_reason: considered.filter(function (c) { return !c.reason; }).slice(0, 8).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, distance_m: c.rec.distance_m, observed: c.rec.observed }; }),
       wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; share, never ask the steward to do anything' },
+    also: also.map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, theme: c.sp.theme, record: c.rec }; }),
     paragraphs: lines, text: lines.join('\n\n') };
+}
+
+/* Season so far at the garden, from modelled daily weather (Open-Meteo
+   archive, ERA5-based) at the garden's display coordinates: rainfall and
+   warm days since the season began, against the same dates over the
+   previous 30 years. Skipped if any value in the current season is
+   missing. */
+function _sigSeasonSoFar(g, now) {
+  var month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
+  var startMonth = { spring: 9, summer: 12, autumn: 3, winter: 6 }[seasonName];
+  var Y = Number(Utilities.formatDate(now, SIG_TZ, 'yyyy'));
+  var sy = startMonth === 12 && month !== 12 ? Y - 1 : Y;
+  var end = Utilities.formatDate(new Date(now.getTime() - 2 * 864e5), SIG_TZ, 'yyyy-MM-dd');   // archive trails by a few days
+  var url = 'https://archive-api.open-meteo.com/v1/archive?latitude=' + g.lat.toFixed(3) + '&longitude=' + g.lng.toFixed(3) +
+    '&start_date=' + (sy - 30) + '-' + ('0' + startMonth).slice(-2) + '-01&end_date=' + end +
+    '&daily=precipitation_sum,temperature_2m_max&timezone=Australia%2FMelbourne';
+  var j = _sigJson(url);
+  if (!j || !j.daily || !j.daily.time) return null;
+  // Same number of days from the season's start in every year.
+  var day = function (str) { var p = str.split('-').map(Number); return Date.UTC(p[0], p[1] - 1, p[2]) / 864e5; };
+  var span = day(end) - Date.UTC(sy, startMonth - 1, 1) / 864e5;
+  var per = {};
+  j.daily.time.forEach(function (t, i) {
+    var d = day(t);
+    for (var b = sy - 30; b <= sy; b++) {
+      var s0 = Date.UTC(b, startMonth - 1, 1) / 864e5;
+      if (d < s0 || d > s0 + span) continue;
+      var o = per[b] || (per[b] = { rain: 0, warm: 0, n: 0, bad: 0 });
+      var r = j.daily.precipitation_sum[i], tx = j.daily.temperature_2m_max[i];
+      if (typeof r !== 'number' || typeof tx !== 'number') { o.bad++; continue; }
+      o.rain += r; o.n++; if (tx >= 25) o.warm++;
+    }
+  });
+  var cur = per[sy];
+  if (!cur || cur.bad || cur.n < 7) return null;
+  var past = Object.keys(per).map(Number).filter(function (b) { return b < sy && !per[b].bad && per[b].n === cur.n; });
+  if (past.length < 20) return null;
+  var med = function (arr) { arr = arr.slice().sort(function (a, b) { return a - b; }); return arr[Math.floor(arr.length / 2)]; };
+  var rainMed = med(past.map(function (b) { return per[b].rain; })), warmMed = med(past.map(function (b) { return per[b].warm; }));
+  var startLabel = '1 ' + SIG_MONTHS[startMonth - 1];
+  var text = seasonName.charAt(0).toUpperCase() + seasonName.slice(1) + ' so far around ' + g.garden_name + ': ' +
+    Math.round(cur.rain) + 'mm of rain since ' + startLabel + ', against a typical ' + Math.round(rainMed) +
+    'mm for the same weeks over the past ' + past.length + ' years, and ' + cur.warm + ' day' + (cur.warm === 1 ? '' : 's') +
+    ' over 25°C against a usual ' + warmMed + '.';
+  return { text: text, evidence: { source: 'Open-Meteo historical weather API (modelled reanalysis, not measured at the garden)',
+    url: url, period: startLabel + ' to ' + end, rain_mm: Math.round(cur.rain), rain_median_mm: Math.round(rainMed),
+    warm_days: cur.warm, warm_days_median: warmMed, comparison_years: past.length } };
 }
 
 /* How a theme connects to this particular garden's record. An unresolved

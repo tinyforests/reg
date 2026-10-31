@@ -34,7 +34,8 @@ function daily(now, kind) {
   return o;
 }
 const GRIIS = ['Allium triquetrum', 'Cirsium vulgare', 'Briza minor', 'Centaurium erythraea', 'Linaria pelisseriana',
-  'Moenchia erecta', 'Oxalis articulata', 'Veronica arvensis', 'Acridotheres tristis', 'Apis mellifera'];
+  'Moenchia erecta', 'Oxalis articulata', 'Veronica arvensis', 'Acridotheres tristis', 'Apis mellifera',
+  'Medicago arabica', 'Limax maximus', 'Pholcus phalangioides', 'Acacia baileyana'];
 const ALA = { occurrences: [
   { uuid: 'u1', eventDate: Date.parse('2026-10-20'), scientificName: 'Malurus cyaneus', vernacularName: 'Superb Fairywren', classs: 'Aves', dataResourceName: 'iNaturalist Australia' },
   { uuid: 'u2', eventDate: Date.parse('2026-10-22'), scientificName: 'Malurus cyaneus', vernacularName: 'Superb Fairywren', classs: 'Aves' },
@@ -79,10 +80,20 @@ function env(opts) {
       const p = path.join(REPO, u.slice('https://ecologicalregistry.org/'.length));
       return fs.existsSync(p) ? resp(200, fs.readFileSync(p, 'utf8')) : resp(404, '');
     }
-    if (u.includes('open-meteo')) {
+    if (u.includes('open-meteo') && !u.includes('archive-api')) {
       const lat = +u.match(/latitude=([-\d.]+)/)[1];
       const g = LOCS.find(l => Math.abs(l.display_lat - lat) < 0.001);
       return resp(200, JSON.stringify({ daily: daily(now, weatherKind(g && g.garden_id)) }));
+    }
+    if (u.includes('archive-api.open-meteo.com')) {
+      if (opts.archiveDown) return resp(503, '');
+      const s0 = u.match(/start_date=([\d-]+)/)[1], e0 = u.match(/end_date=([\d-]+)/)[1];
+      const o = { time: [], precipitation_sum: [], temperature_2m_max: [] };
+      for (let d = new Date(s0 + 'T00:00:00Z'); d <= new Date(e0 + 'T00:00:00Z'); d = new Date(d.getTime() + 864e5)) {
+        const ds = d.toISOString().slice(0, 10), cur = ds >= '2026-09-01', doy = Math.floor(d.getTime() / 864e5);
+        o.time.push(ds); o.precipitation_sum.push(cur ? 2.7 : 2.5); o.temperature_2m_max.push((cur ? doy % 9 : doy % 15) === 0 ? 27 : 18);
+      }
+      return resp(200, JSON.stringify({ daily: o }));
     }
     if (u.includes('lists-ws.ala.org.au')) {
       if (opts.griisDown) return resp(503, '');
@@ -108,6 +119,7 @@ function env(opts) {
       .formatToParts(d).map(x => [x.type, x.value]));
     if (f === 'u') return String(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].indexOf(p.weekday) + 1);
     if (f === 'M') return p.month;
+    if (f === 'yyyy') return p.year;
     return `${p.year}-${String(p.month).padStart(2, '0')}-${String(p.day).padStart(2, '0')}`;
   };
   const ctx = {
@@ -600,6 +612,33 @@ test('season: unresolved observation outranks recorded habitat', () => {
   const b = e.ctx._sigThemeLink(Object.assign({}, base, { faunaRecs: [] }), 'frogs');
   const c = e.ctx._sigThemeLink(Object.assign({}, base, { water: false, faunaRecs: [{ name: 'Spotted Marsh Frog', verified: true }] }), 'frogs');
   ok(a.score > b.score && b.score > c.score, [a.score, b.score, c.score].join(' > '));
+});
+
+test('season note adds what else was recorded around the garden, one per theme, with distances and links', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
+  const body = e.queue()[0][e.col('body')];
+  const sect = body.split('Also recorded around Bush Garden in the past few weeks:\n')[1] || '';
+  const items = sect.split('\n').filter(l => l.startsWith('– '));
+  ok(items.length >= 3 && items.length <= 4, 'three or four items, got ' + items.length + '\n' + sect);
+  ok(items.every(l => /about [\d.]+km away|nearby/.test(l) && /https:\/\/biocache\.ala\.org\.au\/occurrences\//.test(l)), 'distance + link on each');
+  ok(items.some(l => /orchid/i.test(l)) && items.some(l => /Tachyglossus/.test(l)), 'orchid and echidna included');
+  ok(!items.some(l => /Bogong/.test(l)), 'lead species not repeated');
+  ok(!/Spotted Medic|Leopard Slug|Cellar Spider/.test(sect), 'introduced species never listed');
+  const ev = JSON.parse(e.queue()[0][e.col('evidence')]).signals[0].evidence;
+  ok(ev.also_recorded.length === items.length, 'also-recorded kept in evidence');
+});
+
+test('season note adds the season so far at the garden from 30 years of modelled weather', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
+  const body = e.queue()[0][e.col('body')];
+  const m = body.match(/Spring so far around Bush Garden: (\d+)mm of rain since 1 September, against a typical (\d+)mm for the same weeks over the past (\d+) years, and (\d+) days over 25°C against a usual (\d+)\./);
+  ok(m, 'conditions sentence present:\n' + body);
+  ok(m && +m[3] === 30 && +m[1] > +m[2], 'compares against 30 years: ' + (m && m.slice(1).join(',')));
+  ok(!/\?/.test(body.split('\n--')[0]), 'still no questions');
+  const ev = JSON.parse(e.queue()[0][e.col('evidence')]).signals[0].evidence;
+  ok(ev.conditions && /modelled/.test(ev.conditions.source), 'conditions evidence says modelled');
+  const d = bush({ archiveDown: true }); d.ctx.previewSignalsNow();
+  ok(d.queue().length === 1 && !/so far around/.test(d.queue()[0][d.col('body')]), 'archive down: note still drafts, without the line');
 });
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
