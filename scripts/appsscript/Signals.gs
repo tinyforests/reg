@@ -19,11 +19,11 @@
      alerts (lead first): heat >=35C, frost <=1C (both 1-2 days ahead),
                           dry fortnight, soaking rain  -- Open-Meteo
      observations (Mondays, priority order):
-                          season around you -- records from the same weeks
-                            of the past 15 years within 1.5km, filtered for
-                            location accuracy, exact dates, research-grade
-                            IDs and native status (GRIIS); the theme most
-                            connected to this garden leads; stands alone
+                          season around you -- one reliable record observed
+                            in the last 30 days: within 1.5km with a reason
+                            to care, or within 5km only with a seasonal
+                            reason or strong garden link (distance stated);
+                            often nothing qualifies, and nothing is drafted
                           nearby fauna (Atlas of Living Australia, 30 days)
                           flowering from the garden's own species list
 
@@ -656,44 +656,59 @@ function _sigNearbySignal(g, res, log, fetchedAt) {
 
 
 /* ---------------------------------------------------------------
-   Season around you (Atlas of Living Australia, past 15 years)
+   Season around you (Atlas of Living Australia, last 30 days)
 
-   Records near the garden from the same weeks of the year, filtered for
-   location accuracy (server side: coordinate uncertainty <= 1km, species
-   rank), exact dates, research-grade iNaturalist IDs, and native status
-   (GRIIS introduced-species register). Grouped into themes; the theme
-   with the clearest connection to THIS garden leads. Historical records
-   are presented as dated context, never as rarity or as something in
-   the garden. No qualifying theme = no draft.
+   Writes only when a reliable, recent record gives this steward a good
+   reason to care. Finding records and writing nothing is normal.
+
+     Freshness   lead record observed within the last 30 days, judged from
+                 the record's own date (observation and retrieval dates are
+                 both kept in evidence).
+     Reliability coordinate uncertainty <= 1km (server side), species rank,
+                 exact date, research-grade iNaturalist IDs, not on the
+                 GRIIS introduced-species list (unknown status = excluded).
+     Distance    <= 1.5km: local activity, still needs a connection to the
+                 garden or a seasonal reason.
+                 1.5-5km: landscape context, only with a clear seasonal
+                 reason or a habitat/unresolved-observation link, and the
+                 approximate distance is stated.
+                 > 5km: excluded in the pilot.
+   Historical records are never the reason to write.
    --------------------------------------------------------------- */
 
-var SIG_SEASON_YEARS = 15, SIG_SEASON_DAYS = 21, SIG_SEASON_UNC_M = 1000, SIG_SEASON_MIN_SCORE = 3;
+var SIG_SEASON_DAYS = 30, SIG_SEASON_UNC_M = 1000, SIG_LOCAL_M = 1500, SIG_LANDSCAPE_M = 5000;
 var SIG_GRIIS_LIST = 'dr9884';   // GRIIS: Global Register of Introduced and Invasive Species - Australia
 
+/* Curated "why now" notes. Short, conservative, reviewed by a person
+   before being added. Keyed by binomial, or by family for groups. */
+var SIG_WHY_NOW = {
+  'Agrotis infusa': { months: [9, 10, 11, 12],
+    text: 'Bogong Moths migrate in spring from the inland plains to the Australian Alps, and many pass over Melbourne on the way, so this is the time of year to notice them.' },
+  'family:Orchidaceae': { months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    text: 'Many ground orchids flower for only a few weeks, so a fresh record marks the moment they are up.' }
+};
+
 function _sigFetchSeason(gardens, now) {
-  var Y = Number(Utilities.formatDate(now, SIG_TZ, 'yyyy'));
-  var months = [];
-  [-SIG_SEASON_DAYS, 0, SIG_SEASON_DAYS].forEach(function (d) {
-    var m = Number(Utilities.formatDate(new Date(now.getTime() + d * 864e5), SIG_TZ, 'M'));
-    if (months.indexOf(m) === -1) months.push(m);
-  });
-  var fq = ['month:(' + months.join(' OR ') + ')', 'year:[' + (Y - SIG_SEASON_YEARS) + ' TO ' + Y + ']',
+  var from = Utilities.formatDate(new Date(now.getTime() - SIG_SEASON_DAYS * 864e5), 'UTC', 'yyyy-MM-dd');
+  var fq = ['occurrence_date:[' + from + 'T00:00:00Z TO *]',
             'coordinate_uncertainty:[0.1 TO ' + SIG_SEASON_UNC_M + '] AND rank:(species OR subspecies OR variety)'];
+  var base = function (g) {
+    return 'https://biocache-ws.ala.org.au/ws/occurrences/search?q=*:*' +
+      '&lat=' + g.lat.toFixed(4) + '&lon=' + g.lng.toFixed(4) + '&radius=' + (SIG_LANDSCAPE_M / 1000) +
+      fq.map(function (f) { return '&fq=' + encodeURIComponent(f); }).join('') + '&pageSize=100&sort=occurrence_date&dir=desc';
+  };
   var out = {};
-  var reqs = gardens.map(function (g) {
-    return { muteHttpExceptions: true, url: 'https://biocache-ws.ala.org.au/ws/occurrences/search?q=*:*' +
-      '&lat=' + g.lat.toFixed(4) + '&lon=' + g.lng.toFixed(4) + '&radius=' + SIG_ALA_RADIUS_KM +
-      fq.map(function (f) { return '&fq=' + encodeURIComponent(f); }).join('') +
-      '&pageSize=100&sort=occurrence_date&dir=desc' };
+  gardens.forEach(function (g) {
+    var occ = [], total = 0, ok = false;
+    for (var page = 0; page < 3; page++) {          // ALA returns 503 above pageSize=100, so page instead
+      var r = UrlFetchApp.fetch(base(g) + '&startIndex=' + page * 100, { muteHttpExceptions: true });
+      if (r.getResponseCode() !== 200) break;
+      try { var j = JSON.parse(r.getContentText()); } catch (e) { break; }
+      ok = true; total = j.totalRecords || 0; occ = occ.concat(j.occurrences || []);
+      if (occ.length >= total || !(j.occurrences || []).length) break;
+    }
+    if (ok) out[g.garden_id] = { query: base(g), total: total, occurrences: occ };
   });
-  UrlFetchApp.fetchAll(reqs).forEach(function (r, i) {
-    try {
-      if (r.getResponseCode() !== 200) return;
-      var j = JSON.parse(r.getContentText());
-      out[gardens[i].garden_id] = { query: reqs[i].url, total: j.totalRecords, occurrences: j.occurrences || [] };
-    } catch (e) {}
-  });
-  // Native check for every candidate name across all gardens, once.
   var names = {};
   Object.keys(out).forEach(function (k) { out[k].occurrences.forEach(function (o) { names[_sigSci(o.scientificName)] = true; }); });
   var introduced = _sigIntroduced(Object.keys(names));
@@ -732,27 +747,28 @@ function _sigSci(n) {
   return String(n || '').replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim().split(' ').slice(0, 2).join(' ');
 }
 
-function _sigDoy(t) {
-  var d = new Date(t), start = Date.UTC(d.getUTCFullYear(), 0, 1);
-  return Math.floor((d.getTime() - start) / 864e5);
-}
-
 function _sigSeasonName(month) {
   return month >= 9 && month <= 11 ? 'spring' : (month === 12 || month <= 2) ? 'summer' : month <= 5 ? 'autumn' : 'winter';
 }
 
-/* Why a record is not usable (or '' if it is). */
+function _sigDistM(lat1, lng1, lat2, lng2) {
+  var r = function (x) { return x * Math.PI / 180; };
+  var h = Math.pow(Math.sin(r(lat2 - lat1) / 2), 2) + Math.cos(r(lat1)) * Math.cos(r(lat2)) * Math.pow(Math.sin(r(lng2 - lng1) / 2), 2);
+  return Math.round(2 * 6371000 * Math.asin(Math.sqrt(h)));
+}
+
+/* Why a record can't be used (or '' if it can). */
 function _sigSeasonReject(o, now, introduced) {
   if (!/^(species|subspecies|variety)$/.test(String(o.taxonRank || ''))) return 'rank';
   var unc = Number(o.coordinateUncertaintyInMeters);
   if (!(unc > 0 && unc <= SIG_SEASON_UNC_M)) return 'location';
   var asserts = o.assertions || [];
   if (asserts.some(function (a) { return /COORDINATE_UNCERTAINTY_METERS_INVALID|PRESUMED_SWAPPED|ZERO_COORDINATE/.test(a); })) return 'location';
-  if (o.spatiallyValid === false) return 'location';
+  if (o.spatiallyValid === false || !isFinite(Number(o.decimalLatitude))) return 'location';
   if (typeof o.eventDate !== 'number' || asserts.some(function (a) { return /FIRST_OF_|INVALID_DATE|RECORDED_DATE_/.test(a); })) return 'date';
+  var age = (now.getTime() - o.eventDate) / 864e5;
+  if (age > SIG_SEASON_DAYS || age < -1) return 'older than ' + SIG_SEASON_DAYS + ' days';
   if (/inaturalist/i.test(String(o.dataResourceName || '')) && o.identificationVerificationStatus !== 'research') return 'identification';
-  var dd = Math.abs(_sigDoy(o.eventDate) - _sigDoy(now.getTime()));
-  if (Math.min(dd, 365 - dd) > SIG_SEASON_DAYS) return 'season window';
   var nat = introduced[_sigSci(o.scientificName)];
   if (nat === true) return 'introduced';
   if (nat !== false) return 'native status unknown';
@@ -772,104 +788,84 @@ function _sigTheme(o) {
   return '';
 }
 
+function _sigWhyNow(sp, month) {
+  var w = SIG_WHY_NOW[sp.sci] || SIG_WHY_NOW['family:' + sp.family];
+  return w && w.months.indexOf(month) > -1 ? w.text : '';
+}
+
 function _sigSeasonSignal(g, res, log, now, fetchedAt) {
-  var Y = now.getUTCFullYear(), month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
-  // Species featured to this steward before: excluded if featured in the
-  // last 30 days, otherwise down-ranked by how often they've been featured.
+  var month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
   var recentlyFeatured = _sigKeysFor(log, g.garden_id, 'season', 30);
   var featuredCount = {};
   _sigKeysFor(log, g.garden_id, 'season', 3650).forEach(function (k) { featuredCount[k] = (featuredCount[k] || 0) + 1; });
   var own = g.species.map(_sigSci).map(function (n) { return n.toLowerCase(); });
-  var ownFauna = g.fauna;
-  var rejected = {}, themes = {};
+  var rejected = {}, bySp = {};
+  var bump = function (why) { rejected[why] = (rejected[why] || 0) + 1; };
+
   res.occurrences.forEach(function (o) {
     var why = _sigSeasonReject(o, now, res.introduced || {});
-    if (!why) {
-      var sci = _sigSci(o.scientificName), common = String(o.vernacularName || '').trim();
-      if (own.indexOf(sci.toLowerCase()) > -1) why = 'already in garden record';
-      else if (common && ownFauna.some(function (f) { return f && (f === common.toLowerCase() || common.toLowerCase().indexOf(f) > -1); })) why = 'already in garden record';
-      else if (recentlyFeatured.indexOf(sci.toLowerCase()) > -1) why = 'featured in the last 30 days';
-    }
-    if (why) { rejected[why] = (rejected[why] || 0) + 1; return; }
-    var th = _sigTheme(o);
-    if (!th) { rejected['no theme'] = (rejected['no theme'] || 0) + 1; return; }
-    var T = themes[th] || (themes[th] = { theme: th, species: {} });
-    var key = _sigSci(o.scientificName);
-    var sp = T.species[key] || (T.species[key] = { sci: key, common: String(o.vernacularName || '').trim(), records: [] });
-    sp.records.push({ id: String(o.uuid), date: new Date(o.eventDate).toISOString().slice(0, 10),
-      dataset: String(o.dataResourceName || ''), uncertainty_m: Number(o.coordinateUncertaintyInMeters),
+    var sci = _sigSci(o.scientificName), common = String(o.vernacularName || '').trim();
+    var dist = why ? 0 : _sigDistM(g.lat, g.lng, Number(o.decimalLatitude), Number(o.decimalLongitude));
+    if (!why && dist > SIG_LANDSCAPE_M) why = 'beyond ' + (SIG_LANDSCAPE_M / 1000) + 'km';
+    if (!why && own.indexOf(sci.toLowerCase()) > -1) why = 'already in garden record';
+    if (!why && common && g.fauna.some(function (f) { return f && (f === common.toLowerCase() || common.toLowerCase().indexOf(f) > -1); })) why = 'already in garden record';
+    if (!why && recentlyFeatured.indexOf(sci.toLowerCase()) > -1) why = 'featured in the last 30 days';
+    if (!why && !_sigTheme(o)) why = 'no theme';
+    if (why) return bump(why);
+    var sp = bySp[sci] || (bySp[sci] = { sci: sci, common: common, family: String(o.family || ''), theme: _sigTheme(o), records: [] });
+    sp.records.push({ id: String(o.uuid), observed: new Date(o.eventDate).toISOString().slice(0, 10),
+      age_days: Math.floor((now.getTime() - o.eventDate) / 864e5), distance_m: dist,
+      uncertainty_m: Number(o.coordinateUncertaintyInMeters), dataset: String(o.dataResourceName || ''),
       url: 'https://biocache.ala.org.au/occurrences/' + o.uuid });
   });
 
-  // Interest to this steward: a supported connection to the garden's
-  // recorded habitat or an unresolved observation first, then a fresh
-  // record this season, recurrence across years, and breadth. Never the
-  // smallest record count.
-  var scored = Object.keys(themes).map(function (k) {
-    var T = themes[k], list = Object.keys(T.species).map(function (n) { return T.species[n]; });
-    var years = {}, fresh = false;
-    list.forEach(function (sp) { sp.records.forEach(function (r) { years[r.date.slice(0, 4)] = true; if (+r.date.slice(0, 4) === Y) fresh = true; }); });
-    var recent = Object.keys(years).some(function (y) { return Y - Number(y) <= 3; });
-    var link = _sigThemeLink(g, k);
-    var score = link.score + (fresh ? 3 : recent ? 1 : 0) + (Object.keys(years).length >= 2 ? 1 : 0) + Math.min(list.length, 3) * 0.5;
-    // Within a theme: species featured to this steward before go last;
-    // then species recorded in fewer nearby years come first (frequency is
-    // used only to order, never described as rarity or familiarity);
-    // then the most recent record.
-    list.forEach(function (sp) {
-      var ys = {}; sp.records.forEach(function (r) { ys[r.date.slice(0, 4)] = true; });
-      sp.yearsRecorded = Object.keys(ys).sort();
-      sp.featured = featuredCount[sp.sci.toLowerCase()] || 0;
-    });
-    list.sort(function (a, b) {
-      return (a.featured - b.featured) || (a.yearsRecorded.length - b.yearsRecorded.length) ||
-             b.records[0].date.localeCompare(a.records[0].date);
-    });
-    return { theme: k, score: score, fresh: fresh, link: link, list: list, years: Object.keys(years).sort() };
-  }).sort(function (a, b) { return (b.score - a.score) || (b.link.score - a.link.score); });   // ties: closer link to this garden wins
+  // Each species needs a reason this steward would care, stricter with distance.
+  var considered = Object.keys(bySp).map(function (k) {
+    var sp = bySp[k];
+    sp.records.sort(function (a, b) { return (a.distance_m - b.distance_m) || b.observed.localeCompare(a.observed); });
+    var best = sp.records[0], local = best.distance_m <= SIG_LOCAL_M;
+    var whyNow = _sigWhyNow(sp, month), link = _sigThemeLink(g, sp.theme);
+    var reason = local ? (whyNow ? 'seasonal' : link.score >= 1 ? 'garden link: ' + link.why : '')
+                       : (whyNow ? 'seasonal' : link.score >= 2 ? 'garden link: ' + link.why : '');
+    return { sp: sp, rec: best, local: local, whyNow: whyNow, link: link, reason: reason,
+             featured: featuredCount[sp.sci.toLowerCase()] || 0 };
+  });
+  var eligible = considered.filter(function (c) { return c.reason; });
+  considered.filter(function (c) { return !c.reason; }).forEach(function () { bump('no reason at this distance'); });
+  if (!eligible.length) return null;
 
-  var best = scored[0];
-  if (!best || best.score < SIG_SEASON_MIN_SCORE) return null;
-  var pick = best.list.slice(0, 2), supporting = best.list.slice(2);
-  var fmt = function (sp) {
-    var dates = sp.records.map(function (r) { return r.date; }).filter(function (d, i, a) { return a.indexOf(d) === i; }).slice(0, 2);
-    return '– ' + (sp.common ? sp.common + ' (' + sp.sci + ')' : sp.sci) + ': ' +
-      dates.map(function (d) { return _sigDate(d, true).replace(/^\w+ /, '') + ' ' + d.slice(0, 4); }).join(', ') +
-      '  ' + sp.records[0].url;
-  };
-  var lines = [];
-  var leadYears = {};
-  pick.forEach(function (sp) { sp.yearsRecorded.forEach(function (y) { leadYears[y] = true; }); });
-  var label = { frogs: 'These frogs were', birds: 'These birds were', orchids: 'These orchids were', wildflowers: 'These plants were',
-    reptiles: 'These reptiles were', mammals: 'These mammals were' }[best.theme] || 'These were';
-  lines.push(label + ' recorded in the surrounding area in ' + seasonName + ' ' + _sigJoin(Object.keys(leadYears).sort()) + ':\n' + pick.map(fmt).join('\n'));
-  if (best.link.text) lines.push(best.link.text);
-  var which = pick.length === 2 ? 'either' : 'any';
-  var ask = {
-    frogs: 'What\'s calling at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar voices?',
-    birds: 'What\'s been around ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar?',
-    orchids: 'What\'s come up at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar to you locally?',
-    wildflowers: 'What\'s come up at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar to you locally?'
-  }[best.theme] || 'What have you been seeing at ' + g.garden_name + ' this ' + seasonName + ', and are ' + which + ' of these familiar?';
-  lines.push(ask);
-  lines.push('A photo' + (/frogs|birds/.test(best.theme) ? ', a sound recording' : '') + ' or a few lines would help us build that seasonal picture with you.');
-  var subjectTheme = { frogs: 'frogs recorded nearby in these weeks', orchids: 'orchids recorded nearby in these weeks',
-    wildflowers: 'wildflowers recorded nearby in these weeks', birds: 'birds recorded nearby in these weeks' }[best.theme] || best.theme + ' recorded nearby in these weeks';
+  // Local first; then a seasonal reason; then a strong garden link; then
+  // species not featured before; then the freshest record; then nearest.
+  eligible.sort(function (a, b) {
+    return (b.local - a.local) || (!!b.whyNow - !!a.whyNow) || ((b.link.score >= 2) - (a.link.score >= 2)) ||
+      (a.featured - b.featured) || b.rec.observed.localeCompare(a.rec.observed) || (a.rec.distance_m - b.rec.distance_m);
+  });
+  var lead = eligible[0], sp = lead.sp, rec = lead.rec;
+  var name = sp.common || sp.sci;
+  var article = /^[aeiou]/i.test(name) ? 'an ' : 'a ';
+  var km = Math.max(0.5, Math.round(rec.distance_m / 500) / 2);
+  var where = lead.local ? 'in the surrounding area' : 'about ' + km + 'km from ' + g.garden_name;
+  var when = _sigDate(rec.observed).replace(/^\w+ /, '');
+  var lines = [article.charAt(0).toUpperCase() + article.slice(1) + name + (sp.common ? ' (' + sp.sci + ')' : '') + ' was recorded ' + where + ' on ' + when + ':\n' + rec.url];
+  if (lead.whyNow) lines.push(lead.whyNow);
+  if (lead.link.text) lines.push(lead.link.text);
+  lines.push('Have you noticed any at ' + g.garden_name + ' this ' + seasonName + '?');
+  lines.push('A photo or a few lines would help us build that seasonal picture with you.');
+  var subject = lead.local ? article + name + ' recorded nearby' : article + name + ' about ' + km + 'km away';
 
-  return { type: 'season', key: pick.map(function (sp) { return sp.sci.toLowerCase(); }).join('|'),
-    subject: subjectTheme, expires: new Date(Date.now() + 7 * 864e5).toISOString(), standalone: true,
+  return { type: 'season', key: sp.sci.toLowerCase(), subject: subject,
+    expires: new Date(Date.now() + 7 * 864e5).toISOString(), standalone: true,
     evidence: { source: 'Atlas of Living Australia biocache + GRIIS introduced-species list (' + SIG_GRIIS_LIST + ')',
-      retrieved_at: fetchedAt, query: res.query, records_returned: res.total, radius_km: SIG_ALA_RADIUS_KM,
-      window: '+/-' + SIG_SEASON_DAYS + ' days of today, last ' + SIG_SEASON_YEARS + ' years',
-      filters: 'coordinate uncertainty <= ' + SIG_SEASON_UNC_M + 'm; species rank; exact dates; iNaturalist research grade; not on GRIIS; not already in garden record',
-      excluded: rejected, chosen_theme: best.theme, link_to_garden: best.link.why,
-      theme_scores: scored.map(function (t) { return { theme: t.theme, score: t.score, species: t.list.length, years: t.years }; }),
-      species: pick.map(function (sp) { return { scientific: sp.sci, common: sp.common, years_recorded_nearby: sp.yearsRecorded, previously_featured: sp.featured, records: sp.records.slice(0, 5) }; }),
-      supporting_species: supporting.map(function (sp) { return { scientific: sp.sci, common: sp.common, years_recorded_nearby: sp.yearsRecorded, previously_featured: sp.featured, records: sp.records.slice(0, 5) }; }),
-      ordering: 'species featured before last; then fewer nearby years first (ordering only, not a rarity or familiarity claim); then most recent',
-      wording_rules: 'nearby records are context, not garden observations; no rarity claims from record counts' },
-    paragraphs: lines,
-    text: lines.join('\n\n') };
+      retrieved_at: fetchedAt, query: res.query, records_returned: res.total,
+      rules: 'observed within ' + SIG_SEASON_DAYS + ' days; <=' + SIG_LOCAL_M + 'm local (needs a reason); <=' + SIG_LANDSCAPE_M + 'm only with a seasonal reason or strong garden link; beyond excluded',
+      distance_note: 'measured from the garden\'s public display coordinates (offset ~250m)',
+      excluded: rejected,
+      lead: { scientific: sp.sci, common: sp.common, tier: lead.local ? 'local' : 'landscape', reason: lead.reason,
+              why_now: lead.whyNow, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
+      other_candidates: eligible.slice(1, 6).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, reason: c.reason, observed: c.rec.observed, distance_m: c.rec.distance_m, url: c.rec.url }; }),
+      found_but_no_reason: considered.filter(function (c) { return !c.reason; }).slice(0, 8).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, distance_m: c.rec.distance_m, observed: c.rec.observed }; }),
+      wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; ask, don\'t assume' },
+    paragraphs: lines, text: lines.join('\n\n') };
 }
 
 /* How a theme connects to this particular garden's record. An unresolved

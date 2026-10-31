@@ -91,7 +91,10 @@ function env(opts) {
     }
     if (u.includes('biocache') && u.includes('coordinate_uncertainty')) {
       if (opts.alaDown) return resp(503, '');
-      return resp(200, opts.seasonFixture ? fs.readFileSync(path.join(REPO, 'scripts/fixtures', opts.seasonFixture), 'utf8') : '{"totalRecords":0,"occurrences":[]}');
+      if (!opts.seasonFixture) return resp(200, '{"totalRecords":0,"occurrences":[]}');
+      const fx = JSON.parse(fs.readFileSync(path.join(REPO, 'scripts/fixtures', opts.seasonFixture), 'utf8'));
+      const start = +((u.match(/startIndex=(\d+)/) || [])[1] || 0);
+      return resp(200, JSON.stringify({ totalRecords: fx.totalRecords, occurrences: (opts.extraRecords || []).concat(fx.occurrences).slice(start, start + 100) }));
     }
     if (u.includes('biocache')) return resp(opts.alaDown ? 500 : 200, JSON.stringify(ALA));
     return resp(404, '');
@@ -497,69 +500,64 @@ test('ALA request stays within the page size the service accepts', () => {
 
 /* ---------- season around you ---------- */
 const BUSH = 'ER-AU-VIC-NIL-BEL-001';
-test('Bush Garden (real Atlas records): one standalone frogs note tied to the garden record', () => {
-  const e = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json' });
-  e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
+const NOW = '2026-10-31T18:30:00+11:00';
+function bush(opts) { const e = env(Object.assign({ now: NOW, seasonFixture: 'ala-recent-bushgarden.json' }, opts || {})); e.pilot([[BUSH, 'sam@example.com']]); return e; }
+
+test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, asked not assumed', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
   const r = e.queue()[0];
   ok(r && r[e.col('signals')] === 'season', 'season only, got ' + (r && r[e.col('signals')]));
   const body = r[e.col('body')];
+  ok(r[e.col('subject')] === 'Bush Garden · a Bogong Moth about 3km away', r[e.col('subject')]);
   ok(/^Hi Sam,/.test(body), 'greeting');
-  ok(/Bush Garden · frogs recorded nearby in these weeks/.test(r[e.col('subject')]), r[e.col('subject')]);
-  ok(/Verreaux's Frog/.test(body) && /Spotted Marsh Frog, though it hasn't been confirmed yet/.test(body), 'frogs + garden link');
-  ok(/surrounding area/.test(body) && /not from your garden/.test(body), 'nearby vs garden distinguished');
-  ok(!/walking distance|rare|only record|likely to appear|nest box/i.test(body), 'no overstated claims');
-  ok(/What's calling at Bush Garden this spring, and are either of these familiar voices\?/.test(body), 'asks, does not tell');
-  ok(/These frogs were recorded in the surrounding area in spring 2021:/.test(body), 'historical context explicit: ' + body.split('\n')[2]);
-  ok(/Verreaux's Frog/.test(body) && /Eastern Banjo Frog/.test(body) && !/Common Eastern Froglet/.test(body), 'leads with Verreaux + Banjo, froglet held back');
-  ok(/– Verreaux's Frog \(Litoria verreauxii\): 20 Nov 2021  https:\/\/biocache\.ala\.org\.au\/occurrences\/4bb24e91/.test(body), 'dated line with record link');
-  ok(/View record ↗/.test(r[e.col('html')]), 'record links in html');
+  ok(/A Bogong Moth \(Agrotis infusa\) was recorded about 3km from Bush Garden on 18 October:\nhttps:\/\/biocache\.ala\.org\.au\/occurrences\/f2689fa7/.test(body), 'dated, distance stated, linked');
+  ok(/migrate in spring/.test(body), 'explains why it is interesting now');
+  ok(/Have you noticed any at Bush Garden this spring\?/.test(body) && !/lights/.test(body), 'asks, does not assume');
+  ok(!/rare|only record|walking distance|in your garden was/i.test(body), 'no overstated claims');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
-  ok(ev.excluded['already in garden record'] >= 2 && ev.excluded.introduced >= 3, 'garden species + introduced excluded: ' + JSON.stringify(ev.excluded));
-  ok(ev.excluded.location >= 1 && ev.excluded.date >= 1 && ev.excluded.identification >= 1, 'quality filters applied');
-  ok(ev.theme_scores.length >= 2 && ev.chosen_theme === 'frogs', 'themes scored: ' + JSON.stringify(ev.theme_scores));
-  ok(ev.species.every(s => s.records.every(x => x.url && x.id && x.date && x.uncertainty_m <= 1000)), 'evidence keeps id/date/url/uncertainty');
-  ok(ev.supporting_species.some(s => s.common === 'Common Eastern Froglet' && s.years_recorded_nearby.join() === '2021,2022'), 'froglet kept as supporting evidence');
+  ok(ev.lead.tier === 'landscape' && ev.lead.reason === 'seasonal' && ev.lead.record.age_days === 12, 'tier/reason/age: ' + JSON.stringify(ev.lead));
+  ok(ev.lead.record.observed === '2026-10-18' && ev.retrieved_at, 'observation and retrieval dates kept');
+  ok(ev.found_but_no_reason.some(c => /Tachyglossus/.test(c.scientific)), 'echidna found ~4.8km but no reason at that distance');
+  ok(ev.excluded.identification > 0, 'needs-ID records excluded');
 });
 
-test('season: obscured locations, needs-ID and introduced records never qualify', () => {
+test('season: nothing older than 30 days ever leads; historical-only data writes nothing', () => {
+  const e = bush(); e.setNow('2026-12-05T06:00:00+11:00'); e.ctx.previewSignalsNow();
+  ok(!e.queue().some(r => /season/.test(r[e.col('signals')])), 'records now 48+ days old → no season note');
+  const h = bush({ seasonFixture: 'ala-season-bushgarden.json' }); h.ctx.previewSignalsNow();
+  ok(!h.queue().some(r => /season/.test(r[h.col('signals')])), 'past-years fixture → no season note');
+});
+
+test('season: a local record needs a reason; with one, it reads as local activity', () => {
+  const frog = { uuid: '00000000-0000-4000-8000-000000000001', eventDate: Date.parse('2026-10-25T09:00:00Z'), scientificName: 'Litoria verreauxii',
+    vernacularName: "Verreaux's Frog", taxonRank: 'species', family: 'Pelodryadidae', order: 'Anura', classs: 'Amphibia', speciesGroups: ['Animals', 'Amphibians'],
+    decimalLatitude: -37.6880, decimalLongitude: 145.1960, coordinateUncertaintyInMeters: 10, assertions: [], dataResourceName: 'FrogID', spatiallyValid: true };
+  const e = bush({ extraRecords: [frog] }); e.ctx.previewSignalsNow();
+  const r = e.queue()[0], body = r[e.col('body')];
+  ok(/Verreaux's Frog \(Litoria verreauxii\) was recorded in the surrounding area on 25 October/.test(body), 'local wording: ' + body.split('\n')[2]);
+  ok(/Spotted Marsh Frog, though it hasn't been confirmed yet/.test(body), 'garden link from unresolved observation');
+  ok(r[e.col('subject')] === "Bush Garden · a Verreaux's Frog recorded nearby", r[e.col('subject')]);
+});
+
+test('season: beyond 5km and obscured locations never qualify', () => {
   const e = env(); const now = new Date('2026-10-31T07:30:00Z');
-  const beard = { taxonRank: 'species', coordinateUncertaintyInMeters: 28359, eventDate: Date.parse('2026-10-15'), assertions: ['COORDINATE_ROUNDED'],
+  const beard = { taxonRank: 'species', coordinateUncertaintyInMeters: 28359, eventDate: Date.parse('2026-10-15'), assertions: [], decimalLatitude: -37.678, decimalLongitude: 145.2,
                   identificationVerificationStatus: 'research', dataResourceName: 'iNaturalist Australia', scientificName: 'Calochilus robertsonii' };
   ok(e.ctx._sigSeasonReject(beard, now, { 'Calochilus robertsonii': false }) === 'location', 'Beard-orchid (28km uncertainty) rejected');
-  ok(e.ctx._sigSeasonReject(Object.assign({}, beard, { coordinateUncertaintyInMeters: 20, identificationVerificationStatus: 'needs_id' }), now, { 'Calochilus robertsonii': false }) === 'identification', 'needs_id rejected');
   ok(e.ctx._sigSeasonReject(Object.assign({}, beard, { coordinateUncertaintyInMeters: 20 }), now, {}) === 'native status unknown', 'unknown native status rejected');
-  ok(e.ctx._sigSeasonReject(Object.assign({}, beard, { coordinateUncertaintyInMeters: 20 }), now, { 'Calochilus robertsonii': false }) === '', 'good record passes');
+  const far = Object.assign({}, beard, { uuid: '00000000-0000-4000-8000-000000000002', coordinateUncertaintyInMeters: 5, decimalLatitude: -37.74, decimalLongitude: 145.195,
+    family: 'Orchidaceae', classs: 'Equisetopsida', speciesGroups: ['Plants'], vernacularName: 'Western Beard-orchid', eventDate: Date.parse('2026-10-29') });
+  const b = bush({ extraRecords: [far] }); b.ctx.previewSignalsNow();
+  ok(!/Beard-orchid/.test(b.queue()[0][b.col('body')]), 'orchid ~6km away excluded');
 });
 
-test('season: nothing worth saying means no season note', () => {
-  const e = env({ now: '2026-10-31T18:30:00+11:00' }); e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
-  ok(!e.queue().some(r => /season/.test(r[e.col('signals')])), 'empty records → no season');
-  const g = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json', griisDown: true });
-  g.pilot([[BUSH, 'sam@example.com']]); g.ctx.previewSignalsNow();
-  ok(!g.queue().some(r => /season/.test(r[g.col('signals')])), 'native status unavailable → no season');
-});
-
-test('season: same species are not repeated the following week', () => {
-  const e = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json' });
-  e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
+test('season: a species featured in the last 30 days is skipped; the next worthwhile record leads', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
   e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
-  e.setNow('2026-11-09T06:00:00+11:00'); e.ctx.runSignals();
+  e.setNow('2026-11-07T18:30:00+11:00'); e.ctx.previewSignalsNow();
   const second = e.queue()[1];
-  ok(!second || !/Verreaux/.test(second[e.col('body')]), 'Verreaux not repeated');
-});
-
-test('season: species featured before are down-ranked, not dropped forever', () => {
-  const e = env({ now: '2026-10-31T18:30:00+11:00', seasonFixture: 'ala-season-bushgarden.json' });
-  e.pilot([[BUSH, 'sam@example.com']]); e.ctx.previewSignalsNow();
-  e.setCell(0, 'status', 'APPROVED'); e.ctx.sendApprovedSignals();
-  e.setNow('2026-12-07T06:00:00+11:00');                   // 5 weeks later, same records still in window for the test
-  const log = e.ctx._sigLogIndex(e.ss), g = { garden_id: BUSH, garden_name: 'Bush Garden', species: [], fauna: ['spotted marsh frog'],
-    faunaRecs: [{ name: 'Spotted Marsh Frog', verified: false }], water: true };
-  const fx = JSON.parse(require('fs').readFileSync(require('path').join(REPO, 'scripts/fixtures/ala-season-bushgarden.json'), 'utf8'));
-  const intro = {}; fx.occurrences.forEach(o => { intro[e.ctx._sigSci(o.scientificName)] = GRIIS.indexOf(e.ctx._sigSci(o.scientificName)) > -1; });
-  const sig = e.ctx._sigSeasonSignal(g, { query: 'q', total: 1, occurrences: fx.occurrences, introduced: intro }, log, new Date('2026-10-31T07:30:00Z'), 'now');
-  ok(sig && /Common Eastern Froglet/.test(sig.text), 'previously featured frogs move down; froglet now leads');
-  ok(sig && sig.evidence.species.concat(sig.evidence.supporting_species).some(s => s.previously_featured > 0), 'feature history recorded');
+  ok(second && !/Bogong/.test(second[e.col('body')]), 'Bogong not repeated');
+  ok(second && /orchid/i.test(second[e.col('body')]) && /Many ground orchids flower for only a few weeks/.test(second[e.col('body')]), 'orchid with seasonal reason leads instead');
 });
 
 test('season: unresolved observation outranks recorded habitat', () => {
