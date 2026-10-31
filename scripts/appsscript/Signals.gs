@@ -56,7 +56,7 @@
      - Nothing here touches scores or badges.
 
    PAUSE REPLIES
-     The script does not read replies. Whoever reads hello@gardenerandson.com
+     The script does not read replies. Whoever reads hello@ecologicalregistry.org
      adds the address to the "Signals Optout" sheet. That takes effect
      immediately, including for rows already APPROVED.
 
@@ -81,9 +81,9 @@
    ============================================================ */
 
 var SIG_SITE      = 'https://ecologicalregistry.org';
-var SIG_FROM      = 'hello@gardenerandson.com';
-var SIG_FROM_NAME = 'Gardener & Son';
-var SIG_SIGNOFF   = 'Tyson & Natasha\nGardener & Son · Ecological Registry';
+var SIG_FROM      = 'hello@ecologicalregistry.org';   // Registry notes come from the Registry, not G&S
+var SIG_FROM_NAME = 'Ecological Registry';
+var SIG_SIGNOFF   = 'Tyson & Natasha\nEcological Registry';
 var SIG_TZ        = 'Australia/Melbourne';
 var SIG_QUEUE     = 'Signals Queue';
 var SIG_LOG       = 'Signals Log';
@@ -1210,7 +1210,7 @@ function _sigKeysFor(log, gid, type, days) {
   return out;
 }
 
-/* 'primary' = script runs as hello@gardenerandson.com (omit `from`);
+/* 'primary' = script runs as hello@ecologicalregistry.org (omit `from`);
    'alias'   = it's a verified send-as alias (pass `from`); null = can't. */
 function _sigSendMode() {
   try {

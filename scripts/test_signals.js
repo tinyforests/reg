@@ -124,7 +124,7 @@ function env(opts) {
     MailApp: { sendEmail: (...a) => mail.push(a) },
     GmailApp: { sendEmail: (...a) => { if (opts.gmailThrows) throw new Error('Service invoked too many times'); gmail.push(a);
                   if (hooks.onSend) { const f = hooks.onSend; hooks.onSend = null; f(); } },
-                getAliases: () => opts.aliases || ['hello@gardenerandson.com'] },
+                getAliases: () => opts.aliases || ['hello@ecologicalregistry.org'] },
     Session: { getEffectiveUser: () => ({ getEmail: () => opts.account || 'hello@lundbech.me' }) },
     ScriptApp: { getProjectTriggers: () => triggers.map(n => ({ getHandlerFunction: () => n })),
                  deleteTrigger: x => { const i = triggers.indexOf(x.getHandlerFunction()); if (i > -1) triggers.splice(i, 1); },
@@ -235,13 +235,13 @@ test('approved row sends exactly once from the alias; second run sends nothing',
   e.queue().forEach((_, i) => e.setCell(i, 'status', 'APPROVED'));
   ok(e.ctx.sendApprovedSignals() === 3, 'three sent');
   ok(e.ctx.sendApprovedSignals() === 0 && e.gmail.length === 3, 'no duplicates on re-run');
-  ok(e.gmail.every(g => g[3].from === 'hello@gardenerandson.com' && g[3].replyTo === 'hello@gardenerandson.com'), 'alias from set');
+  ok(e.gmail.every(g => g[3].from === 'hello@ecologicalregistry.org' && g[3].replyTo === 'hello@ecologicalregistry.org'), 'alias from set');
   ok(e.gmail[0][3].htmlBody === e.queue()[0][e.col('html')], 'sends the frozen HTML, not a rebuild');
   ok(e.queue().every(r => r[e.col('status')] === 'SENT' && r[e.col('sent_at')]), 'marked SENT');
 });
 
 test('primary account omits `from`; no alias means ERROR, not a send from the wrong address', () => {
-  const a = env({ account: 'hello@gardenerandson.com', aliases: [] }); a.pilot(pilotRows); a.ctx.previewSignalsNow();
+  const a = env({ account: 'hello@ecologicalregistry.org', aliases: [] }); a.pilot(pilotRows); a.ctx.previewSignalsNow();
   a.setCell(0, 'status', 'APPROVED'); a.ctx.sendApprovedSignals();
   ok(a.gmail.length === 1 && !('from' in a.gmail[0][3]), 'primary: from omitted');
   const b = env({ aliases: [] }); b.pilot(pilotRows); b.ctx.previewSignalsNow();
