@@ -857,11 +857,12 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
   var km = Math.max(0.5, Math.round(rec.distance_m / 500) / 2);
   var where = lead.local ? 'in the surrounding area' : 'about ' + km + 'km from ' + g.garden_name;
   var when = _sigDate(rec.observed).replace(/^\w+ /, '');
-  var lines = [article.charAt(0).toUpperCase() + article.slice(1) + name + (sp.common ? ' (' + sp.sci + ')' : '') + ' was recorded ' + where + ' on ' + when + ':\n' + rec.url];
+  // A share, not a request: what's happening around the garden, why it's
+  // interesting now, and the record. No questions, no asks.
+  var lines = [article.charAt(0).toUpperCase() + article.slice(1) + name + (sp.common ? ' (' + sp.sci + ')' : '') + ' was recorded ' + where + ' on ' + when + '.'];
   if (lead.whyNow) lines.push(lead.whyNow);
   if (lead.link.text) lines.push(lead.link.text);
-  lines.push('Have you noticed any at ' + g.garden_name + ' this ' + seasonName + '?');
-  lines.push('A photo or a few lines would help us build that seasonal picture with you.');
+  lines.push('The record: ' + rec.url);
   var subject = lead.local ? article + name + ' recorded nearby' : article + name + ' about ' + km + 'km away';
 
   return { type: 'season', key: sp.sci.toLowerCase(), subject: subject,
@@ -875,7 +876,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
               why_now: lead.whyNow, why_now_source: (_sigWhyNowEntry(sp, month) || {}).source || null, garden_link: lead.link.why, previously_featured: lead.featured, record: rec, all_records: sp.records.slice(0, 5) },
       other_candidates: eligible.slice(1, 6).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, reason: c.reason, observed: c.rec.observed, distance_m: c.rec.distance_m, url: c.rec.url }; }),
       found_but_no_reason: considered.filter(function (c) { return !c.reason; }).slice(0, 8).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, distance_m: c.rec.distance_m, observed: c.rec.observed }; }),
-      wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; ask, don\'t assume' },
+      wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; share, never ask the steward to do anything' },
     paragraphs: lines, text: lines.join('\n\n') };
 }
 

@@ -510,10 +510,12 @@ test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, 
   const body = r[e.col('body')];
   ok(r[e.col('subject')] === 'Bush Garden · a Bogong Moth about 3km away', r[e.col('subject')]);
   ok(/^Hi Sam,/.test(body), 'greeting');
-  ok(/A Bogong Moth \(Agrotis infusa\) was recorded about 3km from Bush Garden on 18 October:\nhttps:\/\/biocache\.ala\.org\.au\/occurrences\/f2689fa7/.test(body), 'dated, distance stated, linked');
+  ok(/A Bogong Moth \(Agrotis infusa\) was recorded about 3km from Bush Garden on 18 October\./.test(body), 'dated, distance stated');
+  ok(/The record: https:\/\/biocache\.ala\.org\.au\/occurrences\/f2689fa7/.test(body), 'linked');
   ok(/migrate each spring from inland Queensland, New South Wales and western Victoria to the Australian Alps, and can turn up around Melbourne along the way/.test(body), 'sourced why-now wording');
   ok(!/many pass over Melbourne/.test(body), 'unsupported route claim gone');
-  ok(/Have you noticed any at Bush Garden this spring\?/.test(body) && !/lights/.test(body), 'asks, does not assume');
+  const main = body.split('\n--')[0];
+  ok(!/\?/.test(main) && !/photo|reply|let us know|send us|have you/i.test(main), 'shares, asks nothing: ' + main);
   ok(!/rare|only record|walking distance|in your garden was/i.test(body), 'no overstated claims');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
   ok(ev.lead.tier === 'landscape' && ev.lead.reason === 'seasonal' && ev.lead.record.age_days === 12, 'tier/reason/age: ' + JSON.stringify(ev.lead));
