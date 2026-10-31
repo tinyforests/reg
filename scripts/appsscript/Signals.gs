@@ -593,7 +593,7 @@ function _sigFetchNearby(gardens) {
     return { muteHttpExceptions: true, url: 'https://biocache-ws.ala.org.au/ws/occurrences/search?q=*:*' +
       '&lat=' + g.lat.toFixed(4) + '&lon=' + g.lng.toFixed(4) + '&radius=' + SIG_ALA_RADIUS_KM +
       '&fq=' + encodeURIComponent('occurrence_date:[' + from + 'T00:00:00Z TO *]') +
-      '&pageSize=300&sort=occurrence_date&dir=desc' };
+      '&pageSize=100&sort=occurrence_date&dir=desc' };   // ALA returns 503 above pageSize=100
   });
   UrlFetchApp.fetchAll(reqs).forEach(function (r, i) {
     try {
@@ -697,7 +697,13 @@ function _sigFloweringSignal(g, lib, month, log) {
     if (!p || seen[p.name] || recent.indexOf(_sigNorm(p.name)) > -1) return;
     seen[p.name] = true;
     if (p.months.indexOf(month) === -1) return;
-    var label = p.name.split(' ').length > 1 && p.common ? p.common + ' (' + p.name + ')' : String(raw).replace(/['‘’"]/g, '').trim();
+    // Always name the plant as the garden's own list does. Borrow the
+    // library's common name only when it is the same taxon, never a
+    // cultivar, variety or subspecies the steward didn't record.
+    var own = String(raw).replace(/['‘’"]/g, '').trim();
+    var exact = function (x) { return String(x).toLowerCase().replace(/['‘’".]/g, '').replace(/\s+/g, ' ').trim(); };
+    var same = exact(p.name) === exact(own);
+    var label = same && p.common ? p.common + ' (' + own + ')' : own;
     cands.push({ p: p, raw: raw, label: label, rank: (p.months.indexOf(prev) === -1 ? 0 : 2) + (p.peak.indexOf(month) > -1 ? 0 : 1) });
   });
   if (!cands.length) return null;
@@ -733,7 +739,7 @@ function _sigNorm(s) {
    --------------------------------------------------------------- */
 
 function _sigCompose(g, chosen) {
-  var greeting = g.stewards ? 'Hi ' + g.stewards.replace(/\s+and\s+/i, ' & ') + ',' : 'Hello,';
+  var greeting = g.stewards ? 'Hi ' + _sigFirstNames(g.stewards) + ',' : 'Hello,';
   var lead = chosen[0], support = chosen[1];
   var paras = [greeting, '', lead.text, ''];
   if (support) paras.push('Also, ' + support.text.charAt(0).toLowerCase() + support.text.slice(1), '');
@@ -945,6 +951,13 @@ function _sigDate(ymd, short) {
   var p = String(ymd).split('-').map(Number);
   var dow = SIG_DAYS[new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay()], mon = SIG_MONTHS[p[1] - 1];
   return short ? dow.slice(0, 3) + ' ' + p[2] + ' ' + mon.slice(0, 3) : dow + ' ' + p[2] + ' ' + mon;
+}
+
+/* "Sam Cox" -> "Sam"; "Richard and Jenny" -> "Richard & Jenny";
+   "Sara & Fede" unchanged. */
+function _sigFirstNames(s) {
+  return String(s).split(/\s*(?:&|\band\b|,)\s*/i).filter(String)
+    .map(function (n) { return n.trim().split(/\s+/)[0]; }).join(' & ');
 }
 
 function _sigRange(a, b) { var o = []; for (var i = a; i <= b; i++) o.push(i); return o; }

@@ -461,5 +461,27 @@ test('previewSelectedSignal uses the selected row; flags HTML out of sync', () =
   ok(threw, 'wrong sheet refused');
 });
 
+/* ---------- real-data run (Bush Garden) ---------- */
+test('greeting uses first names only', () => {
+  const e = env();
+  ok(e.ctx._sigFirstNames('Sam Cox') === 'Sam', 'Sam Cox');
+  ok(e.ctx._sigFirstNames('Richard and Jenny') === 'Richard & Jenny', 'Richard and Jenny');
+  ok(e.ctx._sigFirstNames('Sara & Fede') === 'Sara & Fede', 'Sara & Fede');
+});
+
+test('flowering never relabels a species as a cultivar or variety it is not', () => {
+  const e = env();
+  const lib = { 'correa reflexa var nummulariifolia': { name: 'Correa reflexa var. nummulariifolia', common: 'Roundleaf Correa', months: [11], peak: [] } };
+  lib['correa reflexa'] = undefined; delete lib['correa reflexa'];
+  const sig = e.ctx._sigFloweringSignal({ garden_id: 'g', species: ['Correa reflexa'] }, (() => { const o = {}; o[e.ctx._sigNorm('Correa reflexa var. nummulariifolia')] = lib['correa reflexa var nummulariifolia']; return o; })(), 11, {});
+  ok(sig && /Correa reflexa/.test(sig.text) && !/Roundleaf|nummulariifolia/.test(sig.text), sig && sig.text);
+});
+
+test('ALA request stays within the page size the service accepts', () => {
+  const e = env(); e.pilot(pilotRows); e.ctx.previewSignalsNow();
+  const u = e.fetched.find(x => x.includes('biocache'));
+  ok(/pageSize=100\b/.test(u), 'pageSize=100 in ' + u);
+});
+
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
 process.exit(failures ? 1 : 0);
