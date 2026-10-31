@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Signal Garden Sign</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Signal: the Ecological Registry garden sign. Shows the garden's record at the gate and measures soil moisture, soil temperature, rain, air, light and birdsong in the garden itself. Prototype in development.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Registry cream page; the sign itself is the one dark object, set like an instrument on a gate post. */
+:root {
+  --bg: #fff0dc;
+  --fg: #3d4535;
+  --muted: rgba(61,69,53,.68);
+  --hair: rgba(61,69,53,.14);
+  --wash: rgba(61,69,53,.05);
+  --signal: #6f9455;
+  --plate: #11170f;
+  --plate-line: #47513e;
+  --plate-fg: #fff0dc;
+  --plate-muted: #a4af9c;
+  --light: #b3ff6c;
+  --display: "Abril Fatface", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #2f362a; --fg: #fff0dc; --muted: rgba(255,240,220,.7); --hair: rgba(255,240,220,.14); --wash: rgba(255,240,220,.05); --signal: #9cc27e; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #2f362a; --fg: #fff0dc; --muted: rgba(255,240,220,.7); --hair: rgba(255,240,220,.14); --wash: rgba(255,240,220,.05); --signal: #9cc27e; color-scheme: dark; }
+
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: inherit; text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: .005em; }
+h1 { font-size: clamp(56px, 11vw, 112px); line-height: .95; }
+h2 { font-size: clamp(30px, 4.6vw, 44px); line-height: 1.08; }
+p { margin: 0; }
+.lede { font-size: clamp(18px, 2.2vw, 21px); line-height: 1.55; max-width: 34em; }
+.status { display: inline-flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font: 500 12px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--hair); padding: 8px 12px; }
+.status b { color: var(--signal); font-weight: 500; }
+
+/* Hero */
+.hero { padding-block: 56px 72px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 56px; align-items: center; }
+.hero-text { display: grid; gap: 24px; min-width: 0; }
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; gap: 40px; padding-block: 36px 56px; } }
+
+/* The sign */
+.post { display: grid; justify-items: center; }
+.sign { width: 100%; max-width: 420px; background: var(--plate); color: var(--plate-fg); border: 1px solid var(--plate-line); padding: 26px 26px 20px; box-shadow: 0 30px 60px rgba(17,23,15,.28); position: relative; }
+.sign-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--plate-line); font: 500 11px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #d2dbca; }
+.lamp { width: 7px; height: 7px; background: var(--light); box-shadow: 0 0 16px var(--light); border-radius: 50%; animation: breathe 3.2s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .45; box-shadow: 0 0 6px var(--light); } }
+.sign-name { font: 400 22px/1.25 var(--body); margin-top: 18px; }
+.sign-tier { font: 500 11px/1.6 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--light); margin-top: 4px; }
+.sign-score { display: flex; align-items: baseline; gap: 14px; margin-top: 4px; }
+.sign-score strong { font: 500 clamp(96px, 20vw, 132px)/1.1 var(--mono); letter-spacing: -.08em; color: var(--light); text-shadow: 0 0 18px rgba(179,255,108,.32); font-variant-numeric: tabular-nums; }
+.sign-score span { font: 15px/1 var(--mono); color: var(--plate-muted); }
+.live { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--plate-line); margin-top: 6px; }
+.live div { padding: 12px 0 2px; display: grid; gap: 2px; }
+.live div + div { padding-left: 12px; border-left: 1px solid var(--plate-line); }
+.live dt { font: 500 10px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--plate-muted); }
+.live dd { margin: 0; font: 500 19px/1.2 var(--mono); color: var(--plate-fg); font-variant-numeric: tabular-nums; }
+.sign-foot { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--plate-line); font: 10px/1.5 var(--mono); color: var(--plate-muted); letter-spacing: .04em; }
+.qr { width: 34px; height: 34px; flex: none; background:
+  conic-gradient(from 90deg at 30% 30%, var(--plate-fg) 25%, transparent 0) 0 0/11px 11px,
+  linear-gradient(var(--plate-fg), var(--plate-fg)) 0 0/9px 9px no-repeat,
+  linear-gradient(var(--plate-fg), var(--plate-fg)) 100% 0/9px 9px no-repeat,
+  linear-gradient(var(--plate-fg), var(--plate-fg)) 0 100%/9px 9px no-repeat; opacity: .8; }
+.pole { width: 14px; height: 54px; background: linear-gradient(90deg, #6b5a44, #8a7559 60%, #5b4c39); }
+.caption { margin-top: 14px; font: 12px/1.5 var(--mono); color: var(--muted); text-align: center; max-width: 34em; }
+
+section.band { padding-block: 72px; border-top: 1px solid var(--hair); }
+.band-head { display: grid; gap: 14px; max-width: 46em; margin-bottom: 40px; }
+
+/* Sensor spec */
+.spec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--fg); }
+.sensor { padding: 26px 28px 30px 0; border-bottom: 1px solid var(--hair); display: grid; gap: 10px; align-content: start; min-width: 0; }
+.sensor:nth-child(even) { padding-left: 28px; border-left: 1px solid var(--hair); }
+.sensor h3 { margin: 0; font: 600 19px/1.3 var(--body); }
+.sensor .what { color: var(--fg); }
+.sensor dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; margin: 6px 0 0; font: 13px/1.5 var(--mono); }
+.sensor dt { color: var(--muted); }
+.sensor dd { margin: 0; }
+@media (max-width: 760px) { .spec { grid-template-columns: 1fr; } .sensor, .sensor:nth-child(even) { padding: 24px 0; border-left: 0; } }
+
+/* What it tells you */
+.reads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.read { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.read .q { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--signal); }
+.read p { color: var(--fg); }
+.read .eg { font: 13px/1.5 var(--mono); color: var(--muted); border-left: 2px solid var(--signal); padding-left: 12px; }
+@media (max-width: 860px) { .reads { grid-template-columns: 1fr; } }
+
+/* Principles + build */
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; gap: 40px; } }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.list li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 12px; }
+.list li::before { content: ""; width: 7px; height: 7px; background: var(--signal); margin-top: .62em; }
+.build { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 10px 22px; margin: 0; font-size: 15px; }
+.build dt { font: 500 12px/1.9 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.build dd { margin: 0; }
+
+/* Pilot */
+.pilot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 48px; align-items: end; }
+.contact { display: grid; gap: 10px; padding: 24px; background: var(--wash); border: 1px solid var(--hair); }
+.addr { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font: 500 16px/1.4 var(--mono); }
+.addr span { user-select: all; overflow-wrap: anywhere; }
+button.copy { font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 9px 12px; background: var(--fg); color: var(--bg); border: 0; cursor: pointer; }
+@media (max-width: 760px) { .pilot { grid-template-columns: 1fr; gap: 28px; } }
+footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px/1.6 var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+@media (prefers-reduced-motion: reduce) { .lamp { animation: none; } }
+</style>
+
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Ecological Registry · Garden sign</p>
+      <h1>Signal</h1>
+      <p class="lede">A sign for the garden gate that shows the garden's ecological record, and measures what is happening in the garden itself: how wet the soil is, how warm, how much rain fell, and which birds are calling.</p>
+      <p class="status"><b>● Prototype in development</b><span>First pilot gardens by invitation</span><span>Spring 2026</span></p>
+    </div>
+    <div class="post" aria-label="Rendering of the Signal sign with illustrative readings">
+      <div class="sign">
+        <div class="sign-head"><span>Ecological Registry</span><span class="lamp" aria-hidden="true"></span></div>
+        <p class="sign-name">Example Garden</p>
+        <p class="sign-tier">Ecosystem Garden · Verified</p>
+        <div class="sign-score"><strong>83</strong><span>/ 100</span></div>
+        <dl class="live">
+          <div><dt>Soil moisture</dt><dd>31%</dd></div>
+          <div><dt>Soil 15 cm</dt><dd>16.8°</dd></div>
+          <div><dt>Birds today</dt><dd>9 spp</dd></div>
+        </dl>
+        <div class="sign-foot"><span>Record updated Oct 2026 · live readings every 5 min</span><span class="qr" aria-hidden="true"></span></div>
+      </div>
+      <div class="pole" aria-hidden="true"></div>
+      <p class="caption">Rendering. Garden name, score and readings are illustrative.</p>
+    </div>
+  </header>
+
+  <section class="band" aria-labelledby="sensors">
+    <div class="band-head">
+      <p class="eyebrow">What it measures</p>
+      <h2 id="sensors">Six sensors, all in the garden</h2>
+      <p class="lede">Each Signal pairs the sign at the gate with sensors placed in the garden. Weather apps report a region; these report the garden.</p>
+    </div>
+    <div class="spec">
+      <article class="sensor">
+        <h3>Soil moisture</h3>
+        <p class="what">How much water the soil is holding, and how fast it dries after rain. In a mulched, unirrigated garden this is the number that shows the mulch working.</p>
+        <dl><dt>Sensor</dt><dd>Capacitive probe, no exposed metal</dd><dt>Placed</dt><dd>Root zone, 15 cm below the mulch</dd><dt>Reports</dt><dd>Volumetric water content, %</dd><dt>Every</dt><dd>5 minutes</dd></dl>
+      </article>
+      <article class="sensor">
+        <h3>Soil temperature</h3>
+        <p class="what">When the soil warms in spring and how much the mulch buffers summer heat and winter cold at root depth.</p>
+        <dl><dt>Sensor</dt><dd>Sealed stainless probe</dd><dt>Placed</dt><dd>10–15 cm, beside the moisture probe</dd><dt>Reports</dt><dd>°C, daily min / max</dd><dt>Every</dt><dd>5 minutes</dd></dl>
+      </article>
+      <article class="sensor">
+        <h3>Rainfall</h3>
+        <p class="what">Rain that actually fell on the garden, set against the modelled record for the area, and how long each fall stays in the soil.</p>
+        <dl><dt>Sensor</dt><dd>Self-emptying tipping-bucket gauge</dd><dt>Placed</dt><dd>Open ground, clear of canopy drip</dd><dt>Reports</dt><dd>mm per fall, per day, per season</dd><dt>Resolution</dt><dd>0.2 mm</dd></dl>
+      </article>
+      <article class="sensor">
+        <h3>Air temperature and humidity</h3>
+        <p class="what">Heat days, frost nights and dew, measured inside the garden's own microclimate under its canopy.</p>
+        <dl><dt>Sensor</dt><dd>Digital sensor in a ventilated radiation shield</dd><dt>Placed</dt><dd>1.2 m, shaded</dd><dt>Reports</dt><dd>°C, % relative humidity</dd><dt>Every</dt><dd>5 minutes</dd></dl>
+      </article>
+      <article class="sensor">
+        <h3>Light under the canopy</h3>
+        <p class="what">How much light reaches the understorey through the day and across the seasons, a direct read on how the canopy is closing over.</p>
+        <dl><dt>Sensor</dt><dd>Ambient light sensor</dd><dt>Placed</dt><dd>Understorey height</dd><dt>Reports</dt><dd>lux, day length</dd><dt>Every</dt><dd>5 minutes</dd></dl>
+      </article>
+      <article class="sensor">
+        <h3>Birdsong</h3>
+        <p class="what">Which birds are calling, how many species a day, and when the dawn chorus starts. Calls are identified on the device; no audio is kept.</p>
+        <dl><dt>Sensor</dt><dd>Weatherproof omni microphone</dd><dt>Identifies</dt><dd>BirdNET, running on the sign</dd><dt>Reports</dt><dd>Species detected, time, confidence</dd><dt>Stores</dt><dd>Detections only, never recordings</dd></dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="tells">
+    <div class="band-head">
+      <p class="eyebrow">What the readings show</p>
+      <h2 id="tells">The garden's own season, in numbers</h2>
+    </div>
+    <div class="reads">
+      <div class="read">
+        <p class="q">After rain</p>
+        <p>How many days each fall keeps the root zone moist, and how that changes as mulch and leaf litter build up year on year.</p>
+        <p class="eg">e.g. 18 mm on Tuesday · soil above 25% for 9 days</p>
+      </div>
+      <div class="read">
+        <p class="q">Through the seasons</p>
+        <p>Soil warming in spring, the first frost night, the hottest stretch of summer, all measured where the plants are growing.</p>
+        <p class="eg">e.g. soil at 15 cm passed 15°C on 24 October</p>
+      </div>
+      <div class="read">
+        <p class="q">Who's around</p>
+        <p>The species heard each day and over a season, when migrants arrive, and how the chorus changes as the garden matures.</p>
+        <p class="eg">e.g. 14 species this week · first Sacred Kingfisher 2 Nov</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="how">
+    <div class="cols">
+      <div class="band-head" style="margin-bottom:0">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how">Measured, recorded, kept honest</h2>
+        <ul class="list">
+          <li>Readings go to the garden's Ecological Registry record and appear in the steward's seasonal notes.</li>
+          <li>The big number on the sign is the garden's Registry score. It changes only when the record is reassessed, never automatically from a sensor.</li>
+          <li>Sensor data is added to the record as evidence, labelled as measured at the garden, alongside field notes and verified observations.</li>
+          <li>The sign shows the record and a few live readings. The full data stays with the steward's record, and the precise location of the garden is never published.</li>
+          <li>No camera. The microphone keeps species detections only; no sound is recorded or stored.</li>
+          <li>The display dims at night for neighbours and wildlife.</li>
+        </ul>
+      </div>
+      <div class="band-head" style="margin-bottom:0">
+        <p class="eyebrow">The build</p>
+        <h2>One sign, one probe bed, one gauge</h2>
+        <dl class="build">
+          <dt>Display</dt><dd>Illuminated green LED panel, readable from the footpath, dimmed after dark</dd>
+          <dt>Housing</dt><dd>Powder-coated aluminium, opal acrylic face, sealed against weather</dd>
+          <dt>Computer</dt><dd>Raspberry Pi, running the sensors and bird identification on board</dd>
+          <dt>Connection</dt><dd>The garden's Wi-Fi, syncing readings to the Registry</dd>
+          <dt>Power</dt><dd>Low-voltage supply from the house</dd>
+          <dt>Install</dt><dd>Half a day by Gardener &amp; Son: sign at the gate, probes in the root zone, gauge in the open</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="pilot">
+    <div class="pilot">
+      <div class="band-head" style="margin-bottom:0">
+        <p class="eyebrow">Pilot</p>
+        <h2 id="pilot">The first signs go to Registry gardens this spring</h2>
+        <p class="lede">We're building the first units now and placing them in a small group of registered gardens, chosen for how much their readings can tell us. What the pilot gardens measure will shape the finished sign.</p>
+      </div>
+      <div class="contact">
+        <p class="eyebrow">Ask about the pilot</p>
+        <div class="addr"><span id="addr">hello@ecologicalregistry.org</span><button class="copy" id="copy" type="button">Copy</button></div>
+        <p style="font-size:14px;color:var(--muted)">Registry stewards can also reply to their seasonal note.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Ecological Registry · ecologicalregistry.org</span>
+    <span>Signal is a prototype. Specifications may change as the pilot runs.</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy'), addr = document.getElementById('addr');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    var text = addr.textContent;
+    var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1600); };
+    var fallback = function () { var r = document.createRange(); r.selectNodeContents(addr); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected'; };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+})();
+</script>
+
+</body>
+</html>
