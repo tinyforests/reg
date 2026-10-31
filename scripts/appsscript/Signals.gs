@@ -1,71 +1,87 @@
 /* ============================================================
-   Ecological Registry -- Garden Signals (steward comms engine)
+   Ecological Registry -- Garden Signals (steward comms, PILOT)
 
    Lives in the same bound Apps Script project as Code.gs and reuses
-   NOTIFY_EMAIL and _emailsForGarden() from there.
+   NOTIFY_EMAIL from there. It does NOT use _emailsForGarden(): being a
+   known steward is not the same as opting in to these notes.
 
-   What it does, every morning:
-     1. Reads the live Registry (registry.json + garden-locations.json +
-        each garden's data file + plant-library.json) from the website.
-     2. For every real garden, checks its surrounds:
-          - Open-Meteo: heat (>=35C), frost (<=1C), soaking rain,
-            and a rainfall-vs-evaporation dry spell (14-day window)
-          - Atlas of Living Australia: fauna recorded within 1.5km in the
-            last 30 days (weekly)
-          - Plant library: species on the garden's own list coming into
-            flower this month (weekly)
-     3. Writes ONE draft note per garden into the "Signals Queue" sheet,
-        respecting per-signal cooldowns, and emails you a summary.
+   WHO RECEIVES ANYTHING
+     Only rows in the "Signals Pilot" sheet (garden_id, email). Empty
+     sheet = nothing is drafted. Addresses in "Signals Optout" are never
+     sent to, and both lists are re-checked at send time.
 
-   Nothing reaches a steward until you set a row's status to APPROVED.
-   sendApprovedSignals() (every 30 min) sends approved rows from
-   hello@gardenerandson.com and marks them SENT.
+   WHAT RUNS
+     runSignals()          daily 06:00 -- drafts only
+     sendApprovedSignals() every 30 min -- sends rows you set to APPROVED
 
-   Honesty rules baked into the copy:
-     - Weather and sightings are about the garden's SURROUNDS, never
-       claimed as things observed in the garden.
-     - Flowering is "may be coming into flower", phrased as a question.
-     - Coordinates used are the public ~250m display coordinates only.
+   Each draft carries ONE lead signal and at most ONE supporting
+   observation:
+     alerts (lead first): heat >=35C, frost <=1C (both 1-2 days ahead),
+                          dry fortnight, soaking rain  -- Open-Meteo
+     observations (Mondays): nearby fauna (Atlas of Living Australia,
+                          1.5km, 30 days); flowering from the garden's
+                          own species list (plant-library.json)
+
+   SAFETY RULES
+     - Draft content is frozen: recipients, subject, plain text and the
+       rendered HTML are stored with a content hash. Editing to/subject/
+       body regenerates the HTML and resets status to DRAFT. A hash
+       mismatch at send time also resets to DRAFT.
+     - Every draft has expires_at. Weather drafts expire before the event
+       they describe; expired rows become EXPIRED and are never sent. To
+       resend, generate a fresh draft (previewSignalsNow) and approve it.
+     - Sends run under a script lock with a persistent SENDING state and a
+       unique message_id. A row found in SENDING at the start of a run
+       (crash mid-send) becomes CHECK for manual review; it is never
+       retried automatically.
+     - Missing or non-numeric weather data skips the signal; it is never
+       treated as zero.
+     - Each row keeps its evidence (source, retrieval time, forecast
+       dates and values, ALA occurrence IDs/dates/links) in `evidence`.
+     - Coordinates are the public ~250m display coordinates only.
      - Nothing here touches scores or badges.
 
-   SETUP (once):
-     1. Paste this file into the project as Signals.gs and save.
-     2. Run installSignals() from the editor and grant permissions.
-     3. Run previewSignalsNow() to generate a first round of drafts.
-   Script Properties (optional):
-     SIGNALS_PILOT    comma list of garden_ids; empty = all real gardens
-     SIGNALS_EXCLUDE  comma list of garden_ids to skip
-     SIGNALS_AUTOSEND comma list of signal types that skip approval,
-                      e.g. "heat,frost". Empty = everything needs approval.
+   PAUSE REPLIES
+     The script does not read replies. Whoever reads hello@gardenerandson.com
+     adds the address to the "Signals Optout" sheet. That takes effect
+     immediately, including for rows already APPROVED.
+
+   SETUP (once)
+     1. Add this file to the project as Signals.gs and save.
+     2. Run installSignals() and grant permissions. Check the log line
+        about the hello@gardenerandson.com send-as alias.
+     3. Add 2-3 gardens to "Signals Pilot" (garden_id, email).
+     4. Run previewSignalsNow() and review the "Signals Queue" sheet.
    ============================================================ */
 
-var SIG_SITE        = 'https://ecologicalregistry.org';
-var SIG_FROM        = 'hello@gardenerandson.com';
-var SIG_FROM_NAME   = 'Gardener & Son';
-var SIG_SIGNOFF     = 'Tyson & Natasha\nGardener & Son · Ecological Registry';
-var SIG_QUEUE       = 'Signals Queue';
-var SIG_LOG         = 'Signals Log';
-var SIG_OPTOUT      = 'Signals Optout';
-var SIG_QUEUE_HEADERS = ['created_at', 'garden_id', 'garden_name', 'to', 'signals',
-                         'subject', 'body', 'status', 'sent_at', 'note'];
-var SIG_LOG_HEADERS = ['logged_at', 'garden_id', 'signal', 'key'];
-var SIG_STATUSES    = ['DRAFT', 'APPROVED', 'SKIP', 'SENT', 'ERROR', 'NO_EMAIL'];
+var SIG_SITE      = 'https://ecologicalregistry.org';
+var SIG_FROM      = 'hello@gardenerandson.com';
+var SIG_FROM_NAME = 'Gardener & Son';
+var SIG_SIGNOFF   = 'Tyson & Natasha\nGardener & Son · Ecological Registry';
+var SIG_TZ        = 'Australia/Melbourne';
+var SIG_QUEUE     = 'Signals Queue';
+var SIG_LOG       = 'Signals Log';
+var SIG_PILOT     = 'Signals Pilot';
+var SIG_OPTOUT    = 'Signals Optout';
+var SIG_QUEUE_HEADERS = ['created_at', 'message_id', 'garden_id', 'garden_name', 'to', 'signals',
+  'subject', 'body', 'status', 'expires_at', 'sent_at', 'note', 'content_hash', 'evidence', 'card', 'html'];
+var SIG_C = {};  // column index (1-based) by header name
+SIG_QUEUE_HEADERS.forEach(function (h, i) { SIG_C[h] = i + 1; });
+var SIG_EDITABLE = ['to', 'subject', 'body'];
+var SIG_LOG_HEADERS = ['logged_at', 'garden_id', 'signal', 'key', 'message_id'];
+var SIG_STATUSES = ['DRAFT', 'APPROVED', 'SKIP', 'SENDING', 'SENT', 'CHECK', 'EXPIRED', 'ERROR'];
 
 /* Thresholds */
-var SIG_HEAT_C        = 35;
-var SIG_FROST_C       = 1;
-var SIG_RAIN_MM       = 20;   // forecast over today + next 2 days
-var SIG_DRY_DEFICIT   = 35;   // mm: (evaporation - rain) over the last 14 days
-var SIG_DRY_NEXT_MM   = 5;    // ...and less than this forecast for the next 3 days
-var SIG_ALA_RADIUS_KM = 1.5;
-var SIG_ALA_DAYS      = 30;
-var SIG_WEEKLY_DAY    = 1;    // Monday: nearby sightings + flowering
-var SIG_GARDEN_GAP_DAYS = 6;  // at most one weekly note per garden per this many days
-
-/* Cooldowns (days) per signal type, judged from the log of drafted signals */
+var SIG_HEAT_C = 35, SIG_FROST_C = 1, SIG_RAIN_MM = 20;
+var SIG_DRY_DEFICIT = 35;   // mm: reference ET0 minus rain, past 14 days (modelled)
+var SIG_DRY_NEXT_MM = 5;    // ...and less than this forecast over the next 4 days
+var SIG_ALA_RADIUS_KM = 1.5, SIG_ALA_DAYS = 30;
+var SIG_WEEKLY_DAY = 1;     // Monday
+var SIG_GARDEN_GAP_DAYS = 6;
 var SIG_COOLDOWN = { heat: 5, frost: 7, rain: 14, dry: 10, nearby: 6, flowering: 25 };
+var SIG_ALERTS = ['heat', 'frost', 'dry', 'rain'];      // priority order
+var SIG_OBS = ['nearby', 'flowering'];
 
-/* Common introduced fauna we don't headline */
 var SIG_INTRODUCED = ['common myna', 'indian myna', 'spotted dove', 'house sparrow',
   'eurasian tree sparrow', 'common blackbird', 'eurasian blackbird', 'rock dove', 'rock pigeon',
   'feral pigeon', 'common starling', 'european starling', 'red fox', 'black rat', 'brown rat',
@@ -73,117 +89,165 @@ var SIG_INTRODUCED = ['common myna', 'indian myna', 'spotted dove', 'house sparr
   'common greenfinch', 'european goldfinch', 'song thrush', 'red-whiskered bulbul',
   'common wasp', 'european wasp', 'mallard'];
 var SIG_FAUNA_CLASSES = ['aves', 'amphibia', 'reptilia', 'mammalia', 'insecta'];
+var SIG_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+  'September', 'October', 'November', 'December'];
+var SIG_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 /* ---------------------------------------------------------------
    Entry points
    --------------------------------------------------------------- */
 
-/* Run once from the editor: sheets, triggers, permission prompts. */
 function installSignals() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  _sigQueueSheet(ss); _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS); _sigSheet(ss, SIG_OPTOUT, ['email', 'added_at', 'note']);
+  _sigQueueSheet(ss);
+  _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS);
+  _sigSheet(ss, SIG_PILOT, ['garden_id', 'email', 'added_at', 'note']);
+  _sigSheet(ss, SIG_OPTOUT, ['email', 'added_at', 'note']);
   ScriptApp.getProjectTriggers().forEach(function (t) {
     var f = t.getHandlerFunction();
-    if (f === 'runSignals' || f === 'sendApprovedSignals') ScriptApp.deleteTrigger(t);
+    if (f === 'runSignals' || f === 'sendApprovedSignals' || f === 'onSignalsEdit') ScriptApp.deleteTrigger(t);
   });
-  ScriptApp.newTrigger('runSignals').timeBased().everyDays(1).atHour(6).inTimezone('Australia/Melbourne').create();
+  ScriptApp.newTrigger('runSignals').timeBased().everyDays(1).atHour(6).inTimezone(SIG_TZ).create();
   ScriptApp.newTrigger('sendApprovedSignals').timeBased().everyMinutes(30).create();
-  var alias = _sigAliasOk();
-  Logger.log('Signals installed. Send-as alias ' + SIG_FROM + (alias ? ' found.' : ' NOT FOUND -- add it in Gmail settings before approving anything.'));
+  ScriptApp.newTrigger('onSignalsEdit').forSpreadsheet(ss).onEdit().create();
+  var mode = _sigSendMode();
+  Logger.log('Signals installed. Sending as ' + SIG_FROM + ': ' +
+    (mode ? 'OK (' + mode + ')' : 'NOT AVAILABLE -- add it as a Gmail send-as alias before approving anything'));
 }
 
-/* Daily trigger. */
 function runSignals() { return _sigRun({ forceWeekly: false }); }
-
-/* Manual: generate drafts now, including the weekly components. */
 function previewSignalsNow() { return _sigRun({ forceWeekly: true }); }
 
-/* Every 30 min: send rows marked APPROVED (and auto-send types). */
+/* Installable onEdit: any change to to/subject/body re-freezes the
+   content and sends the row back to DRAFT. */
+function onSignalsEdit(e) {
+  if (!e || !e.range) return;
+  var sh = e.range.getSheet();
+  if (sh.getName() !== SIG_QUEUE) return;
+  var c0 = e.range.getColumn(), c1 = c0 + e.range.getNumColumns() - 1;
+  var touched = SIG_EDITABLE.some(function (h) { return SIG_C[h] >= c0 && SIG_C[h] <= c1; });
+  if (!touched) return;
+  var r0 = Math.max(2, e.range.getRow()), r1 = e.range.getRow() + e.range.getNumRows() - 1;
+  for (var r = r0; r <= r1; r++) _sigRefreeze(sh, r, 'Edited ' + new Date().toISOString() + ' -- re-approve');
+}
+
 function sendApprovedSignals() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sh = _sigQueueSheet(ss);
-  if (sh.getLastRow() < 2) return 0;
-  var rows = sh.getRange(2, 1, sh.getLastRow() - 1, SIG_QUEUE_HEADERS.length).getValues();
-  var auto = _sigProp('SIGNALS_AUTOSEND');
-  var optout = _sigOptouts(ss);
-  var aliasOk = null, sent = 0;
-  var cards = _sigCardIndex();
-  for (var i = 0; i < rows.length; i++) {
-    var r = rows[i], status = String(r[7]);
-    var types = String(r[4]).split(',').map(function (s) { return s.trim(); }).filter(String);
-    var autoOk = status === 'DRAFT' && types.length && auto.length &&
-                 types.every(function (t) { return auto.indexOf(t) > -1; });
-    if (status !== 'APPROVED' && !autoOk) continue;
-    var rowNum = i + 2;
-    var to = String(r[3]).split(',').map(function (s) { return s.trim().toLowerCase(); })
-               .filter(function (e) { return e && optout.indexOf(e) === -1; });
-    if (!to.length) { _sigMark(sh, rowNum, 'NO_EMAIL', '', 'No (opted-in) steward email on file'); continue; }
-    if (aliasOk === null) aliasOk = _sigAliasOk();
-    if (!aliasOk) { _sigMark(sh, rowNum, 'ERROR', '', 'Send-as alias ' + SIG_FROM + ' missing in Gmail -- not sent'); continue; }
-    try {
-      GmailApp.sendEmail(to.join(','), String(r[5]), String(r[6]), {
-        from: SIG_FROM, name: SIG_FROM_NAME, replyTo: SIG_FROM,
-        htmlBody: _sigHtml(String(r[6]), cards[String(r[1])])
-      });
-      _sigMark(sh, rowNum, 'SENT', new Date().toISOString(), autoOk ? 'auto-sent' : '');
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) return 0;
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sh = _sigQueueSheet(ss);
+    if (sh.getLastRow() < 2) return 0;
+    var rows = sh.getRange(2, 1, sh.getLastRow() - 1, SIG_QUEUE_HEADERS.length).getValues();
+    var props = PropertiesService.getScriptProperties();
+    var pilot = _sigPilot(ss), optout = _sigOptouts(ss);
+    var now = Date.now(), mode = null, sent = 0;
+
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i], row = i + 2, v = function (h) { return r[SIG_C[h] - 1]; };
+      var status = String(v('status')), id = String(v('message_id'));
+
+      // A row left in SENDING means a previous run stopped mid-send.
+      if (status === 'SENDING') {
+        if (props.getProperty('sent:' + id)) _sigSet(sh, row, { status: 'SENT', note: 'Reconciled from send record' });
+        else _sigSet(sh, row, { status: 'CHECK', note: 'Delivery uncertain -- check Sent mail for "' + v('subject') + '" before doing anything. Not retried.' });
+        continue;
+      }
+      if (status !== 'APPROVED') continue;
+
+      if (props.getProperty('sent:' + id)) { _sigSet(sh, row, { status: 'SENT', note: 'Already sent (' + props.getProperty('sent:' + id) + ')' }); continue; }
+      if (!id) { _sigSet(sh, row, { status: 'ERROR', note: 'Missing message_id' }); continue; }
+      var exp = Date.parse(String(v('expires_at')));
+      if (!isFinite(exp) || now > exp) { _sigSet(sh, row, { status: 'EXPIRED', note: 'Expired ' + v('expires_at') + ' -- not sent' }); continue; }
+      if (_sigHash(v('to'), v('subject'), v('body'), v('html')) !== String(v('content_hash'))) {
+        _sigRefreeze(sh, row, 'Content changed after approval -- re-approve'); continue;
+      }
+      var to = _sigEmails(v('to'));
+      var allowed = pilot[String(v('garden_id'))] || [];
+      var blocked = to.filter(function (e) { return allowed.indexOf(e) === -1 || optout.indexOf(e) > -1; });
+      if (!to.length || blocked.length) {
+        _sigSet(sh, row, { status: 'SKIP', note: to.length ? 'Not in pilot or opted out: ' + blocked.join(', ') : 'No recipients' }); continue;
+      }
+      if (mode === null) mode = _sigSendMode();
+      if (!mode) { _sigSet(sh, row, { status: 'ERROR', note: 'Cannot send as ' + SIG_FROM + ' (no send-as alias) -- not sent' }); continue; }
+
+      _sigSet(sh, row, { status: 'SENDING', note: 'Sending ' + new Date().toISOString() });
+      SpreadsheetApp.flush();
+      try {
+        var opts = { name: SIG_FROM_NAME, replyTo: SIG_FROM, htmlBody: String(v('html')) };
+        if (mode === 'alias') opts.from = SIG_FROM;          // primary account: omit `from`
+        GmailApp.sendEmail(to.join(','), String(v('subject')), String(v('body')), opts);
+      } catch (err) {
+        // The send threw: nothing reached Gmail's outbox as far as we know.
+        _sigSet(sh, row, { status: 'ERROR', note: String(err).slice(0, 300) });
+        continue;
+      }
+      var at = new Date().toISOString();
+      props.setProperty('sent:' + id, at);
+      _sigSet(sh, row, { status: 'SENT', sent_at: at, note: '' });
       sent++;
-    } catch (err) {
-      _sigMark(sh, rowNum, 'ERROR', '', String(err).slice(0, 300));
     }
+    return sent;
+  } finally {
+    lock.releaseLock();
   }
-  return sent;
 }
 
 /* ---------------------------------------------------------------
-   The run
+   Drafting run
    --------------------------------------------------------------- */
 
 function _sigRun(opts) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var now = new Date();
-  var weekly = opts.forceWeekly || _sigMelbDay(now) === SIG_WEEKLY_DAY;
-  var gardens = _sigGardens();
-  if (!gardens.length) { Logger.log('Signals: no gardens loaded'); return []; }
+  var pilot = _sigPilot(ss), optout = _sigOptouts(ss);
+  var gardens = _sigGardens(Object.keys(pilot));
+  if (!gardens.length) { Logger.log('Signals: no pilot gardens (add rows to "' + SIG_PILOT + '")'); return []; }
 
+  var weekly = opts.forceWeekly || _sigMelbDay(now) === SIG_WEEKLY_DAY;
+  var fetchedAt = now.toISOString();
   var weather = _sigFetchWeather(gardens);
   var nearby = weekly ? _sigFetchNearby(gardens) : {};
   var library = weekly ? _sigPlantLibrary() : null;
   var log = _sigLogIndex(ss);
-  var logRows = [], drafts = [], noEmail = [];
   var month = _sigMelbMonth(now);
+  var drafts = [], logRows = [];
 
   gardens.forEach(function (g) {
+    var to = (pilot[g.garden_id] || []).filter(function (e) { return optout.indexOf(e) === -1; });
+    if (!to.length) return;
     var items = [];
-    var w = weather[g.garden_id];
-    if (w) {
-      _sigWeatherSignals(g, w, month).forEach(function (s) {
-        if (!_sigCooling(log, g.garden_id, s.type, now)) items.push(s);
-      });
-    }
-    var lastWeekly = _sigLastAny(log, g.garden_id, ['nearby', 'flowering']);
-    var weeklyOpen = !lastWeekly || (now - lastWeekly) / 864e5 >= SIG_GARDEN_GAP_DAYS;
-    if (weekly && weeklyOpen) {
-      var nb = nearby[g.garden_id];
-      if (nb && !_sigCooling(log, g.garden_id, 'nearby', now)) {
-        var s1 = _sigNearbySignal(g, nb, log);
-        if (s1) items.push(s1);
+    if (weather[g.garden_id]) _sigWeatherSignals(g, weather[g.garden_id], month, fetchedAt).forEach(function (s) {
+      if (!_sigCooling(log, g.garden_id, s.type, now)) items.push(s);
+    });
+    var last = _sigLastAny(log, g.garden_id, SIG_OBS);
+    if (weekly && (!last || (now - last) / 864e5 >= SIG_GARDEN_GAP_DAYS)) {
+      if (nearby[g.garden_id] && !_sigCooling(log, g.garden_id, 'nearby', now)) {
+        var n = _sigNearbySignal(g, nearby[g.garden_id], log, fetchedAt); if (n) items.push(n);
       }
       if (library && !_sigCooling(log, g.garden_id, 'flowering', now)) {
-        var s2 = _sigFloweringSignal(g, library, month, log);
-        if (s2) items.push(s2);
+        var f = _sigFloweringSignal(g, library, month, log); if (f) items.push(f);
       }
     }
-    if (!items.length) return;
+    var chosen = _sigChoose(items);
+    if (!chosen.length) return;
 
-    var emails = [];
-    try { emails = _emailsForGarden(g.garden_id, ss); } catch (e) { emails = []; }
-    emails = emails.filter(function (e, i, a) { return a.indexOf(e) === i; });
-    if (!emails.length) { noEmail.push(g.garden_name); return; }   // nothing queued or logged
-    var draft = _sigCompose(g, items);
-    drafts.push([now.toISOString(), g.garden_id, g.garden_name, emails.join(', '),
-                 items.map(function (s) { return s.type; }).join(', '),
-                 draft.subject, draft.body, 'DRAFT', '', '']);
-    items.forEach(function (s) { logRows.push([now.toISOString(), g.garden_id, s.type, s.key || '']); });
+    var id = Utilities.getUuid();
+    var card = { garden_name: g.garden_name, score: g.score, rating: g.rating, provisional: g.provisional, profile: g.profile };
+    var draft = _sigCompose(g, chosen);
+    var html = _sigHtml(draft.body, card);
+    var expires = chosen.map(function (s) { return s.expires; }).sort()[0];
+    var evidence = JSON.stringify({ garden_id: g.garden_id, generated_at: fetchedAt,
+      coordinates: { lat: g.lat, lng: g.lng, note: 'public display coordinates, offset ~250m' },
+      signals: chosen.map(function (s) { return { type: s.type, evidence: s.evidence }; }) });
+    var rec = {
+      created_at: fetchedAt, message_id: id, garden_id: g.garden_id, garden_name: g.garden_name,
+      to: to.join(', '), signals: chosen.map(function (s) { return s.type; }).join(', '),
+      subject: draft.subject, body: draft.body, status: 'DRAFT', expires_at: expires,
+      sent_at: '', note: '', content_hash: _sigHash(to.join(', '), draft.subject, draft.body, html),
+      evidence: evidence, card: JSON.stringify(card), html: html };
+    drafts.push(SIG_QUEUE_HEADERS.map(function (h) { return rec[h]; }));
+    chosen.forEach(function (s) { logRows.push([fetchedAt, g.garden_id, s.type, s.key || '', id]); });
   });
 
   if (drafts.length) {
@@ -191,124 +255,142 @@ function _sigRun(opts) {
     q.getRange(q.getLastRow() + 1, 1, drafts.length, SIG_QUEUE_HEADERS.length).setValues(drafts);
     var l = _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS);
     l.getRange(l.getLastRow() + 1, 1, logRows.length, SIG_LOG_HEADERS.length).setValues(logRows);
+    _sigNotify(ss, drafts);
   }
-  if (drafts.length || noEmail.length) _sigNotify(ss, drafts, noEmail);
-  Logger.log('Signals: ' + gardens.length + ' gardens checked, ' + drafts.length + ' drafts written' + (weekly ? ' (weekly run)' : ''));
+  Logger.log('Signals: ' + gardens.length + ' pilot gardens checked, ' + drafts.length + ' drafts' + (weekly ? ' (weekly run)' : ''));
   return drafts;
 }
 
+/* One lead signal + at most one supporting observation. Alerts lead. */
+function _sigChoose(items) {
+  var alerts = SIG_ALERTS.map(function (t) { return items.filter(function (s) { return s.type === t; })[0]; }).filter(Boolean);
+  var obs = SIG_OBS.map(function (t) { return items.filter(function (s) { return s.type === t; })[0]; }).filter(Boolean);
+  var lead = alerts[0] || obs[0];
+  if (!lead) return [];
+  var support = alerts.length ? obs[0] : obs[1];
+  return support ? [lead, support] : [lead];
+}
+
 /* ---------------------------------------------------------------
-   Gardens
+   Gardens (pilot only)
    --------------------------------------------------------------- */
 
-function _sigGardens() {
+function _sigGardens(ids) {
+  if (!ids.length) return [];
   var reg = _sigJson(SIG_SITE + '/data/registry.json');
   var locs = _sigJson(SIG_SITE + '/data/garden-locations.json') || [];
   if (!reg || !reg.gardens) return [];
   var loc = {};
   locs.forEach(function (l) { loc[l.garden_id] = l; });
-  var pilot = _sigProp('SIGNALS_PILOT'), exclude = _sigProp('SIGNALS_EXCLUDE');
   var list = reg.gardens.filter(function (g) {
-    if (g.demo || /demo/i.test(String(g.status || ''))) return false;
-    if (exclude.indexOf(g.garden_id) > -1) return false;
-    if (pilot.length && pilot.indexOf(g.garden_id) === -1) return false;
-    return loc[g.garden_id] && loc[g.garden_id].display_lat;
+    return ids.indexOf(g.garden_id) > -1 && !g.demo && !/demo/i.test(String(g.status || '')) &&
+      loc[g.garden_id] && isFinite(Number(loc[g.garden_id].display_lat));
   });
-  var reqs = list.map(function (g) { return { url: SIG_SITE + '/' + String(g.data_file || '').replace(/^\//, ''), muteHttpExceptions: true }; });
-  var resps = reqs.length ? UrlFetchApp.fetchAll(reqs) : [];
+  var resps = list.length ? UrlFetchApp.fetchAll(list.map(function (g) {
+    return { url: SIG_SITE + '/' + String(g.data_file || '').replace(/^\//, ''), muteHttpExceptions: true };
+  })) : [];
   return list.map(function (g, i) {
     var rec = {};
     try { if (resps[i].getResponseCode() === 200) rec = JSON.parse(resps[i].getContentText()); } catch (e) {}
     var bio = rec.biodiversity || {}, hab = rec.habitat || {};
     return {
-      garden_id: g.garden_id,
-      garden_name: g.garden_name || rec.garden_name || g.garden_id,
-      suburb: g.suburb || rec.suburb || '',
-      lat: Number(loc[g.garden_id].display_lat),
-      lng: Number(loc[g.garden_id].display_lng),
+      garden_id: g.garden_id, garden_name: g.garden_name || rec.garden_name || g.garden_id,
+      lat: Number(loc[g.garden_id].display_lat), lng: Number(loc[g.garden_id].display_lng),
       stewards: String(rec.stewards || '').trim(),
       species: (bio.species_list || []).map(function (s) { return typeof s === 'string' ? s : (s && (s.name || s.botanical_name)) || ''; }).filter(String),
       fauna: (hab.fauna_sightings || []).map(function (f) { return String(f.species || '').toLowerCase(); }),
-      score: g.score, rating: (g.rating && g.rating.current) || '',
+      score: typeof g.score === 'number' ? g.score : null, rating: (g.rating && g.rating.current) || '',
       provisional: /provisional/i.test(String(g.status || '')) || /self_reported/i.test(String(g.verification_level || '')),
       profile: SIG_SITE + (String(g.profile_url || '').charAt(0) === '/' ? '' : '/') + String(g.profile_url || '')
     };
   });
 }
 
-/* garden_id -> card data for the email footer */
-function _sigCardIndex() {
-  var out = {};
-  try {
-    _sigGardens().forEach(function (g) { out[g.garden_id] = g; });
-  } catch (e) {}
-  return out;
-}
-
 /* ---------------------------------------------------------------
-   Weather (Open-Meteo, no key)
+   Weather (Open-Meteo). daily[0..13] = past 14 days, [14] = today.
    --------------------------------------------------------------- */
 
 function _sigFetchWeather(gardens) {
-  var reqs = gardens.map(function (g) {
+  var out = {};
+  UrlFetchApp.fetchAll(gardens.map(function (g) {
     return { muteHttpExceptions: true, url: 'https://api.open-meteo.com/v1/forecast?latitude=' + g.lat.toFixed(3) +
       '&longitude=' + g.lng.toFixed(3) +
       '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,et0_fao_evapotranspiration' +
-      '&past_days=14&forecast_days=4&timezone=Australia%2FMelbourne' };
-  });
-  var out = {};
-  var resps = UrlFetchApp.fetchAll(reqs);
-  resps.forEach(function (r, i) {
+      '&past_days=14&forecast_days=5&timezone=Australia%2FMelbourne' };
+  })).forEach(function (r, i) {
     try { if (r.getResponseCode() === 200) out[gardens[i].garden_id] = JSON.parse(r.getContentText()).daily; } catch (e) {}
   });
   return out;
 }
 
-/* daily arrays: indices 0..13 = past 14 days, 14 = today, 15.. = next days */
-function _sigWeatherSignals(g, d, month) {
+function _sigWeatherSignals(g, d, month, fetchedAt) {
   var out = [], T = 14;
-  if (!d || !d.time || d.time.length < T + 3) return out;
-  var tmax = d.temperature_2m_max, tmin = d.temperature_2m_min,
-      rain = d.precipitation_sum, et0 = d.et0_fao_evapotranspiration;
-  var num = function (v) { return typeof v === 'number' ? v : 0; };
-  var dayName = function (i) { return _sigDayName(d.time[i], i - T); };
+  if (!d || !d.time || d.time.length < T + 5) return out;
+  var tmax = d.temperature_2m_max || [], tmin = d.temperature_2m_min || [],
+      rain = d.precipitation_sum || [], et0 = d.et0_fao_evapotranspiration || [];
+  // All values in [a, b] must be real numbers, or the signal is skipped.
+  var ok = function (arr, a, b) {
+    for (var i = a; i <= b; i++) if (typeof arr[i] !== 'number' || !isFinite(arr[i])) return false;
+    return true;
+  };
+  var ev = function (src, idx, extra) {
+    var o = { source: 'Open-Meteo forecast API (modelled, not measured at the garden)', retrieved_at: fetchedAt,
+              dates: idx.map(function (i) { return d.time[i]; }) };
+    Object.keys(src).forEach(function (k) { o[k] = idx.map(function (i) { return src[k][i]; }); });
+    if (extra) Object.keys(extra).forEach(function (k) { o[k] = extra[k]; });
+    return o;
+  };
 
-  // Heat: hottest of today + next 2 days
-  var hi = -99, hiDay = -1;
-  for (var i = T; i <= T + 2; i++) if (num(tmax[i]) > hi) { hi = num(tmax[i]); hiDay = i; }
-  if (hi >= SIG_HEAT_C) out.push({ type: 'heat', key: d.time[hiDay], subject: 'heat on the way',
-    text: 'Our forecast for your area shows ' + Math.round(hi) + '°C ' + dayName(hiDay) + '. ' +
-      'Anything planted in the last year is most at risk. A deep, slow soak the evening before does far more than a daily sprinkle, ' +
-      'and a shallow dish of water at ground level helps lizards, birds and bees ride it out too.' });
-
-  // Frost
-  var lo = 99, loDay = -1;
-  for (var j = T; j <= T + 2; j++) if (typeof tmin[j] === 'number' && tmin[j] < lo) { lo = tmin[j]; loDay = j; }
-  if (lo <= SIG_FROST_C) out.push({ type: 'frost', key: d.time[loDay], subject: 'a cold morning ahead',
-    text: 'A frost is possible ' + dayName(loDay) + ' morning, with a forecast low around ' + Math.round(lo) + '°C near you. ' +
-      'Most indigenous plants take it in their stride, but young or tender plantings in open, low spots are worth checking. ' +
-      'Leave the leaf litter where it is; it is doing its job.' });
-
-  // Soaking rain: today + next 2 days
-  var wet = 0;
-  for (var k = T; k <= T + 2; k++) wet += num(rain[k]);
-  if (wet >= SIG_RAIN_MM) {
-    var autumn = month >= 3 && month <= 6;
-    out.push({ type: 'rain', key: d.time[T], subject: autumn ? 'the planting window opens' : 'rain on the way',
-      text: autumn
-        ? 'Around ' + Math.round(wet) + 'mm of rain is forecast for your area over the next three days. In autumn this is the moment the planting window properly opens: warm soil, moisture arriving. If there is a gap you have been meaning to fill, this is the week.'
-        : 'Around ' + Math.round(wet) + 'mm of rain is forecast for your area over the next three days. Afterwards is a good time for a slow walk around: where water pools and where it runs off tells you a lot about your garden.' });
+  // Heat / frost: 1-2 days ahead only, so there is time to approve and act.
+  if (ok(tmax, T + 1, T + 2)) {
+    var hiDay = tmax[T + 1] >= tmax[T + 2] ? T + 1 : T + 2;
+    if (tmax[hiDay] >= SIG_HEAT_C) out.push({ type: 'heat', key: d.time[hiDay], subject: 'heat forecast for ' + _sigDate(d.time[hiDay], true),
+      expires: _sigStartOf(d.time[hiDay]),
+      evidence: ev({ temperature_2m_max: tmax }, [T + 1, T + 2]),
+      text: 'The forecast for your area shows ' + Math.round(tmax[hiDay]) + '°C on ' + _sigDate(d.time[hiDay]) + '. ' +
+        'Anything planted in the last year is most at risk. A deep, slow soak the evening before does far more than a daily sprinkle, ' +
+        'and a shallow dish of water at ground level helps lizards, birds and bees too.' });
+  }
+  if (ok(tmin, T + 1, T + 2)) {
+    var loDay = tmin[T + 1] <= tmin[T + 2] ? T + 1 : T + 2;
+    if (tmin[loDay] <= SIG_FROST_C) out.push({ type: 'frost', key: d.time[loDay], subject: 'possible frost on ' + _sigDate(d.time[loDay], true),
+      expires: _sigStartOf(d.time[loDay]),
+      evidence: ev({ temperature_2m_min: tmin }, [T + 1, T + 2]),
+      text: 'A frost is possible on the morning of ' + _sigDate(d.time[loDay]) + ', with a forecast low around ' + Math.round(tmin[loDay]) +
+        '°C in your area. Most indigenous plants take it in their stride, but young or tender plantings in open, low spots are worth checking. ' +
+        'Leave the leaf litter where it is; it is doing its job.' });
   }
 
-  // Dry spell: evaporation outrunning rain over the last 14 days, little rain coming
-  var pastRain = 0, pastEt = 0, next = 0;
-  for (var p = 0; p < T; p++) { pastRain += num(rain[p]); pastEt += num(et0[p]); }
-  for (var n = T; n <= T + 3 && n < rain.length; n++) next += num(rain[n]);
-  if (pastEt - pastRain >= SIG_DRY_DEFICIT && next < SIG_DRY_NEXT_MM && wet < SIG_RAIN_MM)
-    out.push({ type: 'dry', key: d.time[T], subject: 'a dry stretch',
-      text: 'It has been a dry fortnight around your garden: about ' + Math.round(pastRain) + 'mm of rain, against roughly ' +
-        Math.round(pastEt) + 'mm drawn back out of the ground by sun and wind, and little rain in the forecast. ' +
-        'Established indigenous plants mostly ride this out. The newest plantings are the ones to check: push a finger into the soil beside them.' });
+  // Soaking rain: tomorrow + the two days after.
+  if (ok(rain, T + 1, T + 3)) {
+    var wet = rain[T + 1] + rain[T + 2] + rain[T + 3];
+    if (wet >= SIG_RAIN_MM) {
+      var autumn = month >= 3 && month <= 6;
+      var span = _sigDate(d.time[T + 1]) + ' and ' + _sigDate(d.time[T + 3]);
+      out.push({ type: 'rain', key: d.time[T + 1], subject: autumn ? 'the planting window opens' : 'rain forecast from ' + _sigDate(d.time[T + 1], true),
+        expires: _sigStartOf(d.time[T + 1]),
+        evidence: ev({ precipitation_sum: rain }, [T + 1, T + 2, T + 3], { total_mm: Math.round(wet * 10) / 10 }),
+        text: autumn
+          ? 'Around ' + Math.round(wet) + 'mm of rain is forecast for your area between ' + span + '. In autumn this is when the planting window properly opens: warm soil, moisture arriving. If there is a gap you have been meaning to fill, this is the moment.'
+          : 'Around ' + Math.round(wet) + 'mm of rain is forecast for your area between ' + span + '. Afterwards is a good time for a slow walk around: where water pools and where it runs off tells you a lot about your garden.' });
+    }
+  }
+
+  // Dry fortnight: modelled rain vs reference evapotranspiration (ET0).
+  if (ok(rain, 0, T + 4) && ok(et0, 0, T - 1)) {
+    var pr = 0, pe = 0, next = 0;
+    for (var p = 0; p < T; p++) { pr += rain[p]; pe += et0[p]; }
+    for (var n = T; n <= T + 4; n++) next += rain[n];
+    if (pe - pr >= SIG_DRY_DEFICIT && next < SIG_DRY_NEXT_MM)
+      out.push({ type: 'dry', key: d.time[T], subject: 'a dry stretch',
+        expires: _sigStartOf(d.time[T + 2]),
+        evidence: ev({ precipitation_sum: rain, et0_fao_evapotranspiration: et0 }, _sigRange(0, T - 1),
+          { rain_14d_mm: Math.round(pr), et0_14d_mm: Math.round(pe), rain_next_5d_mm: Math.round(next),
+            note: 'ET0 is reference evapotranspiration for well-watered grass: atmospheric demand, not measured soil drying' }),
+        text: 'Modelled conditions around your garden suggest rainfall has been below atmospheric water demand over the past fortnight, ' +
+          'with little rain forecast in the next few days. Established indigenous plants mostly ride this out. ' +
+          'It may be worth checking the soil beside recent plantings.' });
+  }
   return out;
 }
 
@@ -318,58 +400,62 @@ function _sigWeatherSignals(g, d, month) {
 
 function _sigFetchNearby(gardens) {
   var from = Utilities.formatDate(new Date(Date.now() - SIG_ALA_DAYS * 864e5), 'UTC', 'yyyy-MM-dd');
+  var out = {};
   var reqs = gardens.map(function (g) {
     return { muteHttpExceptions: true, url: 'https://biocache-ws.ala.org.au/ws/occurrences/search?q=*:*' +
       '&lat=' + g.lat.toFixed(4) + '&lon=' + g.lng.toFixed(4) + '&radius=' + SIG_ALA_RADIUS_KM +
       '&fq=' + encodeURIComponent('occurrence_date:[' + from + 'T00:00:00Z TO *]') +
       '&pageSize=300&sort=occurrence_date&dir=desc' };
   });
-  var out = {};
-  var resps = UrlFetchApp.fetchAll(reqs);
-  resps.forEach(function (r, i) {
+  UrlFetchApp.fetchAll(reqs).forEach(function (r, i) {
     try {
       if (r.getResponseCode() !== 200) return;
-      var occ = JSON.parse(r.getContentText()).occurrences || [];
       var bySp = {};
-      occ.forEach(function (o) {
+      (JSON.parse(r.getContentText()).occurrences || []).forEach(function (o) {
         var cls = String(o.classs || o['class'] || '').toLowerCase();
         var groups = (o.speciesGroups || []).join(' ').toLowerCase();
-        var fauna = SIG_FAUNA_CLASSES.indexOf(cls) > -1 || /birds|amphibians|frogs|reptiles|mammals|insects|butterflies/.test(groups);
-        if (!fauna) return;
+        if (SIG_FAUNA_CLASSES.indexOf(cls) === -1 && !/birds|amphibians|frogs|reptiles|mammals|insects|butterflies/.test(groups)) return;
         var sci = String(o.scientificName || o.raw_scientificName || '').trim();
-        if (sci.split(/\s+/).length < 2) return;            // species-level only
+        if (sci.split(/\s+/).length < 2) return;
         var common = String(o.vernacularName || o.raw_vernacularName || '').trim();
         if (SIG_INTRODUCED.indexOf(common.toLowerCase()) > -1) return;
         var k = sci.toLowerCase();
-        if (!bySp[k]) bySp[k] = { sci: sci, common: common, cls: cls, n: 0 };
-        bySp[k].n++;
+        var sp = bySp[k] || (bySp[k] = { sci: sci, common: common, cls: cls, records: [] });
+        var when = typeof o.eventDate === 'number' ? new Date(o.eventDate).toISOString().slice(0, 10) : String(o.eventDate || o.occurrenceDate || '');
+        sp.records.push({ id: String(o.uuid || ''), date: when, dataset: String(o.dataResourceName || ''),
+          url: o.uuid ? 'https://biocache.ala.org.au/occurrences/' + o.uuid : '' });
       });
-      out[gardens[i].garden_id] = Object.keys(bySp).map(function (k) { return bySp[k]; });
+      out[gardens[i].garden_id] = { query: reqs[i].url, species: Object.keys(bySp).map(function (k) { return bySp[k]; }) };
     } catch (e) {}
   });
   return out;
 }
 
-function _sigNearbySignal(g, list, log) {
+function _sigNearbySignal(g, res, log, fetchedAt) {
   var mentioned = _sigKeysFor(log, g.garden_id, 'nearby', 90);
-  var fresh = list.filter(function (s) {
+  var fresh = res.species.filter(function (s) {
     var lc = (s.common || s.sci).toLowerCase();
     if (mentioned.indexOf(s.sci.toLowerCase()) > -1) return false;
     return !g.fauna.some(function (f) { return f && (lc.indexOf(f) > -1 || f.indexOf(lc) > -1); });
   });
   if (!fresh.length) return null;
   var rank = { aves: 0, amphibia: 1, reptilia: 2, insecta: 3, mammalia: 4 };
-  var r = function (c) { return rank.hasOwnProperty(c) ? rank[c] : 5; };
-  fresh.sort(function (a, b) { return (r(a.cls) - r(b.cls)) || (b.n - a.n); });
-  var pick = fresh.slice(0, 4);
+  var rk = function (c) { return rank.hasOwnProperty(c) ? rank[c] : 5; };
+  fresh.sort(function (a, b) { return (rk(a.cls) - rk(b.cls)) || (b.records.length - a.records.length); });
+  var pick = fresh.slice(0, 3);
   var names = pick.map(function (s) { return s.common ? s.common + ' (' + s.sci + ')' : s.sci; });
-  return { type: 'nearby', key: pick.map(function (s) { return s.sci.toLowerCase(); }).join('|'), subject: 'who\'s been seen nearby',
+  return { type: 'nearby', key: pick.map(function (s) { return s.sci.toLowerCase(); }).join('|'),
+    subject: 'who\'s been seen nearby', expires: new Date(Date.now() + 7 * 864e5).toISOString(),
+    evidence: { source: 'Atlas of Living Australia biocache', retrieved_at: fetchedAt, query: res.query,
+      radius_km: SIG_ALA_RADIUS_KM, window_days: SIG_ALA_DAYS,
+      species: pick.map(function (s) { return { scientific: s.sci, common: s.common, class: s.cls,
+        record_count: s.records.length, records: s.records.slice(0, 5) }; }) },
     text: 'Recorded within about 1.5km of your garden in the past month, according to the Atlas of Living Australia: ' +
-      _sigJoin(names) + '. Have any of them visited you? Reply with a photo or a line and we will add it to your garden\'s record.' };
+      _sigJoin(names) + '. Have any of them visited you? Send us a photo or a line and we\'ll review it with you for your garden\'s record.' };
 }
 
 /* ---------------------------------------------------------------
-   Flowering (plant library)
+   Flowering (plant library, Australian plants only)
    --------------------------------------------------------------- */
 
 function _sigPlantLibrary() {
@@ -377,24 +463,22 @@ function _sigPlantLibrary() {
   if (!lib || !lib.species) return null;
   var idx = {};
   lib.species.forEach(function (p) {
-    if (p.australian_native !== true) return;   // only headline Australian plants
+    if (p.australian_native !== true) return;
     var months = _sigBloomMonths(p);
     if (!months.length) return;
-    idx[_sigNorm(p.botanical_name)] = { name: p.botanical_name, common: p.common_name || '', months: months,
-      peak: (p.flowering && p.flowering.peak) || [] };
+    idx[_sigNorm(p.botanical_name)] = { name: p.botanical_name, slug: p.slug, common: p.common_name || '', months: months,
+      peak: (p.flowering && p.flowering.peak) || [], basis: p.flowering && (p.flowering.peak || []).length ? 'flowering.peak/shoulder' : 'bloom_time: ' + JSON.stringify(p.bloom_time) };
   });
   return idx;
 }
 
 function _sigBloomMonths(p) {
-  if (p.flowering && (p.flowering.peak || []).length)
-    return (p.flowering.peak || []).concat(p.flowering.shoulder || []);
+  if (p.flowering && (p.flowering.peak || []).length) return (p.flowering.peak || []).concat(p.flowering.shoulder || []);
   var bt = p.bloom_time;
   if (!bt) return [];
   if (!Array.isArray(bt)) bt = [bt];
   var S = { spring: [9, 10, 11], summer: [12, 1, 2], autumn: [3, 4, 5], winter: [6, 7, 8] };
-  var order = ['spring', 'summer', 'autumn', 'winter'];
-  var months = [];
+  var order = ['spring', 'summer', 'autumn', 'winter'], months = [];
   bt.forEach(function (raw) {
     var s = String(raw).toLowerCase();
     if (/all year|evergreen/.test(s)) return;
@@ -402,8 +486,7 @@ function _sigBloomMonths(p) {
     if (!found.length) return;
     var span = found;
     if (/\bto\b|-/.test(s) && found.length === 2) {
-      var a = s.indexOf(found[0]) < s.indexOf(found[1]) ? found[0] : found[1];
-      var b = a === found[0] ? found[1] : found[0];
+      var a = s.indexOf(found[0]) < s.indexOf(found[1]) ? found[0] : found[1], b = a === found[0] ? found[1] : found[0];
       span = []; var i = order.indexOf(a);
       while (true) { span.push(order[i]); if (order[i] === b || span.length > 4) break; i = (i + 1) % 4; }
     }
@@ -420,27 +503,25 @@ function _sigBloomMonths(p) {
 function _sigFloweringSignal(g, lib, month, log) {
   var prev = month === 1 ? 12 : month - 1;
   var recent = _sigKeysFor(log, g.garden_id, 'flowering', 150);
-  var seen = {}, coming = [];
+  var seen = {}, cands = [];
   g.species.forEach(function (raw) {
     var p = _sigMatchPlant(raw, lib);
-    if (!p || seen[p.name]) return;
+    if (!p || seen[p.name] || recent.indexOf(_sigNorm(p.name)) > -1) return;
     seen[p.name] = true;
-    if (recent.indexOf(_sigNorm(p.name)) > -1) return;
-    // Genus-level library entries (e.g. a cultivar) keep the garden's own name
-    var label = p.name.split(' ').length > 1 && p.common ? p.common + ' (' + p.name + ')'
-              : String(raw).replace(/['‘’"]/g, '').trim();
-    if (p.months.indexOf(month) > -1) coming.push({ name: p.name, months: p.months, peak: p.peak, label: label });
+    if (p.months.indexOf(month) === -1) return;
+    var label = p.name.split(' ').length > 1 && p.common ? p.common + ' (' + p.name + ')' : String(raw).replace(/['‘’"]/g, '').trim();
+    cands.push({ p: p, raw: raw, label: label, rank: (p.months.indexOf(prev) === -1 ? 0 : 2) + (p.peak.indexOf(month) > -1 ? 0 : 1) });
   });
-  if (!coming.length) return null;
-  // Prefer plants just starting this month, then those at peak, then the rest.
-  var rankP = function (p) { return (p.months.indexOf(prev) === -1 ? 0 : 2) + (p.peak.indexOf(month) > -1 ? 0 : 1); };
-  coming.sort(function (a, b) { return rankP(a) - rankP(b); });
-  var pick = coming.slice(0, 3);
-  var names = pick.map(function (p) { return p.label; });
-  return { type: 'flowering', key: pick.map(function (p) { return _sigNorm(p.name); }).join('|'), subject: 'what may be coming into flower',
-    text: 'Going by your garden\'s planting list, ' + _sigJoin(names) + (pick.length > 1 ? ' are' : ' is') +
-      ' usually in flower around now. ' + (pick.length > 1 ? 'Have they' : 'Has it') + ' started? Let us know what is actually out; ' +
-      'a quick photo makes your record far richer than any list.' };
+  if (!cands.length) return null;
+  cands.sort(function (a, b) { return a.rank - b.rank; });
+  var pick = cands.slice(0, 3);
+  return { type: 'flowering', key: pick.map(function (c) { return _sigNorm(c.p.name); }).join('|'),
+    subject: 'what may be in flower', expires: new Date(Date.now() + 7 * 864e5).toISOString(),
+    evidence: { source: SIG_SITE + '/data/plant-library.json', month: month,
+      species: pick.map(function (c) { return { garden_list_name: c.raw, library_name: c.p.name, slug: c.p.slug, months: c.p.months, basis: c.p.basis }; }) },
+    text: 'Going by your garden\'s planting list, ' + _sigJoin(pick.map(function (c) { return c.label; })) +
+      (pick.length > 1 ? ' are' : ' is') + ' usually in flower around now. ' + (pick.length > 1 ? 'Have they' : 'Has it') +
+      ' started? Let us know what is actually out; a quick photo makes your record far richer than any list.' };
 }
 
 function _sigMatchPlant(raw, lib) {
@@ -463,28 +544,29 @@ function _sigNorm(s) {
    Composition
    --------------------------------------------------------------- */
 
-function _sigCompose(g, items) {
-  var order = { heat: 0, frost: 1, dry: 2, rain: 3, nearby: 4, flowering: 5 };
-  items.sort(function (a, b) { return order[a.type] - order[b.type]; });
+function _sigCompose(g, chosen) {
   var greeting = g.stewards ? 'Hi ' + g.stewards.replace(/\s+and\s+/i, ' & ') + ',' : 'Hello,';
-  var lead = items.length > 1 ? 'A few things around ' + g.garden_name + ' this week.' : 'A quick note about ' + g.garden_name + '.';
-  var subject = g.garden_name + ': ' + items[0].subject;
-  var close = items.some(function (s) { return s.type === 'nearby' || s.type === 'flowering'; })
+  var lead = chosen[0], support = chosen[1];
+  var paras = [greeting, '', lead.text, ''];
+  if (support) paras.push('Also, ' + support.text.charAt(0).toLowerCase() + support.text.slice(1), '');
+  paras.push(chosen.some(function (s) { return SIG_OBS.indexOf(s.type) > -1; })
     ? 'Just hit reply. It comes straight to us.'
-    : 'If anything looks unhappy, reply with a photo and we will take a look.';
-  var body = [greeting, '', lead, '']
-    .concat(items.map(function (s) { return s.text + '\n'; }))
-    .concat([close, '', SIG_SIGNOFF]).join('\n');
-  return { subject: subject, body: body };
+    : 'If anything looks unhappy, reply with a photo and we will take a look.');
+  paras.push('', SIG_SIGNOFF, '', '--',
+    'These notes are part of our Ecological Registry steward pilot. Weather and sightings describe your local area, not your garden itself. ' +
+    'Reply "pause" and we will stop them.');
+  return { subject: g.garden_name + ': ' + lead.subject, body: paras.join('\n') };
 }
 
 function _sigHtml(body, card) {
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
-  var paras = esc(body).split(/\n{2,}/).map(function (p) {
+  var parts = String(body).split(/\n--\n/);
+  var main = parts[0], small = parts.slice(1).join(' ');
+  var paras = esc(main).split(/\n{2,}/).map(function (p) {
     return '<p style="margin:0 0 16px;font:16px/1.6 Georgia,serif;color:#2b2f26">' + p.replace(/\n/g, '<br>') + '</p>';
   }).join('');
   var foot = '';
-  if (card) {
+  if (card && card.garden_name) {
     var light = card.provisional ? '#d4bb87' : '#b3ff6c';
     foot = '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0 0;width:100%;max-width:360px;background:#11170f;border:1px solid #47513e">' +
       '<tr><td style="padding:18px 20px">' +
@@ -495,20 +577,32 @@ function _sigHtml(body, card) {
       '<a href="' + esc(card.profile) + '" style="display:block;margin-top:12px;font:13px/1.5 Helvetica,Arial,sans-serif;color:#fff0dc">View your garden\'s record ↗</a>' +
       '</td></tr></table>';
   }
-  var small = '<p style="margin:24px 0 0;font:12px/1.6 Helvetica,Arial,sans-serif;color:#7d8574">These notes are part of our steward pilot. ' +
-    'Weather and sightings describe your local area, not your garden itself. Reply "pause" and we will stop them.</p>';
-  return '<div style="max-width:560px;padding:8px">' + paras + foot + small + '</div>';
+  var note = small ? '<p style="margin:24px 0 0;font:12px/1.6 Helvetica,Arial,sans-serif;color:#7d8574">' + esc(small).replace(/\n/g, ' ') + '</p>' : '';
+  return '<div style="max-width:560px;padding:8px">' + paras + foot + note + '</div>';
 }
 
-/* Internal summary to you after each run that produced drafts */
-function _sigNotify(ss, drafts, noEmail) {
+/* Rebuild the frozen HTML + hash from the row's current to/subject/body
+   and send it back to DRAFT. Used by onSignalsEdit and the send check. */
+function _sigRefreeze(sh, row, note) {
+  var vals = sh.getRange(row, 1, 1, SIG_QUEUE_HEADERS.length).getValues()[0];
+  var v = function (h) { return vals[SIG_C[h] - 1]; };
+  if (!v('message_id')) return;
+  var st = String(v('status'));
+  if (st === 'SENT' || st === 'SENDING' || st === 'CHECK') return;   // history is not rewritten
+  var card = {}; try { card = JSON.parse(String(v('card') || '{}')); } catch (e) {}
+  var html = _sigHtml(v('body'), card);
+  _sigSet(sh, row, { html: html, content_hash: _sigHash(v('to'), v('subject'), v('body'), html),
+    status: 'DRAFT', note: note });
+}
+
+function _sigNotify(ss, drafts) {
   try {
-    var lines = drafts.map(function (d) { return '• ' + d[2] + ' — ' + d[4]; });
-    var text = (lines.length ? lines.join('\n') + '\n\nReview and set status to APPROVED:\n' +
-      ss.getUrl() + '#gid=' + _sigQueueSheet(ss).getSheetId() : 'No drafts this run.');
-    if (noEmail && noEmail.length)
-      text += '\n\nHad something to say but no steward email on file (add to the Steward Emails sheet):\n' + noEmail.join(', ');
-    MailApp.sendEmail(NOTIFY_EMAIL, 'Garden signals: ' + drafts.length + ' draft' + (drafts.length === 1 ? '' : 's') + ' to review', text);
+    var lines = drafts.map(function (d) {
+      return '• ' + d[SIG_C.garden_name - 1] + ' — ' + d[SIG_C.signals - 1] + ' (expires ' + d[SIG_C.expires_at - 1] + ')';
+    });
+    MailApp.sendEmail(NOTIFY_EMAIL, 'Garden signals: ' + drafts.length + ' draft' + (drafts.length === 1 ? '' : 's') + ' to review',
+      lines.join('\n') + '\n\nReview and set status to APPROVED (evidence is in the row):\n' +
+      ss.getUrl() + '#gid=' + _sigQueueSheet(ss).getSheetId());
   } catch (e) {}
 }
 
@@ -531,20 +625,41 @@ function _sigQueueSheet(ss) {
   var sh = _sigSheet(ss, SIG_QUEUE, SIG_QUEUE_HEADERS);
   if (!existed) {
     var rule = SpreadsheetApp.newDataValidation().requireValueInList(SIG_STATUSES, true).build();
-    sh.getRange('H2:H').setDataValidation(rule);
-    sh.setColumnWidth(6, 260); sh.setColumnWidth(7, 520);
-    sh.getRange('G2:G').setWrap(true);
+    sh.getRange(2, SIG_C.status, 999, 1).setDataValidation(rule);
+    sh.setColumnWidth(SIG_C.subject, 260); sh.setColumnWidth(SIG_C.body, 520);
+    sh.getRange(2, SIG_C.body, 999, 1).setWrap(true);
+    sh.hideColumns(SIG_C.content_hash, 4);   // content_hash, evidence, card, html
   }
   return sh;
 }
 
-function _sigMark(sh, row, status, sentAt, note) {
-  sh.getRange(row, 8, 1, 3).setValues([[status, sentAt, note]]);
+function _sigSet(sh, row, fields) {
+  Object.keys(fields).forEach(function (h) { sh.getRange(row, SIG_C[h]).setValue(fields[h]); });
+}
+
+function _sigPilot(ss) {
+  var sh = ss.getSheetByName(SIG_PILOT), out = {};
+  if (!sh || sh.getLastRow() < 2) return out;
+  sh.getRange(2, 1, sh.getLastRow() - 1, 2).getValues().forEach(function (r) {
+    var g = String(r[0]).trim(), e = String(r[1]).toLowerCase().trim();
+    if (g && /@/.test(e)) (out[g] = out[g] || []).push(e);
+  });
+  return out;
+}
+
+function _sigOptouts(ss) {
+  var sh = ss.getSheetByName(SIG_OPTOUT);
+  if (!sh || sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues()
+    .map(function (r) { return String(r[0]).toLowerCase().trim(); }).filter(String);
+}
+
+function _sigEmails(s) {
+  return String(s || '').split(',').map(function (x) { return x.trim().toLowerCase(); }).filter(String);
 }
 
 function _sigLogIndex(ss) {
-  var sh = _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS);
-  var out = {};
+  var sh = _sigSheet(ss, SIG_LOG, SIG_LOG_HEADERS), out = {};
   if (sh.getLastRow() < 2) return out;
   sh.getRange(2, 1, sh.getLastRow() - 1, 4).getValues().forEach(function (r) {
     var k = r[1] + '::' + r[2];
@@ -568,24 +683,23 @@ function _sigLastAny(log, gid, types) {
 
 function _sigKeysFor(log, gid, type, days) {
   var cut = Date.now() - days * 864e5, out = [];
-  (log[gid + '::' + type] || []).forEach(function (x) {
-    if (x.at.getTime() >= cut) out = out.concat(x.key.split('|'));
-  });
+  (log[gid + '::' + type] || []).forEach(function (x) { if (x.at.getTime() >= cut) out = out.concat(x.key.split('|')); });
   return out;
 }
 
-function _sigOptouts(ss) {
-  var sh = ss.getSheetByName(SIG_OPTOUT);
-  if (!sh || sh.getLastRow() < 2) return [];
-  return sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues()
-    .map(function (r) { return String(r[0]).toLowerCase().trim(); }).filter(String);
+/* 'primary' = script runs as hello@gardenerandson.com (omit `from`);
+   'alias'   = it's a verified send-as alias (pass `from`); null = can't. */
+function _sigSendMode() {
+  try {
+    if (String(Session.getEffectiveUser().getEmail()).toLowerCase() === SIG_FROM) return 'primary';
+    return GmailApp.getAliases().map(function (a) { return String(a).toLowerCase(); }).indexOf(SIG_FROM) > -1 ? 'alias' : null;
+  } catch (e) { return null; }
 }
 
-function _sigAliasOk() {
-  try {
-    if (Session.getEffectiveUser().getEmail().toLowerCase() === SIG_FROM) return true;
-    return GmailApp.getAliases().map(function (a) { return a.toLowerCase(); }).indexOf(SIG_FROM) > -1;
-  } catch (e) { return false; }
+function _sigHash() {
+  var s = Array.prototype.slice.call(arguments).map(String).join('␞');
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, s, Utilities.Charset.UTF_8)
+    .map(function (b) { return ('0' + ((b + 256) % 256).toString(16)).slice(-2); }).join('');
 }
 
 function _sigJson(url) {
@@ -595,23 +709,19 @@ function _sigJson(url) {
   } catch (e) { return null; }
 }
 
-function _sigProp(name) {
-  return String(PropertiesService.getScriptProperties().getProperty(name) || '')
-    .split(',').map(function (s) { return s.trim(); }).filter(String);
+/* Melbourne-local midnight at the start of a YYYY-MM-DD date, as ISO. */
+function _sigStartOf(ymd) {
+  return Utilities.parseDate(String(ymd) + ' 00:00', SIG_TZ, 'yyyy-MM-dd HH:mm').toISOString();
 }
 
-function _sigMelbDay(d) { return Number(Utilities.formatDate(d, 'Australia/Melbourne', 'u')) % 7; }   // 1=Mon .. 0=Sun
-function _sigMelbMonth(d) { return Number(Utilities.formatDate(d, 'Australia/Melbourne', 'M')); }
-
-function _sigDayName(iso, offset) {
-  if (offset === 0) return 'today';
-  if (offset === 1) return 'tomorrow';
-  var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  var p = String(iso).split('-');
-  return 'on ' + days[new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay()];
+/* 'Tuesday 3 November' (or 'Tue 3 Nov' when short) from YYYY-MM-DD */
+function _sigDate(ymd, short) {
+  var p = String(ymd).split('-').map(Number);
+  var dow = SIG_DAYS[new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay()], mon = SIG_MONTHS[p[1] - 1];
+  return short ? dow.slice(0, 3) + ' ' + p[2] + ' ' + mon.slice(0, 3) : dow + ' ' + p[2] + ' ' + mon;
 }
 
-function _sigJoin(a) {
-  if (a.length < 2) return a.join('');
-  return a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
-}
+function _sigRange(a, b) { var o = []; for (var i = a; i <= b; i++) o.push(i); return o; }
+function _sigMelbDay(d) { return Number(Utilities.formatDate(d, SIG_TZ, 'u')) % 7; }
+function _sigMelbMonth(d) { return Number(Utilities.formatDate(d, SIG_TZ, 'M')); }
+function _sigJoin(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
