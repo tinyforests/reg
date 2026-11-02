@@ -436,20 +436,33 @@ function _sigRunLocked(opts) {
       }
     }
     var chosen = _sigChoose(items);
-    if (chosen.length && chosen[0].type === 'season') {
-      var cond = _sigSeasonSoFar(g, now);
-      if (cond) {
-        var at = chosen[0].paragraphs.length - 1 - (chosen[0].also && chosen[0].also.length ? 1 : 0);
-        chosen[0].paragraphs.splice(at, 0, cond.text);
-        chosen[0].evidence.conditions = cond.evidence;
-      }
-    }
     if (!chosen.length) return;
 
     var id = Utilities.getUuid();
     var card = { garden_name: g.garden_name, score: g.score, rating: g.rating, provisional: g.provisional, profile: g.profile };
-    var draft = _sigCompose(g, chosen);
-    var html = _sigHtml(draft.body, card);
+    var draft, html;
+    if (chosen[0].type === 'season') {
+      // Seasonal update: the steward email template (templates/email/steward_update.py).
+      var cond = _sigSeasonSoFar(g, now);
+      var model = chosen[0].model;
+      model.garden = g.garden_name; model.greeting = g.stewards ? 'Hi ' + _sigFirstNames(g.stewards) + ',' : 'Hello,';
+      model.profile = g.profile; model.dateLabel = _sigDate(Utilities.formatDate(now, SIG_TZ, 'yyyy-MM-dd'), true).replace(/^\w+ /, '') + ' ' + Utilities.formatDate(now, SIG_TZ, 'yyyy');
+      model.season = _sigSeasonName(month);
+      model.stats = cond ? cond.stats : null;
+      model.sun = _sigSunrise(g, now);
+      model.lookups = _sigLookups(g, now);
+      model.studio = _sigStudioPanel(g);
+      model.studioNote = String(PropertiesService.getScriptProperties().getProperty('SIGNALS_STUDIO_NOTE') || '').trim().replace(/\{garden\}/g, g.garden_name);
+      if (cond) chosen[0].evidence.conditions = cond.evidence;
+      if (model.sun) chosen[0].evidence.sun = { source: 'Open-Meteo forecast sunrise; first light = civil dawn (sun 6° below horizon)', date: model.sun.date, first_light: model.sun.firstLight, sunrise: model.sun.sunrise };
+      if (model.lookups) chosen[0].evidence.lookups = { source: 'EVC lookup log (distinct places, ~100m; no addresses)', near_10km: model.lookups.near, statewide: model.lookups.all, since: '1 ' + model.lookups.sinceLabel };
+      card.model = model;
+      draft = { subject: g.garden_name + ' - ' + model.season.charAt(0).toUpperCase() + model.season.slice(1) + ' Update', body: _sigUpdateText(model) };
+      html = _sigUpdateHtml(model, card);
+    } else {
+      draft = _sigCompose(g, chosen);
+      html = _sigHtml(draft.body, card);
+    }
     var expires = chosen.map(function (s) { return s.expires; }).sort()[0];
     var evidence = JSON.stringify({ garden_id: g.garden_id, generated_at: fetchedAt,
       coordinates: { lat: g.lat, lng: g.lng, note: 'public display coordinates, offset ~250m' },
@@ -886,6 +899,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       (a.featured - b.featured) || b.rec.observed.localeCompare(a.rec.observed) || (a.rec.distance_m - b.rec.distance_m);
   });
   var lead = eligible[0], sp = lead.sp, rec = lead.rec;
+  if (!sp.common) sp.common = _sigCommonName(sp.sci);
   var name = sp.common || sp.sci;
   var article = /^[aeiou]/i.test(name) ? 'an ' : 'a ';
   var km = Math.max(0.5, Math.round(rec.distance_m / 500) / 2);
@@ -908,6 +922,7 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
     if (also.length >= 4 || seenTheme[c.sp.theme]) return;
     seenTheme[c.sp.theme] = true; also.push(c);
   });
+  also.forEach(function (c) { if (!c.sp.common) c.sp.common = _sigCommonName(c.sp.sci); });
   var alsoLines = also.map(function (c) {
     var km2 = Math.max(0.5, Math.round(c.rec.distance_m / 500) / 2);
     return '– ' + (c.sp.common ? c.sp.common + ' (' + c.sp.sci + ')' : c.sp.sci) + ', ' +
@@ -937,54 +952,213 @@ function _sigSeasonSignal(g, res, log, now, fetchedAt) {
       found_but_no_reason: considered.filter(function (c) { return !c.reason; }).slice(0, 8).map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, distance_m: c.rec.distance_m, observed: c.rec.observed }; }),
       wording_rules: 'records describe the surrounding area or landscape, never the garden; no rarity claims; share, never ask the steward to do anything' },
     also: also.map(function (c) { return { scientific: c.sp.sci, common: c.sp.common, theme: c.sp.theme, record: c.rec }; }),
+    model: {
+      eyebrow: 'Recorded nearby · ' + when,
+      headline: article.charAt(0).toUpperCase() + article.slice(1) + name + (lead.local ? ', recorded near ' + g.garden_name : ', about ' + km + 'km from ' + g.garden_name),
+      sci: sp.common ? sp.sci : '', why: lead.whyNow || '', plant: lead.plant ? lead.plant.text : '', link: lead.link.text || '',
+      also: also.map(function (c) {
+        var k2 = Math.max(0.5, Math.round(c.rec.distance_m / 500) / 2);
+        return { theme: c.sp.theme, name: c.sp.common || c.sp.sci, sci: c.sp.common ? c.sp.sci : '',
+                 where: c.rec.distance_m <= SIG_LOCAL_M ? 'Nearby' : 'About ' + k2 + 'km away', when: _sigDate(c.rec.observed).replace(/^\w+ /, '') };
+      })
+    },
     paragraphs: lines, text: lines.join('\n\n') };
 }
 
-/* Season so far at the garden, from modelled daily weather (Open-Meteo
-   archive, ERA5-based) at the garden's display coordinates: rainfall and
-   warm days since the season began, against the same dates over the
-   previous 30 years. Skipped if any value in the current season is
-   missing. */
+/* Season so far at the garden, from modelled weather (Open-Meteo
+   historical API, ERA5) at the garden's display coordinates, against the
+   same days in each of the previous 30 years: rain, hot days, soil
+   moisture and soil temperature at 7-28cm, and (August-January) spring
+   warmth as growing degree days since 1 August, base 10C, expressed as
+   weeks ahead of or behind a typical year. Every figure is turned into
+   plain language. Returns null if data is incomplete. */
 function _sigSeasonSoFar(g, now) {
   var month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
   var startMonth = { spring: 9, summer: 12, autumn: 3, winter: 6 }[seasonName];
   var Y = Number(Utilities.formatDate(now, SIG_TZ, 'yyyy'));
   var sy = startMonth === 12 && month !== 12 ? Y - 1 : Y;
   var end = Utilities.formatDate(new Date(now.getTime() - 2 * 864e5), SIG_TZ, 'yyyy-MM-dd');   // archive trails by a few days
+  var warmthOn = month >= 8 || month === 1;
+  var wy = month === 1 ? Y - 1 : Y;                                                              // year of the 1 August start
+  var first = Math.min(sy, wy) - 30;
+  var startStr = first + '-' + (warmthOn ? '08' : ('0' + startMonth).slice(-2)) + '-01';
   var url = 'https://archive-api.open-meteo.com/v1/archive?latitude=' + g.lat.toFixed(3) + '&longitude=' + g.lng.toFixed(3) +
-    '&start_date=' + (sy - 30) + '-' + ('0' + startMonth).slice(-2) + '-01&end_date=' + end +
-    '&daily=precipitation_sum,temperature_2m_max&timezone=Australia%2FMelbourne';
+    '&start_date=' + startStr + '&end_date=' + end +
+    '&daily=precipitation_sum,temperature_2m_max,temperature_2m_min&hourly=soil_moisture_7_to_28cm,soil_temperature_7_to_28cm' +
+    '&timezone=Australia%2FMelbourne';
   var j = _sigJson(url);
   if (!j || !j.daily || !j.daily.time) return null;
-  // Same number of days from the season's start in every year.
-  var day = function (str) { var p = str.split('-').map(Number); return Date.UTC(p[0], p[1] - 1, p[2]) / 864e5; };
-  var span = day(end) - Date.UTC(sy, startMonth - 1, 1) / 864e5;
+  var day = function (str) { var p = String(str).slice(0, 10).split('-').map(Number); return Date.UTC(p[0], p[1] - 1, p[2]) / 864e5; };
+  var num = function (v) { return typeof v === 'number' && isFinite(v); };
+  var med = function (arr) { arr = arr.slice().sort(function (a, b) { return a - b; }); return arr.length ? arr[Math.floor(arr.length / 2)] : null; };
+  var endD = day(end), span = endD - Date.UTC(sy, startMonth - 1, 1) / 864e5;
+
+  // Daily rain / hot days per season-year, same span of days from the season start.
   var per = {};
   j.daily.time.forEach(function (t, i) {
     var d = day(t);
     for (var b = sy - 30; b <= sy; b++) {
       var s0 = Date.UTC(b, startMonth - 1, 1) / 864e5;
       if (d < s0 || d > s0 + span) continue;
-      var o = per[b] || (per[b] = { rain: 0, warm: 0, n: 0, bad: 0 });
+      var o = per[b] || (per[b] = { rain: 0, hot: 0, n: 0, bad: 0 });
       var r = j.daily.precipitation_sum[i], tx = j.daily.temperature_2m_max[i];
-      if (typeof r !== 'number' || typeof tx !== 'number') { o.bad++; continue; }
-      o.rain += r; o.n++; if (tx >= 25) o.warm++;
+      if (!num(r) || !num(tx)) { o.bad++; continue; }
+      o.rain += r; o.n++; if (tx >= 25) o.hot++;
     }
   });
   var cur = per[sy];
   if (!cur || cur.bad || cur.n < 7) return null;
   var past = Object.keys(per).map(Number).filter(function (b) { return b < sy && !per[b].bad && per[b].n === cur.n; });
   if (past.length < 20) return null;
-  var med = function (arr) { arr = arr.slice().sort(function (a, b) { return a - b; }); return arr[Math.floor(arr.length / 2)]; };
-  var rainMed = med(past.map(function (b) { return per[b].rain; })), warmMed = med(past.map(function (b) { return per[b].warm; }));
-  var startLabel = '1 ' + SIG_MONTHS[startMonth - 1];
-  var text = seasonName.charAt(0).toUpperCase() + seasonName.slice(1) + ' so far around ' + g.garden_name + ': ' +
-    Math.round(cur.rain) + 'mm of rain since ' + startLabel + ', against a typical ' + Math.round(rainMed) +
-    'mm for the same weeks over the past ' + past.length + ' years, and ' + cur.warm + ' day' + (cur.warm === 1 ? '' : 's') +
-    ' over 25°C against a usual ' + warmMed + '.';
-  return { text: text, evidence: { source: 'Open-Meteo historical weather API (modelled reanalysis, not measured at the garden)',
-    url: url, period: startLabel + ' to ' + end, rain_mm: Math.round(cur.rain), rain_median_mm: Math.round(rainMed),
-    warm_days: cur.warm, warm_days_median: warmMed, comparison_years: past.length } };
+  var rainTyp = med(past.map(function (b) { return per[b].rain; })), hotTyp = med(past.map(function (b) { return per[b].hot; }));
+
+  // Soil: daily means from hourly, same calendar day each year.
+  var sm = {}, st = {};
+  if (j.hourly && j.hourly.time) j.hourly.time.forEach(function (t, i) {
+    var k = String(t).slice(0, 10), m = j.hourly.soil_moisture_7_to_28cm[i], te = j.hourly.soil_temperature_7_to_28cm[i];
+    if (num(m)) (sm[k] = sm[k] || []).push(m);
+    if (num(te)) (st[k] = st[k] || []).push(te);
+  });
+  var mean = function (a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; };
+  var md = end.slice(5), soil = null, soilT = null;
+  var smNow = sm[end] && sm[end].length === 24 ? mean(sm[end]) : null;
+  var smPast = Object.keys(sm).filter(function (k) { return k.slice(5) === md && k < end && sm[k].length === 24; }).map(function (k) { return mean(sm[k]); });
+  if (smNow !== null && smPast.length >= 20) {
+    var below = smPast.filter(function (v) { return v < smNow; }).length / smPast.length;
+    var label = below < 0.25 ? 'Drier than usual' : below > 0.75 ? 'Wetter than usual' : 'Normal';
+    var holding = below < 0.25 ? 'less water than usual' : below > 0.75 ? 'more water than usual' : 'about as much water as usual';
+    // Biggest one-day rise in the last 14 days = a soaking rain.
+    var recent = _sigRange(0, 14).map(function (k) { return Utilities.formatDate(new Date(Date.UTC(1970, 0, 1) + (endD - 14 + k) * 864e5), 'UTC', 'yyyy-MM-dd'); })
+      .filter(function (k) { return sm[k] && sm[k].length === 24; }).map(function (k) { return [k, mean(sm[k])]; });
+    var rise = null;
+    for (var i = 1; i < recent.length; i++) { var dlt = recent[i][1] - recent[i - 1][1]; if (dlt >= 0.03 && (!rise || dlt > rise.d)) rise = { day: recent[i][0], d: dlt, i: i }; }
+    var note = '';
+    if (rise) {
+      var after = recent.slice(rise.i).map(function (x) { return x[1]; });
+      var drying = after.length > 2 && after[after.length - 1] < Math.max.apply(null, after);
+      note = 'The ' + _sigDate(rise.day).replace(/^\w+ /, '') + ' rain soaked in well' + (drying ? ' and the soil has been drying slowly since' : '') + '. ';
+    }
+    note += 'Right now it\'s holding ' + holding + '.';
+    var smTyp = med(smPast);
+    soil = { label: label, note: note, now: smNow, typ: smTyp, scale: Math.max(Math.max.apply(null, smPast), smNow) * 1.05 };
+  }
+  var stNow = st[end] && st[end].length === 24 ? mean(st[end]) : null;
+  var stPast = Object.keys(st).filter(function (k) { return k.slice(5) === md && k < end && st[k].length === 24; }).map(function (k) { return mean(st[k]); });
+  if (stNow !== null && stPast.length >= 20) {
+    var stTyp = med(stPast), dd = stNow - stTyp, n = Math.round(Math.abs(dd));
+    var words = n === 0 ? 'About usual.' : (Math.abs(dd) < n ? 'Nearly ' : Math.abs(dd) > n + 0.2 ? 'Just over ' : 'About ') + n + '°C ' + (dd > 0 ? 'warmer' : 'cooler') + ' than usual.';
+    soilT = { now: stNow, typ: stTyp, note: words, scale: Math.max(Math.max.apply(null, stPast), stNow) * 1.1 };
+  }
+
+  // Spring warmth: growing degree days since 1 August, base 10C.
+  var warmth = null;
+  if (warmthOn) {
+    var gdd = {}, seq = {};
+    j.daily.time.forEach(function (t, i) {
+      var y = Number(String(t).slice(0, 4)), m = Number(String(t).slice(5, 7));
+      var by = m >= 8 ? y : (m === 1 ? y - 1 : null);
+      if (by === null) return;
+      var tx = j.daily.temperature_2m_max[i], tn = j.daily.temperature_2m_min[i];
+      if (!num(tx) || !num(tn)) return;
+      var v = Math.max(0, (tx + tn) / 2 - 10), dIn = day(t) - Date.UTC(by, 7, 1) / 864e5;
+      (seq[by] = seq[by] || []).push([dIn, v]);
+      if (dIn <= endD - Date.UTC(wy, 7, 1) / 864e5) gdd[by] = (gdd[by] || 0) + v;
+    });
+    var gNow = gdd[wy], reach = [];
+    Object.keys(seq).map(Number).filter(function (b) { return b < wy; }).forEach(function (b) {
+      var c = 0; for (var q = 0; q < seq[b].length; q++) { c += seq[b][q][1]; if (c >= gNow) { reach.push(seq[b][q][0]); return; } }
+    });
+    if (num(gNow) && reach.length >= 20) {
+      var todayIn = endD - Date.UTC(wy, 7, 1) / 864e5, typIn = med(reach), ahead = typIn - todayIn;
+      var typDate = Utilities.formatDate(new Date(Date.UTC(wy, 7, 1) + typIn * 864e5), 'UTC', 'yyyy-MM-dd');
+      var wk = Math.round(Math.abs(ahead) / 7 * 2) / 2, wkTxt = (wk % 1 ? (Math.floor(wk) || '') + '½' : String(wk)) + (wk > 1 ? ' weeks' : ' week');
+      var headline = Math.abs(ahead) < 4 ? 'Right on time' : 'About ' + wkTxt + (ahead > 0 ? ' ahead' : ' behind');
+      var typLabel = _sigDate(typDate).replace(/^\w+ /, '');
+      var text = Math.abs(ahead) < 4 ? 'Warmth since 1 August is about where it usually is by now.'
+        : g.garden_name + ' has had as much warmth since 1 August as it usually ' + (ahead > 0 ? 'gets by ' : 'had by ') + typLabel +
+          ', so growth and flowering are likely running ' + (ahead > 0 ? 'early.' : 'late.');
+      warmth = { headline: headline, text: text, ahead: ahead, todayIn: todayIn + 2, typIn: typIn + 2, typLabel: typLabel.replace(/(\d+) (\w{3})\w*/, '$1 $2'), gdd: Math.round(gNow) };
+    }
+  }
+
+  var seasonCap = seasonName.charAt(0).toUpperCase() + seasonName.slice(1);
+  var ratio = cur.rain / Math.max(rainTyp, 1);
+  var rainNote = ratio < 0.75 ? 'Drier than a typical ' + seasonName + '.' : ratio < 0.95 ? 'A little drier than a typical ' + seasonName + '.'
+    : ratio <= 1.05 ? 'About a typical ' + seasonName + '.' : ratio <= 1.25 ? 'A little wetter than a typical ' + seasonName + '.' : 'Wetter than a typical ' + seasonName + '.';
+  var hotNote = cur.hot === hotTyp ? 'About as many as usual.' : hotTyp > 0 && cur.hot === 2 * hotTyp ? 'Twice as many as usual.'
+    : hotTyp > 0 && cur.hot > 2 * hotTyp ? 'More than twice as many as usual.' : cur.hot > hotTyp ? 'More than usual.' : 'Fewer than usual.';
+  var stats = { season: seasonName, startLabel: '1 ' + SIG_MONTHS[startMonth - 1],
+    rain: { now: Math.round(cur.rain), typ: Math.round(rainTyp), note: rainNote },
+    hot: { now: cur.hot, typ: hotTyp, note: hotNote }, soil: soil, soilT: soilT, warmth: warmth };
+  var lines = [seasonCap + ' so far around ' + g.garden_name + ': ' + Math.round(cur.rain) + 'mm of rain since 1 ' + SIG_MONTHS[startMonth - 1] +
+    ' (typical ' + Math.round(rainTyp) + 'mm), and ' + cur.hot + ' day' + (cur.hot === 1 ? '' : 's') + ' over 25°C (usual ' + hotTyp + ').'];
+  return { text: lines[0], stats: stats, evidence: { source: 'Open-Meteo historical weather API (ERA5 reanalysis, modelled, not measured at the garden)',
+    url: url, period: '1 ' + SIG_MONTHS[startMonth - 1] + ' to ' + end, comparison_years: past.length,
+    rain_mm: Math.round(cur.rain), rain_typical_mm: Math.round(rainTyp), hot_days: cur.hot, hot_days_typical: hotTyp,
+    soil_moisture_m3m3: soil && +soil.now.toFixed(3), soil_moisture_typical: soil && +soil.typ.toFixed(3),
+    soil_temp_c: soilT && +soilT.now.toFixed(1), soil_temp_typical_c: soilT && +soilT.typ.toFixed(1),
+    growing_degree_days_base10_since_1_aug: warmth && warmth.gdd, warmth_days_ahead: warmth && warmth.ahead } };
+}
+
+/* Tomorrow's sunrise (Open-Meteo forecast) and first light (civil dawn,
+   sun 6 degrees below the horizon, NOAA approximation), local time. */
+function _sigSunrise(g, now) {
+  var j = _sigJson('https://api.open-meteo.com/v1/forecast?latitude=' + g.lat.toFixed(3) + '&longitude=' + g.lng.toFixed(3) +
+    '&daily=sunrise&forecast_days=2&timezone=Australia%2FMelbourne');
+  if (!j || !j.daily || !j.daily.sunrise || !j.daily.sunrise[1]) return null;
+  var date = j.daily.time[1], sr = String(j.daily.sunrise[1]).slice(11, 16);
+  var p = date.split('-').map(Number), rad = Math.PI / 180;
+  var N = Math.floor((Date.UTC(p[0], p[1] - 1, p[2]) - Date.UTC(p[0], 0, 0)) / 864e5);
+  var gm = 2 * Math.PI / 365 * (N - 1 - 0.25);
+  var eq = 229.18 * (0.000075 + 0.001868 * Math.cos(gm) - 0.032077 * Math.sin(gm) - 0.014615 * Math.cos(2 * gm) - 0.040849 * Math.sin(2 * gm));
+  var decl = 0.006918 - 0.399912 * Math.cos(gm) + 0.070257 * Math.sin(gm) - 0.006758 * Math.cos(2 * gm) + 0.000907 * Math.sin(2 * gm) - 0.002697 * Math.cos(3 * gm) + 0.00148 * Math.sin(3 * gm);
+  var ha = Math.acos(Math.cos(96 * rad) / (Math.cos(g.lat * rad) * Math.cos(decl)) - Math.tan(g.lat * rad) * Math.tan(decl)) / rad;
+  var off = Number(j.utc_offset_seconds || 39600) / 60;
+  var mins = Math.round(720 - 4 * (g.lng + ha) - eq + off);
+  var fmt = function (hhmm) { var h = Number(hhmm.split(':')[0]), m = hhmm.split(':')[1]; return (h % 12 || 12) + ':' + m + (h < 12 ? 'am' : 'pm'); };
+  return { date: date, firstLight: fmt(Math.floor(mins / 60) + ':' + ('0' + (mins % 60)).slice(-2)), sunrise: fmt(sr) };
+}
+
+/* EVC lookups near the garden since the season began, from the lookup log
+   sheet (Script Property SIGNALS_LOOKUP_SHEET = spreadsheet id). Distinct
+   places (coordinates to ~100m), never addresses. Null if unavailable. */
+function _sigLookups(g, now, stats) {
+  var id = String(PropertiesService.getScriptProperties().getProperty('SIGNALS_LOOKUP_SHEET') || '').trim();
+  if (!id) return null;
+  try {
+    var rows = SpreadsheetApp.openById(id).getSheets()[0].getDataRange().getValues();
+    var month = _sigMelbMonth(now), seasonName = _sigSeasonName(month);
+    var startMonth = { spring: 9, summer: 12, autumn: 3, winter: 6 }[seasonName];
+    var Y = Number(Utilities.formatDate(now, SIG_TZ, 'yyyy')), sy = startMonth === 12 && month !== 12 ? Y - 1 : Y;
+    var since = Date.UTC(sy, startMonth - 1, 1) - 11 * 36e5;
+    var near = {}, all = {};
+    rows.slice(1).forEach(function (r) {
+      var t = r[0] instanceof Date ? r[0].getTime() : Date.parse(r[0]);
+      if (!isFinite(t) || t < since || /^test$/i.test(String(r[6] || '').trim())) return;
+      var lat = Number(r[2]), lng = Number(r[3]);
+      if (!isFinite(lat) || !isFinite(lng) || (!lat && !lng)) return;
+      var k = lat.toFixed(3) + ',' + lng.toFixed(3);
+      all[k] = true;
+      if (_sigDistM(g.lat, g.lng, lat, lng) <= 10000) near[k] = true;
+    });
+    return { near: Object.keys(near).length, all: Object.keys(all).length, sinceLabel: SIG_MONTHS[startMonth - 1] };
+  } catch (e) { return null; }
+}
+
+/* Common name from the Atlas species index when a record has none. */
+function _sigCommonName(sci) {
+  if (!sci) return '';
+  var cache = CacheService.getScriptCache(), key = 'cn:' + sci;
+  var c = cache.get(key); if (c !== null) return c;
+  var j = _sigJson('https://bie-ws.ala.org.au/ws/species/' + encodeURIComponent(sci) + '.json');
+  var name = '';
+  if (j) {
+    name = String(j.commonNameSingle || '');
+    if (!name && j.commonNames) { var cn = j.commonNames.filter(function (x) { return x.status === 'common'; })[0]; name = cn ? cn.nameString : ''; }
+  }
+  name = name.replace(/-([A-Z])/g, function (m, l) { return '-' + l.toLowerCase(); });   // "Short-Beaked" -> "Short-beaked"
+  cache.put(key, name, 21600);
+  return name;
 }
 
 /* How a theme connects to this particular garden's record. An unresolved
@@ -1149,6 +1323,182 @@ function _sigHtml(body, card) {
   return '<div style="max-width:560px;padding:8px">' + paras + foot + note + '</div>';
 }
 
+/* ---------------------------------------------------------------
+   Steward update template (Gmail-safe: tables, inline styles, no
+   images or SVG, light palette, direct links). Same layout as
+   templates/email/steward_update.py.
+   --------------------------------------------------------------- */
+
+var SIG_T = { INK: '#2b2f26', MUTE: '#6f7666', LINE: '#e3d8c3', PAPER: '#fbf6ec', CARD: '#f4ecdc', GREEN: '#5f7f47', LIGHT: '#9cbf7e', GREY: '#cfc5b0',
+  SERIF: "Georgia,'Times New Roman',serif", SANS: 'Helvetica,Arial,sans-serif', MONO: 'Menlo,Consolas,monospace' };
+var SIG_PILLS = { orchids: ['Orchid', '#8a6aa8'], mammals: ['Mammal', '#8a6a4f'], birds: ['Bird', '#b0574a'], wildflowers: ['Wildflower', '#4f7fa8'],
+  frogs: ['Frog', '#4f8a6a'], reptiles: ['Reptile', '#8a7a3f'], 'moths and butterflies': ['Insect', '#6a6a8a'], insects: ['Insect', '#6a6a8a'] };
+
+/* Studio panel shown in updates when Script Property SIGNALS_STUDIO = signal. */
+function _sigStudioPanel(g) {
+  var which = String(PropertiesService.getScriptProperties().getProperty('SIGNALS_STUDIO') || '').trim().toLowerCase();
+  if (which !== 'signal') return null;
+  return { eyebrow: 'Something we\'re building', title: 'Signal: a garden sign that measures the garden',
+    intro: 'The figures above are estimates for your area. Signal would measure them in the garden itself, and show the garden\'s record at the gate.',
+    items: [['Soil moisture', '15cm under the mulch'], ['Soil temperature', 'at root depth'], ['Rain gauge', 'what actually fell'],
+            ['Air and humidity', 'under the canopy'], ['Light', 'in the understorey'], ['Birdsong', 'identified on the sign, no audio kept']],
+    close: 'We\'d love ' + g.garden_name + ' to be one of the first. If you\'d like one there, just reply.',
+    button: ['See the Signal prototype', SIG_SITE + '/sign/'] };
+}
+
+function _sigUpdateText(m) {
+  var L = [m.greeting, '', m.eyebrow.toUpperCase(), m.headline + (m.sci ? ' (' + m.sci + ')' : '')];
+  if (m.why) L.push('', m.why);
+  if (m.plant) L.push('', m.plant);
+  if (m.link) L.push('', m.link);
+  var st = m.stats;
+  if (st) {
+    L.push('', (st.season + ' at ' + m.garden + ' so far').toUpperCase(), 'Compared with the same weeks in each of the past 30 years.', '');
+    L.push('Rain: ' + st.rain.now + 'mm. ' + st.rain.note + ' (typical ' + st.rain.typ + 'mm)');
+    L.push('Hot days: ' + st.hot.now + ' over 25°C. ' + st.hot.note + ' (usual ' + st.hot.typ + ')');
+    if (st.soil) L.push('Soil moisture: ' + st.soil.label.toLowerCase() + '. ' + st.soil.note);
+    if (st.soilT) L.push('Soil temperature: ' + st.soilT.now.toFixed(1) + '°C at root depth. ' + st.soilT.note);
+    if (st.warmth) L.push('Spring warmth: ' + st.warmth.headline.charAt(0).toLowerCase() + st.warmth.headline.slice(1) + '. ' + st.warmth.text);
+  }
+  if (m.sun) L.push('', 'Tomorrow: first light ' + m.sun.firstLight + ', sunrise ' + m.sun.sunrise + '.');
+  if (m.also && m.also.length) {
+    L.push('', ('Also recorded around ' + m.garden).toUpperCase(), 'In the past few weeks, in the surrounding area.');
+    m.also.forEach(function (a) { L.push('– ' + a.name + (a.sci ? ' (' + a.sci + ')' : '') + ', ' + a.where.toLowerCase() + ', ' + a.when); });
+  }
+  if (m.lookups && m.lookups.near) L.push('', 'Since ' + m.lookups.sinceLabel + ', people have looked up what originally grew at ' + m.lookups.near + ' place' + (m.lookups.near === 1 ? '' : 's') +
+    ' within 10km of ' + m.garden + ' on findmyevc.com, and at ' + m.lookups.all + ' place' + (m.lookups.all === 1 ? '' : 's') + ' across Victoria.');
+  if (m.studio) {
+    L.push('', m.studio.eyebrow.toUpperCase(), m.studio.title + '.', m.studio.intro + ' ' + m.studio.items.map(function (x) { return x[0].toLowerCase() + ' ' + x[1]; }).join('; ') + '.', m.studio.close, m.studio.button[0] + ': ' + m.studio.button[1]);
+  }
+  if (m.studioNote) L.push('', m.studioNote);
+  L.push('', 'Add your own sightings to ' + m.garden + '\'s record: ' + m.profile, '', SIG_SIGNOFF, '', '--',
+    'Part of our Ecological Registry steward pilot. Sightings are from the surrounding area, not from your garden, via the Atlas of Living Australia. ' +
+    'Weather and soil figures are estimates for your location from Open-Meteo. Reply "pause" and we\'ll stop these notes.');
+  return L.join('\n');
+}
+
+function _sigUpdateHtml(m, card) {
+  var T = SIG_T, e = function (x) { return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+  var bar = function (pct, color, h) {
+    h = h || 10; pct = Math.max(2, Math.min(100, Math.round(pct)));
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr><td width="' + pct + '%" bgcolor="' + color +
+      '" style="background-color:' + color + ';height:' + h + 'px;line-height:' + h + 'px;font-size:0">&nbsp;</td>' +
+      (pct < 100 ? '<td width="' + (100 - pct) + '%" style="height:' + h + 'px;line-height:' + h + 'px;font-size:0">&nbsp;</td>' : '') + '</tr></table>';
+  };
+  var lab = function (t) { return '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.08em;text-transform:uppercase;color:' + T.MUTE + '">' + t + '</div>'; };
+  var statCard = function (label, big, unit, note, now, typ, scale, typLabel) {
+    return '<td width="50%" valign="top" style="padding:14px 14px 16px;border:1px solid ' + T.LINE + ';background-color:#ffffff" bgcolor="#ffffff">' + lab(label) +
+      '<div style="font:400 30px/1.15 ' + T.SERIF + ';color:' + T.INK + ';margin:6px 0 2px">' + big + (unit ? '<span style="font:14px ' + T.SANS + ';color:' + T.MUTE + '"> ' + unit + '</span>' : '') + '</div>' +
+      '<div style="font:13px/1.45 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 10px">' + note + '</div>' +
+      '<div style="font:11px/1.6 ' + T.SANS + ';color:' + T.MUTE + '">This ' + e(m.season) + '</div>' + bar(now / scale * 100, T.GREEN) +
+      '<div style="font:11px/1.6 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:4px">' + typLabel + '</div>' + bar(typ / scale * 100, T.GREY) + '</td>';
+  };
+  var btn = function (text, href, solid) {
+    return '<a href="' + e(href) + '" style="display:inline-block;font:600 14px/1 ' + T.SANS + ';color:' + (solid ? '#ffffff' : T.INK) + ';background-color:' + (solid ? T.GREEN : '#ffffff') +
+      ';border:1px solid ' + (solid ? T.GREEN : T.INK) + ';padding:13px 18px;text-decoration:none;border-radius:2px">' + e(text) + '</a>';
+  };
+  var row = function (inner, pad) { return '<tr><td style="padding:' + pad + '">' + inner + '</td></tr>'; };
+  var h2 = function (t, sub) { return '<div style="font:400 24px/1.2 ' + T.SERIF + ';color:' + T.INK + '">' + t + '</div>' + (sub ? '<div style="font:13px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:4px">' + sub + '</div>' : ''); };
+  var seasonCap = m.season.charAt(0).toUpperCase() + m.season.slice(1);
+  var out = [];
+
+  out.push(row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="font:600 11px/1.4 ' + T.MONO + ';letter-spacing:.12em;text-transform:uppercase;color:' + T.INK +
+    '">Ecological Registry <span style="color:' + T.GREEN + '">●</span></td><td align="right" style="font:11px/1.4 ' + T.MONO + ';letter-spacing:.08em;text-transform:uppercase;color:' + T.MUTE + '">' +
+    e(m.garden) + ' · ' + seasonCap + ' update · ' + e(m.dateLabel) + '</td></tr></table>', '0 0 14px;border-bottom:2px solid ' + T.INK));
+
+  var lead = '<div style="font:15px/1.6 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 18px">' + e(m.greeting) + '</div>' +
+    '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.eyebrow) + '</div>' +
+    '<div style="font:400 34px/1.15 ' + T.SERIF + ';color:' + T.INK + ';margin:8px 0 ' + (m.sci ? '2px' : '12px') + '">' + e(m.headline) + '</div>' +
+    (m.sci ? '<div style="font:italic 15px/1.5 ' + T.SERIF + ';color:' + T.MUTE + ';margin:0 0 12px">' + e(m.sci) + '</div>' : '') +
+    (m.why ? '<div style="font:16px/1.6 ' + T.SERIF + ';color:' + T.INK + ';margin:0 0 12px">' + e(m.why) + '</div>' : '') +
+    [m.plant, m.link].filter(String).map(function (t) {
+      return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="background-color:' + T.CARD + ';border-left:3px solid ' + T.GREEN +
+        ';margin:0 0 8px"><tr><td style="padding:12px 14px;font:15px/1.5 ' + T.SANS + ';color:' + T.INK + '">' + e(t) + '</td></tr></table>';
+    }).join('');
+  out.push(row(lead, '26px 0 8px'));
+
+  var st = m.stats;
+  if (st) {
+    out.push(row(h2(seasonCap + ' at ' + e(m.garden) + ' so far', 'Compared with the same weeks in each of the past 30 years.'), '30px 0 6px'));
+    var cells = [statCard('Rain', st.rain.now, 'mm', e(st.rain.note), st.rain.now, st.rain.typ, Math.max(st.rain.now, st.rain.typ) * 1.15, 'Typical: ' + st.rain.typ + 'mm'),
+                 statCard('Hot days', st.hot.now, 'days over 25°C', e(st.hot.note), st.hot.now, st.hot.typ, Math.max(st.hot.now, st.hot.typ, 1) * 1.3, 'Usual: ' + st.hot.typ)];
+    if (st.soil) cells.push(statCard('Soil moisture', e(st.soil.label), '', e(st.soil.note), st.soil.now, st.soil.typ, st.soil.scale, 'Typical for this date'));
+    if (st.soilT) cells.push(statCard('Soil temperature', st.soilT.now.toFixed(1), '°C at root depth', e(st.soilT.note), st.soilT.now, st.soilT.typ, st.soilT.scale, 'Typical: ' + st.soilT.typ.toFixed(1) + '°C'));
+    var grid = '';
+    for (var i = 0; i < cells.length; i += 2) grid += '<tr>' + cells[i] + (cells[i + 1] || '<td width="50%"></td>') + '</tr>';
+    out.push(row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0">' + grid + '</table>', '10px 0 0'));
+    if (st.warmth) {
+      var W = st.warmth, total = 153, a = Math.min(W.todayIn, W.typIn), b2 = Math.abs(W.typIn - W.todayIn);
+      var pa = Math.max(1, Math.round(a / total * 100)), pb = Math.round(b2 / total * 100), pc = Math.max(0, 100 - pa - pb);
+      var aheadOrOn = W.ahead >= 0;
+      var tl = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse"><tr>' +
+        '<td width="' + pa + '%" bgcolor="' + T.GREEN + '" style="background-color:' + T.GREEN + ';height:14px;font-size:0">&nbsp;</td>' +
+        (pb ? '<td width="' + pb + '%" bgcolor="' + (aheadOrOn ? T.LIGHT : '#d9b98a') + '" style="background-color:' + (aheadOrOn ? T.LIGHT : '#d9b98a') + ';height:14px;font-size:0">&nbsp;</td>' : '') +
+        (pc ? '<td width="' + pc + '%" bgcolor="' + T.GREY + '" style="background-color:' + T.GREY + ';height:14px;font-size:0">&nbsp;</td>' : '') + '</tr></table>' +
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font:11px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:5px"><tr>' +
+        '<td width="' + pa + '%" valign="top">1 Aug</td>' +
+        (pb ? '<td width="' + pb + '%" valign="top" style="color:' + T.INK + '"><b>' + (aheadOrOn ? 'Today' : W.typLabel) + '</b></td>' : '') +
+        '<td width="' + (pc || 20) + '%" valign="top">' + (aheadOrOn ? 'Typical year reaches today\'s warmth on <b style="color:' + T.INK + '">' + e(W.typLabel) + '</b>' : '<b style="color:' + T.INK + '">Today</b>') + '</td></tr></table>';
+      out.push(row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid ' + T.LINE + '"><tr><td style="padding:14px 14px 16px">' +
+        lab('Spring warmth') + '<div style="font:400 24px/1.2 ' + T.SERIF + ';color:' + T.INK + ';margin:6px 0 4px">' + e(W.headline) + '</div>' +
+        '<div style="font:13px/1.45 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 12px">' + e(W.text) + '</div>' + tl + '</td></tr></table>', '16px 0 0'));
+    }
+  }
+  if (m.sun) out.push(row('Tomorrow: first light <b style="color:' + T.INK + '">' + e(m.sun.firstLight) + '</b>, sunrise <b style="color:' + T.INK + '">' + e(m.sun.sunrise) + '</b>.', '12px 0 0;font:13px/1.5 ' + T.SANS + ';color:' + T.MUTE));
+
+  if (m.also && m.also.length) {
+    out.push(row(h2('Also recorded around ' + e(m.garden), 'In the past few weeks, in the surrounding area.'), '32px 0 6px'));
+    var rows = m.also.map(function (a) {
+      var p = SIG_PILLS[a.theme] || ['Sighting', T.MUTE];
+      return '<tr><td style="padding:11px 0;border-bottom:1px solid ' + T.LINE + '" valign="top" width="96"><span style="display:inline-block;font:600 10px/1 ' + T.SANS +
+        ';letter-spacing:.08em;text-transform:uppercase;color:#ffffff;background-color:' + p[1] + ';padding:4px 7px;border-radius:2px">' + p[0] + '</span></td>' +
+        '<td style="padding:11px 0 11px 10px;border-bottom:1px solid ' + T.LINE + ';font:15px/1.4 ' + T.SANS + ';color:' + T.INK + '" valign="top"><b>' + e(a.name) + '</b>' +
+        (a.sci ? ' <i style="color:' + T.MUTE + '">' + e(a.sci) + '</i>' : '') + '<br><span style="font-size:13px;color:' + T.MUTE + '">' + e(a.where) + ' · ' + e(a.when) + '</span></td></tr>';
+    }).join('');
+    out.push(row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border-top:1px solid ' + T.LINE + '">' + rows + '</table>', '0'));
+  }
+  if (m.lookups && m.lookups.near) {
+    out.push(row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="background-color:' + T.CARD + '"><tr>' +
+      '<td width="96" align="center" valign="middle" style="padding:16px 0;font:400 40px/1 ' + T.SERIF + ';color:' + T.GREEN + '">' + m.lookups.near + '</td>' +
+      '<td valign="middle" style="padding:16px 16px 16px 0;font:14px/1.5 ' + T.SANS + ';color:' + T.INK + '">Since ' + e(m.lookups.sinceLabel) + ', people have looked up what originally grew at <b>' +
+      m.lookups.near + ' place' + (m.lookups.near === 1 ? '' : 's') + ' within 10km</b> of ' + e(m.garden) + ' on <a href="https://findmyevc.com" style="color:' + T.INK + '">findmyevc.com</a>, and at <b>' +
+      m.lookups.all + ' place' + (m.lookups.all === 1 ? '' : 's') + '</b> across Victoria.</td></tr></table>', '24px 0 0'));
+  }
+  if (m.studio) {
+    var S = m.studio, items = '';
+    for (var k = 0; k < S.items.length; k += 3) {
+      items += '<tr>' + S.items.slice(k, k + 3).map(function (x) {
+        return '<td width="33%" valign="top" style="padding:10px 10px 10px 0"><div style="font:600 13px/1.3 ' + T.SANS + ';color:' + T.INK + '"><span style="color:' + T.GREEN + '">●</span> ' + e(x[0]) +
+          '</div><div style="font:12px/1.4 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:3px">' + e(x[1]) + '</div></td>';
+      }).join('') + '</tr>';
+    }
+    out.push(row('<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid ' + T.INK + '"><tr><td style="padding:20px 18px">' +
+      '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(S.eyebrow) + '</div>' +
+      '<div style="font:400 28px/1.15 ' + T.SERIF + ';color:' + T.INK + ';margin:8px 0 8px">' + e(S.title) + '</div>' +
+      '<div style="font:15px/1.55 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 6px">' + e(S.intro) + '</div>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:6px">' + items + '</table>' +
+      '<div style="font:15px/1.55 ' + T.SANS + ';color:' + T.INK + ';margin:12px 0 16px">' + e(S.close) + '</div>' + btn(S.button[0], S.button[1], true) + '</td></tr></table>', '32px 0 0'));
+  }
+  if (m.studioNote) out.push(row(e(m.studioNote), '22px 0 0;font:15px/1.55 ' + T.SANS + ';color:' + T.INK));
+  out.push(row(btn('Add your own sightings to ' + m.garden + '\'s record', m.profile, false), '22px 0 0'));
+  out.push(row(e(SIG_SIGNOFF.split('\n')[0]) + '<br><span style="font:13px ' + T.SANS + ';color:' + T.MUTE + '">' + e(SIG_SIGNOFF.split('\n')[1] || '') + '</span>', '26px 0 0;font:15px/1.6 ' + T.SERIF + ';color:' + T.INK));
+  if (card && card.garden_name) {
+    var acc = card.provisional ? '#a8873f' : T.GREEN;
+    out.push(row('<table role="presentation" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="width:100%;max-width:300px;background-color:' + T.CARD + ';border:1px solid #d9ccb2"><tr><td style="padding:14px 16px">' +
+      '<div style="font:11px/1.5 ' + T.MONO + ';letter-spacing:.1em;text-transform:uppercase;color:#5b6152">Ecological Registry <span style="color:' + acc + '">●</span></div>' +
+      '<div style="font:16px/1.3 ' + T.SANS + ';color:' + T.INK + ';margin-top:8px">' + e(card.garden_name) + '</div>' +
+      '<div style="font:11px/1.6 ' + T.MONO + ';text-transform:uppercase;color:' + acc + '">' + e(card.rating || '') + (card.provisional ? ' · provisional' : '') + '</div>' +
+      (typeof card.score === 'number' ? '<div style="font:500 44px/1.1 ' + T.MONO + ';color:' + acc + ';margin-top:4px">' + card.score + '<span style="font-size:12px;color:#8a8f80"> / 100</span></div>' : '') +
+      '<a href="' + e(card.profile) + '" style="display:block;margin-top:8px;font:13px/1.5 ' + T.SANS + ';color:' + T.INK + '">View your garden\'s record ↗</a></td></tr></table>', '24px 0 0'));
+  }
+  out.push(row('Part of our Ecological Registry steward pilot. Sightings are from the surrounding area, not from your garden, via the Atlas of Living Australia. Weather and soil figures are estimates for your location from Open-Meteo. Reply "pause" and we\'ll stop these notes.',
+    '24px 0 8px;font:11px/1.6 ' + T.SANS + ';color:' + T.MUTE));
+
+  return '<div style="background-color:' + T.PAPER + ';padding:0;margin:0" bgcolor="' + T.PAPER + '"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.PAPER +
+    '" style="background-color:' + T.PAPER + '"><tr><td align="center" style="padding:20px 12px"><table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border-collapse:collapse">' +
+    out.join('\n') + '</table></td></tr></table></div>';
+}
+
 /* Rebuild the frozen HTML + hash from the row's current to/subject/body
    and send it back to DRAFT. Used by onSignalsEdit and the send check. */
 function _sigRefreeze(sh, row, note, fromOwnClaim) {
@@ -1158,7 +1508,8 @@ function _sigRefreeze(sh, row, note, fromOwnClaim) {
   var st = String(v('status'));
   if (st === 'SENT' || st === 'CHECK' || (st === 'SENDING' && !fromOwnClaim)) return;   // history is not rewritten
   var card = {}; try { card = JSON.parse(String(v('card') || '{}')); } catch (e) {}
-  var html = _sigHtml(v('body'), card);
+  // Template notes keep their layout unless the text itself was edited.
+  var html = card.model && String(v('body')) === _sigUpdateText(card.model) ? _sigUpdateHtml(card.model, card) : _sigHtml(v('body'), card);
   _sigSet(sh, row, { html: html, content_hash: _sigHash(v('to'), v('subject'), v('body'), html),
     status: 'DRAFT', note: note });
 }

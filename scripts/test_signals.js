@@ -80,6 +80,11 @@ function env(opts) {
       const p = path.join(REPO, u.slice('https://ecologicalregistry.org/'.length));
       return fs.existsSync(p) ? resp(200, fs.readFileSync(p, 'utf8')) : resp(404, '');
     }
+    if (u.includes('daily=sunrise')) {
+      if (opts.sunDown) return resp(503, '');
+      const d1 = new Date(now.getTime() + 864e5 + 11 * 36e5).toISOString().slice(0, 10), d0 = new Date(now.getTime() + 11 * 36e5).toISOString().slice(0, 10);
+      return resp(200, JSON.stringify({ utc_offset_seconds: 39600, daily: { time: [d0, d1], sunrise: [d0 + 'T06:11', d1 + 'T06:10'] } }));
+    }
     if (u.includes('open-meteo') && !u.includes('archive-api')) {
       const lat = +u.match(/latitude=([-\d.]+)/)[1];
       const g = LOCS.find(l => Math.abs(l.display_lat - lat) < 0.001);
@@ -88,12 +93,25 @@ function env(opts) {
     if (u.includes('archive-api.open-meteo.com')) {
       if (opts.archiveDown) return resp(503, '');
       const s0 = u.match(/start_date=([\d-]+)/)[1], e0 = u.match(/end_date=([\d-]+)/)[1];
-      const o = { time: [], precipitation_sum: [], temperature_2m_max: [] };
+      const o = { time: [], precipitation_sum: [], temperature_2m_max: [], temperature_2m_min: [] };
+      const h = { time: [], soil_moisture_7_to_28cm: [], soil_temperature_7_to_28cm: [] };
+      const md = e0.slice(5), endT = new Date(e0 + 'T00:00:00Z').getTime();
       for (let d = new Date(s0 + 'T00:00:00Z'); d <= new Date(e0 + 'T00:00:00Z'); d = new Date(d.getTime() + 864e5)) {
-        const ds = d.toISOString().slice(0, 10), cur = ds >= '2026-09-01', doy = Math.floor(d.getTime() / 864e5);
+        const ds = d.toISOString().slice(0, 10), cur = ds >= '2026-08-01', doy = Math.floor(d.getTime() / 864e5);
         o.time.push(ds); o.precipitation_sum.push(cur ? 2.7 : 2.5); o.temperature_2m_max.push((cur ? doy % 9 : doy % 15) === 0 ? 27 : 18);
+        o.temperature_2m_min.push(cur ? 10 : 9);
+        // Hourly soil only where the engine looks: this date in past years, and the last 15 days.
+        const yr = +ds.slice(0, 4);
+        if (u.includes('hourly=') && (ds.slice(5) === md || endT - d.getTime() <= 15 * 864e5)) {
+          const rain = ds === '2026-10-25';
+          for (let k = 0; k < 24; k++) {
+            h.time.push(ds + 'T' + String(k).padStart(2, '0') + ':00');
+            h.soil_moisture_7_to_28cm.push(ds >= '2026-10-25' ? 0.33 - (d.getTime() - Date.UTC(2026, 9, 25)) / 864e5 * 0.002 : cur ? 0.28 : 0.28 + (yr % 7) * 0.006);
+            h.soil_temperature_7_to_28cm.push(cur ? 16.5 : 14.4 + (yr % 5) * 0.15);
+          }
+        }
       }
-      return resp(200, JSON.stringify({ daily: o }));
+      return resp(200, JSON.stringify({ daily: o, hourly: h.time.length ? h : undefined }));
     }
     if (u.includes('lists-ws.ala.org.au')) {
       if (opts.griisDown) return resp(503, '');
@@ -126,7 +144,7 @@ function env(opts) {
     console, JSON, Math, Date: FD, NOTIFY_EMAIL: 'hello@lundbech.me',
     UrlFetchApp: { fetch, fetchAll: r => r.map(fetch) },
     HtmlService: { createHtmlOutput: h => { const o = { html: h, setWidth() { return o; }, setHeight() { return o; } }; return o; } },
-    SpreadsheetApp: { getUi: () => ({ showModalDialog: (o, title) => dialogs.push({ html: o.html, title }) }), getActiveSpreadsheet: () => ss, flush() { if (hooks.onFlush) { const f = hooks.onFlush; hooks.onFlush = null; f(); } }, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
+    SpreadsheetApp: { getUi: () => ({ showModalDialog: (o, title) => dialogs.push({ html: o.html, title }) }), getActiveSpreadsheet: () => ss, openById: id => { if (!opts.lookupRows || id !== 'LOOKUPS') throw new Error('no access'); return { getSheets: () => [{ getDataRange: () => ({ getValues: () => opts.lookupRows }) }] }; }, flush() { if (hooks.onFlush) { const f = hooks.onFlush; hooks.onFlush = null; f(); } }, newDataValidation: () => ({ requireValueInList() { return this; }, build() { return {}; } }) },
     CacheService: { getScriptCache: () => ({ get: k => cache[k] || null, put: (k, v) => { cache[k] = v; } }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => props[k] || null, setProperty: (k, v) => { props[k] = v; } }) },
     LockService: { getScriptLock: () => { let mine = false; return {
@@ -520,12 +538,12 @@ test('Bush Garden (real records, last 30 days): Bogong Moth ~3km, with why-now, 
   const r = e.queue()[0];
   ok(r && r[e.col('signals')] === 'season', 'season only, got ' + (r && r[e.col('signals')]));
   const body = r[e.col('body')];
-  ok(r[e.col('subject')] === 'Bush Garden · a Bogong Moth about 3km away', r[e.col('subject')]);
+  ok(r[e.col('subject')] === 'Bush Garden - Spring Update', r[e.col('subject')]);
   ok(/^Hi Sam,/.test(body), 'greeting');
-  ok(/A Bogong Moth \(Agrotis infusa\) was recorded about 3km from Bush Garden on 18 October\./.test(body), 'dated, distance stated');
+  ok(/RECORDED NEARBY · 18 OCTOBER\nA Bogong Moth, about 3km from Bush Garden \(Agrotis infusa\)/.test(body), 'dated, distance stated');
   ok(!/biocache\.ala\.org\.au/.test(body), 'no record links in the email');
   ok(/Add your own sightings to Bush Garden's record: https:\/\/ecologicalregistry\.org\/gardens\//.test(body), 'sightings line with profile link');
-  ok(/Add your own sightings to Bush Garden's record ↗<\/a>/.test(r[e.col('html')]) && /#f4ecdc/.test(r[e.col('html')]) && !/#11170f/.test(r[e.col('html')]), 'html: linked sightings line, beige card');
+  ok(/Add your own sightings to Bush Garden&#39;s record<\/a>|Add your own sightings to Bush Garden's record<\/a>/.test(r[e.col('html')]) && !/google\.com\/url/.test(r[e.col('html')]) && /#f4ecdc/.test(r[e.col('html')]) && !/#11170f/.test(r[e.col('html')]), 'html: linked sightings line, beige card');
   ok(/migrate each spring from inland Queensland, New South Wales and western Victoria to the Australian Alps, and can turn up around Melbourne along the way/.test(body), 'sourced why-now wording');
   ok(!/many pass over Melbourne/.test(body), 'unsupported route claim gone');
   const main = body.split('\n--')[0];
@@ -554,9 +572,9 @@ test('season: a local record needs a reason; with one, it reads as local activit
     decimalLatitude: -37.6880, decimalLongitude: 145.1960, coordinateUncertaintyInMeters: 10, assertions: [], dataResourceName: 'FrogID', spatiallyValid: true };
   const e = bush({ extraRecords: [frog] }); e.ctx.previewSignalsNow();
   const r = e.queue()[0], body = r[e.col('body')];
-  ok(/Verreaux's Frog \(Litoria verreauxii\) was recorded in the surrounding area on 25 October/.test(body), 'local wording: ' + body.split('\n')[2]);
+  ok(/RECORDED NEARBY · 25 OCTOBER\nA Verreaux's Frog, recorded near Bush Garden \(Litoria verreauxii\)/.test(body), 'local wording: ' + body.split('\n').slice(2, 4).join(' / '));
   ok(/Spotted Marsh Frog, though it hasn't been confirmed yet/.test(body), 'garden link from unresolved observation');
-  ok(r[e.col('subject')] === "Bush Garden · a Verreaux's Frog recorded nearby", r[e.col('subject')]);
+  ok(r[e.col('subject')] === 'Bush Garden - Spring Update', r[e.col('subject')]);
 });
 
 test('season: beyond 5km and obscured locations never qualify', () => {
@@ -619,7 +637,7 @@ test('season: unresolved observation outranks recorded habitat', () => {
 test('season note adds what else was recorded around the garden, one per theme, with distances and links', () => {
   const e = bush(); e.ctx.previewSignalsNow();
   const body = e.queue()[0][e.col('body')];
-  const sect = body.split('Also recorded around Bush Garden in the past few weeks:\n')[1] || '';
+  const sect = (body.split('ALSO RECORDED AROUND BUSH GARDEN\nIn the past few weeks, in the surrounding area.\n')[1] || '').split('\n\n')[0];
   const items = sect.split('\n').filter(l => l.startsWith('– '));
   ok(items.length >= 3 && items.length <= 4, 'three or four items, got ' + items.length + '\n' + sect);
   ok(items.every(l => /about [\d.]+km away|nearby/.test(l) && /\d{1,2} [A-Z][a-z]+\.?$/.test(l)), 'distance + full date on each: ' + items.join(' | '));
@@ -633,14 +651,24 @@ test('season note adds what else was recorded around the garden, one per theme, 
 test('season note adds the season so far at the garden from 30 years of modelled weather', () => {
   const e = bush(); e.ctx.previewSignalsNow();
   const body = e.queue()[0][e.col('body')];
-  const m = body.match(/Spring so far around Bush Garden: (\d+)mm of rain since 1 September, against a typical (\d+)mm for the same weeks over the past (\d+) years, and (\d+) days over 25°C against a usual (\d+)\./);
-  ok(m, 'conditions sentence present:\n' + body);
-  ok(m && +m[3] === 30 && +m[1] > +m[2], 'compares against 30 years: ' + (m && m.slice(1).join(',')));
+  const m = body.match(/SPRING AT BUSH GARDEN SO FAR\nCompared with the same weeks in each of the past 30 years\.\n\nRain: (\d+)mm\. A little wetter than a typical spring\. \(typical (\d+)mm\)\nHot days: (\d+) over 25°C\. .+ \(usual (\d+)\)/);
+  ok(m, 'conditions present:\n' + body);
+  ok(m && +m[1] > +m[2] && +m[3] > +m[4], 'rain and hot days vs typical: ' + (m && m.slice(1).join(',')));
+  ok(/Soil moisture: wetter than usual\. The 25 October rain soaked in well and the soil has been drying slowly since\./.test(body), 'soil moisture in plain words');
+  ok(/Soil temperature: 16\.5°C at root depth\. Nearly 2°C warmer than usual\./.test(body), 'soil temperature in plain words');
+  ok(/Spring warmth: about 2½ weeks ahead\. Bush Garden has had as much warmth since 1 August as it usually gets by 15 November/.test(body), 'spring warmth as weeks ahead');
+  ok(/Tomorrow: first light \d:\d\dam, sunrise 6:10am\./.test(body), 'first light and sunrise');
+  const html = e.queue()[0][e.col('html')];
+  ok(/Spring at Bush Garden so far/.test(html) && /About 2½ weeks ahead/.test(html) && /bgcolor="#5f7f47"/.test(html), 'stat cards and warmth timeline in html');
+  ok(!/<svg|<img|<style|class=/.test(html), 'gmail-safe: no svg, images, style blocks or classes');
+  ok(!/findmyevc/.test(body), 'no lookup panel without the lookup sheet');
   ok(!/\?/.test(body.split('\n--')[0]), 'still no questions');
   const ev = JSON.parse(e.queue()[0][e.col('evidence')]).signals[0].evidence;
-  ok(ev.conditions && /modelled/.test(ev.conditions.source), 'conditions evidence says modelled');
-  const d = bush({ archiveDown: true }); d.ctx.previewSignalsNow();
-  ok(d.queue().length === 1 && !/so far around/.test(d.queue()[0][d.col('body')]), 'archive down: note still drafts, without the line');
+  ok(ev.conditions && /modelled/.test(ev.conditions.source) && ev.conditions.comparison_years === 30, 'conditions evidence says modelled, 30 years');
+  ok(ev.sun && /civil dawn/.test(ev.sun.source), 'sunrise evidence');
+  const d = bush({ archiveDown: true, sunDown: true }); d.ctx.previewSignalsNow();
+  const db = d.queue()[0] && d.queue()[0][d.col('body')];
+  ok(d.queue().length === 1 && !/SO FAR/.test(db) && !/Tomorrow:/.test(db) && !/Spring at Bush Garden so far/.test(d.queue()[0][d.col('html')]), 'weather down: note still drafts, without those sections');
 });
 
 test('optional studio note appears before the sightings line, verbatim with the garden name filled in', () => {
@@ -651,6 +679,48 @@ test('optional studio note appears before the sightings line, verbatim with the 
   const n = bush(); n.ctx.previewSignalsNow();
   ok(!/Something we're building/.test(n.queue()[0][n.col('body')]), 'absent unless set');
 });
+
+test('update template: EVC lookups near the garden, distinct places, test rows and old rows ignored', () => {
+  const H = ['timestamp', 'address', 'lat', 'lng', 'evc', 'bioregion', 'source'];
+  const rows = [H,
+    [new Date('2026-09-10T02:00:00Z'), 'a', -37.70, 145.20, 'x', 'y', 'web'],
+    [new Date('2026-09-11T02:00:00Z'), 'a again', -37.7001, 145.2001, 'x', 'y', 'web'],      // same place (~100m)
+    [new Date('2026-10-01T02:00:00Z'), 'b', -37.72, 145.15, 'x', 'y', 'web'],
+    [new Date('2026-10-02T02:00:00Z'), 'test', -37.69, 145.19, 'x', 'y', 'test'],           // test row
+    [new Date('2026-08-20T02:00:00Z'), 'old', -37.69, 145.18, 'x', 'y', 'web'],             // before the season
+    [new Date('2026-10-05T02:00:00Z'), 'far', -38.10, 144.30, 'x', 'y', 'web']];
+  const e = bush({ lookupRows: rows }); e.props.SIGNALS_LOOKUP_SHEET = 'LOOKUPS'; e.ctx.previewSignalsNow();
+  const body = e.queue()[0][e.col('body')], html = e.queue()[0][e.col('html')];
+  ok(/Since September, people have looked up what originally grew at 2 places within 10km of Bush Garden on findmyevc\.com, and at 3 places across Victoria\./.test(body), body.split('\n').filter(l => /findmyevc/.test(l)).join(''));
+  ok(/href="https:\/\/findmyevc\.com"/.test(html) && !/address|-37\.70/.test(html), 'linked, no addresses or coordinates');
+  const n = bush({ lookupRows: rows }); n.props.SIGNALS_LOOKUP_SHEET = 'NOPE'; n.ctx.previewSignalsNow();
+  ok(n.queue().length === 1 && !/findmyevc/.test(n.queue()[0][n.col('body')]), 'sheet unreadable: note drafts without the panel');
+});
+
+test('update template: Signal panel only when SIGNALS_STUDIO = signal', () => {
+  const e = bush(); e.props.SIGNALS_STUDIO = 'signal'; e.ctx.previewSignalsNow();
+  const html = e.queue()[0][e.col('html')], body = e.queue()[0][e.col('body')];
+  ok(/Signal: a garden sign that measures the garden/.test(html) && /href="https:\/\/ecologicalregistry\.org\/sign\/"/.test(html), 'panel + prototype link');
+  ok(/See the Signal prototype: https:\/\/ecologicalregistry\.org\/sign\//.test(body), 'plain-text link');
+  const b = bush(); b.ctx.previewSignalsNow();
+  ok(!/Signal: a garden sign/.test(b.queue()[0][b.col('html')]), 'absent by default');
+});
+
+test('update template: refreeze keeps the layout when only the status changes, falls back when the text is edited', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
+  const before = e.queue()[0][e.col('html')];
+  e.edit(0, 'subject', 'Bush Garden - Spring Update (for Sam)');
+  ok(/Spring at Bush Garden so far/.test(e.queue()[0][e.col('html')]) && e.queue()[0][e.col('html')] === before, 'subject edit: template html unchanged');
+  e.edit(0, 'body', e.queue()[0][e.col('body')].replace('Hi Sam,', 'Hi Sam and Lisa,'));
+  const after = e.queue()[0][e.col('html')];
+  ok(/Hi Sam and Lisa,/.test(after) && after !== before, 'body edit: html rebuilt from the edited text');
+});
+
+test('update template: common name looked up from the Atlas species index when a record has none', () => {
+  const e = env();
+  ok(typeof e.ctx._sigCommonName('Tachyglossus aculeatus') === 'string', 'returns a string even when the lookup fails');
+});
+
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
 process.exit(failures ? 1 : 0);
