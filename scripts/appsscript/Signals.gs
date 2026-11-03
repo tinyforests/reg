@@ -1387,6 +1387,7 @@ function _sigRecordSection(g) {
 
 var SIG_T = { INK: '#2b2f26', MUTE: '#6f7666', LINE: '#e3d8c3', PAPER: '#fbf6ec', CARD: '#f4ecdc', GREEN: '#5f7f47', LIGHT: '#9cbf7e', GREY: '#cfc5b0',
   SERIF: "Georgia,'Times New Roman',serif", SANS: 'Helvetica,Arial,sans-serif', MONO: 'Menlo,Consolas,monospace' };
+var SIG_UPDATE_FOOT = 'Part of our Ecological Registry steward pilot. Sightings are from the surrounding area, not from your garden. Weather and soil figures are estimates for your location. Reply "pause" and we\'ll stop these notes.';
 var SIG_PILLS = { orchids: ['Orchid', '#8a6aa8'], mammals: ['Mammal', '#8a6a4f'], birds: ['Bird', '#b0574a'], wildflowers: ['Wildflower', '#4f7fa8'],
   frogs: ['Frog', '#4f8a6a'], reptiles: ['Reptile', '#8a7a3f'], 'moths and butterflies': ['Insect', '#6a6a8a'], insects: ['Insect', '#6a6a8a'] };
 
@@ -1404,13 +1405,6 @@ function _sigStudioPanel(g) {
 
 function _sigUpdateText(m) {
   var L = [m.greeting], R = m.record;
-  if (R) {
-    L.push('', (m.garden + '\'s record').toUpperCase(), m.garden + ' is at ' + R.score + ' of 100: ' + R.rating + '.' +
-      (R.next && R.toNext ? ' ' + R.toNext + ' point' + (R.toNext === 1 ? '' : 's') + ' from ' + R.next + '.' : ''), '');
-    R.pillars.forEach(function (p) { L.push(p.label + ': ' + p.score + ' of ' + p.max); });
-    L.push('', R.gap.text);
-    if (R.invite) L.push(R.invite.text + ': ' + R.invite.href);
-  }
   var st = m.stats;
   if (st) {
     L.push('', (st.season + ' at ' + m.garden + ' so far').toUpperCase(), 'Compared with the same weeks in each of the past 30 years.', '');
@@ -1421,6 +1415,13 @@ function _sigUpdateText(m) {
     if (st.warmth) L.push('Spring warmth: ' + st.warmth.headline.charAt(0).toLowerCase() + st.warmth.headline.slice(1) + '. ' + st.warmth.text);
   }
   if (m.sun) L.push('', 'Tomorrow: first light ' + m.sun.firstLight + ', sunrise ' + m.sun.sunrise + '.');
+  if (R) {
+    L.push('', (m.garden + '\'s record').toUpperCase(), m.garden + ' is at ' + R.score + ' of 100: ' + R.rating + '.' +
+      (R.next && R.toNext ? ' ' + R.toNext + ' point' + (R.toNext === 1 ? '' : 's') + ' from ' + R.next + '.' : ''), '');
+    R.pillars.forEach(function (p) { L.push(p.label + ': ' + p.score + ' of ' + p.max); });
+    L.push('', R.gap.text);
+    if (R.invite) L.push(R.invite.text + ': ' + R.invite.href);
+  }
   L.push('', ('Around ' + m.garden).toUpperCase(), 'Recorded in the surrounding area in the past few weeks.', '', m.eyebrow.toUpperCase(), m.headline + (m.sci ? ' (' + m.sci + ')' : ''));
   if (m.why) L.push(m.why);
   if (m.plant) L.push(m.plant);
@@ -1436,8 +1437,7 @@ function _sigUpdateText(m) {
   }
   if (m.studioNote) L.push('', m.studioNote);
   L.push('', 'Add your own sightings to ' + m.garden + '\'s record: ' + m.profile, '', SIG_SIGNOFF, '', '--',
-    'Part of our Ecological Registry steward pilot. Sightings are from the surrounding area, not from your garden, via the Atlas of Living Australia. ' +
-    'Weather and soil figures are estimates for your location from Open-Meteo. Reply "pause" and we\'ll stop these notes.');
+    SIG_UPDATE_FOOT);
   return L.join('\n');
 }
 
@@ -1474,29 +1474,7 @@ function _sigUpdateHtml(m, card) {
     return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="background-color:' + T.CARD + ';border-left:3px solid ' + T.GREEN +
       ';margin:0 0 8px"><tr><td style="padding:12px 14px;font:15px/1.5 ' + T.SANS + ';color:' + T.INK + '">' + t + '</td></tr></table>';
   };
-  var R = m.record, lead = '<div style="font:15px/1.6 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 18px">' + e(m.greeting) + '</div>';
-  if (R) {
-    var acc = card && card.provisional ? '#a8873f' : T.GREEN;
-    var pill = function (p) {
-      var isGap = p.key === R.gap.key, col = isGap ? '#a8873f' : T.GREEN;
-      return '<tr><td style="padding:7px 0 0;font:13px/1.4 ' + T.SANS + ';color:' + T.INK + '">' + (isGap ? '<b>' + e(p.label) + '</b>' : e(p.label)) +
-        '</td><td align="right" style="padding:7px 0 0;font:12px/1.4 ' + T.MONO + ';color:' + (isGap ? '#a8873f' : T.MUTE) + '">' + p.score + ' / ' + p.max + '</td></tr>' +
-        '<tr><td colspan="2" style="padding:4px 0 0">' + bar(p.score / p.max * 100, col, 8) + '</td></tr>';
-    };
-    lead += '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.garden) + '&#39;s record · ' + e(seasonCap) + '</div>' +
-      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px"><tr>' +
-      '<td width="150" valign="top" style="padding:0 18px 0 0"><div style="font:500 64px/1 ' + T.MONO + ';color:' + acc + '">' + R.score + '</div>' +
-      '<div style="font:11px/1.6 ' + T.MONO + ';color:' + T.MUTE + ';margin-top:6px">OUT OF 100</div></td>' +
-      '<td valign="top"><div style="font:400 28px/1.15 ' + T.SERIF + ';color:' + T.INK + '">' + e(R.rating) + '</div>' +
-      (R.next && R.toNext ? '<div style="font:14px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:6px"><b style="color:' + T.INK + '">' + R.toNext + ' point' + (R.toNext === 1 ? '' : 's') +
-        '</b> from ' + e(R.next) + '</div>' : '') + '</td></tr></table>' +
-      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid ' + T.LINE + ';margin-top:18px"><tr><td style="padding:8px 14px 16px">' +
-      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">' + R.pillars.map(pill).join('') + '</table></td></tr></table>' +
-      '<div style="margin-top:14px">' + callout(e(R.gap.text)) + '</div>' +
-      (R.invite ? '<div style="margin-top:6px">' + btn(R.invite.text, R.invite.href, true) + '<div style="font:12px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:8px">' + e(R.invite.note) + '</div></div>' : '') +
-      '<div style="font:13px/1.5 ' + T.SANS + ';margin-top:12px"><a href="' + e(m.profile) + '" style="color:' + T.INK + '">View the full record ↗</a></div>';
-  }
-  out.push(row(lead, '26px 0 8px'));
+  out.push(row('<div style="font:15px/1.6 ' + T.SANS + ';color:' + T.INK + '">' + e(m.greeting) + '</div>', '26px 0 0'));
 
   var st = m.stats;
   if (st) {
@@ -1526,6 +1504,29 @@ function _sigUpdateHtml(m, card) {
     }
   }
   if (m.sun) out.push(row('Tomorrow: first light <b style="color:' + T.INK + '">' + e(m.sun.firstLight) + '</b>, sunrise <b style="color:' + T.INK + '">' + e(m.sun.sunrise) + '</b>.', '12px 0 0;font:13px/1.5 ' + T.SANS + ';color:' + T.MUTE));
+  var R = m.record, lead = '';
+  if (R) {
+    var acc = card && card.provisional ? '#a8873f' : T.GREEN;
+    var pill = function (p) {
+      var isGap = p.key === R.gap.key, col = isGap ? '#a8873f' : T.GREEN;
+      return '<tr><td style="padding:7px 0 0;font:13px/1.4 ' + T.SANS + ';color:' + T.INK + '">' + (isGap ? '<b>' + e(p.label) + '</b>' : e(p.label)) +
+        '</td><td align="right" style="padding:7px 0 0;font:12px/1.4 ' + T.MONO + ';color:' + (isGap ? '#a8873f' : T.MUTE) + '">' + p.score + ' / ' + p.max + '</td></tr>' +
+        '<tr><td colspan="2" style="padding:4px 0 0">' + bar(p.score / p.max * 100, col, 8) + '</td></tr>';
+    };
+    lead += '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.garden) + '&#39;s record · ' + e(seasonCap) + '</div>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px"><tr>' +
+      '<td width="150" valign="top" style="padding:0 18px 0 0"><div style="font:500 64px/1 ' + T.MONO + ';color:' + acc + '">' + R.score + '</div>' +
+      '<div style="font:11px/1.6 ' + T.MONO + ';color:' + T.MUTE + ';margin-top:6px">OUT OF 100</div></td>' +
+      '<td valign="top"><div style="font:400 28px/1.15 ' + T.SERIF + ';color:' + T.INK + '">' + e(R.rating) + '</div>' +
+      (R.next && R.toNext ? '<div style="font:14px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:6px"><b style="color:' + T.INK + '">' + R.toNext + ' point' + (R.toNext === 1 ? '' : 's') +
+        '</b> from ' + e(R.next) + '</div>' : '') + '</td></tr></table>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid ' + T.LINE + ';margin-top:18px"><tr><td style="padding:8px 14px 16px">' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">' + R.pillars.map(pill).join('') + '</table></td></tr></table>' +
+      '<div style="margin-top:14px">' + callout(e(R.gap.text)) + '</div>' +
+      (R.invite ? '<div style="margin-top:6px">' + btn(R.invite.text, R.invite.href, true) + '<div style="font:12px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:8px">' + e(R.invite.note) + '</div></div>' : '') +
+      '<div style="font:13px/1.5 ' + T.SANS + ';margin-top:12px"><a href="' + e(m.profile) + '" style="color:' + T.INK + '">View the full record ↗</a></div>';
+  }
+  if (R) out.push(row(lead, '36px 0 8px'));
 
   out.push(row(h2('Around ' + e(m.garden), 'Recorded in the surrounding area in the past few weeks.'), '32px 0 12px'));
   out.push(row('<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.eyebrow) + '</div>' +
@@ -1578,7 +1579,7 @@ function _sigUpdateHtml(m, card) {
       (typeof card.score === 'number' ? '<div style="font:500 44px/1.1 ' + T.MONO + ';color:' + acc2 + ';margin-top:4px">' + card.score + '<span style="font-size:12px;color:#8a8f80"> / 100</span></div>' : '') +
       '<a href="' + e(card.profile) + '" style="display:block;margin-top:8px;font:13px/1.5 ' + T.SANS + ';color:' + T.INK + '">View your garden\'s record ↗</a></td></tr></table>', '24px 0 0'));
   }
-  out.push(row('Part of our Ecological Registry steward pilot. Sightings are from the surrounding area, not from your garden, via the Atlas of Living Australia. Weather and soil figures are estimates for your location from Open-Meteo. Reply "pause" and we\'ll stop these notes.',
+  out.push(row(e(SIG_UPDATE_FOOT),
     '24px 0 8px;font:11px/1.6 ' + T.SANS + ';color:' + T.MUTE));
 
   return '<div style="background-color:' + T.PAPER + ';padding:0;margin:0" bgcolor="' + T.PAPER + '"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.PAPER +

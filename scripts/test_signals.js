@@ -725,11 +725,12 @@ test('update template: common name looked up from the Atlas species index when a
 test('update leads with the garden record: score, five pillars from the Registry engine, the pillar with most room', () => {
   const e = bush(); e.ctx.previewSignalsNow();
   const r = e.queue()[0], body = r[e.col('body')], html = r[e.col('html')];
-  ok(/^Hi Sam,\n\nBUSH GARDEN'S RECORD\nBush Garden is at 83 of 100: Ecosystem Garden\. 8 points from Urban Biodiversity Node\./.test(body), body.slice(0, 200));
+  ok(/^Hi Sam,\n\nSPRING AT BUSH GARDEN SO FAR\n/.test(body) && /\n\nBUSH GARDEN'S RECORD\nBush Garden is at 83 of 100: Ecosystem Garden\. 8 points from Urban Biodiversity Node\./.test(body), body.slice(0, 200));
   ok(/Connectivity: 11 of 20/.test(body) && /Soil & Water Function: 20 of 20/.test(body), 'pillar scores');
   ok(/Connectivity is where Bush Garden has the most room: 11 of 20\..*There's a park within 50m, but no registered gardens next door yet\. One registered neighbour adds 3 points\./.test(body), 'gap pillar in plain words');
   ok(/href="https:\/\/ecologicalregistry\.org\/gardens\/g-a8fd930bda96\/index\.html#opportunityList"[^>]*>Invite a neighbour<\/a>/.test(html), 'invite button links to the profile opportunities');
-  ok(body.indexOf("BUSH GARDEN'S RECORD") < body.indexOf('SO FAR') && body.indexOf('SO FAR') < body.indexOf('AROUND BUSH GARDEN') && body.indexOf('AROUND BUSH GARDEN') < body.indexOf('Bogong'), 'record, then season, then sightings');
+  ok(body.indexOf('SO FAR') < body.indexOf("BUSH GARDEN'S RECORD") && body.indexOf("BUSH GARDEN'S RECORD") < body.indexOf('AROUND BUSH GARDEN') && body.indexOf('AROUND BUSH GARDEN') < body.indexOf('Bogong'), 'season, then record, then sightings');
+  ok(/not from your garden\. Weather and soil figures are estimates for your location\. Reply "pause"/.test(body) && !/Atlas of Living Australia|Open-Meteo/.test(body.split('\n--')[1] || 'x'), 'new footer');
   ok((html.match(/>83</g) || []).length === 1, 'score shown once (no duplicate card)');
   const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
   ok(ev.record && ev.record.score === 83 && ev.record.gap === 'connectivity', 'record evidence');
