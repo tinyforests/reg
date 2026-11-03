@@ -729,3 +729,12 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 **Reason:** A single vertical reading order gives the score greater prominence and unifies the intended website and garden-sign identity. This supersedes the Gateplate layout above; data selection, scoring and verification behaviour are unchanged.
 
 **Files affected:** `index.html`, `assets/css/registry-home.css`, `docs/design-system.md`, `docs/decisions-log.md`.
+
+
+## 4 Nov 2026 — Signal pilot enquiry clarity
+
+- **Decision:** Explain the Registry score beside the concept rendering; bring membership, installation needs and prototype status into a Pilot essentials panel; provide a prefilled, user-sent email enquiry with suburb, Registry identity and site conditions. Link unregistered visitors to enrolment.
+- **Reason:** The approved page review identified uncertainty about participation. No confirmed cost, duration, ownership, maintenance, service boundary or response schedule exists in the Signal source, so the page identifies these gaps rather than inventing terms. No working-unit photograph or dimensions were supplied; retain and clarify the labelled concept rendering.
+- **Audio boundary:** Describe on-device identification and detection-only retention as intended prototype behaviour, with temporary processing distinguished from retained recordings. Hardware privacy behaviour has not been verified by this page change.
+- **Presentation:** Preserve the established Signal treatment; apply the repo’s square-edge rule, readable keyboard focus and sticky-header anchor offset.
+- **Files:** `sign/index.html`, `docs/decisions-log.md`. Scoring, records and sensor firmware are unchanged.
