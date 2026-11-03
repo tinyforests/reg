@@ -1432,7 +1432,7 @@ function _sigUpdateText(m) {
   if (m.lookups && m.lookups.near) L.push('', 'Since ' + m.lookups.sinceLabel + ', people have looked up what originally grew at ' + m.lookups.near + ' place' + (m.lookups.near === 1 ? '' : 's') +
     ' within 10km of ' + m.garden + ' on findmyevc.com, and at ' + m.lookups.all + ' place' + (m.lookups.all === 1 ? '' : 's') + ' across Victoria.');
   if (m.studio) {
-    L.push('', m.studio.eyebrow.toUpperCase(), m.studio.title + '.', m.studio.intro + ' ' + m.studio.items.map(function (x) { return x[0].toLowerCase() + ' ' + x[1]; }).join('; ') + '.', m.studio.close, m.studio.button[0] + ': ' + m.studio.button[1]);
+    L.push('', m.studio.eyebrow.toUpperCase(), m.studio.title + '.', m.studio.intro + ' It tracks ' + m.studio.items.map(function (x) { return x[0].toLowerCase() + ' ' + x[1]; }).join(', ') + '.', m.studio.close, m.studio.button[0] + ': ' + m.studio.button[1]);
   }
   if (m.studioNote) L.push('', m.studioNote);
   L.push('', 'Add your own sightings to ' + m.garden + '\'s record: ' + m.profile, '', SIG_SIGNOFF, '', '--',
