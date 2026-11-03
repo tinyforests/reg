@@ -452,6 +452,9 @@ function _sigRunLocked(opts) {
       model.sun = _sigSunrise(g, now);
       model.lookups = _sigLookups(g, now);
       model.studio = _sigStudioPanel(g);
+      model.record = _sigRecordSection(g);
+      if (model.record) chosen[0].evidence.record = { source: SIG_SITE + '/js/reg-score.js (the Registry scoring engine) on ' + SIG_SITE + '/data registry record',
+        score: model.record.score, pillars: model.record.pillars.map(function (p) { return p.key + ' ' + p.score + '/' + p.max; }), gap: model.record.gap.key };
       model.studioNote = String(PropertiesService.getScriptProperties().getProperty('SIGNALS_STUDIO_NOTE') || '').trim().replace(/\{garden\}/g, g.garden_name);
       if (cond) chosen[0].evidence.conditions = cond.evidence;
       if (model.sun) chosen[0].evidence.sun = { source: 'Open-Meteo forecast sunrise; first light = civil dawn (sun 6° below horizon)', date: model.sun.date, first_light: model.sun.firstLight, sunrise: model.sun.sunrise };
@@ -531,6 +534,8 @@ function _sigGardens(ids) {
       faunaRecs: (hab.fauna_sightings || []).map(function (f) { return { name: String(f.species || ''), verified: f.verified === true }; }),
       water: hab.has_water_feature === true || /\b(pond|dam|wetland|frog)/i.test(String(rec.description || '')),
       score: typeof g.score === 'number' ? g.score : null, rating: (g.rating && g.rating.current) || '',
+      nextLevel: (g.rating && g.rating.next) || '', toNext: g.rating && typeof g.rating.points_to_next === 'number' ? g.rating.points_to_next : null,
+      record: rec,
       provisional: /provisional/i.test(String(g.status || '')) || /self_reported/i.test(String(g.verification_level || '')),
       profile: SIG_SITE + (String(g.profile_url || '').charAt(0) === '/' ? '' : '/') + String(g.profile_url || '')
     };
@@ -1323,6 +1328,57 @@ function _sigHtml(body, card) {
   return '<div style="max-width:560px;padding:8px">' + paras + foot + note + '</div>';
 }
 
+/* The Registry's own scoring engine, loaded from the site so the email
+   always matches the garden profile. Cached for six hours. */
+function _sigScorer() {
+  var cache = CacheService.getScriptCache(), src = cache.get('reg-score.js');
+  if (src === null) {
+    try {
+      var r = UrlFetchApp.fetch(SIG_SITE + '/js/reg-score.js', { muteHttpExceptions: true });
+      src = r.getResponseCode() === 200 ? r.getContentText() : '';
+    } catch (e) { src = ''; }
+    if (src.length < 90000) cache.put('reg-score.js', src, 21600);
+  }
+  if (!src) return null;
+  try {
+    var w = {};
+    return new Function('window', 'self', 'module', 'exports', src + '\n;return typeof scoreEcologicalRegistry === "function" ? scoreEcologicalRegistry : (window.scoreEcologicalRegistry || null);')(w, w, undefined, undefined);
+  } catch (e) { return null; }
+}
+
+var SIG_PILLAR_KEYS = { 'Biodiversity Structure': 'biodiversity', 'Soil & Water Function': 'soil_water', 'Habitat Complexity': 'habitat',
+  'Connectivity': 'connectivity', 'Evidence & Verification': 'evidence' };
+var SIG_PILLAR_WHY = {
+  biodiversity: 'These points come from indigenous species, structural layers and canopy cover.',
+  soil_water: 'These points come from soil health, water held on site, rain capture and swales.',
+  habitat: 'These points come from logs, rocks, water, nest boxes and fauna recorded in the garden.',
+  connectivity: 'These points come from the gardens and green space around it.',
+  evidence: 'These points come from photos, field notes and records added to the garden\'s record.'
+};
+
+/* Score card, five pillars and the pillar with the most room, scored by
+   the Registry engine. Null unless the engine's total matches the score
+   published on the Registry (so the email never contradicts the profile). */
+function _sigRecordSection(g) {
+  if (!g.record || typeof g.score !== 'number') return null;
+  var score = _sigScorer(); if (!score) return null;
+  var r; try { r = score(g.record); } catch (e) { return null; }
+  if (!r || r.total !== g.score || !r.categories) return null;
+  var pillars = r.categories.map(function (c) { return { key: SIG_PILLAR_KEYS[c.label] || c.label, label: c.label, score: c.score, max: c.max, notes: c.notes || [] }; });
+  var gap = pillars.slice().sort(function (a, b) { return (a.score / a.max) - (b.score / b.max) || (b.max - b.score) - (a.max - a.score); })[0];
+  var text = gap.label + ' is where ' + g.garden_name + ' has the most room: ' + gap.score + ' of ' + gap.max + '. ' + (SIG_PILLAR_WHY[gap.key] || '');
+  var invite = null;
+  if (gap.key === 'connectivity') {
+    var c = g.record.connectivity || {}, adj = (c.adjacent_registered_gardens || []).length;
+    var park = gap.notes.filter(function (n) { return /park/i.test(n); })[0];
+    text += ' ' + (park ? park.replace(/^Park/, 'There\'s a park') + (adj ? '' : ', but') : '') +
+      (adj ? (park ? ', and ' : '') + adj + ' registered garden' + (adj === 1 ? '' : 's') + ' next door.' : (park ? ' no' : 'No') + ' registered gardens next door yet.') +
+      (adj < 3 ? ' ' + (adj ? 'Each more registered neighbour lifts it further.' : 'One registered neighbour adds 3 points.') : '');
+    invite = { text: 'Invite a neighbour', href: g.profile + '#opportunityList', note: 'From ' + g.garden_name + '\'s record, under Biggest Opportunities.' };
+  }
+  return { score: r.total, rating: g.rating, next: g.nextLevel, toNext: g.toNext, pillars: pillars, gap: { key: gap.key, label: gap.label, text: text.trim() }, invite: invite };
+}
+
 /* ---------------------------------------------------------------
    Steward update template (Gmail-safe: tables, inline styles, no
    images or SVG, light palette, direct links). Same layout as
@@ -1347,10 +1403,14 @@ function _sigStudioPanel(g) {
 }
 
 function _sigUpdateText(m) {
-  var L = [m.greeting, '', m.eyebrow.toUpperCase(), m.headline + (m.sci ? ' (' + m.sci + ')' : '')];
-  if (m.why) L.push('', m.why);
-  if (m.plant) L.push('', m.plant);
-  if (m.link) L.push('', m.link);
+  var L = [m.greeting], R = m.record;
+  if (R) {
+    L.push('', (m.garden + '\'s record').toUpperCase(), m.garden + ' is at ' + R.score + ' of 100: ' + R.rating + '.' +
+      (R.next && R.toNext ? ' ' + R.toNext + ' point' + (R.toNext === 1 ? '' : 's') + ' from ' + R.next + '.' : ''), '');
+    R.pillars.forEach(function (p) { L.push(p.label + ': ' + p.score + ' of ' + p.max); });
+    L.push('', R.gap.text);
+    if (R.invite) L.push(R.invite.text + ': ' + R.invite.href);
+  }
   var st = m.stats;
   if (st) {
     L.push('', (st.season + ' at ' + m.garden + ' so far').toUpperCase(), 'Compared with the same weeks in each of the past 30 years.', '');
@@ -1361,8 +1421,12 @@ function _sigUpdateText(m) {
     if (st.warmth) L.push('Spring warmth: ' + st.warmth.headline.charAt(0).toLowerCase() + st.warmth.headline.slice(1) + '. ' + st.warmth.text);
   }
   if (m.sun) L.push('', 'Tomorrow: first light ' + m.sun.firstLight + ', sunrise ' + m.sun.sunrise + '.');
+  L.push('', ('Around ' + m.garden).toUpperCase(), 'Recorded in the surrounding area in the past few weeks.', '', m.eyebrow.toUpperCase(), m.headline + (m.sci ? ' (' + m.sci + ')' : ''));
+  if (m.why) L.push(m.why);
+  if (m.plant) L.push(m.plant);
+  if (m.link) L.push(m.link);
   if (m.also && m.also.length) {
-    L.push('', ('Also recorded around ' + m.garden).toUpperCase(), 'In the past few weeks, in the surrounding area.');
+    L.push('', 'Also recorded:');
     m.also.forEach(function (a) { L.push('– ' + a.name + (a.sci ? ' (' + a.sci + ')' : '') + ', ' + a.where.toLowerCase() + ', ' + a.when); });
   }
   if (m.lookups && m.lookups.near) L.push('', 'Since ' + m.lookups.sinceLabel + ', people have looked up what originally grew at ' + m.lookups.near + ' place' + (m.lookups.near === 1 ? '' : 's') +
@@ -1406,15 +1470,32 @@ function _sigUpdateHtml(m, card) {
     '">Ecological Registry <span style="color:' + T.GREEN + '">●</span></td><td align="right" style="font:11px/1.4 ' + T.MONO + ';letter-spacing:.08em;text-transform:uppercase;color:' + T.MUTE + '">' +
     e(m.garden) + ' · ' + seasonCap + ' update · ' + e(m.dateLabel) + '</td></tr></table>', '0 0 14px;border-bottom:2px solid ' + T.INK));
 
-  var lead = '<div style="font:15px/1.6 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 18px">' + e(m.greeting) + '</div>' +
-    '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.eyebrow) + '</div>' +
-    '<div style="font:400 34px/1.15 ' + T.SERIF + ';color:' + T.INK + ';margin:8px 0 ' + (m.sci ? '2px' : '12px') + '">' + e(m.headline) + '</div>' +
-    (m.sci ? '<div style="font:italic 15px/1.5 ' + T.SERIF + ';color:' + T.MUTE + ';margin:0 0 12px">' + e(m.sci) + '</div>' : '') +
-    (m.why ? '<div style="font:16px/1.6 ' + T.SERIF + ';color:' + T.INK + ';margin:0 0 12px">' + e(m.why) + '</div>' : '') +
-    [m.plant, m.link].filter(String).map(function (t) {
-      return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="background-color:' + T.CARD + ';border-left:3px solid ' + T.GREEN +
-        ';margin:0 0 8px"><tr><td style="padding:12px 14px;font:15px/1.5 ' + T.SANS + ';color:' + T.INK + '">' + e(t) + '</td></tr></table>';
-    }).join('');
+  var callout = function (t) {
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="background-color:' + T.CARD + ';border-left:3px solid ' + T.GREEN +
+      ';margin:0 0 8px"><tr><td style="padding:12px 14px;font:15px/1.5 ' + T.SANS + ';color:' + T.INK + '">' + t + '</td></tr></table>';
+  };
+  var R = m.record, lead = '<div style="font:15px/1.6 ' + T.SANS + ';color:' + T.INK + ';margin:0 0 18px">' + e(m.greeting) + '</div>';
+  if (R) {
+    var acc = card && card.provisional ? '#a8873f' : T.GREEN;
+    var pill = function (p) {
+      var isGap = p.key === R.gap.key, col = isGap ? '#a8873f' : T.GREEN;
+      return '<tr><td style="padding:7px 0 0;font:13px/1.4 ' + T.SANS + ';color:' + T.INK + '">' + (isGap ? '<b>' + e(p.label) + '</b>' : e(p.label)) +
+        '</td><td align="right" style="padding:7px 0 0;font:12px/1.4 ' + T.MONO + ';color:' + (isGap ? '#a8873f' : T.MUTE) + '">' + p.score + ' / ' + p.max + '</td></tr>' +
+        '<tr><td colspan="2" style="padding:4px 0 0">' + bar(p.score / p.max * 100, col, 8) + '</td></tr>';
+    };
+    lead += '<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.garden) + '&#39;s record · ' + e(seasonCap) + '</div>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-top:10px"><tr>' +
+      '<td width="150" valign="top" style="padding:0 18px 0 0"><div style="font:500 64px/1 ' + T.MONO + ';color:' + acc + '">' + R.score + '</div>' +
+      '<div style="font:11px/1.6 ' + T.MONO + ';color:' + T.MUTE + ';margin-top:6px">OUT OF 100</div></td>' +
+      '<td valign="top"><div style="font:400 28px/1.15 ' + T.SERIF + ';color:' + T.INK + '">' + e(R.rating) + '</div>' +
+      (R.next && R.toNext ? '<div style="font:14px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:6px"><b style="color:' + T.INK + '">' + R.toNext + ' point' + (R.toNext === 1 ? '' : 's') +
+        '</b> from ' + e(R.next) + '</div>' : '') + '</td></tr></table>' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid ' + T.LINE + ';margin-top:18px"><tr><td style="padding:8px 14px 16px">' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">' + R.pillars.map(pill).join('') + '</table></td></tr></table>' +
+      '<div style="margin-top:14px">' + callout(e(R.gap.text)) + '</div>' +
+      (R.invite ? '<div style="margin-top:6px">' + btn(R.invite.text, R.invite.href, true) + '<div style="font:12px/1.5 ' + T.SANS + ';color:' + T.MUTE + ';margin-top:8px">' + e(R.invite.note) + '</div></div>' : '') +
+      '<div style="font:13px/1.5 ' + T.SANS + ';margin-top:12px"><a href="' + e(m.profile) + '" style="color:' + T.INK + '">View the full record ↗</a></div>';
+  }
   out.push(row(lead, '26px 0 8px'));
 
   var st = m.stats;
@@ -1446,8 +1527,14 @@ function _sigUpdateHtml(m, card) {
   }
   if (m.sun) out.push(row('Tomorrow: first light <b style="color:' + T.INK + '">' + e(m.sun.firstLight) + '</b>, sunrise <b style="color:' + T.INK + '">' + e(m.sun.sunrise) + '</b>.', '12px 0 0;font:13px/1.5 ' + T.SANS + ';color:' + T.MUTE));
 
+  out.push(row(h2('Around ' + e(m.garden), 'Recorded in the surrounding area in the past few weeks.'), '32px 0 12px'));
+  out.push(row('<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.1em;text-transform:uppercase;color:' + T.GREEN + '">' + e(m.eyebrow) + '</div>' +
+    '<div style="font:400 26px/1.2 ' + T.SERIF + ';color:' + T.INK + ';margin:6px 0 ' + (m.sci ? '2px' : '10px') + '">' + e(m.headline) + '</div>' +
+    (m.sci ? '<div style="font:italic 14px/1.5 ' + T.SERIF + ';color:' + T.MUTE + ';margin:0 0 10px">' + e(m.sci) + '</div>' : '') +
+    (m.why ? '<div style="font:15px/1.6 ' + T.SERIF + ';color:' + T.INK + ';margin:0 0 10px">' + e(m.why) + '</div>' : '') +
+    [m.plant, m.link].filter(String).map(function (t) { return callout(e(t)); }).join(''), '0 0 6px'));
   if (m.also && m.also.length) {
-    out.push(row(h2('Also recorded around ' + e(m.garden), 'In the past few weeks, in the surrounding area.'), '32px 0 6px'));
+    out.push(row('<div style="font:600 11px/1.4 ' + T.SANS + ';letter-spacing:.08em;text-transform:uppercase;color:' + T.MUTE + '">Also recorded</div>', '18px 0 6px'));
     var rows = m.also.map(function (a) {
       var p = SIG_PILLS[a.theme] || ['Sighting', T.MUTE];
       return '<tr><td style="padding:11px 0;border-bottom:1px solid ' + T.LINE + '" valign="top" width="96"><span style="display:inline-block;font:600 10px/1 ' + T.SANS +
@@ -1482,13 +1569,13 @@ function _sigUpdateHtml(m, card) {
   if (m.studioNote) out.push(row(e(m.studioNote), '22px 0 0;font:15px/1.55 ' + T.SANS + ';color:' + T.INK));
   out.push(row(btn('Add your own sightings to ' + m.garden + '\'s record', m.profile, false), '22px 0 0'));
   out.push(row(e(SIG_SIGNOFF.split('\n')[0]) + '<br><span style="font:13px ' + T.SANS + ';color:' + T.MUTE + '">' + e(SIG_SIGNOFF.split('\n')[1] || '') + '</span>', '26px 0 0;font:15px/1.6 ' + T.SERIF + ';color:' + T.INK));
-  if (card && card.garden_name) {
-    var acc = card.provisional ? '#a8873f' : T.GREEN;
+  if (card && card.garden_name && !R) {
+    var acc2 = card.provisional ? '#a8873f' : T.GREEN;
     out.push(row('<table role="presentation" cellpadding="0" cellspacing="0" bgcolor="' + T.CARD + '" style="width:100%;max-width:300px;background-color:' + T.CARD + ';border:1px solid #d9ccb2"><tr><td style="padding:14px 16px">' +
-      '<div style="font:11px/1.5 ' + T.MONO + ';letter-spacing:.1em;text-transform:uppercase;color:#5b6152">Ecological Registry <span style="color:' + acc + '">●</span></div>' +
+      '<div style="font:11px/1.5 ' + T.MONO + ';letter-spacing:.1em;text-transform:uppercase;color:#5b6152">Ecological Registry <span style="color:' + acc2 + '">●</span></div>' +
       '<div style="font:16px/1.3 ' + T.SANS + ';color:' + T.INK + ';margin-top:8px">' + e(card.garden_name) + '</div>' +
-      '<div style="font:11px/1.6 ' + T.MONO + ';text-transform:uppercase;color:' + acc + '">' + e(card.rating || '') + (card.provisional ? ' · provisional' : '') + '</div>' +
-      (typeof card.score === 'number' ? '<div style="font:500 44px/1.1 ' + T.MONO + ';color:' + acc + ';margin-top:4px">' + card.score + '<span style="font-size:12px;color:#8a8f80"> / 100</span></div>' : '') +
+      '<div style="font:11px/1.6 ' + T.MONO + ';text-transform:uppercase;color:' + acc2 + '">' + e(card.rating || '') + (card.provisional ? ' · provisional' : '') + '</div>' +
+      (typeof card.score === 'number' ? '<div style="font:500 44px/1.1 ' + T.MONO + ';color:' + acc2 + ';margin-top:4px">' + card.score + '<span style="font-size:12px;color:#8a8f80"> / 100</span></div>' : '') +
       '<a href="' + e(card.profile) + '" style="display:block;margin-top:8px;font:13px/1.5 ' + T.SANS + ';color:' + T.INK + '">View your garden\'s record ↗</a></td></tr></table>', '24px 0 0'));
   }
   out.push(row('Part of our Ecological Registry steward pilot. Sightings are from the surrounding area, not from your garden, via the Atlas of Living Australia. Weather and soil figures are estimates for your location from Open-Meteo. Reply "pause" and we\'ll stop these notes.',

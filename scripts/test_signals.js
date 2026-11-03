@@ -637,7 +637,7 @@ test('season: unresolved observation outranks recorded habitat', () => {
 test('season note adds what else was recorded around the garden, one per theme, with distances and links', () => {
   const e = bush(); e.ctx.previewSignalsNow();
   const body = e.queue()[0][e.col('body')];
-  const sect = (body.split('ALSO RECORDED AROUND BUSH GARDEN\nIn the past few weeks, in the surrounding area.\n')[1] || '').split('\n\n')[0];
+  const sect = (body.split('\nAlso recorded:\n')[1] || '').split('\n\n')[0];
   const items = sect.split('\n').filter(l => l.startsWith('– '));
   ok(items.length >= 3 && items.length <= 4, 'three or four items, got ' + items.length + '\n' + sect);
   ok(items.every(l => /about [\d.]+km away|nearby/.test(l) && /\d{1,2} [A-Z][a-z]+\.?$/.test(l)), 'distance + full date on each: ' + items.join(' | '));
@@ -721,6 +721,26 @@ test('update template: common name looked up from the Atlas species index when a
   ok(typeof e.ctx._sigCommonName('Tachyglossus aculeatus') === 'string', 'returns a string even when the lookup fails');
 });
 
+
+test('update leads with the garden record: score, five pillars from the Registry engine, the pillar with most room', () => {
+  const e = bush(); e.ctx.previewSignalsNow();
+  const r = e.queue()[0], body = r[e.col('body')], html = r[e.col('html')];
+  ok(/^Hi Sam,\n\nBUSH GARDEN'S RECORD\nBush Garden is at 83 of 100: Ecosystem Garden\. 8 points from Urban Biodiversity Node\./.test(body), body.slice(0, 200));
+  ok(/Connectivity: 11 of 20/.test(body) && /Soil & Water Function: 20 of 20/.test(body), 'pillar scores');
+  ok(/Connectivity is where Bush Garden has the most room: 11 of 20\..*There's a park within 50m, but no registered gardens next door yet\. One registered neighbour adds 3 points\./.test(body), 'gap pillar in plain words');
+  ok(/href="https:\/\/ecologicalregistry\.org\/gardens\/g-a8fd930bda96\/index\.html#opportunityList"[^>]*>Invite a neighbour<\/a>/.test(html), 'invite button links to the profile opportunities');
+  ok(body.indexOf("BUSH GARDEN'S RECORD") < body.indexOf('SO FAR') && body.indexOf('SO FAR') < body.indexOf('AROUND BUSH GARDEN') && body.indexOf('AROUND BUSH GARDEN') < body.indexOf('Bogong'), 'record, then season, then sightings');
+  ok((html.match(/>83</g) || []).length === 1, 'score shown once (no duplicate card)');
+  const ev = JSON.parse(r[e.col('evidence')]).signals[0].evidence;
+  ok(ev.record && ev.record.score === 83 && ev.record.gap === 'connectivity', 'record evidence');
+});
+
+test('record section is left out if the engine disagrees with the published score', () => {
+  const e = bush(); e.ctx._sigScorer = () => () => ({ total: 80, categories: [] }); e.ctx.previewSignalsNow();
+  const body = e.queue()[0][e.col('body')];
+  ok(!/BUSH GARDEN'S RECORD/.test(body) && /AROUND BUSH GARDEN/.test(body), 'no record section, rest of the note intact');
+  ok(/>83</.test(e.queue()[0][e.col('html')]), 'falls back to the score card at the foot');
+});
 
 console.log('\n' + passes + ' passed, ' + failures + ' failed');
 process.exit(failures ? 1 : 0);
