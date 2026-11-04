@@ -101,7 +101,7 @@
     .gs-badge:hover { opacity: 1; }
   </style>
   <link rel="stylesheet" href="/assets/css/registry-home.css?v=20261104-flat" />
-  <link rel="stylesheet" href="/assets/css/signal-face.css?v=20261104-flat">
+  <link rel="stylesheet" href="/assets/css/home-profile-card.css?v=20261104">
 </head>
 <body>
 
@@ -156,26 +156,24 @@
         </div>
       </div>
 
-      <!-- Signal scorecard: current record, refreshed from the Registry below. -->
+      <!-- Profile-style ecological function card, refreshed from the ledger. -->
       <div class="hero-record lg:col-span-5 fade-in">
-        <article class="signal-card signal-face" aria-label="Featured garden ecological record">
-          <header class="signal-card-head"><span>Ecological Registry</span><span class="signal-card-light" aria-hidden="true"></span></header>
-          <div class="signal-card-main">
-            <div class="signal-card-identity">
-              <h2 id="heroIdentity">Bush Garden</h2>
-              <p id="heroLocation">Wattle Glen · VIC</p>
+        <article class="eco-card home-eco-card" aria-label="Featured garden ecological scorecard">
+          <div class="card">
+            <p class="eyebrow">Ecological function</p>
+            <h2 id="heroIdentity" class="home-card-name">Bush Garden</h2>
+            <p id="heroLocation" class="eyebrow">Wattle Glen · VIC</p>
+            <div class="hero" id="homeScoreHero">
+              <div class="score" id="heroScore">83</div>
+              <div class="score-meta"><span class="of">OF 100</span><span class="tier" id="heroTier">Ecosystem Garden</span></div>
             </div>
-            <div class="signal-card-display" role="group" aria-label="Ecological score out of 100">
-              <span id="heroScore" class="signal-numeral">83</span>
-              <span class="signal-card-scale">/ 100</span>
-            </div>
+            <div class="home-card-verification"><span id="heroVerification">G&amp;S Verified</span> · <span id="heroDateLabel">Last verified</span> <span id="heroVerifiedDate">Aug 2026</span></div>
+            <div class="ladder"><p class="eyebrow">Level</p><div class="track" id="homeLevelTrack" role="img" aria-label="Level 5 of 6, Ecosystem Garden"><span class="dot done" title="Foundation Garden"></span><span class="seg done"></span><span class="dot done" title="Habitat Garden"></span><span class="seg done"></span><span class="dot done" title="Ecological Garden"></span><span class="seg done"></span><span class="dot done" title="Rich Habitat Garden"></span><span class="seg done"></span><span class="dot here" title="Ecosystem Garden"></span><span class="seg"></span><span class="dot " title="Urban Biodiversity Node"></span></div><p class="next" id="homeNextLevel"><b>8 points</b> to Urban Biodiversity Node.</p></div>
+            <hr class="rule">
+            <div class="badge-head"><p class="eyebrow">Badges</p><span class="count" id="homeBadgeCount">10 of 13</span></div>
+            <div class="badges" id="homeBadges"><span class="badge">Indigenous Dominant</span><span class="badge">Species Rich</span><span class="badge">Canopy Forming</span><span class="badge">Five Layer Garden</span><span class="badge">Habitat Builder</span><span class="badge">Fauna Active</span><span class="badge">Pollinator Rich</span><span class="badge">Water Wise</span><span class="badge">Corridor Node</span><span class="badge">Fauna Record</span></div>
+            <p id="heroGardenId" class="home-card-id">ER-AU-VIC-NIL-BEL-001</p>
           </div>
-          <p id="heroTier">Ecosystem Garden</p>
-          <div class="signal-card-record">
-            <div><span>Verification</span><strong id="heroVerification">G&amp;S Verified</strong></div>
-            <div><span id="heroDateLabel">Last verified</span><strong id="heroVerifiedDate">Aug 2026</strong></div>
-          </div>
-          <p id="heroGardenId">ER-AU-VIC-NIL-BEL-001</p>
         </article>
         <a id="heroProfileLink" class="signal-card-profile" href="/gardens/g-a8fd930bda96/index.html">View garden record <span aria-hidden="true">↗</span></a>
       </div>
@@ -599,7 +597,7 @@
    Homepage registry surfaces -- single source of truth.
    Hero preview + Registered-gardens strip both render from
    /data/registry.json through the canonical fields. Demo gardens are
-   never shown. The signal-card retains a ledger-derived static fallback
+   never shown. The ecological function card retains a ledger-derived static fallback
    if the initial request fails; its verification date remains visible.
    ------------------------------------------------------------------ */
 (function () {
@@ -623,7 +621,24 @@
     setText('heroDateLabel', provisional ? 'Verification' : 'Last verified');
     setText('heroVerifiedDate', provisional ? 'Pending' : (g.last_verified || 'Not recorded'));
     setText('heroGardenId', g.garden_id || '');
-    document.querySelector('.signal-card').classList.toggle('is-provisional', provisional);
+    document.querySelector('.home-eco-card').classList.toggle('is-provisional', provisional);
+    document.getElementById('homeScoreHero').classList.toggle('provisional', provisional);
+    var level = tierIdxFromScore(scoreOf(g));
+    var track = document.getElementById('homeLevelTrack');
+    track.replaceChildren();
+    HOME_TIERS.forEach(function (name, i) {
+      if (i) { var seg = document.createElement('span'); seg.className = 'seg' + (i <= level ? ' done' : ''); track.appendChild(seg); }
+      var dot = document.createElement('span'); dot.className = 'dot ' + (i === level ? 'here' : i < level ? 'done' : ''); dot.title = name; track.appendChild(dot);
+    });
+    track.setAttribute('aria-label', 'Level ' + (level + 1) + ' of ' + HOME_TIERS.length + ', ' + HOME_TIERS[level]);
+    setText('homeNextLevel', provisional ? 'Book a site visit to confirm this score.' : level < HOME_TIERS.length - 1 ? (HOME_TIER_MIN[level + 1] - scoreOf(g)) + ' points to ' + HOME_TIERS[level + 1] + '.' : 'Top level reached — ' + HOME_TIERS[level] + '.');
+    var verificationBadges = ['gs_verified', 'site_visit_badge'];
+    var earned = (g.badges || []).filter(function (id) { return verificationBadges.indexOf(id) === -1; });
+    var catalogue = Object.keys(BADGE_DEFINITIONS).filter(function (id) { return verificationBadges.indexOf(id) === -1; }).length;
+    setText('homeBadgeCount', provisional ? 'Withheld' : earned.length + ' of ' + catalogue);
+    var grid = document.getElementById('homeBadges'); grid.replaceChildren();
+    if (provisional) { grid.textContent = 'Awarded on verification only.'; }
+    else earned.forEach(function (id) { var badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = (BADGE_DEFINITIONS[id] || {}).name || id; grid.appendChild(badge); });
     document.getElementById('heroProfileLink').setAttribute('href', g.profile_url || '/registry.html');
   }
 
