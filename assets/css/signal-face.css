@@ -1,0 +1,20 @@
+/* Shared Signal face: dark housing, illuminated information only. */
+.signal-face {
+  --signal-face-bg: #11170f;
+  --signal-face-text: #e2eadb;
+  --signal-face-muted: #a4af9c;
+  --signal-face-line: #47513e;
+  --signal-face-light: #b3ff6c;
+  background: var(--signal-face-bg);
+  color: var(--signal-face-text);
+  border: 1px solid var(--signal-face-line);
+  box-shadow: 0 0 0 6px #1a2217, 0 24px 50px #00000040;
+}
+.signal-face.is-provisional { --signal-face-light: #d4bb87; }
+.signal-face .signal-numeral {
+  color: var(--signal-face-light);
+  text-shadow: 0 0 18px #b3ff6c40;
+}
+.signal-face.is-provisional .signal-numeral { text-shadow: none; }
+.signal-post { width: 14px; height: 70px; margin: 0 auto; background: linear-gradient(90deg, #30372b, #47513e 60%, #242c20); }
+.signal-ground { width: min(380px, 90%); height: 10px; margin: 0 auto; background: radial-gradient(closest-side, #00000060, transparent); }

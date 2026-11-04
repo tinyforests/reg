@@ -101,7 +101,7 @@ html{scroll-padding-top:76px}
 @media(max-width:767px){.registry-mobile-audiences{gap:12px 22px;flex-wrap:wrap}}
 
 /* Signal scorecard: the website face of a future connected garden sign. */
-.signal-card{--plate-light:#b3ff6c;background:#11170f;color:#fff0dc;border:1px solid #47513e;padding:28px;box-shadow:0 18px 40px #00000024}
+.signal-card{--plate-light:var(--signal-face-light);padding:28px;}
 .signal-card-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:22px;border-bottom:1px solid #47513e;font:11px/1.5 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#d2dbca}
 .signal-card-light{width:7px;height:7px;flex:none;background:var(--plate-light);box-shadow:0 0 18px var(--plate-light)}
 .signal-card-main{padding:20px 0 0}
@@ -117,6 +117,9 @@ html{scroll-padding-top:76px}
 .signal-card #heroGardenId{font:10px/1.7 'IBM Plex Mono',monospace;letter-spacing:.04em;overflow-wrap:anywhere;color:#a4af9c;margin:20px 0 0}
 .signal-card-profile{display:flex;justify-content:space-between;gap:16px;padding:16px 0;font:12px/1.5 'IBM Plex Sans',sans-serif;color:var(--fg)}
 .signal-card-profile:hover{text-decoration:underline;text-underline-offset:4px}
-.signal-card.is-provisional{--plate-light:#d4bb87}
+.signal-card.is-provisional{--plate-light:var(--signal-face-light)}
 .signal-card.is-provisional #heroScore{text-shadow:none}
 @media(max-width:399px){.signal-card{padding:22px}.signal-card #heroScore{font-size:112px}.signal-card-head{font-size:10px;letter-spacing:.07em}.signal-card-record{gap:12px}}
+
+.signal-card-caption{margin:14px 0 0;font:12px/1.6 "IBM Plex Mono",monospace;color:var(--muted)}
+.signal-card-caption a{text-decoration:underline;text-underline-offset:3px}

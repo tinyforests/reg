@@ -101,6 +101,7 @@
     .gs-badge:hover { opacity: 1; }
   </style>
   <link rel="stylesheet" href="/assets/css/registry-home.css" />
+  <link rel="stylesheet" href="/assets/css/signal-face.css">
 </head>
 <body>
 
@@ -157,7 +158,7 @@
 
       <!-- Signal scorecard: current record, refreshed from the Registry below. -->
       <div class="hero-record lg:col-span-5 fade-in">
-        <article class="signal-card" aria-label="Featured garden ecological record">
+        <article class="signal-card signal-face" aria-label="Featured garden ecological record">
           <header class="signal-card-head"><span>Ecological Registry</span><span class="signal-card-light" aria-hidden="true"></span></header>
           <div class="signal-card-main">
             <div class="signal-card-identity">
@@ -165,7 +166,7 @@
               <p id="heroLocation">Wattle Glen · VIC</p>
             </div>
             <div class="signal-card-display" role="group" aria-label="Ecological score out of 100">
-              <span id="heroScore">83</span>
+              <span id="heroScore" class="signal-numeral">83</span>
               <span class="signal-card-scale">/ 100</span>
             </div>
           </div>
@@ -176,6 +177,9 @@
           </div>
           <p id="heroGardenId">ER-AU-VIC-NIL-BEL-001</p>
         </article>
+        <div class="signal-post" aria-hidden="true"></div>
+        <div class="signal-ground" aria-hidden="true"></div>
+        <p class="signal-card-caption">Signal · dark-face sign concept. Garden details are from the Registry; this is not a live sensor display. <a href="/sign/">Explore Signal ↗</a></p>
         <a id="heroProfileLink" class="signal-card-profile" href="/gardens/g-a8fd930bda96/index.html">View garden record <span aria-hidden="true">↗</span></a>
       </div>
 
