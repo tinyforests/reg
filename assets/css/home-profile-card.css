@@ -52,3 +52,13 @@
 .home-eco-card .badge { background:#3d4535; color:#fff0dc; border:1px solid #7a9e5f; letter-spacing:.04em; }
 .home-eco-card .hero.provisional .score,.home-eco-card .hero.provisional .of,.home-eco-card .hero.provisional .tier { color:#fff0dc; }
 @media(max-width:399px){.home-eco-card .card{padding:22px}.home-eco-card .hero{padding:18px 16px;gap:12px}.home-eco-card .score{font-size:68px}}
+
+/* Descriptions are available on hover and keyboard focus. */
+.home-eco-card .dot[data-tier]:focus::before { opacity:1;transform:translateX(-50%) translateY(0); }
+.home-eco-card .dot[data-tier]:last-child::before{left:auto;right:0;transform:translateY(0)}
+.home-eco-card .dot[data-tier]:first-child::before{left:0;transform:translateY(0)}
+.home-eco-card .badge[data-description]{position:static;cursor:help}
+.home-eco-card .badge[data-description]::after{content:attr(data-description);position:absolute;z-index:20;bottom:calc(100% + 8px);left:0;width:230px;max-width:65vw;padding:10px 12px;background:#11170f;border:1px solid #7a9e5f;color:#fff0dc;font:11px/1.6 'IBM Plex Sans',sans-serif;text-transform:none;letter-spacing:0;opacity:0;visibility:hidden;pointer-events:none}
+.home-eco-card .badge[data-description]:hover::after,.home-eco-card .badge[data-description]:focus::after{opacity:1;visibility:visible}
+.home-eco-card .badge:focus-visible,.home-eco-card .dot:focus-visible{outline:2px solid #fff0dc;outline-offset:4px}
+.home-eco-card .badges{position:relative;overflow:visible}

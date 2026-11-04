@@ -766,3 +766,9 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Replace the Signal sign preview with the profile Ecological Function card in a fixed dark Canopy palette, including level track, next level and earned badges. Preserve real ledger identity, score, verification and record link; no post, shadow or explanatory caption.
 - **Data:** Generate static fallback from the current non-demo ledger leader. Refresh progression and badges alongside the existing live hero refresh; withhold badges for provisional records. Do not invent site potential where the homepage ledger supplies none.
 - **Files:** `index.html`, `assets/css/home-profile-card.css`, `docs/decisions-log.md`.
+
+
+## 4 Nov 2026 — Homepage scorecard rollovers
+
+- **Decision:** Restore profile-style level labels on hover and keyboard focus. Expose canonical badge descriptions on hover/focus as well.
+- **Files:** `index.html`, `assets/css/home-profile-card.css`, `docs/decisions-log.md`.

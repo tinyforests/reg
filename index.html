@@ -101,7 +101,7 @@
     .gs-badge:hover { opacity: 1; }
   </style>
   <link rel="stylesheet" href="/assets/css/registry-home.css?v=20261104-flat" />
-  <link rel="stylesheet" href="/assets/css/home-profile-card.css?v=20261104">
+  <link rel="stylesheet" href="/assets/css/home-profile-card.css?v=20261104-hover">
 </head>
 <body>
 
@@ -168,7 +168,7 @@
               <div class="score-meta"><span class="of">OF 100</span><span class="tier" id="heroTier">Ecosystem Garden</span></div>
             </div>
             <div class="home-card-verification"><span id="heroVerification">G&amp;S Verified</span> · <span id="heroDateLabel">Last verified</span> <span id="heroVerifiedDate">Aug 2026</span></div>
-            <div class="ladder"><p class="eyebrow">Level</p><div class="track" id="homeLevelTrack" role="img" aria-label="Level 5 of 6, Ecosystem Garden"><span class="dot done" title="Foundation Garden"></span><span class="seg done"></span><span class="dot done" title="Habitat Garden"></span><span class="seg done"></span><span class="dot done" title="Ecological Garden"></span><span class="seg done"></span><span class="dot done" title="Rich Habitat Garden"></span><span class="seg done"></span><span class="dot here" title="Ecosystem Garden"></span><span class="seg"></span><span class="dot " title="Urban Biodiversity Node"></span></div><p class="next" id="homeNextLevel"><b>8 points</b> to Urban Biodiversity Node.</p></div>
+            <div class="ladder"><p class="eyebrow">Level</p><div class="track" id="homeLevelTrack" role="img" aria-label="Level 5 of 6, Ecosystem Garden"><span class="dot done" title="Foundation Garden" data-tier="Foundation Garden" tabindex="0" aria-label="Foundation Garden"></span><span class="seg done"></span><span class="dot done" title="Habitat Garden" data-tier="Habitat Garden" tabindex="0" aria-label="Habitat Garden"></span><span class="seg done"></span><span class="dot done" title="Ecological Garden" data-tier="Ecological Garden" tabindex="0" aria-label="Ecological Garden"></span><span class="seg done"></span><span class="dot done" title="Rich Habitat Garden" data-tier="Rich Habitat Garden" tabindex="0" aria-label="Rich Habitat Garden"></span><span class="seg done"></span><span class="dot here" title="Ecosystem Garden" data-tier="Ecosystem Garden" tabindex="0" aria-label="Ecosystem Garden"></span><span class="seg"></span><span class="dot " title="Urban Biodiversity Node" data-tier="Urban Biodiversity Node" tabindex="0" aria-label="Urban Biodiversity Node"></span></div><p class="next" id="homeNextLevel"><b>8 points</b> to Urban Biodiversity Node.</p></div>
             <hr class="rule">
             <div class="badge-head"><p class="eyebrow">Badges</p><span class="count" id="homeBadgeCount">10 of 13</span></div>
             <div class="badges" id="homeBadges"><span class="badge">Indigenous Dominant</span><span class="badge">Species Rich</span><span class="badge">Canopy Forming</span><span class="badge">Five Layer Garden</span><span class="badge">Habitat Builder</span><span class="badge">Fauna Active</span><span class="badge">Pollinator Rich</span><span class="badge">Water Wise</span><span class="badge">Corridor Node</span><span class="badge">Fauna Record</span></div>
@@ -628,7 +628,7 @@
     track.replaceChildren();
     HOME_TIERS.forEach(function (name, i) {
       if (i) { var seg = document.createElement('span'); seg.className = 'seg' + (i <= level ? ' done' : ''); track.appendChild(seg); }
-      var dot = document.createElement('span'); dot.className = 'dot ' + (i === level ? 'here' : i < level ? 'done' : ''); dot.title = name; track.appendChild(dot);
+      var dot = document.createElement('span'); dot.className = 'dot ' + (i === level ? 'here' : i < level ? 'done' : ''); dot.title = name; dot.dataset.tier = name; dot.tabIndex = 0; dot.setAttribute('aria-label', name); track.appendChild(dot);
     });
     track.setAttribute('aria-label', 'Level ' + (level + 1) + ' of ' + HOME_TIERS.length + ', ' + HOME_TIERS[level]);
     setText('homeNextLevel', provisional ? 'Book a site visit to confirm this score.' : level < HOME_TIERS.length - 1 ? (HOME_TIER_MIN[level + 1] - scoreOf(g)) + ' points to ' + HOME_TIERS[level + 1] + '.' : 'Top level reached — ' + HOME_TIERS[level] + '.');
@@ -638,7 +638,7 @@
     setText('homeBadgeCount', provisional ? 'Withheld' : earned.length + ' of ' + catalogue);
     var grid = document.getElementById('homeBadges'); grid.replaceChildren();
     if (provisional) { grid.textContent = 'Awarded on verification only.'; }
-    else earned.forEach(function (id) { var badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = (BADGE_DEFINITIONS[id] || {}).name || id; grid.appendChild(badge); });
+    else earned.forEach(function (id) { var badge = document.createElement('span'); badge.className = 'badge'; var definition = BADGE_DEFINITIONS[id] || {}; badge.textContent = definition.name || id; badge.dataset.description = definition.description || ''; badge.tabIndex = 0; badge.setAttribute('aria-label', badge.textContent + (definition.description ? ': ' + definition.description : '')); grid.appendChild(badge); });
     document.getElementById('heroProfileLink').setAttribute('href', g.profile_url || '/registry.html');
   }
 
