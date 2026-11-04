@@ -786,3 +786,11 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Add a shared view switch to all 25 canonical profiles. The profile view keeps its existing score, progression, potential and badges; connected-sign view presents that same assessed record with its badge count and a Signal connection area. Remember the view for the browser session. Future profiles inherit the shared assets through the existing copied profile templates.
 - **Data boundary:** There is no configured telemetry feed or Signal schema in the current profile source. Show “Signal not connected” and missing readings, never illustrative samples or inferred measurements. Score calculation, badge awards, verification and canonical garden data are unchanged.
 - **Files:** Canonical `gardens/g-*/index.html`, `assets/css/reg-profile-view.css`, `js/reg-profile-view.js`, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Paired score and badge totals
+
+- **Decision:** Apply the approved reference-inspired two-total layout to all profiles and the homepage. Retain existing renderer IDs, score and badge engines, rating, level-track rollovers, next-level output, conditional baseline/site-potential block, verification, public identity and connected-view switch.
+- **Counts:** Use the current engine-rendered badge count and denominator (13 ecological badges, verification excluded), not the draft’s illustrative 15. Preserve withheld state and provisional styling. Add canonical badge descriptions on hover/focus.
+- **Implementation:** Shared presentation adapter moves existing DOM nodes and observes upstream rendered outputs without changing records or scoring. No device feed exists; the connected view retains its explicit disconnected state.
+- **Files:** Canonical profiles, `index.html`, `js/reg-scorecard-layout.js`, `assets/css/reg-scorecard-layout.css`, `docs/decisions-log.md`.
