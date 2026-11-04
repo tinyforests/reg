@@ -25,7 +25,7 @@
   var footer=node('footer','reg-card-footer');var name=node('p','reg-card-name');var verification=node('p','reg-card-verification');var identity=node('p','reg-card-identity');footer.appendChild(name);footer.appendChild(verification);
   // Keep homepage's existing identity node; profiles use a display copy of public identity.
   if (!profile && get('identity')) footer.appendChild(get('identity')); else footer.appendChild(identity);
-  card.appendChild(footer);
+  if (!profile) card.appendChild(footer);
 
   function sync() {
     var count=get('count');var raw=count?count.textContent.trim():'';var match=raw.match(/^(\d+)\s*(?:of|\/)\s*(\d+)$/i);

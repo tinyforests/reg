@@ -808,3 +808,10 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Extend the scorecard’s compact rhythm through full garden profiles: smaller display headings, reduced hero/section/panel padding, tighter signal/species/record spacing. Retain body readability, every section, data binding and control, and map geometry.
 - **Scope:** Dedicated profile-only CSS on all 25 canonical profiles; no homepage, scoring, records or access-control changes.
 - **Files:** Canonical profiles, `assets/css/reg-profile-compact.css`, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Tight metric tiles and remove duplicate profile footer
+
+- **Decision:** Reduce metric-tile bottom padding and remove inherited hero minimum-height stretching. Omit the duplicate name/verification/Registry-ID footer on profiles. Keep homepage identity context.
+- **Date:** The description box already renders the actual `assessment_date` beside the verification label; retain that existing connection rather than add a second date.
+- **Files:** Shared scorecard CSS/JS, asset versions on profiles/homepage, `docs/decisions-log.md`.

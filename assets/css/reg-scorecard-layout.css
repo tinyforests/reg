@@ -1,8 +1,8 @@
 /* Shared score / badge layout. Data stays owned by the existing renderers. */
 body .reg-scorecard.eco-card{--ground:#2b3326;--ink:#fff0dc;--ink-soft:#c1bea9;--rule:#505743}
 body .reg-scorecard.eco-card>.card{background:var(--ground);color:var(--ink);padding:20px;border:1px solid #505743}
-body .reg-scorecard.eco-card .hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:transparent;border:0;padding:0;margin:16px 0 0;align-items:stretch}
-body .reg-scorecard.eco-card .reg-total{border:1px solid #505743;text-align:center;padding:12px 8px;min-width:0}
+body .reg-scorecard.eco-card .hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:transparent;border:0;padding:0;margin:16px 0 0;align-items:start;min-height:0}
+body .reg-scorecard.eco-card .reg-total{border:1px solid #505743;text-align:center;padding:12px 8px 5px;min-width:0}
 body .reg-scorecard.eco-card .reg-total-value{display:flex;align-items:baseline;justify-content:center;gap:8px;min-height:56px}
 body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card #heroScore,body .reg-scorecard.eco-card .reg-badge-number{font:400 clamp(48px,5vw,64px)/1.1 'Fraunces',Georgia,serif;letter-spacing:-.05em;color:#fff0dc;opacity:1;text-shadow:none}
 body .reg-scorecard.eco-card .reg-total .of{font:10px/1.5 'IBM Plex Mono',monospace;letter-spacing:.02em;color:#c1bea9;white-space:nowrap;display:inline}
