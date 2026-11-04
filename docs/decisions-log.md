@@ -801,3 +801,10 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Reduce number size, metric-tile padding, section spacing and badge padding across the shared scorecard. Keep all content, data bindings, rollovers and view controls.
 - **Reason:** Tyson requested a shorter card through smaller sizing.
 - **Files:** `assets/css/reg-scorecard-layout.css`, stylesheet versions on profiles and homepage, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Compact profile pages
+
+- **Decision:** Extend the scorecard’s compact rhythm through full garden profiles: smaller display headings, reduced hero/section/panel padding, tighter signal/species/record spacing. Retain body readability, every section, data binding and control, and map geometry.
+- **Scope:** Dedicated profile-only CSS on all 25 canonical profiles; no homepage, scoring, records or access-control changes.
+- **Files:** Canonical profiles, `assets/css/reg-profile-compact.css`, `docs/decisions-log.md`.

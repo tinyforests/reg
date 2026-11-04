@@ -1,0 +1,36 @@
+/* Compact profile rhythm; preserve data, controls and map geometry. */
+body.reg-ui.reg-ui-profile>main.max-w-6xl{padding:30px 28px 40px;font-size:15px;line-height:1.6}
+body.reg-ui.reg-ui-profile main.space-y-12>section+section:not([hidden]){margin-top:28px}
+body.reg-ui.reg-ui-profile main>section{scroll-margin-top:88px}
+body.reg-ui.reg-ui-profile main>section:first-child>.grid{gap:20px}
+body.reg-ui.reg-ui-profile main>section:first-child>.grid>div:first-child{padding:24px}
+body.reg-ui.reg-ui-profile h1.font-serif{font-size:clamp(2.3rem,4.2vw,4rem);line-height:1.05;margin-bottom:12px}
+body.reg-ui.reg-ui-profile main>section h2.font-serif{font-size:28px;line-height:1.15;margin-bottom:18px}
+body.reg-ui.reg-ui-profile #heroDesc{font-size:15px;line-height:1.65}
+body.reg-ui.reg-ui-profile #heroType{margin-bottom:12px}
+body.reg-ui.reg-ui-profile #heroTags{gap:6px;margin-bottom:14px}
+body.reg-ui.reg-ui-profile #heroTags>span{padding:5px 8px;font-size:11px}
+body.reg-ui.reg-ui-profile main>section:first-child>.grid>div:first-child>.mt-6{margin-top:18px;padding-top:18px;gap:12px}
+body.reg-ui.reg-ui-profile main>section:not(:first-child) .grid.gap-6{gap:18px}
+body.reg-ui.reg-ui-profile main>section:not(:first-child) .grid.gap-4{gap:12px}
+body.reg-ui.reg-ui-profile #signals .signal-cell{padding:12px 14px}
+body.reg-ui.reg-ui-profile #signals .signal-cell .section-label{margin-bottom:5px}
+body.reg-ui.reg-ui-profile #signals .signal-cell .text-xl{font-size:18px;line-height:1.35}
+body.reg-ui.reg-ui-profile #signals .signal-grid.mb-4{margin-bottom:12px}
+body.reg-ui.reg-ui-profile main>section:not(:first-child) .p-6{padding:18px}
+body.reg-ui.reg-ui-profile main>section:not(:first-child) .p-5{padding:16px}
+body.reg-ui.reg-ui-profile #score .mb-6{margin-bottom:16px}
+body.reg-ui.reg-ui-profile #categoryBars> :not([hidden])~ :not([hidden]){margin-top:14px}
+body.reg-ui.reg-ui-profile #opportunityList> :not([hidden])~ :not([hidden]){margin-top:10px}
+body.reg-ui.reg-ui-profile #network .text-2xl{font-size:21px;line-height:1.3}
+body.reg-ui.reg-ui-profile #speciesSection .p-4{padding:12px}
+body.reg-ui.reg-ui-profile #speciesSection .gap-3{gap:8px}
+body.reg-ui.reg-ui-profile #trajectory .border:has(> #nextLevelName){padding:20px}
+body.reg-ui.reg-ui-profile #nextLevelName{font-size:clamp(1.5rem,2.2vw,2rem);margin-bottom:12px}
+body.reg-ui.reg-ui-profile #nextLevelGap{margin-bottom:15px;line-height:1.6}
+body.reg-ui.reg-ui-profile #levelTrack{margin-top:16px}
+body.reg-ui.reg-ui-profile #milestoneList> :not([hidden])~ :not([hidden]),body.reg-ui.reg-ui-profile #gardenFacts> :not([hidden])~ :not([hidden]){margin-top:9px}
+body.reg-ui.reg-ui-profile #record .space-y-4> :not([hidden])~ :not([hidden]){margin-top:12px}
+body.reg-ui.reg-ui-profile>footer{margin-top:32px}
+body.reg-ui.reg-ui-profile>footer>div{padding-top:22px;padding-bottom:22px}
+@media(max-width:767px){body.reg-ui.reg-ui-profile>main.max-w-6xl{padding:24px 16px 32px}body.reg-ui.reg-ui-profile main.space-y-12>section+section:not([hidden]){margin-top:26px}body.reg-ui.reg-ui-profile main>section:first-child>.grid>div:first-child{padding:20px}body.reg-ui.reg-ui-profile main>section h2.font-serif{font-size:25px}body.reg-ui.reg-ui-profile h1.font-serif{font-size:clamp(2rem,8vw,2.8rem)}body.reg-ui.reg-ui-profile #heroDesc{font-size:15px}body.reg-ui.reg-ui-profile main>section:not(:first-child) .grid.gap-6{gap:14px}}
