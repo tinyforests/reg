@@ -18,3 +18,6 @@
 .signal-face.is-provisional .signal-numeral { text-shadow: none; }
 .signal-post { width: 14px; height: 70px; margin: 0 auto; background: linear-gradient(90deg, #30372b, #47513e 60%, #242c20); }
 .signal-ground { width: min(380px, 90%); height: 10px; margin: 0 auto; background: radial-gradient(closest-side, #00000060, transparent); }
+
+/* Homepage presents the record as a flat panel, without the physical mount. */
+.signal-card.signal-face { box-shadow: none; }

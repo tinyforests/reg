@@ -746,3 +746,10 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Reason:** Tyson requested the dark design to support the battery-powered direction. Reduced display power is a design aim, not a measured result; battery runtime and solar charging remain unvalidated. Initial low-voltage testing remains the stated requirement.
 - **Data:** Preserve the homepage’s ledger-derived garden identity, score, verification date, provisional treatment and profile link. Do not add illustrative sensor readings to a real garden. Link to the Signal concept and label the homepage rendering accordingly.
 - **Files:** `sign/index.html`, `index.html`, `assets/css/signal-face.css`, `assets/css/registry-home.css`, `docs/decisions-log.md`.
+
+
+## 4 Nov 2026 — Homepage score context and flat presentation
+
+- **Decision:** Add the same score explanation and methodology link as `/sign/` beneath the homepage record. Remove the homepage post, ground shadow and panel shadow; preserve the product-page rendering.
+- **Reason:** Requested by Tyson to make the homepage record more informative and visually flat.
+- **Files:** `index.html`, `assets/css/registry-home.css`, `assets/css/signal-face.css`, `docs/decisions-log.md`.

@@ -123,3 +123,6 @@ html{scroll-padding-top:76px}
 
 .signal-card-caption{margin:14px 0 0;font:12px/1.6 "IBM Plex Mono",monospace;color:var(--muted)}
 .signal-card-caption a{text-decoration:underline;text-underline-offset:3px}
+
+.signal-card-score-note{margin:18px 0 0;font:14px/1.6 "IBM Plex Sans",sans-serif;color:var(--fg)}
+.signal-card-score-note a{text-decoration:underline;text-underline-offset:3px}
