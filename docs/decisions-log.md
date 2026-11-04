@@ -753,3 +753,9 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Add the same score explanation and methodology link as `/sign/` beneath the homepage record. Remove the homepage post, ground shadow and panel shadow; preserve the product-page rendering.
 - **Reason:** Requested by Tyson to make the homepage record more informative and visually flat.
 - **Files:** `index.html`, `assets/css/registry-home.css`, `assets/css/signal-face.css`, `docs/decisions-log.md`.
+
+
+## 4 Nov 2026 — Remove homepage sign commentary
+
+- **Decision:** Remove the added score explanation and Signal concept caption beneath the homepage sign at Tyson’s request. Retain the existing garden-record link and the flat, unmounted panel.
+- **Files:** `index.html`, `docs/decisions-log.md`.
