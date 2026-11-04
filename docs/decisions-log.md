@@ -772,3 +772,10 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 
 - **Decision:** Restore profile-style level labels on hover and keyboard focus. Expose canonical badge descriptions on hover/focus as well.
 - **Files:** `index.html`, `assets/css/home-profile-card.css`, `docs/decisions-log.md`.
+
+
+## 4 Nov 2026 — Signal two-way record concept
+
+- **Decision:** Incorporate the accepted local sign/card concept into `/sign/` as a scoped interactive illustration. Registry identity, assessed score and verification flow to the sign; sign observations flow back to the profile as evidence. Reassessment remains a separate decision.
+- **Scope:** Preserve the homepage card and local draft. Illustrative controls send no data and make no hardware or integration claim. Clarify initial power requirements versus exploratory battery/solar operation.
+- **Files:** `sign/index.html`, `assets/css/signal-loop.css`, `assets/js/signal-loop.js`, `docs/decisions-log.md`.

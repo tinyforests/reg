@@ -205,6 +205,7 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
 @media (prefers-reduced-motion: reduce) { .lamp { animation: none; } .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
 </style>
 <link rel="stylesheet" href="/assets/css/signal-face.css">
+<link rel="stylesheet" href="/assets/css/signal-loop.css?v=20261104">
 </head>
 <body>
 
@@ -214,6 +215,7 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
     <nav aria-label="Page">
       <a href="#sensors">Sensors</a>
       <a href="#how">How it works</a>
+      <a href="#loop">The loop</a>
       <a href="#faq">FAQ</a>
       <a class="cta-sm" href="#founding">Join the pilot</a>
     </nav>
@@ -225,7 +227,7 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
     <div class="hero-text">
       <span class="kicker"><span class="lamp" aria-hidden="true"></span>Introducing Signal · Founding pilot, spring 2026</span>
       <h1>Welcome to <em>Signal.</em></h1>
-      <p class="lede">The garden sign that measures the garden. Signal shows a garden's Ecological Registry record at the gate, and reads the soil, the rain, the air, the light and the birdsong inside it.</p>
+      <p class="lede">The garden sign that measures the garden. Signal shows a garden's Ecological Registry record at the gate, and reads the soil, the rain, the air, the light and the birdsong inside it. The Registry feeds the sign; the sign feeds observations back to the record.</p>
       <div class="ctas">
         <a class="btn btn-primary" href="#founding">Become a founding garden</a>
         <a class="btn btn-ghost" href="#sensors">See what it measures ↓</a>
@@ -316,13 +318,28 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
     <div class="wrap">
       <div class="head reveal">
         <p class="eyebrow">How it works</p>
-        <h2 id="how-h">From the gate to the record.</h2>
+        <h2 id="how-h">From the record to the garden. And back.</h2>
       </div>
       <div class="steps">
-        <div class="step reveal"><h3>We install it</h3><p>Gardener &amp; Son fit the sign at the gate, the probes in the root zone and the gauge in open ground. Half a day.</p></div>
+        <div class="step reveal"><h3>The Registry feeds the sign</h3><p>The garden’s identity, assessed score and verification come from its Registry record. Gardener &amp; Son install the sign and garden sensors.</p></div>
         <div class="step reveal"><h3>It reads the garden</h3><p>Every five minutes, around the clock. The intended design identifies birds on the sign itself and keeps species detections, including time and confidence, rather than audio recordings.</p></div>
-        <div class="step reveal"><h3>The record grows</h3><p>Readings flow into the garden's Ecological Registry record as measured evidence, and into the steward's seasonal update.</p></div>
+        <div class="step reveal"><h3>The sign feeds the record</h3><p>Garden observations return as dated evidence on the profile card and in seasonal updates. Any score change is a separate reassessment, then shared back to the sign.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section class="signal-loop" id="loop" aria-labelledby="loop-h">
+    <div class="wrap">
+      <p class="label tag">One record. Two expressions.</p>
+      <h2 class="loop-heading" id="loop-h">The record feeds the sign.<br>The garden feeds the record.</h2>
+      <p class="intro">Signal combines the garden’s assessed Registry score with observations made at the gate. The profile card carries the same score, with levels, badges and the evidence arriving from the garden.</p>
+<div class="flow"><div><b>Registry → Sign</b> &nbsp; Identity · assessed score · verification</div><div><b>Sign → Registry</b> &nbsp; Garden readings · detections · time</div></div>
+<div class="grid">
+<section><div class="view-title"><span class="label">01 / At the garden gate</span><span class="label">Physical sign concept</span></div><article class="panel sign" id="sign"><div class="panel-top"><span class="label">Ecological Registry</span><span class="label"><i class="live-dot"></i>Signal</span></div><h3>Example Garden</h3><div class="place">Illustrative garden · Melbourne</div><div class="score-line"><strong class="score score-value">83</strong><div class="score-meta">OF 100<div class="tier">Ecosystem Garden</div></div></div><div class="verified">Example verification · 4 Nov 2026<br>Score supplied by the Registry</div><dl class="readings"><div class="reading"><dt>Soil moisture</dt><dd data-moist>31%</dd></div><div class="reading"><dt>Soil 15 cm</dt><dd data-temp>16.8°</dd></div><div class="reading"><dt>Birds today</dt><dd data-birds>9 spp</dd></div></dl><div class="heard"><span>Latest detection<br><strong data-bird>Eastern Spinebill</strong></span><span>Last observation<br><strong data-time>06:12</strong></span></div><div class="sign-foot">Assessed record + garden observations · one identity</div></article><p class="caption">A quiet dark face. The score and readings share one display.</p></section>
+<section><div class="view-title"><span class="label">02 / On the Registry</span><span class="label">Connected profile card</span></div><article class="panel card" id="card"><div class="panel-top"><span class="label">Ecological function</span><span class="label">Example record</span></div><h3>Example Garden</h3><div class="place">Illustrative garden · Melbourne</div><div class="score-line"><strong class="score score-value">83</strong><div class="score-meta">OF 100<div class="tier">Ecosystem Garden</div></div></div><div class="verified" id="review-date">Example verification · 4 Nov 2026</div><div style="margin-top:22px"><div class="label">Level</div><div class="track" role="img" aria-label="Level 5 of 6, Ecosystem Garden"><i class="dot"></i><i class="seg"></i><i class="dot"></i><i class="seg"></i><i class="dot"></i><i class="seg"></i><i class="dot"></i><i class="seg"></i><i class="dot here"></i><i class="seg todo"></i><i class="dot todo"></i></div><div class="next" id="next">8 points to Urban Biodiversity Node</div></div><div class="section"><div class="section-head"><span class="label">Example badges</span><span class="label">3 shown</span></div><div class="badges"><span class="badge">Habitat Builder</span><span class="badge">Water Wise</span><span class="badge">Fauna Record</span></div></div><div class="section"><div class="section-head"><span class="label">From Signal</span><span class="label" id="sync">Synced · 06:12</span></div><ul class="evidence"><li><span>Root-zone moisture</span><span data-moist>31%</span></li><li><span>Soil temperature</span><span data-temp>16.8°</span></li><li><span>Bird species detected today</span><span data-birds>9 spp</span></li><li><span>Latest detection</span><span data-bird>Eastern Spinebill</span></li></ul></div></article><p class="caption">The same score, with progression, badges and the garden’s latest evidence.</p></section>
+</div>
+<div class="controls"><button id="observe" type="button">1. Send a garden observation →</button><button class="secondary" id="review" type="button">2. Preview a reassessment →</button><button class="secondary" id="reset" type="button">Reset demo</button><p id="status" role="status" aria-live="polite">Try the loop. New readings update the record; the assessed score stays at 83.</p></div>
+<p class="footer">Interactive illustration. Garden details, scores, badges and readings are examples. These controls simulate the exchange; no device, live feed or assessment is connected. Sensor readings are evidence for review, not automatic score increases. The demo controls do not send data.</p>
     </div>
   </section>
 
@@ -379,7 +396,7 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
         <h3>Pilot essentials</h3>
         <dl>
           <div><dt>Who can take part</dt><dd>Founding units are for gardens already on the Ecological Registry. <a href="/enrol/">Not registered? Start with the Registry</a>.</dd></div>
-          <div><dt>Location and installation</dt><dd>Installation is by Melbourne-based Gardener &amp; Son. Include your suburb so we can discuss installation availability. The sign needs garden Wi-Fi and a low-voltage supply from the house; installation is expected to take half a day.</dd></div>
+          <div><dt>Location and installation</dt><dd>Installation is by Melbourne-based Gardener &amp; Son. Include your suburb so we can discuss installation availability. Initial testing needs garden Wi-Fi and a low-voltage supply from the house; battery operation and solar charging are being explored; installation is expected to take half a day.</dd></div>
           <div><dt>Cost and responsibilities</dt><dd>Participation costs, pilot duration, equipment ownership and maintenance arrangements are not listed here. Ask about these when enquiring, before deciding whether to take part.</dd></div>
           <div><dt>Prototype stage</dt><dd>Specifications may change during the pilot. This page shows a concept rendering; final dimensions and a working-unit demonstration are not yet published here.</dd></div>
         </dl>
@@ -415,7 +432,7 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
       <details><summary>How is sound handled?</summary><p>The microphone captures sound so BirdNET can identify birds on the device. The intended design retains the species name, time and confidence, rather than audio recordings, and does not upload audio. Temporary audio processing is needed for identification; the final handling of that audio is part of prototype validation.</p></details>
       <details><summary>What does the pilot cost, and who looks after the equipment?</summary><p>Cost, duration, equipment ownership and maintenance terms are not published on this page. Include these questions in your enquiry so you can discuss the arrangements before deciding whether to take part.</p></details>
       <details><summary>Can the readings change our score?</summary><p>Not by themselves. The score changes only when the record is reassessed. Sensor data is added as evidence, clearly labelled as measured at the garden.</p></details>
-      <details><summary>What does it need from the house?</summary><p>A low-voltage power supply and the garden's Wi-Fi. Everything else, including bird identification, runs on the sign.</p></details>
+      <details><summary>What does it need from the house?</summary><p>Initial testing uses a low-voltage power supply and the garden’s Wi-Fi. Battery operation and solar charging are being explored; capacity and runtime are not established. Bird identification is intended to run on the sign.</p></details>
       <details><summary>Is Signal finished?</summary><p>Not yet. It's a prototype, and the founding pilot this spring is how we'll finish it. Specifications may change as the pilot runs.</p></details>
     </div>
   </div>
@@ -467,5 +484,6 @@ footer { padding-block: 40px 56px; border-top: 1px solid var(--hair); font: 12px
   }, 2600);
 })();
 </script>
+<script src="/assets/js/signal-loop.js?v=20261104"></script>
 </body>
 </html>
