@@ -794,3 +794,10 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Counts:** Use the current engine-rendered badge count and denominator (13 ecological badges, verification excluded), not the draft’s illustrative 15. Preserve withheld state and provisional styling. Add canonical badge descriptions on hover/focus.
 - **Implementation:** Shared presentation adapter moves existing DOM nodes and observes upstream rendered outputs without changing records or scoring. No device feed exists; the connected view retains its explicit disconnected state.
 - **Files:** Canonical profiles, `index.html`, `js/reg-scorecard-layout.js`, `assets/css/reg-scorecard-layout.css`, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Compact scorecard sizing
+
+- **Decision:** Reduce number size, metric-tile padding, section spacing and badge padding across the shared scorecard. Keep all content, data bindings, rollovers and view controls.
+- **Reason:** Tyson requested a shorter card through smaller sizing.
+- **Files:** `assets/css/reg-scorecard-layout.css`, stylesheet versions on profiles and homepage, `docs/decisions-log.md`.

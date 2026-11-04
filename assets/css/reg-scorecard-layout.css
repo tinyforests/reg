@@ -1,43 +1,46 @@
 /* Shared score / badge layout. Data stays owned by the existing renderers. */
 body .reg-scorecard.eco-card{--ground:#2b3326;--ink:#fff0dc;--ink-soft:#c1bea9;--rule:#505743}
-body .reg-scorecard.eco-card>.card{background:var(--ground);color:var(--ink);padding:26px;border:1px solid #505743}
-body .reg-scorecard.eco-card .hero{display:grid;grid-template-columns:1fr 1fr;gap:14px;background:transparent;border:0;padding:0;margin:22px 0 0;align-items:stretch}
-body .reg-scorecard.eco-card .reg-total{border:1px solid #505743;text-align:center;padding:20px 8px 18px;min-width:0}
-body .reg-scorecard.eco-card .reg-total-value{display:flex;align-items:baseline;justify-content:center;gap:8px;min-height:78px}
-body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card #heroScore,body .reg-scorecard.eco-card .reg-badge-number{font:400 clamp(56px,6vw,84px)/1.1 'Fraunces',Georgia,serif;letter-spacing:-.05em;color:#fff0dc;opacity:1;text-shadow:none}
+body .reg-scorecard.eco-card>.card{background:var(--ground);color:var(--ink);padding:20px;border:1px solid #505743}
+body .reg-scorecard.eco-card .hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:transparent;border:0;padding:0;margin:16px 0 0;align-items:stretch}
+body .reg-scorecard.eco-card .reg-total{border:1px solid #505743;text-align:center;padding:12px 8px;min-width:0}
+body .reg-scorecard.eco-card .reg-total-value{display:flex;align-items:baseline;justify-content:center;gap:8px;min-height:56px}
+body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card #heroScore,body .reg-scorecard.eco-card .reg-badge-number{font:400 clamp(48px,5vw,64px)/1.1 'Fraunces',Georgia,serif;letter-spacing:-.05em;color:#fff0dc;opacity:1;text-shadow:none}
 body .reg-scorecard.eco-card .reg-total .of{font:10px/1.5 'IBM Plex Mono',monospace;letter-spacing:.02em;color:#c1bea9;white-space:nowrap;display:inline}
-body .reg-scorecard.eco-card .reg-total-label{font:300 15px/1.4 'IBM Plex Sans',sans-serif;color:#c1bea9;margin-top:8px}
-body .reg-scorecard.eco-card .reg-rating{display:inline-block;border:1px solid #8b7e52;color:#c5b078;font:11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin:24px 0 0;padding:10px 13px;max-width:100%}
-body .reg-scorecard.eco-card .reg-assessed-wrap{margin-top:26px}
-body .reg-scorecard.eco-card .reg-assessed-progress{height:7px;background:#505743}
+body .reg-scorecard.eco-card .reg-total-label{font:300 12px/1.4 'IBM Plex Sans',sans-serif;color:#c1bea9;margin-top:4px}
+body .reg-scorecard.eco-card .reg-rating{display:inline-block;border:1px solid #8b7e52;color:#c5b078;font:11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin:16px 0 0;padding:7px 10px;max-width:100%}
+body .reg-scorecard.eco-card .reg-assessed-wrap{margin-top:18px}
+body .reg-scorecard.eco-card .reg-assessed-progress{height:5px;background:#505743}
 body .reg-scorecard.eco-card .reg-assessed-progress>span{display:block;height:100%;background:#89a65d}
-body .reg-scorecard.eco-card .reg-progress-notes{display:flex;justify-content:space-between;gap:14px;margin-top:12px;color:#c1bea9;font:10px/1.7 'IBM Plex Mono',monospace}
+body .reg-scorecard.eco-card .reg-progress-notes{display:flex;justify-content:space-between;gap:10px;margin-top:9px;color:#c1bea9;font:10px/1.7 'IBM Plex Mono',monospace}
 body .reg-scorecard.eco-card .reg-progress-notes .next{margin:0;font:inherit;color:inherit;text-align:right}
-body .reg-scorecard.eco-card .ladder{margin-top:22px}body .reg-scorecard.eco-card .ladder>.eyebrow{font-size:9px}
+body .reg-scorecard.eco-card .ladder{margin-top:14px}body .reg-scorecard.eco-card .ladder>.eyebrow{font-size:9px}
 body .reg-scorecard.eco-card .dot{border-color:#9aa592;border-radius:0!important}body .reg-scorecard.eco-card .dot.done,body .reg-scorecard.eco-card .seg.done{background:#89a65d;border-color:#89a65d}body .reg-scorecard.eco-card .dot.here{background:#fff0dc;border-color:#fff0dc}body .reg-scorecard.eco-card .dot.here::after{display:none}
-body .reg-scorecard.eco-card .bar-wrap{border-top:1px solid #505743;padding-top:20px;margin-top:24px}
-body .reg-scorecard.eco-card .rule{background:#505743;margin:26px 0}
+body .reg-scorecard.eco-card .bar-wrap{border-top:1px solid #505743;padding-top:16px;margin-top:18px}
+body .reg-scorecard.eco-card .rule{background:#505743;margin:18px 0}
 body .reg-scorecard.eco-card .eyebrow,body .reg-scorecard.eco-card .count,body .reg-scorecard.eco-card .bar-ends,body .reg-scorecard.eco-card .marker span{color:#c1bea9}
-body .reg-scorecard.eco-card .badges{position:relative;gap:8px;margin-top:16px}
-body .reg-scorecard.eco-card .badge{position:static;border:1px solid #59634f;background:transparent;color:#d9d1bc;font:300 13px/1.4 'IBM Plex Sans',sans-serif;letter-spacing:0;text-transform:none;padding:8px 11px;cursor:help}
+body .reg-scorecard.eco-card .badges{position:relative;gap:6px;margin-top:12px}
+body .reg-scorecard.eco-card .badge{position:static;border:1px solid #59634f;background:transparent;color:#d9d1bc;font:300 12px/1.4 'IBM Plex Sans',sans-serif;letter-spacing:0;text-transform:none;padding:5px 8px;cursor:help}
 body .reg-scorecard.eco-card .badge[data-description]::after{content:attr(data-description);position:absolute;bottom:calc(100% + 8px);left:0;width:280px;max-width:100%;padding:12px;background:#11170f;color:#fff0dc;border:1px solid #7a9e5f;font:12px/1.6 'IBM Plex Sans',sans-serif;z-index:20;opacity:0;visibility:hidden;pointer-events:none}
 body .reg-scorecard.eco-card .badge:hover::after,body .reg-scorecard.eco-card .badge:focus::after{opacity:1;visibility:visible}
 body .reg-scorecard.eco-card .dot:focus::before{opacity:1;transform:translateX(-50%) translateY(0)}
 body .reg-scorecard.eco-card .badge:focus-visible,body .reg-scorecard.eco-card .dot:focus-visible{outline:2px solid #fff0dc;outline-offset:3px}
-body .reg-scorecard.eco-card .reg-card-footer{border-top:1px solid #505743;padding:22px 0 0;margin-top:28px;font:10px/1.7 'IBM Plex Mono',monospace;color:#c1bea9;display:block}
-body .reg-scorecard.eco-card .reg-card-name{font:11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
-body .reg-scorecard.eco-card .reg-card-verification{font:10px/1.7 'IBM Plex Mono',monospace;margin:0 0 6px}
+body .reg-scorecard.eco-card .reg-card-footer{border-top:1px solid #505743;padding:16px 0 0;margin-top:18px;font:10px/1.7 'IBM Plex Mono',monospace;color:#c1bea9;display:block}
+body .reg-scorecard.eco-card .reg-card-name{font:11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin:0 0 5px}
+body .reg-scorecard.eco-card .reg-card-verification{font:10px/1.7 'IBM Plex Mono',monospace;margin:0 0 4px}
 body .reg-scorecard.eco-card .reg-card-identity,body .reg-scorecard.eco-card .home-card-id{font:10px/1.7 'IBM Plex Mono',monospace;overflow-wrap:anywhere;margin:0}
 body .home-eco-card.reg-scorecard .home-card-verification{display:none}
 body .reg-scorecard.eco-card .hero.provisional{border:0;background:transparent}body .reg-scorecard.eco-card .hero.provisional .reg-total{border-color:#b49a63;border-style:dashed}body .reg-scorecard.eco-card .quarantine{color:#d4bb87}
 body .reg-scorecard.eco-card .reg-total.is-withheld .reg-total-label::after{content:' · withheld';font-size:11px}
 body .reg-scorecard.eco-card[data-profile-view=connected] .card{background:#11170f}
-body .reg-scorecard.eco-card[data-profile-view=connected] .score,body .reg-scorecard.eco-card[data-profile-view=connected] .reg-badge-number{font-family:'IBM Plex Mono',monospace;color:#b3ff6c;font-size:clamp(48px,6vw,78px)}
+body .reg-scorecard.eco-card[data-profile-view=connected] .score,body .reg-scorecard.eco-card[data-profile-view=connected] .reg-badge-number{font-family:'IBM Plex Mono',monospace;color:#b3ff6c;font-size:clamp(44px,5vw,60px)}
 body .reg-scorecard.eco-card[data-profile-view=connected] .hero.provisional .score{color:#d4bb87}
 body .reg-scorecard.eco-card[data-profile-view=connected] .reg-assessed-wrap{display:none}
-body .reg-scorecard.eco-card[data-profile-view=connected] .reg-rating{margin-top:18px}
+body .reg-scorecard.eco-card[data-profile-view=connected] .reg-rating{margin-top:14px}
 body .reg-scorecard.eco-card .reg-sign-summary{display:none}
-body .reg-scorecard.eco-card .reg-sign-readings{margin-top:20px}
-@media(max-width:399px){body .reg-scorecard.eco-card>.card{padding:22px}body .reg-scorecard.eco-card .hero{gap:10px}body .reg-scorecard.eco-card .reg-total-value{flex-wrap:wrap;gap:0 6px}body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card .reg-badge-number{font-size:66px}body .reg-scorecard.eco-card .reg-total .of{font-size:9px}body .reg-scorecard.eco-card .reg-progress-notes{font-size:9px}}
+body .reg-scorecard.eco-card .reg-sign-readings{margin-top:16px}
+@media(max-width:399px){body .reg-scorecard.eco-card>.card{padding:18px}body .reg-scorecard.eco-card .hero{gap:10px}body .reg-scorecard.eco-card .reg-total-value{flex-wrap:wrap;gap:0 6px}body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card .reg-badge-number{font-size:56px}body .reg-scorecard.eco-card .reg-total .of{font-size:9px}body .reg-scorecard.eco-card .reg-progress-notes{font-size:9px}}
 
 body .reg-scorecard.eco-card .bar{background:#505743}body .reg-scorecard.eco-card .fill{background:#a2c278}body .reg-scorecard.eco-card .marker{background:#fff0dc}body .reg-scorecard.eco-card .gap{background:repeating-linear-gradient(-45deg,#fff0dc66 0 2px,transparent 2px 5px)}
+
+/* Compact spacing also covers the inherited profile/home headings. */
+body .reg-scorecard.eco-card .home-card-name{font-size:20px;margin:10px 0 5px}body .reg-scorecard.eco-card .track{margin-top:9px}body .reg-scorecard.eco-card .bar-ends{margin-top:9px}body .reg-scorecard.eco-card .bar{margin-top:12px;height:6px}
