@@ -1,6 +1,6 @@
 /* A shared switch for every canonical garden profile. */
-.reg-profile-switch{display:flex;justify-content:flex-end;gap:0;margin:0 0 12px;position:relative}
-.reg-profile-switch button{border:1px solid currentColor;background:transparent;color:inherit;padding:10px 14px;min-height:42px;font:11px/1.4 'IBM Plex Sans',sans-serif;cursor:pointer}
+.reg-profile-switch{display:flex;justify-content:flex-end;gap:0;margin:0 0 8px;position:relative}
+.reg-profile-switch button{border:1px solid currentColor;background:transparent;color:inherit;padding:6px 10px;min-height:30px;font:10px/1.4 'IBM Plex Sans',sans-serif;cursor:pointer}
 .reg-profile-switch button+button{border-left:0}
 .reg-profile-switch button[aria-pressed=true]{background:#fff0dc;color:#3d4535;border-color:#fff0dc}
 html:not(.dark) .reg-profile-switch button[aria-pressed=true]{background:#3d4535;color:#fff0dc;border-color:#3d4535}
@@ -25,4 +25,6 @@ body.reg-ui-profile .eco-card[data-profile-view=connected] .card{background:#111
 .eco-card .reg-sign-grid dd{font:24px/1.5 'IBM Plex Mono',monospace;margin:4px 0 0;color:#b9c3b1}
 .eco-card .reg-sign-note{font:12px/1.7 'IBM Plex Sans',sans-serif;color:#b9c3b1;margin:16px 0 0}
 .eco-card .reg-sign-link{display:inline-block;font:12px/1.6 'IBM Plex Sans',sans-serif;color:#fff0dc;text-decoration:underline;text-underline-offset:4px;margin-top:12px}
-@media(max-width:399px){.reg-profile-switch button{padding:10px 12px}.eco-card .reg-sign-grid div+div{padding-left:8px}}
+@media(max-width:399px){.reg-profile-switch button{padding:7px 9px}.eco-card .reg-sign-grid div+div{padding-left:8px}}
+
+@media(pointer:coarse){.reg-profile-switch button{min-height:36px;padding-top:8px;padding-bottom:8px}}

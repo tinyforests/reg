@@ -815,3 +815,9 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Reduce metric-tile bottom padding and remove inherited hero minimum-height stretching. Omit the duplicate name/verification/Registry-ID footer on profiles. Keep homepage identity context.
 - **Date:** The description box already renders the actual `assessment_date` beside the verification label; retain that existing connection rather than add a second date.
 - **Files:** Shared scorecard CSS/JS, asset versions on profiles/homepage, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Smaller profile-view switch
+
+- **Decision:** Reduce switch text, horizontal/vertical padding and gap below it across all profiles. Desktop buttons are 30px high; touch pointers retain a 36px minimum. Keep labels, focus indication, selection and session persistence.
+- **Files:** `assets/css/reg-profile-view.css`, canonical profile asset versions, `docs/decisions-log.md`.
