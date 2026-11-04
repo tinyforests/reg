@@ -1,0 +1,28 @@
+/* A shared switch for every canonical garden profile. */
+.reg-profile-switch{display:flex;justify-content:flex-end;gap:0;margin:0 0 12px;position:relative}
+.reg-profile-switch button{border:1px solid currentColor;background:transparent;color:inherit;padding:10px 14px;min-height:42px;font:11px/1.4 'IBM Plex Sans',sans-serif;cursor:pointer}
+.reg-profile-switch button+button{border-left:0}
+.reg-profile-switch button[aria-pressed=true]{background:#fff0dc;color:#3d4535;border-color:#fff0dc}
+html:not(.dark) .reg-profile-switch button[aria-pressed=true]{background:#3d4535;color:#fff0dc;border-color:#3d4535}
+.reg-profile-switch button:focus-visible{outline:2px solid currentColor;outline-offset:4px;z-index:1}
+.reg-view-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.eco-card .reg-sign-identity{font:400 20px/1.35 'IBM Plex Sans',sans-serif;margin:16px 0 0;overflow-wrap:anywhere}
+.eco-card[data-profile-view=connected]{--ground:#11170f;--ink:#fff0dc;--ink-soft:#b9c3b1;--rule:#46533e}
+body.reg-ui-profile .eco-card[data-profile-view=connected] .card{background:#11170f;color:#fff0dc;border:1px solid #46533e}
+.eco-card[data-profile-view=connected] .eyebrow{color:#b9c3b1}
+.eco-card[data-profile-view=connected] .hero{background:transparent;border-left:0;padding:20px 0 12px}
+.eco-card[data-profile-view=connected] .hero .score{font:500 clamp(78px,8vw,110px)/1.05 'IBM Plex Mono',monospace;color:#b3ff6c;letter-spacing:-.08em}
+.eco-card[data-profile-view=connected] .hero.provisional .score{color:#d4bb87}
+.eco-card[data-profile-view=connected] .hero .of,.eco-card[data-profile-view=connected] .hero .tier{color:#fff0dc}
+.eco-card[data-profile-view=connected] .quarantine{color:#d4bb87}
+.eco-card[data-profile-view=connected] .ladder,.eco-card[data-profile-view=connected] .bar-wrap,.eco-card[data-profile-view=connected] .rule,.eco-card[data-profile-view=connected] .badge-head,.eco-card[data-profile-view=connected] .badges,.eco-card[data-profile-view=connected] .withheld{display:none!important}
+.eco-card .reg-sign-readings[hidden],.eco-card .reg-sign-identity[hidden]{display:none!important}
+.eco-card .reg-sign-summary{display:flex;justify-content:space-between;gap:16px;border-top:1px solid #46533e;padding-top:16px;font:11px/1.6 'IBM Plex Mono',monospace;color:#b9c3b1}
+.eco-card .reg-sign-connection{font:11px/1.6 'IBM Plex Mono',monospace;color:#d4bb87;margin:22px 0 0}
+.eco-card .reg-sign-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid #46533e;margin:14px 0 0;padding:14px 0}
+.eco-card .reg-sign-grid div{min-width:0}.eco-card .reg-sign-grid div+div{border-left:1px solid #46533e;padding-left:12px}
+.eco-card .reg-sign-grid dt{font:9px/1.6 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em;color:#b9c3b1}
+.eco-card .reg-sign-grid dd{font:24px/1.5 'IBM Plex Mono',monospace;margin:4px 0 0;color:#b9c3b1}
+.eco-card .reg-sign-note{font:12px/1.7 'IBM Plex Sans',sans-serif;color:#b9c3b1;margin:16px 0 0}
+.eco-card .reg-sign-link{display:inline-block;font:12px/1.6 'IBM Plex Sans',sans-serif;color:#fff0dc;text-decoration:underline;text-underline-offset:4px;margin-top:12px}
+@media(max-width:399px){.reg-profile-switch button{padding:10px 12px}.eco-card .reg-sign-grid div+div{padding-left:8px}}

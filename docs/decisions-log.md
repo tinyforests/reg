@@ -779,3 +779,10 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - **Decision:** Incorporate the accepted local sign/card concept into `/sign/` as a scoped interactive illustration. Registry identity, assessed score and verification flow to the sign; sign observations flow back to the profile as evidence. Reassessment remains a separate decision.
 - **Scope:** Preserve the homepage card and local draft. Illustrative controls send no data and make no hardware or integration claim. Clarify initial power requirements versus exploratory battery/solar operation.
 - **Files:** `sign/index.html`, `assets/css/signal-loop.css`, `assets/js/signal-loop.js`, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Profile / Connected sign switch across profiles
+
+- **Decision:** Add a shared view switch to all 25 canonical profiles. The profile view keeps its existing score, progression, potential and badges; connected-sign view presents that same assessed record with its badge count and a Signal connection area. Remember the view for the browser session. Future profiles inherit the shared assets through the existing copied profile templates.
+- **Data boundary:** There is no configured telemetry feed or Signal schema in the current profile source. Show “Signal not connected” and missing readings, never illustrative samples or inferred measurements. Score calculation, badge awards, verification and canonical garden data are unchanged.
+- **Files:** Canonical `gardens/g-*/index.html`, `assets/css/reg-profile-view.css`, `js/reg-profile-view.js`, `docs/decisions-log.md`.
