@@ -21,6 +21,15 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 ---
 
 
+## 2026-11-06 — Blend the fuller council explanation into Merri-bek
+
+**Decision:** Expand the Merri-bek detail page with the Yarra Ranges page’s continuing-record explanation, steward participation, feature maturity, detailed pillars and tiers, data delivery, privacy and evaluation checkpoints. Retain the user’s exact opening, proposed 20-garden cohort and AfN distinction.
+
+**Reason:** Give Merri-bek one complete follow-up resource without importing another council’s programmes, stale figures or unsupported assurances. Whole-register figures fetch the canonical ledger and species catalogue with dated computed fallbacks; the dashboard remains explicitly illustrative.
+
+**Files affected:** `decks/merri-bek/detail.html`, `docs/decisions-log.md`.
+
+
 ## 2026-11-05 — Complete Merri-bek demonstration geography and copy
 
 **Decision:** Replace all inherited municipality names, suburbs, sites, waterways, IDs, source claims and geography in the Merri-bek dashboard. Use the Victorian Government Merri-bek LGA polygon (ABS 24700), indicative local nature-site centres and generalised creek lines, with fictional garden locations inside the boundary. Keep every stored ecological score, count, assessment date, comparison input and scenario attribute distribution unchanged. Spatial distance/connectivity calculations update to match the new demonstration positions.
