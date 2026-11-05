@@ -279,19 +279,19 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
     <div class="who">
       <div class="e">Merri-bek City Council · Ecological Registry demonstration</div>
       <div class="h">Private-land biodiversity · Merri-bek</div>
-      <div class="sub">A council dashboard demonstration using the complete Boroondara example dataset and map.</div>
+      <div class="sub">Private-land ecology in Merri-bek · interactive demonstration for a proposed 20-garden pilot.</div>
     </div>
     <div class="ctl"><span class="lab">Theme</span><button id="themeBtn">Understory</button></div>
   </div>
   <div class="meta" id="metaStrip"></div>
 </div>
 
-<div class="warn" id="warnBar">Prepared for Merri-bek · Boroondara demonstration data and geography retained. Not measured Merri-bek results.</div>
+<div class="warn" id="warnBar">Merri-bek demonstration · Illustrative figures and garden markers, not assessed Merri-bek results.</div>
 
 <div class="scen">
   <div class="grp">
     <span class="lab">View</span>
-    <button data-scen="current" aria-pressed="true">Current evidence</button>
+    <button data-scen="current" aria-pressed="true">Example baseline</button>
     <button data-scen="pilot" aria-pressed="false">Pilot demonstration</button>
     <button data-scen="scale" aria-pressed="false">Neighbourhood scale</button>
   </div>
@@ -304,8 +304,8 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
 <section class="sec">
   <div class="head">
     <span class="lab">01 · Ecological network</span>
-    <h2>Private gardens within Boroondara's ecological network</h2>
-    <p>Where registered gardens reinforce existing habitat, and where another participating garden could strengthen connectivity. Council's Backyard Biodiversity guidance already describes private gardens as extending corridors and creating stepping stones — this measures that.</p>
+    <h2>Private gardens within Merri-bek’s ecological network</h2>
+    <p>Explore how gardens could connect with Merri-bek’s creek corridors, parks and reserves. Merri Creek, Moonee Ponds Creek and their tributaries provide the local context. The network shown is a demonstration, not evidence of wildlife movement.</p>
   </div>
   <div class="netwrap">
     <div class="mp">
@@ -319,8 +319,8 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
         <span class="lab">Layers</span>
         <label class="tog"><input type="checkbox" data-l="links" checked> Adjacency links</label>
         <label class="tog"><input type="checkbox" data-l="gaps"> Candidate gaps</label>
-        <label class="tog"><input type="checkbox" data-l="sites" checked> Council biodiversity sites</label>
-        <label class="tog"><input type="checkbox" data-l="corridor" checked> Stepping Stone Corridor</label>
+        <label class="tog"><input type="checkbox" data-l="sites" checked> Local nature sites</label>
+        <label class="tog"><input type="checkbox" data-l="corridor" checked> Illustrative garden connection</label>
         <label class="tog"><input type="checkbox" data-l="water" checked> Waterways</label>
         <label class="tog"><input type="checkbox" data-l="rings"> Proximity bands</label>
         <label class="tog"><input type="checkbox" data-l="demand"> Lookup intensity</label>
@@ -341,8 +341,8 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
     <div class="sidepanel" id="side"></div>
   </div>
   <div class="privacy">
-    <span class="lab">Privacy by design</span>
-    <p>Precise property locations are used to calculate ecological context and network relationships but are not published. Council views show de-identified records at a 130 m display grid — no names, no house numbers, no coordinate export. Lookup intensity is aggregated by suburb and suppressed below <b id="supp">5</b> records per area. Steward-consented detail is a separate, explicitly granted view.</p>
+    <span class="lab">Demonstration geography</span>
+    <p>Garden markers are fictional examples within Merri-bek; they do not identify participating households. The council boundary uses Victorian Government geometry. Nature-site extents and creek lines are generalised for presentation. Network distances are illustrative. The example lookup layer uses a suppression threshold of <b id="supp">5</b> records per area. Any future participant map will require consent and privacy review.</p>
   </div>
 </section>
 
@@ -363,7 +363,7 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
   <div class="head">
     <span class="lab">03 · Ecological contribution</span>
     <h2>What the gardens are contributing</h2>
-    <p>Five pillars, each scored against a fixed maximum. Mean, range and the largest recurring gap across records eligible for condition reporting.</p>
+    <p>Illustrative pillar values retained for this demonstration. These legacy example allocations are not the current Registry method; the current 25 / 20 / 20 / 20 / 15 framework is explained in the pilot detail page.</p>
   </div>
   <div class="pillars" id="pillars"></div>
 </section>
@@ -388,10 +388,10 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
   <div class="head">
     <span class="lab">05 · Where Council can act</span>
     <h2>Highest-value opportunities across registered gardens</h2>
-    <p>Each row is a gap the assessment has already located, the response that closes it, and the Council program it maps to. Ranked by total score uplift available across the affected gardens.</p>
+    <p>Each row demonstrates a garden gap, a possible response and a potential programme connection. Point opportunities are illustrative, not an offer of Council support or a calibrated ecological gain.</p>
   </div>
   <table class="opp">
-    <thead><tr><th>Recorded gap</th><th>Gardens affected</th><th>Potential response</th><th>Council program</th><th>Uplift available</th></tr></thead>
+    <thead><tr><th>Recorded gap</th><th>Gardens affected</th><th>Potential response</th><th>Potential programme connection</th><th>Uplift available</th></tr></thead>
     <tbody id="oppBody"></tbody>
   </table>
 </section>
@@ -416,7 +416,7 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
     </div>
     <div>
       <h3>Local ecological interest</h3>
-      <p class="sb">Property-level ecology lookups from Boroondara addresses. Aggregated, never mapped to a household.</p>
+      <p class="sb">Illustrative lookup counts assigned to Merri-bek suburbs for this demonstration. These are not recorded resident enquiries.</p>
       <div id="demandStats"></div>
       <svg class="chart" id="trend" viewBox="0 0 520 108" aria-label="Monthly lookup volume"></svg>
       <span class="lab" style="display:block;margin:12px 0 8px">Most looked-up vegetation classes</span>
@@ -437,8 +437,8 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
 <!-- 07 ALIGNMENT -->
 <section class="sec">
   <div class="head">
-    <span class="lab">07 · Alignment with Council strategy</span>
-    <h2>Where this sits against Boroondara's published commitments</h2>
+    <span class="lab">07 · Merri-bek context & illustrative comparisons</span>
+    <h2>How this could support Merri-bek’s nature programmes</h2>
   </div>
   <div class="align" id="align"></div>
 </section>
@@ -459,7 +459,7 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
       </ul>
     </div>
     <div>
-      <h4>Council context sources</h4>
+      <h4>Merri-bek references</h4><p><a href="https://www.merri-bek.vic.gov.au/living-in-merri-bek/environment/nature/gardens-for-wildlife/">Gardens for Wildlife</a> · <a href="https://www.merri-bek.vic.gov.au/living-in-merri-bek/environment/nature/moreland-nature-plan/">Nature Plan</a> · <a href="https://www.merri-bek.vic.gov.au/living-in-merri-bek/environment/trees/trees-in-merri-bek/">Urban Forest Strategy</a></p><p>These references establish programme context, not the example figures below. Council’s published municipal canopy target is 29% by 2050; the retained 30% by 2040 display is an illustrative scenario only.</p><p><a href="https://corp-gis.mapshare.vic.gov.au/arcgis/rest/services/Mapshare/Boundary/MapServer/4">Victorian Government LGA boundary</a> · <a href="https://www.merri-bek.vic.gov.au/globalassets/website-merri-bek/areas/living-merri-bek/environment/nature/gg_merri-bek_gfw_webfile.pdf">Council nature-site guide</a>. Nature-site centres and creek lines are indicative; the filled shapes are not reserve boundaries.</p><h4>Illustrative comparison inputs</h4>
       <div id="sources"></div>
     </div>
   </div>
@@ -474,65 +474,36 @@ function seeded(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>
    THE DATA CONTRACT
 
    Everything on this page is DERIVED from REGISTRY.gardens at runtime.
-   No aggregate is stored. To make this page live, engineering replaces
-   REGISTRY.gardens with the export from the canonical garden records and
-   flips meta.data_source to "live". Nothing else changes.
+   This demonstration must not be switched to live by relabelling. Live use needs
+   consented canonical records, current scoring, verified local context and
+   reviewed spatial inputs. No aggregate is stored.
 
-   This mirrors /data/councils/boroondara.json — but computed, not cached,
+   This is an illustrative council presentation — computed, not cached,
    so it cannot drift the way stored network totals have before.
    ══════════════════════════════════════════════════════════════════════ */
 
 const REGISTRY = {
 
   meta:{
-    council:"City of Boroondara",
-    lga_code:"LGA21110",
+    council:"Merri-bek City Council",
+    lga_code:"LGA24700",
     as_at:"22 August 2026",
-    methodology_version:"Registry Method v1.0",
-    source_commit:"— set by build —",
+    methodology_version:"Illustrative scoring example",
+    source_commit:"demonstration",
     privacy_mode:"council",           // council | steward_consented
     data_source:"illustrative"        // illustrative | live   ← P0 flips this
   },
 
-  /* Council's own published figures. Each carries its source so the number
-     can be defended in the room. Verified against Boroondara publications. */
-  council_context:{
-    canopy_total:{v:25.7,unit:"%",label:"Municipal canopy cover",
-      src:"Boroondara, Our tree canopy today"},
-    canopy_private:{v:23.3,unit:"%",label:"Private-land canopy cover",
-      src:"Boroondara, Our tree canopy today"},
-    canopy_public:{v:31.6,unit:"%",label:"Public-land canopy cover",
-      src:"Boroondara, Our tree canopy today"},
-    canopy_target:{v:30,unit:"%",year:2040,label:"Canopy target",
-      src:"Boroondara Tree Canopy Strategy page",
-      caution:"Council's Tree Canopy Strategy page states 30% by 2040; consultation material for the adopted strategy stated 27%. Confirm which figure Council is currently using before publication."},
-    biodiversity_sites:{v:53,label:"Council biodiversity sites",
-      src:"Urban Biodiversity Strategy 2024–2034, Biodiversity Sites Plan"},
-    biodiversity_area:{v:60.8,unit:"ha",label:"Land managed for biodiversity",
-      src:"Urban Biodiversity Strategy 2024–2034"},
-    plants_target:{v:5000,label:"Indigenous plants per year via residents and schools",
-      src:"Urban Biodiversity Strategy 2024–2034"},
-    area_target:{v:1,unit:"ha/yr",label:"Increase in land managed for biodiversity",
-      src:"Urban Biodiversity Strategy 2024–2034"},
-    fauna_species:{v:240,label:"Animal species recorded in Boroondara",
-      src:"Council biodiversity team, public presentation 2025"},
-    flora_species:{v:280,label:"Plant species recorded in Boroondara",
-      src:"Council biodiversity team, public presentation 2025"},
-    bbp_since:{v:2010,label:"Backyard Biodiversity Project running since",
-      src:"Boroondara Annual Report"},
-    bbp_cohort:{v:14,label:"Households in the Balwyn North Stepping Stone Corridor cohort",
-      src:"Boroondara Annual Report 2020–21"},
-    bbp_wider:{v:23,label:"Households across the wider municipality in the same round",
-      src:"Boroondara Annual Report 2020–21"}
-  },
+  /* Demonstration inputs retained for layout and interaction; no Council attribution. */
+  council_context:{"canopy_total": {"v": 25.7, "unit": "%", "label": "Example · Municipal canopy cover", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "canopy_private": {"v": 23.3, "unit": "%", "label": "Example · Private-land canopy cover", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "canopy_public": {"v": 31.6, "unit": "%", "label": "Example · Public-land canopy cover", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "canopy_target": {"v": 30, "unit": "%", "year": 2040, "label": "Illustrative canopy scenario", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment", "caution": "Illustrative 30% by 2040 scenario only; not Merri-bek’s published target."}, "biodiversity_sites": {"v": 53, "label": "Example nature-site count", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "biodiversity_area": {"v": 60.8, "unit": "ha", "label": "Example · Land managed for biodiversity", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "plants_target": {"v": 5000, "label": "Example · Indigenous plants per year via residents and schools", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "area_target": {"v": 1, "unit": "ha/yr", "label": "Example · Increase in land managed for biodiversity", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "fauna_species": {"v": 240, "label": "Example animal-species count", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "flora_species": {"v": 280, "label": "Example plant-species count", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "bbp_since": {"v": 2010, "label": "Illustrative programme start year", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "bbp_cohort": {"v": 14, "label": "Example small-cohort size", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}, "bbp_wider": {"v": 23, "label": "Example wider-cohort size", "src": "Illustrative input only — not a Merri-bek Council statistic or commitment"}},
 
-  /* ── GARDEN RECORDS — the only truth on this page ──
+  /* ── ILLUSTRATIVE GARDEN RECORDS — not assessed properties ──
      status:      verified | site_visit | provisional
      assessment:  complete | proposal        (proposal = design not yet built)
      Records marked proposal are excluded from every condition statistic.   */
   gardens:[
   {
-    id:"ER-AU-VIC-BOR-0001", suburb:"Surrey Hills", lat:-37.8232, lng:145.0964,
+    id:"DEMO-MERRI-0001", suburb:"Brunswick East", lat:-37.7662, lng:144.9792,
     status:"verified", assessment:"complete", assessed_on:"2026-03-14", prior_assessments:[{on:"2025-02-20",score:61}],
     score:73, area_sqm:640, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:58, taxa_indigenous:52, indigenous_dominant:true,
@@ -546,7 +517,7 @@ const REGISTRY = {
     pillars:{Biodiversity:26,"Soil & Water":15,Habitat:21,Connectivity:13,Evidence:14}
   },
   {
-    id:"ER-AU-VIC-BOR-0002", suburb:"Surrey Hills", lat:-37.8244, lng:145.0980,
+    id:"DEMO-MERRI-0002", suburb:"Brunswick East", lat:-37.7674, lng:144.9808,
     status:"verified", assessment:"complete", assessed_on:"2026-02-02", prior_assessments:[{on:"2024-11-08",score:41}],
     score:50, area_sqm:520, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:44, taxa_indigenous:41, indigenous_dominant:true,
@@ -560,7 +531,7 @@ const REGISTRY = {
     pillars:{Biodiversity:18,"Soil & Water":11,Habitat:13,Connectivity:8,Evidence:12}
   },
   {
-    id:"ER-AU-VIC-BOR-0003", suburb:"Hawthorn East", lat:-37.8248, lng:145.0498,
+    id:"DEMO-MERRI-0003", suburb:"Coburg", lat:-37.7438, lng:144.962,
     status:"verified", assessment:"complete", assessed_on:"2026-05-19", prior_assessments:[{on:"2025-05-02",score:38}],
     score:44, area_sqm:410, evc:"EVC 55 Plains Grassy Woodland",
     taxa_total:36, taxa_indigenous:34, indigenous_dominant:true,
@@ -574,7 +545,7 @@ const REGISTRY = {
     pillars:{Biodiversity:15,"Soil & Water":10,Habitat:12,Connectivity:7,Evidence:11}
   },
   {
-    id:"ER-AU-VIC-BOR-0004", suburb:"Canterbury", lat:-37.8236, lng:145.0838,
+    id:"DEMO-MERRI-0004", suburb:"Brunswick", lat:-37.7668, lng:144.962,
     status:"site_visit", assessment:"complete", assessed_on:"2026-06-27", prior_assessments:[],
     score:32, area_sqm:380, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:28, taxa_indigenous:26, indigenous_dominant:true,
@@ -588,7 +559,7 @@ const REGISTRY = {
     pillars:{Biodiversity:11,"Soil & Water":6,Habitat:7,Connectivity:5,Evidence:9}
   },
   {
-    id:"ER-AU-VIC-BOR-0005", suburb:"Surrey Hills", lat:-37.8221, lng:145.0978,
+    id:"DEMO-MERRI-0005", suburb:"Brunswick East", lat:-37.7651, lng:144.9806,
     status:"verified", assessment:"complete", assessed_on:"2026-04-08", prior_assessments:[{on:"2025-03-30",score:39}],
     score:46, area_sqm:560, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:39, taxa_indigenous:37, indigenous_dominant:true,
@@ -602,7 +573,7 @@ const REGISTRY = {
     pillars:{Biodiversity:16,"Soil & Water":11,Habitat:11,Connectivity:9,Evidence:11}
   },
   {
-    id:"ER-AU-VIC-BOR-0006", suburb:"Hawthorn", lat:-37.8218, lng:145.0388,
+    id:"DEMO-MERRI-0006", suburb:"Brunswick West", lat:-37.763, lng:144.945,
     status:"verified", assessment:"complete", assessed_on:"2026-01-22", prior_assessments:[],
     score:38, area_sqm:220, evc:"EVC 55 Plains Grassy Woodland",
     taxa_total:31, taxa_indigenous:29, indigenous_dominant:true,
@@ -616,7 +587,7 @@ const REGISTRY = {
     pillars:{Biodiversity:13,"Soil & Water":10,Habitat:11,Connectivity:4,Evidence:11}
   },
   {
-    id:"ER-AU-VIC-BOR-0007", suburb:"Kew East", lat:-37.7938, lng:145.0566,
+    id:"DEMO-MERRI-0007", suburb:"Coburg North", lat:-37.7275, lng:144.9695,
     status:"verified", assessment:"complete", assessed_on:"2026-05-06", prior_assessments:[{on:"2025-04-18",score:33}],
     score:41, area_sqm:470, evc:"EVC 56 Floodplain Riparian Woodland",
     taxa_total:34, taxa_indigenous:31, indigenous_dominant:true,
@@ -630,7 +601,7 @@ const REGISTRY = {
     pillars:{Biodiversity:14,"Soil & Water":8,Habitat:10,Connectivity:11,Evidence:11}
   },
   {
-    id:"ER-AU-VIC-BOR-0008", suburb:"Balwyn", lat:-37.8082, lng:145.0788,
+    id:"DEMO-MERRI-0008", suburb:"Pascoe Vale", lat:-37.727, lng:144.941,
     status:"provisional", assessment:"complete", assessed_on:"2026-07-11", prior_assessments:[],
     score:28, area_sqm:340, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:22, taxa_indigenous:19, indigenous_dominant:false,
@@ -644,7 +615,7 @@ const REGISTRY = {
     pillars:{Biodiversity:9,"Soil & Water":5,Habitat:5,Connectivity:6,Evidence:3}
   },
   {
-    id:"ER-AU-VIC-BOR-0009", suburb:"Canterbury", lat:-37.8212, lng:145.0852,
+    id:"DEMO-MERRI-0009", suburb:"Brunswick", lat:-37.7644, lng:144.9634,
     status:"verified", assessment:"proposal", assessed_on:null, prior_assessments:[],
     score:null, area_sqm:300, evc:"EVC 47 Valley Grassy Forest",
     taxa_total:null, taxa_indigenous:null, indigenous_dominant:null,
@@ -664,13 +635,13 @@ const REGISTRY = {
     total_lookups:1030,
     unique_properties:874,
     repeat_properties:112,
-    by_suburb:[["Camberwell",168],["Balwyn North",149],["Kew",133],["Hawthorn",121],
-               ["Canterbury",108],["Balwyn",96],["Glen Iris",84],["Surrey Hills",71],
-               ["Kew East",58],["Ashburton",42]],
+    by_suburb:[["Glenroy",168],["Fawkner",149],["Hadfield",133],["Brunswick West",121],
+               ["Brunswick",108],["Pascoe Vale",96],["Oak Park",84],["Brunswick East",71],
+               ["Coburg North",58],["Gowanbrae",42]],
     by_evc:[["EVC 47 Valley Grassy Forest",402],["EVC 55 Plains Grassy Woodland",288],
             ["EVC 56 Floodplain Riparian Woodland",196],["EVC 175 Grassy Woodland",144]],
     by_month:[42,49,58,54,67,79,74,88,96,111,124,140],
-    funnel:[["Ecological lookups from Boroondara addresses",1030],
+    funnel:[["Ecological lookups from Merri-bek example locations",1030],
             ["Planting guide requested",321],
             ["Garden record started",47],
             ["Record completed and held",9]]
@@ -681,19 +652,19 @@ const REGISTRY = {
 const STRATA=[
  {k:"canopy",     n:"Canopy",              h:"over 8 m",
   spp:["Eucalyptus melliodora","Eucalyptus polyanthemos","Eucalyptus radiata","Eucalyptus viminalis"],
-  why:"Shade, hollows and the structural top of the system. Boroondara's strongest layer, and largely inherited rather than planted — which is why canopy loss on private land is difficult to reverse quickly."},
+  why:"Shade, hollows and the structural top of the system. Mature trees provide habitat that takes time to replace. The figures shown here are example inputs, not a municipal canopy assessment."},
  {k:"subcanopy",  n:"Sub-canopy",          h:"3 – 8 m",
   spp:["Acacia melanoxylon","Acacia mearnsii","Allocasuarina littoralis","Exocarpos cupressiformis"],
   why:"The layer small birds move through. Its absence explains how a garden can hold large trees and still record almost no small-bird activity."},
  {k:"shrub",      n:"Shrub / middle storey", h:"1 – 3 m",
   spp:["Bursaria spinosa","Correa reflexa","Goodenia ovata","Cassinia aculeata","Ozothamnus ferrugineus"],
-  why:"Dense refuge and nectar. Council's own Backyard Biodiversity guidance puts dense shrub layers first for exactly this reason."},
+  why:"Dense refuge and nectar. Gardens for Wildlife encourages habitat gardening. The species shown are examples, not a site-specific indigenous planting prescription."},
  {k:"ground",     n:"Ground layer",        h:"below 1 m",
   spp:["Lomandra longifolia","Poa morrisii","Themeda triandra","Dianella revoluta","Microlaena stipoides"],
   why:"Skink habitat, soil cover and insect base. The layer most often replaced by lawn or bare mulch."},
  {k:"climber",    n:"Climber / other structural", h:"variable",
   spp:["Clematis microphylla","Hardenbergia violacea","Pandorea pandorana","Retained standing timber"],
-  why:"Vertical connection between strata, and the least frequently recorded layer in the municipality."}
+  why:"Vertical connection between strata, and the least frequently recorded layer in this example dataset."}
 ];
 
 const PILLAR_MAX={Biodiversity:30,"Soil & Water":20,Habitat:25,Connectivity:20,Evidence:15};
@@ -702,19 +673,19 @@ const PILLAR_MAX={Biodiversity:30,"Soil & Water":20,Habitat:25,Connectivity:20,E
    Each tests a garden and reports the uplift available if addressed. */
 const OPPORTUNITIES=[
  {k:"middle_storey", label:"No middle storey recorded", response:"Shrub / understorey planting",
-  program:"Backyard Biodiversity", uplift:6, test:g=>g.layers.shrub===0},
+  program:"Gardens for Wildlife", uplift:6, test:g=>g.layers.shrub===0},
  {k:"subcanopy", label:"No sub-canopy recorded", response:"Small-tree planting (wattle, sheoak)",
   program:"Indigenous plant distribution", uplift:5, test:g=>g.layers.subcanopy===0},
- {k:"canopy_low", label:"Canopy below Council's private-land average", response:"Private tree support / planting advice",
-  program:"Tree Canopy Strategy", uplift:4, test:g=>g.canopy_pct!==null&&g.canopy_pct<23.3},
+ {k:"canopy_low", label:"Canopy below illustrative private-land baseline", response:"Private tree support / planting advice",
+  program:"Urban Forest Strategy", uplift:4, test:g=>g.canopy_pct!==null&&g.canopy_pct<23.3},
  {k:"water", label:"No water habitat", response:"Pond or water-habitat guidance",
-  program:"Backyard Biodiversity workshop", uplift:4, test:g=>!g.habitat.water},
+  program:"Gardens for Wildlife advice", uplift:4, test:g=>!g.habitat.water},
  {k:"woody", label:"No woody habitat (logs or rock)", response:"Habitat log and rock supply",
   program:"Habitat materials", uplift:3, test:g=>!g.habitat.logs&&!g.habitat.rocks},
  {k:"richness", label:"Indigenous richness below 30 taxa", response:"Indigenous plant distribution",
-  program:"5,000 plants per year", uplift:5, test:g=>g.taxa_indigenous!==null&&g.taxa_indigenous<30},
+  program:"Example: 5,000 plants per year", uplift:5, test:g=>g.taxa_indigenous!==null&&g.taxa_indigenous<30},
  {k:"isolated", label:"Isolated in the network", response:"Neighbouring garden recruitment",
-  program:"Stepping Stone Corridor cohort", uplift:6, test:g=>g._adj===0&&g._band===0},
+  program:"Illustrative garden connection cohort", uplift:6, test:g=>g._adj===0&&g._band===0},
  {k:"stale", label:"Assessment older than 12 months", response:"Reassessment",
   program:"Registry", uplift:0, test:g=>g._age_months>12},
  {k:"evidence", label:"Evidence record incomplete", response:"Photographs, species list or field notes",
@@ -764,72 +735,15 @@ function monthsSince(d){
 const MLAT=111320, MLNG=88000;
 const metres=(a,b)=>Math.hypot((a.lng-b.lng)*MLNG,(a.lat-b.lat)*MLAT);
 
-const BOUNDARY=[
- [-37.7838,145.0248],[-37.7772,145.0430],[-37.7784,145.0620],[-37.7806,145.0800],
- [-37.7818,145.0980],[-37.7828,145.1094],[-37.7960,145.1122],[-37.8100,145.1130],
- [-37.8240,145.1122],[-37.8380,145.1062],[-37.8480,145.1002],[-37.8560,145.0942],
- [-37.8660,145.0882],[-37.8724,145.0800],[-37.8700,145.0680],[-37.8640,145.0560],
- [-37.8580,145.0460],[-37.8520,145.0340],[-37.8440,145.0262],[-37.8340,145.0208],
- [-37.8200,145.0184],[-37.8060,145.0194],[-37.7940,145.0208]];
-
-/* Council biodiversity sites — a sample of the 53 Council manages, for context.
-   Engineering should replace with Council's Biodiversity Sites Plan geometry. */
-const SITES=[
- {n:"Greythorn Park",lat:-37.7902,lng:145.0812,r:320,corridor:true},
- {n:"Hays Paddock",lat:-37.7932,lng:145.0532,r:300,corridor:true},
- {n:"Burke Rd Billabong",lat:-37.7886,lng:145.0618,r:220,corridor:true},
- {n:"Bellbird Dell",lat:-37.7948,lng:145.0648,r:190,corridor:true},
- {n:"Willsmere Park",lat:-37.7972,lng:145.0402,r:260},
- {n:"Studley Park",lat:-37.8010,lng:145.0202,r:420,wide:true},
- {n:"Maranoa Gardens",lat:-37.8044,lng:145.0856,r:200},
- {n:"Macleay Park",lat:-37.7966,lng:145.0944,r:210,corridor:true},
- {n:"Balwyn Park",lat:-37.8104,lng:145.0798,r:250},
- {n:"Hislop Park",lat:-37.8126,lng:145.0698,r:170},
- {n:"Canterbury Gardens",lat:-37.8250,lng:145.0808,r:190},
- {n:"Surrey Gardens",lat:-37.8256,lng:145.0994,r:180},
- {n:"Frog Hollow Reserve",lat:-37.8302,lng:145.0704,r:200},
- {n:"Anderson Park",lat:-37.8170,lng:145.0336,r:220},
- {n:"Nettleton Park",lat:-37.8342,lng:145.0596,r:170},
- {n:"Wattle Park",lat:-37.8396,lng:145.0928,r:400},
- {n:"Summerhill Reserve",lat:-37.8462,lng:145.0562,r:180},
- {n:"Ferndale Park",lat:-37.8582,lng:145.0648,r:290,wide:true},
- {n:"Markham Reserve",lat:-37.8652,lng:145.0796,r:230},
- {n:"Central Gardens",lat:-37.8262,lng:145.0296,r:160}];
-
-const WATERWAYS=[
- {n:"Yarra River",major:true,pts:[[-37.7742,145.0498],[-37.7830,145.0392],[-37.7952,145.0300],
-   [-37.8062,145.0192],[-37.8188,145.0186],[-37.8320,145.0208],[-37.8452,145.0244]]},
- {n:"Koonung Creek",pts:[[-37.7802,145.1180],[-37.7818,145.0900],[-37.7856,145.0700],[-37.7900,145.0540],[-37.7936,145.0410]]},
- {n:"Gardiners Creek",pts:[[-37.8452,145.1180],[-37.8480,145.0960],[-37.8520,145.0740],[-37.8536,145.0540],[-37.8492,145.0350],[-37.8452,145.0250]]},
- {n:"Back Creek",pts:[[-37.8060,145.0760],[-37.8180,145.0742],[-37.8320,145.0716],[-37.8440,145.0690],[-37.8520,145.0672]]},
- {n:"Glass Creek",pts:[[-37.7920,145.0700],[-37.7988,145.0640],[-37.8046,145.0562],[-37.8090,145.0470]]}];
-
-const SUBURBS=[
- {n:"KEW",lat:-37.8058,lng:145.0304},{n:"KEW EAST",lat:-37.7926,lng:145.0560},
- {n:"BALWYN NORTH",lat:-37.7924,lng:145.0872},{n:"BALWYN",lat:-37.8086,lng:145.0834},
- {n:"DEEPDENE",lat:-37.8110,lng:145.0616},{n:"HAWTHORN",lat:-37.8222,lng:145.0348},
- {n:"HAWTHORN EAST",lat:-37.8232,lng:145.0492},{n:"CANTERBURY",lat:-37.8232,lng:145.0800},
- {n:"SURREY HILLS",lat:-37.8236,lng:145.0982},{n:"CAMBERWELL",lat:-37.8368,lng:145.0680},
- {n:"KOOYONG",lat:-37.8330,lng:145.0256},{n:"GLEN IRIS",lat:-37.8606,lng:145.0564},
- {n:"ASHBURTON",lat:-37.8648,lng:145.0814}];
-const DKEY={"Camberwell":"CAMBERWELL","Balwyn North":"BALWYN NORTH","Kew":"KEW","Hawthorn":"HAWTHORN",
- "Canterbury":"CANTERBURY","Balwyn":"BALWYN","Glen Iris":"GLEN IRIS","Surrey Hills":"SURREY HILLS",
- "Kew East":"KEW EAST","Ashburton":"ASHBURTON"};
-
-/* ── Council's own named corridor. Scenario cohorts are placed along it. ── */
-const CORRIDOR={
-  name:"Balwyn North Stepping Stone Corridor",
-  note:"Council's own Backyard Biodiversity focus area, running from Macleay Park and Greythorn Park west toward the creek corridors and the Yarra.",
-  pts:[[-37.7966,145.0944],[-37.7930,145.0872],[-37.7902,145.0812],[-37.7928,145.0742],
-       [-37.7948,145.0648],[-37.7898,145.0612],[-37.7932,145.0532],[-37.7958,145.0468],[-37.7974,145.0402]]
-};
-const OTHER_SPINES=[
- [[-37.8104,145.0798],[-37.8126,145.0698],[-37.8202,145.0712],[-37.8302,145.0704],[-37.8342,145.0640],
-  [-37.8402,145.0592],[-37.8462,145.0562],[-37.8522,145.0602],[-37.8582,145.0648]],
- [[-37.8240,145.0994],[-37.8248,145.0868],[-37.8250,145.0808],[-37.8286,145.0712],[-37.8302,145.0704]],
- [[-37.8452,145.1090],[-37.8502,145.0848],[-37.8522,145.0740],[-37.8536,145.0618],[-37.8520,145.0498],[-37.8456,145.0262]],
- [[-37.8262,145.0296],[-37.8170,145.0336],[-37.8218,145.0388],[-37.8248,145.0498],[-37.8252,145.0566]],
- [[-37.8396,145.0928],[-37.8420,145.0770],[-37.8462,145.0620],[-37.8462,145.0562]]];
+/* Merri-bek LGA: Victorian Government Mapshare, retrieved 5 Nov 2026.
+Nature sites and creek lines are generalised presentation geometry, not surveyed extents. */
+const BOUNDARY=[[-37.76067, 144.93806], [-37.76081, 144.93834], [-37.76109, 144.93846], [-37.76646, 144.93801], [-37.76688, 144.93776], [-37.76759, 144.9377], [-37.76863, 144.93788], [-37.7689, 144.93758], [-37.769, 144.93757], [-37.76954, 144.9361], [-37.76982, 144.9356], [-37.77011, 144.93538], [-37.77058, 144.93526], [-37.77079, 144.9353], [-37.77093, 144.93542], [-37.77091, 144.93609], [-37.77102, 144.93679], [-37.77109, 144.93676], [-37.771, 144.93772], [-37.77124, 144.93832], [-37.77186, 144.93836], [-37.77255, 144.9379], [-37.773, 144.93747], [-37.77357, 144.9367], [-37.77427, 144.93634], [-37.77572, 144.9365], [-37.77777, 144.93709], [-37.77789, 144.93805], [-37.77705, 144.93771], [-37.77656, 144.93817], [-37.77597, 144.93847], [-37.77558, 144.93856], [-37.77558, 144.93878], [-37.77543, 144.93881], [-37.77904, 144.96843], [-37.77898, 144.96917], [-37.78006, 144.97814], [-37.77534, 144.97888], [-37.77579, 144.98309], [-37.77572, 144.9831], [-37.77639, 144.98852], [-37.77596, 144.98854], [-37.77541, 144.98869], [-37.77507, 144.98854], [-37.77491, 144.98822], [-37.77486, 144.9874], [-37.77455, 144.98702], [-37.77419, 144.98681], [-37.77368, 144.9868], [-37.77297, 144.98619], [-37.77164, 144.98481], [-37.77094, 144.98431], [-37.76987, 144.98414], [-37.76719, 144.98455], [-37.76649, 144.98556], [-37.76638, 144.98562], [-37.76617, 144.98558], [-37.76582, 144.98539], [-37.76505, 144.98432], [-37.76481, 144.9841], [-37.76402, 144.98381], [-37.76383, 144.98367], [-37.76368, 144.9832], [-37.7636, 144.98233], [-37.7633, 144.98177], [-37.76311, 144.98159], [-37.76264, 144.9814], [-37.76245, 144.98139], [-37.76227, 144.98151], [-37.76219, 144.98165], [-37.76211, 144.98274], [-37.76185, 144.9831], [-37.76158, 144.9832], [-37.76135, 144.98302], [-37.76049, 144.98176], [-37.75797, 144.98024], [-37.75739, 144.98011], [-37.7572, 144.98016], [-37.75666, 144.97992], [-37.75565, 144.97971], [-37.755, 144.97947], [-37.7547, 144.97966], [-37.75425, 144.97921], [-37.75381, 144.97938], [-37.75303, 144.98004], [-37.75297, 144.98048], [-37.75269, 144.98078], [-37.75266, 144.98115], [-37.75214, 144.9818], [-37.7517, 144.98174], [-37.7511, 144.98135], [-37.75076, 144.98128], [-37.75037, 144.9809], [-37.74987, 144.9806], [-37.74958, 144.98072], [-37.74903, 144.98136], [-37.74878, 144.98141], [-37.74836, 144.9811], [-37.74787, 144.98088], [-37.74768, 144.98061], [-37.74725, 144.98063], [-37.74685, 144.98055], [-37.74655, 144.98025], [-37.74638, 144.98021], [-37.74622, 144.9803], [-37.7462, 144.98148], [-37.74588, 144.98193], [-37.74557, 144.98197], [-37.74526, 144.9819], [-37.74497, 144.98161], [-37.74393, 144.98002], [-37.74332, 144.97946], [-37.74306, 144.97906], [-37.7427, 144.979], [-37.74274, 144.97979], [-37.73594, 144.98288], [-37.73595, 144.98295], [-37.72136, 144.98527], [-37.72128, 144.98455], [-37.72134, 144.98445], [-37.72105, 144.98182], [-37.7217, 144.98143], [-37.72141, 144.97862], [-37.72036, 144.97819], [-37.72013, 144.97901], [-37.71971, 144.97944], [-37.71923, 144.97871], [-37.71914, 144.9788], [-37.71886, 144.97883], [-37.71831, 144.97879], [-37.71754, 144.97846], [-37.71727, 144.97824], [-37.71675, 144.9781], [-37.71658, 144.97815], [-37.71651, 144.97832], [-37.71651, 144.9787], [-37.71666, 144.97965], [-37.71622, 144.98023], [-37.71614, 144.98046], [-37.71575, 144.98074], [-37.71477, 144.98088], [-37.71443, 144.98073], [-37.71433, 144.98057], [-37.71418, 144.97979], [-37.71419, 144.97924], [-37.71396, 144.97841], [-37.71399, 144.97756], [-37.71389, 144.9773], [-37.71364, 144.97703], [-37.71346, 144.97702], [-37.71334, 144.97717], [-37.71315, 144.97759], [-37.71296, 144.97843], [-37.71274, 144.97887], [-37.71254, 144.97901], [-37.71136, 144.97884], [-37.71104, 144.97793], [-37.71043, 144.97727], [-37.71015, 144.97712], [-37.70954, 144.97757], [-37.70926, 144.9779], [-37.70837, 144.97848], [-37.70794, 144.97886], [-37.7077, 144.97947], [-37.70771, 144.98055], [-37.7074, 144.98083], [-37.7069, 144.98069], [-37.70643, 144.98024], [-37.70572, 144.97946], [-37.70529, 144.97869], [-37.70499, 144.97848], [-37.70474, 144.97853], [-37.70436, 144.97898], [-37.70388, 144.9803], [-37.70384, 144.98064], [-37.70394, 144.98149], [-37.70389, 144.98193], [-37.70354, 144.98232], [-37.70308, 144.98254], [-37.70255, 144.98238], [-37.70232, 144.98208], [-37.70114, 144.98105], [-37.70101, 144.98077], [-37.70101, 144.97985], [-37.70063, 144.97958], [-37.70029, 144.97944], [-37.69986, 144.97944], [-37.69909, 144.97994], [-37.69865, 144.98049], [-37.69823, 144.9807], [-37.69802, 144.9807], [-37.69763, 144.98057], [-37.6975, 144.9804], [-37.69735, 144.97937], [-37.69706, 144.97872], [-37.69672, 144.97858], [-37.69641, 144.97858], [-37.69615, 144.97839], [-37.69564, 144.97866], [-37.69518, 144.97869], [-37.69479, 144.979], [-37.69455, 144.97901], [-37.69428, 144.97876], [-37.69395, 144.97721], [-37.69416, 144.97682], [-37.69435, 144.97663], [-37.69491, 144.97647], [-37.69499, 144.97634], [-37.69497, 144.97607], [-37.69484, 144.9758], [-37.69456, 144.97569], [-37.69412, 144.97531], [-37.69379, 144.97425], [-37.69367, 144.97414], [-37.6934, 144.97407], [-37.69331, 144.97391], [-37.6929, 144.97367], [-37.69283, 144.97328], [-37.69247, 144.97295], [-37.69239, 144.97257], [-37.69248, 144.97236], [-37.69268, 144.97226], [-37.69276, 144.972], [-37.69275, 144.97169], [-37.69263, 144.97139], [-37.69267, 144.97045], [-37.69223, 144.97034], [-37.69194, 144.97041], [-37.69116, 144.97164], [-37.69099, 144.97214], [-37.69114, 144.96982], [-37.69153, 144.96662], [-37.69184, 144.96215], [-37.69206, 144.95226], [-37.6928, 144.9402], [-37.69367, 144.93386], [-37.69453, 144.92116], [-37.69467, 144.91768], [-37.6942, 144.91452], [-37.69403, 144.91276], [-37.69384, 144.90718], [-37.69391, 144.9046], [-37.69417, 144.90338], [-37.69479, 144.90212], [-37.70458, 144.88935], [-37.70774, 144.88623], [-37.71081, 144.88847], [-37.71013, 144.8906], [-37.70986, 144.89205], [-37.70921, 144.89815], [-37.70983, 144.89858], [-37.71239, 144.90126], [-37.71265, 144.9014], [-37.71333, 144.90152], [-37.71365, 144.90173], [-37.71401, 144.90219], [-37.71428, 144.90279], [-37.71446, 144.90297], [-37.71497, 144.90286], [-37.71647, 144.90218], [-37.71677, 144.90232], [-37.71697, 144.90291], [-37.7169, 144.9035], [-37.71669, 144.90372], [-37.71588, 144.90425], [-37.71576, 144.90443], [-37.71574, 144.9047], [-37.71587, 144.90492], [-37.71608, 144.90499], [-37.7169, 144.90497], [-37.71719, 144.90521], [-37.71736, 144.90552], [-37.71737, 144.9059], [-37.7171, 144.90676], [-37.71702, 144.90782], [-37.7173, 144.90868], [-37.71735, 144.90916], [-37.7177, 144.90989], [-37.7183, 144.91047], [-37.71865, 144.91066], [-37.71888, 144.91068], [-37.71908, 144.91052], [-37.71926, 144.90964], [-37.71939, 144.90936], [-37.71957, 144.90927], [-37.71996, 144.90928], [-37.72082, 144.90952], [-37.72153, 144.91004], [-37.72194, 144.91052], [-37.7219, 144.91083], [-37.72149, 144.91136], [-37.72126, 144.91141], [-37.72096, 144.9112], [-37.72085, 144.91127], [-37.72081, 144.91233], [-37.72183, 144.91316], [-37.72264, 144.91335], [-37.72281, 144.91362], [-37.72288, 144.9141], [-37.72309, 144.91458], [-37.72326, 144.91461], [-37.72369, 144.91447], [-37.72379, 144.91456], [-37.72406, 144.91576], [-37.72396, 144.91601], [-37.72367, 144.91632], [-37.72362, 144.91672], [-37.72367, 144.9171], [-37.72401, 144.9181], [-37.72494, 144.91951], [-37.7258, 144.92022], [-37.72576, 144.92056], [-37.72582, 144.9207], [-37.72619, 144.92099], [-37.72636, 144.92127], [-37.72732, 144.92218], [-37.72788, 144.92246], [-37.72818, 144.92249], [-37.72867, 144.92239], [-37.72894, 144.92254], [-37.72906, 144.92292], [-37.72886, 144.92367], [-37.72883, 144.92438], [-37.72901, 144.92476], [-37.72926, 144.92487], [-37.72957, 144.9247], [-37.72973, 144.92473], [-37.72996, 144.92536], [-37.73023, 144.92565], [-37.73052, 144.92557], [-37.73075, 144.92523], [-37.73081, 144.92486], [-37.73099, 144.92462], [-37.73204, 144.92427], [-37.73268, 144.92456], [-37.7331, 144.92563], [-37.73363, 144.92612], [-37.7348, 144.92825], [-37.73527, 144.92857], [-37.73743, 144.92877], [-37.73772, 144.92917], [-37.73788, 144.92976], [-37.7381, 144.92994], [-37.73986, 144.92996], [-37.74033, 144.93013], [-37.74215, 144.93165], [-37.74228, 144.93186], [-37.74233, 144.93234], [-37.7424, 144.93239], [-37.74243, 144.93312], [-37.74234, 144.93304], [-37.74244, 144.93338], [-37.74382, 144.93458], [-37.74404, 144.93467], [-37.74424, 144.93462], [-37.7444, 144.93447], [-37.74483, 144.93327], [-37.74531, 144.93307], [-37.74545, 144.93284], [-37.74536, 144.93202], [-37.74551, 144.93158], [-37.74553, 144.93079], [-37.74536, 144.92942], [-37.7457, 144.92856], [-37.74605, 144.92838], [-37.74706, 144.92829], [-37.74727, 144.92852], [-37.74732, 144.92913], [-37.74758, 144.92921], [-37.74796, 144.9288], [-37.74849, 144.92859], [-37.74892, 144.92829], [-37.74898, 144.92774], [-37.74926, 144.92741], [-37.74949, 144.92732], [-37.74984, 144.92747], [-37.75027, 144.92748], [-37.75093, 144.9271], [-37.75125, 144.9268], [-37.75156, 144.92676], [-37.75184, 144.92691], [-37.75203, 144.92712], [-37.75261, 144.92843], [-37.75246, 144.9287], [-37.75193, 144.92901], [-37.75188, 144.92917], [-37.75194, 144.92937], [-37.75266, 144.92957], [-37.75294, 144.92974], [-37.75349, 144.93021], [-37.75365, 144.93055], [-37.75334, 144.9312], [-37.75317, 144.93191], [-37.75295, 144.93212], [-37.75268, 144.93224], [-37.7526, 144.93244], [-37.75287, 144.93283], [-37.75312, 144.93339], [-37.75319, 144.93389], [-37.75311, 144.93461], [-37.75322, 144.9349], [-37.75346, 144.93506], [-37.75419, 144.93488], [-37.75448, 144.93453], [-37.7549, 144.93371], [-37.75513, 144.93362], [-37.75532, 144.93368], [-37.75609, 144.93438], [-37.75658, 144.93458], [-37.75679, 144.93457], [-37.75746, 144.9336], [-37.7577, 144.93347], [-37.75815, 144.93342], [-37.75858, 144.93301], [-37.75885, 144.933], [-37.75955, 144.93406], [-37.75977, 144.9341], [-37.76024, 144.93391], [-37.76041, 144.93398], [-37.76054, 144.93415], [-37.76061, 144.93437], [-37.76059, 144.93473], [-37.76019, 144.93541], [-37.76013, 144.93566], [-37.76022, 144.9368], [-37.76067, 144.93806]];
+const SITES=[{"n": "Bababi Djinanang Grassland", "lat": -37.696, "lng": 144.975, "r": 320, "corridor": true}, {"n": "Brunswick Central Parklands", "lat": -37.7708, "lng": 144.9608, "r": 300, "corridor": false}, {"n": "Coburg Lake Reserve", "lat": -37.733, "lng": 144.969, "r": 220, "corridor": true}, {"n": "Fawkner Memorial Park", "lat": -37.714, "lng": 144.958, "r": 190, "corridor": false}, {"n": "JP Fawkner Reserve", "lat": -37.7218, "lng": 144.9175, "r": 260, "corridor": false}, {"n": "Union Street Escarpment", "lat": -37.7738, "lng": 144.9375, "r": 420, "corridor": false}, {"n": "KW Joyce Reserve", "lat": -37.7265, "lng": 144.931, "r": 200, "corridor": false}, {"n": "Northern Golf Course", "lat": -37.7085, "lng": 144.93, "r": 210, "corridor": false}, {"n": "Jones Park", "lat": -37.7622, "lng": 144.979, "r": 250, "corridor": true}, {"n": "Hosken Reserve", "lat": -37.725, "lng": 144.952, "r": 170, "corridor": false}, {"n": "Gavin Park", "lat": -37.73, "lng": 144.959, "r": 190, "corridor": false}, {"n": "Moomba Park", "lat": -37.698, "lng": 144.9725, "r": 180, "corridor": true}, {"n": "Jacana Wetlands", "lat": -37.6908, "lng": 144.91, "r": 200, "corridor": false}, {"n": "Gowanbrae Parklands", "lat": -37.703, "lng": 144.895, "r": 220, "corridor": false}, {"n": "Edgars Creek Parkland", "lat": -37.723, "lng": 144.979, "r": 170, "corridor": true}, {"n": "Merri Creek", "lat": -37.752, "lng": 144.983, "r": 400, "corridor": true}, {"n": "Moonee Ponds Creek", "lat": -37.744, "lng": 144.929, "r": 180, "corridor": false}, {"n": "Westbreen Creek", "lat": -37.721, "lng": 144.932, "r": 290, "corridor": false}, {"n": "Merlynston Creek", "lat": -37.7125, "lng": 144.969, "r": 230, "corridor": false}, {"n": "Merri Creek northern corridor", "lat": -37.704, "lng": 144.979, "r": 160, "corridor": true}];
+const WATERWAYS=[{"n": "Merri Creek", "major": true, "pts": [[-37.691, 144.976], [-37.706, 144.979], [-37.72, 144.981], [-37.733, 144.97], [-37.743, 144.978], [-37.752, 144.983], [-37.764, 144.985], [-37.778, 144.986]]}, {"n": "Moonee Ponds Creek", "pts": [[-37.691, 144.907], [-37.7, 144.899], [-37.71, 144.908], [-37.722, 144.918], [-37.733, 144.923], [-37.744, 144.929], [-37.755, 144.938], [-37.77, 144.936], [-37.78, 144.94]]}, {"n": "Edgars Creek", "pts": [[-37.711, 144.984], [-37.72, 144.983], [-37.727, 144.979], [-37.733, 144.971]]}, {"n": "Westbreen Creek", "pts": [[-37.711, 144.934], [-37.721, 144.932], [-37.729, 144.933], [-37.735, 144.924]]}, {"n": "Merlynston Creek", "pts": [[-37.697, 144.965], [-37.709, 144.969], [-37.716, 144.97], [-37.723, 144.976]]}];
+const SUBURBS=[{"n": "BRUNSWICK", "lat": -37.767, "lng": 144.961}, {"n": "BRUNSWICK EAST", "lat": -37.767, "lng": 144.979}, {"n": "BRUNSWICK WEST", "lat": -37.763, "lng": 144.943}, {"n": "COBURG", "lat": -37.743, "lng": 144.963}, {"n": "COBURG NORTH", "lat": -37.727, "lng": 144.962}, {"n": "PASCOE VALE", "lat": -37.727, "lng": 144.94}, {"n": "PASCOE VALE SOUTH", "lat": -37.742, "lng": 144.939}, {"n": "OAK PARK", "lat": -37.718, "lng": 144.922}, {"n": "GLENROY", "lat": -37.704, "lng": 144.922}, {"n": "HADFIELD", "lat": -37.708, "lng": 144.941}, {"n": "FAWKNER", "lat": -37.709, "lng": 144.967}, {"n": "GOWANBRAE", "lat": -37.704, "lng": 144.898}];
+const DKEY={"Brunswick East": "BRUNSWICK EAST", "Coburg": "COBURG", "Brunswick": "BRUNSWICK", "Brunswick West": "BRUNSWICK WEST", "Coburg North": "COBURG NORTH", "Fawkner": "FAWKNER", "Glenroy": "GLENROY", "Pascoe Vale": "PASCOE VALE", "Oak Park": "OAK PARK", "Hadfield": "HADFIELD", "Gowanbrae": "GOWANBRAE"};
+const CORRIDOR={"name": "Merri Creek garden connection", "note": "Illustrative garden connection beside Merri Creek, from Coburg Lake toward Brunswick East. This is a demonstration route, not an adopted Council programme boundary.", "pts": [[-37.733, 144.967], [-37.741, 144.975], [-37.75, 144.979], [-37.758, 144.978], [-37.766, 144.98]]};
+const OTHER_SPINES=[[[-37.691, 144.907], [-37.7, 144.899], [-37.71, 144.908], [-37.722, 144.918], [-37.733, 144.923], [-37.744, 144.929], [-37.755, 144.938], [-37.77, 144.936], [-37.78, 144.94]], [[-37.705, 144.921], [-37.715, 144.929], [-37.728, 144.94], [-37.74, 144.959]], [[-37.709, 144.967], [-37.722, 144.966], [-37.733, 144.967]], [[-37.765, 144.944], [-37.766, 144.96], [-37.766, 144.98]], [[-37.704, 144.899], [-37.71, 144.912], [-37.72, 144.922]]];
 
 function walkSpine(pts,spacingM,lateralM,rnd){
   const segs=[];let total=0;
@@ -853,31 +767,22 @@ function walkSpine(pts,spacingM,lateralM,rnd){
 }
 
 /* Scenario cohorts. Modelled participants — never presented as records. */
+function insideBoundary(p){
+ let inside=false;for(let i=0,j=BOUNDARY.length-1;i<BOUNDARY.length;j=i++){
+ const a=BOUNDARY[i],b=BOUNDARY[j];if((a[0]>p.lat)!==(b[0]>p.lat)&&p.lng<(b[1]-a[1])*(p.lat-a[0])/(b[0]-a[0])+a[1])inside=!inside;
+ }return inside;
+}
+const SCENARIO_TEMPLATES={"pilot": [1, 3, 1, 4, 3, 4, 4, 4, 5, 4, 1, 4, 4, 0, 6, 2, 5, 5, 1, 1, 5, 2, 0, 4, 3, 7], "scale": [7, 6, 2, 3, 2, 1, 5, 3, 6, 6, 3, 5, 5, 4, 6, 1, 2, 4, 1, 0, 7, 6, 6, 7, 3, 0, 6, 2, 3, 3, 1, 2, 2, 5, 6, 1, 1, 2, 5, 0, 0, 3, 7, 0, 4, 0, 2, 2, 7, 7, 0, 6, 7, 1, 1, 4, 5, 3, 1, 5, 6, 7, 1, 4, 5, 2, 4, 2, 7, 4, 2, 1, 7, 5, 5, 0, 5, 6, 1, 3, 0, 1, 4, 1, 4, 6, 2, 2, 6, 4, 2, 4, 1, 6, 0, 6, 1, 3, 4, 3, 1, 0, 0, 3, 3, 2, 6, 2, 6, 6, 0, 6, 0, 5, 7, 3, 1, 3, 0, 5, 7, 1, 0, 0, 6, 1, 0, 5, 0, 0, 0, 1, 1, 5, 6, 0, 4, 2, 7, 1, 7, 1, 7, 0, 7, 2, 4, 7, 1, 1, 4, 5, 7, 0, 6, 0, 6, 2, 5, 1, 2, 6, 1, 7, 3, 7, 1, 5, 3, 7, 4, 3, 2, 5, 1, 2, 7, 3, 3, 0, 1, 1, 0, 5, 0, 5, 5, 1, 3, 0, 0, 3, 1, 7, 7, 0, 0, 0, 7, 7, 6, 2, 5, 3, 5, 3, 5, 7, 1, 2, 1, 2, 6, 2, 3, 7, 7, 2, 3, 5, 0, 5, 2, 0, 1, 7, 3, 7, 4, 2, 0, 2, 5, 5, 2, 0, 0, 6, 7, 1, 7, 4, 1, 6, 5, 3, 3, 6, 7, 5, 4, 0, 6, 0, 5, 1, 0, 5, 4, 4, 1, 7, 2, 7, 3, 1, 4, 4, 0, 0, 6, 0, 3, 1, 5, 4]};
 function cohort(kind){
-  const rnd=seeded(kind==="pilot"?4471:6620),pos=[];
-  if(kind==="pilot"){
-    pos.push.apply(pos,walkSpine(CORRIDOR.pts,215,64,rnd));
-  }else{
-    pos.push.apply(pos,walkSpine(CORRIDOR.pts,170,70,rnd));
-    OTHER_SPINES.forEach(s=>pos.push.apply(pos,walkSpine(s,180,72,rnd)));
-    const anchors=SITES.concat(SUBURBS.map(s=>({lat:s.lat,lng:s.lng,r:750})));
-    for(let i=0;i<120;i++){
-      const a=anchors[Math.floor(rnd()*anchors.length)],sp=(a.r||400)/MLAT*3.1;
-      pos.push({lat:a.lat+(rnd()-.5)*sp*2,lng:a.lng+(rnd()-.5)*sp*2*(MLAT/MLNG)});
-    }
-  }
-  /* Attributes are drawn by resampling the observed assessed records, so a scenario
-     says "if N more gardens participated at the condition we currently measure".
-     It is a projection from observed distribution — never a claim of measured uplift. */
-  const src=REGISTRY.gardens.filter(g=>g.assessment==="complete");
-  return pos.filter(p=>p.lat>-37.8724&&p.lat<-37.7772&&p.lng>145.0184&&p.lng<145.1130)
-    .map((p,i)=>{
-      const t=src[Math.floor(rnd()*src.length)];
-      return {modelled:true,id:"MODEL-"+i,lat:p.lat,lng:p.lng,
-        area_sqm:t.area_sqm, taxa_indigenous:t.taxa_indigenous, taxa_total:t.taxa_total,
-        canopy_pct:t.canopy_pct, layers:t.layers,
-        _layers_n:Object.keys(t.layers).filter(k=>t.layers[k]===1).length};
-    });
+ const rnd=seeded(kind==='pilot'?4471:6620);
+ const spines=kind==='pilot'?[CORRIDOR.pts]:[CORRIDOR.pts,...OTHER_SPINES];
+ const positions=spines.flatMap(s=>walkSpine(s,kind==='pilot'?215:170,64,rnd)).filter(insideBoundary);
+ return SCENARIO_TEMPLATES[kind].map((index,i)=>{
+ const t=REGISTRY.gardens[index],anchor=positions[i%positions.length];
+ let p={...anchor};
+ if(i>=positions.length){const q={lat:anchor.lat+(rnd()-.5)*.002,lng:anchor.lng+(rnd()-.5)*.002};if(insideBoundary(q))p=q;}
+ return {modelled:true,id:'MODEL-'+i,lat:p.lat,lng:p.lng,area_sqm:t.area_sqm,taxa_indigenous:t.taxa_indigenous,taxa_total:t.taxa_total,canopy_pct:t.canopy_pct,layers:t.layers,_layers_n:Object.keys(t.layers).filter(k=>t.layers[k]===1).length};
+ });
 }
 let COHORT=[];
 function scenarioNodes(){return SCENARIO==="current"?[]:COHORT}
@@ -1101,12 +1006,12 @@ let stratum="shrub", threshold=300, selected=null;
 let layers={links:true,gaps:false,sites:true,corridor:true,water:true,rings:false,demand:false,boundary:true};
 
 const SCEN={
-  current:{label:"Current evidence",
-    note:"Illustrative Boroondara example records. Every figure below is calculated from the retained demonstration dataset; these are not live Registry or Merri-bek results."},
+  current:{label:"Example baseline",
+    note:"Illustrative garden records for the Merri-bek demonstration. Scores, habitat, discovery and trend figures are examples, not live Registry results."},
   pilot:{label:"Pilot demonstration",
-    note:"Scenario, not forecast. Current evidence plus a modelled cohort along the "+CORRIDOR.name+", sized on Council's own Backyard Biodiversity cohort of "+CTX.bbp_cohort.v+" households. Modelled participants carry no scores and contribute to network geometry only."},
+    note:"Scenario, not forecast. Example baseline plus a modelled cohort along the "+CORRIDOR.name+", using the retained demonstration distribution. The small-cohort comparison input is "+CTX.bbp_cohort.v+"; it is not a Council programme count. Modelled participants carry no scores. The proposed Merri-bek pilot remains 20 gardens."},
   scale:{label:"Neighbourhood scale",
-    note:"Scenario, not forecast. Assumes sustained participation across Boroondara's corridors. Illustrates network geometry at scale; it is not measured ecological uplift."}
+    note:"Scenario, not forecast. Assumes sustained participation across Merri-bek’s creek corridors. Illustrates network geometry at scale; it is not measured ecological uplift."}
 };
 
 /* ── masthead meta ── */
@@ -1123,13 +1028,13 @@ function drawMeta(){
   const w=document.getElementById("warnBar");
   if(M.data_source!=="live"){
     w.style.display="flex";
-    w.innerHTML='<span>Prepared for Merri-bek · Boroondara demonstration</span>'
+    w.innerHTML='<span>Merri-bek · Illustrative dashboard</span>'
       +'<span style="opacity:.75;text-transform:none;letter-spacing:.02em;font-size:11px">'
-      +'All data, map locations and scenarios are retained from the Boroondara example. Not measured Merri-bek results. The proposed Merri-bek pilot is 20 gardens; the example scenarios below retain their original assumptions.</span>';
+      +'All garden scores, counts, trends and comparison figures are illustrative. Garden pins are fictional demonstration locations. The proposed pilot is 20 gardens; demonstration scenarios are separate.</span>';
   }
   document.getElementById("supp").textContent=REGISTRY.discovery.suppression_threshold;
   document.getElementById("methodNote").textContent=
-    "Ecological condition is reported from records with a completed assessment at verified or site-visit status. "
+    "This is an illustrative dataset. Verification labels, condition figures and dates describe example records, not assessed Merri-bek gardens. "
     +"Design proposals and provisional self-reported records are counted as participation but excluded from condition statistics. "
     +"Median is the headline statistic because the cohort is small enough for a single outlier to distort a mean.";
   document.getElementById("sources").innerHTML=Object.keys(CTX).map(k=>{
@@ -1167,7 +1072,7 @@ function drawBand(){
     {n:(totArea/10000).toFixed(2),unit:" ha",k:"Ecological area",
      tag:isScen,
      x:isScen
-       ? [fmt(P.measured.area)+" m² measured · "+fmt(P.modelled.area)+" m² modelled",
+       ? [fmt(P.measured.area)+" m² example · "+fmt(P.modelled.area)+" m² modelled",
           "modelled area resampled from observed records"]
        : [fmt(totArea)+" m² · assessed records only",
           "excludes "+(p.live-p.assessed)+" of "+p.live+" not yet assessed"]},
@@ -1175,7 +1080,7 @@ function drawBand(){
     {n:totTaxa,k:"Indigenous taxa records",
      tag:isScen,
      x:isScen
-       ? [fmt(P.measured.taxa)+" measured · "+fmt(P.modelled.taxa)+" modelled",
+       ? [fmt(P.measured.taxa)+" example · "+fmt(P.modelled.taxa)+" modelled",
           "sum across gardens · not a unique species count"]
        : ["sum across gardens · not a unique species count",
           den(d.rich30,d.n)+" records with 30 or more indigenous taxa"]},
@@ -1183,14 +1088,14 @@ function drawBand(){
     {n:c.median===null?"—":c.median,unit:" /100",k:"Ecological condition · median",
      tag:false,
      x:["range "+c.min+"–"+c.max+" · n="+c.n,
-        isScen?"measured records only · condition is never projected"
+        isScen?"example records only · condition is never projected"
               :"mean "+c.mean+" · verified and site visit only"]},
 
     {n:totL4,k:"Gardens with 4+ structural layers",
      tag:isScen,
      x:isScen
        ? [den(totL4,totAssessed)+" of assessed and modelled gardens",
-          P.measured.l4+" measured · "+P.modelled.l4+" modelled"]
+          P.measured.l4+" example · "+P.modelled.l4+" modelled"]
        : [den(totL4,P.measured.n),
           den(l5.n,l5.d)+" with all five"]},
 
@@ -1198,7 +1103,7 @@ function drawBand(){
      tag:false,
      x:[den(t.n,t.d)+" with two or more readings",
         t.medianChange===null?"no repeat readings yet"
-          :"median change "+(t.medianChange>=0?"+":"")+t.medianChange+" points · measured only"]},
+          :"median change "+(t.medianChange>=0?"+":"")+t.medianChange+" points · example records only"]},
 
     {n:D.unique,k:"Local ecological interest",
      tag:D.modelled,
@@ -1264,7 +1169,7 @@ function drawNet(){
 
   if(layers.corridor)
     L.polyline(CORRIDOR.pts,{color:SIG,weight:9,opacity:.16,lineCap:"round"}).addTo(G.corridor)
-      .bindTooltip(CORRIDOR.name+" — Council program area",{className:"maptip",sticky:true});
+      .bindTooltip(CORRIDOR.name+" — illustrative connection, not a Council programme boundary",{className:"maptip",sticky:true});
 
   if(layers.sites)
     SITES.forEach((s,i)=>{
@@ -1273,7 +1178,7 @@ function drawNet(){
           dashArray:k===2?null:"4 5",fillColor:SIG,fillOpacity:[.04,.05,.065][k]}).addTo(G.rings));
       L.polygon(blobLatLng(s,1700+i),{color:SIG,weight:s.corridor?2:1.2,opacity:s.corridor?.9:.65,
         fillColor:SIG,fillOpacity:.26}).addTo(G.sites)
-        .bindTooltip(s.n+(s.corridor?" · Stepping Stone Corridor":""),{className:"maptip",sticky:true});
+        .bindTooltip(s.n+(s.corridor?" · Illustrative garden connection":""),{className:"maptip",sticky:true});
     });
 
   if(layers.gaps)
@@ -1332,7 +1237,7 @@ function drawSide(){
     {n:"Within 300 m",t:g=>g._band===300,p:"+2 connectivity points"},
     {n:"Beyond 300 m",t:g=>g._band===0,p:"0 points · recruitment target"},
     {n:"Adjacent to another registered garden",t:g=>g._adj>0,p:"1 → +3 · 2 → +4 · 3 or more → +6"},
-    {n:"Confirmed corridor node",t:()=>false,p:"+5 · assessor-asserted; none confirmed to date"}
+    {n:"Confirmed corridor node",t:()=>false,p:"+5 · assessor-asserted; none confirmed in this example"}
   ];
   const max=Math.max.apply(null,rows.map(r=>live.filter(r.t).length))||1;
   let sel="";
@@ -1385,7 +1290,7 @@ function drawStratDetail(){
     +'<p class="why">'+S.why+'</p>'
     +'<p class="note"><b class="mono" style="font-weight:400">'+den(missing,c.d)+'</b> of assessed gardens record no '
     +S.n.toLowerCase()+'. Eligibility class: assessed records.</p></div>'
-    +'<div><span class="lab" style="display:block;margin-bottom:12px">Indigenous species recorded in this layer</span>'
+    +'<div><span class="lab" style="display:block;margin-bottom:12px">Example species in this layer</span>'
     +'<div class="spplist">'+S.spp.map(s=>'<div class="r">'
     +(/^[A-Z][a-z]+ [a-z]/.test(s)?'<i>'+s+'</i>':s)+'</div>').join('')+'</div></div>';
 }
@@ -1394,10 +1299,10 @@ function drawCanopy(){
   const cells=[
     {n:w.v===null?"—":w.v,unit:"%",k:"Registered garden canopy · area weighted",
      src:den(w.n,w.d)+" records with a canopy measurement"},
-    {n:CTX.canopy_private.v,unit:"%",k:"Boroondara private-land canopy",src:CTX.canopy_private.src},
-    {n:CTX.canopy_total.v,unit:"%",k:"Municipal canopy cover",src:CTX.canopy_total.src},
-    {n:CTX.canopy_target.v,unit:"% by "+CTX.canopy_target.year,k:"Council canopy target",
-     src:CTX.canopy_target.src+" — confirm before publication"}
+    {n:CTX.canopy_private.v,unit:"%",k:"Illustrative private-land canopy baseline",src:CTX.canopy_private.src},
+    {n:CTX.canopy_total.v,unit:"%",k:"Illustrative municipal canopy cover",src:CTX.canopy_total.src},
+    {n:CTX.canopy_target.v,unit:"% by "+CTX.canopy_target.year,k:"Illustrative canopy scenario",
+     src:CTX.canopy_target.caution}
   ];
   document.getElementById("canopyRow").innerHTML=cells.map(c=>
     '<div><div class="n">'+c.n+'<small>'+c.unit+'</small></div><div class="k">'+c.k+'</div>'
@@ -1544,16 +1449,16 @@ function drawTraj(){
 function drawAlign(){
   const w=canopyWeighted(), d=diversity(), p=participation();
   const cards=[
-    {t:"Private land",g:"Urban Biodiversity Strategy",
-     b:"Records ecological action occurring outside Council-managed land. Council manages "+CTX.biodiversity_sites.v
-       +" biodiversity sites over "+CTX.biodiversity_area.v+" ha; this is the private-land layer alongside it.",
+    {t:"Private land",g:"Nature Plan",
+     b:"Records ecological action occurring outside Council-managed land. The illustrative comparison uses "+CTX.biodiversity_sites.v
+       +" nature sites over "+CTX.biodiversity_area.v+" ha. These are demonstration inputs, not Merri-bek totals.",
      m:den(p.assessed,p.live)+" records assessed"},
-    {t:"Native plants",g:fmt(CTX.plants_target.v)+" plants / year",
-     b:"Measures species, structure and change rather than plants distributed. Registered gardens currently record "
+    {t:"Native plants",g:fmt(CTX.plants_target.v)+" plants / year · example",
+     b:"Measures species, structure and change rather than plants distributed. The example gardens contain "
        +fmt(d.indigenous)+" indigenous taxa across "+d.n+" assessed records.",
      m:den(d.rich30,d.n)+" with 30+ indigenous taxa"},
-    {t:"Canopy",g:CTX.canopy_target.v+"% by "+CTX.canopy_target.year,
-     b:"Tracks private-garden canopy contribution against Council's private-land baseline of "
+    {t:"Canopy",g:CTX.canopy_target.v+"% by "+CTX.canopy_target.year+" · example",
+     b:"Tracks private-garden canopy contribution against the illustrative private-land baseline of "
        +CTX.canopy_private.v+"%. Area weighted, so a courtyard does not outvote a large block.",
      m:(w.v===null?"—":w.v+"% across "+den(w.n,w.d))},
     {t:"Evidence",g:"Monitoring and best available information",

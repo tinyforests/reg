@@ -21,6 +21,19 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 ---
 
 
+## 2026-11-05 — Complete Merri-bek demonstration geography and copy
+
+**Decision:** Replace all inherited municipality names, suburbs, sites, waterways, IDs, source claims and geography in the Merri-bek dashboard. Use the Victorian Government Merri-bek LGA polygon (ABS 24700), indicative local nature-site centres and generalised creek lines, with fictional garden locations inside the boundary. Keep every stored ecological score, count, assessment date, comparison input and scenario attribute distribution unchanged. Spatial distance/connectivity calculations update to match the new demonstration positions.
+
+**Reason:** Tyson requested a complete local reskin while retaining the numbers and full dashboard functionality. Retained figures cannot be attributed to Merri-bek Council: label them illustrative, separate programme references from numeric inputs, and distinguish the example 30% by 2040 canopy scenario from Council’s published 29% by 2050 target. Legacy example pillar allocations remain explicitly distinguished from the current Registry method. No canonical garden record or scoring engine changes.
+
+**Files affected:** `decks/merri-bek/dashboard.html`, `decks/merri-bek/detail.html`, `docs/decisions-log.md`.
+
+**Notes:** The detail page opening uses Tyson’s supplied continuing-record wording verbatim. Local nature references: Council Gardens for Wildlife guide, Nature Plan and Urban Forest Strategy pages. Nature-site shapes and creek lines are presentation geometry, not surveyed boundaries. Garden records use `DEMO-MERRI-` IDs and are not participants. The proposed pilot remains 20 gardens; the demonstration scenario sizes are retained.
+
+---
+
+
 ## 2026-11-05 — Retain the full Boroondara dashboard for the Merri-bek demonstration
 
 **Decision:** At Tyson’s explicit request, replace the reduced Merri-bek dashboard with the complete Boroondara dashboard: same dataset, Leaflet geography, layers, controls, calculations and scenarios. Reskin the title and introduction for Merri-bek; retain source labels and prominently identify the Boroondara illustrative dataset. The demonstration’s original cohort assumptions are distinct from the proposed 20-garden Merri-bek pilot.
