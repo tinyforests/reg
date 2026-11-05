@@ -828,3 +828,5 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 - Remove the repeated garden name and location above the score tiles. Keep the live garden name binding for the existing footer.
 
 - Set both headline numbers on the homepage card in IBM Plex Mono to match their denominators.
+
+- Extend matching IBM Plex Mono score and badge numerals to all garden profiles through the shared scorecard stylesheet.
