@@ -826,3 +826,5 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 ## 5 Nov 2026 — Shorten homepage scorecard header
 
 - Remove the repeated garden name and location above the score tiles. Keep the live garden name binding for the existing footer.
+
+- Set both headline numbers on the homepage card in IBM Plex Mono to match their denominators.
