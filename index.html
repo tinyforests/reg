@@ -162,8 +162,7 @@
         <article class="eco-card home-eco-card" aria-label="Featured garden ecological scorecard">
           <div class="card">
             <p class="eyebrow">Ecological function</p>
-            <h2 id="heroIdentity" class="home-card-name">Bush Garden</h2>
-            <p id="heroLocation" class="eyebrow">Wattle Glen · VIC</p>
+            <h2 id="heroIdentity" class="home-card-name" hidden>Bush Garden</h2>
             <div class="hero" id="homeScoreHero">
               <div class="score" id="heroScore">83</div>
               <div class="score-meta"><span class="of">OF 100</span><span class="tier" id="heroTier">Ecosystem Garden</span></div>
@@ -617,7 +616,6 @@
     setText('heroScore', scoreOf(g));
     setText('heroTier', (provisional ? 'Provisional · ' : '') + HOME_TIERS[tierIdxFromScore(scoreOf(g))]);
     setText('heroIdentity', g.garden_name || 'Registered garden');
-    setText('heroLocation', [g.suburb, g.state].filter(Boolean).join(' · '));
     setText('heroVerification', provisional ? 'Provisional / unverified' : (g.verification_label || 'Verified'));
     setText('heroDateLabel', provisional ? 'Verification' : 'Last verified');
     setText('heroVerifiedDate', provisional ? 'Pending' : (g.last_verified || 'Not recorded'));

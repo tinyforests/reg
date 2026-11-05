@@ -821,3 +821,8 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 
 - **Decision:** Reduce switch text, horizontal/vertical padding and gap below it across all profiles. Desktop buttons are 30px high; touch pointers retain a 36px minimum. Keep labels, focus indication, selection and session persistence.
 - **Files:** `assets/css/reg-profile-view.css`, canonical profile asset versions, `docs/decisions-log.md`.
+
+
+## 5 Nov 2026 — Shorten homepage scorecard header
+
+- Remove the repeated garden name and location above the score tiles. Keep the live garden name binding for the existing footer.
