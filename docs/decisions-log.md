@@ -27,7 +27,9 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 **Reason:** Give Merri-bek one complete follow-up resource without importing another council’s programmes, stale figures or unsupported assurances. Whole-register figures fetch the canonical ledger and species catalogue with dated computed fallbacks; the dashboard remains explicitly illustrative.
 
-**Files affected:** `decks/merri-bek/detail.html`, `docs/decisions-log.md`.
+**Files affected:** `decks/merri-bek/detail.html`, `decks/merri-bek/dashboard.html`, `docs/decisions-log.md`.
+
+**Navigation:** Add Presentation and Detail links beside the dashboard theme button, using the same button styling, as requested.
 
 
 ## 2026-11-05 — Complete Merri-bek demonstration geography and copy

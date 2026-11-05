@@ -34,13 +34,14 @@ p{margin:0}
 .lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.20em;text-transform:uppercase;color:var(--faint)}
 .mono{font-family:"IBM Plex Mono",monospace}
 .den{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--faint);letter-spacing:.04em}
-button{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+button,.nav-btn{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
   background:transparent;color:var(--dim);border:1px solid var(--rule);padding:7px 11px;cursor:pointer;transition:all .18s}
-button:hover{color:var(--ink);border-color:var(--signal)}
+button:hover,.nav-btn:hover{color:var(--ink);border-color:var(--signal)}
 button[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#fff6e6}
 html[data-theme="canopy"] button[aria-pressed="true"]{color:#10150c}
-button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+button:focus-visible,.nav-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
+.nav-btn{display:inline-block;text-decoration:none;line-height:normal;white-space:nowrap}
 /* masthead */
 .mast{border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:1500}
 .mast .top{display:flex;flex-wrap:wrap;align-items:stretch}
@@ -48,7 +49,7 @@ button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .mast .who .e{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
 .mast .who .h{font-family:"Fraunces",Georgia,serif;font-size:22px;letter-spacing:-.015em;line-height:1.15;margin-top:3px}
 .mast .who .sub{font-size:12.5px;color:var(--dim);margin-top:4px;max-width:64ch}
-.ctl{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--rule)}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:12px 16px;border-right:1px solid var(--rule)}
 .ctl:last-child{border-right:0}
 .ctl .lab{margin-right:4px}
 .meta{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--hair)}
@@ -281,7 +282,7 @@ footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
       <div class="h">Private-land biodiversity · Merri-bek</div>
       <div class="sub">Private-land ecology in Merri-bek · interactive demonstration for a proposed 20-garden pilot.</div>
     </div>
-    <div class="ctl"><span class="lab">Theme</span><button id="themeBtn">Understory</button></div>
+    <div class="ctl"><a class="nav-btn" href="deck.html">Presentation</a><a class="nav-btn" href="detail.html">Detail</a><button id="themeBtn">Understory</button></div>
   </div>
   <div class="meta" id="metaStrip"></div>
 </div>
