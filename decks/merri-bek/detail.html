@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="canopy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merri-bek pilot &amp; method · Ecological Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+:root{
+  --signal:#7C9A52; --brass:#B49A63; --clay:#9A6A4F;
+  --bg:#fff0dc; --panel:#f9e9d2; --sunk:#f2ddbe;
+  --ink:#2b3125; --dim:rgba(43,49,37,.66); --faint:rgba(43,49,37,.42);
+  --ghost:rgba(43,49,37,.20); --rule:rgba(43,49,37,.22); --hair:rgba(43,49,37,.10);
+  --tilefx:sepia(.30) saturate(.72) hue-rotate(-6deg) brightness(1.04) contrast(.95);
+}
+html[data-theme="canopy"]{
+  --bg:#171c13; --panel:#1f251a; --sunk:#252c1e;
+  --ink:#f2e8d6; --dim:rgba(242,232,214,.64); --faint:rgba(242,232,214,.40);
+  --ghost:rgba(242,232,214,.22); --rule:rgba(242,232,214,.20); --hair:rgba(242,232,214,.09);
+  --tilefx:saturate(.55) hue-rotate(28deg) brightness(.92) contrast(1.05);
+}
+*{box-sizing:border-box;border-radius:0!important}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .5s,color .5s}
+h1,h2,h3,h4{margin:0;font-weight:400}
+p{margin:0}
+.lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.20em;text-transform:uppercase;color:var(--faint)}
+.mono{font-family:"IBM Plex Mono",monospace}
+.den{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--faint);letter-spacing:.04em}
+button{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  background:transparent;color:var(--dim);border:1px solid var(--rule);padding:7px 11px;cursor:pointer;transition:all .18s}
+button:hover{color:var(--ink);border-color:var(--signal)}
+button[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#fff6e6}
+html[data-theme="canopy"] button[aria-pressed="true"]{color:#10150c}
+button:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+/* masthead */
+.mast{border-bottom:1px solid var(--rule);background:var(--panel);position:sticky;top:0;z-index:1500}
+.mast .top{display:flex;flex-wrap:wrap;align-items:stretch}
+.mast .who{padding:15px 24px;flex:1 1 380px;min-width:0;border-right:1px solid var(--rule)}
+.mast .who .e{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.mast .who .h{font-family:"Fraunces",Georgia,serif;font-size:22px;letter-spacing:-.015em;line-height:1.15;margin-top:3px}
+.mast .who .sub{font-size:12.5px;color:var(--dim);margin-top:4px;max-width:64ch}
+.ctl{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--rule)}
+.ctl:last-child{border-right:0}
+.ctl .lab{margin-right:4px}
+.meta{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--hair)}
+.meta div{padding:8px 16px;border-right:1px solid var(--hair);font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim)}
+.meta div:last-child{border-right:0}
+.meta b{font-weight:400;color:var(--ink)}
+.meta .key{display:inline-flex;align-items:center;gap:6px}
+.meta .key i{width:8px;height:8px;display:inline-block}
+.i-ver{background:var(--signal)}
+.i-sv{background:var(--brass)}
+.i-prov{background:transparent;border:1px dashed var(--faint)}
+.i-prop{background:var(--ghost)}
+.warn{background:var(--clay);color:#fff6e6;padding:9px 24px;font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;display:flex;gap:10px;align-items:center}
+
+/* scenario bar */
+.scen{border-bottom:1px solid var(--rule);background:var(--sunk);display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:12px 24px}
+.scen .grp{display:flex;gap:6px;align-items:center}
+.scen .note{font-size:11.5px;color:var(--dim);flex:1 1 340px;min-width:0}
+
+/* metrics */
+.band{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--rule)}
+.st{padding:17px 16px 15px;border-right:1px solid var(--hair);min-width:0}
+.st:last-child{border-right:0}
+.st .n{font-family:"IBM Plex Mono",monospace;font-size:30px;line-height:1;letter-spacing:-.02em}
+.st .n small{font-size:13px;color:var(--faint)}
+.st .k{margin-top:7px;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--faint);line-height:1.55}
+.st .x{margin-top:6px;font-size:10.5px;color:var(--dim);line-height:1.5}
+.st .x span{display:block}
+.st.modelled{background:linear-gradient(var(--sunk),var(--sunk))}
+.mtag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:7.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--clay);border:1px solid var(--clay);padding:1px 4px;margin-left:5px;vertical-align:1px}
+
+/* sections */
+.sec{border-bottom:1px solid var(--rule)}
+.sec>.head{padding:26px 24px 20px;max-width:1500px}
+.sec>.head .lab{display:block;margin-bottom:9px}
+.sec>.head h2{font-family:"Fraunces",Georgia,serif;font-size:26px;letter-spacing:-.02em;line-height:1.14}
+.sec>.head p{margin-top:9px;font-size:13.5px;color:var(--dim);max-width:76ch;line-height:1.6}
+
+/* map */
+.netwrap{display:grid;grid-template-columns:minmax(0,1fr) 344px}
+.mp{position:relative;border-right:1px solid var(--rule);background:var(--sunk)}
+#map{width:100%;height:720px;background:var(--sunk)}
+.leaflet-tile-pane{filter:var(--tilefx)}
+.leaflet-container{background:var(--sunk);font-family:"IBM Plex Sans",sans-serif}
+.leaflet-control-attribution{font-family:"IBM Plex Mono",monospace!important;font-size:9px!important;
+  background:var(--panel)!important;color:var(--dim)!important;border:1px solid var(--rule);border-right:0;border-bottom:0}
+.leaflet-control-attribution a{color:var(--dim)!important}
+.leaflet-bar a{background:var(--panel)!important;color:var(--ink)!important;border-color:var(--rule)!important}
+.leaflet-control-scale-line{background:var(--panel)!important;border-color:var(--rule)!important;color:var(--dim)!important;
+  font-family:"IBM Plex Mono",monospace!important;font-size:9.5px!important}
+.maptip{font-family:"IBM Plex Mono",monospace;font-size:10px;background:var(--panel);border:1px solid var(--rule);
+  color:var(--ink);box-shadow:none;padding:3px 7px}
+.maptip::before{display:none}
+.panel-tl,.panel-tr{position:absolute;top:14px;z-index:1200;background:var(--panel);border:1px solid var(--rule);padding:13px 14px}
+.panel-tl{left:54px;width:210px}
+.panel-tr{right:14px;width:262px}
+.panel-tl .lab,.panel-tr .lab{display:block;margin-bottom:8px}
+.thr{font-family:"IBM Plex Mono",monospace;font-size:22px;line-height:1;margin:2px 0 3px}
+.thr small{font-size:10px;color:var(--faint)}
+input[type=range]{width:100%;appearance:none;height:2px;background:var(--rule);margin:6px 0 0;padding:0}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;background:var(--signal);border:0;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;background:var(--signal);border:0;border-radius:0;cursor:pointer}
+.divide{margin:12px 0 10px;border-top:1px solid var(--hair)}
+.tog{display:flex;align-items:center;gap:8px;padding:3.5px 0;font-size:11.5px;color:var(--dim);cursor:pointer;user-select:none}
+.tog:hover{color:var(--ink)}
+.tog input{appearance:none;width:12px;height:12px;border:1px solid var(--faint);margin:0;flex:none;cursor:pointer}
+.tog input:checked{background:var(--signal);border-color:var(--signal)}
+.ro{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:4.5px 0;
+  border-bottom:1px solid var(--hair);font-size:11px;color:var(--dim)}
+.ro:last-of-type{border-bottom:0}
+.ro b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:14px;color:var(--ink)}
+.offline{position:absolute;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;background:var(--sunk);padding:40px;text-align:center}
+.offline p{font-size:13px;color:var(--dim);max-width:44ch;line-height:1.6}
+.privacy{padding:16px 24px;background:var(--panel);border-top:1px solid var(--rule);display:flex;gap:16px;align-items:flex-start}
+.privacy .lab{flex:none;padding-top:2px}
+.privacy p{font-size:12px;color:var(--dim);line-height:1.6;max-width:92ch}
+.sidepanel{padding:20px 22px;background:var(--panel);align-self:start;position:sticky;top:120px}
+.bnd{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:9px 0;border-bottom:1px solid var(--hair)}
+.bnd:last-of-type{border-bottom:0}
+.bnd .n{font-size:12px}
+.bnd .c{font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+.bnd .tr{grid-column:1/-1;height:5px;background:var(--hair)}
+.bnd .tr i{display:block;height:100%;background:var(--brass)}
+.bnd .s{grid-column:1/-1;font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--faint)}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6;border-left:2px solid var(--brass);padding-left:11px;margin-top:14px}
+.selcard{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.selcard .rid{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--dim)}
+.selcard .sc{font-family:"IBM Plex Mono",monospace;font-size:34px;line-height:.9;color:var(--signal);margin:8px 0 4px}
+.selcard .kv{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);padding:4px 0;border-bottom:1px solid var(--hair)}
+.selcard .kv:last-child{border-bottom:0}
+.selcard .kv b{font-family:"IBM Plex Mono",monospace;font-weight:400;color:var(--ink)}
+.pillb{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.13em;
+  text-transform:uppercase;padding:3px 7px;border:1px solid;margin:2px 4px 2px 0}
+
+/* structure */
+.strat-btns{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.sbtn{border:0;border-right:1px solid var(--hair);background:transparent;text-align:left;padding:17px 16px 15px;
+  cursor:pointer;text-transform:none;letter-spacing:0;font-family:inherit;color:inherit}
+.sbtn:last-child{border-right:0}
+.sbtn:hover{background:var(--sunk)}
+.sbtn[aria-pressed="true"]{background:var(--panel);color:inherit}
+.sbtn[aria-pressed="true"] .sbn{color:var(--signal)}
+.sbtn .sbh{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+.sbtn .sbt{font-family:"Fraunces",Georgia,serif;font-size:16px;margin:5px 0 9px;letter-spacing:-.01em}
+.sbtn .sbn{font-family:"IBM Plex Mono",monospace;font-size:24px;line-height:1}
+.sbtn .sbr{margin-top:8px;height:5px;background:var(--hair)}
+.sbtn .sbr i{display:block;height:100%;background:var(--signal);transition:width .7s cubic-bezier(.22,.8,.28,1)}
+.strat-detail{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.strat-detail>div{padding:22px 24px;border-right:1px solid var(--hair)}
+.strat-detail>div:last-child{border-right:0}
+.strat-detail h3{font-family:"Fraunces",Georgia,serif;font-size:21px;letter-spacing:-.01em}
+.strat-detail .why{font-size:13px;color:var(--dim);line-height:1.65;margin-top:10px;max-width:58ch}
+.spplist{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.spplist .r{padding:6px 0;border-bottom:1px solid var(--hair);font-size:12.5px}
+.spplist .r i{font-family:"IBM Plex Mono",monospace;font-style:italic;color:var(--dim)}
+.canopy{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule)}
+.canopy>div{padding:20px 18px;border-right:1px solid var(--hair)}
+.canopy>div:last-child{border-right:0}
+.canopy .n{font-family:"IBM Plex Mono",monospace;font-size:28px;line-height:1}
+.canopy .k{margin-top:7px;font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);line-height:1.55}
+.canopy .src{margin-top:7px;font-size:10px;color:var(--faint);line-height:1.5}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(5,1fr)}
+.pcol{border-right:1px solid var(--hair);padding:20px 18px 22px}
+.pcol:last-child{border-right:0}
+.pcol .pn{font-family:"Fraunces",Georgia,serif;font-size:17px}
+.pcol .pw{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;color:var(--faint);text-transform:uppercase;margin-top:2px}
+.pcol .big{font-family:"IBM Plex Mono",monospace;font-size:30px;line-height:1;margin:14px 0 2px}
+.pcol .big small{font-size:14px;color:var(--faint)}
+.pcol .tr{height:6px;background:var(--hair);margin:10px 0 4px}
+.pcol .tr i{display:block;height:100%;background:var(--signal)}
+.pcol .dist{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair)}
+.pcol .kv{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);padding:3px 0}
+.pcol .kv b{font-family:"IBM Plex Mono",monospace;font-weight:400;color:var(--ink)}
+.pcol .gap{margin-top:12px;font-size:11px;color:var(--clay);line-height:1.5}
+
+/* generic grids */
+.quad{display:grid;grid-template-columns:repeat(4,1fr)}
+.quad>div{border-right:1px solid var(--hair);padding:20px 18px}
+.quad>div:last-child{border-right:0}
+.trio{display:grid;grid-template-columns:repeat(3,1fr)}
+.trio>div{border-right:1px solid var(--hair);padding:22px}
+.trio>div:last-child{border-right:0}
+.quad h3,.trio h3{font-family:"Fraunces",Georgia,serif;font-size:17px;margin-bottom:4px}
+.quad .sb,.trio .sb{font-size:11.5px;color:var(--dim);margin-bottom:16px;line-height:1.55}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:6px 0;border-bottom:1px solid var(--hair);font-size:12px}
+.row:last-of-type{border-bottom:0}
+.row .nm i{font-style:italic;color:var(--faint);font-size:11px;font-family:"IBM Plex Mono",monospace}
+.row .ct{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--dim);white-space:nowrap}
+.row .tr{grid-column:1/-1;height:4px;background:var(--hair);margin-top:3px}
+.row .tr i{display:block;height:100%;background:var(--signal)}
+.row.wd .tr i{background:var(--clay)}
+
+/* opportunity table */
+.opp{width:100%;border-collapse:collapse;font-size:12.5px}
+.opp th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint);font-weight:400;padding:10px 24px;border-bottom:1px solid var(--rule)}
+.opp td{padding:12px 24px;border-bottom:1px solid var(--hair);color:var(--dim);vertical-align:top}
+.opp tr:last-child td{border-bottom:0}
+.opp td.g{color:var(--ink)}
+.opp td.n{font-family:"IBM Plex Mono",monospace;color:var(--ink);white-space:nowrap}
+.opp .bar{height:5px;background:var(--hair);margin-top:6px;width:120px}
+.opp .bar i{display:block;height:100%;background:var(--clay)}
+.opp td.p{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+
+/* provenance / demand / change */
+.pv{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin-bottom:13px}
+.pv .n{font-size:12px}
+.pv .c{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--dim)}
+.pv .tr{grid-column:1/-1;height:5px;background:var(--hair)}
+.pv .tr i{display:block;height:100%}
+.pv .s{grid-column:1/-1;font-size:10px;color:var(--faint);font-family:"IBM Plex Mono",monospace;line-height:1.5}
+.fs{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--hair);font-size:11.5px;color:var(--dim)}
+.fs:last-child{border-bottom:0}
+.fs b{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:13px;color:var(--ink)}
+.fs .pc{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--faint);margin-left:8px}
+svg.chart{display:block;width:100%;height:auto;margin:4px 0 10px}
+
+/* alignment strip */
+.align{display:grid;grid-template-columns:repeat(4,1fr)}
+.align>div{border-right:1px solid var(--hair);padding:22px 20px}
+.align>div:last-child{border-right:0}
+.align .t{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.align .g{font-family:"Fraunces",Georgia,serif;font-size:19px;margin:7px 0 3px;letter-spacing:-.01em}
+.align .b{font-size:12px;color:var(--dim);line-height:1.6;margin-top:8px}
+.align .m{margin-top:12px;padding-top:10px;border-top:1px solid var(--hair);font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink)}
+
+footer{padding:24px;border-top:1px solid var(--rule)}
+footer .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+footer h4{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+footer p,footer li{font-size:11.5px;color:var(--dim);line-height:1.65}
+footer ul{margin:0;padding-left:16px}
+footer .sig{margin-top:24px;padding-top:16px;border-top:1px solid var(--hair);
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);text-align:right}
+
+@media (max-width:1300px){
+  .band{grid-template-columns:repeat(4,1fr)}
+  .st{border-bottom:1px solid var(--hair)}
+  .netwrap{grid-template-columns:1fr}
+  .mp{border-right:0;border-bottom:1px solid var(--rule)}
+  .sidepanel{position:static}
+  .pillars,.canopy,.quad,.align{grid-template-columns:repeat(2,1fr)}
+  .pcol,.canopy>div,.quad>div,.align>div{border-bottom:1px solid var(--hair)}
+  .strat-btns{grid-template-columns:repeat(3,1fr)}
+  .strat-detail,.trio{grid-template-columns:1fr}
+  .strat-detail>div,.trio>div{border-right:0;border-bottom:1px solid var(--hair)}
+  footer .cols{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .band,.pillars,.canopy,.quad,.align,.strat-btns{grid-template-columns:1fr}
+  #map{height:440px}
+  .panel-tl,.panel-tr{position:static;width:auto;border:0;border-bottom:1px solid var(--rule)}
+  .spplist{grid-template-columns:1fr}
+  .opp th,.opp td{padding:9px 14px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+:root{--signal:#7a9e5f;--bg:#fff0dc;--panel:#f7ead6;--ink:#3d4535}html[data-theme="canopy"]{--bg:#3d4535;--panel:#485141;--sunk:#3d4535;--ink:#fff0dc}
+a{color:inherit;text-underline-offset:4px}.mast .h{font-size:25px}.navlinks{display:flex;gap:18px;flex-wrap:wrap;padding:15px 24px;font-size:13px}.band{grid-template-columns:repeat(4,1fr)}.st{padding:25px}.st .n{font-size:42px}.st .k{font-size:10px;color:var(--dim)}.st .x{font-size:12px}.content{padding:0 24px 28px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}.card{padding:25px;background:var(--panel)}.card h3{font-family:Fraunces,serif;font-size:22px;margin:10px 0}.card p{font-size:14px;color:var(--dim);max-width:65ch}.empty{padding:45px 28px;border:1px dashed var(--rule);font-family:Fraunces,serif;font-size:24px}.empty small{display:block;font:14px/1.6 'IBM Plex Sans',sans-serif;color:var(--dim);margin-top:12px}.netwrap{grid-template-columns:minmax(0,1fr) 320px}#map{height:440px}.sidepanel{padding:25px}.sidepanel h3{font:24px Fraunces,serif;margin-bottom:15px}.sidepanel p{font-size:14px;line-height:1.7;color:var(--dim);margin-bottom:18px}.pillars{display:grid;grid-template-columns:repeat(5,1fr)}.pillar{padding:22px;border-right:1px solid var(--hair)}.pillar b{font:30px 'IBM Plex Mono',monospace}.pillar h3{font-size:14px;margin:12px 0}.pillar p{font-size:12px;color:var(--dim)}.longcopy{max-width:900px;margin:auto}.longcopy section{padding:40px 24px;border-bottom:1px solid var(--rule)}.longcopy h1{font:clamp(38px,6vw,66px)/1.1 Fraunces,serif;margin:18px 0}.longcopy h2{font:30px/1.2 Fraunces,serif;margin:15px 0}.longcopy p,.longcopy li{font-size:16px;line-height:1.75;margin:16px 0;color:var(--dim)}.longcopy strong{color:var(--ink)}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:14px;border-bottom:1px solid var(--rule)}footer{padding:28px 24px;font-size:12px;color:var(--dim)}[hidden]{display:none!important}.scen .grp{flex-wrap:wrap}.mast{position:static}.cta{display:inline-block;border:1px solid var(--rule);padding:12px 18px;margin:12px 12px 0 0;text-decoration:none}.notice{border-left:3px solid var(--signal);padding:18px;background:var(--panel)}@media(max-width:750px){.cards,.netwrap{grid-template-columns:1fr}.band{grid-template-columns:repeat(2,1fr)}.pillars{grid-template-columns:1fr}.pillar{border-bottom:1px solid var(--hair)}.ctl{padding:12px 24px}.st{padding:20px}.navlinks{gap:12px}.longcopy h1{font-size:40px}#map{height:340px}}@media print{.ctl,.scen{display:none}.mast{position:static}body{background:#fff;color:#222}}
+</style></head>
+<body><div class="mast"><div class="top"><div class="who"><div class="e">Ecological Registry · Merri-bek City Council</div><h1 class="h">Private gardens, a shared ecological record.</h1><div class="sub">Proposed 20-garden pilot · Follow-up to 5 Nov 2026</div></div><div class="ctl"><button id="themeBtn" type="button">Canopy</button></div></div><nav class="navlinks" aria-label="Pilot materials"><a href="detail.html">Pilot &amp; method</a><a href="dashboard.html">Council dashboard</a><a href="deck.html">Presentation</a></nav></div><main class="longcopy"><section><span class="lab">Meeting follow-up · 5 Nov 2026</span><h1>Twenty gardens.<br>A record that keeps growing.</h1><p>A proposed Merri-bek pilot to make the work happening in private gardens visible over time, building on the relationship between residents and Gardens for Wildlife.</p><p>Each participating garden would hold a dated ecological baseline, a clear account of its evidence and a way to record what happens next. Together, those records could give Council a more useful picture of private-land ecology.</p><a class="cta" href="deck.html">Presentation</a><a class="cta" href="dashboard.html">Merri-bek dashboard</a></section>
+<section id="pilot"><span class="lab">01 · Proposed pilot</span><h2>A small cohort, shaped together.</h2><p><strong>Scope: 20 voluntarily participating gardens.</strong> This is the proposal discussed, not an approved or recruited cohort. Participant criteria, responsibilities, timing and costs remain to be agreed with Council.</p><ol><li><strong>Council invites.</strong> Merri-bek communicates the opportunity through its own channels. Its resident list stays with Council.</li><li><strong>The steward opts in.</strong> A resident approaches the Registry directly, provides their own information and chooses what may be published. Existing Gardens for Wildlife support remains available without Registry participation.</li><li><strong>A baseline is recorded.</strong> A steward may provide their own Gardens for Wildlife assessment. We identify what it supports, what is missing and what needs further assessment. A Council report is evidence, not Council verification of a Registry score.</li><li><strong>The garden develops.</strong> The record helps the steward identify practical next steps for planting, soil, water and habitat.</li><li><strong>We return to the evidence.</strong> A follow-up around 12 months is proposed, subject to agreement. We record establishment and losses as well as improvements, and state where follow-up evidence is missing.</li></ol><p>The pilot should test usefulness to residents and officers, assessment effort, data completeness and repeatability. It cannot establish mature habitat recovery or biodiversity net gain from a score increase alone.</p></section>
+<section id="method"><span class="lab">02 · Current scoring</span><h2>What the score means today.</h2><p>The Registry’s published method scores a garden out of 100. It combines ecological indicators with the strength of its documentation. It is a practical garden assessment, with limitations that remain visible.</p><table><thead><tr><th>Pillar</th><th>Maximum</th></tr></thead><tbody><tr><td>Biodiversity structure</td><td>25</td></tr><tr><td>Soil &amp; water function</td><td>20</td></tr><tr><td>Habitat complexity</td><td>20</td></tr><tr><td>Connectivity</td><td>20</td></tr><tr><td>Evidence &amp; verification</td><td>15</td></tr></tbody></table><p>Fixed species, canopy and vegetation-layer thresholds do not yet adjust to the reference community for a site. Documentation can also raise the score without changing the garden. Verification status therefore needs to be read alongside the number.</p><p><a href="../../docs/scoring-methodology.md">Published scoring methodology</a> · <a href="../../js/reg-score.js">Scoring engine</a></p></section>
+<section id="afn"><span class="lab">03 · Accounting for Nature</span><h2>An external reference for the method’s development.</h2><p><strong>The Registry is not AfN-certified. A Registry score is not an Econd®.</strong> Accounting for Nature’s Econd measures environmental condition against a defined reference benchmark using an accredited method. Sharing a 0–100 scale does not make the scores equivalent.</p><p>AfN informs the direction of our work: appropriate ecological reference benchmarks, clear evidence and formal assurance. Identifying a site’s pre-clearing vegetation community provides context; calibrating indicators against that community is a further step that remains to be completed.</p><p>We also need to separate ecological condition from confidence in the evidence and establish independent repeatability. AfN offers certification through an independent audit or an AfN technical assessment; G&amp;S verification is neither of these.</p><p>Future opportunity-relative scoring would ask how well a garden uses its available space. That is a different measure from condition against an ecological reference and would remain clearly labelled as such.</p><p>Sources: <a href="https://www.accountingfornature.org/faqs">AfN’s explanation of Econd</a> and <a href="https://www.accountingfornature.org/audit-verification">verification and audit pathways</a>.</p></section>
+<section id="governance"><span class="lab">04 · Participation &amp; governance</span><h2>Council keeps its resident information.</h2><p>Council would send the invitation itself. No participant list is transferred, and no household record is created in anticipation of consent. Any aggregate information supplied separately by Council must remain permanently de-identified and cannot be linked back to a household.</p><p>Gardener &amp; Son operates the Registry and is also a design studio. No design services will be marketed or solicited to residents joining through this pilot. Requests for design help during the pilot will be referred elsewhere. Steward-facing materials carry Registry branding, and participant information is used solely for Registry purposes.</p><p>Publication settings, location handling, information security and retention need to be reviewed through Council’s own processes before recruitment. This demonstration dashboard publishes no household locations. It does not establish that all existing Registry data surfaces meet the requirements of a council pilot.</p><p><a href="../../docs/COUNCIL-PARTNERSHIP-PRINCIPLES.md">Council Partnership Principles v1.0</a> apply to this proposal. We welcome Council’s probity and privacy review, including any requirements of its Gardens for Wildlife partnership.</p></section>
+<section><span class="lab">05 · Next step</span><h2>Agree what would make the pilot useful.</h2><p>The next conversation can settle the cohort, assessment responsibilities, reporting needs, follow-up timing and budget. The dashboard shows the current ledger separately from the proposed pilot, with no invented gardens or projected ecological gains.</p><p>We can also facilitate conversations with council contacts involved in the Registry discussions in other municipalities. Those conversations are exploratory and should not be read as Council endorsement or adoption.</p><a class="cta" href="dashboard.html">Explore the council view</a></section></main><footer>Ecological Registry · Prepared for discussion, 5 Nov 2026. Pilot scope, timing and costs remain to be agreed.</footer><script>document.getElementById('themeBtn').addEventListener('click',function(){var dark=document.documentElement.dataset.theme==='canopy';document.documentElement.dataset.theme=dark?'understory':'canopy';this.textContent=dark?'Understory':'Canopy';});</script></body></html>

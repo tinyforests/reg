@@ -20,6 +20,21 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-11-05 — Merri-bek council follow-up and proposed 20-garden pilot
+
+**Decision:** Adapt the Boroondara dashboard visual structure into a Merri-bek follow-up pack, with a pilot/method page. Separate current ledger evidence from the proposed 20-garden cohort; retain unknown condition and network outcomes rather than generating illustrative garden records. Fetch municipal totals from the ledger, exclude demo records and label the dated fallback.
+
+**Reason:** Follow-up to the Merri-bek meeting and its question about Accounting for Nature. Explain that the Registry score is not an Econd or an AfN-certified account, and retain the existing council consent and commercial-separation commitments. A context map carries no household locations. Pilot scope, costs and timing are proposals, not Council commitments.
+
+**Files affected:** `decks/merri-bek/dashboard.html`, `decks/merri-bek/detail.html`, `docs/decisions-log.md`.
+
+**Notes:** No scoring, schema or garden data changes. Other council conversations remain exploratory, without implied endorsement. Email correspondence remains outside public pages. Existing council pages were not rewritten; their older AfN/privacy wording needs separate review before reuse.
+
+
+**Publication:** Retain the existing Merri-bek meeting deck already published on production. Publish the dashboard and method/pilot page alongside it.
+
+---
+
 ## 2026-09-30 — Swap basemap tiles from CARTO to keyless Esri light/dark gray canvas
 
 **Decision:** Replaced the CARTO basemap tiles (`basemaps.cartocdn.com/light_all`, `light_nolabels`, `dark_all`) with Esri's public Light/Dark Gray Canvas (`server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base` and `World_Dark_Gray_Base`) across every public map. Capped `maxNativeZoom: 16` (Esri Canvas's deepest native level) so deeper zooms upscale rather than 404, and updated tile attribution to Esri.
