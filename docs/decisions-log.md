@@ -20,6 +20,17 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+
+## 2026-11-05 — Retain the full Boroondara dashboard for the Merri-bek demonstration
+
+**Decision:** At Tyson’s explicit request, replace the reduced Merri-bek dashboard with the complete Boroondara dashboard: same dataset, Leaflet geography, layers, controls, calculations and scenarios. Reskin the title and introduction for Merri-bek; retain source labels and prominently identify the Boroondara illustrative dataset. The demonstration’s original cohort assumptions are distinct from the proposed 20-garden Merri-bek pilot.
+
+**Reason:** Show the complete council dashboard experience while avoiding a false claim that its example records or municipal statistics describe Merri-bek.
+
+**Files affected:** `decks/merri-bek/dashboard.html`, `decks/merri-bek/detail.html`, `docs/decisions-log.md`.
+
+---
+
 ## 2026-11-05 — Merri-bek council follow-up and proposed 20-garden pilot
 
 **Decision:** Adapt the Boroondara dashboard visual structure into a Merri-bek follow-up pack, with a pilot/method page. Separate current ledger evidence from the proposed 20-garden cohort; retain unknown condition and network outcomes rather than generating illustrative garden records. Fetch municipal totals from the ledger, exclude demo records and label the dated fallback.
