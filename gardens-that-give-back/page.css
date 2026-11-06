@@ -43,15 +43,8 @@ header { border-bottom: 1px solid var(--line); }
   align-items: end;
   gap: clamp(1.5rem, 4vw, 4rem);
 }
-.hero-copy { align-self: center; padding-bottom: clamp(5rem, 11vw, 10rem); }
-.hero-art { position: relative; isolation: isolate; }
-.hero-art::before {
-  content: "";
-  position: absolute;
-  inset: 77% -100vw 0;
-  background: #b77351;
-  z-index: -1;
-}
+.hero-copy { position: relative; z-index: 1; align-self: center; padding-bottom: clamp(6rem, 13vw, 12rem); }
+.hero-art { position: relative; }
 .hero-art svg { display: block; width: 100%; height: auto; overflow: visible; }
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) and (animation-range: exit 0% exit 65%) {
