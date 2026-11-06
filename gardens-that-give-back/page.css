@@ -118,7 +118,7 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .closing h2 { max-width: 20ch; margin-inline: auto; }
 .closing p { margin: 1.4rem 0 1.6rem; }
 .acknowledgement {
-  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   padding-block: 1.5rem 2rem;
   font-size: .88rem;
 }
