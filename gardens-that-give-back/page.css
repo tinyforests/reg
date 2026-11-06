@@ -36,14 +36,14 @@ header { border-bottom: 1px solid var(--line); }
   align-items: center;
   min-height: clamp(32rem, 53vw, 49rem);
   padding-block: clamp(3rem, 8vw, 7rem);
-  background: #e5e9bd;
+  background: #26372a;
 }
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: url("garden.svg") center 58% / cover no-repeat;
+  background: url("canopy-hero.webp") center bottom / cover no-repeat;
 }
 .hero-copy {
   width: fit-content;
@@ -101,6 +101,11 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .closing .button { background: var(--leaf); color: var(--ink); }
 .closing .button:hover { background: var(--paper); }
 @media (min-width: 761px) {
+  .hero::before {
+    inset-inline-start: 18%;
+    background-size: 111% auto;
+    background-position-x: left;
+  }
   .features-intro {
     position: sticky;
     top: 2rem;
@@ -135,7 +140,7 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
     grid-row: 2;
     z-index: auto;
     aspect-ratio: 64 / 50;
-    background-position: center;
+    background-position: center bottom;
   }
   .hero-copy { width: auto; padding: 2.7rem 0 2rem; }
 }
