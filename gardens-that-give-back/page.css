@@ -96,6 +96,7 @@ summary span { font: .77rem ui-monospace, monospace; }
 summary::after { content: "+"; margin-left: auto; font-size: 1.25rem; }
 details[open] summary::after { content: "−"; }
 details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
+.yield-feature { border-top: 1px solid var(--line); }
 .record p:first-child, .closing div > p:first-child:not(.label) { margin-top: 0; }
 .closing { background: var(--ink); color: var(--paper); }
 .closing .button { background: var(--leaf); color: var(--ink); }

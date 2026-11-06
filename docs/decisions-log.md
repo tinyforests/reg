@@ -886,3 +886,7 @@ js/reg-field-records.js, canonical garden profiles, test_field_records.cjs.
 Added a standalone consumer page at `/gardens-that-give-back/` for the newsletter promotion. It uses a lighter illustrated design and an interactive garden-feature explainer to introduce the five pillars. The score and signup calls to action use the existing `/enrol/` flow, keeping the same consent and scoring process.
 
 Files: `gardens-that-give-back/index.html`, `gardens-that-give-back/page.css`, `gardens-that-give-back/garden.svg`.
+
+## 2026-11-06 — Yield on the newsletter landing page
+
+Added a dedicated Yield section after the energy-rating explainer in `gardens-that-give-back/index.html` and styled its divider in `gardens-that-give-back/page.css`. It explains the proposed sponsor-funded reward in plain language, distinguishes verified eligibility from a provisional score, and gives readers an immediate way to begin.
