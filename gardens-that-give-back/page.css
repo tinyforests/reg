@@ -101,31 +101,11 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .closing .button { background: var(--leaf); color: var(--ink); }
 .closing .button:hover { background: var(--paper); }
 @media (min-width: 761px) {
-  .hero::before {
-    inset-inline-start: 18%;
-    background-size: 111% auto;
-    background-position-x: left;
-  }
   .features-intro {
     position: sticky;
     top: 2rem;
   }
   .garden-features summary { padding-block: 1.45rem; }
-}
-@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) and (animation-range: exit 0% exit 100%) {
-    .hero { view-timeline-name: --hero; }
-    .hero::before {
-      inset-block-end: -12%;
-      animation: garden-drift linear both;
-      animation-timeline: --hero;
-      animation-range: exit 0% exit 100%;
-    }
-    @keyframes garden-drift {
-      from { transform: translateY(-10%); }
-      to { transform: translateY(17%); }
-    }
-  }
 }
 @media (max-width: 760px) {
   .wrap { width: min(34rem, calc(100% - 2rem)); }
