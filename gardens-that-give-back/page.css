@@ -27,7 +27,12 @@ a:hover { text-decoration-thickness: .15em; }
   font-size: .88rem;
 }
 header { border-bottom: 1px solid var(--line); }
-.wordmark { font-weight: 800; text-decoration: none; }
+.wordmark {
+  font: 500 .75rem/1rem "IBM Plex Sans", sans-serif;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
 .hero {
   position: relative;
   isolation: isolate;
@@ -57,7 +62,6 @@ header { border-bottom: 1px solid var(--line); }
   align-items: start;
   gap: clamp(2rem, 5vw, 5rem);
 }
-.label { font-size: .73rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 1rem; }
 h1, h2 { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.06em; margin: 0; }
 h1 { font-size: clamp(3.3rem, 6.5vw, 6.5rem); line-height: .92; }
 h1 em { display: block; }
