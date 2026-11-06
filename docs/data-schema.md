@@ -434,3 +434,12 @@ The default response window is 14 days. `ROUTING_RESPONSE_MINUTES` is an optiona
 private script-property test override (minimum one minute); never publish it.
 `installRoutingReleaseTrigger` installs one idempotent 15-minute release job;
 queue reads also reconcile expired offers under the same lock.
+
+### Signup vegetation context (7 Nov 2026)
+
+The Submissions sheet appends `ecological_context` JSON at AO (index 40), keeping
+A–AN stable. It contains `original_vegetation`, optional `state_attempt` and `note`.
+Each classification retains `system`, `code`, `name`, `resolution`, `source`,
+`status` and whitelisted `provenance` fields from the jurisdiction schema. It is a
+client lookup record for review, not a verified garden observation. Coordinates
+are excluded from this JSON. Legacy AA/AB EVC fields remain Victorian-only.

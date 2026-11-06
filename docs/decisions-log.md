@@ -890,3 +890,26 @@ Files: `gardens-that-give-back/index.html`, `gardens-that-give-back/page.css`, `
 ## 2026-11-06 — Yield on the newsletter landing page
 
 Added a dedicated Yield section after the energy-rating explainer in `gardens-that-give-back/index.html` and styled its divider in `gardens-that-give-back/page.css`. It explains the proposed sponsor-funded reward in plain language, distinguishes verified eligibility from a provisional score, and gives readers an immediate way to begin.
+
+## 7 Nov 2026 — National original-vegetation lookup during self-enrolment
+
+**Decision:** Route signup by the garden address's state, matching Find My Native
+Plants: VIC pre-1750 EVC, NSW pre-clearing PCT, QLD pre-clear RE, WA Beard, with
+NVIS pre-1750 MVS elsewhere and on state coverage gaps/service failures. Show
+source and broad national resolution. Keep interstate classifications out of EVC
+fields, retain lookup provenance in additive Submissions column AO, and allow
+signup with unknown vegetation when services fail. Invalidate stale address
+results and species handoffs. Replace ungrounded generic plant samples with the
+national discovery link. Use the submitted state during promotion, never a
+hardcoded Victorian identity.
+
+**Reason:** Discovery and Registry should recognise the same Australian places,
+without inventing site-level precision, local species or Victorian classifications.
+No scoring or existing garden data changes. All five practical-rule questions
+are satisfied by connecting national discovery to an honest, legible record.
+
+**Files affected:** `enrol/index.html`, `jurisdiction/enrolment.js`,
+`jurisdiction/test/enrolment.mjs`, `scripts/test_enrolment.cjs`,
+`scripts/appsscript/Code.gs`,
+`scripts/promote_submission.py`, `docs/data-schema.md`,
+`docs/self-enrolment-to-registered.md`, `docs/decisions-log.md`.

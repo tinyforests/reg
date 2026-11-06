@@ -75,7 +75,7 @@ function doGet(e) {
   if (params.action === 'plants_view')            return handlePlantsView(params);        // Plants.gs
   if (params.action === 'plants_export_edits')    return handlePlantsExportEdits(params); // Plants.gs
 
-  return jsonResp({status: 'Self-Enrolment endpoint is live', timestamp: new Date().toISOString(), enrolment_global_limit: enrolmentGlobalMax(), newsletter_limit_until: new Date(RATE_NEWSLETTER_UNTIL).toISOString()});
+  return jsonResp({status: 'Self-Enrolment endpoint is live', signup_context_schema: '1', timestamp: new Date().toISOString(), enrolment_global_limit: enrolmentGlobalMax(), newsletter_limit_until: new Date(RATE_NEWSLETTER_UNTIL).toISOString()});
 }
 
 /*
@@ -504,6 +504,11 @@ function handleEnrolment(payload, cache) {
   var ss    = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName('Submissions') || ss.getActiveSheet();
 
+  // Additive column: existing A–AN positions remain unchanged.
+  if (sheet.getMaxColumns() < 41) sheet.insertColumnsAfter(sheet.getMaxColumns(), 41 - sheet.getMaxColumns());
+  var contextHeader = sheet.getRange(1, 41);
+  if (!contextHeader.getValue()) contextHeader.setValue('ecological_context');
+
   sheet.appendRow([
     submittedAt,                                   // A  timestamp
     submissionId,                                  // B  submission_id
@@ -544,7 +549,8 @@ function handleEnrolment(payload, cache) {
     parkLng,                                       // AK park_lng
     parkDistM,                                     // AL park_distance_m
     parseInt(payload.area_sqm, 10) || '',          // AM area_sqm
-    parseFloat(payload.effective_ecological_area_ha) || ''  // AN effective_ecological_area_ha
+    parseFloat(payload.effective_ecological_area_ha) || '', // AN effective_ecological_area_ha
+    enrolmentContextJson_(payload.ecological_context)    // AO ecological_context (no coordinates)
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -1990,4 +1996,27 @@ function handleRouting(payload) {
     if(action==='complete' && admin && String(selected[5])==='accepted'){selected[5]='completed';sheet.getRange(index+2,6).setValue('completed');sheet.getRange(index+2,12).setValue(new Date().toISOString());_routingAudit(ss,selected,'registry-admin','Manually confirmed; scoring inputs remain unchanged');return jsonResp({ok:true});}
     throw Error('Action not permitted');
   }catch(e){return jsonResp({ok:false,error:e.message});}finally{lock.releaseLock();}
+}
+
+// Whitelist the lookup record; never persist arbitrary client objects or coordinates.
+function enrolmentContextJson_(context) {
+  if (!context || !context.original_vegetation) return '';
+  var clean = {};
+  ['original_vegetation', 'state_attempt'].forEach(function(key) {
+    var v = context[key];
+    if (!v || ['ok', 'nodata'].indexOf(v.status) < 0) return;
+    var record = {};
+    ['system', 'code', 'name', 'resolution', 'source', 'status'].forEach(function(k) {
+      record[k] = v[k] == null ? null : safeStr(String(v[k]), 1500);
+    });
+    record.provenance = {};
+    ['authority', 'dataset', 'dataset_version', 'service_url', 'lookup_method', 'queried_at', 'jurisdiction'].forEach(function(k) {
+      var value = (v.provenance || {})[k];
+      record.provenance[k] = value == null ? null : safeStr(String(value), 500);
+    });
+    clean[key] = record;
+  });
+  if (!clean.original_vegetation) return '';
+  if (context.note) clean.note = safeStr(String(context.note), 500);
+  return JSON.stringify(clean);
 }

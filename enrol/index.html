@@ -241,7 +241,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <div class="wrap">
       <div class="label eyebrow">Ecological Registry · open enrolment</div>
       <h1>Add your garden to the&nbsp;Registry.</h1>
-      <p class="lede">The Registry holds the ecological memory of gardens across Wurundjeri and beyond — what grows there, what lives there, and how it changes over time. You don't need us to have planted it. You only need to be its steward now.</p>
+      <p class="lede">The Registry holds the ecological memory of gardens across Australia — what grows there, what lives there, and how it changes over time. You don't need us to have planted it. You only need to be its steward now.</p>
       <div class="arrive-meta">
         <div><span class="label">Takes</span>About four minutes</div>
         <div><span class="label">Produces</span>A provisional ecological score</div>
@@ -426,11 +426,35 @@ const speciesList = _p.get('species')
 
 /* ---- Location resolution ----
    Fires on blur of garden_address. Geocodes via Nominatim → extracts
-   suburb/region/country → queries VIC WFS for EVC → Overpass for park.
+   suburb/region/country → national pre-clearing resolver → Overpass for park.
    Populates gardenLat/Lng/Suburb/Region/Country, evcCode/Name, park* vars.
    Non-blocking: submission proceeds with blanks if any lookup fails. */
-const _VIC_WFS   = 'https://opendata.maps.vic.gov.au/geoserver/wfs';
-const _EVC_LAYER = 'open-data-platform:nv1750_evcbcs'; // pre-1750 EVC (NatureKit); never the extant nv2005
+let ecologicalContext = null;
+let locationVersion = 0;
+// Import on demand so a module failure remains a non-blocking lookup error.
+function resetLocation() {
+  locationVersion++;
+  gardenLat = gardenLng = gardenSuburb = gardenRegion = gardenCountry = '';
+  evcCode = evcName = parkName = parkLat = parkLng = '';
+  parkDistM = null;
+  ecologicalContext = null;
+  speciesList.length = 0;
+  tickedSpecies = [];
+  const checklist = document.getElementById('bio0_opts');
+  if (checklist) {
+    delete answers.bio_0;
+    const question = PILLARS[0].qs[0];
+    checklist.innerHTML = question.opts.map(o => `<button class="opt" data-p="bio" data-qi="0" data-pts="${o[1]}" onclick="pick(this,'bio','single',0)">${o[0]}</button>`).join('');
+    const help = checklist.parentElement.querySelector('.qhelp');
+    if (help) help.textContent = question.help;
+    const gap = document.getElementById('bio0_gap');
+    if (gap) gap.style.display = 'none';
+    updateScore();
+  }
+  _setEvcStatus('Enter an Australian address to look up its original vegetation', false);
+  _setParkStatus('', false);
+  _setGardenStatus('', false);
+}
 
 function _setGeoResult(row, msg, ok) {
   const el = document.getElementById('geo-val-' + row);
@@ -446,13 +470,14 @@ function _setGardenStatus(msg, ok) { _setGeoResult('garden', msg, ok); }
 
 let _gardenLocs = null;
 
-async function resolveNearestGarden(lat, lng) {
+async function resolveNearestGarden(lat, lng, version) {
   _setGardenStatus('Looking for nearby registered gardens…', false);
   try {
     if (!_gardenLocs) {
       const r = await fetch('/data/garden-locations.json');
       _gardenLocs = await r.json();
     }
+    if (version !== locationVersion) return;
     const pt = turf.point([lng, lat]);
     let best = Infinity, bestLoc = null;
     for (const g of _gardenLocs) {
@@ -466,61 +491,32 @@ async function resolveNearestGarden(lat, lng) {
       _setGardenStatus(bestLoc.garden_name + ' · ' + Math.round(best) + 'm away', true);
     }
   } catch(e) {
-    _setGardenStatus('Garden lookup unavailable', false);
+    if (version === locationVersion) _setGardenStatus('Garden lookup unavailable', false);
   }
 }
 
 /* Shared coord-based resolution — called after geocoding OR after autocomplete selection */
 async function _resolveFromCoords(lat, lng) {
-  resolveNearestPark(lat, lng);
-  resolveNearestGarden(lat, lng);
+  const version = ++locationVersion;
+  evcCode = evcName = '';
+  ecologicalContext = null;
+  resolveNearestPark(lat, lng, undefined, version);
+  resolveNearestGarden(lat, lng, version);
   try {
-    const d    = 0.02;
-    const bbox = (lng-d)+','+(lat-d)+','+(lng+d)+','+(lat+d)+',EPSG:4326';
-    const wUrl = _VIC_WFS + '?service=WFS&version=1.0.0&request=GetFeature'
-               + '&typeName=' + encodeURIComponent(_EVC_LAYER)
-               + '&bbox=' + bbox + '&outputFormat=application%2Fjson';
-    const wData = await (await fetch(wUrl)).json();
-    if (!wData.features || !wData.features.length) {
-      _setEvcStatus('No vegetation class found for this location', false); return;
+    const {resolveEnrolmentVegetation} = await import('/jurisdiction/enrolment.js');
+    const result = await resolveEnrolmentVegetation({lat, lng, state:gardenRegion});
+    if (version !== locationVersion) return;
+    ecologicalContext = result;
+    const v = result.original_vegetation;
+    if (v.status !== 'ok') {
+      _setEvcStatus('No pre-clearing vegetation mapped here. You can still continue.', false);
+      return;
     }
-    const pt = turf.point([lng, lat]);
-    let match = null;
-    for (const f of wData.features) {
-      try {
-        const geom = f.geometry.type === 'Polygon' ? turf.polygon(f.geometry.coordinates) : null;
-        if (geom && turf.booleanPointInPolygon(pt, geom)) { match = f; break; }
-      } catch(e) {}
-    }
-    if (!match) {
-      for (const f of wData.features) {
-        try {
-          for (const ring of (f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : [])) {
-            if (turf.booleanPointInPolygon(pt, turf.polygon(ring))) { match = f; break; }
-          }
-          if (match) break;
-        } catch(e) {}
-      }
-    }
-    if (!match) {
-      let best = Infinity;
-      for (const f of wData.features) {
-        try {
-          const g = f.geometry.type === 'Polygon'
-            ? turf.polygon(f.geometry.coordinates)
-            : turf.multiPolygon(f.geometry.coordinates);
-          const d2 = turf.distance(pt, turf.centroid(g));
-          if (d2 < best) { best = d2; match = f; }
-        } catch(e) {}
-      }
-    }
-    if (!match) { _setEvcStatus('Vegetation class not resolved', false); return; }
-    const p = match.properties;
-    evcCode = 'EVC ' + (p.evc || p.evc_no || '');
-    evcName = p.x_evcname || p.evc_name || '';
-    _setEvcStatus(evcName + ' · ' + evcCode, true);
+    if (v.system === 'EVC') { evcCode = 'EVC ' + v.code; evcName = v.name; }
+    _setEvcStatus([v.name, v.system + ' ' + v.code, v.source,
+      v.resolution === 'national' ? 'Broad national context' : '', result.note].filter(Boolean).join(' · '), true);
   } catch(err) {
-    _setEvcStatus('Vegetation class lookup failed', false);
+    if (version === locationVersion) _setEvcStatus('Vegetation lookup unavailable. You can still continue.', false);
   }
 }
 
@@ -528,12 +524,14 @@ async function _resolveFromCoords(lat, lng) {
 async function resolveEvc() {
   const address = (document.getElementById('garden_address') || {}).value || '';
   if (!address) return;
+  const version = locationVersion;
   _setEvcStatus('Looking up your area…', false);
   _setParkStatus('Finding nearest green space…', false);
   try {
-    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q='
+    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&countrycodes=au&limit=1&addressdetails=1&q='
                + encodeURIComponent(address + ', Australia');
     const gData = await (await fetch(gUrl, { headers: { 'Accept-Language': 'en' } })).json();
+    if (version !== locationVersion) return;
     if (!gData || !gData.length) {
       _setEvcStatus('Address not found — try including suburb', false);
       _setParkStatus('', false); return;
@@ -547,7 +545,7 @@ async function resolveEvc() {
     gardenCountry = a.country || '';
     _resolveFromCoords(lat, lng);
   } catch(err) {
-    _setEvcStatus('Lookup failed — try again', false);
+    if (version === locationVersion) _setEvcStatus('Lookup failed — try again', false);
   }
 }
 
@@ -569,7 +567,7 @@ function _showAddrDrop(results) {
   if (!inp || !results.length) return;
   const ul = document.createElement('ul');
   ul.id = 'addr-drop';
-  ul.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:300;background:var(--bg,#fafaf7);border:1px solid var(--rl,#d6d9cf);border-radius:6px;margin:3px 0 0;padding:0;list-style:none;box-shadow:0 6px 18px rgba(0,0,0,.1);max-height:220px;overflow-y:auto';
+  ul.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:300;background:var(--bg,#fafaf7);border:1px solid var(--rl,#d6d9cf);border-radius:0;margin:3px 0 0;padding:0;list-style:none;box-shadow:0 6px 18px rgba(0,0,0,.1);max-height:220px;overflow-y:auto';
   results.forEach(r => {
     const li = document.createElement('li');
     li.style.cssText = 'padding:9px 13px;font-size:12.5px;cursor:pointer;border-bottom:1px solid var(--hairline);line-height:1.4';
@@ -578,6 +576,7 @@ function _showAddrDrop(results) {
     li.addEventListener('mouseout',  () => li.style.background = '');
     li.addEventListener('mousedown', e => {
       e.preventDefault();
+      resetLocation();
       inp.value = _fmtSuggestion(r);
       const a = r.address || {};
       gardenLat     = parseFloat(r.lat).toFixed(6);
@@ -605,7 +604,7 @@ const _fetchAddrSuggestions = _debounce(async q => {
     const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=au&q='
               + encodeURIComponent(q);
     const data = await (await fetch(url, { headers: { 'Accept-Language': 'en' } })).json();
-    _showAddrDrop(data);
+    if ((document.getElementById('garden_address') || {}).value === q) _showAddrDrop(data);
   } catch(e) {}
 }, 380);
 
@@ -628,7 +627,8 @@ async function _overpassFetch(query) {
   ));
 }
 
-async function resolveNearestPark(lat, lng, _attempt) {
+async function resolveNearestPark(lat, lng, _attempt, version) {
+  if (version !== locationVersion) return;
   if (_attempt === undefined) {
     parkName = ''; parkLat = ''; parkLng = ''; parkDistM = null;
     _setParkStatus('Finding nearest park…', false);
@@ -645,11 +645,13 @@ async function resolveNearestPark(lat, lng, _attempt) {
 out center tags;`;
   try {
     const data = await _overpassFetch(query);
+    if (version !== locationVersion) return;
     if (!data.elements || !data.elements.length) {
       _setParkStatus('No park found within 600m', false);
       return;
     }
 
+    if (version !== locationVersion) return;
     const pt = turf.point([lng, lat]);
     let best = Infinity, bestEl = null;
     for (const el of data.elements) {
@@ -667,8 +669,9 @@ out center tags;`;
     parkDistM = Math.round(best);
     _setParkStatus(parkName + ' · ' + parkDistM + 'm', true);
   } catch(err) {
+    if (version !== locationVersion) return;
     if (_attempt < 1) {
-      setTimeout(() => resolveNearestPark(lat, lng, _attempt + 1), 2500);
+      setTimeout(() => resolveNearestPark(lat, lng, _attempt + 1, version), 2500);
     } else {
       _setParkStatus('No park found within 600m', false);
     }
@@ -959,7 +962,7 @@ function buildFormSteps() {
       inp.autocomplete = fid === 'steward_email' ? 'email' : 'street-address';
       inp.addEventListener('input', updateStepNext);
       if (fid === 'garden_address') {
-        inp.addEventListener('input',  () => _fetchAddrSuggestions(inp.value));
+        inp.addEventListener('input', () => { resetLocation(); _hideAddrDrop(); _fetchAddrSuggestions(inp.value); });
         inp.addEventListener('blur',   () => { setTimeout(_hideAddrDrop, 150); if (!gardenLat) resolveEvc(); });
         inp.addEventListener('keydown', e => { if (e.key === 'Escape') _hideAddrDrop(); });
       }
@@ -1022,15 +1025,15 @@ function buildFormSteps() {
     if (si === 1) {
       const hint = document.createElement('p');
       hint.className = 'geo-step-hint';
-      hint.textContent = 'We\'ll look up your local vegetation class and nearest green space automatically.';
+      hint.textContent = 'We\'ll look up your original vegetation and nearest green space across Australia. Mapping detail varies by state.';
       idfWrap.insertBefore(hint, idfWrap.firstChild);
       const card = document.createElement('div');
       card.id = 'geo-results';
-      card.style.cssText = 'display:none;margin-top:16px;border:1px solid var(--rl,#d6d9cf);border-radius:8px;overflow:hidden;';
+      card.style.cssText = 'display:none;margin-top:16px;border:1px solid var(--rl,#d6d9cf);border-radius:0;overflow:hidden;';
       card.innerHTML =
         '<div style="padding:10px 14px;border-bottom:1px solid var(--rl,#d6d9cf)">' +
-          '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Vegetation class</div>' +
-          '<div id="geo-val-evc" style="font-size:.8rem;color:rgba(61,69,53,.45)">Type your address above to look up your EVC</div>' +
+          '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Original vegetation</div>' +
+          '<div id="geo-val-evc" style="font-size:.8rem;color:rgba(61,69,53,.45)">Enter an Australian address to look up its original vegetation</div>' +
         '</div>' +
         '<div style="padding:10px 14px;border-bottom:1px solid var(--rl,#d6d9cf)">' +
           '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;opacity:.5;margin-bottom:3px">Nearest green space</div>' +
@@ -1232,6 +1235,7 @@ function updateRegisterBtn() {
   btn.disabled = !CONSENT.every((c, i) => !c.req || consentState[i] === true);
 }
 function openConsent() {
+  resetLocation();
   formStep = 0;
   buildFormSteps();
   document.getElementById('overlay').classList.add('open');
@@ -1269,6 +1273,7 @@ async function confirmConsent(){
     consent_public_score:        consentState[1] === true,
     consent_contact_about_visit: consentState[2] === true,
     consent_aggregate_stats:     consentState[3] === true,
+    ecological_context:          ecologicalContext,
     evc_code:                    evcCode,
     evc_name:                    evcName,
     garden_lat:                  gardenLat,
@@ -1380,20 +1385,17 @@ function buildDeepenSpecies() {
     ? 'Species local to ' + evcName + (evcCode ? ' (' + evcCode + ')' : '') + '. Each one lifts Biodiversity Structure and strengthens your connection to local ecology.'
     : 'Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity.';
 
-  // Build species pool: gap list if available, else 2-per-layer sample from DB
-  let pool = [];
-  if (speciesList.length > 0) {
-    const gap = speciesList.filter(s => tickedSpecies.indexOf(s) === -1);
-    pool = gap.map(name => {
-      const db = _deepenDb.find(s => s.botanical_name === name);
-      return { name, common: db ? db.common_name : '', layer: db ? db.layer : '' };
-    });
-  } else {
-    LAYER_GROUPS.forEach(grp => {
-      const candidates = _deepenDb.filter(s => grp.keys.includes(s.layer));
-      candidates.slice(0, 2).forEach(s => pool.push({ name: s.botanical_name, common: s.common_name, layer: s.layer }));
-    });
+  // Address lookup establishes vegetation context, not a verified planting palette.
+  if (!evcCode || !speciesList.length) {
+    if (heading) heading.textContent = 'Discover plants for your place';
+    if (sub) sub.textContent = 'Explore your local vegetation and plant information with Find My Native Plants.';
+    container.innerHTML = '<a href="https://findmynativeplants.com.au/">Find My Native Plants →</a>';
+    return;
   }
+  const pool = speciesList.filter(s => tickedSpecies.indexOf(s) === -1).map(name => {
+    const db = _deepenDb.find(s => s.botanical_name === name);
+    return {name, common:db ? db.common_name : '', layer:db ? db.layer : ''};
+  });
 
   if (!pool.length) {
     container.innerHTML = '<p style="font-size:13px;color:var(--ink-soft)">All EVC species already present — no gap to close.</p>';
@@ -1442,6 +1444,7 @@ function buildDeepenPanel() {
   }
   // Update Plants of Place link with EVC code
   const popLink = document.getElementById('popLink');
+  if (popLink) popLink.href = 'https://findmynativeplants.com.au/';
   if (popLink && evcCode) {
     popLink.href = 'https://plantsofplace.com.au/?evc=' + encodeURIComponent(evcCode);
   }

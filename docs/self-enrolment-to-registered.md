@@ -70,3 +70,50 @@ The ramp stores each answer as its **points** contribution, so canonical values
 (species count, canopy %, layers, habitat features) are reconstructed as
 mid-band / best-effort and marked `TO CONFIRM`. Always confirm against the site
 visit before treating the score as final.
+
+## National signup vegetation lookup — 7 Nov 2026
+
+`enrol/index.html` calls `jurisdiction/enrolment.js` using the selected Australian
+address's state. Routing mirrors Find My Native Plants: Victoria uses containing
+NV1750 EVC polygons; NSW uses SVTM 1750 PCT; Queensland uses pre-clear Regional
+Ecosystems; WA uses Beard pre-European associations. SA, TAS, NT and ACT use NVIS
+pre-1750 MVS. State gaps or outages fall back to NVIS with an explanation. A total
+outage leaves the lookup unknown and does not block signup. No nearest-polygon
+EVC guess is used. Mapping is context, not measured garden condition.
+
+Only Victorian results populate legacy `evc_code` / `evc_name`. The full result,
+source, resolution and lookup provenance are submitted in `ecological_context`.
+`Code.gs` whitelists that object into additive column **AO** (`ecological_context`)
+without coordinates. Existing A–AN columns keep their positions. **Redeploy the
+Apps Script web app with the updated Code.gs before releasing the signup page**;
+the old deployment ignores this new field. No test submissions are needed.
+The existing promotion/sync process resolves public ecological context separately
+from private coordinates; AO preserves the signup result for review rather than
+turning a client-supplied classification into a verified public record. Promotion
+now uses the recorded state for geocoding, IDs and records; missing states require
+review instead of defaulting to Victoria.
+
+Address edits invalidate in-flight lookups, coordinates and previous species
+handoffs. Where no local species palette is available, Deepen links to Find My
+Native Plants rather than presenting a generic database sample as local species.
+
+Checks: `node jurisdiction/test/enrolment.mjs`,
+`node jurisdiction/test/proof.mjs`, and
+`python3 scripts/promote_submission.py --self-test`.
+
+`node scripts/test_enrolment.cjs` also checks stale-response rejection, interstate
+EVC isolation, reset behaviour and submission sanitisation. Read-only live checks
+on 7 Nov 2026 returned classifications for VIC, NSW, QLD, WA and SA (NVIS).
+These confirm endpoint responses, not browser CORS or the deployed signup flow;
+check those after the Apps Script update and before release.
+
+## Live deployment — 7 Nov 2026
+
+- Editor: https://script.google.com/home/projects/1x8_qE0lGksbmTK_JaJ_UTHEs-WkZDjcg0VPRaRjDHfW9yluvbKWa6l8y/edit
+- Signup deployment: `AKfycbywnSUukawAaCJ0JTSo6bowC0TWqGUPtclsvs6bHWglvzp4qtczulyeeFyKHqTt8HR_`, version **45**.
+- Version 45 is the previous signup version 34 plus the additive AO storage,
+  sanitiser and read-only health flag `signup_context_schema: "1"`. It does not
+  roll unrelated newer editor features into this endpoint. Rollback target: 34.
+- The editor source was restored to its current multi-file state with the same
+  signup addition. The separate Plant Studio deployment remains on version 44.
+- Browser lookup checked from the release preview without submitting a garden.

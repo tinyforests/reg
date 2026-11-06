@@ -150,8 +150,8 @@ def cell(row, key):
     return row[i].strip() if i < len(row) and row[i] else ''
 
 
-def geocode(address, suburb):
-    q = ', '.join(x for x in [address, suburb, 'Victoria', 'Australia'] if x)
+def geocode(address, suburb, region):
+    q = ', '.join(x for x in [address, suburb, region, 'Australia'] if x)
     url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + \
         urllib.parse.quote(q)
     req = urllib.request.Request(url, headers={
@@ -172,12 +172,12 @@ def name3(street):
     return (letters[:3] or 'GDN').upper()
 
 
-def make_garden_id(suburb, street, existing):
-    loc = re.sub(r'[^A-Za-z]', '', suburb)[:3].upper() or 'VIC'
+def make_garden_id(suburb, street, existing, state):
+    loc = re.sub(r'[^A-Za-z]', '', suburb)[:3].upper() or state
     nm = name3(street)
     n = 1
     while True:
-        gid = 'ER-AU-VIC-%s-%s-%03d' % (loc, nm, n)
+        gid = 'ER-AU-%s-%s-%s-%03d' % (state, loc, nm, n)
         if gid not in existing:
             return gid
         n += 1
@@ -245,13 +245,22 @@ def main():
     street = ' '.join(w for w in address.split() if not w.isdigit()) if address else ''
     garden_name = cell(row, 'garden_name') or (street or suburb)
 
+    states = {'victoria': 'VIC', 'new south wales': 'NSW', 'queensland': 'QLD',
+              'western australia': 'WA', 'south australia': 'SA', 'tasmania': 'TAS',
+              'northern territory': 'NT', 'australian capital territory': 'ACT',
+              'jervis bay territory': 'ACT'}
+    region = cell(row, 'region')
+    state = states.get(region.lower(), region.upper())
+    if state not in states.values():
+        sys.exit('Confirm the submission state / region before registration; it is not assumed to be Victoria.')
+
     # coords: prefer the ramp-geocoded point, else geocode the address.
     lat = cell(row, 'garden_lat')
     lng = cell(row, 'garden_lng')
     if lat and lng:
         lat, lng = float(lat), float(lng)
     else:
-        geo = geocode(address, suburb)
+        geo = geocode(address, suburb, region)
         if not geo:
             sys.exit('Could not geocode "%s, %s". Add coords manually.' % (address, suburb))
         lat, lng = geo
@@ -263,7 +272,7 @@ def main():
         gid = gid_override
     else:
         # reuse published_garden_id if the sheet already assigned one
-        gid = cell(row, 'published_garden_id') or make_garden_id(suburb, street, existing)
+        gid = cell(row, 'published_garden_id') or make_garden_id(suburb, street, existing, state)
     if gid in existing:
         sys.exit('%s already in registry.json — nothing to do.' % gid)
 
@@ -282,7 +291,7 @@ def main():
     area = cell(row, 'area_sqm')
     record = {
         'garden_id': gid, 'garden_name': garden_name,
-        'garden_type': 'Ecological Home Garden', 'suburb': suburb, 'state': 'VIC',
+        'garden_type': 'Ecological Home Garden', 'suburb': suburb, 'state': state,
         'assessment_date': time.strftime('%b %Y'), 'baseline_date': time.strftime('%Y'),
         'target_score': 75, 'stewards': cell(row, 'steward_name').split(' ')[0],
         'designer': 'Steward self-enrolled', 'designer_id': 'self-enrolled',
@@ -339,7 +348,7 @@ def main():
 
     reg_entry = {
         'garden_id': gid, 'garden_name': garden_name, 'type': 'Ecological Home Garden',
-        'suburb': suburb, 'state': 'VIC', 'score': 0,
+        'suburb': suburb, 'state': state, 'score': 0,
         'rating': 'Provisional' if status != 'verified' else
         {'current': 'Foundation Garden', 'next': 'Habitat Garden', 'points_to_next': 0},
         'primary_evc': '', 'bioregion': '',
