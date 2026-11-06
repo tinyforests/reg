@@ -34,52 +34,42 @@ header { border-bottom: 1px solid var(--line); }
   text-decoration: none;
 }
 .hero {
-  padding-block: clamp(3rem, 8vw, 7.5rem);
+  padding-top: clamp(2.75rem, 5vw, 5rem);
   overflow: clip;
 }
 .hero-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  align-items: center;
+  align-items: end;
   gap: clamp(1.5rem, 4vw, 4rem);
 }
-.hero-art {
-  position: relative;
-  aspect-ratio: 64 / 50;
-  margin-block: 1rem;
-}
-.art-panel {
+.hero-copy { align-self: center; padding-bottom: clamp(5rem, 11vw, 10rem); }
+.hero-art { position: relative; isolation: isolate; }
+.hero-art::before {
+  content: "";
   position: absolute;
-  inset: 0;
-  background: url("garden.svg") center / cover no-repeat;
-  transform: translateY(var(--offset));
+  inset: 77% -100vw 0;
+  background: #b77351;
+  z-index: -1;
 }
-.art-panel-left {
-  --offset: 0%;
-  --travel: -16%;
-  clip-path: inset(0 68% 0 0);
-}
-.art-panel-middle {
-  --offset: -5%;
-  --travel: 1%;
-  clip-path: inset(0 34% 0 34%);
-}
-.art-panel-right {
-  --offset: 5%;
-  --travel: 19%;
-  clip-path: inset(0 0 0 68%);
-}
-@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) and (animation-range: exit 0% exit 85%) {
-    .hero-art { view-timeline-name: --garden-art; }
-    .art-panel {
-      animation: garden-panels linear both;
-      animation-timeline: --garden-art;
-      animation-range: exit 0% exit 85%;
+.hero-art svg { display: block; width: 100%; height: auto; overflow: visible; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) and (animation-range: exit 0% exit 65%) {
+    .hero { view-timeline-name: --garden-scene; }
+    .garden-sun, .garden-birds {
+      animation: linear both;
+      animation-timeline: --garden-scene;
+      animation-range: exit 0% exit 65%;
     }
-    @keyframes garden-panels {
-      from { transform: translateY(var(--offset)); }
-      to { transform: translateY(var(--travel)); }
+    .garden-sun { animation-name: garden-sunrise; }
+    .garden-birds { animation-name: garden-flight; }
+    @keyframes garden-sunrise {
+      from { transform: translateY(62px); }
+      to { transform: translateY(-24px); }
+    }
+    @keyframes garden-flight {
+      from { transform: translate(-15px, 16px); }
+      to { transform: translate(110px, -42px); }
     }
   }
 }
@@ -165,9 +155,13 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
   }
   .garden-features summary { padding-block: 1.45rem; }
 }
+@media (max-width: 900px) {
+  .hero-copy { padding-bottom: 0; }
+  .hero-layout { grid-template-columns: 1fr; gap: 1.6rem; }
+  .hero-art { width: min(100%, 39rem); margin-inline: auto; }
+}
 @media (max-width: 760px) {
   .wrap { width: min(34rem, calc(100% - 2rem)); }
   .split { grid-template-columns: 1fr; gap: 1.8rem; }
-  .hero { padding-block: 2.7rem 2rem; }
-  .hero-layout { grid-template-columns: 1fr; gap: 1.6rem; }
+  .hero { padding-top: 2.7rem; }
 }
