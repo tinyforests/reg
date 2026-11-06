@@ -27,7 +27,12 @@ a:hover { text-decoration-thickness: .15em; }
   font-size: .88rem;
 }
 header { border-bottom: 1px solid var(--line); }
-.wordmark { font-weight: 800; text-decoration: none; }
+.wordmark {
+  font: 500 .75rem/1rem "IBM Plex Sans", sans-serif;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
 .hero {
   position: relative;
   isolation: isolate;
