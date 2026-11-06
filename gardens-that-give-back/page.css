@@ -141,6 +141,15 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .acknowledgement p { max-width: 74ch; margin: .5rem auto 0; }
 .closing .button { background: var(--leaf); color: var(--ink); }
 .closing .button:hover { background: var(--paper); }
+@media (min-width: 901px) {
+  body { --header-height: 3.75rem; }
+  header { min-height: var(--header-height); }
+  .hero {
+    display: grid;
+    align-items: end;
+    min-height: calc(100svh - var(--header-height));
+  }
+}
 @media (min-width: 761px) {
   .features-intro {
     position: sticky;
