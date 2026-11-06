@@ -90,7 +90,7 @@ h2 { font-size: clamp(2.65rem, 4.7vw, 4.6rem); line-height: .99; }
 }
 .button:hover { background: #416044; }
 .garden-features { background: var(--wash); }
-.garden-features, .record, .closing { padding-block: clamp(2.6rem, 6vw, 5.5rem); }
+.garden-features, .record { padding-block: clamp(2.6rem, 6vw, 5.5rem); }
 details { border-top: 1px solid var(--line); }
 details:last-child { border-bottom: 1px solid var(--line); }
 summary {
@@ -108,8 +108,26 @@ summary::after { content: "+"; margin-left: auto; font-size: 1.25rem; }
 details[open] summary::after { content: "−"; }
 details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .yield-feature { border-top: 1px solid var(--line); }
-.record p:first-child, .closing div > p:first-child:not(.label) { margin-top: 0; }
-.closing { background: var(--ink); color: var(--paper); }
+.record p:first-child { margin-top: 0; }
+.closing {
+  padding-block: clamp(4.5rem, 10vw, 9rem);
+  text-align: center;
+  background: var(--ink);
+  color: var(--paper);
+}
+.closing h2 { max-width: 20ch; margin-inline: auto; }
+.closing p { margin: 1.4rem 0 1.6rem; }
+.acknowledgement {
+  border-top: 1px solid var(--line);
+  padding-block: 1.5rem 2rem;
+  font-size: .88rem;
+}
+.acknowledgement h2 {
+  font: inherit;
+  font-weight: 750;
+  letter-spacing: normal;
+}
+.acknowledgement p { max-width: 74ch; margin: .5rem 0 0; }
 .closing .button { background: var(--leaf); color: var(--ink); }
 .closing .button:hover { background: var(--paper); }
 @media (min-width: 761px) {
