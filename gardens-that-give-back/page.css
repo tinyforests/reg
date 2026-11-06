@@ -33,9 +33,13 @@ header { border-bottom: 1px solid var(--line); }
   align-items: center;
   min-height: clamp(32rem, 53vw, 49rem);
   padding-block: clamp(3rem, 8vw, 7rem);
-  background:
-    linear-gradient(90deg, var(--paper) 0%, var(--paper) 24%, rgba(252, 245, 230, .96) 38%, rgba(252, 245, 230, .3) 64%, transparent 79%),
-    url("garden.svg") center 58% / cover no-repeat;
+  background: #e5e9bd url("garden.svg") center 58% / cover no-repeat;
+}
+.hero-copy {
+  width: fit-content;
+  max-width: 100%;
+  padding: clamp(1.6rem, 4vw, 3.4rem);
+  background: var(--paper);
 }
 .split {
   display: grid;
@@ -45,7 +49,7 @@ header { border-bottom: 1px solid var(--line); }
 }
 .label { font-size: .73rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 1rem; }
 h1, h2 { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.06em; margin: 0; }
-h1 { font-size: clamp(3.5rem, 7.4vw, 7.3rem); line-height: .92; }
+h1 { font-size: clamp(3.3rem, 6.5vw, 6.5rem); line-height: .92; }
 h1 em { display: block; }
 h2 { font-size: clamp(2.65rem, 4.7vw, 4.6rem); line-height: .99; }
 .intro { font-size: clamp(1.07rem, 1.55vw, 1.3rem); max-width: 34ch; margin-block: 1.55rem; }
@@ -91,9 +95,13 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
   .split { grid-template-columns: 1fr; gap: 1.8rem; }
   .hero {
     min-height: auto;
-    padding-block: 2.7rem clamp(14rem, 69vw, 25rem);
-    background:
-      linear-gradient(var(--paper) 0%, rgba(252, 245, 230, .8) 37%, transparent 74%) bottom / 100% clamp(14rem, 69vw, 25rem) no-repeat,
-      url("garden.svg") center bottom / 100% auto no-repeat;
+    padding-block: 0;
+    background: var(--paper);
   }
+  .hero::after {
+    content: "";
+    aspect-ratio: 64 / 50;
+    background: #e5e9bd url("garden.svg") center / cover no-repeat;
+  }
+  .hero-copy { width: auto; padding: 2.7rem 0 2rem; }
 }
