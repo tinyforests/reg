@@ -34,27 +34,54 @@ header { border-bottom: 1px solid var(--line); }
   text-decoration: none;
 }
 .hero {
-  position: relative;
-  isolation: isolate;
+  padding-block: clamp(3rem, 8vw, 7.5rem);
   overflow: clip;
-  display: grid;
-  align-items: center;
-  min-height: clamp(32rem, 53vw, 49rem);
-  padding-block: clamp(3rem, 8vw, 7rem);
-  background: #26372a;
 }
-.hero::before {
-  content: "";
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+.hero-art {
+  position: relative;
+  aspect-ratio: 64 / 50;
+  margin-block: 1rem;
+}
+.art-panel {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background: url("canopy-hero.webp") center bottom / cover no-repeat;
+  background: url("garden.svg") center / cover no-repeat;
+  transform: translateY(var(--offset));
 }
-.hero-copy {
-  width: fit-content;
-  max-width: 100%;
-  padding: clamp(1.6rem, 4vw, 3.4rem);
-  background: var(--paper);
+.art-panel-left {
+  --offset: 0%;
+  --travel: -16%;
+  clip-path: inset(0 68% 0 0);
+}
+.art-panel-middle {
+  --offset: -5%;
+  --travel: 1%;
+  clip-path: inset(0 34% 0 34%);
+}
+.art-panel-right {
+  --offset: 5%;
+  --travel: 19%;
+  clip-path: inset(0 0 0 68%);
+}
+@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) and (animation-range: exit 0% exit 85%) {
+    .hero-art { view-timeline-name: --garden-art; }
+    .art-panel {
+      animation: garden-panels linear both;
+      animation-timeline: --garden-art;
+      animation-range: exit 0% exit 85%;
+    }
+    @keyframes garden-panels {
+      from { transform: translateY(var(--offset)); }
+      to { transform: translateY(var(--travel)); }
+    }
+  }
 }
 .hero-eyebrow {
   margin: 0 0 1rem;
@@ -141,17 +168,6 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 @media (max-width: 760px) {
   .wrap { width: min(34rem, calc(100% - 2rem)); }
   .split { grid-template-columns: 1fr; gap: 1.8rem; }
-  .hero {
-    min-height: auto;
-    padding-block: 0;
-    background: var(--paper);
-  }
-  .hero::before {
-    position: static;
-    grid-row: 2;
-    z-index: auto;
-    aspect-ratio: 64 / 50;
-    background-position: center bottom;
-  }
-  .hero-copy { width: auto; padding: 2.7rem 0 2rem; }
+  .hero { padding-block: 2.7rem 2rem; }
+  .hero-layout { grid-template-columns: 1fr; gap: 1.6rem; }
 }
