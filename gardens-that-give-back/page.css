@@ -120,6 +120,7 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .acknowledgement {
   border-bottom: 1px solid var(--line);
   padding-block: 1.5rem 2rem;
+  text-align: center;
   font-size: .88rem;
 }
 .acknowledgement h2 {
@@ -127,7 +128,7 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
   font-weight: 750;
   letter-spacing: normal;
 }
-.acknowledgement p { max-width: 74ch; margin: .5rem 0 0; }
+.acknowledgement p { max-width: 74ch; margin: .5rem auto 0; }
 .closing .button { background: var(--leaf); color: var(--ink); }
 .closing .button:hover { background: var(--paper); }
 @media (min-width: 761px) {
