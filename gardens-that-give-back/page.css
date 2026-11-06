@@ -29,11 +29,21 @@ a:hover { text-decoration-thickness: .15em; }
 header { border-bottom: 1px solid var(--line); }
 .wordmark { font-weight: 800; text-decoration: none; }
 .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   display: grid;
   align-items: center;
   min-height: clamp(32rem, 53vw, 49rem);
   padding-block: clamp(3rem, 8vw, 7rem);
-  background: #e5e9bd url("garden.svg") center 58% / cover no-repeat;
+  background: #e5e9bd;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("garden.svg") center 58% / cover no-repeat;
 }
 .hero-copy {
   width: fit-content;
@@ -90,6 +100,28 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
 .closing { background: var(--ink); color: var(--paper); }
 .closing .button { background: var(--leaf); color: var(--ink); }
 .closing .button:hover { background: var(--paper); }
+@media (min-width: 761px) {
+  .features-intro {
+    position: sticky;
+    top: 2rem;
+  }
+  .garden-features summary { padding-block: 1.45rem; }
+}
+@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) and (animation-range: exit 0% exit 100%) {
+    .hero { view-timeline-name: --hero; }
+    .hero::before {
+      inset-block-end: -12%;
+      animation: garden-drift linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 100%;
+    }
+    @keyframes garden-drift {
+      from { transform: translateY(-10%); }
+      to { transform: translateY(17%); }
+    }
+  }
+}
 @media (max-width: 760px) {
   .wrap { width: min(34rem, calc(100% - 2rem)); }
   .split { grid-template-columns: 1fr; gap: 1.8rem; }
@@ -98,10 +130,12 @@ details p { margin: 0 1.3rem 1.1rem 2rem; max-width: 53ch; }
     padding-block: 0;
     background: var(--paper);
   }
-  .hero::after {
-    content: "";
+  .hero::before {
+    position: static;
+    grid-row: 2;
+    z-index: auto;
     aspect-ratio: 64 / 50;
-    background: #e5e9bd url("garden.svg") center / cover no-repeat;
+    background-position: center;
   }
   .hero-copy { width: auto; padding: 2.7rem 0 2rem; }
 }
