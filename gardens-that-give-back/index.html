@@ -59,6 +59,15 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
 .sprout{animation:sprout 4.5s ease-in-out infinite alternate}
 .leaf{animation:leaf 4.5s ease-in-out infinite alternate}
 .ot{transform-box:fill-box;transform-origin:50% 0}
+.hero-art{position:absolute;bottom:0;left:50%;height:100%;width:auto;aspect-ratio:1440/380;transform:translateX(-50%);overflow:visible;display:block}
+@media (max-height: 760px) and (min-width: 600px){
+  .hero-pad{padding-top:20px !important}
+  .hero-eyebrow{margin-bottom:10px !important}
+  .hero-h1{font-size:clamp(40px, 11svh, 84px) !important}
+  .hero-p{font-size:16px !important;margin-top:10px !important}
+  .hero-cta{margin-top:14px !important}
+  .hero-note{display:none !important}
+}
 .orb{transform-box:fill-box;transform-origin:100% 100%}
 @keyframes flyAcross{from{transform:translateX(-220px)}to{transform:translateX(1700px)}}
 @keyframes flapY{0%,100%{transform:scaleY(1)}50%{transform:scaleY(-.55)}}
@@ -144,16 +153,16 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
 </header>
 
 <!-- HERO -->
-<section style="background: #3d4535; color: #fff0dc; position: relative; overflow: hidden; height: calc(100svh - 64px); min-height: 620px; max-height: 1000px; display: flex; flex-direction: column">
-  <div style="max-width: 1280px; width: 100%; margin: 0 auto; padding: clamp(28px, 6svh, 72px) 24px 0; position: relative; z-index: 2; flex: none">
-    <a href="#offer" style="margin: 0 0 clamp(14px, 2.5svh, 24px); display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; background: #A9C47F; color: #2f3629; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; line-height: 1.35; text-decoration: none"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" style="flex: none"><path d="M8 15 V7" stroke="#2f3629" stroke-width="2" stroke-linecap="round"></path><path d="M8 8 C 8 4, 4 3, 2 3 C 2 6, 4 8, 8 8 Z M8 7 C 8 3, 12 1, 14 1 C 14 5, 11 7, 8 7 Z" fill="#2f3629"></path></svg><span>Hello, Three Neat Things readers · Six free indigenous plants for you</span></a>
-    <h1 style="margin: 0; font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(48px, min(9vw, 12.5svh), 140px); line-height: .92; letter-spacing: -.02em; max-width: 11ch">Gardens that <em style="color: #A9C47F">give back.</em></h1>
-    <p style="margin: clamp(14px, 2.6svh, 28px) 0 0; max-width: 560px; font-size: clamp(16px, 2.1svh, 19px); line-height: 1.5; color: rgba(255,240,220,.88)">Your garden is part of something bigger. Scroll down and watch one grow, then find out what yours offers local wildlife, how it fits into the neighbourhood and what you could do next.</p>
-    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 3svh, 32px)">
+<section style="background: #3d4535; color: #fff0dc; position: relative; overflow: hidden; min-height: calc(100svh - 64px); display: flex; flex-direction: column; justify-content: space-between">
+  <div class="hero-pad" style="max-width: 1280px; width: 100%; margin: 0 auto; padding: clamp(28px, 6svh, 72px) 24px 0; position: relative; z-index: 2; flex: none">
+    <a class="hero-eyebrow" href="#offer" style="margin: 0 0 clamp(14px, 2.5svh, 24px); display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; background: #A9C47F; color: #2f3629; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; line-height: 1.35; text-decoration: none"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" style="flex: none"><path d="M8 15 V7" stroke="#2f3629" stroke-width="2" stroke-linecap="round"></path><path d="M8 8 C 8 4, 4 3, 2 3 C 2 6, 4 8, 8 8 Z M8 7 C 8 3, 12 1, 14 1 C 14 5, 11 7, 8 7 Z" fill="#2f3629"></path></svg><span>Hello, Three Neat Things readers · Six free indigenous plants for you</span></a>
+    <h1 class="hero-h1" style="margin: 0; font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(48px, min(9vw, 12.5svh), 140px); line-height: .92; letter-spacing: -.02em; max-width: 11ch">Gardens that <em style="color: #A9C47F">give back.</em></h1>
+    <p class="hero-p" style="margin: clamp(14px, 2.6svh, 28px) 0 0; max-width: 560px; font-size: clamp(16px, 2.1svh, 19px); line-height: 1.5; color: rgba(255,240,220,.88)">Your garden is part of something bigger. Scroll down and watch one grow, then find out what yours offers local wildlife, how it fits into the neighbourhood and what you could do next.</p>
+    <div class="hero-cta" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(16px, 3svh, 32px)">
       <a class="btn btn-solid" href="https://ecologicalregistry.org/enrol/?ref=threeneatthings">Get my garden score →</a>
       <a class="btn btn-ghost" href="#grow">Scroll to grow a garden ↓</a>
     </div>
-    <p style="margin: 14px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: rgba(255,240,220,.78)">Free to begin · About four minutes · Provisional score out of 100</p>
+    <p class="hero-note" style="margin: 14px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: rgba(255,240,220,.78)">Free to begin · About four minutes · Provisional score out of 100</p>
   </div>
 
   <a class="stamp" href="#offer" aria-label="Six free indigenous plants for Three Neat Things readers" style="position: absolute; z-index: 3; top: clamp(64px, 11svh, 120px); right: max(32px, calc((100vw - 1280px) / 2 + 40px)); width: 210px; height: 210px; text-decoration: none">
@@ -168,8 +177,8 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
     </svg>
   </a>
 
-  <div style="flex: 1 1 auto; min-height: 170px; position: relative; margin-top: 8px">
-  <svg aria-hidden="true" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMax slice" style="position: absolute; inset: 0; display: block; width: 100%; height: 100%">
+  <div style="flex: 1 1 auto; min-height: 170px; max-height: 400px; position: relative; margin-top: 8px">
+  <svg class="hero-art" aria-hidden="true" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMax meet">
     <!-- sun -->
     <g transform="translate(194 50) scale(.85)">
     <g class="spin oc">
@@ -189,8 +198,8 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
     <g class="drift"><g fill="#fff0dc" opacity=".92" transform="translate(0 36)"><ellipse cx="80" cy="96" rx="58" ry="22"></ellipse><ellipse cx="116" cy="80" rx="36" ry="26"></ellipse><ellipse cx="62" cy="84" rx="26" ry="20"></ellipse></g></g>
     <g class="drift" style="animation-delay: -38s; animation-duration: 90s"><g fill="#fff0dc" opacity=".8"><ellipse cx="80" cy="150" rx="44" ry="16"></ellipse><ellipse cx="104" cy="138" rx="26" ry="18"></ellipse></g></g>
     <!-- far hills -->
-    <path d="M0 210 C 260 150, 600 230, 900 180 S 1300 140, 1440 180 L1440 380 L0 380 Z" fill="#46503b"></path>
-    <g><rect x="108.5" y="182" width="3" height="10" fill="#3a4231"></rect><circle cx="110" cy="180" r="8" fill="#5a6649"></circle><rect x="132.5" y="179" width="3" height="10" fill="#3a4231"></rect><circle cx="134" cy="177" r="8" fill="#5a6649"></circle><rect x="688.5" y="190" width="3" height="10" fill="#3a4231"></rect><circle cx="690" cy="188" r="8" fill="#5a6649"></circle><rect x="1070.5" y="156" width="3" height="10" fill="#3a4231"></rect><circle cx="1072" cy="154" r="8" fill="#5a6649"></circle><rect x="1096.5" y="153" width="3" height="10" fill="#3a4231"></rect><circle cx="1098" cy="151" r="8" fill="#5a6649"></circle><rect x="1364.5" y="158" width="3" height="10" fill="#3a4231"></rect><circle cx="1366" cy="156" r="8" fill="#5a6649"></circle></g>
+    <path d="M-1600 200 C -1000 175, -400 230, 0 210 C 260 150, 600 230, 900 180 S 1300 140, 1440 180 C 1800 220, 2400 160, 3040 195 L3040 380 L-1600 380 Z" fill="#46503b"></path>
+    <g><rect x="-301.5" y="190" width="3" height="10" fill="#3a4231"></rect><circle cx="-300" cy="188" r="8" fill="#5a6649"></circle><rect x="-601.5" y="200" width="3" height="10" fill="#3a4231"></rect><circle cx="-600" cy="198" r="8" fill="#5a6649"></circle><rect x="1698.5" y="188" width="3" height="10" fill="#3a4231"></rect><circle cx="1700" cy="186" r="8" fill="#5a6649"></circle><rect x="1998.5" y="180" width="3" height="10" fill="#3a4231"></rect><circle cx="2000" cy="178" r="8" fill="#5a6649"></circle><rect x="108.5" y="182" width="3" height="10" fill="#3a4231"></rect><circle cx="110" cy="180" r="8" fill="#5a6649"></circle><rect x="132.5" y="179" width="3" height="10" fill="#3a4231"></rect><circle cx="134" cy="177" r="8" fill="#5a6649"></circle><rect x="688.5" y="190" width="3" height="10" fill="#3a4231"></rect><circle cx="690" cy="188" r="8" fill="#5a6649"></circle><rect x="1070.5" y="156" width="3" height="10" fill="#3a4231"></rect><circle cx="1072" cy="154" r="8" fill="#5a6649"></circle><rect x="1096.5" y="153" width="3" height="10" fill="#3a4231"></rect><circle cx="1098" cy="151" r="8" fill="#5a6649"></circle><rect x="1364.5" y="158" width="3" height="10" fill="#3a4231"></rect><circle cx="1366" cy="156" r="8" fill="#5a6649"></circle></g>
     <!-- house one -->
     <g stroke="#2f3629" stroke-width="3" stroke-linejoin="round">
       <rect x="486" y="168" width="12" height="26" fill="#9A6A4F"></rect>
@@ -224,7 +233,7 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
       <rect x="780" y="214" width="18" height="36" fill="#9A6A4F"></rect>
     </g>
     <!-- mid hill -->
-    <path d="M0 262 C 300 192, 520 282, 820 232 S 1250 182, 1440 242 L1440 380 L0 380 Z" fill="#525d43"></path>
+    <path d="M-1600 252 C -1000 228, -400 280, 0 262 C 300 192, 520 282, 820 232 S 1250 182, 1440 242 C 1800 290, 2400 226, 3040 254 L3040 380 L-1600 380 Z" fill="#525d43"></path>
     <!-- ghost gum -->
     <g transform="translate(330 238) scale(.8)">
       <path d="M-11 0 C -8 -40, -14 -70, -4 -112 L 6 -112 C 10 -70, 6 -40, 13 0 Z" fill="#efe6d6" stroke="#2f3629" stroke-width="2.5"></path>
@@ -280,7 +289,7 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
       </g>
     </g>
     <!-- front ground -->
-    <path d="M0 320 C 240 290, 480 340, 720 316 S 1200 296, 1440 326 L1440 380 L0 380 Z" fill="#2f3629"></path>
+    <path d="M-1600 322 C -1000 300, -400 334, 0 320 C 240 290, 480 340, 720 316 S 1200 296, 1440 326 C 1800 340, 2400 302, 3040 322 L3040 380 L-1600 380 Z" fill="#2f3629"></path>
     <!-- grass trees -->
     <g transform="translate(360 320)">
       <path d="M-8 0 L -7 -34 L 7 -34 L 8 0 Z" fill="#2a2a24" stroke="#2f3629" stroke-width="2"></path>
@@ -418,7 +427,123 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
     <g class="sway ob" style="animation-delay: -0.1s"><path d="M1356 380 Q1352 351 1342 331 Q1362 356 1364 380 Z M1366 380 Q1369 343 1374 318 Q1376 349 1374 380 Z M1376 380 Q1382 349 1392 329 Q1380 354 1384 380 Z" fill="#5E7A3E"></path></g>
     <g class="sway ob" style="animation-delay: -2.2s"><path d="M1384 380 Q1380 351 1370 331 Q1390 356 1392 380 Z M1394 380 Q1397 346 1402 324 Q1404 352 1402 380 Z M1404 380 Q1410 360 1420 346 Q1408 363 1412 380 Z" fill="#A9C47F"></path></g>
     <g class="sway ob" style="animation-delay: -0.3s"><path d="M1429 380 Q1425 345 1415 321 Q1435 350 1437 380 Z M1439 380 Q1442 343 1447 318 Q1449 349 1447 380 Z M1449 380 Q1455 357 1465 341 Q1453 360 1457 380 Z" fill="#A9C47F"></path></g>
-      <!-- butterflies -->
+      <g transform="translate(-1440 0)">
+    <!-- grass tufts -->
+    <g class="sway ob"><path d="M40 380 Q34 340 24 318 Q42 344 48 380 Z M52 380 Q54 336 62 306 Q62 344 60 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -.8s"><path d="M150 380 Q144 344 132 324 Q152 348 158 380 Z M162 380 Q166 338 176 314 Q172 350 170 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.6s"><path d="M270 380 Q262 340 252 322 Q272 346 278 380 Z M282 380 Q286 334 298 310 Q292 348 290 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -2.2s"><path d="M420 380 Q414 346 402 330 Q422 350 428 380 Z M432 380 Q436 342 448 320 Q442 352 440 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -.4s"><path d="M560 380 Q552 340 540 320 Q562 346 568 380 Z M572 380 Q576 330 590 306 Q582 346 580 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.2s"><path d="M720 380 Q714 346 702 328 Q722 350 728 380 Z M732 380 Q736 340 748 318 Q742 352 740 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.8s"><path d="M870 380 Q862 340 850 322 Q872 346 878 380 Z M882 380 Q886 336 898 312 Q892 350 890 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.9s"><path d="M1020 380 Q1014 344 1002 326 Q1022 350 1028 380 Z M1032 380 Q1036 338 1048 316 Q1042 350 1040 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -.6s"><path d="M1170 380 Q1162 342 1150 324 Q1172 348 1178 380 Z M1182 380 Q1186 334 1198 310 Q1192 350 1190 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -2.4s"><path d="M1320 380 Q1314 344 1302 326 Q1322 350 1328 380 Z M1332 380 Q1336 338 1348 316 Q1342 350 1340 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.4s"><path d="M1410 380 Q1404 346 1392 330 Q1412 350 1418 380 Z M1422 380 Q1426 340 1436 318 Q1432 352 1430 380 Z" fill="#7C9A52"></path></g>
+    <!-- denser grass -->
+    <g class="sway ob" style="animation-delay: -2.6s"><path d="M0 380 Q-4 352 -14 334 Q6 357 8 380 Z M10 380 Q13 354 18 337 Q20 358 18 380 Z M20 380 Q26 362 36 350 Q24 365 28 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.7s"><path d="M27 380 Q23 349 13 328 Q33 354 35 380 Z M37 380 Q40 354 45 337 Q47 358 45 380 Z M47 380 Q53 354 63 336 Q51 358 55 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.3s"><path d="M60 380 Q56 352 46 333 Q66 356 68 380 Z M70 380 Q73 354 78 336 Q80 358 78 380 Z M80 380 Q86 359 96 345 Q84 362 88 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.0s"><path d="M105 380 Q101 344 91 320 Q111 350 113 380 Z M115 380 Q118 352 123 333 Q125 356 123 380 Z M125 380 Q131 359 141 345 Q129 362 133 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -3.1s"><path d="M127 380 Q123 349 113 328 Q133 354 135 380 Z M137 380 Q140 341 145 315 Q147 348 145 380 Z M147 380 Q153 363 163 351 Q151 366 155 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M161 380 Q157 343 147 319 Q167 350 169 380 Z M171 380 Q174 351 179 332 Q181 356 179 380 Z M181 380 Q187 358 197 343 Q185 362 189 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.9s"><path d="M197 380 Q193 354 183 337 Q203 358 205 380 Z M207 380 Q210 349 215 329 Q217 354 215 380 Z M217 380 Q223 361 233 349 Q221 364 225 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.2s"><path d="M234 380 Q230 358 220 343 Q240 362 242 380 Z M244 380 Q247 354 252 336 Q254 358 252 380 Z M254 380 Q260 352 270 334 Q258 357 262 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.5s"><path d="M268 380 Q264 347 254 325 Q274 352 276 380 Z M278 380 Q281 336 286 306 Q288 343 286 380 Z M288 380 Q294 355 304 339 Q292 360 296 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.8s"><path d="M310 380 Q306 351 296 332 Q316 356 318 380 Z M320 380 Q323 342 328 317 Q330 348 328 380 Z M330 380 Q336 358 346 343 Q334 362 338 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.8s"><path d="M335 380 Q331 345 321 322 Q341 351 343 380 Z M345 380 Q348 347 353 325 Q355 352 353 380 Z M355 380 Q361 362 371 350 Q359 365 363 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.4s"><path d="M380 380 Q376 343 366 318 Q386 349 388 380 Z M390 380 Q393 343 398 319 Q400 350 398 380 Z M400 380 Q406 349 416 329 Q404 354 408 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.4s"><path d="M400 380 Q396 350 386 330 Q406 355 408 380 Z M410 380 Q413 340 418 314 Q420 347 418 380 Z M420 380 Q426 360 436 347 Q424 364 428 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.2s"><path d="M436 380 Q432 352 422 333 Q442 356 444 380 Z M446 380 Q449 355 454 338 Q456 359 454 380 Z M456 380 Q462 351 472 331 Q460 356 464 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.6s"><path d="M476 380 Q472 346 462 324 Q482 352 484 380 Z M486 380 Q489 343 494 318 Q496 349 494 380 Z M496 380 Q502 352 512 333 Q500 356 504 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.5s"><path d="M514 380 Q510 344 500 320 Q520 350 522 380 Z M524 380 Q527 353 532 335 Q534 358 532 380 Z M534 380 Q540 358 550 344 Q538 362 542 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.8s"><path d="M536 380 Q532 346 522 323 Q542 352 544 380 Z M546 380 Q549 345 554 321 Q556 350 554 380 Z M556 380 Q562 351 572 332 Q560 356 564 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.1s"><path d="M582 380 Q578 346 568 324 Q588 352 590 380 Z M592 380 Q595 342 600 316 Q602 348 600 380 Z M602 380 Q608 351 618 331 Q606 356 610 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.2s"><path d="M616 380 Q612 357 602 341 Q622 360 624 380 Z M626 380 Q629 352 634 333 Q636 356 634 380 Z M636 380 Q642 354 652 337 Q640 358 644 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M645 380 Q641 346 631 323 Q651 352 653 380 Z M655 380 Q658 347 663 325 Q665 352 663 380 Z M665 380 Q671 356 681 340 Q669 360 673 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.8s"><path d="M685 380 Q681 357 671 341 Q691 360 693 380 Z M695 380 Q698 339 703 312 Q705 346 703 380 Z M705 380 Q711 356 721 340 Q709 360 713 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M708 380 Q704 343 694 319 Q714 350 716 380 Z M718 380 Q721 346 726 323 Q728 352 726 380 Z M728 380 Q734 350 744 330 Q732 355 736 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.5s"><path d="M749 380 Q745 343 735 318 Q755 349 757 380 Z M759 380 Q762 342 767 316 Q769 348 767 380 Z M769 380 Q775 359 785 345 Q773 362 777 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.6s"><path d="M777 380 Q773 355 763 339 Q783 360 785 380 Z M787 380 Q790 348 795 326 Q797 353 795 380 Z M797 380 Q803 363 813 352 Q801 366 805 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M811 380 Q807 354 797 337 Q817 358 819 380 Z M821 380 Q824 356 829 340 Q831 360 829 380 Z M831 380 Q837 361 847 348 Q835 364 839 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.2s"><path d="M851 380 Q847 349 837 328 Q857 354 859 380 Z M861 380 Q864 344 869 320 Q871 350 869 380 Z M871 380 Q877 361 887 348 Q875 364 879 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -2.9s"><path d="M890 380 Q886 348 876 326 Q896 353 898 380 Z M900 380 Q903 354 908 337 Q910 358 908 380 Z M910 380 Q916 355 926 338 Q914 359 918 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.5s"><path d="M920 380 Q916 352 906 334 Q926 357 928 380 Z M930 380 Q933 341 938 315 Q940 348 938 380 Z M940 380 Q946 361 956 349 Q944 364 948 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.4s"><path d="M954 380 Q950 356 940 340 Q960 360 962 380 Z M964 380 Q967 354 972 336 Q974 358 972 380 Z M974 380 Q980 360 990 346 Q978 363 982 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.0s"><path d="M979 380 Q975 348 965 327 Q985 354 987 380 Z M989 380 Q992 354 997 337 Q999 358 997 380 Z M999 380 Q1005 361 1015 349 Q1003 364 1007 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.1s"><path d="M1014 380 Q1010 358 1000 343 Q1020 362 1022 380 Z M1024 380 Q1027 342 1032 317 Q1034 348 1032 380 Z M1034 380 Q1040 352 1050 333 Q1038 356 1042 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.8s"><path d="M1050 380 Q1046 352 1036 334 Q1056 357 1058 380 Z M1060 380 Q1063 351 1068 331 Q1070 356 1068 380 Z M1070 380 Q1076 351 1086 332 Q1074 356 1078 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.4s"><path d="M1089 380 Q1085 353 1075 335 Q1095 358 1097 380 Z M1099 380 Q1102 338 1107 310 Q1109 345 1107 380 Z M1109 380 Q1115 361 1125 349 Q1113 364 1117 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.3s"><path d="M1127 380 Q1123 351 1113 331 Q1133 356 1135 380 Z M1137 380 Q1140 338 1145 310 Q1147 345 1145 380 Z M1147 380 Q1153 358 1163 343 Q1151 362 1155 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.7s"><path d="M1149 380 Q1145 354 1135 336 Q1155 358 1157 380 Z M1159 380 Q1162 346 1167 324 Q1169 352 1167 380 Z M1169 380 Q1175 354 1185 337 Q1173 358 1177 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.2s"><path d="M1185 380 Q1181 360 1171 346 Q1191 363 1193 380 Z M1195 380 Q1198 348 1203 327 Q1205 354 1203 380 Z M1205 380 Q1211 354 1221 336 Q1209 358 1213 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -2.7s"><path d="M1214 380 Q1210 354 1200 337 Q1220 358 1222 380 Z M1224 380 Q1227 353 1232 335 Q1234 358 1232 380 Z M1234 380 Q1240 350 1250 330 Q1238 355 1242 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.7s"><path d="M1264 380 Q1260 357 1250 341 Q1270 360 1272 380 Z M1274 380 Q1277 343 1282 318 Q1284 349 1282 380 Z M1284 380 Q1290 349 1300 328 Q1288 354 1292 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.6s"><path d="M1298 380 Q1294 348 1284 326 Q1304 353 1306 380 Z M1308 380 Q1311 348 1316 326 Q1318 353 1316 380 Z M1318 380 Q1324 352 1334 333 Q1322 356 1326 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.6s"><path d="M1322 380 Q1318 344 1308 320 Q1328 350 1330 380 Z M1332 380 Q1335 341 1340 315 Q1342 348 1340 380 Z M1342 380 Q1348 349 1358 329 Q1346 354 1350 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.1s"><path d="M1356 380 Q1352 351 1342 331 Q1362 356 1364 380 Z M1366 380 Q1369 343 1374 318 Q1376 349 1374 380 Z M1376 380 Q1382 349 1392 329 Q1380 354 1384 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -2.2s"><path d="M1384 380 Q1380 351 1370 331 Q1390 356 1392 380 Z M1394 380 Q1397 346 1402 324 Q1404 352 1402 380 Z M1404 380 Q1410 360 1420 346 Q1408 363 1412 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.3s"><path d="M1429 380 Q1425 345 1415 321 Q1435 350 1437 380 Z M1439 380 Q1442 343 1447 318 Q1449 349 1447 380 Z M1449 380 Q1455 357 1465 341 Q1453 360 1457 380 Z" fill="#A9C47F"></path></g>
+      </g>
+    <g transform="translate(1440 0)">
+    <!-- grass tufts -->
+    <g class="sway ob"><path d="M40 380 Q34 340 24 318 Q42 344 48 380 Z M52 380 Q54 336 62 306 Q62 344 60 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -.8s"><path d="M150 380 Q144 344 132 324 Q152 348 158 380 Z M162 380 Q166 338 176 314 Q172 350 170 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.6s"><path d="M270 380 Q262 340 252 322 Q272 346 278 380 Z M282 380 Q286 334 298 310 Q292 348 290 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -2.2s"><path d="M420 380 Q414 346 402 330 Q422 350 428 380 Z M432 380 Q436 342 448 320 Q442 352 440 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -.4s"><path d="M560 380 Q552 340 540 320 Q562 346 568 380 Z M572 380 Q576 330 590 306 Q582 346 580 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.2s"><path d="M720 380 Q714 346 702 328 Q722 350 728 380 Z M732 380 Q736 340 748 318 Q742 352 740 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.8s"><path d="M870 380 Q862 340 850 322 Q872 346 878 380 Z M882 380 Q886 336 898 312 Q892 350 890 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.9s"><path d="M1020 380 Q1014 344 1002 326 Q1022 350 1028 380 Z M1032 380 Q1036 338 1048 316 Q1042 350 1040 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -.6s"><path d="M1170 380 Q1162 342 1150 324 Q1172 348 1178 380 Z M1182 380 Q1186 334 1198 310 Q1192 350 1190 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -2.4s"><path d="M1320 380 Q1314 344 1302 326 Q1322 350 1328 380 Z M1332 380 Q1336 338 1348 316 Q1342 350 1340 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.4s"><path d="M1410 380 Q1404 346 1392 330 Q1412 350 1418 380 Z M1422 380 Q1426 340 1436 318 Q1432 352 1430 380 Z" fill="#7C9A52"></path></g>
+    <!-- denser grass -->
+    <g class="sway ob" style="animation-delay: -2.6s"><path d="M0 380 Q-4 352 -14 334 Q6 357 8 380 Z M10 380 Q13 354 18 337 Q20 358 18 380 Z M20 380 Q26 362 36 350 Q24 365 28 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.7s"><path d="M27 380 Q23 349 13 328 Q33 354 35 380 Z M37 380 Q40 354 45 337 Q47 358 45 380 Z M47 380 Q53 354 63 336 Q51 358 55 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.3s"><path d="M60 380 Q56 352 46 333 Q66 356 68 380 Z M70 380 Q73 354 78 336 Q80 358 78 380 Z M80 380 Q86 359 96 345 Q84 362 88 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.0s"><path d="M105 380 Q101 344 91 320 Q111 350 113 380 Z M115 380 Q118 352 123 333 Q125 356 123 380 Z M125 380 Q131 359 141 345 Q129 362 133 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -3.1s"><path d="M127 380 Q123 349 113 328 Q133 354 135 380 Z M137 380 Q140 341 145 315 Q147 348 145 380 Z M147 380 Q153 363 163 351 Q151 366 155 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M161 380 Q157 343 147 319 Q167 350 169 380 Z M171 380 Q174 351 179 332 Q181 356 179 380 Z M181 380 Q187 358 197 343 Q185 362 189 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.9s"><path d="M197 380 Q193 354 183 337 Q203 358 205 380 Z M207 380 Q210 349 215 329 Q217 354 215 380 Z M217 380 Q223 361 233 349 Q221 364 225 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.2s"><path d="M234 380 Q230 358 220 343 Q240 362 242 380 Z M244 380 Q247 354 252 336 Q254 358 252 380 Z M254 380 Q260 352 270 334 Q258 357 262 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.5s"><path d="M268 380 Q264 347 254 325 Q274 352 276 380 Z M278 380 Q281 336 286 306 Q288 343 286 380 Z M288 380 Q294 355 304 339 Q292 360 296 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.8s"><path d="M310 380 Q306 351 296 332 Q316 356 318 380 Z M320 380 Q323 342 328 317 Q330 348 328 380 Z M330 380 Q336 358 346 343 Q334 362 338 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.8s"><path d="M335 380 Q331 345 321 322 Q341 351 343 380 Z M345 380 Q348 347 353 325 Q355 352 353 380 Z M355 380 Q361 362 371 350 Q359 365 363 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.4s"><path d="M380 380 Q376 343 366 318 Q386 349 388 380 Z M390 380 Q393 343 398 319 Q400 350 398 380 Z M400 380 Q406 349 416 329 Q404 354 408 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.4s"><path d="M400 380 Q396 350 386 330 Q406 355 408 380 Z M410 380 Q413 340 418 314 Q420 347 418 380 Z M420 380 Q426 360 436 347 Q424 364 428 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.2s"><path d="M436 380 Q432 352 422 333 Q442 356 444 380 Z M446 380 Q449 355 454 338 Q456 359 454 380 Z M456 380 Q462 351 472 331 Q460 356 464 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.6s"><path d="M476 380 Q472 346 462 324 Q482 352 484 380 Z M486 380 Q489 343 494 318 Q496 349 494 380 Z M496 380 Q502 352 512 333 Q500 356 504 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.5s"><path d="M514 380 Q510 344 500 320 Q520 350 522 380 Z M524 380 Q527 353 532 335 Q534 358 532 380 Z M534 380 Q540 358 550 344 Q538 362 542 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.8s"><path d="M536 380 Q532 346 522 323 Q542 352 544 380 Z M546 380 Q549 345 554 321 Q556 350 554 380 Z M556 380 Q562 351 572 332 Q560 356 564 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.1s"><path d="M582 380 Q578 346 568 324 Q588 352 590 380 Z M592 380 Q595 342 600 316 Q602 348 600 380 Z M602 380 Q608 351 618 331 Q606 356 610 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.2s"><path d="M616 380 Q612 357 602 341 Q622 360 624 380 Z M626 380 Q629 352 634 333 Q636 356 634 380 Z M636 380 Q642 354 652 337 Q640 358 644 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M645 380 Q641 346 631 323 Q651 352 653 380 Z M655 380 Q658 347 663 325 Q665 352 663 380 Z M665 380 Q671 356 681 340 Q669 360 673 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.8s"><path d="M685 380 Q681 357 671 341 Q691 360 693 380 Z M695 380 Q698 339 703 312 Q705 346 703 380 Z M705 380 Q711 356 721 340 Q709 360 713 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M708 380 Q704 343 694 319 Q714 350 716 380 Z M718 380 Q721 346 726 323 Q728 352 726 380 Z M728 380 Q734 350 744 330 Q732 355 736 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.5s"><path d="M749 380 Q745 343 735 318 Q755 349 757 380 Z M759 380 Q762 342 767 316 Q769 348 767 380 Z M769 380 Q775 359 785 345 Q773 362 777 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.6s"><path d="M777 380 Q773 355 763 339 Q783 360 785 380 Z M787 380 Q790 348 795 326 Q797 353 795 380 Z M797 380 Q803 363 813 352 Q801 366 805 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -1.3s"><path d="M811 380 Q807 354 797 337 Q817 358 819 380 Z M821 380 Q824 356 829 340 Q831 360 829 380 Z M831 380 Q837 361 847 348 Q835 364 839 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.2s"><path d="M851 380 Q847 349 837 328 Q857 354 859 380 Z M861 380 Q864 344 869 320 Q871 350 869 380 Z M871 380 Q877 361 887 348 Q875 364 879 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -2.9s"><path d="M890 380 Q886 348 876 326 Q896 353 898 380 Z M900 380 Q903 354 908 337 Q910 358 908 380 Z M910 380 Q916 355 926 338 Q914 359 918 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.5s"><path d="M920 380 Q916 352 906 334 Q926 357 928 380 Z M930 380 Q933 341 938 315 Q940 348 938 380 Z M940 380 Q946 361 956 349 Q944 364 948 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -1.4s"><path d="M954 380 Q950 356 940 340 Q960 360 962 380 Z M964 380 Q967 354 972 336 Q974 358 972 380 Z M974 380 Q980 360 990 346 Q978 363 982 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.0s"><path d="M979 380 Q975 348 965 327 Q985 354 987 380 Z M989 380 Q992 354 997 337 Q999 358 997 380 Z M999 380 Q1005 361 1015 349 Q1003 364 1007 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.1s"><path d="M1014 380 Q1010 358 1000 343 Q1020 362 1022 380 Z M1024 380 Q1027 342 1032 317 Q1034 348 1032 380 Z M1034 380 Q1040 352 1050 333 Q1038 356 1042 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.8s"><path d="M1050 380 Q1046 352 1036 334 Q1056 357 1058 380 Z M1060 380 Q1063 351 1068 331 Q1070 356 1068 380 Z M1070 380 Q1076 351 1086 332 Q1074 356 1078 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.4s"><path d="M1089 380 Q1085 353 1075 335 Q1095 358 1097 380 Z M1099 380 Q1102 338 1107 310 Q1109 345 1107 380 Z M1109 380 Q1115 361 1125 349 Q1113 364 1117 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.3s"><path d="M1127 380 Q1123 351 1113 331 Q1133 356 1135 380 Z M1137 380 Q1140 338 1145 310 Q1147 345 1145 380 Z M1147 380 Q1153 358 1163 343 Q1151 362 1155 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.7s"><path d="M1149 380 Q1145 354 1135 336 Q1155 358 1157 380 Z M1159 380 Q1162 346 1167 324 Q1169 352 1167 380 Z M1169 380 Q1175 354 1185 337 Q1173 358 1177 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -1.2s"><path d="M1185 380 Q1181 360 1171 346 Q1191 363 1193 380 Z M1195 380 Q1198 348 1203 327 Q1205 354 1203 380 Z M1205 380 Q1211 354 1221 336 Q1209 358 1213 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -2.7s"><path d="M1214 380 Q1210 354 1200 337 Q1220 358 1222 380 Z M1224 380 Q1227 353 1232 335 Q1234 358 1232 380 Z M1234 380 Q1240 350 1250 330 Q1238 355 1242 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -0.7s"><path d="M1264 380 Q1260 357 1250 341 Q1270 360 1272 380 Z M1274 380 Q1277 343 1282 318 Q1284 349 1282 380 Z M1284 380 Q1290 349 1300 328 Q1288 354 1292 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.6s"><path d="M1298 380 Q1294 348 1284 326 Q1304 353 1306 380 Z M1308 380 Q1311 348 1316 326 Q1318 353 1316 380 Z M1318 380 Q1324 352 1334 333 Q1322 356 1326 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -2.6s"><path d="M1322 380 Q1318 344 1308 320 Q1328 350 1330 380 Z M1332 380 Q1335 341 1340 315 Q1342 348 1340 380 Z M1342 380 Q1348 349 1358 329 Q1346 354 1350 380 Z" fill="#7C9A52"></path></g>
+    <g class="sway ob" style="animation-delay: -0.1s"><path d="M1356 380 Q1352 351 1342 331 Q1362 356 1364 380 Z M1366 380 Q1369 343 1374 318 Q1376 349 1374 380 Z M1376 380 Q1382 349 1392 329 Q1380 354 1384 380 Z" fill="#5E7A3E"></path></g>
+    <g class="sway ob" style="animation-delay: -2.2s"><path d="M1384 380 Q1380 351 1370 331 Q1390 356 1392 380 Z M1394 380 Q1397 346 1402 324 Q1404 352 1402 380 Z M1404 380 Q1410 360 1420 346 Q1408 363 1412 380 Z" fill="#A9C47F"></path></g>
+    <g class="sway ob" style="animation-delay: -0.3s"><path d="M1429 380 Q1425 345 1415 321 Q1435 350 1437 380 Z M1439 380 Q1442 343 1447 318 Q1449 349 1447 380 Z M1449 380 Q1455 357 1465 341 Q1453 360 1457 380 Z" fill="#A9C47F"></path></g>
+      </g>
+    <!-- butterflies -->
     <g class="flutter">
       <g transform="translate(860 170)">
         <g class="flap oc"><ellipse cx="-7" cy="0" rx="9" ry="12" fill="#E9C46A"></ellipse><ellipse cx="7" cy="0" rx="9" ry="12" fill="#E9C46A"></ellipse></g>
