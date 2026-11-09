@@ -58,6 +58,26 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
 .ring{animation:ring 3.6s ease-out infinite}
 .sprout{animation:sprout 4.5s ease-in-out infinite alternate}
 .leaf{animation:leaf 4.5s ease-in-out infinite alternate}
+.ot{transform-box:fill-box;transform-origin:50% 0}
+.orb{transform-box:fill-box;transform-origin:100% 100%}
+@keyframes flyAcross{from{transform:translateX(-220px)}to{transform:translateX(1700px)}}
+@keyframes flapY{0%,100%{transform:scaleY(1)}50%{transform:scaleY(-.55)}}
+@keyframes smoke{0%{transform:translate(0,0) scale(.5);opacity:0}20%{opacity:.85}100%{transform:translate(16px,-48px) scale(1.7);opacity:0}}
+@keyframes peck{0%,55%,100%{transform:rotate(0)}65%{transform:rotate(-30deg)}75%{transform:rotate(0)}85%{transform:rotate(-30deg)}}
+@keyframes graze{0%,55%,100%{transform:rotate(0)}65%,90%{transform:rotate(-40deg)}}
+@keyframes crawl{from{transform:translateX(-120px)}to{transform:translateX(1560px)}}
+@keyframes tongue{0%,78%,100%{transform:scaleX(0)}86%,92%{transform:scaleX(1)}}
+@keyframes buzz{0%,100%{transform:translate(0,0)}25%{transform:translate(18px,-12px)}50%{transform:translate(0,-22px)}75%{transform:translate(-18px,-10px)}}
+@keyframes hangSway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.fly-across{animation:flyAcross 34s linear infinite}
+.flapY{animation:flapY .45s ease-in-out infinite}
+.smoke{animation:smoke 4.2s ease-out infinite}
+.peck{animation:peck 3.6s ease-in-out infinite}
+.graze{animation:graze 7s ease-in-out infinite}
+.crawl{animation:crawl 90s linear infinite}
+.tongue{animation:tongue 2.8s ease-in-out infinite}
+.buzz{animation:buzz 2.2s ease-in-out infinite}
+.hang{animation:hangSway 2.8s ease-in-out infinite}
 
 /* ---------- scroll-driven ---------- */
 @keyframes growY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
@@ -151,6 +171,7 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
   <div style="flex: 1 1 auto; min-height: 170px; position: relative; margin-top: 8px">
   <svg aria-hidden="true" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMax slice" style="position: absolute; inset: 0; display: block; width: 100%; height: 100%">
     <!-- sun -->
+    <g transform="translate(194 50) scale(.85)">
     <g class="spin oc">
       <line x1="1160" y1="38" x2="1160" y2="58" stroke="#B49A63" stroke-width="5" stroke-linecap="round"></line>
       <line x1="1160" y1="162" x2="1160" y2="182" stroke="#B49A63" stroke-width="5" stroke-linecap="round"></line>
@@ -162,55 +183,185 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
       <line x1="1123" y1="147" x2="1109" y2="161" stroke="#B49A63" stroke-width="5" stroke-linecap="round"></line>
     </g>
     <circle cx="1160" cy="110" r="40" fill="#B49A63"></circle>
+    <circle cx="1160" cy="110" r="30" fill="#c4ab72"></circle>
+    </g>
     <!-- clouds -->
-    <g class="drift"><g fill="#fff0dc" opacity=".92"><ellipse cx="80" cy="96" rx="58" ry="22"></ellipse><ellipse cx="116" cy="80" rx="36" ry="26"></ellipse><ellipse cx="62" cy="84" rx="26" ry="20"></ellipse></g></g>
+    <g class="drift"><g fill="#fff0dc" opacity=".92" transform="translate(0 36)"><ellipse cx="80" cy="96" rx="58" ry="22"></ellipse><ellipse cx="116" cy="80" rx="36" ry="26"></ellipse><ellipse cx="62" cy="84" rx="26" ry="20"></ellipse></g></g>
     <g class="drift" style="animation-delay: -38s; animation-duration: 90s"><g fill="#fff0dc" opacity=".8"><ellipse cx="80" cy="150" rx="44" ry="16"></ellipse><ellipse cx="104" cy="138" rx="26" ry="18"></ellipse></g></g>
-    <!-- hills -->
+    <!-- far hills -->
     <path d="M0 210 C 260 150, 600 230, 900 180 S 1300 140, 1440 180 L1440 380 L0 380 Z" fill="#46503b"></path>
-    <!-- homes on the hill -->
+    <g><rect x="108.5" y="182" width="3" height="10" fill="#3a4231"></rect><circle cx="110" cy="180" r="8" fill="#5a6649"></circle><rect x="132.5" y="179" width="3" height="10" fill="#3a4231"></rect><circle cx="134" cy="177" r="8" fill="#5a6649"></circle><rect x="688.5" y="190" width="3" height="10" fill="#3a4231"></rect><circle cx="690" cy="188" r="8" fill="#5a6649"></circle><rect x="1070.5" y="156" width="3" height="10" fill="#3a4231"></rect><circle cx="1072" cy="154" r="8" fill="#5a6649"></circle><rect x="1096.5" y="153" width="3" height="10" fill="#3a4231"></rect><circle cx="1098" cy="151" r="8" fill="#5a6649"></circle><rect x="1364.5" y="158" width="3" height="10" fill="#3a4231"></rect><circle cx="1366" cy="156" r="8" fill="#5a6649"></circle></g>
+    <!-- house one -->
     <g stroke="#2f3629" stroke-width="3" stroke-linejoin="round">
       <rect x="486" y="168" width="12" height="26" fill="#9A6A4F"></rect>
       <rect x="440" y="198" width="76" height="62" fill="#fff0dc"></rect>
       <path d="M430 202 L478 164 L526 202 Z" fill="#9A6A4F"></path>
-      <rect x="452" y="214" width="18" height="18" fill="#E9C46A"></rect>
-      <rect x="486" y="222" width="18" height="38" fill="#7C9A52"></rect>
+      <rect x="452" y="212" width="20" height="20" fill="#E9C46A"></rect>
+      <path d="M462 212 L462 232 M452 222 L472 222" stroke-width="2"></path>
+      <rect x="486" y="220" width="18" height="40" fill="#7C9A52"></rect>
     </g>
+    <circle cx="500" cy="241" r="1.8" fill="#2f3629"></circle>
+    <!-- hills hoist -->
+    <g>
+      <path d="M640 252 L640 178" stroke="#b9b2a2" stroke-width="4" stroke-linecap="round"></path>
+      <path d="M592 182 L688 174 M612 170 L668 186 M592 182 L612 170 L688 174 L668 186 Z" stroke="#b9b2a2" stroke-width="2" fill="none" stroke-linejoin="round"></path>
+      <g stroke="#2f3629" stroke-width="2" stroke-linejoin="round">
+        <g class="hang ot"><rect x="597" y="181" width="14" height="18" fill="#fff0dc"></rect></g>
+        <g class="hang ot" style="animation-delay: -.7s"><path d="M618 182 L 638 184 L 642 190 L 637 192 L 636 202 L 620 201 L 620 191 L 615 189 Z" fill="#E9C46A"></path></g>
+        <g class="hang ot" style="animation-delay: -1.4s"><rect x="646" y="185" width="8" height="15" fill="#C2553F"></rect></g>
+        <g class="hang ot" style="animation-delay: -2.1s"><path d="M672 182 L 684 178 L 690 200 L 670 203 Z" fill="#6f7fc0"></path></g>
+      </g>
+    </g>
+    <!-- house two + chimney smoke -->
     <g stroke="#2f3629" stroke-width="3" stroke-linejoin="round">
+      <rect x="812" y="146" width="12" height="28" fill="#9A6A4F"></rect>
       <rect x="742" y="186" width="96" height="64" fill="#f3dfbf"></rect>
       <path d="M732 190 L790 150 L848 190 Z" fill="#B49A63"></path>
+      <circle cx="790" cy="174" r="6" fill="#E9C46A"></circle>
       <rect x="754" y="202" width="20" height="18" fill="#E9C46A"></rect>
       <rect x="806" y="202" width="20" height="18" fill="#E9C46A"></rect>
+      <path d="M764 202 V220 M816 202 V220" stroke-width="2"></path>
       <rect x="780" y="214" width="18" height="36" fill="#9A6A4F"></rect>
     </g>
+    <!-- mid hill -->
     <path d="M0 262 C 300 192, 520 282, 820 232 S 1250 182, 1440 242 L1440 380 L0 380 Z" fill="#525d43"></path>
-    <!-- eucalypts -->
-    <g class="sway-slow ob">
-      <path d="M318 244 L322 150 L330 150 L336 244 Z" fill="#9A6A4F"></path>
-      <path d="M326 170 L300 140 M328 160 L352 128" stroke="#9A6A4F" stroke-width="5" stroke-linecap="round" fill="none"></path>
-      <ellipse cx="294" cy="128" rx="34" ry="22" fill="#7C9A52"></ellipse><ellipse cx="356" cy="116" rx="38" ry="24" fill="#7C9A52"></ellipse><ellipse cx="326" cy="100" rx="32" ry="22" fill="#A9C47F"></ellipse>
+    <!-- ghost gum -->
+    <g transform="translate(330 238) scale(.8)">
+      <path d="M-11 0 C -8 -40, -14 -70, -4 -112 L 6 -112 C 10 -70, 6 -40, 13 0 Z" fill="#efe6d6" stroke="#2f3629" stroke-width="2.5"></path>
+      <path d="M-3 -82 C -20 -100, -40 -110, -58 -126 M2 -98 C 18 -116, 34 -126, 52 -138 M0 -110 C -2 -130, 2 -144, 4 -158" stroke="#efe6d6" stroke-width="6" stroke-linecap="round" fill="none"></path>
+      <path d="M-4 -20 q 4 -6 8 0 M-2 -52 q 4 -5 7 0 M-6 -76 q 3 -5 7 0" stroke="#c9bda6" stroke-width="2" fill="none"></path>
+      <g class="sway-slow ob">
+        <ellipse cx="-64" cy="-132" rx="36" ry="19" fill="#5E7A3E"></ellipse>
+        <ellipse cx="56" cy="-144" rx="38" ry="21" fill="#7C9A52"></ellipse>
+        <ellipse cx="-24" cy="-156" rx="28" ry="17" fill="#7C9A52"></ellipse>
+        <ellipse cx="4" cy="-170" rx="34" ry="20" fill="#A9C47F"></ellipse>
+        <ellipse cx="30" cy="-122" rx="24" ry="13" fill="#A9C47F"></ellipse>
+        <path d="M-90 -126 l -2 10 M-74 -116 l 0 10 M-52 -118 l 2 9 M34 -128 l -1 9 M74 -130 l 2 10 M84 -138 l 3 9" stroke="#5E7A3E" stroke-width="3" stroke-linecap="round"></path>
+      </g>
     </g>
-    <g class="sway-slow ob" style="animation-delay: -2.5s">
-      <path d="M1000 226 L1003 160 L1009 160 L1013 226 Z" fill="#9A6A4F"></path>
-      <ellipse cx="992" cy="150" rx="28" ry="18" fill="#7C9A52"></ellipse><ellipse cx="1024" cy="140" rx="26" ry="18" fill="#A9C47F"></ellipse>
+    <!-- koala gum -->
+    <g transform="translate(985 226) scale(.88)">
+      <path d="M-8 0 C -6 -40, -10 -60, -4 -98 L 4 -98 C 8 -60, 4 -40, 9 0 Z" fill="#cfc2a8" stroke="#2f3629" stroke-width="2.5"></path>
+      <path d="M1 -70 C 16 -86, 26 -94, 40 -106" stroke="#cfc2a8" stroke-width="5" stroke-linecap="round" fill="none"></path>
+      <g class="sway-slow ob" style="animation-delay: -2s">
+        <ellipse cx="-30" cy="-104" rx="30" ry="17" fill="#7C9A52"></ellipse>
+        <ellipse cx="38" cy="-114" rx="30" ry="17" fill="#5E7A3E"></ellipse>
+        <ellipse cx="2" cy="-128" rx="32" ry="19" fill="#A9C47F"></ellipse>
+      </g>
+      <g stroke="#2f3629" stroke-width="2">
+        <ellipse cx="9" cy="-60" rx="13" ry="16" fill="#9d9c97"></ellipse>
+        <ellipse cx="9" cy="-56" rx="7" ry="10" fill="#d9d3c9" stroke="none"></ellipse>
+        <circle cx="1" cy="-90" r="7" fill="#9d9c97"></circle>
+        <circle cx="21" cy="-90" r="7" fill="#9d9c97"></circle>
+        <circle cx="1" cy="-90" r="3.5" fill="#e8d9d0" stroke="none"></circle>
+        <circle cx="21" cy="-90" r="3.5" fill="#e8d9d0" stroke="none"></circle>
+        <circle cx="11" cy="-80" r="11" fill="#9d9c97"></circle>
+        <ellipse cx="11" cy="-77" rx="4" ry="5" fill="#2f3629" stroke="none"></ellipse>
+        <path d="M-2 -66 C -8 -62, -8 -54, -2 -52" fill="none" stroke-width="3" stroke-linecap="round"></path>
+      </g>
+      <g class="oc" style="animation: blink 5s infinite"><circle cx="6" cy="-83" r="1.6" fill="#2f3629"></circle><circle cx="16" cy="-83" r="1.6" fill="#2f3629"></circle></g>
     </g>
-    <!-- fence post + fairy-wren -->
-    <rect x="606" y="226" width="10" height="44" fill="#9A6A4F"></rect>
-    <g class="bob">
-      <path d="M602 226 L582 202" stroke="#2c4a7a" stroke-width="5" stroke-linecap="round"></path>
-      <ellipse cx="612" cy="214" rx="15" ry="11" fill="#6b5a46"></ellipse>
-      <circle cx="624" cy="204" r="9" fill="#4f86c6"></circle>
-      <g class="oc" style="animation: blink 4s infinite"><circle cx="627" cy="202" r="2" fill="#1d2418"></circle></g>
-      <path d="M632 204 L640 206 L632 208 Z" fill="#1d2418"></path>
-    </g>
-    <!-- butterfly -->
-    <g class="flutter">
-      <g transform="translate(860 170)">
-        <g class="flap oc"><ellipse cx="-7" cy="0" rx="9" ry="12" fill="#E9C46A"></ellipse><ellipse cx="7" cy="0" rx="9" ry="12" fill="#E9C46A"></ellipse></g>
-        <rect x="-1.5" y="-9" width="3" height="18" fill="#1d2418"></rect>
+    <!-- grazing kangaroo with joey -->
+    <g transform="translate(1250 204)">
+      <path d="M12 -10 C 38 -6, 58 0, 76 6" stroke="#a96c46" stroke-width="8" stroke-linecap="round" fill="none"></path>
+      <path d="M-6 -4 C -32 -10, -36 -44, -14 -58 C 4 -66, 22 -50, 20 -26 C 18 -10, 8 -2, -6 -4 Z" fill="#b97a52" stroke="#2f3629" stroke-width="2.5"></path>
+      <path d="M-6 -2 L -30 1 L -4 3 Z" fill="#a96c46" stroke="#2f3629" stroke-width="2" stroke-linejoin="round"></path>
+      <path d="M-22 -38 L -30 -26" stroke="#2f3629" stroke-width="3" stroke-linecap="round"></path>
+      <path d="M-18 -30 C -12 -26, -6 -26, -2 -30" stroke="#8d5c3c" stroke-width="2" fill="none"></path>
+      <circle cx="-12" cy="-34" r="5" fill="#c99470" stroke="#2f3629" stroke-width="2"></circle>
+      <path d="M-14 -40 L -13 -45 L -10 -40" fill="#c99470" stroke="#2f3629" stroke-width="1.5"></path>
+      <circle cx="-13" cy="-35" r="1" fill="#2f3629"></circle>
+      <g class="graze orb">
+        <path d="M-12 -56 L -16 -64" stroke="#b97a52" stroke-width="10" stroke-linecap="round"></path>
+        <ellipse cx="-28" cy="-64" rx="13" ry="8" fill="#b97a52" stroke="#2f3629" stroke-width="2.5"></ellipse>
+        <path d="M-20 -70 L -18 -84 L -14 -70 M-24 -70 L -24 -83 L -19 -71" fill="#b97a52" stroke="#2f3629" stroke-width="2" stroke-linejoin="round"></path>
+        <circle cx="-30" cy="-66" r="1.6" fill="#2f3629"></circle>
+        <circle cx="-40" cy="-63" r="2" fill="#2f3629"></circle>
       </g>
     </g>
     <!-- front ground -->
     <path d="M0 320 C 240 290, 480 340, 720 316 S 1200 296, 1440 326 L1440 380 L0 380 Z" fill="#2f3629"></path>
+    <!-- grass trees -->
+    <g transform="translate(360 320)">
+      <path d="M-8 0 L -7 -34 L 7 -34 L 8 0 Z" fill="#2a2a24" stroke="#2f3629" stroke-width="2"></path>
+      <path d="M-5 -8 l 8 -3 M-4 -18 l 8 -3 M-5 -27 l 9 -3" stroke="#4a463a" stroke-width="2"></path>
+      <g class="sway-slow ob" style="animation-delay: 0s">
+        <path d="M0 -38 L 0 -104" stroke="#6b5a3e" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M0 -68 L 0 -104" stroke="#e8dcb5" stroke-width="7" stroke-linecap="round"></path>
+        <path d="M0 -34 Q -15 -42 -30 -23 M0 -34 Q -18 -43 -36 -24 M0 -34 Q -13 -46 -25 -30 M0 -34 Q -10 -48 -19 -33 M0 -34 Q -13 -49 -26 -37 M0 -34 Q -13 -51 -25 -40 M0 -34 Q -7 -58 -14 -54 M0 -34 Q -6 -59 -12 -56 M0 -34 Q -7 -65 -14 -68 M0 -34 Q -4 -64 -8 -66 M0 -34 Q -1 -59 -3 -56 M0 -34 Q 0 -62 0 -63 M0 -34 Q 2 -67 5 -72 M0 -34 Q 4 -62 7 -62 M0 -34 Q 4 -58 8 -55 M0 -34 Q 8 -62 16 -63 M0 -34 Q 11 -63 22 -64 M0 -34 Q 9 -50 17 -38 M0 -34 Q 9 -49 19 -36 M0 -34 Q 15 -48 31 -33 M0 -34 Q 16 -46 31 -29 M0 -34 Q 11 -45 22 -28 M0 -34 Q 14 -43 27 -24" stroke="#7C9A52" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      </g>
+    </g>
+    <g transform="translate(1080 305)">
+      <path d="M-8 0 L -7 -34 L 7 -34 L 8 0 Z" fill="#2a2a24" stroke="#2f3629" stroke-width="2"></path>
+      <path d="M-5 -8 l 8 -3 M-4 -18 l 8 -3 M-5 -27 l 9 -3" stroke="#4a463a" stroke-width="2"></path>
+      <g class="sway-slow ob" style="animation-delay: -3s">
+        <path d="M0 -38 L 0 -104" stroke="#6b5a3e" stroke-width="4" stroke-linecap="round"></path>
+        <path d="M0 -68 L 0 -104" stroke="#e8dcb5" stroke-width="7" stroke-linecap="round"></path>
+        <path d="M0 -34 Q -15 -42 -30 -23 M0 -34 Q -18 -43 -36 -24 M0 -34 Q -13 -46 -25 -30 M0 -34 Q -10 -48 -19 -33 M0 -34 Q -13 -49 -26 -37 M0 -34 Q -13 -51 -25 -40 M0 -34 Q -7 -58 -14 -54 M0 -34 Q -6 -59 -12 -56 M0 -34 Q -7 -65 -14 -68 M0 -34 Q -4 -64 -8 -66 M0 -34 Q -1 -59 -3 -56 M0 -34 Q 0 -62 0 -63 M0 -34 Q 2 -67 5 -72 M0 -34 Q 4 -62 7 -62 M0 -34 Q 4 -58 8 -55 M0 -34 Q 8 -62 16 -63 M0 -34 Q 11 -63 22 -64 M0 -34 Q 9 -50 17 -38 M0 -34 Q 9 -49 19 -36 M0 -34 Q 15 -48 31 -33 M0 -34 Q 16 -46 31 -29 M0 -34 Q 11 -45 22 -28 M0 -34 Q 14 -43 27 -24" stroke="#7C9A52" stroke-width="2" fill="none" stroke-linecap="round"></path>
+      </g>
+    </g>
+    <!-- wattle + bees -->
+    <g transform="translate(560 312)">
+      <path d="M0 0 L -2 -18 M0 -6 L 10 -22" stroke="#6b5a3e" stroke-width="3" stroke-linecap="round"></path>
+      <g class="sway-slow ob" style="animation-delay: -1s">
+        <ellipse cx="0" cy="-24" rx="36" ry="20" fill="#6f8a4a"></ellipse>
+        <ellipse cx="-22" cy="-38" rx="20" ry="15" fill="#7C9A52"></ellipse>
+        <ellipse cx="20" cy="-40" rx="22" ry="15" fill="#6f8a4a"></ellipse>
+        <ellipse cx="0" cy="-52" rx="20" ry="13" fill="#7C9A52"></ellipse>
+        <g fill="#F2C94C">
+          <circle cx="-26" cy="-26" r="3.5"></circle><circle cx="-14" cy="-34" r="3.5"></circle><circle cx="-30" cy="-42" r="3.5"></circle><circle cx="-6" cy="-20" r="3.5"></circle>
+          <circle cx="8" cy="-30" r="3.5"></circle><circle cx="22" cy="-22" r="3.5"></circle><circle cx="18" cy="-44" r="3.5"></circle><circle cx="30" cy="-34" r="3.5"></circle>
+          <circle cx="-2" cy="-46" r="3.5"></circle><circle cx="6" cy="-58" r="3.5"></circle><circle cx="-12" cy="-54" r="3.5"></circle><circle cx="32" cy="-18" r="3.5"></circle>
+          <circle cx="-34" cy="-18" r="3.5"></circle><circle cx="12" cy="-14" r="3.5"></circle><circle cx="-18" cy="-14" r="3.5"></circle>
+        </g>
+      </g>
+      <g transform="translate(34 -66)"><g class="buzz">
+        <ellipse cx="-2" cy="-5" rx="3" ry="4" fill="#fffaf2" opacity=".85"></ellipse><ellipse cx="0" cy="0" rx="5" ry="3.5" fill="#E9C46A" stroke="#2f3629" stroke-width="1"></ellipse><path d="M0 -3 V3" stroke="#2f3629" stroke-width="1.5"></path>
+      </g></g>
+      <g transform="translate(-40 -60)"><g class="buzz" style="animation-delay: -1.1s; animation-duration: 2.8s">
+        <ellipse cx="-2" cy="-5" rx="3" ry="4" fill="#fffaf2" opacity=".85"></ellipse><ellipse cx="0" cy="0" rx="5" ry="3.5" fill="#E9C46A" stroke="#2f3629" stroke-width="1"></ellipse><path d="M0 -3 V3" stroke="#2f3629" stroke-width="1.5"></path>
+      </g></g>
+    </g>
+    <!-- kangaroo paws -->
+    <g transform="translate(145 312)"><g class="sway ob" style="animation-delay: 0s">
+      <path d="M-2 0 Q -18 -12 -26 -9 M2 0 Q 18 -14 26 -11 M0 0 Q -10 -10 -14 -18" stroke="#7C9A52" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <path d="M0 0 C -2 -20, -6 -34, -10 -46 M0 0 C 1 -24, 2 -38, 4 -54 M0 0 C 4 -18, 10 -30, 16 -40" stroke="#5E7A3E" stroke-width="3" stroke-linecap="round" fill="none"></path>
+      <path d="M-10 -46 l -5 -9 M-10 -46 l 0 -11 M-10 -46 l 5 -9 M4 -54 l -5 -9 M4 -54 l 0 -11 M4 -54 l 5 -9 M16 -40 l -5 -9 M16 -40 l 0 -11 M16 -40 l 5 -9" stroke="#C2553F" stroke-width="4.5" stroke-linecap="round" fill="none"></path>
+    </g></g>
+    <g transform="translate(455 322)"><g class="sway ob" style="animation-delay: -1.2s">
+      <path d="M-2 0 Q -18 -12 -26 -9 M2 0 Q 18 -14 26 -11 M0 0 Q -10 -10 -14 -18" stroke="#7C9A52" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <path d="M0 0 C -2 -20, -6 -34, -10 -46 M0 0 C 1 -24, 2 -38, 4 -54 M0 0 C 4 -18, 10 -30, 16 -40" stroke="#5E7A3E" stroke-width="3" stroke-linecap="round" fill="none"></path>
+      <path d="M-10 -46 l -5 -9 M-10 -46 l 0 -11 M-10 -46 l 5 -9 M4 -54 l -5 -9 M4 -54 l 0 -11 M4 -54 l 5 -9 M16 -40 l -5 -9 M16 -40 l 0 -11 M16 -40 l 5 -9" stroke="#C2553F" stroke-width="4.5" stroke-linecap="round" fill="none"></path>
+    </g></g>
+    <g transform="translate(1296 313)"><g class="sway ob" style="animation-delay: -2s">
+      <path d="M-2 0 Q -18 -12 -26 -9 M2 0 Q 18 -14 26 -11 M0 0 Q -10 -10 -14 -18" stroke="#7C9A52" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <path d="M0 0 C -2 -20, -6 -34, -10 -46 M0 0 C 1 -24, 2 -38, 4 -54 M0 0 C 4 -18, 10 -30, 16 -40" stroke="#5E7A3E" stroke-width="3" stroke-linecap="round" fill="none"></path>
+      <path d="M-10 -46 l -5 -9 M-10 -46 l 0 -11 M-10 -46 l 5 -9 M4 -54 l -5 -9 M4 -54 l 0 -11 M4 -54 l 5 -9 M16 -40 l -5 -9 M16 -40 l 0 -11 M16 -40 l 5 -9" stroke="#C2553F" stroke-width="4.5" stroke-linecap="round" fill="none"></path>
+    </g></g>
+    <!-- magpie -->
+    <g transform="translate(690 318)">
+      <path d="M-4 -4 L -4 0 M4 -4 L 4 0" stroke="#8d877b" stroke-width="2"></path>
+      <path d="M12 -12 L 30 -6 L 14 -8 Z" fill="#1f211c"></path>
+      <path d="M22 -9 L 30 -6 L 24 -7 Z" fill="#f3efe6"></path>
+      <ellipse cx="0" cy="-12" rx="16" ry="9" fill="#1f211c"></ellipse>
+      <ellipse cx="4" cy="-15" rx="9" ry="4" fill="#f3efe6"></ellipse>
+      <g class="peck orb">
+        <circle cx="-15" cy="-21" r="7" fill="#1f211c"></circle>
+        <ellipse cx="-10" cy="-22" rx="3" ry="5" fill="#f3efe6"></ellipse>
+        <path d="M-21 -22 L -31 -19 L -21 -18 Z" fill="#cfc8b8"></path>
+        <circle cx="-17" cy="-23" r="1.4" fill="#c97a3a"></circle>
+      </g>
+    </g>
+    <!-- blue-tongue lizard -->
+    <g transform="translate(0 350)"><g class="crawl">
+      <path d="M-26 0 Q -42 2 -54 0" stroke="#9c8a6c" stroke-width="6" stroke-linecap="round" fill="none"></path>
+      <path d="M-14 4 l -5 5 M10 4 l 5 5 M-14 -4 l -5 -5 M10 -4 l 5 -5" stroke="#7d6e55" stroke-width="3" stroke-linecap="round"></path>
+      <ellipse cx="0" cy="0" rx="30" ry="6.5" fill="#9c8a6c" stroke="#2f3629" stroke-width="2"></ellipse>
+      <path d="M-16 -6 V6 M-6 -6 V6 M4 -6 V6 M14 -6 V6" stroke="#5c5040" stroke-width="3"></path>
+      <ellipse cx="33" cy="-1" rx="9" ry="6" fill="#8a7a5e" stroke="#2f3629" stroke-width="2"></ellipse>
+      <circle cx="36" cy="-3" r="1.3" fill="#2f3629"></circle>
+      <g class="tongue ol"><path d="M41 0 L 52 -1 L 49 1 L 52 3 Z" fill="#3d6fd1"></path></g>
+    </g></g>
     <!-- grass tufts -->
     <g class="sway ob"><path d="M40 380 Q34 340 24 318 Q42 344 48 380 Z M52 380 Q54 336 62 306 Q62 344 60 380 Z" fill="#7C9A52"></path></g>
     <g class="sway ob" style="animation-delay: -.8s"><path d="M150 380 Q144 344 132 324 Q152 348 158 380 Z M162 380 Q166 338 176 314 Q172 350 170 380 Z" fill="#A9C47F"></path></g>
@@ -267,6 +418,13 @@ a{color:#3d4535}a:hover{color:#5E7A3E}
     <g class="sway ob" style="animation-delay: -0.1s"><path d="M1356 380 Q1352 351 1342 331 Q1362 356 1364 380 Z M1366 380 Q1369 343 1374 318 Q1376 349 1374 380 Z M1376 380 Q1382 349 1392 329 Q1380 354 1384 380 Z" fill="#5E7A3E"></path></g>
     <g class="sway ob" style="animation-delay: -2.2s"><path d="M1384 380 Q1380 351 1370 331 Q1390 356 1392 380 Z M1394 380 Q1397 346 1402 324 Q1404 352 1402 380 Z M1404 380 Q1410 360 1420 346 Q1408 363 1412 380 Z" fill="#A9C47F"></path></g>
     <g class="sway ob" style="animation-delay: -0.3s"><path d="M1429 380 Q1425 345 1415 321 Q1435 350 1437 380 Z M1439 380 Q1442 343 1447 318 Q1449 349 1447 380 Z M1449 380 Q1455 357 1465 341 Q1453 360 1457 380 Z" fill="#A9C47F"></path></g>
+      <!-- butterflies -->
+    <g class="flutter">
+      <g transform="translate(860 170)">
+        <g class="flap oc"><ellipse cx="-7" cy="0" rx="9" ry="12" fill="#E9C46A"></ellipse><ellipse cx="7" cy="0" rx="9" ry="12" fill="#E9C46A"></ellipse></g>
+        <rect x="-1.5" y="-9" width="3" height="18" fill="#1d2418"></rect>
+      </g>
+    </g>
   </svg>
   </div>
 </section>
