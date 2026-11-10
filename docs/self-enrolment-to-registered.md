@@ -117,3 +117,17 @@ check those after the Apps Script update and before release.
 - The editor source was restored to its current multi-file state with the same
   signup addition. The separate Plant Studio deployment remains on version 44.
 - Browser lookup checked from the release preview without submitting a garden.
+
+## Live deployment — 10 Nov 2026
+
+- Signup deployment (same ID and URL) moved from version 45 to version **46**.
+- Version 46 is version 45 plus the additive AP `enrol_src` column, the
+  `threeneatthings` plant-offer flag in the notification email and the extra
+  paragraph in the steward confirmation. Nothing else was rolled in. Rollback
+  target: 45.
+- The editor source was restored to its multi-file state with the same
+  addition. Health check returned live after the update.
+- Note: the editor's Code.gs differed slightly from the repository copy before
+  this change (editor 104,338 characters, repository 104,951); the same patch
+  was applied to each. Reconcile separately.
+

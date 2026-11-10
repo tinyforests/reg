@@ -921,4 +921,4 @@ are satisfied by connecting national discovery to an honest, legible record.
 
 **Reason:** The landing page promises six free plants to Marnie Hawson's newsletter readers who get a score through it; the backend previously dropped `enrol_src`, so nobody could tell who was owed plants.
 
-**Files affected:** `scripts/appsscript/Code.gs` (`PLANT_OFFER_SRC`, `enrolmentSource_`, AP column, both emails — **needs signup deployment update**), `enrol/index.html` (`ref` alias), `gardens-that-give-back/index.html` (buttons use `?src=`), `scripts/test_enrol_source.cjs` (new).
+**Files affected:** `scripts/appsscript/Code.gs` (`PLANT_OFFER_SRC`, `enrolmentSource_`, AP column, both emails — deployed as signup version 46 on 10 Nov 2026), `enrol/index.html` (`ref` alias), `gardens-that-give-back/index.html` (buttons use `?src=`), `scripts/test_enrol_source.cjs` (new).
