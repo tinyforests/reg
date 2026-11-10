@@ -457,6 +457,14 @@ var KNOWN_TIERS = [
   'Rich Habitat Garden', 'Ecosystem Garden', 'Urban Biodiversity Node'
 ];
 
+/* ---- Campaign source ---- */
+var PLANT_OFFER_SRC = 'threeneatthings';
+
+// Normalises the ?src= tag carried by the signup form: lower case, a-z 0-9 _ - only.
+function enrolmentSource_(v) {
+  return String(v == null ? '' : v).toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 60);
+}
+
 /* ---- Enrolment handler ---- */
 function handleEnrolment(payload, cache) {
   var bucket      = hourBucket();
@@ -508,6 +516,12 @@ function handleEnrolment(payload, cache) {
   if (sheet.getMaxColumns() < 41) sheet.insertColumnsAfter(sheet.getMaxColumns(), 41 - sheet.getMaxColumns());
   var contextHeader = sheet.getRange(1, 41);
   if (!contextHeader.getValue()) contextHeader.setValue('ecological_context');
+  // Additive column AP: campaign source from ?src= (e.g. threeneatthings).
+  if (sheet.getMaxColumns() < 42) sheet.insertColumnsAfter(sheet.getMaxColumns(), 42 - sheet.getMaxColumns());
+  var srcHeader = sheet.getRange(1, 42);
+  if (!srcHeader.getValue()) srcHeader.setValue('enrol_src');
+  var enrolSrc   = enrolmentSource_(payload.enrol_src);
+  var plantOffer = enrolSrc === PLANT_OFFER_SRC;
 
   sheet.appendRow([
     submittedAt,                                   // A  timestamp
@@ -550,7 +564,8 @@ function handleEnrolment(payload, cache) {
     parkDistM,                                     // AL park_distance_m
     parseInt(payload.area_sqm, 10) || '',          // AM area_sqm
     parseFloat(payload.effective_ecological_area_ha) || '', // AN effective_ecological_area_ha
-    enrolmentContextJson_(payload.ecological_context)    // AO ecological_context (no coordinates)
+    enrolmentContextJson_(payload.ecological_context),   // AO ecological_context (no coordinates)
+    enrolSrc                                       // AP enrol_src
   ]);
 
   cache.put(globalKey, String(globalCount + 1), RATE_CACHE_TTL);
@@ -561,7 +576,11 @@ function handleEnrolment(payload, cache) {
   // Notification to Tyson
   try {
     var sheetUrl    = ss.getUrl();
-    var notifyBody  = [
+    var notifyBody  = (plantOffer ? [
+      'THREE NEAT THINGS READER: six free indigenous plants promised.',
+      'Email them to arrange collection from Auburn Road.',
+      ''
+    ] : []).concat([
       'New self-enrolment submission',
       '',
       'Steward name:    ' + name,
@@ -575,14 +594,15 @@ function handleEnrolment(payload, cache) {
       'Nearest park:    ' + (parkName || '(not resolved)') + (parkDistM ? ' · ' + parkDistM + 'm' : ''),
       'Score:           ' + score + '/100',
       'Tier:            ' + tier,
+      'Source:          ' + (enrolSrc || '(direct)'),
       'Submission ID:   ' + submissionId,
       'Submitted:       ' + submittedAt,
       '',
       'Review at: ' + sheetUrl
-    ].join('\n');
+    ]).join('\n');
     MailApp.sendEmail({
       to:      NOTIFY_EMAIL,
-      subject: 'New self-enrolment: ' + tier + ' - ' + score + '/100',
+      subject: (plantOffer ? '6 FREE PLANTS (Three Neat Things) - ' : '') + 'New self-enrolment: ' + tier + ' - ' + score + '/100',
       body:    notifyBody
     });
   } catch (mailErr) {
@@ -599,7 +619,11 @@ function handleEnrolment(payload, cache) {
         'Thank you for registering your garden with the Ecological Registry.',
         '',
         'We have received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.',
-        '',
+        ''
+      ].concat(plantOffer ? [
+        'As a Three Neat Things reader, six free indigenous plants are set aside for you. We will email you in the next few days with the six we have chosen for your garden and a time to collect them from our studio at 140 Auburn Road, Hawthorn.',
+        ''
+      ] : []).concat([
         'Your garden will appear on the public registry as a provisional entry within 48 hours. Provisional means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one. We will be in touch separately about that pathway if you would like to explore it.',
         '',
         'Your submission ID is: ' + submissionId,
@@ -611,7 +635,7 @@ function handleEnrolment(payload, cache) {
         'Gardener and Son',
         'Ecological Registry',
         'ecologicalregistry.org'
-      ].join('\n');
+      ]).join('\n');
       MailApp.sendEmail({
         to:      email,
         subject: 'Your garden registration was received -- Ecological Registry',

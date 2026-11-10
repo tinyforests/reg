@@ -397,7 +397,8 @@ const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTS
    Lets us count enrolments per channel (e.g. src=fmeg-sep26). */
 const ENROL_SRC = (function () {
   try {
-    var s = new URLSearchParams(location.search).get('src') || '';
+    var q = new URLSearchParams(location.search);
+    var s = q.get('src') || q.get('ref') || '';
     if (s) { sessionStorage.setItem('enrol_src', s); return s.slice(0, 60); }
     return (sessionStorage.getItem('enrol_src') || '').slice(0, 60);
   } catch (e) { return ''; }

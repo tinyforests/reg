@@ -913,3 +913,12 @@ are satisfied by connecting national discovery to an honest, legible record.
 `scripts/appsscript/Code.gs`,
 `scripts/promote_submission.py`, `docs/data-schema.md`,
 `docs/self-enrolment-to-registered.md`, `docs/decisions-log.md`.
+
+
+## 2026-11-10 — Store signup source and flag Three Neat Things plant offer
+
+**Decision:** Store the signup form's existing `?src=` tag (now also accepted as `?ref=`) in a new additive Submissions column AP `enrol_src`. Signups tagged `threeneatthings` (from /gardens-that-give-back/) get a "6 FREE PLANTS (Three Neat Things)" prefix and source line in the notification email, and a paragraph in the steward confirmation saying six indigenous plants are set aside, with collection from 140 Auburn Road arranged by email.
+
+**Reason:** The landing page promises six free plants to Marnie Hawson's newsletter readers who get a score through it; the backend previously dropped `enrol_src`, so nobody could tell who was owed plants.
+
+**Files affected:** `scripts/appsscript/Code.gs` (`PLANT_OFFER_SRC`, `enrolmentSource_`, AP column, both emails — **needs signup deployment update**), `enrol/index.html` (`ref` alias), `gardens-that-give-back/index.html` (buttons use `?src=`), `scripts/test_enrol_source.cjs` (new).
