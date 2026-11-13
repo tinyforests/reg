@@ -922,3 +922,22 @@ are satisfied by connecting national discovery to an honest, legible record.
 **Reason:** The landing page promises six free plants to Marnie Hawson's newsletter readers who get a score through it; the backend previously dropped `enrol_src`, so nobody could tell who was owed plants.
 
 **Files affected:** `scripts/appsscript/Code.gs` (`PLANT_OFFER_SRC`, `enrolmentSource_`, AP column, both emails — deployed as signup version 46 on 10 Nov 2026), `enrol/index.html` (`ref` alias), `gardens-that-give-back/index.html` (buttons use `?src=`), `scripts/test_enrol_source.cjs` (new).
+
+## 13 Nov 2026 — Deliver self-enrolment scores through email and profile
+
+**Decision:** Remove the live score total and tier from self-baseline, and replace
+the immediate post-submission score/gap reveal with a registration confirmation.
+Keep the score in the steward email and add a dedicated provisional profile link.
+The profile reads the existing public submission record with consent and status
+guards, labels the score self-reported, and links to the canonical garden profile
+once published. No scoring rules, submission schema or garden data change.
+
+**Reason:** At Tyson’s direction, let stewards finish recording their garden
+without an early score discouraging enrolment. The email and profile retain an
+honest, accessible starting point. This supports the five practical-rule questions:
+a welcoming entry, grounded claims, and continuity from discovery to the record.
+
+**Files affected:** `enrol/index.html`, `provisional.html`,
+`js/reg-provisional.js`, `scripts/appsscript/Code.gs`,
+`scripts/test_provisional_profile.cjs`, `docs/self-enrolment-to-registered.md`,
+`docs/decisions-log.md`. Email delivery requires a signup Apps Script redeployment.

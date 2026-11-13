@@ -113,15 +113,6 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .opt{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;border:1px solid var(--hairline);background:transparent;padding:9px 14px;cursor:pointer;border-radius:0;transition:.15s;color:var(--ink)}
 .opt:hover{border-color:var(--signal)}
 .opt.sel{background:var(--signal);border-color:var(--signal);color:#fff}
-.running{position:sticky;bottom:0;background:var(--understory-2);border:1px solid var(--hairline);padding:16px 20px;margin-top:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.running .v{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:500}
-
-/* ---- score reveal (Abril Fatface — ceremonial location #1) ---- */
-.reveal{text-align:center;padding:30px 0 10px}
-.score-big{font-family:"Abril Fatface",serif;font-size:clamp(80px,18vw,150px);line-height:.9;color:var(--understory)}
-.score-of{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.14em;color:rgba(247,245,239,.5)}
-.provisional-flag{display:inline-flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--provisional);border:1px dashed var(--provisional);padding:7px 14px;margin-top:18px}
-.dot{width:7px;height:7px;background:var(--provisional);display:inline-block}
 
 /* ---- consent modal ---- */
 .overlay{position:fixed;inset:0;z-index:60;background:rgba(26,31,23,.74);display:none;align-items:center;justify-content:center;padding:24px}
@@ -171,30 +162,6 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .identity-fields input:focus{outline:none;border:2px solid var(--signal);padding:9px 11px}
 .consent-error{color:#c0392b;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;margin-top:8px}
 
-/* ---- 04 THE GAP — signature element ---- */
-.gap-stage{margin-top:40px}
-.meter{position:relative;border:1px solid var(--hairline);background:var(--understory-2)}
-.tier-row{display:flex;align-items:center;gap:0;border-top:1px solid var(--hairline);position:relative}
-.tier-row:first-child{border-top:none}
-.tier-band{flex:0 0 96px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft);padding:14px 12px;border-right:1px solid var(--hairline);text-align:right}
-.tier-fill{flex:1;height:52px;position:relative;overflow:hidden}
-.tier-fill .name{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:"Fraunces",serif;font-size:15px;color:var(--ink-soft);z-index:2}
-.tier-fill .bar{position:absolute;left:0;top:0;bottom:0;background:rgba(122,158,95,.14)}
-.tier-row.current .tier-fill{background:rgba(122,158,95,.06)}
-/* provisional marker — HARD QUARANTINE: hollow, dashed, provisional colour, never solid Signal fill */
-.marker{position:absolute;z-index:5;top:50%;transform:translate(-50%,-50%);}
-.marker .pin{width:18px;height:18px;border:2px dashed var(--provisional);background:var(--understory);border-radius:0;transform:rotate(45deg)}
-.marker .mlab{position:absolute;left:50%;transform:translateX(-50%);top:-30px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;color:var(--provisional);white-space:nowrap;text-transform:uppercase}
-/* how a VERIFIED marker would render — shown for contrast in the legend */
-.legend{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap}
-.legend div{display:flex;align-items:center;gap:10px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-soft);text-transform:uppercase}
-.leg-prov{width:14px;height:14px;border:2px dashed var(--provisional);background:var(--understory);transform:rotate(45deg)}
-.leg-ver{width:14px;height:14px;background:var(--signal);transform:rotate(45deg)}
-.gap-call{margin-top:40px;border:1px solid var(--signal);background:rgba(122,158,95,.08);padding:26px}
-.gap-call .label{color:var(--signal-deep)}
-.gap-call .dist{font-family:"Fraunces",serif;font-size:26px;margin:8px 0}
-.gap-call .dist b{color:var(--signal-deep);font-weight:600}
-
 /* ---- 05 DEEPEN ---- */
 .deepen-split{display:grid;grid-template-columns:1fr;gap:0;margin-top:36px;border:1px solid var(--hairline)}
 .deepen-col{padding:30px}
@@ -230,7 +197,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <span class="rail-step" data-step="0"><span class="n">01</span> Arrive</span>
     <span class="rail-step" data-step="1"><span class="n">02</span> Self-baseline</span>
     <span class="rail-step" data-step="2"><span class="n">03</span> Consent</span>
-    <span class="rail-step" data-step="3"><span class="n">04</span> The gap</span>
+    <span class="rail-step" data-step="3"><span class="n">04</span> Received</span>
     <span class="rail-step" data-step="4"><span class="n">05</span> Deepen</span>
   </div>
 </div>
@@ -260,12 +227,8 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <div class="wrap">
       <div class="label eyebrow">Step 02 · self-baseline</div>
       <h2>Tell us what's there.</h2>
-      <p class="lede">Answer from what you can see today. Inputs are truth — the score is only ever a consequence of them. You can refine any answer later, and a steward visit can confirm them.</p>
+      <p class="lede">Answer from what you can see today. Every garden starts somewhere. You can refine any answer later, and a steward visit can confirm them. After registration, your email will include your provisional score and a link to your garden’s profile.</p>
       <div id="pillars"></div>
-      <div class="running">
-        <span class="label">Provisional total · live</span>
-        <span class="v"><span id="liveScore">0</span> / 100 &nbsp;·&nbsp; <span id="liveTier">—</span></span>
-      </div>
       <div class="btn-row">
         <button class="btn ghost" onclick="go(0)">Back</button>
         <button class="btn primary" onclick="go(2)">Continue to consent</button>
@@ -314,39 +277,16 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
   </div>
 </div>
 
-<!-- ============ 04 THE GAP (signature) ============ -->
+<!-- ============ 04 CONFIRMATION ============ -->
 <div class="screen" id="s3">
-  <section class="band canopy">
-    <div class="wrap reveal">
-      <div class="label">Provisional score · self-reported</div>
-      <div class="score-big" id="revealScore">0</div>
-      <div class="score-of">OUT OF 100 · <span id="revealTier">—</span></div>
-      <div class="provisional-flag"><span class="dot"></span> Provisional — not yet verified</div>
-    </div>
-  </section>
   <section class="band">
     <div class="wrap">
-      <div class="label eyebrow">Step 04 · the gap</div>
-      <h2>Here's the distance to a richer garden.</h2>
-      <p class="lede">Your provisional marker sits where your inputs place it. A verified marker would sit solid and filled — earned through a steward visit. The space between your band and the next is not a deficiency. It's the invitation.</p>
-
-      <div class="gap-stage">
-        <div class="meter" id="meter"></div>
-        <div class="legend">
-          <div><span class="leg-prov"></span> Provisional (self-reported)</div>
-          <div><span class="leg-ver"></span> Verified (steward visit)</div>
-        </div>
-      </div>
-
-      <div class="gap-call">
-        <div class="label">Next threshold</div>
-        <div class="dist">You're <b><span id="gapPoints">0</span> points</b> from <b><span id="gapTier">—</span></b>.</div>
-        <p style="color:var(--ink-soft);font-size:15px;max-width:52ch">The next section shows the ways to close it — some you can do this weekend, some we can do with you.</p>
-      </div>
-
+      <div class="label eyebrow">Step 04 · registration received</div>
+      <h2>Your garden’s record has begun.</h2>
+      <p class="lede">Thank you for recording what’s there today. Check your email for your provisional score and a link to your garden’s profile. Your score is a starting point, based on what you’ve shared.</p>
+      <p class="fieldnote">Your public profile may take up to 48 hours to appear. If the email hasn’t arrived, check your spam folder or contact hello@gardenerandson.com.</p>
       <div class="btn-row">
-        <button class="btn ghost" onclick="go(2)">Back</button>
-        <button class="btn primary" onclick="go(4)">Show me how to close it</button>
+        <button class="btn primary" onclick="go(4)">Explore next steps</button>
       </div>
     </div>
   </section>
@@ -450,7 +390,6 @@ function resetLocation() {
     if (help) help.textContent = question.help;
     const gap = document.getElementById('bio0_gap');
     if (gap) gap.style.display = 'none';
-    updateScore();
   }
   _setEvcStatus('Enter an Australian address to look up its original vegetation', false);
   _setParkStatus('', false);
@@ -1167,7 +1106,6 @@ function pick(btn, key, type, cap){
     if(cap && sum > cap) sum = cap;
     answers[qid] = sum;
   }
-  updateScore();
 }
 let tickedSpecies = [];
 
@@ -1195,17 +1133,10 @@ function pickSpecies(btn) {
       gapEl.style.display = 'none';
     }
   }
-  updateScore();
 }
 
 function score(){ return Object.values(answers).reduce((a,b)=>a+b,0); }
 function tierFor(s){ return TIERS.find(t=> s>=t.min && s<=t.max) || TIERS[0]; }
-function updateScore(){
-  const s=score(); const t=tierFor(s);
-  document.getElementById('liveScore').textContent=s;
-  document.getElementById('liveTier').textContent=t.name;
-}
-
 /* ---- garden size step ---- */
 function pickSizeBand(btn, sqm) {
   document.querySelectorAll('#size-bands .opt').forEach(b => b.classList.remove('sel'));
@@ -1321,40 +1252,6 @@ function showConsentError(msg){
   el.textContent = msg;
 }
 
-/* ---- build the gap meter (signature) ---- */
-function buildMeter(){
-  const s=score(); const meter=document.getElementById('meter'); meter.innerHTML='';
-  // marker x-position as % across the 0..100 fill area
-  TIERS.forEach(t=>{
-    const row=document.createElement('div');
-    const isCurrent = s>=t.min && s<=t.max;
-    row.className='tier-row'+(isCurrent?' current':'');
-    const span = t.max-t.min+1;
-    row.innerHTML=`<div class="tier-band">${t.min}–${t.max}</div>
-      <div class="tier-fill"><div class="bar" style="width:${isCurrent? ((s-t.min)/span*100):0}%"></div><span class="name">${t.name}</span></div>`;
-    if(isCurrent){
-      const m=document.createElement('div');
-      m.className='marker';
-      m.style.left = ((s-t.min)/span*100) + '%';
-      m.innerHTML='<div class="mlab">You · provisional</div><div class="pin"></div>';
-      row.querySelector('.tier-fill').appendChild(m);
-    }
-    meter.appendChild(row);
-  });
-  // reveal + gap call
-  const t=tierFor(s);
-  document.getElementById('revealScore').textContent=s;
-  document.getElementById('revealTier').textContent=t.name;
-  const next = TIERS.find(x=>x.min>t.max);
-  if(next){
-    document.getElementById('gapPoints').textContent = next.min - s;
-    document.getElementById('gapTier').textContent = next.name;
-  } else {
-    document.getElementById('gapPoints').textContent = 0;
-    document.getElementById('gapTier').textContent = "the top of the Registry";
-  }
-}
-
 /* ---- Deepen panel: EVC species by layer ---- */
 let _deepenDb = [];
 
@@ -1460,7 +1357,6 @@ function go(step){
     r.classList.toggle('active', i===step);
     r.classList.toggle('done', i<step);
   });
-  if(step===3) buildMeter();
   if(step===4) buildDeepenPanel();
   window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
 }
@@ -1473,9 +1369,8 @@ function restart(){
   consentState = new Array(CONSENT.length).fill(null);
   const errEl = document.getElementById('consentError');
   if(errEl) errEl.textContent = '';
-  updateScore(); go(0);
+  go(0);
 }
-updateScore();
 </script>
 </body>
 </html>
