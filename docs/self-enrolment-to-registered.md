@@ -131,3 +131,25 @@ check those after the Apps Script update and before release.
   this change (editor 104,338 characters, repository 104,951); the same patch
   was applied to each. Reconcile separately.
 
+
+## Score delivery after enrolment — 13 Nov 2026
+
+The signup form does not display a running total or a score reveal after
+submission. Its confirmation directs the steward to their email. Score and tier
+calculation and the submission fields are unchanged.
+
+The steward email retains the provisional score and adds
+`https://ecologicalregistry.org/provisional.html?id=<submission_id>`. This page
+reads the same published Submissions CSV as the Registry, requires record/public
+score consent, and excludes hidden, rejected and deleted submissions. It displays
+only garden name, suburb, submitted date, reference, self-reported score and tier.
+Missing records show a publication-delay/withdrawal message; fetch errors offer a
+retry. Published records link onwards to their canonical profile from the ledger.
+No addresses, contact details, coordinates, badges or verified claims are added.
+
+Release the page and `js/reg-provisional.js` before updating the signup Apps
+Script deployment. Apply the email link addition to the deployed signup version;
+do not deploy unrelated editor features to this endpoint (see version 45 above).
+These changes are prepared in the repository; deployment is a separate step.
+Checks: `node scripts/test_provisional_profile.cjs` and
+`node scripts/test_enrolment.cjs`. No live submissions or emails are sent by tests.

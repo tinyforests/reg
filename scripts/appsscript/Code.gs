@@ -624,6 +624,9 @@ function handleEnrolment(payload, cache) {
         'As a Three Neat Things reader, six free indigenous plants are set aside for you. We will email you in the next few days with the six we have chosen for your garden and a time to collect them from our studio at 140 Auburn Road, Hawthorn.',
         ''
       ] : []).concat([
+        'View your provisional garden profile:',
+        'https://ecologicalregistry.org/provisional.html?id=' + encodeURIComponent(submissionId),
+        '',
         'Your garden will appear on the public registry as a provisional entry within 48 hours. Provisional means your score is self-reported and awaiting a steward visit to confirm it. A verification visit is what turns a provisional score into a verified one. We will be in touch separately about that pathway if you would like to explore it.',
         '',
         'Your submission ID is: ' + submissionId,

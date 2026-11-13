@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Provisional garden profile · Ecological Registry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; border-radius: 0 !important; }
+    body { margin: 0; background: #3d4535; color: #fff0dc; font: 17px/1.6 'IBM Plex Sans', sans-serif; }
+    main { max-width: 760px; margin: auto; padding: 40px 24px 80px; }
+    a { color: inherit; text-underline-offset: 4px; }
+    h1 { font: clamp(36px, 7vw, 64px)/1.15 'Abril Fatface', serif; overflow-wrap: anywhere; }
+    .label { font: 12px/1.6 'IBM Plex Mono', monospace; letter-spacing: .12em; text-transform: uppercase; }
+    article { margin-top: 48px; border-top: 1px solid #d7ccb9; padding-top: 24px; }
+    .scorecard { border: 1px dashed #B49A63; padding: 24px; margin: 24px 0; }
+    #score { font: clamp(64px, 15vw, 100px)/1.2 'IBM Plex Mono', monospace; }
+    .status { color: #B49A63; }
+    button { background: #fff0dc; color: #3d4535; border: 0; padding: 12px 20px; font: inherit; cursor: pointer; }
+    [hidden] { display: none !important; }
+  </style>
+  <script src="/js/reg-provisional.js" defer></script>
+</head>
+<body>
+  <main>
+    <a href="/">Ecological Registry</a>
+    <article aria-live="polite">
+      <div class="label">Garden record · self-reported</div>
+      <h1 id="title">Your provisional profile</h1>
+      <p id="message">Loading your garden’s record…</p>
+      <div id="record" hidden>
+        <p id="suburb"></p>
+        <div class="scorecard">
+          <div class="label status">Provisional ecological score</div>
+          <div><span id="score"></span> / 100</div>
+          <p id="tier"></p>
+          <p class="status">Self-reported · not a verified garden score</p>
+        </div>
+        <p>This score is derived from the answers submitted at registration. It is a starting point for the garden’s record. A steward visit can confirm the inputs.</p>
+        <p id="review-status"></p>
+        <p class="label" id="submitted"></p>
+        <p class="label" id="reference"></p>
+      </div>
+      <p id="published" hidden><a id="published-link">View your registered garden profile</a></p>
+      <button id="retry" type="button" hidden>Try again</button>
+      <p>To update or withdraw your record, reply to your registration email.</p>
+      <a href="/registry.html">Explore the Registry</a>
+    </article>
+  </main>
+</body>
+</html>
