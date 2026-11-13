@@ -150,6 +150,11 @@ No addresses, contact details, coordinates, badges or verified claims are added.
 Release the page and `js/reg-provisional.js` before updating the signup Apps
 Script deployment. Apply the email link addition to the deployed signup version;
 do not deploy unrelated editor features to this endpoint (see version 45 above).
-These changes are prepared in the repository; deployment is a separate step.
+Released on 13 Nov 2026 via PR #43. Signup is now on version **47**, based on
+version 46 with only the profile email link added; rollback target: **46**.
+The current editor source was restored with the same link addition, and the
+separate Plant Studio deployment remains on version 44. Read-only production
+checks confirmed the score-free form, matching profile script and healthy signup
+endpoint. No test garden or email was submitted.
 Checks: `node scripts/test_provisional_profile.cjs` and
 `node scripts/test_enrolment.cjs`. No live submissions or emails are sent by tests.
