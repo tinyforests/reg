@@ -84,6 +84,7 @@ section.canopy .fieldnote{color:var(--signal);border-color:var(--signal)}
 
 /* buttons */
 .btn{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink);background:var(--ink);color:var(--understory);padding:14px 26px;cursor:pointer;border-radius:0;transition:.18s;display:inline-block}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .btn:hover{background:transparent;color:var(--ink)}
 .btn.primary{background:var(--signal);border-color:var(--signal);color:#fff}
 .btn.primary:hover{background:transparent;color:var(--signal-deep);border-color:var(--signal)}
@@ -92,6 +93,15 @@ section.canopy .fieldnote{color:var(--signal);border-color:var(--signal)}
 section.canopy .btn.ghost{color:var(--understory);border-color:var(--understory)}
 section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .btn-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px;align-items:center}
+
+.address-choice{width:100%;text-align:left;padding:12px 14px;border:0;border-bottom:1px solid var(--hairline);background:var(--understory);color:var(--ink);font:inherit;font-size:13px;cursor:pointer;min-height:44px}
+.address-choice:hover,.address-choice:focus-visible{background:var(--understory-2)}
+
+/* ---- stewardship continuation ---- */
+.stewardship-next{display:inline-flex;align-items:center;gap:18px;min-height:44px;margin-top:8px;padding:10px 0;color:var(--understory);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid currentColor}
+.stewardship-next:hover{color:var(--signal)}
+.stewardship-next svg{width:20px;height:24px;flex-shrink:0}
+#consent-choices{scroll-margin-top:100px}
 
 /* ---- 01 ARRIVE ---- */
 .eyebrow{margin-bottom:22px}
@@ -122,6 +132,10 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
 .modal-body{padding:18px 32px 8px}
 .modal-foot{padding:18px 32px 30px;position:sticky;bottom:0;background:var(--understory);border-top:1px solid var(--hairline);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
 .req{color:var(--signal-deep)}
+/* Indeterminate bars: activity, not a measured percentage. */
+.geo-loading::after{content:"";display:block;height:3px;margin-top:9px;background:linear-gradient(90deg,var(--hairline) 0 35%,var(--signal-deep) 35% 65%,var(--hairline) 65% 100%);background-size:250% 100%;animation:geo-loading 1.4s ease-in-out infinite alternate}
+@keyframes geo-loading{from{background-position:100% 0}to{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){.geo-loading::after{animation:none}}
 /* ---- consent stepper ---- */
 .cstep-progress{height:2px;background:var(--hairline);margin:4px 0 20px;overflow:hidden}
 .geo-step-hint{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0 0 14px}
@@ -183,6 +197,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
   .deepen-col.free{border-right:1px solid var(--hairline)}
 }
 @media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
   .screen{animation:none}*{transition:none!important}
 }
 :focus-visible{outline:2px solid var(--signal);outline-offset:2px}
@@ -229,6 +244,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
       <h2>Tell us what's there.</h2>
       <p class="lede">Answer from what you can see today. Every garden starts somewhere. You can refine any answer later, and a steward visit can confirm them. After registration, your email will include your provisional score and a link to your garden’s profile.</p>
       <div id="pillars"></div>
+      <p id="baselineError" class="consent-error" role="alert" hidden></p>
       <div class="btn-row">
         <button class="btn ghost" onclick="go(0)">Back</button>
         <button class="btn primary" onclick="go(2)">Continue to consent</button>
@@ -245,11 +261,16 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
       <h2 style="color:var(--understory)">Accept stewardship of this garden's&nbsp;memory.</h2>
       <p class="lede" style="color:var(--understory-2)">Registering isn't a checkbox — it's a commitment to hold this garden's record. You decide what's shared and you can withdraw any of it at any time. Nothing appears on the public Registry until you open the door.</p>
       <p class="fieldnote" style="color:rgba(247,245,239,.55)">A garden should not lose its memory when ownership changes. Consent is how the memory stays cared for.</p>
+      <a class="stewardship-next" href="#consent-choices">Review consent choices
+        <svg viewBox="0 0 20 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M10 2v19M3 14l7 7 7-7"/></svg>
+      </a>
     </div>
   </section>
   <section class="band">
     <div class="wrap">
-      <div id="consent-items"></div>
+      <div id="consent-choices" tabindex="-1" role="group" aria-label="Consent choices">
+        <div id="consent-items"></div>
+      </div>
       <div class="btn-row">
         <button class="btn ghost" onclick="go(1)">Back</button>
         <button class="btn primary" id="registerBtn" onclick="confirmConsent()">Register my garden</button>
@@ -268,6 +289,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <div class="modal-body">
       <div class="cstep-progress"><div class="cstep-fill" id="fstepFill"></div></div>
       <div class="cstep-wrap" id="fstepWrap"></div>
+      <p id="formError" class="consent-error" role="alert" hidden></p>
     </div>
     <div class="modal-foot">
       <button class="btn ghost" onclick="closeConsent()">Cancel</button>
@@ -298,13 +320,15 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
     <div class="wrap">
       <div class="label eyebrow">Step 05 · deepen</div>
       <h2>Tend it forward.</h2>
-      <p class="lede">Everything here closes the gap. The free path is yours to walk alone. The verified path is where the garden becomes part of the Registry's evidence base — and where a provisional score becomes real.</p>
+      <p class="lede">Start with the areas your answers suggest need the most care. Improve what’s growing and functioning, then record the change so your score can reflect it.</p>
 
+      <div id="deepenPriorities" style="margin-top:32px"></div>
+      <p class="sub" style="margin-top:16px">These priorities are derived from your self-reported answers, compared with the available answers in each area. They are suggestions, not verified findings or promised points. Record changes once they are established; verification may revise your score.</p>
       <div class="deepen-split">
         <div class="deepen-col free">
           <div class="label">Free · do it yourself</div>
           <h3 id="deepenEvcHeading">Plant your EVC match</h3>
-          <p class="sub" id="deepenEvcSub">Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity.</p>
+          <p class="sub" id="deepenEvcSub">Species local to your Ecological Vegetation Class. Choose plants suited to your site and record them once established.</p>
           <div id="deepenSpecies" style="margin-top:14px"><div style="font-size:13px;color:var(--ink-soft);opacity:.5">Loading species…</div></div>
           <p class="fieldnote" style="margin-top:24px">Six plants in the right place will do more than sixty in the wrong one.</p>
         </div>
@@ -313,14 +337,14 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
           <div class="card flagship">
             <h4>Ecological Garden Health Check</h4>
             <div class="price">$240 · Melbourne area · steward site visit</div>
-            <p class="cdesc">A G&S steward visits, confirms your inputs, and lifts your garden from provisional to verified. This is how the score becomes real — and how the garden joins the Registry's evidence base.</p>
+            <p class="cdesc">A G&S steward reviews your garden, checks the evidence behind your answers and helps identify the next steps. Verification records what can be confirmed; it does not guarantee a higher score.</p>
             <a class="btn primary" id="bookVisitBtn" href="mailto:hello@lundbech.me">Book a verification visit</a>
           </div>
           <div class="card">
-            <h4>Plants of Place species pack</h4>
-            <div class="price">From $— · indigenous micro-nursery</div>
-            <p class="cdesc">The EVC-matched species above, grown locally and ready to plant.</p>
-            <a class="btn ghost" id="popLink" href="https://plantsofplace.com.au" target="_blank" rel="noopener">Reserve a pack</a>
+            <h4>Plants of Place</h4>
+            <div class="price">Indigenous micro-nursery</div>
+            <p class="cdesc">Explore Plants of Place for indigenous plants. Check that each species suits your location and garden conditions.</p>
+            <a class="btn ghost" id="popLink" href="https://plantsofplace.com/" target="_blank" rel="noopener">Visit Plants of Place</a>
           </div>
         </div>
       </div>
@@ -337,8 +361,7 @@ const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTS
    Lets us count enrolments per channel (e.g. src=fmeg-sep26). */
 const ENROL_SRC = (function () {
   try {
-    var q = new URLSearchParams(location.search);
-    var s = q.get('src') || q.get('ref') || '';
+    var s = new URLSearchParams(location.search).get('src') || '';
     if (s) { sessionStorage.setItem('enrol_src', s); return s.slice(0, 60); }
     return (sessionStorage.getItem('enrol_src') || '').slice(0, 60);
   } catch (e) { return ''; }
@@ -366,15 +389,20 @@ const speciesList = _p.get('species')
   : [];
 
 /* ---- Location resolution ----
-   Fires on blur of garden_address. Geocodes via Nominatim → extracts
+   Fires only after selecting an address suggestion. Nominatim extracts
    suburb/region/country → national pre-clearing resolver → Overpass for park.
    Populates gardenLat/Lng/Suburb/Region/Country, evcCode/Name, park* vars.
    Non-blocking: submission proceeds with blanks if any lookup fails. */
 let ecologicalContext = null;
 let locationVersion = 0;
+let selectedAddress = '';
+let parkRequest = null;
+const parkCache = new Map();
 // Import on demand so a module failure remains a non-blocking lookup error.
 function resetLocation() {
   locationVersion++;
+  selectedAddress = "";
+  if (parkRequest) parkRequest.abort();
   gardenLat = gardenLng = gardenSuburb = gardenRegion = gardenCountry = '';
   evcCode = evcName = parkName = parkLat = parkLng = '';
   parkDistM = null;
@@ -396,22 +424,25 @@ function resetLocation() {
   _setGardenStatus('', false);
 }
 
-function _setGeoResult(row, msg, ok) {
+function _setGeoResult(row, msg, ok, loading = false) {
   const el = document.getElementById('geo-val-' + row);
   if (!el) return;
   el.textContent = msg;
+  el.classList.toggle('geo-loading', loading);
+  el.setAttribute('aria-busy', String(loading));
+  el.setAttribute('role', 'status');
   el.style.color = ok ? 'var(--ink)' : 'rgba(61,69,53,.45)';
   const wrap = document.getElementById('geo-results');
-  if (wrap) wrap.style.display = '';
+  if (wrap) wrap.style.display = selectedAddress ? '' : 'none';
 }
-function _setEvcStatus(msg, ok)    { _setGeoResult('evc',    msg, ok); }
-function _setParkStatus(msg, ok)   { _setGeoResult('park',   msg, ok); }
-function _setGardenStatus(msg, ok) { _setGeoResult('garden', msg, ok); }
+function _setEvcStatus(msg, ok, loading = false) { _setGeoResult('evc', msg, ok, loading); }
+function _setParkStatus(msg, ok, loading = false) { _setGeoResult('park', msg, ok, loading); }
+function _setGardenStatus(msg, ok, loading = false) { _setGeoResult('garden', msg, ok, loading); }
 
 let _gardenLocs = null;
 
 async function resolveNearestGarden(lat, lng, version) {
-  _setGardenStatus('Looking for nearby registered gardens…', false);
+  _setGardenStatus('Looking for nearby registered gardens…', false, true);
   try {
     if (!_gardenLocs) {
       const r = await fetch('/data/garden-locations.json');
@@ -440,6 +471,7 @@ async function _resolveFromCoords(lat, lng) {
   const version = ++locationVersion;
   evcCode = evcName = '';
   ecologicalContext = null;
+  _setEvcStatus('Looking up original vegetation…', false, true);
   resolveNearestPark(lat, lng, undefined, version);
   resolveNearestGarden(lat, lng, version);
   try {
@@ -460,35 +492,6 @@ async function _resolveFromCoords(lat, lng) {
   }
 }
 
-/* Fallback: geocode address then resolve — used when typing without selecting a suggestion */
-async function resolveEvc() {
-  const address = (document.getElementById('garden_address') || {}).value || '';
-  if (!address) return;
-  const version = locationVersion;
-  _setEvcStatus('Looking up your area…', false);
-  _setParkStatus('Finding nearest green space…', false);
-  try {
-    const gUrl = 'https://nominatim.openstreetmap.org/search?format=json&countrycodes=au&limit=1&addressdetails=1&q='
-               + encodeURIComponent(address + ', Australia');
-    const gData = await (await fetch(gUrl, { headers: { 'Accept-Language': 'en' } })).json();
-    if (version !== locationVersion) return;
-    if (!gData || !gData.length) {
-      _setEvcStatus('Address not found — try including suburb', false);
-      _setParkStatus('', false); return;
-    }
-    const lat = parseFloat(gData[0].lat), lng = parseFloat(gData[0].lon);
-    const a   = gData[0].address || {};
-    gardenLat     = lat.toFixed(6);
-    gardenLng     = lng.toFixed(6);
-    gardenSuburb  = a.suburb || a.town || a.city_district || a.city || '';
-    gardenRegion  = a.state  || '';
-    gardenCountry = a.country || '';
-    _resolveFromCoords(lat, lng);
-  } catch(err) {
-    if (version === locationVersion) _setEvcStatus('Lookup failed — try again', false);
-  }
-}
-
 /* ---- Address autocomplete ---- */
 function _debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
@@ -501,51 +504,74 @@ function _fmtSuggestion(r) {
 
 function _hideAddrDrop() { const el = document.getElementById('addr-drop'); if (el) el.remove(); }
 
+function _addressStatus(message, loading = false) {
+  const el = document.getElementById('addressStatus');
+  if (!el) return;
+  el.textContent = message;
+  el.classList.toggle('geo-loading', loading);
+}
+function _selectAddress(r) {
+  const lat = Number(r.lat), lng = Number(r.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || !r.address) return;
+  resetLocation();
+  const inp = document.getElementById('garden_address');
+  selectedAddress = _fmtSuggestion(r);
+  inp.value = selectedAddress;
+  const a = r.address;
+  gardenLat = lat.toFixed(6);
+  gardenLng = lng.toFixed(6);
+  gardenSuburb = a.suburb || a.town || a.city_district || a.city || '';
+  gardenRegion = a.state || '';
+  gardenCountry = a.country || '';
+  _hideAddrDrop();
+  _addressStatus('Address selected. Looking up your local ecology below.');
+  inp.focus();
+  updateStepNext();
+  _resolveFromCoords(lat, lng);
+}
 function _showAddrDrop(results) {
   _hideAddrDrop();
   const inp = document.getElementById('garden_address');
   if (!inp || !results.length) return;
   const ul = document.createElement('ul');
   ul.id = 'addr-drop';
-  ul.style.cssText = 'position:absolute;left:0;right:0;top:100%;z-index:300;background:var(--bg,#fafaf7);border:1px solid var(--rl,#d6d9cf);border-radius:0;margin:3px 0 0;padding:0;list-style:none;box-shadow:0 6px 18px rgba(0,0,0,.1);max-height:220px;overflow-y:auto';
+  ul.setAttribute('aria-label', 'Address suggestions');
+  ul.style.cssText = 'border:1px solid var(--hairline);margin:8px 0;padding:0;list-style:none;max-height:220px;overflow-y:auto';
   results.forEach(r => {
     const li = document.createElement('li');
-    li.style.cssText = 'padding:9px 13px;font-size:12.5px;cursor:pointer;border-bottom:1px solid var(--hairline);line-height:1.4';
-    li.textContent = _fmtSuggestion(r);
-    li.addEventListener('mouseover', () => li.style.background = 'var(--surface-raised,#f0f0eb)');
-    li.addEventListener('mouseout',  () => li.style.background = '');
-    li.addEventListener('mousedown', e => {
-      e.preventDefault();
-      resetLocation();
-      inp.value = _fmtSuggestion(r);
-      const a = r.address || {};
-      gardenLat     = parseFloat(r.lat).toFixed(6);
-      gardenLng     = parseFloat(r.lon).toFixed(6);
-      gardenSuburb  = a.suburb || a.town || a.city_district || a.city || '';
-      gardenRegion  = a.state  || '';
-      gardenCountry = a.country || '';
-      _hideAddrDrop();
-      _setEvcStatus('Looking up vegetation class…', false);
-      _setParkStatus('Finding nearest green space…', false);
-      updateStepNext();
-      _resolveFromCoords(parseFloat(r.lat), parseFloat(r.lon));
-    });
+    const choice = document.createElement('button');
+    choice.type = 'button';
+    choice.className = 'address-choice';
+    choice.textContent = _fmtSuggestion(r);
+    choice.addEventListener('click', () => _selectAddress(r));
+    choice.addEventListener('keydown', e => { if (e.key === 'Escape') { _hideAddrDrop(); inp.focus(); } });
+    li.appendChild(choice);
     ul.appendChild(li);
   });
-  const wrap = inp.closest('.identity-fields') || inp.parentElement;
-  const inputWrap = inp.parentElement;
-  inputWrap.style.position = 'relative';
-  inputWrap.appendChild(ul);
+  inp.insertAdjacentElement('afterend', ul);
 }
 
 const _fetchAddrSuggestions = _debounce(async q => {
-  if (q.length < 4) { _hideAddrDrop(); return; }
+  const version = locationVersion;
+  const current = () => version === locationVersion && !selectedAddress && (document.getElementById('garden_address') || {}).value === q;
+  if (!current()) return;
+  if (q.trim().length < 4) { _hideAddrDrop(); _addressStatus('Start typing your street address, then choose a suggestion.'); return; }
+  _addressStatus('Finding matching addresses…', true);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
   try {
     const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&countrycodes=au&q='
               + encodeURIComponent(q);
-    const data = await (await fetch(url, { headers: { 'Accept-Language': 'en' } })).json();
-    if ((document.getElementById('garden_address') || {}).value === q) _showAddrDrop(data);
-  } catch(e) {}
+    const response = await fetch(url, { headers: { 'Accept-Language': 'en' }, signal:controller.signal });
+    if (!response.ok) throw new Error('Address search unavailable');
+    const data = await response.json();
+    if (!current()) return;
+    const results = data.filter(r => r.address && r.lat && r.lon);
+    _showAddrDrop(results);
+    _addressStatus(results.length ? 'Choose your address from the suggestions to continue.' : 'No matching address found. Try the street number, street name and suburb.');
+  } catch(e) {
+    if (current()) _addressStatus('Address search is unavailable. Edit your address to try again.');
+  } finally { clearTimeout(timeout); }
 }, 380);
 
 /* ---- Nearest park / greenspace lookup ----
@@ -559,19 +585,31 @@ const _OVERPASS_MIRRORS = [
 
 async function _overpassFetch(query) {
   const encoded = '?data=' + encodeURIComponent(query);
+  if (parkRequest) parkRequest.abort();
   const ac = new AbortController();
-  return Promise.any(_OVERPASS_MIRRORS.map(ep =>
-    fetch(ep + encoded, { signal: ac.signal })
-      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-      .then(d => { ac.abort(); return d; })
-  ));
+  parkRequest = ac;
+  const timeout = setTimeout(() => ac.abort(), 8000);
+  try {
+    return await Promise.any(_OVERPASS_MIRRORS.map(ep =>
+      fetch(ep + encoded, { signal: ac.signal })
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(d => {
+          if (d.remark || !Array.isArray(d.elements)) throw new Error('Incomplete green-space response');
+          return d;
+        })
+    ));
+  } finally {
+    clearTimeout(timeout);
+    ac.abort();
+    if (parkRequest === ac) parkRequest = null;
+  }
 }
 
 async function resolveNearestPark(lat, lng, _attempt, version) {
   if (version !== locationVersion) return;
   if (_attempt === undefined) {
     parkName = ''; parkLat = ''; parkLng = ''; parkDistM = null;
-    _setParkStatus('Finding nearest park…', false);
+    _setParkStatus('Finding nearest park…', false, true);
     _attempt = 0;
   }
   const r = 600;
@@ -584,7 +622,11 @@ async function resolveNearestPark(lat, lng, _attempt, version) {
 );
 out center tags;`;
   try {
-    const data = await _overpassFetch(query);
+    const data = parkCache.get(query) || await _overpassFetch(query);
+    if (!parkCache.has(query)) {
+      if (parkCache.size >= 20) parkCache.delete(parkCache.keys().next().value);
+      parkCache.set(query, data);
+    }
     if (version !== locationVersion) return;
     if (!data.elements || !data.elements.length) {
       _setParkStatus('No park found within 600m', false);
@@ -610,11 +652,7 @@ out center tags;`;
     _setParkStatus(parkName + ' · ' + parkDistM + 'm', true);
   } catch(err) {
     if (version !== locationVersion) return;
-    if (_attempt < 1) {
-      setTimeout(() => resolveNearestPark(lat, lng, _attempt + 1, version), 2500);
-    } else {
-      _setParkStatus('No park found within 600m', false);
-    }
+    _setParkStatus('Green-space lookup unavailable. You can still continue.', false);
   }
 }
 
@@ -642,7 +680,7 @@ const TIERS = [
    Weights sum to the canonical pillar maxima (25/20/20/20/15 = 100).
    These questions are a PROTOTYPE proxy, not the real scoring engine. */
 const PILLARS = [
-  {key:"bio", name:"Biodiversity Structure", max:25, qs:[
+  {key:"bio", name:"Plant Diversity Structure", max:25, qs:[
     {
       t:"How many strictly local-indigenous plant species are growing in your garden?",
       help:"Strictly local-indigenous means species native to your specific local ecological community — not natives from other regions. If unsure, count what you're confident about.",
@@ -674,7 +712,8 @@ const PILLARS = [
         ["Tussock grasses or low tufting plants",1],
         ["Low shrubs (knee to waist height)",1],
         ["Mid-storey shrubs and small trees",1],
-        ["Canopy trees (mature trees forming overhead structure)",2]
+        ["Canopy trees (mature trees forming overhead structure)",2],
+        ["None of these layers yet",0]
       ],
       cap:6
     },
@@ -855,9 +894,9 @@ PILLARS.forEach(p => {
       const items = speciesList.map(s =>
         '<button class="opt" data-species="' + _esc(s) + '" onclick="pickSpecies(this)">' + _esc(s) + '</button>'
       ).join('');
-      return '<div class="q"><div class="qt">' + q.t + '</div>' +
+      return '<div class="q" id="question-bio_0" tabindex="-1"><div class="qt">' + q.t + '</div>' +
         (help ? '<div class="qhelp">' + help + '</div>' : '') +
-        '<div class="opts" id="bio0_opts">' + items + '</div>' +
+        '<div class="opts" id="bio0_opts">' + items + '<button class="opt" data-none="true" onclick="pickSpecies(this)">None of these yet</button></div>' +
         '<div id="bio0_gap" style="display:none;margin-top:10px"></div></div>';
     }
     const helpHtml = q.help ? `<div class="qhelp">${q.help}</div>` : '';
@@ -865,7 +904,7 @@ PILLARS.forEach(p => {
       `<button class="opt" data-p="${p.key}" data-qi="${qi}" data-pts="${o[1]}" onclick="pick(this,'${p.key}','${type}',${cap})">${o[0]}</button>`
     ).join('');
     const typeNote = type === 'multi' ? '<div class="qtype">Tick all that apply</div>' : '';
-    return `<div class="q"><div class="qt">${q.t}</div>${helpHtml}${typeNote}<div class="opts">${opts}</div></div>`;
+    return `<div class="q" id="question-${p.key}_${qi}" tabindex="-1"><div class="qt">${q.t}</div>${helpHtml}${typeNote}<div class="opts">${opts}</div></div>`;
   }).join('');
   wrap.innerHTML = `<div class="pillar-head"><h3>${p.name}</h3><span class="pillar-max">max ${p.max}</span></div>${qhtml}`;
   pillarsEl.appendChild(wrap);
@@ -902,9 +941,14 @@ function buildFormSteps() {
       inp.autocomplete = fid === 'steward_email' ? 'email' : 'street-address';
       inp.addEventListener('input', updateStepNext);
       if (fid === 'garden_address') {
-        inp.addEventListener('input', () => { resetLocation(); _hideAddrDrop(); _fetchAddrSuggestions(inp.value); });
-        inp.addEventListener('blur',   () => { setTimeout(_hideAddrDrop, 150); if (!gardenLat) resolveEvc(); });
-        inp.addEventListener('keydown', e => { if (e.key === 'Escape') _hideAddrDrop(); });
+        inp.addEventListener('input', () => { resetLocation(); _hideAddrDrop(); _addressStatus('Start typing your street address, then choose a suggestion.'); updateStepNext(); _fetchAddrSuggestions(inp.value); });
+        inp.addEventListener('keydown', e => {
+          if (e.key === 'Escape') _hideAddrDrop();
+          if (e.key === 'ArrowDown') {
+            const first = document.querySelector('#addr-drop button');
+            if (first) { e.preventDefault(); first.focus(); }
+          }
+        });
       }
       idfWrap.appendChild(lbl);
       idfWrap.appendChild(inp);
@@ -965,8 +1009,14 @@ function buildFormSteps() {
     if (si === 1) {
       const hint = document.createElement('p');
       hint.className = 'geo-step-hint';
-      hint.textContent = 'We\'ll look up your original vegetation and nearest green space across Australia. Mapping detail varies by state.';
+      hint.textContent = 'Start typing your Australian street address, then select it from the suggestions. Your original vegetation and nearby green spaces and registered gardens will appear below.';
       idfWrap.insertBefore(hint, idfWrap.firstChild);
+      const addressStatus = document.createElement('p');
+      addressStatus.id = 'addressStatus';
+      addressStatus.className = 'geo-step-hint';
+      addressStatus.setAttribute('role', 'status');
+      addressStatus.textContent = 'Choose a suggested address to enable Continue.';
+      idfWrap.appendChild(addressStatus);
       const card = document.createElement('div');
       card.id = 'geo-results';
       card.style.cssText = 'display:none;margin-top:16px;border:1px solid var(--rl,#d6d9cf);border-radius:0;overflow:hidden;';
@@ -1039,28 +1089,50 @@ function updateStepUI() {
   if (label)   label.textContent  = 'Step ' + (formStep + 1) + ' of 3';
   if (title)   title.textContent  = FORM_STEP_TITLES[formStep];
   if (backBtn) backBtn.style.display = formStep > 0 ? '' : 'none';
-  if (nextBtn) nextBtn.textContent = formStep === 2 ? 'Register →' : 'Continue →';
+  if (nextBtn) nextBtn.textContent = formStep === 2 ? 'Continue to self-baseline →' : 'Continue →';
   if (fill)    fill.style.width   = ((formStep + 1) / 3 * 100) + '%';
   updateStepNext();
 }
 
+function formStepValid(step) {
+  if (step === 2) return Number.isFinite(gardenAreaSqm) && gardenAreaSqm > 0 && gardenAreaSqm <= 999999;
+  return (FORM_STEP_FIELDS[step] || []).every(id => {
+    const field = IDENTITY_FIELDS.find(f => f.id === id);
+    const el = document.getElementById(id);
+    if (!field.required) return true;
+    if (!el || !el.value.trim()) return false;
+    if (id === 'garden_address') return !!selectedAddress && selectedAddress === el.value.trim() && !!gardenLat && !!gardenLng;
+    return id !== 'steward_email' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+  });
+}
 function updateStepNext() {
   const btn = document.getElementById('fstepNextBtn');
-  if (!btn) return;
-  if (formStep === 2) { btn.disabled = gardenAreaSqm === null; return; }
-  const fieldIds = FORM_STEP_FIELDS[formStep] || [];
-  const ok = IDENTITY_FIELDS
-    .filter(f => fieldIds.includes(f.id) && f.required)
-    .every(f => {
-      const el = document.getElementById(f.id);
-      if (!el || !el.value.trim()) return false;
-      if (f.id === 'steward_email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
-      return true;
-    });
-  btn.disabled = !ok;
+  if (btn) btn.disabled = !formStepValid(formStep);
+  const error = document.getElementById('formError');
+  if (error && formStepValid(formStep)) error.hidden = true;
+}
+function showFormError() {
+  const error = document.getElementById('formError');
+  error.textContent = formStep === 1 ? 'Select your address from the suggestions before continuing.' : formStep === 2 ? 'Choose a garden size or enter a valid area.' : 'Please complete the required fields with a valid email address and street address where requested.';
+  error.hidden = false;
+}
+function baselineMissing() {
+  return PILLARS.flatMap(p => p.qs.map((q, i) => p.key + '_' + i))
+    .filter(key => !Object.prototype.hasOwnProperty.call(answers, key));
+}
+function validateBaseline() {
+  const missing = baselineMissing();
+  const error = document.getElementById('baselineError');
+  error.hidden = !missing.length;
+  if (!missing.length) return true;
+  error.textContent = 'Please answer every question. Choose “none” where it applies — an unanswered question is not a zero.';
+  const question = document.getElementById('question-' + missing[0]);
+  if (question) { question.focus(); question.scrollIntoView({block:'center'}); }
+  return false;
 }
 
 function formStepNext() {
+  if (!formStepValid(formStep)) { showFormError(); return; }
   if (formStep === 2) { closeConsent(); go(1); return; }
   const next = formStep + 1;
   _slideStep('fstep-' + formStep, 'fstep-' + next, true);
@@ -1099,12 +1171,18 @@ function pick(btn, key, type, cap){
     answers[key + '_' + btn.dataset.qi] = parseInt(btn.dataset.pts, 10);
   } else if(type === 'multi'){
     btn.classList.toggle('sel');
+    if (btn.classList.contains('sel')) {
+      btn.parentElement.querySelectorAll('.opt').forEach(other => {
+        if (other !== btn && (Number(btn.dataset.pts) === 0 || Number(other.dataset.pts) === 0)) other.classList.remove('sel');
+      });
+    }
     var qid = key + '_' + btn.dataset.qi;
     var picks = Array.from(btn.parentElement.querySelectorAll('.opt.sel'))
       .map(b => parseInt(b.dataset.pts, 10));
     var sum = picks.reduce((a,b) => a+b, 0);
     if(cap && sum > cap) sum = cap;
-    answers[qid] = sum;
+    if (picks.length) answers[qid] = sum;
+    else delete answers[qid];
   }
 }
 let tickedSpecies = [];
@@ -1120,9 +1198,15 @@ function bio0Pts(n) {
 
 function pickSpecies(btn) {
   btn.classList.toggle('sel');
+  if (btn.classList.contains('sel')) {
+    document.querySelectorAll('#bio0_opts .opt').forEach(other => {
+      if (other !== btn && (btn.dataset.none || other.dataset.none)) other.classList.remove('sel');
+    });
+  }
   tickedSpecies = Array.from(document.querySelectorAll('#bio0_opts .opt.sel'))
-    .map(b => b.dataset.species);
-  answers['bio_0'] = bio0Pts(tickedSpecies.length);
+    .map(b => b.dataset.species).filter(Boolean);
+  if (document.querySelectorAll('#bio0_opts .opt.sel').length) answers['bio_0'] = bio0Pts(tickedSpecies.length);
+  else delete answers['bio_0'];
   var unticked = speciesList.filter(function(s) { return tickedSpecies.indexOf(s) === -1; });
   var gapEl = document.getElementById('bio0_gap');
   if (gapEl) {
@@ -1149,8 +1233,8 @@ function pickSizeBand(btn, sqm) {
 
 function onExactAreaInput() {
   const el = document.getElementById('garden_area_sqm');
-  const v = parseInt(el.value, 10);
-  if (v > 0) {
+  const v = Number(el.value);
+  if (Number.isFinite(v) && v > 0 && v <= 999999) {
     gardenAreaSqm = v;
     document.querySelectorAll('#size-bands .opt').forEach(b => b.classList.remove('sel'));
   } else {
@@ -1169,11 +1253,23 @@ function updateRegisterBtn() {
 function openConsent() {
   resetLocation();
   formStep = 0;
+  gardenAreaSqm = null;
   buildFormSteps();
   document.getElementById('overlay').classList.add('open');
 }
 function closeConsent(){ document.getElementById('overlay').classList.remove('open'); }
 async function confirmConsent(){
+  const invalidStep = [0, 1, 2].find(step => !formStepValid(step));
+  if (invalidStep !== undefined) {
+    formStep = invalidStep;
+    document.querySelectorAll('#fstepWrap .cstep').forEach((el, i) => el.classList.toggle('active', i === formStep));
+    document.getElementById('overlay').classList.add('open');
+    updateStepUI(); showFormError(); return;
+  }
+  if (baselineMissing().length) { go(1); validateBaseline(); return; }
+  if (!CONSENT.every((c, i) => !c.req || consentState[i] === true)) {
+    showConsentError('Please accept the required stewardship consents.'); return;
+  }
   const btn = document.getElementById('registerBtn');
   if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
 
@@ -1280,14 +1376,14 @@ function buildDeepenSpecies() {
 
   const sub = document.getElementById('deepenEvcSub');
   if (sub) sub.textContent = evcName
-    ? 'Species local to ' + evcName + (evcCode ? ' (' + evcCode + ')' : '') + '. Each one lifts Biodiversity Structure and strengthens your connection to local ecology.'
-    : 'Species local to your Ecological Vegetation Class. Each one lifts Biodiversity Structure and Connectivity.';
+    ? 'Species local to ' + evcName + (evcCode ? ' (' + evcCode + ')' : '') + '. Check which species suit your garden before planting.'
+    : 'Species local to your Ecological Vegetation Class. Choose plants suited to your site and record them once established.';
 
   // Address lookup establishes vegetation context, not a verified planting palette.
   if (!evcCode || !speciesList.length) {
     if (heading) heading.textContent = 'Discover plants for your place';
     if (sub) sub.textContent = 'Explore your local vegetation and plant information with Find My Native Plants.';
-    container.innerHTML = '<a href="https://findmynativeplants.com.au/">Find My Native Plants →</a>';
+    container.innerHTML = '<a class="btn ghost" href="https://findmynativeplants.com.au/" target="_blank" rel="noopener">Find My Native Plants →</a>';
     return;
   }
   const pool = speciesList.filter(s => tickedSpecies.indexOf(s) === -1).map(name => {
@@ -1326,6 +1422,55 @@ function buildDeepenSpecies() {
   container.innerHTML = html;
 }
 
+// Advice follows the existing questions; it does not change their point values.
+const DEEPEN_ACTIONS = {
+  bio: [
+    'Identify the indigenous plants already growing, then use the plant finder to choose additional species suited to your place. Record what establishes.',
+    'When replacing plants, favour species indigenous to your local ecological community. Keep a species list to track the balance.',
+    'Build missing planting layers where space allows: groundcovers, grasses, shrubs and trees each offer different shelter and food.',
+    'Retain established trees and plan suitable canopy planting where there is room. Record canopy as it grows, rather than counting future cover.'
+  ],
+  soil: [
+    'Keep bare soil covered with suitable mulch or planting, reduce compaction and photograph soil condition over time.',
+    'Observe where rain runs off or pools. Improve soil cover and watering practices, then record whether moisture retention improves.',
+    'Consider a rainwater tank, moisture basin or swale where suitable for the site. Record only features installed and functioning.'
+  ],
+  habitat: [
+    'Create a distinct refuge area with dense planting or a sheltered log-and-rock corner, suited to the wildlife of your place.',
+    'Add suitable shelter or water: an embedded log, rock refuge or maintained shallow water source. Keep a record of the features in use.',
+    'Keep dated notes or photographs of wildlife visitors. Observations build the record; verified sightings need confirmation.'
+  ],
+  conn: [
+    'Check nearby habitat and talk with neighbours about connecting planting. Park distance is fixed; other connectivity contributions need evidence and verification.'
+  ],
+  evid: [
+    'Start dated photographs, a species list and short field notes. Add wildlife observations as they occur; retain any professional assessment.'
+  ]
+};
+function deepenPriorities() {
+  return PILLARS.map(p => {
+    const questions = p.qs.map((q, i) => {
+      const max = q.type === 'multi' ? q.cap : Math.max(...q.opts.map(o => o[1]));
+      const value = answers[p.key + '_' + i];
+      return {i, max, value};
+    });
+    if (questions.some(q => q.value === undefined)) return null;
+    const available = questions.reduce((sum, q) => sum + q.max, 0);
+    const recorded = questions.reduce((sum, q) => sum + q.value, 0);
+    const weakest = questions.filter(q => q.value < q.max)
+      .sort((a, b) => a.value / a.max - b.value / b.max)[0];
+    return weakest ? {name:p.name, ratio:recorded / available, action:DEEPEN_ACTIONS[p.key][weakest.i]} : null;
+  }).filter(Boolean).sort((a, b) => a.ratio - b.ratio).slice(0, 3);
+}
+function buildDeepenPriorities() {
+  const target = document.getElementById('deepenPriorities');
+  if (!target) return;
+  const priorities = deepenPriorities();
+  target.innerHTML = '<h3>Your next steps</h3>' + (priorities.length
+    ? priorities.map(p => '<article class="card"><div class="label">Lower in your self-baseline</div><h4>' + _esc(p.name) + '</h4><p class="cdesc">' + _esc(p.action) + '</p></article>').join('')
+    : '<p style="margin-top:12px">Keep dated records of your garden’s condition and discuss any evidence gaps at a verification visit.</p>');
+}
+
 function buildDeepenPanel() {
   // Update booking mailto with context
   const bookBtn = document.getElementById('bookVisitBtn');
@@ -1340,18 +1485,16 @@ function buildDeepenPanel() {
       + encodeURIComponent('Ecological Garden Health Check — ' + (suburb || 'enquiry'))
       + '&body=' + encodeURIComponent(lines);
   }
-  // Update Plants of Place link with EVC code
   const popLink = document.getElementById('popLink');
-  if (popLink) popLink.href = 'https://findmynativeplants.com.au/';
-  if (popLink && evcCode) {
-    popLink.href = 'https://plantsofplace.com.au/?evc=' + encodeURIComponent(evcCode);
-  }
+  if (popLink) popLink.href = 'https://plantsofplace.com/';
+  buildDeepenPriorities();
   // Render species
   loadDeepenDb(buildDeepenSpecies);
 }
 
 /* ---- navigation ---- */
 function go(step){
+  if (step === 2 && !validateBaseline()) return;
   document.querySelectorAll('.screen').forEach((s,i)=> s.classList.toggle('active', i===step));
   document.querySelectorAll('.rail-step').forEach((r,i)=>{
     r.classList.toggle('active', i===step);

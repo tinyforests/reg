@@ -6,7 +6,7 @@ Total: **100 points across 5 pillars.** Computed by `reg-score.js` via `scoreEco
 
 | Pillar | Max | What it measures |
 |---|---|---|
-| Biodiversity Structure | 25 | Indigenous species count, indigenous dominance, structural layers, canopy cover |
+| Plant Diversity Structure | 25 | Indigenous species count, indigenous dominance, structural layers, canopy cover |
 | Soil & Water Function | 20 | Soil health score, water function score, rainwater system, moisture basin, swale |
 | Habitat Complexity | 20 | Habitat nodes, embedded logs, rock refuges, water feature, nest boxes, verified fauna sightings |
 | Connectivity | 20 | Adjacency to parks (by distance), adjacent registered gardens, corridor node, cluster area |
@@ -31,7 +31,7 @@ The engine returns:
 
 Mirrored from `reg-score.js`. **If this section and the code drift, the code wins, and this section is re-synced.**
 
-### Biodiversity Structure (25 pts)
+### Plant Diversity Structure (25 pts)
 
 | Component | Source field | Points |
 |---|---|---|
@@ -275,7 +275,7 @@ These are known gaps in the current methodology. They are documented here rather
 
 ### (a) "Indigenous to this place" is undefined by the engine
 
-The Biodiversity Structure pillar awards points for `indigenous_species_current` — a steward-reported count of strictly local-indigenous species. The engine accepts this count at face value. It does not hold a reference list of species that are indigenous to any specific location, and it does not check the count against one.
+The Plant Diversity Structure pillar awards points for `indigenous_species_current` — a steward-reported count of strictly local-indigenous species. The engine accepts this count at face value. It does not hold a reference list of species that are indigenous to any specific location, and it does not check the count against one.
 
 This means: a steward could report a species as indigenous when it is a native from a different bioregion, or a cultivar of an indigenous species, or genuinely local — and the engine would treat all three identically.
 

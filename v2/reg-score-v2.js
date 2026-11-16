@@ -79,7 +79,7 @@ function richnessTarget(env, locale) {
  * `target` returns the envelope-calibrated threshold for full marks.
  */
 const INDICATORS = [
-  // --- Biodiversity structure
+  // --- Plant diversity structure
   {
     id: 'indigenous_richness', pillar: 'biodiversity', weight: 12,
     applicable: () => 1,

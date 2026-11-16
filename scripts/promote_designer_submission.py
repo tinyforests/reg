@@ -61,7 +61,7 @@ def prepare(submission, verification='self_reported', verifier=None):
     record['connectivity'].update(cluster_name='', cluster={'name':'', 'gardens':0, 'area_ha':None, 'status':''})
     validate_public_text(record)
     score = score_ecological_registry(record)
-    record['score'] = {'total': score['total'], 'rating': rating_object(score['total'])['current'], 'categories': [{'label': label, 'score': score[key], 'max': maximum, 'notes': []} for key, label, maximum in [('biodiversity','Biodiversity Structure',25),('soil_water','Soil & Water Function',20),('habitat','Habitat Complexity',20),('connectivity','Connectivity',20),('evidence','Evidence & Verification',15)]]}
+    record['score'] = {'total': score['total'], 'rating': rating_object(score['total'])['current'], 'categories': [{'label': label, 'score': score[key], 'max': maximum, 'notes': []} for key, label, maximum in [('biodiversity','Plant Diversity Structure',25),('soil_water','Soil & Water Function',20),('habitat','Habitat Complexity',20),('connectivity','Connectivity',20),('evidence','Evidence & Verification',15)]]}
     record['upgrade_potential'] = record['points_available'] = 100 - score['total']
     record['rating'] = rating_object(score['total'])
     record['badges'] = award_badges(record) if verified else []

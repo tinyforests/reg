@@ -3,7 +3,7 @@
  * Ecological Registry Scoring Engine - Gardener & Son v1.0
  *
  * Five pillars, 100 points total:
- *   Biodiversity Structure   25 pts
+ *   Plant Diversity Structure   25 pts
  *   Soil & Water Function    20 pts
  *   Habitat Complexity       20 pts
  *   Connectivity             20 pts
@@ -29,7 +29,7 @@ function scoreEcologicalRegistry(record) {
   }
 
   var categories = [
-    { label: "Biodiversity Structure",  score: scores.biodiversity.score, max: 25, notes: scores.biodiversity.notes },
+    { label: "Plant Diversity Structure",  score: scores.biodiversity.score, max: 25, notes: scores.biodiversity.notes },
     { label: "Soil & Water Function",   score: scores.soil_water.score,   max: 20, notes: scores.soil_water.notes },
     { label: "Habitat Complexity",      score: scores.habitat.score,      max: 20, notes: scores.habitat.notes },
     { label: "Connectivity",            score: scores.connectivity.score,  max: 20, notes: scores.connectivity.notes },
@@ -50,7 +50,7 @@ function scoreEcologicalRegistry(record) {
   };
 }
 
-// Pillar 1: Biodiversity Structure (25 pts)
+// Pillar 1: Plant Diversity Structure (25 pts)
 function scoreBiodiversity(r) {
   var b = r.biodiversity || {};
   var score = 0;

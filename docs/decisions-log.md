@@ -946,3 +946,95 @@ a welcoming entry, grounded claims, and continuity from discovery to the record.
 ## 16 Nov 2026 — Matched scorecard numerals
 
 - Use Abril Fatface and one sizing rule for the two headline values across the homepage and profiles. Keep denominators and labels unchanged.
+
+## 16 Nov 2026 — Make stewardship consent choices discoverable
+
+**Decision:** Add a “Review consent choices” link with a downward arrow beneath
+the Step 03 introduction. It targets the consent choices below, with clearance
+for the sticky progress rail and reduced-motion support.
+
+**Reason:** The full-height introduction hides the next section on desktop.
+A labelled, keyboard-accessible continuation makes the next action clear while
+keeping the Registry’s restrained design and existing consent behaviour.
+
+**Files affected:** `enrol/index.html`, `docs/decisions-log.md`.
+
+## 16 Nov 2026 — Show location lookup activity and bound green-space waits
+
+**Decision:** Give all three enrolment location results indeterminate loading
+bars and accessible busy/status states, with static bars for reduced motion.
+Keep the existing parallel Overpass mirrors, cap requests at eight seconds,
+cancel superseded park requests, and cache up to twenty successful queries in
+memory. Remove the delayed automatic retry and reject incomplete server results.
+Distinguish service failure from a successful search with no nearby park.
+
+**Reason:** Make background activity visible and prevent slow services from
+leaving stewards waiting indefinitely. Cached repeat queries avoid another
+network request. Lookups remain optional; search coverage and scoring are unchanged.
+
+**Files affected:** `enrol/index.html`, `scripts/test_enrolment.cjs`,
+`scripts/test_location_loading.cjs`, `docs/decisions-log.md`.
+
+## 16 Nov 2026 — Personalised next steps and complete enrolment answers
+
+**Decision:** Step 05 links directly to `https://plantsofplace.com/`, styles the
+plant finder as a matching button, and suggests actions for up to three weaker
+self-baseline areas. Rank against the answers available within each pillar, not
+unavailable verification points; label the advice as derived and self-reported.
+No scoring weights, thresholds or garden records change.
+
+Require complete identity, selected address, garden size and explicit baseline
+answers before continuing/submitting. Multi-select “none” choices are exclusive;
+clearing every choice returns a question to unanswered. Add explicit “none”
+choices for planting layers and the optional species checklist. Recheck at the
+submission handler rather than relying only on disabled buttons.
+
+**Reason:** A blank answer must not become an invented zero. Useful improvement
+advice should follow the steward’s answers without promising points for planned
+work or penalising them for verification-only criteria.
+
+**Files affected:** `enrol/index.html`, `scripts/test_enrolment_flow.cjs`,
+`docs/decisions-log.md`.
+
+## 16 Nov 2026 — Select an address before showing location results
+
+**Decision:** Automatically search for Australian address suggestions while typing.
+Require an explicit suggestion selection before enabling Continue or showing
+vegetation, green-space and registered-garden lookups. Remove blur-based geocoding
+of unselected text. Edits invalidate the selection and hide old results. Suggestions
+are keyboard-accessible buttons; search has loading, no-match and failure messages.
+Ecological lookup outages after selection remain non-blocking.
+
+**Reason:** At Tyson’s direction, show location context only for the address the
+steward has selected, avoiding silent guesses from incomplete address text.
+
+**Files affected:** `enrol/index.html`, `scripts/test_enrolment.cjs`,
+`scripts/test_location_loading.cjs`, `scripts/test_enrolment_flow.cjs`,
+`docs/decisions-log.md`, `docs/self-enrolment-to-registered.md`.
+
+**Related domain repair:** GoDaddy confirmed permanent (301) forwarding from
+`plantsofplace.com.au` to `https://plantsofplace.com/` on 16 Nov 2026. DNS/SSL
+propagation may take up to 48 hours; this is separate from the local page changes.
+
+## 16 Nov 2026 — Plant Diversity Structure in self-baseline
+
+**Decision:** Label the self-baseline plant pillar “Plant Diversity Structure”,
+including its corresponding Step 05 recommendation heading.
+
+**Reason:** Tyson’s requested steward-facing wording. The `bio` key, point values,
+canonical scoring methodology and garden records are unchanged.
+
+**Files affected:** `enrol/index.html`, `docs/decisions-log.md`.
+
+## 16 Nov 2026 — Plant Diversity Structure across the site
+
+**Decision:** Extend the steward-facing pillar name “Plant Diversity Structure”
+through public pages, council decks, field notes, shared scoring/opportunity
+display labels, garden snapshot labels and supporting methodology documentation.
+Retain machine keys such as `biodiversity` and `biodiversity_structure`.
+
+**Reason:** Tyson requested consistent wording throughout the site. This is a
+label change only; point allocations, calculations and recorded measurements
+are unchanged. Historical decision entries retain their original wording.
+
+**Files affected:** `yield-demo.html`, `profile.html`, `decks/merri-bek/detail.html`, `slides.html`, `decks/merri-bek/deck.html`, `v2/reg-score-v2.js`, `js/reg-score.js`, `decks/whitehorse/deck-original.html`, `decks/whitehorse/deck.html`, `decks/whitehorse/pilot.html`, `docs/scoring-methodology.md`, `js/reg-opportunities.js`, `decks/yarra-ranges/detail.html`, `decks/yarra-ranges/deck.html`, `docs/developer-government-brief.md`, `decks/yarra-ranges/dashboard.html`, `scripts/promote_designer_submission.py`, `docs/REGISTRY-OPPORTUNITY-MODEL-v2-PROPOSAL.md`, `decks/monash/detail.html`, `decks/monash/deck.html`, `decks/monash/dashboard.html`, `decks/whitehorse-ecological-registry.html`, `developers.html`, `gardens/g-2942b7a03783/field-notes/2026-02-15.html`, `decks/boroondara/deck.html`, `gardens/g-2942b7a03783/field-notes/002.html`, `decks/boroondara/slides.html`, `assess.html`, `boorondara-dashboard.html`, `index.html`, `scripts/reg_opportunities.py`, `gardens/g-62a8b20f8af5/field-notes/002.html`, `scripts/reg_score.py`, `gardens/g-62a8b20f8af5/field-notes/2026-04-01.html`, `data/sirgarnet.json`, `BRAND_BOOK.html`, `data/canterburyg02.json`, `data/auburn_test.json`, `data/welcome.json`, `data/windella.json`, `data/leopold.json`, `data/evelina.json`, `data/gardentrail.json`, `data/parringroad.json`, `data/bushgarden.json`, `data/smokebush.json`, `data/dewrang.json`, `data/nicholson.json`, `data/parring.json`, `data/arundel.json`, `data/middlesex.json`, `docs/decisions-log.md`.

@@ -158,3 +158,15 @@ checks confirmed the score-free form, matching profile script and healthy signup
 endpoint. No test garden or email was submitted.
 Checks: `node scripts/test_provisional_profile.cjs` and
 `node scripts/test_enrolment.cjs`. No live submissions or emails are sent by tests.
+
+## Address selection and next steps — 16 Nov 2026
+
+The location step requires the steward to select an autocomplete suggestion.
+Typing alone does not trigger ecological lookups or enable Continue. Editing
+invalidates the selected address and hides prior results. Address-search failures
+must be retried; ecological lookup failures after selection do not block enrolment.
+The baseline requires explicit answers, including zero/none choices. Step 05 uses
+the existing self-baseline answers for labelled improvement suggestions, without
+changing scoring or guaranteeing a score increase. Checks:
+`node scripts/test_enrolment_flow.cjs`, `node scripts/test_enrolment.cjs`, and
+`node scripts/test_location_loading.cjs`.

@@ -1,0 +1,38 @@
+const fs = require('node:fs');
+const vm = require('node:vm');
+const assert = require('node:assert/strict');
+const html = fs.readFileSync('enrol/index.html','utf8');
+for (const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)) new vm.Script(match[1]);
+const els = {};
+const ctx = vm.createContext({document:{getElementById:id=>els[id]}, Number});
+const section = (start,end)=>html.slice(html.indexOf(start),html.indexOf(end));
+vm.runInContext(section('const PILLARS =','/* ---- state ---- */') + '\nconst answers = {}; let gardenAreaSqm = null; let selectedAddress = ""; let gardenLat = ""; let gardenLng = "";\n' + section('const FORM_STEP_FIELDS =','function buildFormSteps()') + section('function formStepValid','function updateStepNext') + section('function baselineMissing','function validateBaseline') + section('const DEEPEN_ACTIONS =','function buildDeepenPriorities'),ctx);
+assert.equal(ctx.formStepValid(0),false);
+els.steward_name={value:'  '}; els.steward_email={value:'invalid'};
+assert.equal(ctx.formStepValid(0),false);
+els.steward_name.value='Test'; els.steward_email.value='test@example.com';
+assert.equal(ctx.formStepValid(0),true);
+assert.equal(ctx.formStepValid(1),false);
+els.garden_address={value:'Test address'};
+assert.equal(ctx.formStepValid(1),false,'Typed address must not enable Continue');
+vm.runInContext("selectedAddress='Test address'; gardenLat='-37'; gardenLng='145'",ctx);
+assert.equal(ctx.formStepValid(1),true);
+els.garden_address.value='Edited address';
+assert.equal(ctx.formStepValid(1),false,'Editing invalidates selection');
+els.garden_address.value='Test address';
+for (const area of [null,0,-1,1000000,NaN]) {
+  ctx.area=area; vm.runInContext('gardenAreaSqm = area',ctx); assert.equal(ctx.formStepValid(2),false);
+}
+vm.runInContext('gardenAreaSqm = 100',ctx); assert.equal(ctx.formStepValid(2),true);
+assert.equal(ctx.baselineMissing().length,12);
+vm.runInContext('PILLARS.forEach(p=>p.qs.forEach((q,i)=>answers[p.key+"_"+i]=0))',ctx);
+assert.equal(ctx.baselineMissing().length,0,'Explicit zero answers are complete');
+assert.equal(ctx.deepenPriorities().length,3);
+vm.runInContext('PILLARS.forEach(p=>p.qs.forEach((q,i)=>answers[p.key+"_"+i]=q.type === "multi" ? q.cap : Math.max(...q.opts.map(o=>o[1]))))',ctx);
+assert.equal(ctx.deepenPriorities().length,0,'No manufactured gaps at highest available answers');
+vm.runInContext('answers.soil_0=2',ctx);
+assert.equal(ctx.deepenPriorities()[0].name,'Soil & Water');
+assert.match(ctx.deepenPriorities()[0].action,/compaction/);
+assert.ok(!html.includes('plantsofplace.com.au'));
+assert.match(html,/class="btn ghost" href="https:\/\/findmynativeplants.com.au\//);
+console.log('PASS script syntax, required details, explicit zero answers, personalised priorities and destination links');
