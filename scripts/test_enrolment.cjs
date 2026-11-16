@@ -3,8 +3,8 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const html = fs.readFileSync('enrol/index.html', 'utf8');
 const pending = [];
-const elements = Object.fromEntries(['geo-val-evc','geo-val-park','geo-val-garden','geo-results'].map(id=>[id,{style:{},textContent:''}]));
-let source = html.slice(html.indexOf('let ecologicalContext'), html.indexOf('/* Fallback:'));
+const elements = Object.fromEntries(['geo-val-evc','geo-val-park','geo-val-garden','geo-results'].map(id=>[id,{style:{},textContent:'',classList:{toggle(){}},setAttribute(){}}]));
+let source = html.slice(html.indexOf('let ecologicalContext'), html.indexOf('/* ---- Address autocomplete ---- */'));
 source = source.replace("await import('/jurisdiction/enrolment.js')", 'await moduleStub');
 const context = vm.createContext({document:{getElementById:id=>elements[id]},
   moduleStub:{resolveEnrolmentVegetation:()=>new Promise(resolve=>pending.push(resolve))},

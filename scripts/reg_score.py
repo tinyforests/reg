@@ -6,7 +6,7 @@ Python port of js/reg-score.js. Logic must remain identical.
 If this file and reg-score.js drift, reg-score.js wins and this file is re-synced.
 
 Five pillars, 100 points total:
-  Biodiversity Structure   25 pts
+  Plant Diversity Structure   25 pts
   Soil & Water Function    20 pts
   Habitat Complexity       20 pts
   Connectivity             20 pts

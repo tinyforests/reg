@@ -37,7 +37,7 @@ A landscape plan expresses intent. A continuing, independently checked record ca
 | Installation / handover | Site inspection, installed species and features, survival at inspection, as-built changes and named caretaker | Identify delivery shortfalls; do not claim mature ecological function |
 | Establishment | Repeat observations at agreed intervals, survival/replacement, actual canopy and habitat, condition, maintenance and documented connectivity | Test whether delivery persists and agree remediation |
 
-The Registry's existing five pillars are biodiversity structure, soil and water, habitat complexity, connectivity, and evidence and verification. The current 0–100 score is an existing method for garden records. It is **not** a validated statutory biodiversity metric, a replacement for native-vegetation regulation, an offset unit or a government energy-rating equivalent.
+The Registry's existing five pillars are plant diversity structure, soil and water, habitat complexity, connectivity, and evidence and verification. The current 0–100 score is an existing method for garden records. It is **not** a validated statutory biodiversity metric, a replacement for native-vegetation regulation, an offset unit or a government energy-rating equivalent.
 
 Before a compliance threshold could be proposed, research must test reference-relative benchmarks, agreement between assessors, sensitivity to site size, missing data and the ecological relevance of the score. Separate hard protections and pillar floors would need evaluation; favourable evidence points must not conceal poor ecological condition.
 

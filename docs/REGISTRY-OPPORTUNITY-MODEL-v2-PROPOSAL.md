@@ -106,7 +106,7 @@ All five survive with their names and caps intact. This matters for continuity w
 
 | Pillar | Change |
 |---|---|
-| Biodiversity structure | Thresholds become envelope-scaled. Fixed absolute species counts retire. Strata expressed as functions, not features. |
+| Plant diversity structure | Thresholds become envelope-scaled. Fixed absolute species counts retire. Strata expressed as functions, not features. |
 | Soil & water | Splits cleanly into substrate function (can be genuinely 0 on a slab) and water function (never 0 — a fauna water point is available to every site). Rooting volume replaces area as the primary term. |
 | Habitat complexity | Feature list generalises: "log" becomes "decaying woody material", "rock pile" becomes "thermal/refuge structure". Scale-appropriate versions exist on a balcony. |
 | Connectivity | **Substantive change — see §4.3.** Currently a manually asserted tick worth +5, set only on the demo garden. Becomes computed from network membership and adjacency. |

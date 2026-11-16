@@ -38,7 +38,7 @@ DELIVERY_PATH_LABEL = {
 
 PILLAR_MAX = {'biodiversity': 25, 'soil_water': 20, 'habitat': 20, 'connectivity': 20, 'evidence': 15}
 PILLAR_LABEL = {
-    'biodiversity': 'Biodiversity Structure', 'soil_water': 'Soil & Water',
+    'biodiversity': 'Plant Diversity Structure', 'soil_water': 'Soil & Water',
     'habitat': 'Habitat Complexity', 'connectivity': 'Connectivity', 'evidence': 'Evidence & Verification',
 }
 TIERS = [
