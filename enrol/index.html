@@ -361,9 +361,17 @@ const ENDPOINT_URL = 'https://script.google.com/macros/s/AKfycbywnSUukawAaCJ0JTS
    Lets us count enrolments per channel (e.g. src=fmeg-sep26). */
 const ENROL_SRC = (function () {
   try {
-    var s = new URLSearchParams(location.search).get('src') || '';
+    var q = new URLSearchParams(location.search);
+    var s = q.get('src') || q.get('ref') || '';
     if (s) { sessionStorage.setItem('enrol_src', s); return s.slice(0, 60); }
-    return (sessionStorage.getItem('enrol_src') || '').slice(0, 60);
+    s = sessionStorage.getItem('enrol_src') || '';
+    if (!s) {
+      // Offer pages (e.g. /gardens-that-give-back/) leave a 30-day tag, so a reader
+      // who reaches the form by another route is still attributed to the offer.
+      var o = JSON.parse(localStorage.getItem('enrol_src_offer') || 'null');
+      if (o && o.src && Date.now() - o.at < 30 * 864e5) s = String(o.src);
+    }
+    return s.slice(0, 60);
   } catch (e) { return ''; }
 })();
 

@@ -1053,3 +1053,12 @@ do not silently change awards or imply independent certification.
 
 **Files affected:** `index.html`, `assets/css/registry-home.css`,
 `js/home-badge-dialogs.js`, `docs/decisions-log.md`.
+
+
+## 2026-11-17 — Keep the Three Neat Things tag when readers take another route
+
+**Decision:** /gardens-that-give-back/ now leaves a 30-day first-party tag (`localStorage.enrol_src_offer`) when it loads. The signup form uses it only when no `?src=` / `?ref=` or session tag is present, and again accepts `?ref=` as an alias of `?src=` (lost in the 16 Nov flow change).
+
+**Reason:** Marnie Hawson's newsletter went out on 17 Nov linking to the landing page. A reader who saw the offer but reached the form via the home page or a later visit was recorded as "(direct)" and would not be flagged for plants.
+
+**Files affected:** `enrol/index.html`, `gardens-that-give-back/index.html` (script tag before `</body>`; keep it if the page is rebuilt from the design canvas). No backend change.
