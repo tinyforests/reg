@@ -4,7 +4,7 @@ body .reg-scorecard.eco-card>.card{background:var(--ground);color:var(--ink);pad
 body .reg-scorecard.eco-card .hero{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:transparent;border:0;padding:0;margin:16px 0 0;align-items:start;min-height:0}
 body .reg-scorecard.eco-card .reg-total{border:1px solid #505743;text-align:center;padding:12px 8px 5px;min-width:0}
 body .reg-scorecard.eco-card .reg-total-value{display:flex;align-items:baseline;justify-content:center;gap:8px;min-height:56px}
-body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card #heroScore,body .reg-scorecard.eco-card .reg-badge-number{font:400 clamp(48px,5vw,64px)/1.1 'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;letter-spacing:-.05em;color:#fff0dc;opacity:1;text-shadow:none}
+body .reg-scorecard.eco-card :is(.reg-score-total, .reg-badge-total) .reg-total-value > :first-child{font:400 clamp(48px,5vw,64px)/1.1 'Abril Fatface',Georgia,serif;font-variant-numeric:tabular-nums;letter-spacing:-.05em;color:#fff0dc;opacity:1;text-shadow:none}
 body .reg-scorecard.eco-card .reg-total .of{font:10px/1.5 'IBM Plex Mono',monospace;letter-spacing:.02em;color:#c1bea9;white-space:nowrap;display:inline}
 body .reg-scorecard.eco-card .reg-total-label{font:300 12px/1.4 'IBM Plex Sans',sans-serif;color:#c1bea9;margin-top:4px}
 body .reg-scorecard.eco-card .reg-rating{display:inline-block;border:1px solid #8b7e52;color:#c5b078;font:11px/1.6 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin:16px 0 0;padding:7px 10px;max-width:100%}
@@ -32,13 +32,13 @@ body .home-eco-card.reg-scorecard .home-card-verification{display:none}
 body .reg-scorecard.eco-card .hero.provisional{border:0;background:transparent}body .reg-scorecard.eco-card .hero.provisional .reg-total{border-color:#b49a63;border-style:dashed}body .reg-scorecard.eco-card .quarantine{color:#d4bb87}
 body .reg-scorecard.eco-card .reg-total.is-withheld .reg-total-label::after{content:' · withheld';font-size:11px}
 body .reg-scorecard.eco-card[data-profile-view=connected] .card{background:#11170f}
-body .reg-scorecard.eco-card[data-profile-view=connected] .score,body .reg-scorecard.eco-card[data-profile-view=connected] .reg-badge-number{font-family:'IBM Plex Mono',monospace;color:#b3ff6c;font-size:clamp(44px,5vw,60px)}
+body .reg-scorecard.eco-card[data-profile-view=connected] .score,body .reg-scorecard.eco-card[data-profile-view=connected] .reg-badge-number{color:#b3ff6c}
 body .reg-scorecard.eco-card[data-profile-view=connected] .hero.provisional .score{color:#d4bb87}
 body .reg-scorecard.eco-card[data-profile-view=connected] .reg-assessed-wrap{display:none}
 body .reg-scorecard.eco-card[data-profile-view=connected] .reg-rating{margin-top:14px}
 body .reg-scorecard.eco-card .reg-sign-summary{display:none}
 body .reg-scorecard.eco-card .reg-sign-readings{margin-top:16px}
-@media(max-width:399px){body .reg-scorecard.eco-card>.card{padding:18px}body .reg-scorecard.eco-card .hero{gap:10px}body .reg-scorecard.eco-card .reg-total-value{flex-wrap:wrap;gap:0 6px}body .reg-scorecard.eco-card .score,body .reg-scorecard.eco-card .reg-badge-number{font-size:56px}body .reg-scorecard.eco-card .reg-total .of{font-size:9px}body .reg-scorecard.eco-card .reg-progress-notes{font-size:9px}}
+@media(max-width:399px){body .reg-scorecard.eco-card>.card{padding:18px}body .reg-scorecard.eco-card .hero{gap:10px}body .reg-scorecard.eco-card .reg-total-value{flex-wrap:wrap;gap:0 6px}body .reg-scorecard.eco-card :is(.reg-score-total, .reg-badge-total) .reg-total-value > :first-child{font-size:56px}body .reg-scorecard.eco-card .reg-total .of{font-size:9px}body .reg-scorecard.eco-card .reg-progress-notes{font-size:9px}}
 
 body .reg-scorecard.eco-card .bar{background:#505743}body .reg-scorecard.eco-card .fill{background:#a2c278}body .reg-scorecard.eco-card .marker{background:#fff0dc}body .reg-scorecard.eco-card .gap{background:repeating-linear-gradient(-45deg,#fff0dc66 0 2px,transparent 2px 5px)}
 

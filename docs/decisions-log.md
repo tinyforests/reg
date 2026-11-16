@@ -941,3 +941,8 @@ a welcoming entry, grounded claims, and continuity from discovery to the record.
 `js/reg-provisional.js`, `scripts/appsscript/Code.gs`,
 `scripts/test_provisional_profile.cjs`, `docs/self-enrolment-to-registered.md`,
 `docs/decisions-log.md`. Email delivery requires a signup Apps Script redeployment.
+
+
+## 16 Nov 2026 — Matched scorecard numerals
+
+- Use Abril Fatface and one sizing rule for the two headline values across the homepage and profiles. Keep denominators and labels unchanged.
