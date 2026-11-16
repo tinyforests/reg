@@ -210,7 +210,7 @@
         </div>
         <div class="border p-5" style="border-color:var(--hair)">
           <div class="text-sm font-medium mb-2">You earn badges</div>
-          <p class="text-sm muted leading-relaxed">Species Rich. Habitat Builder. Corridor Node. Amphibian Active. Each badge marks a real ecological threshold your garden has crossed.</p>
+          <p class="text-sm muted leading-relaxed">Species Rich. Habitat Builder. Corridor Node. Fauna Active. Each badge marks a real ecological threshold your garden has crossed.</p>
         </div>
         <div class="border p-5" style="border-color:var(--hair)">
           <div class="text-sm font-medium mb-2">You join the network</div>
@@ -316,21 +316,22 @@
       <h2 class="font-serif text-4xl leading-tight">Signals, not stickers. Each badge marks something real.</h2>
       <p class="text-base muted leading-relaxed">Badges are awarded automatically when your garden crosses an ecological threshold. You can't buy them. You can't shortcut them. You earn them by improving your garden.</p>
     </div>
+    <p class="text-sm muted mb-5">Select a badge to see what it means and how it is earned.</p>
     <div class="flex flex-wrap gap-2">
-      <span class="chip chip-signal">Corridor Node</span>
-      <span class="chip chip-filled">G&S Verified</span>
-      <span class="chip" style="border-color:var(--hair)">Indigenous Dominant</span>
-      <span class="chip" style="border-color:var(--hair)">Species Rich</span>
-      <span class="chip" style="border-color:var(--hair)">Highly Species Rich</span>
-      <span class="chip" style="border-color:var(--hair)">Habitat Builder</span>
-      <span class="chip" style="border-color:var(--hair)">Amphibian Active</span>
-      <span class="chip" style="border-color:var(--hair)">Pollinator Rich</span>
-      <span class="chip" style="border-color:var(--hair)">Water Wise</span>
-      <span class="chip" style="border-color:var(--hair)">Five Layer Garden</span>
-      <span class="chip" style="border-color:var(--hair)">Canopy Forming</span>
-      <span class="chip" style="border-color:var(--hair)">Network Connected</span>
-      <span class="chip" style="border-color:var(--hair)">Full Record</span>
-      <span class="chip" style="border-color:var(--hair)">Fauna Record</span>
+      <button type="button" class="chip chip-signal" data-badge-explainer="corridor_node" aria-haspopup="dialog" aria-controls="badge-dialog-corridor_node">Corridor Node<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip chip-filled" data-badge-explainer="gs_verified" aria-haspopup="dialog" aria-controls="badge-dialog-gs_verified">G&S Verified<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="indigenous_dominant" aria-haspopup="dialog" aria-controls="badge-dialog-indigenous_dominant">Indigenous Dominant<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="species_rich_20" aria-haspopup="dialog" aria-controls="badge-dialog-species_rich_20">Species Rich<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="species_rich_30" aria-haspopup="dialog" aria-controls="badge-dialog-species_rich_30">Highly Species Rich<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="habitat_builder" aria-haspopup="dialog" aria-controls="badge-dialog-habitat_builder">Habitat Builder<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="amphibian_active" aria-haspopup="dialog" aria-controls="badge-dialog-amphibian_active">Fauna Active<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="pollinator_rich" aria-haspopup="dialog" aria-controls="badge-dialog-pollinator_rich">Pollinator Rich<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="water_wise" aria-haspopup="dialog" aria-controls="badge-dialog-water_wise">Water Wise<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="five_layers" aria-haspopup="dialog" aria-controls="badge-dialog-five_layers">Five Layer Garden<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="full_canopy" aria-haspopup="dialog" aria-controls="badge-dialog-full_canopy">Canopy Forming<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="network_connected" aria-haspopup="dialog" aria-controls="badge-dialog-network_connected">Network Connected<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="full_record" aria-haspopup="dialog" aria-controls="badge-dialog-full_record">Full Record<span class="badge-more" aria-hidden="true">↗</span></button>
+      <button type="button" class="chip" style="border-color:var(--hair)" data-badge-explainer="fauna_record" aria-haspopup="dialog" aria-controls="badge-dialog-fauna_record">Fauna Record<span class="badge-more" aria-hidden="true">↗</span></button>
     </div>
   </div>
 </section>
@@ -592,6 +593,7 @@
   }
 </script>
 <script src="/js/badge-engine.js"></script>
+<script defer src="/js/home-badge-dialogs.js"></script>
 <script>
 /* ------------------------------------------------------------------
    Homepage registry surfaces -- single source of truth.

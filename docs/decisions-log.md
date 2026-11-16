@@ -1038,3 +1038,18 @@ label change only; point allocations, calculations and recorded measurements
 are unchanged. Historical decision entries retain their original wording.
 
 **Files affected:** `yield-demo.html`, `profile.html`, `decks/merri-bek/detail.html`, `slides.html`, `decks/merri-bek/deck.html`, `v2/reg-score-v2.js`, `js/reg-score.js`, `decks/whitehorse/deck-original.html`, `decks/whitehorse/deck.html`, `decks/whitehorse/pilot.html`, `docs/scoring-methodology.md`, `js/reg-opportunities.js`, `decks/yarra-ranges/detail.html`, `decks/yarra-ranges/deck.html`, `docs/developer-government-brief.md`, `decks/yarra-ranges/dashboard.html`, `scripts/promote_designer_submission.py`, `docs/REGISTRY-OPPORTUNITY-MODEL-v2-PROPOSAL.md`, `decks/monash/detail.html`, `decks/monash/deck.html`, `decks/monash/dashboard.html`, `decks/whitehorse-ecological-registry.html`, `developers.html`, `gardens/g-2942b7a03783/field-notes/2026-02-15.html`, `decks/boroondara/deck.html`, `gardens/g-2942b7a03783/field-notes/002.html`, `decks/boroondara/slides.html`, `assess.html`, `boorondara-dashboard.html`, `index.html`, `scripts/reg_opportunities.py`, `gardens/g-62a8b20f8af5/field-notes/002.html`, `scripts/reg_score.py`, `gardens/g-62a8b20f8af5/field-notes/2026-04-01.html`, `data/sirgarnet.json`, `BRAND_BOOK.html`, `data/canterburyg02.json`, `data/auburn_test.json`, `data/welcome.json`, `data/windella.json`, `data/leopold.json`, `data/evelina.json`, `data/gardentrail.json`, `data/parringroad.json`, `data/bushgarden.json`, `data/smokebush.json`, `data/dewrang.json`, `data/nicholson.json`, `data/parring.json`, `data/arundel.json`, `data/middlesex.json`, `docs/decisions-log.md`.
+
+## 16 Nov 2026 — Individual homepage badge explanations
+
+**Decision:** Turn the fourteen badges in “Signals, not stickers” into buttons,
+each opening a distinct native dialog with its meaning and current award rule.
+Use canonical badge names, including Fauna Active, and the existing theme palette.
+Provide close, backdrop and Escape dismissal, focus containment and focus return.
+
+**Reason:** Make each badge understandable without leaving the homepage. Explain
+actual engine behaviour: Pollinator Rich currently counts verified fauna sightings
+without filtering for pollinators. Preserve that rule and state its limitation;
+do not silently change awards or imply independent certification.
+
+**Files affected:** `index.html`, `assets/css/registry-home.css`,
+`js/home-badge-dialogs.js`, `docs/decisions-log.md`.
