@@ -20,6 +20,18 @@ The long-term institutional memory of the Registry. Every meaningful product, sc
 
 ---
 
+## 2026-11-18 — Infrastructure Victoria deck and evidence dashboard
+
+**Decision:** Add a 15-slide deck and an evidence dashboard for the 19 Nov 2026 Infrastructure Victoria meeting under `decks/infrastructure-victoria/`. The deck pairs the building energy rating with the unrecorded garden layer, then presents the score as serving two avenues: a legible rating for institutions, and steward participation through badges and a visible next tier.
+
+**Reason:** IV's audience is state infrastructure policy, not a council program, so the frame is the missing measurement layer for land cleared for development, with the baseline-to-now record as the proof. Both pages fetch `data/registry.json`, each garden's data file and `data/species.json`, and recompute pillars and estimated baselines with `js/reg-score.js`; an embedded snapshot dated 16 Nov 2026 is the fallback and is labelled as such. Every figure is tagged measured or derived; nothing is modelled, and no v2 figure appears.
+
+**Files affected:** `decks/infrastructure-victoria/deck.html`, `decks/infrastructure-victoria/dashboard.html`, `docs/registry-figures.md`, `docs/decisions-log.md`.
+
+**Notes:** Development is framed as a record-keeping gap; the deck states that canopy and native vegetation controls apply on some sites. Verification is reported as it stands (studio-verified or site visit, none independent).
+
+---
+
 
 ## 2026-11-06 — Blend the fuller council explanation into Merri-bek
 
