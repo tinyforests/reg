@@ -1074,3 +1074,11 @@ do not silently change awards or imply independent certification.
 **Reason:** Marnie Hawson's newsletter went out on 17 Nov linking to the landing page. A reader who saw the offer but reached the form via the home page or a later visit was recorded as "(direct)" and would not be flagged for plants.
 
 **Files affected:** `enrol/index.html`, `gardens-that-give-back/index.html` (script tag before `</body>`; keep it if the page is rebuilt from the design canvas). No backend change.
+
+## 18 Nov 2026 — Infrastructure Victoria: linked evidence, opening proposition and dual-screen presentation
+
+**Decision:** Keep the existing Infrastructure Victoria briefing and evidence dashboard, add canonical public-profile links to the three ledger examples (Bush Garden, The Refuge and Modern Apartment), and bookend the 15-slide narrative with the same measurement-infrastructure proposition. Add a presenter mode with private current/next speaker notes and a timer to the existing deck, and create a separate `screen.html` audience presentation using the same slides. `P` toggles presenter mode; `F` opens the synced audience window; `Shift+F` toggles browser full screen. Presenter and audience windows sync slide numbers through a scoped BroadcastChannel with same-origin messaging fallback. Garden and dashboard links open separately, preserving the slide position.
+
+**Reason:** The meeting may or may not have a shared screen. A private laptop presentation should remain complete on its own, while a screen-ready copy gives presenters notes without exposing them to the audience. Direct links allow reviewers to inspect genuine, existing Registry records. The central proposition is framed as an emerging measurement gap, not a claim of state acceptance, independent verification or statutory standing.
+
+**Files affected:** `decks/infrastructure-victoria/deck.html`, `decks/infrastructure-victoria/screen.html`, `docs/decisions-log.md`. No scoring, garden data, methodology, dashboard arithmetic or registry status changed.
