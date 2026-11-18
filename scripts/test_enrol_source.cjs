@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const code = fs.readFileSync('scripts/appsscript/Code.gs', 'utf8');
 
-function run(src) {
+function run(src, score=42, tier='Habitat Garden') {
   const rows = [], mails = [], header = {};
   const sheet = {
     getMaxColumns: () => 42, insertColumnsAfter() {},
@@ -15,7 +15,7 @@ function run(src) {
   const ss = { getSheetByName: () => sheet, getActiveSheet: () => sheet, getUrl: () => 'sheet-url', insertSheet: () => sheet };
   const ctx = vm.createContext({
     SpreadsheetApp: { getActiveSpreadsheet: () => ss },
-    MailApp: { sendEmail: m => mails.push(m) },
+    GmailApp: { getAliases:()=>['hello@ecologicalregistry.org'], sendEmail:(to,subject,body,options)=>mails.push({to,subject,body,...options}), createDraft(){} },
     CacheService: { getScriptCache: () => ({ get: () => null, put() {} }) },
     ContentService: { createTextOutput: t => ({ setMimeType: () => t }), MimeType: { JSON: 'json' } },
     PropertiesService: { getScriptProperties: () => ({ getProperty: () => null }) },
@@ -23,8 +23,8 @@ function run(src) {
   });
   vm.runInContext(code, ctx);
   const out = vm.runInContext('handleEnrolment', ctx)({
-    steward_name: 'Test Reader', steward_email: 'reader@example.com', garden_address: '1 Test St, Hawthorn',
-    provisional_score_total: 42, provisional_tier: 'Habitat Garden', enrol_src: src
+    steward_name: 'Test Reader', steward_email: 'reader@example.com', garden_address: 'Synthetic location',
+    provisional_score_total: score, provisional_tier: tier, enrol_src: src
   }, { get: () => null, put() {} });
   return { out, rows, mails, header };
 }
@@ -50,3 +50,6 @@ assert.doesNotMatch(b.mails.find(m => m.to === 'reader@example.com').body, /free
 
 assert.equal(run('=HYPERLINK("x")').rows[0][41], 'hyperlinkx');
 console.log('PASS enrol source stored in AP, Three Neat Things signups flagged, steward told about plants, direct signups unchanged');
+
+assert.equal(run('',65,undefined).rows[0][18],'Rich Habitat Garden');
+assert.equal(run('',65,'').rows[0][18],'Rich Habitat Garden');
