@@ -220,7 +220,7 @@ function handleRequestClaim(params) {
   // Build and send magic link
   var link = BASE_URL + _neutralGardenSlug(gardenId) + '/?claim=' + token;
   try {
-    MailApp.sendEmail({
+    sendRegistryEmail_({
       to:      email,
       subject: 'Claim your garden profile — Ecological Registry',
       body: [
@@ -396,12 +396,12 @@ function handleGetPreciseMap(params) {
   return jsonResp({ok: true, precise: out});
 }
 
-/* ---- Auth helper (run once from editor to grant MailApp scope) ---- */
+/* ---- Auth helper (run once from editor to grant Gmail scope) ---- */
 function authorizeMail() {
-  MailApp.sendEmail({
+  sendRegistryEmail_({
     to:      NOTIFY_EMAIL,
     subject: 'Auth test -- Self-Enrolment endpoint',
-    body:    'If you received this, MailApp is now authorized.'
+    body:    'If you received this, Registry Gmail sending is now authorised.'
   });
 }
 
@@ -502,9 +502,10 @@ function handleEnrolment(payload, cache) {
   // Accept client score only if it is a reasonable integer in range; discard otherwise.
   var rawScore = parseInt(payload.provisional_score_total, 10);
   var score    = (isNaN(rawScore) || rawScore < 0 || rawScore > 100) ? 0 : rawScore;
-  // Accept client tier only if it is one of the known tier strings.
-  var tier     = (KNOWN_TIERS.indexOf(payload.provisional_tier) !== -1)
-                 ? payload.provisional_tier : '';
+  // The score determines the tier, including for older clients that omit it.
+  var computedTier = registryTierFromScore_(score);
+  var tier = payload.provisional_tier === computedTier ? payload.provisional_tier : computedTier;
+  var vegetationContext = resolveEnrolmentContext_(payload);
 
   var submissionId = 'SUB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
   var submittedAt  = new Date().toISOString();
@@ -564,7 +565,7 @@ function handleEnrolment(payload, cache) {
     parkDistM,                                     // AL park_distance_m
     parseInt(payload.area_sqm, 10) || '',          // AM area_sqm
     parseFloat(payload.effective_ecological_area_ha) || '', // AN effective_ecological_area_ha
-    enrolmentContextJson_(payload.ecological_context),   // AO ecological_context (no coordinates)
+    enrolmentContextJson_(vegetationContext),   // AO ecological_context (no coordinates)
     enrolSrc                                       // AP enrol_src
   ]);
 
@@ -589,7 +590,7 @@ function handleEnrolment(payload, cache) {
       'Garden name:     ' + (gardenName || '(not provided)'),
       'Suburb:          ' + (suburb || '(not provided)'),
       'Coordinates:     ' + (gardenLat && gardenLng ? gardenLat + ', ' + gardenLng : '(not resolved)'),
-      'EVC:             ' + (safeStr(payload.evc_code || '', 50) || '(not resolved)') + ' ' + (safeStr(payload.evc_name || '', 120) || ''),
+      'Vegetation:      ' + vegetationLabel_(vegetationContext),
       'Garden area:     ' + (payload.area_sqm ? payload.area_sqm + ' m²' : '(not provided)'),
       'Nearest park:    ' + (parkName || '(not resolved)') + (parkDistM ? ' · ' + parkDistM + 'm' : ''),
       'Score:           ' + score + '/100',
@@ -600,7 +601,7 @@ function handleEnrolment(payload, cache) {
       '',
       'Review at: ' + sheetUrl
     ]).join('\n');
-    MailApp.sendEmail({
+    sendRegistryEmail_({
       to:      NOTIFY_EMAIL,
       subject: (plantOffer ? '6 FREE PLANTS (Three Neat Things) - ' : '') + 'New self-enrolment: ' + tier + ' - ' + score + '/100',
       body:    notifyBody
@@ -621,7 +622,7 @@ function handleEnrolment(payload, cache) {
         'We have received your submission and your provisional ecological score is ' + score + '/100 -- tier: ' + tier + '.',
         ''
       ].concat(plantOffer ? [
-        'As a Three Neat Things reader, six free indigenous plants are set aside for you. We will email you in the next few days with the six we have chosen for your garden and a time to collect them from our studio at 140 Auburn Road, Hawthorn.',
+        'As a Three Neat Things reader, six free indigenous plants are set aside for you. We will be in touch to arrange collection from our Hawthorn studio.',
         ''
       ] : []).concat([
         'View your provisional garden profile:',
@@ -639,7 +640,7 @@ function handleEnrolment(payload, cache) {
         'Ecological Registry',
         'ecologicalregistry.org'
       ]).join('\n');
-      MailApp.sendEmail({
+      sendRegistryEmail_({
         to:      email,
         subject: 'Your garden registration was received -- Ecological Registry',
         body:    stewardBody
@@ -652,6 +653,13 @@ function handleEnrolment(payload, cache) {
     }
   }
 
+  if (plantOffer) {
+    try { createPlantOfferDraft_(payload, email, gardenName); }
+    catch (draftErr) {
+      var draftLog = ss.getSheetByName('Debug log') || ss.insertSheet('Debug log');
+      draftLog.appendRow([new Date().toISOString(), 'plant offer draft failed', submissionId, draftErr.message]);
+    }
+  }
   return jsonResp({ok: true});
 }
 
@@ -783,7 +791,7 @@ function handleClaim(payload, cache) {
 
   // Non-fatal notification
   try {
-    MailApp.sendEmail({
+    sendRegistryEmail_({
       to:      NOTIFY_EMAIL,
       subject: 'Claim: ' + (payload.opportunity_action || oppId) + ' -- ' + (payload.garden_name || gardenId),
       body: [
@@ -900,7 +908,7 @@ function handleAddFieldNote(params) {
     sheet.getRange(1, 1, 1, STEWARD_NOTES_HEADERS.length).setValues([STEWARD_NOTES_HEADERS]);
   }
   sheet.appendRow([gardenId, title, date, type, notes, email, new Date().toISOString()]);
-  try { MailApp.sendEmail(NOTIFY_EMAIL, 'New field note — ' + gardenId,
+  try { sendRegistryEmail_(NOTIFY_EMAIL, 'New field note — ' + gardenId,
     'Steward ' + email + ' added a field note to ' + gardenId + ':\n\n' + title + '\n\n' + notes); } catch(e) {}
   return jsonResp({ ok: true });
 }
@@ -975,7 +983,7 @@ function handleInviteNeighbour(payload) {
   var gname    = gardenName || 'a nearby garden';
   var greeting = neighbourName ? ('Hi ' + neighbourName + ',') : 'Hello,';
   try {
-    MailApp.sendEmail({
+    sendRegistryEmail_({
       to:      neighbour,
       subject: 'You have been invited to the Ecological Registry',
       body: [
@@ -1005,7 +1013,7 @@ function handleInviteNeighbour(payload) {
 
   // Notify G&S
   try {
-    MailApp.sendEmail(NOTIFY_EMAIL, 'Neighbour invite — ' + gardenId,
+    sendRegistryEmail_(NOTIFY_EMAIL, 'Neighbour invite — ' + gardenId,
       inviter + ' invited ' + neighbour + (neighbourName ? ' (' + neighbourName + ')' : '') +
       ' to register, from ' + gname + ' (' + gardenId + ').');
   } catch (e3) {}
@@ -1684,7 +1692,7 @@ function _designerRequestAccess(payload, ss) {
   if (!row) return jsonResp({ok: true, message: message});
   var token = _designerRandomToken(), now = new Date();
   _designerTable(ss, 'Designer Access Tokens', DESIGNER_ACCESS_HEADERS, true).appendRow([_designerHash(token), String(row[0]), now.toISOString(), new Date(now.getTime() + TOKEN_EXPIRY_MS).toISOString(), false]);
-  try { MailApp.sendEmail({to: email, subject: 'Open your Ecological Registry designer portal', body: ['Open your practice portal using this one-use link:', '', 'https://ecologicalregistry.org/designer-dashboard.html#designer_claim=' + token, '', 'The link expires in 30 minutes. If you did not request it, ignore this email.'].join('\n')}); }
+  try { sendRegistryEmail_({to: email, subject: 'Open your Ecological Registry designer portal', body: ['Open your practice portal using this one-use link:', '', 'https://ecologicalregistry.org/designer-dashboard.html#designer_claim=' + token, '', 'The link expires in 30 minutes. If you did not request it, ignore this email.'].join('\n')}); }
   catch (e) { console.error('Designer access email could not be sent'); }
   return jsonResp({ok: true, message: message});
 }
@@ -1953,7 +1961,7 @@ function _routingAudit(ss, row, actor, note) {
   _designerTable(ss,'Routing History',ROUTING_AUDIT_HEADERS,true).appendRow([row[0],new Date().toISOString(),row[5],actor,note || '']);
 }
 function _routingMail(ss, row, to, subject, body) {
-  try { MailApp.sendEmail({to:to,subject:subject,body:body}); }
+  try { sendRegistryEmail_({to:to,subject:subject,body:body}); }
   catch (e) { _routingAudit(ss,row,'system','Notification failed; Registry follow-up required'); }
 }
 function _routingRelease(ss, sheet, index, row, reason) {
@@ -2046,4 +2054,86 @@ function enrolmentContextJson_(context) {
   if (!clean.original_vegetation) return '';
   if (context.note) clean.note = safeStr(String(context.note), 500);
   return JSON.stringify(clean);
+}
+
+
+// Every Registry send and draft must use this exact verified alias.
+function registryMailOptions_(options) {
+  var alias = 'hello@ecologicalregistry.org';
+  if (GmailApp.getAliases().indexOf(alias) < 0) throw new Error('Registry sender alias unavailable; refusing to send.');
+  var out = {};
+  Object.keys(options || {}).forEach(function(k) { out[k] = options[k]; });
+  out.from = alias; out.replyTo = alias; out.name = 'Ecological Registry';
+  return out;
+}
+function sendRegistryEmail_(to, subject, body, options) {
+  if (typeof to === 'object') {
+    var message = to; to = message.to; subject = message.subject; body = message.body;
+    options = {};
+    Object.keys(message).forEach(function(k) {
+      if (['to','subject','body'].indexOf(k) < 0) options[k] = message[k];
+    });
+  }
+  return GmailApp.sendEmail(to, subject, body || '', registryMailOptions_(options));
+}
+function registryTierFromScore_(score) {
+  if (score >= 91) return 'Urban Biodiversity Node';
+  if (score >= 81) return 'Ecosystem Garden';
+  if (score >= 61) return 'Rich Habitat Garden';
+  if (score >= 41) return 'Ecological Garden';
+  if (score >= 21) return 'Habitat Garden';
+  return 'Foundation Garden';
+}
+function vegetationLabel_(context) {
+  var v = context && context.original_vegetation;
+  return v && v.status === 'ok' ? [v.system, v.code, v.name].join(' ') : 'Mapping unavailable — needs review';
+}
+function resolveEnrolmentContext_(payload) {
+  var clean = enrolmentContextJson_(payload.ecological_context);
+  var context = clean ? JSON.parse(clean) : null;
+  if (context && context.original_vegetation.status === 'ok' && context.original_vegetation.code && context.original_vegetation.name) return context;
+  var region = String(payload.garden_region || '').toUpperCase();
+  if ((region === 'VIC' || region === 'VICTORIA') && payload.evc_code && payload.evc_name) {
+    return {original_vegetation:{system:'EVC', code:payload.evc_code, name:payload.evc_name,
+      status:'ok', resolution:'state', source:'Victorian EVC supplied by enrolment lookup'}};
+  }
+  var lat = Number(payload.garden_lat), lng = Number(payload.garden_lng);
+  if (!payload.garden_lat || !payload.garden_lng || !isFinite(lat) || !isFinite(lng) || lat < -44 || lat > -9 || lng < 112 || lng > 154) return context;
+  var base = 'https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer';
+  var params = {f:'json', geometry:JSON.stringify({x:lng,y:lat,spatialReference:{wkid:4326}}),
+    geometryType:'esriGeometryPoint',sr:'4326',layers:'all:0',tolerance:'1',
+    mapExtent:[lng-.01,lat-.01,lng+.01,lat+.01].join(','),imageDisplay:'400,400,96',returnGeometry:'false'};
+  try {
+    var query = Object.keys(params).map(function(k){return k+'='+encodeURIComponent(params[k]);}).join('&');
+    var response = UrlFetchApp.fetch(base+'/identify?'+query, {muteHttpExceptions:true});
+    if (response.getResponseCode() !== 200) return context;
+    var data = JSON.parse(response.getContentText());
+    var a = data.results && data.results[0] && data.results[0].attributes || {};
+    var pixelKey = Object.keys(a).filter(function(k){return /pixel value/i.test(k);})[0];
+    var nameKey = Object.keys(a).filter(function(k){return /mvs[ _]name/i.test(k);})[0];
+    var code = a[pixelKey], name = a[nameKey];
+    if (code == null || /^(nodata|null|)$/i.test(String(code).trim()) || !name) return context;
+    return {original_vegetation:{system:'MVS',code:String(code),name:name,status:'ok',
+      resolution:'national',source:'DCCEEW NVIS 7.0 pre-1750 MVS'}};
+  } catch (_) { return context; }
+}
+function plantOfferBody_(payload, gardenName) {
+  var region = String(payload.garden_region || '').toUpperCase();
+  var lat = Number(payload.garden_lat), lng = Number(payload.garden_lng);
+  // Distance is a cautious draft cue, not a Greater Melbourne boundary classification.
+  var far = region && region !== 'VIC' && region !== 'VICTORIA';
+  if (payload.garden_lat && payload.garden_lng && isFinite(lat) && isFinite(lng)) {
+    var km = Math.sqrt(Math.pow((lat + 37.81)*111,2) + Math.pow((lng - 144.96)*88,2));
+    far = far || km > 70;
+  }
+  var collection = PropertiesService.getScriptProperties().getProperty('PLANT_COLLECTION_LOCATION') || 'our Hawthorn studio';
+  return ['Hello ' + safeStr(payload.steward_name || '',120) + ',', '',
+    'Thank you for enrolling ' + (gardenName || 'your garden') + ' with the Ecological Registry. We’re glad to have your garden in the record.', '',
+    'We have six indigenous plants set aside for you at ' + collection + '.', '',
+    far ? 'It looks as though you’re some distance from Melbourne. If collection is difficult, let us know and we can work out another way. If you are coming this way, what day and time would suit you to collect?' : 'What day and time would suit you to collect? Let us know and we can arrange a time together.', '',
+    'Talk soon, Tyson & Natasha'].join('\n');
+}
+function createPlantOfferDraft_(payload, email, gardenName) {
+  return GmailApp.createDraft(email, 'Six indigenous plants for ' + (gardenName || 'your garden'),
+    plantOfferBody_(payload, gardenName), registryMailOptions_({}));
 }

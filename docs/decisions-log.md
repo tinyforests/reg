@@ -1082,3 +1082,9 @@ do not silently change awards or imply independent certification.
 **Reason:** The meeting may or may not have a shared screen. A private laptop presentation should remain complete on its own, while a screen-ready copy gives presenters notes without exposing them to the audience. Direct links allow reviewers to inspect genuine, existing Registry records. The central proposition is framed as an emerging measurement gap, not a claim of state acceptance, independent verification or statutory standing.
 
 **Files affected:** `decks/infrastructure-victoria/deck.html`, `decks/infrastructure-victoria/screen.html`, `docs/decisions-log.md`. No scoring, garden data, methodology, dashboard arithmetic or registry status changed.
+
+## 18 Nov 2026 — Enrolment tiers, vegetation and mail
+
+Derive provisional tier from the submitted score using the existing thresholds; this does not change scoring. Route every Code.gs send through the exact Registry Gmail alias and refuse missing-alias sends. Preserve enrolment vegetation context and resolve missing legacy contexts through NVIS pre-1750. Report mapping failures honestly. Create an unsent Three Neat Things collection draft, with location detail configurable privately through PLANT_COLLECTION_LOCATION. Distance wording is a draft cue (state and approximate distance), not an administrative boundary determination.
+
+Files: scripts/appsscript/Code.gs and mail/enrolment tests. Current enrol/index.html is the only public score submission path found and already sends t.name; the historical missing-tier sender cannot be established from the campaign label '(direct)'. No historical records or emails are altered. Apps Script redeployment is required separately.
