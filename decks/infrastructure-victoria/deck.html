@@ -290,7 +290,7 @@ body.screen .wrap{right:0!important}
     <div class="tile"><div class="num" data-f="base"></div><p class="cap">mean estimated score at baseline</p><div class="t">Derived</div></div>
     <div class="tile"><div class="num" data-f="badges"></div><p class="cap">badges earned by stewards</p><div class="t">Derived</div></div>
   </div>
-  <a class="btn" href="dashboard.html">Open the evidence dashboard</a>
+  <a class="btn" href="dashboard.html" target="_blank" rel="noopener noreferrer">Open the evidence dashboard</a>
   <div class="src">Ledger read <span data-f="read"></span> · data/registry.json · demo record excluded</div>
 </section>
 
@@ -500,7 +500,7 @@ let channel=null;
 try{channel=new BroadcastChannel("ecological-registry-iv-19nov26");}catch(e){}
 slides.forEach((s,i)=>{if(i>0){const p=document.createElement("div");p.className="pg";p.textContent=String(i+1).padStart(2,"0")+" / "+slides.length;s.appendChild(p)}});
 function fit(){const w=view.clientWidth,h=view.clientHeight,k=Math.min(w/1600,h/900);stage.style.transform="translate("+(-800*k)+"px,"+(-450*k)+"px) scale("+k+")"}
-function titleFor(i){const h=slides[i]&&slides[i].querySelector("h1,h2");return h?h.textContent.replace(/\\s+/g," ").trim():"End of deck"}
+function titleFor(i){const h=slides[i]&&slides[i].querySelector("h1,h2");return h?h.textContent.replace(/\s+/g," ").trim():"End of deck"}
 function status(){const live=displayWin&&!displayWin.closed;document.getElementById("pstatus").textContent=live?"Audience window open and syncing":popupBlocked?"Pop-up blocked — allow pop-ups or use the Screen deck link":"No audience window open. F opens the screen version."}
 function presenterDetails(){
   document.getElementById("pcount").textContent=String(cur+1).padStart(2,"0")+" / "+slides.length;
@@ -557,7 +557,7 @@ let tx=null;view.addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{pas
 view.addEventListener("touchend",e=>{if(tx==null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)go(cur+(d<0?1:-1));tx=null});
 setInterval(()=>{if(document.body.classList.contains("presenter")){const s=Math.floor((Date.now()-presenterStart)/1000);document.getElementById("ptimer").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}},500);
 addEventListener("resize",fit);
-const m=/^#slide-(\\d+)$/.exec(location.hash);fit();go(m?+m[1]-1:0,true);
+const m=/^#slide-(\d+)$/.exec(location.hash);fit();go(m?+m[1]-1:0,true);
 if(screenMode){const ready={deck:"iv-registry-2026",type:"ready"};try{channel&&channel.postMessage(ready)}catch(e){}try{window.opener&&window.opener.postMessage(ready,location.origin)}catch(e){}}
 
 }
