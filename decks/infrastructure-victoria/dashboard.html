@@ -74,7 +74,7 @@ footer{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;font-fa
 <main>
 <p class="eyebrow">Ecological Registry · Gardener &amp; Son · prepared for Infrastructure Victoria</p>
 <h1>What the ledger holds <span class="acc">today</span><span class="acc">.</span></h1>
-<p class="lede">Every figure on this page is read from the Registry ledger and tagged by how it was obtained. Nothing here is modelled or projected.</p>
+<p class="lede">Every figure on this page is read from the Registry ledger and tagged by how it was obtained. No future projections or valuations are shown; historical baselines are estimates.</p>
 <div class="stamp">
   <span>Ledger read <b id="read"></b></span><span>Source data/registry.json and per-garden records</span><span>Demo record excluded</span>
   <span><span class="tg m">Measured</span> recorded on a garden</span><span><span class="tg d">Derived</span> arithmetic on measured records</span>
@@ -86,13 +86,13 @@ footer{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;font-fa
 
 <section id="rating">
   <header><p class="eyebrow">Avenue one</p><h2>A rating people can <span class="acc">read</span><span class="acc">.</span></h2>
-  <p>Five pillars, 100 points, six named tiers. The same recorded inputs give the same score whoever applies the method.</p></header>
+  <p>Five pillars, 100 points, six named tiers. The scoring engine is consistent for given inputs; independent assessor agreement has not yet been tested.</p></header>
   <div class="grid g2">
     <div class="panel"><div class="top"><h3>Records by tier</h3><span class="tg d">Derived</span></div><div class="bars" id="tiers"></div></div>
     <div class="panel"><div class="top"><h3>Mean score by pillar</h3><span class="tg d">Derived</span></div><div class="bars" id="pillars"></div><p class="sub">Bar shows the mean as a share of that pillar's maximum.</p></div>
   </div>
-  <div class="panel" style="margin-top:18px"><div class="top"><div><h3>What went back: baseline to now, garden by garden</h3><p class="sub" style="max-width:70ch">Brass mark is the score the engine gives each garden's recorded baseline inputs. Green ring is the current score. This is the before and after that a cleared block never has.</p></div><span class="tg d">Derived</span></div><div id="dumb"></div>
-  <div class="key"><span><s style="background:var(--brass)"></s>Estimated baseline</span><span><s style="background:var(--glow)"></s>Current score</span><span>Shaded bands are the six tiers</span></div></div>
+  <div class="panel" style="margin-top:18px"><div class="top"><div><h3>Current condition and estimated historical baselines</h3><p class="sub" style="max-width:70ch">Brass marks show scores calculated from recorded baseline inputs, some reconstructed retrospectively. Green rings show current recorded scores. These comparisons are not independently measured biodiversity uplift.</p></div><span class="tg d">Derived</span></div><div id="dumb"></div>
+  <div class="key"><span><s style="background:var(--brass)"></s>Estimated historical baseline</span><span><s style="background:var(--glow)"></s>Current score</span><span>Shaded bands are the six tiers</span></div></div>
 </section>
 
 <section id="stewards">
@@ -235,7 +235,7 @@ $("tbl").innerHTML="<thead><tr><th>Garden</th><th>Area</th><th class='n'>Score</
    ["Fixed thresholds","Version 1 scores against absolute thresholds. It does not yet benchmark a garden against the reference vegetation community for its site."],
    ["Area is not aggregated","Garden area is recorded on "+ar+" of "+N+" records and is under audit, so no total area, canopy area or per-hectare figure is given."],
    ["A small and uneven sample",cnt(g=>g.enrol==="studio")+" of "+N+" records were enrolled by one studio, and "+cnt(g=>g.lga==="Boroondara")+" sit in one municipality. This shows the method working, not the state of Melbourne's gardens."],
-   ["Nothing modelled","No projection, valuation or at-scale estimate appears on this page."]];
+   ["No projections or valuations","No future projection, valuation or at-scale estimate appears on this page; historical baseline scores are estimates."]];
   $("gaps").innerHTML=L.map((l,i)=>"<div><i>0"+(i+1)+"</i><span><b>"+l[0]+"</b>"+l[1]+"</span></div>").join("")})();
 }
 </script>
