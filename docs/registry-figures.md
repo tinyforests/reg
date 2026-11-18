@@ -52,7 +52,8 @@ fetch fails, then overwrite from the ledger on load. Prose that states a count
 source, or is reworded so it carries no number.
 
 Pages currently wired this way: `designer-invite.html`, `boorondara-dashboard.html`,
-`yield.html`. The council deck dashboards under `/decks/` compute from an
+`yield.html`, `decks/infrastructure-victoria/deck.html` and
+`decks/infrastructure-victoria/dashboard.html`. The council deck dashboards under `/decks/` compute from an
 embedded per-garden array instead, which also carries area and per-garden
 species the ledger does not hold; converting them is a real refactor, not a
 sweep.

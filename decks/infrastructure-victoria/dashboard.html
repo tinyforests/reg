@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecological Registry Evidence Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fraunces:ital,opsz,wght@1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: one dark Signal panel world; summary tiles first, then three evidence sections, the full ledger, and what the data cannot yet show. */
+  --bg:#262c20; --panel:#2f3628; --line:rgba(180,154,99,.38);
+  --beige:#fff0dc; --mute:#c9c2ad; --signal:#7C9A52; --glow:#b7dc7c; --brass:#B49A63; --clay:#d9a27f;
+  --display:"Abril Fatface",Georgia,serif; --edit:"Fraunces",Georgia,serif;
+  --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;border-radius:0}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--beige);font-family:var(--body);font-size:16px;line-height:1.5}
+main{max-width:1240px;margin:0 auto;padding:36px 20px 80px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance}
+h1{font-size:clamp(38px,6vw,68px);line-height:1.02}
+h2{font-size:clamp(28px,3.6vw,42px);line-height:1.1}
+h3{font-size:22px}
+.acc{font-family:var(--edit);font-style:italic;color:#a8c97a}
+.eyebrow,.lab{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.lede{font-size:19px;font-weight:300;max-width:66ch;margin:14px 0 0}
+.stamp{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;padding:12px 14px;border:1px solid var(--line);font-family:var(--mono);font-size:12px;letter-spacing:.04em}
+.tg{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border:1px solid currentColor;white-space:nowrap}
+.tg.m{color:var(--glow)}.tg.d{color:var(--brass)}.tg.x{color:var(--clay)}
+section{margin-top:64px}
+section>header{border-top:1px solid var(--brass);padding-top:18px;margin-bottom:24px}
+section>header p{max-width:70ch;margin:10px 0 0;color:var(--mute)}
+.grid{display:grid;gap:18px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.panel{background:var(--panel);border:1px solid rgba(255,240,220,.08);padding:20px;min-width:0}
+.panel>.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
+.big{font-family:var(--display);font-size:72px;line-height:1;color:var(--glow);font-variant-numeric:tabular-nums;text-shadow:0 0 26px rgba(183,220,124,.25)}
+.big small{font-family:var(--mono);font-size:15px;color:var(--mute);margin-left:6px;text-shadow:none}
+.cap{margin:8px 0 0;font-size:15px;color:var(--beige)}
+.sub{font-size:13px;color:var(--mute);margin-top:6px}
+.bars{display:grid;gap:9px}
+.br{display:grid;grid-template-columns:minmax(120px,190px) 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.br .t{height:12px;background:rgba(255,240,220,.09);position:relative}
+.br .t i{position:absolute;inset:0 auto 0 0;background:var(--signal)}
+.br .t u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--beige)}
+.br .v{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+svg{display:block;width:100%;height:auto}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:820px}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1px solid var(--brass);font-weight:400}
+td{padding:8px 10px;border-bottom:1px solid rgba(255,240,220,.08);vertical-align:middle}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+td .id{font-family:var(--mono);font-size:11px;color:var(--mute)}
+.sc{font-family:var(--display);font-size:20px;color:var(--glow)}
+.pill{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border:1px solid var(--line);white-space:nowrap}
+.mini{display:inline-block;width:90px;height:8px;background:rgba(255,240,220,.09);position:relative;vertical-align:middle;margin-right:8px}
+.mini i{position:absolute;inset:0 auto 0 0;background:var(--signal)}.mini u{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--brass)}
+.gaps{display:grid;gap:0}
+.gaps div{display:grid;grid-template-columns:44px 1fr;gap:6px 14px;padding:14px 0;border-bottom:1px solid rgba(255,240,220,.1)}
+.gaps i{font-style:normal;font-family:var(--mono);color:var(--clay);font-size:13px;padding-top:3px}
+.gaps b{font-weight:500;display:block}
+.gaps span{color:var(--mute);font-size:15px}
+.key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--mute);margin-top:12px}
+.key s{display:inline-block;width:10px;height:10px;margin-right:6px;text-decoration:none;vertical-align:-1px}
+footer{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;font-family:var(--mono);font-size:12px;color:var(--mute)}
+#tip{position:fixed;pointer-events:none;background:#1b2016;border:1px solid var(--brass);padding:6px 9px;font-size:12.5px;display:none;z-index:5;max-width:240px}
+</style>
+</head>
+<body>
+<main>
+<p class="eyebrow">Ecological Registry · Gardener &amp; Son · prepared for Infrastructure Victoria</p>
+<h1>What the ledger holds <span class="acc">today</span><span class="acc">.</span></h1>
+<p class="lede">Every figure on this page is read from the Registry ledger and tagged by how it was obtained. Nothing here is modelled or projected.</p>
+<div class="stamp">
+  <span>Ledger read <b id="read"></b></span><span>Source data/registry.json and per-garden records</span><span>Demo record excluded</span>
+  <span><span class="tg m">Measured</span> recorded on a garden</span><span><span class="tg d">Derived</span> arithmetic on measured records</span>
+</div>
+
+<section id="summary" style="margin-top:34px">
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(172px,1fr))" id="tiles"></div>
+</section>
+
+<section id="rating">
+  <header><p class="eyebrow">Avenue one</p><h2>A rating people can <span class="acc">read</span><span class="acc">.</span></h2>
+  <p>Five pillars, 100 points, six named tiers. The same recorded inputs give the same score whoever applies the method.</p></header>
+  <div class="grid g2">
+    <div class="panel"><div class="top"><h3>Records by tier</h3><span class="tg d">Derived</span></div><div class="bars" id="tiers"></div></div>
+    <div class="panel"><div class="top"><h3>Mean score by pillar</h3><span class="tg d">Derived</span></div><div class="bars" id="pillars"></div><p class="sub">Bar shows the mean as a share of that pillar's maximum.</p></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><div class="top"><div><h3>What went back: baseline to now, garden by garden</h3><p class="sub" style="max-width:70ch">Brass mark is the score the engine gives each garden's recorded baseline inputs. Green ring is the current score. This is the before and after that a cleared block never has.</p></div><span class="tg d">Derived</span></div><div id="dumb"></div>
+  <div class="key"><span><s style="background:var(--brass)"></s>Estimated baseline</span><span><s style="background:var(--glow)"></s>Current score</span><span>Shaded bands are the six tiers</span></div></div>
+</section>
+
+<section id="stewards">
+  <header><p class="eyebrow">Avenue two</p><h2>A reason for stewards to <span class="acc">keep going</span><span class="acc">.</span></h2>
+  <p>The same inputs drive badges, a visible next tier, and a running record of what people do in their gardens after the planting day.</p></header>
+  <div class="grid g4" id="stiles"></div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="panel"><div class="top"><h3>Badges earned, by type</h3><span class="tg d">Derived</span></div><div class="bars" id="badges"></div><p class="sub">Verification badges are shown separately in the ledger below.</p></div>
+    <div class="panel"><div class="top"><h3>Distance to the next tier</h3><span class="tg d">Derived</span></div><div id="gapchart"></div><p class="sub">Each mark is one garden. Closer to zero means a small, specific improvement lifts it a tier.</p>
+      <div class="top" style="margin-top:22px"><h3>Evidence held on record</h3><span class="tg m">Measured</span></div><div class="bars" id="evid"></div></div>
+  </div>
+</section>
+
+<section id="landscape">
+  <header><p class="eyebrow">Cumulative</p><h2>Gardens taking part in the wider <span class="acc">landscape</span><span class="acc">.</span></h2>
+  <p>Small records, real places. Public pins are offset about 250 m from each property; precise locations are held privately.</p></header>
+  <div class="grid g2" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
+    <div class="panel"><div class="top"><h3>Where the records sit</h3><span class="tg m">Measured</span></div><svg id="map" viewBox="0 0 640 420" role="img" aria-label="Public pins for registered gardens"></svg><p class="sub">Ring size follows score.</p></div>
+    <div class="panel"><div class="top"><h3>By local government area</h3><span class="tg m">Measured</span></div><div class="bars" id="lga"></div>
+      <div class="top" style="margin-top:24px"><h3>Connection to what surrounds them</h3><span class="tg m">Measured</span></div><div class="bars" id="conn"></div>
+      <div class="top" style="margin-top:24px"><h3>Reference vegetation class</h3><span class="tg m">Measured</span></div><div class="bars" id="evc"></div></div>
+  </div>
+</section>
+
+<section id="ledger">
+  <header><p class="eyebrow">The ledger</p><h2>Every record, <span class="acc">in full</span><span class="acc">.</span></h2>
+  <p>Sorted by current score. Garden names and suburbs are public on the Registry; steward names and addresses are not shown.</p></header>
+  <div class="panel scroll"><table id="tbl"></table></div>
+</section>
+
+<section id="limits">
+  <header><p class="eyebrow">Read this with the numbers</p><h2>What this does <span class="acc">not yet</span> show<span>.</span></h2></header>
+  <div class="panel"><div class="gaps" id="gaps"></div></div>
+</section>
+
+<footer>Ecological Registry · ecologicalregistry.org · Scoring engine js/reg-score.js, Method v1.0 · Snapshot, not a live feed: figures are correct as at the ledger read date above.</footer>
+</main>
+<div id="tip"></div>
+<script src="/js/reg-score.js"></script>
+<script>
+const FALLBACK = {"read":"16 Nov 2026","species":168,"speciesDate":"Apr 2026","gardens":[{"id":"ER-AU-VIC-NIL-BEL-001","name":"Bush Garden","suburb":"Wattle Glen","lga":"Nillumbik","score":83,"baseline":16,"tier":"Ecosystem Garden","next":"Urban Biodiversity Node","gap":8,"ver":"gardener_and_son_verified","last":"Aug 2026","badges":["indigenous_dominant","species_rich_20","full_canopy","five_layers","habitat_builder","amphibian_active","pollinator_rich","water_wise","corridor_node","gs_verified","fauna_record"],"p":[23,20,18,11,11],"sp":20,"sp0":0,"fauna":4,"park":0,"adj":0,"lat":-37.6851,"lng":145.1949,"act":5,"evc":"Box Ironbark Forest (EVC 61)","area":6070,"enrol":"studio","ev":{"has_photos":false,"has_field_notes":false,"has_species_list":true,"has_fauna_record":true,"has_professional_assessment":true}},{"id":"ER-AU-VIC-SH-ARU-0001","name":"Arundel","suburb":"Surrey Hills","lga":"Boroondara","score":58,"baseline":20,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":3,"ver":"gardener_and_son_verified","last":"Apr 2026","badges":["species_rich_20","amphibian_active","gs_verified","fauna_record"],"p":[8,12,13,12,13],"sp":24,"sp0":8,"fauna":1,"park":45,"adj":1,"lat":-37.8326,"lng":145.0955,"act":19,"evc":"Grassy Woodland (EVC 175)","area":843,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":false,"has_fauna_record":true,"has_professional_assessment":true}},{"id":"ER-AU-VIC-SY-NIC-0002","name":"Urban Meadow","suburb":"South Yarra","lga":"Stonnington","score":37,"baseline":12,"tier":"Habitat Garden","next":"Ecological Garden","gap":4,"ver":"gardener_and_son_verified","last":"Feb 2026","badges":["species_rich_20","species_rich_30","gs_verified"],"p":[14,4,2,6,11],"sp":36,"sp0":2,"fauna":0,"park":0,"adj":0,"lat":-37.8422,"lng":144.9855,"act":4,"evc":"Grassy Woodland (EVC 175)","area":60,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":false,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-BAL-001","name":"Connected Habitat Garden","suburb":"Balwyn","lga":"Boroondara","score":58,"baseline":9,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":3,"ver":"gardener_and_son_verified","last":"Mar 2026","badges":["indigenous_dominant","species_rich_20","species_rich_30","habitat_builder","amphibian_active","network_connected","gs_verified","fauna_record","full_record"],"p":[18,8,9,8,15],"sp":31,"sp0":2,"fauna":1,"park":200,"adj":3,"lat":-37.8132,"lng":145.0901,"act":6,"evc":"Plains Grassy Woodland (EVC 55)","area":20,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":true,"has_professional_assessment":true}},{"id":"ER-AU-VIC-SH-MID-001","name":"Habitat Meadow","suburb":"Surrey Hills","lga":"Boroondara","score":54,"baseline":12,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":7,"ver":"gardener_and_son_verified","last":"Mar 2026","badges":["indigenous_dominant","species_rich_20","gs_verified"],"p":[16,8,7,10,13],"sp":20,"sp0":2,"fauna":0,"park":120,"adj":1,"lat":-37.8314,"lng":145.0876,"act":14,"evc":"Grassy Woodland (EVC 175)","area":200,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-SH-SIR-0001","name":"Native Buffer","suburb":"Surrey Hills","lga":"Boroondara","score":56,"baseline":6,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":5,"ver":"gardener_and_son_verified","last":"May 2026","badges":["indigenous_dominant","network_connected","gs_verified"],"p":[16,15,4,10,11],"sp":18,"sp0":0,"fauna":0,"park":5,"adj":2,"lat":-37.8201,"lng":145.089,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":73,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-SH-CAN-0001","name":"Modern Apartment","suburb":"Surrey Hills","lga":"Boroondara","score":40,"baseline":20,"tier":"Habitat Garden","next":"Ecological Garden","gap":1,"ver":"site_visit","last":"16 Jun 2026","badges":["network_connected","site_visit_badge"],"p":[8,8,0,12,12],"sp":11,"sp0":2,"fauna":0,"park":30,"adj":3,"lat":-37.825,"lng":145.0867,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":60,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-CAN-MON-001","name":"The Refuge","suburb":"Canterbury","lga":"Boroondara","score":76,"baseline":6,"tier":"Rich Habitat Garden","next":"Ecosystem Garden","gap":5,"ver":"gardener_and_son_verified","last":"Sep 2026","badges":["indigenous_dominant","species_rich_20","species_rich_30","full_canopy","five_layers","habitat_builder","water_wise","gs_verified"],"p":[25,20,14,6,11],"sp":30,"sp0":0,"fauna":0,"park":50,"adj":0,"lat":-37.8179,"lng":145.0712,"act":2,"evc":"Grassy Woodland (EVC 175)","area":256,"enrol":"steward","ev":{"has_photos":false,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-MAN-EVE-001","name":"Magpie Maggies Garden","suburb":"Mont Albert North","lga":"Whitehorse","score":54,"baseline":9,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":7,"ver":"gardener_and_son_verified","last":"Apr 2026","badges":["indigenous_dominant","species_rich_20","species_rich_30","habitat_builder","gs_verified"],"p":[17,9,9,6,13],"sp":30,"sp0":0,"fauna":0,"park":0,"adj":0,"lat":-37.8055,"lng":145.1046,"act":5,"evc":"Valley Grassy Forest (EVC 47)","area":24,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-BLA-DEW-001","name":"Dewrang","suburb":"Blackburn","lga":"Whitehorse","score":53,"baseline":9,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":8,"ver":"gardener_and_son_verified","last":"Nov 2025","badges":["indigenous_dominant","species_rich_20","species_rich_30","habitat_builder","gs_verified"],"p":[20,8,6,6,13],"sp":36,"sp0":0,"fauna":0,"park":0,"adj":0,"lat":-37.8161,"lng":145.1406,"act":3,"evc":"Valley Heathy Forest (EVC 127)","area":243,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-BAL-PRD-001","name":"Parring Stepping Stone","suburb":"Balwyn","lga":"Boroondara","score":45,"baseline":4,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":16,"ver":"gardener_and_son_verified","last":"May 2026","badges":["indigenous_dominant","network_connected","gs_verified"],"p":[11,9,4,10,11],"sp":11,"sp0":0,"fauna":0,"park":150,"adj":3,"lat":-37.8121,"lng":145.0914,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":25,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-BOR-WIN-001","name":"The Home Garden","suburb":"Kew East","lga":"Boroondara","score":52,"baseline":3,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":9,"ver":"gardener_and_son_verified","last":"Apr 2026","badges":["indigenous_dominant","species_rich_20","species_rich_30","habitat_builder","gs_verified"],"p":[20,9,9,3,11],"sp":32,"sp0":0,"fauna":0,"park":null,"adj":1,"lat":-37.7973,"lng":145.0503,"act":3,"evc":"Plains Grassy Woodland (EVC 55)","area":200,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-BOR-WIN-002","name":"Smokebush","suburb":"Kew East","lga":"Boroondara","score":29,"baseline":0,"tier":"Habitat Garden","next":"Ecological Garden","gap":12,"ver":"gardener_and_son_verified","last":"Aug 2026","badges":["five_layers","gs_verified"],"p":[9,4,0,3,13],"sp":5,"sp0":0,"fauna":0,"park":null,"adj":1,"lat":-37.7934,"lng":145.0517,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-WHI-YRK-001","name":"York Street","suburb":"Mont Albert","lga":"Whitehorse","score":55,"baseline":3,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":6,"ver":"gardener_and_son_verified","last":"Apr 2026","badges":["indigenous_dominant","habitat_builder","amphibian_active","gs_verified","fauna_record"],"p":[14,13,12,3,13],"sp":19,"sp0":0,"fauna":2,"park":null,"adj":1,"lat":-37.8179,"lng":145.1013,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":true,"has_professional_assessment":true}},{"id":"ER-AU-VIC-WHI-VIC-001","name":"Victoria Crescent","suburb":"Mont Albert","lga":"Whitehorse","score":47,"baseline":3,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":14,"ver":"gardener_and_son_verified","last":"May 2026","badges":["indigenous_dominant","species_rich_20","species_rich_30","five_layers","gs_verified"],"p":[21,8,4,3,11],"sp":30,"sp0":0,"fauna":0,"park":null,"adj":1,"lat":-37.8163,"lng":145.1049,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":18,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-CAN-FLI-001","name":"Flinders","suburb":"Canterbury","lga":"Boroondara","score":42,"baseline":6,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":19,"ver":"gardener_and_son_verified","last":"Sep 2025","badges":["gs_verified"],"p":[7,9,4,9,13],"sp":6,"sp0":0,"fauna":0,"park":30,"adj":1,"lat":-37.8229,"lng":145.0844,"act":1,"evc":"Plains Grassy Woodland (EVC 55)","area":225,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-HW-AUB-0001","name":"The Auburn Test","suburb":"Hawthorn","lga":"Boroondara","score":51,"baseline":26,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":10,"ver":"site_visit","last":"Aug 2026","badges":["indigenous_dominant","habitat_builder","amphibian_active","water_wise","site_visit_badge","fauna_record"],"p":[13,14,17,2,5],"sp":8,"sp0":8,"fauna":2,"park":200,"adj":0,"lat":-37.8221,"lng":145.0438,"act":3,"evc":"Plains Grassy Woodland (EVC 55)","area":15,"enrol":"steward","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":false,"has_fauna_record":false,"has_professional_assessment":false}},{"id":"ER-AU-VIC-WHI-KTE-001","name":"Forest Hill Garden","suburb":"Forest Hill","lga":"Whitehorse","score":21,"baseline":5,"tier":"Habitat Garden","next":"Ecological Garden","gap":20,"ver":"site_visit","last":"30 Oct 2025","badges":["amphibian_active","pollinator_rich","site_visit_badge","fauna_record"],"p":[3,0,6,0,12],"sp":3,"sp0":3,"fauna":3,"park":null,"adj":0,"lat":null,"lng":null,"act":1,"evc":"To be confirmed","area":0,"enrol":"council","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":false,"has_fauna_record":true,"has_professional_assessment":true}},{"id":"ER-AU-VIC-WHI-YRK-002","name":"Sensory Garden","suburb":"Mont Albert","lga":"Whitehorse","score":32,"baseline":2,"tier":"Habitat Garden","next":"Ecological Garden","gap":9,"ver":"gardener_and_son_verified","last":"Jul 2026","badges":["five_layers","network_connected","gs_verified"],"p":[11,0,0,8,13],"sp":10,"sp0":0,"fauna":0,"park":280,"adj":3,"lat":-37.8122,"lng":145.0855,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":300,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":true,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-SH-WEL-0001","name":"The Welcome Garden","suburb":"Surrey Hills","lga":"Boroondara","score":47,"baseline":0,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":14,"ver":"gardener_and_son_verified","last":"Sep 2026","badges":["indigenous_dominant","species_rich_20","network_connected","gs_verified"],"p":[18,8,7,6,8],"sp":20,"sp0":0,"fauna":0,"park":null,"adj":3,"lat":-37.8166,"lng":145.0887,"act":1,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":false}},{"id":"ER-AU-VIC-WHI-LEO-0001","name":"Native Cottage Garden","suburb":"Mont Albert","lga":"Whitehorse","score":30,"baseline":0,"tier":"Habitat Garden","next":"Ecological Garden","gap":11,"ver":"gardener_and_son_verified","last":"Sep 2026","badges":["gs_verified"],"p":[10,8,4,0,8],"sp":13,"sp0":0,"fauna":0,"park":null,"adj":0,"lat":-37.8238,"lng":145.1028,"act":1,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":false}},{"id":"ER-AU-VIC-SH-GTR-0001","name":"The Garden Trail","suburb":"Surrey Hills","lga":"Boroondara","score":41,"baseline":0,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":20,"ver":"gardener_and_son_verified","last":"Sep 2026","badges":["indigenous_dominant","network_connected","gs_verified"],"p":[14,8,7,4,8],"sp":13,"sp0":0,"fauna":0,"park":null,"adj":2,"lat":-37.8226,"lng":145.0911,"act":1,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"studio","ev":{"has_photos":true,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":false}},{"id":"ER-AU-VIC-BAL-WNM-001","name":"Winmallee","suburb":"Balwyn","lga":"Boroondara","score":9,"baseline":0,"tier":"Foundation Garden","next":"Habitat Garden","gap":12,"ver":"gardener_and_son_verified","last":"Sep 2026","badges":["gs_verified"],"p":[0,0,0,0,9],"sp":0,"sp0":0,"fauna":0,"park":null,"adj":0,"lat":-37.8078,"lng":145.084,"act":1,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"studio","ev":{"has_photos":false,"has_field_notes":false,"has_species_list":true,"has_fauna_record":false,"has_professional_assessment":true}},{"id":"ER-AU-VIC-THO-HAR-001","name":"Harry Street","suburb":"Thornbury","lga":"Darebin","score":51,"baseline":0,"tier":"Ecological Garden","next":"Rich Habitat Garden","gap":10,"ver":"gardener_and_son_verified","last":"Sep 2026","badges":["indigenous_dominant","habitat_builder","gs_verified"],"p":[15,15,14,0,7],"sp":8,"sp0":0,"fauna":0,"park":null,"adj":0,"lat":-37.755,"lng":145.0173,"act":2,"evc":"Plains Grassy Woodland (EVC 55)","area":0,"enrol":"steward","ev":{"has_photos":false,"has_field_notes":false,"has_species_list":false,"has_fauna_record":false,"has_professional_assessment":true}}]};
+async function liveSnap(){
+  if (typeof scoreEcologicalRegistry !== "function") throw new Error("engine");
+  const j = u => fetch(u,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(u);return r.json()});
+  const [reg, spc] = await Promise.all([j("/data/registry.json"), j("/data/species.json")]);
+  const real = reg.gardens.filter(g=>!g.demo);
+  const enrol = e => { e=(e||"").toLowerCase(); return e.includes("self")?"steward":e.includes("wildlife")?"council":"studio"; };
+  const gardens = await Promise.all(real.map(async g=>{
+    const r = await j("/"+g.data_file), s = scoreEcologicalRegistry(r);
+    const b=r.biodiversity||{}, h=r.habitat||{}, c=r.connectivity||{}, e=r.evidence||{};
+    return {id:g.garden_id,name:g.garden_name,suburb:g.suburb,lga:g.lga,score:g.score,baseline:s.baselineScore,
+      tier:g.rating.current,next:g.rating.next,gap:g.rating.points_to_next,ver:g.verification_level,last:g.last_verified,
+      badges:g.badges||[],p:[s.scores.biodiversity.score,s.scores.soil_water.score,s.scores.habitat.score,s.scores.connectivity.score,s.scores.evidence.score],
+      sp:b.indigenous_species_current||0,sp0:b.indigenous_species_baseline||0,fauna:(h.fauna_sightings||[]).length,
+      park:c.adjacent_park?c.park_distance_m:null,adj:(c.adjacent_registered_gardens||[]).length,lat:c.display_lat,lng:c.display_lng,
+      act:(r.activity_log||[]).length,evc:g.primary_evc,area:r.area_sqm||0,enrol:enrol(r.enroller),
+      ev:{has_photos:!!e.has_photos,has_field_notes:!!e.has_field_notes,has_species_list:!!e.has_species_list,has_fauna_record:!!e.has_fauna_record,has_professional_assessment:!!e.has_professional_assessment}};
+  }));
+  const read = new Date().toLocaleDateString("en-AU",{day:"numeric",month:"short",year:"numeric"});
+  return {read:read+", live", species:(spc.species||[]).length, speciesDate:(spc.metadata||{}).last_updated||"", gardens};
+}
+(async()=>{
+  let SNAP = FALLBACK;
+  try { SNAP = await Promise.race([liveSnap(), new Promise((_,x)=>setTimeout(()=>x(new Error("timeout")),5000))]); } catch(e) { SNAP.read = FALLBACK.read + " (saved snapshot)"; }
+  main(SNAP);
+})();
+function main(SNAP){
+
+const G = SNAP.gardens.slice().sort((a,b)=>b.score-a.score), N=G.length;
+const TIERS=[["Foundation Garden",0,20],["Habitat Garden",21,40],["Ecological Garden",41,60],["Rich Habitat Garden",61,80],["Ecosystem Garden",81,90],["Urban Biodiversity Node",91,100]];
+const PIL=[["Plant diversity and structure",25],["Soil and water function",20],["Habitat complexity",20],["Connectivity",20],["Evidence and verification",15]];
+const BADGE={gs_verified:"G&S Verified",indigenous_dominant:"Indigenous Dominant",species_rich_20:"Species Rich 20+",species_rich_30:"Species Rich 30+",habitat_builder:"Habitat Builder",network_connected:"Network Connected",amphibian_active:"Amphibian Active",fauna_record:"Fauna Record",five_layers:"Five Layers",water_wise:"Water Wise",site_visit_badge:"Site Visit",full_canopy:"Full Canopy",pollinator_rich:"Pollinator Rich",corridor_node:"Corridor Node",full_record:"Full Record"};
+const VER={gardener_and_son_verified:"Studio verified",site_visit:"Site visit"};
+const sum=f=>G.reduce((a,g)=>a+(f(g)||0),0),cnt=f=>G.filter(f).length,$=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tag=k=>'<span class="tg '+(k==="m"?"m":"d")+'">'+(k==="m"?"Measured":"Derived")+"</span>";
+$("read").textContent=SNAP.read;
+const mean=sum(g=>g.score)/N,base=sum(g=>g.baseline)/N,badges=sum(g=>g.badges.length);
+const tile=(v,u,c,s,k)=>'<div class="panel"><div class="top"><span class="lab">'+c+"</span>"+tag(k)+'</div><div class="big">'+v+(u?"<small>"+u+"</small>":"")+'</div><p class="sub">'+s+"</p></div>";
+$("tiles").innerHTML=[
+  tile(N,"","Property records","Across "+new Set(G.map(g=>g.lga)).size+" local government areas","m"),
+  tile(Math.round(mean),"/100","Mean score","Range "+Math.min(...G.map(g=>g.score))+" to "+Math.max(...G.map(g=>g.score)),"d"),
+  tile(Math.round(base),"/100","Mean estimated baseline","Engine score of each garden's recorded baseline inputs","d"),
+  tile(badges,"","Badges earned","Across "+new Set(G.flatMap(g=>g.badges)).size+" badge types","d"),
+  tile(SNAP.species,"","Plant species catalogued","Species ledger, last updated "+esc(SNAP.speciesDate),"m"),
+  tile(sum(g=>g.sp),"","Indigenous species records","Summed across gardens; "+sum(g=>g.sp0)+" at baseline","d")
+].join("");
+const bar=(l,v,max,txt,mark)=>'<div class="br"><span>'+esc(l)+'</span><span class="t"><i style="width:'+Math.max(0,v/max*100)+'%"></i>'+(mark!=null?'<u style="left:'+mark+'%"></u>':"")+'</span><span class="v">'+txt+"</span></div>";
+(function(){const c=TIERS.map(t=>cnt(g=>g.tier===t[0])),m=Math.max(...c);
+  $("tiers").innerHTML=TIERS.slice().reverse().map((t,i)=>bar(t[0]+" · "+t[1]+"–"+t[2],c[TIERS.length-1-i],m,c[TIERS.length-1-i])).join("")})();
+$("pillars").innerHTML=PIL.map((p,i)=>{const v=sum(g=>g.p[i])/N;return bar(p[0],v,p[1],v.toFixed(1)+"/"+p[1])}).join("");
+// tooltip
+const tip=$("tip");function hov(el,html){el.addEventListener("pointermove",e=>{tip.innerHTML=html;tip.style.display="block";tip.style.left=Math.min(e.clientX+12,innerWidth-250)+"px";tip.style.top=(e.clientY+14)+"px"});el.addEventListener("pointerleave",()=>tip.style.display="none")}
+const E=(t,a={},p)=>{const e=document.createElementNS("http://www.w3.org/2000/svg",t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+// dumbbell
+(function(){const rh=24,L=210,R=36,W=1100,H=G.length*rh+40;const s=E("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"Baseline and current score for every garden"});
+  const x=v=>L+(W-L-R)*v/100;
+  TIERS.forEach((t,i)=>{if(i%2===0)E("rect",{x:x(t[1]),y:22,width:x(t[2]+1>100?100:t[2]+1)-x(t[1]),height:H-30,fill:"rgba(255,240,220,.035)"},s)});
+  [0,21,41,61,81,91,100].forEach(v=>{E("line",{x1:x(v),y1:22,x2:x(v),y2:H-8,stroke:"rgba(255,240,220,.14)"},s);const t=E("text",{x:x(v),y:14,"text-anchor":"middle","font-family":"IBM Plex Mono","font-size":11,fill:"#c9c2ad"},s);t.textContent=v});
+  G.forEach((g,i)=>{const y=34+i*rh;const t=E("text",{x:L-14,y:y+4,"text-anchor":"end","font-family":"IBM Plex Sans","font-size":13,fill:"#fff0dc"},s);t.textContent=g.name;
+    E("line",{x1:x(g.baseline),y1:y,x2:x(g.score),y2:y,stroke:"#7C9A52","stroke-width":3},s);
+    E("rect",{x:x(g.baseline)-2,y:y-7,width:4,height:14,fill:"#B49A63"},s);
+    E("circle",{cx:x(g.score),cy:y,r:6.5,fill:"#262c20",stroke:"#b7dc7c","stroke-width":2},s);E("circle",{cx:x(g.score),cy:y,r:2.5,fill:"#b7dc7c"},s);
+    const v=E("text",{x:x(g.score)+13,y:y+4,"font-family":"IBM Plex Mono","font-size":12,fill:"#b7dc7c"},s);v.textContent=g.score;
+    const hit=E("rect",{x:0,y:y-rh/2,width:W,height:rh,fill:"transparent"},s);hov(hit,"<b>"+esc(g.name)+"</b>, "+esc(g.suburb)+"<br>Baseline est. "+g.baseline+" → now "+g.score+"<br>"+esc(g.tier))});
+  $("dumb").className="scroll";s.style.minWidth="640px";$("dumb").appendChild(s)})();
+// steward tiles
+(function(){const self=cnt(g=>g.enrol==="steward"),g4w=cnt(g=>g.enrol==="council"),act=sum(g=>g.act);
+  $("stiles").innerHTML=[
+   tile(cnt(g=>g.gap<=5),"","Within 5 points of next tier",cnt(g=>g.gap<=10)+" are within 10 points","d"),
+   tile(act,"","Activity log entries","Dated entries held across all garden records","m"),
+   tile(sum(g=>g.fauna),"","Fauna sightings recorded","In "+cnt(g=>g.fauna>0)+" gardens","m"),
+   tile(self,"","Enrolled by the steward","Plus "+g4w+" built from a council garden visit report; "+cnt(g=>g.enrol==="studio")+" enrolled by the studio","m")].join("")})();
+(function(){const bc={};G.forEach(g=>g.badges.forEach(b=>bc[b]=(bc[b]||0)+1));const a=Object.entries(bc).filter(e=>e[0]!=="gs_verified"&&e[0]!=="site_visit_badge").sort((x,y)=>y[1]-x[1]);
+  $("badges").innerHTML=a.map(e=>bar(BADGE[e[0]]||e[0],e[1],N,e[1]+"/"+N)).join("")})();
+(function(){const W=520,H=120,s=E("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"Points to next tier for each garden"});const x=v=>30+(W-60)*v/20;
+  E("line",{x1:30,y1:86,x2:W-30,y2:86,stroke:"rgba(255,240,220,.3)"},s);[0,5,10,15,20].forEach(v=>{E("line",{x1:x(v),y1:82,x2:x(v),y2:90,stroke:"rgba(255,240,220,.4)"},s);const t=E("text",{x:x(v),y:108,"text-anchor":"middle","font-family":"IBM Plex Mono","font-size":11,fill:"#c9c2ad"},s);t.textContent=v+" pts"});
+  E("rect",{x:x(0),y:18,width:x(5)-x(0),height:68,fill:"rgba(183,220,124,.08)"},s);
+  const stack={};G.forEach(g=>{const k=g.gap;stack[k]=(stack[k]||0)+1;const c=E("circle",{cx:x(Math.min(k,20)),cy:86-stack[k]*13,r:5,fill:k<=5?"#b7dc7c":"#7C9A52"},s);hov(c,"<b>"+esc(g.name)+"</b><br>"+g.gap+" points to "+esc(g.next))});
+  $("gapchart").appendChild(s)})();
+(function(){const L=[["has_photos","Photographs"],["has_species_list","Species list"],["has_professional_assessment","Professional assessment"],["has_field_notes","Field notes"],["has_fauna_record","Fauna record"]];
+  $("evid").innerHTML=L.map(l=>{const c=cnt(g=>g.ev[l[0]]);return bar(l[1],c,N,c+"/"+N)}).join("")})();
+// map
+(function(){const s=$("map"),W=640,H=420,pad=44,P=G.filter(g=>g.lat!=null);const la=P.map(g=>g.lat),lo=P.map(g=>g.lng),a0=Math.min(...la),a1=Math.max(...la),o0=Math.min(...lo),o1=Math.max(...lo);
+  const k=Math.cos(-37.8*Math.PI/180),sc=Math.min((W-2*pad)/((o1-o0)*k),(H-2*pad)/(a1-a0));
+  const X=g=>pad+(g.lng-o0)*k*sc+((W-2*pad)-(o1-o0)*k*sc)/2,Y=g=>H-pad-(g.lat-a0)*sc-((H-2*pad)-(a1-a0)*sc)/2;
+  E("rect",{width:W,height:H,fill:"rgba(255,240,220,.03)"},s);for(let i=1;i<8;i++)E("line",{x1:i*W/8,y1:0,x2:i*W/8,y2:H,stroke:"rgba(255,240,220,.06)"},s);for(let i=1;i<5;i++)E("line",{x1:0,y1:i*H/5,x2:W,y2:i*H/5,stroke:"rgba(255,240,220,.06)"},s);
+  P.forEach(g=>{const r=5+g.score/10,c=g.score>=61?"#b7dc7c":g.score>=41?"#7C9A52":"#B49A63";const gg=E("g",{},s);[r,r*.66].forEach(q=>E("circle",{cx:X(g),cy:Y(g),r:q,fill:"none",stroke:c},gg));E("circle",{cx:X(g),cy:Y(g),r:2.6,fill:c},gg);const h=E("circle",{cx:X(g),cy:Y(g),r:r+4,fill:"transparent"},gg);hov(h,"<b>"+esc(g.name)+"</b>, "+esc(g.suburb)+"<br>"+g.score+" · "+esc(g.tier))});
+  const lab={};P.forEach(g=>(lab[g.lga]=lab[g.lga]||[]).push(g));Object.entries(lab).forEach(([n,a])=>{const x=a.reduce((q,g)=>q+X(g),0)/a.length,y=Math.min(...a.map(Y));const t=E("text",{x:Math.min(Math.max(x,60),W-60),y:Math.max(y-20,14),"text-anchor":"middle","font-family":"IBM Plex Mono","font-size":11,"letter-spacing":1.2,fill:"#c9c2ad"},s);t.textContent=n.toUpperCase()});
+  if(N-P.length){const t=E("text",{x:10,y:H-10,"font-family":"IBM Plex Mono","font-size":10.5,fill:"#c9c2ad"},s);t.textContent=(N-P.length)+" record without a public pin not shown"}})();
+(function(){const c={};G.forEach(g=>c[g.lga]=(c[g.lga]||0)+1);const a=Object.entries(c).sort((x,y)=>y[1]-x[1]);$("lga").innerHTML=a.map(e=>bar(e[0],e[1],a[0][1],e[1])).join("");
+  $("conn").innerHTML=[["Park or reserve within 50 m",cnt(g=>g.park!=null&&g.park<=50)],["Park or reserve within 300 m",cnt(g=>g.park!=null&&g.park<=300)],["One or more registered gardens nearby",cnt(g=>g.adj>=1)],["Three or more registered gardens nearby",cnt(g=>g.adj>=3)]].map(r=>bar(r[0],r[1],N,r[1]+"/"+N)).join("");
+  const e={};G.forEach(g=>e[g.evc]=(e[g.evc]||0)+1);const b=Object.entries(e).sort((x,y)=>y[1]-x[1]);$("evc").innerHTML=b.map(r=>bar(r[0],r[1],b[0][1],r[1])).join("")})();
+// table
+$("tbl").innerHTML="<thead><tr><th>Garden</th><th>Area</th><th class='n'>Score</th><th>Tier</th><th>Baseline to now</th><th class='n'>Badges</th><th>Evidence</th><th>Last verified</th></tr></thead><tbody>"+G.map(g=>"<tr><td><b>"+esc(g.name)+"</b><br><span class='id'>"+esc(g.id)+"</span></td><td>"+esc(g.suburb)+"<br><span class='id'>"+esc(g.lga)+"</span></td><td class='n'><span class='sc'>"+g.score+"</span></td><td>"+esc(g.tier)+"</td><td><span class='mini'><i style='width:"+g.score+"%'></i><u style='left:"+g.baseline+"%'></u></span><span class='id'>"+g.baseline+" → "+g.score+"</span></td><td class='n'>"+g.badges.length+"</td><td><span class='pill'>"+esc(VER[g.ver]||g.ver)+"</span>"+(g.enrol==="council"?"<br><span class='id'>Source: council garden visit report</span>":g.enrol==="steward"?"<br><span class='id'>Steward enrolled</span>":"")+"</td><td class='id'>"+esc(g.last||"")+"</td></tr>").join("")+"</tbody>";
+// gaps
+(function(){const gsv=cnt(g=>g.ver==="gardener_and_son_verified"),sv=cnt(g=>g.ver==="site_visit"),ar=cnt(g=>g.area>0);
+  const L=[["Independent verification",gsv+" of "+N+" records were verified by the studio that built the Registry and "+sv+" by site visit. None has been verified by an independent third party."],
+   ["Baselines are estimates","Baseline scores are the engine applied to recorded baseline inputs. For gardens that existed before the Registry, those inputs were recorded in hindsight."],
+   ["Fixed thresholds","Version 1 scores against absolute thresholds. It does not yet benchmark a garden against the reference vegetation community for its site."],
+   ["Area is not aggregated","Garden area is recorded on "+ar+" of "+N+" records and is under audit, so no total area, canopy area or per-hectare figure is given."],
+   ["A small and uneven sample",cnt(g=>g.enrol==="studio")+" of "+N+" records were enrolled by one studio, and "+cnt(g=>g.lga==="Boroondara")+" sit in one municipality. This shows the method working, not the state of Melbourne's gardens."],
+   ["Nothing modelled","No projection, valuation or at-scale estimate appears on this page."]];
+  $("gaps").innerHTML=L.map((l,i)=>"<div><i>0"+(i+1)+"</i><span><b>"+l[0]+"</b>"+l[1]+"</span></div>").join("")})();
+}
+</script>
+</body>
+</html>
