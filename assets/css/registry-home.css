@@ -141,3 +141,12 @@ body.badge-dialog-open{overflow:hidden}
 .badge-dialog h3{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;border-top:1px solid var(--hair);padding-top:24px;margin-bottom:12px}
 .badge-dialog-link{font-size:13px;text-decoration:underline;text-underline-offset:5px}
 @media(max-width:480px){.badge-dialog{padding:32px 24px}}
+
+/* Privacy + closing statements: centre the capped heading box (the shared
+   .registry-section h2 max-width has no auto margins) and give both more
+   presence on desktop. Mobile sizes unchanged. */
+.registry-privacy h2,.registry-close h2{margin-left:auto;margin-right:auto}
+@media(min-width:1024px){
+ .registry-privacy h2{max-width:860px;font-size:clamp(2.6rem,min(4vw,7.4svh),4rem)}
+ .registry-close h2{max-width:900px;font-size:clamp(3.2rem,min(5.2vw,9svh),4.6rem)}
+}
