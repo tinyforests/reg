@@ -277,9 +277,12 @@
   }
 
   /* ---- rendering (three surfaces) ---------------------------------------- */
-  function deliveryLine(o) {
+  // withCost: only the designer surface shows cost bands. Public surfaces
+  // (steward profile, enrolment) show delivery routes by label only.
+  function deliveryLine(o, withCost) {
     return o.delivery_options.map(function (d) {
-      return (DELIVERY_PATH_LABEL[d.path] || d.path) + ' ' + d.cost;
+      var label = DELIVERY_PATH_LABEL[d.path] || d.path;
+      return withCost ? label + ' ' + d.cost : label;
     }).join(' · ');
   }
 
@@ -329,7 +332,7 @@
     }
     var card = function (o) {
       return '<div class="opp-card"><div class="opp-action">' + esc(o.action) + '</div>' +
-        '<div class="opp-meta">+' + o.points + ' pts · ' + esc(o.pillarLabel) + ' · ' + o.effort + ' · ' + esc(deliveryLine(o)) + (o.season ? ' · ' + esc(o.season) : '') + '</div>' +
+        '<div class="opp-meta">+' + o.points + ' pts · ' + esc(o.pillarLabel) + ' · ' + o.effort + ' · ' + esc(deliveryLine(o, true)) + (o.season ? ' · ' + esc(o.season) : '') + '</div>' +
         '<div class="opp-detail">' + esc(o.detail) + '</div></div>';
     };
     out2 += '<div class="opp-group-h">Improve the garden</div>' + ecological.map(card).join('');

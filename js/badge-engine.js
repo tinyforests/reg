@@ -114,7 +114,18 @@ var BADGE_DEFINITIONS = {
  * Award badges based on a garden record.
  * Returns categorised badge ID arrays.
  */
+// Mirrors NO_BADGE_STATUSES in scripts/sync_registry.py. Provisional and
+// pre-install records have unverified inputs and never earn badges, on any
+// surface. Canonical records carry status only when written by a promoter;
+// absent status means "not gated here" (the registry index still gates).
+var NO_BADGE_STATUSES = ["Design Proposal", "Provisional"];
+
+function _noBadges() {
+  return { all_badges: [], score_badges: [], verification_badges: [], evidence_badges: [], all: [], vb: [] };
+}
+
 function awardBadges(record) {
+  if (record && NO_BADGE_STATUSES.indexOf(record.status) !== -1) return _noBadges();
   var b  = record.biodiversity || {};
   var h  = record.habitat      || {};
   var c  = record.connectivity || {};
