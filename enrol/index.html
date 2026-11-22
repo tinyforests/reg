@@ -338,7 +338,7 @@ section.canopy .btn.ghost:hover{background:var(--understory);color:var(--ink)}
             <h4>Ecological Garden Health Check</h4>
             <div class="price">$240 · Melbourne area · steward site visit</div>
             <p class="cdesc">A G&S steward reviews your garden, checks the evidence behind your answers and helps identify the next steps. Verification records what can be confirmed; it does not guarantee a higher score.</p>
-            <a class="btn primary" id="bookVisitBtn" href="mailto:hello@lundbech.me">Book a verification visit</a>
+            <a class="btn primary" id="bookVisitBtn" href="mailto:hello@ecologicalregistry.org">Book a verification visit</a>
           </div>
           <div class="card">
             <h4>Plants of Place</h4>
@@ -1489,7 +1489,7 @@ function buildDeepenPanel() {
       evcName  ? 'Vegetation class: ' + evcName : '',
       'Provisional score: ' + score() + '/100',
     ].filter(Boolean).join('\n');
-    bookBtn.href = 'mailto:hello@lundbech.me?subject='
+    bookBtn.href = 'mailto:hello@ecologicalregistry.org?subject='
       + encodeURIComponent('Ecological Garden Health Check — ' + (suburb || 'enquiry'))
       + '&body=' + encodeURIComponent(lines);
   }

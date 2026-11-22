@@ -64,7 +64,7 @@ Shape taken from `york.json`. Fields are grouped by purpose.
 "designer_id":      "gardener-and-son",      // Stable slug — survives name changes; links to designer registry
 "enroller":         "Gardener & Son",        // Who submitted this record to the registry (distinct from designer and verifier)
 "verifier":         null,                    // Who independently confirmed the inputs; null until third-party audit exists
-"area_sqm":         0,                       // Note: 0 is permitted when area is unmeasured
+"area_sqm":         null,                    // Measured planted area in m². null = not yet measured; never 0 (0 is a value)
 "target_score":     75,
 "description":      "Approx 320 chars compressed prose. No marketing language."
 ```

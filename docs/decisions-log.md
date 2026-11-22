@@ -1082,3 +1082,58 @@ do not silently change awards or imply independent certification.
 **Reason:** The meeting may or may not have a shared screen. A private laptop presentation should remain complete on its own, while a screen-ready copy gives presenters notes without exposing them to the audience. Direct links allow reviewers to inspect genuine, existing Registry records. The central proposition is framed as an emerging measurement gap, not a claim of state acceptance, independent verification or statutory standing.
 
 **Files affected:** `decks/infrastructure-victoria/deck.html`, `decks/infrastructure-victoria/screen.html`, `docs/decisions-log.md`. No scoring, garden data, methodology, dashboard arithmetic or registry status changed.
+
+## 22 Nov 2026 — Repository health pass: fixes that change no score
+
+**Decision:** Fix public-surface defects and pipeline gaps found in an end-to-end
+audit, without changing any score, input, badge award or status:
+
+1. The Refuge profile fetched `/data/montalbert.json`; the file is `montAlbert.json`.
+   GitHub Pages is case-sensitive, so the live profile showed "Data unavailable"
+   (it is linked from the Infrastructure Victoria deck). Path corrected, and
+   `promote_submission.py` (which copies this profile as its template) updated to
+   match and to abort if any Refuge reference survives substitution.
+2. `promote_submission.py` now writes `status` onto the canonical record as well
+   as the index entry. Profiles gate badges and provisional styling on
+   `R.status`; without it a promoted Provisional self-enrolment would render
+   with badges and no quarantine.
+3. `awardBadges()` in `js/badge-engine.js` returns no badges for
+   `Provisional` / `Design Proposal` records, mirroring `NO_BADGE_STATUSES` in
+   `sync_registry.py`. No current canonical record carries `status`, so no
+   current award changes.
+4. `renderOpportunities(_, 'steward')` no longer prints cost bands, matching the
+   no-cost-on-public-surfaces decision. Only the designer surface shows cost.
+5. Unmeasured `area_sqm` is `null`, never `0`, as the pending-work entry
+   required: Smokebush, York Street, Winmallee and Harry Street changed 0 → null;
+   `data-schema.md` and the promoter updated. The scoring engines do not read
+   `area_sqm`. Profiles now show "Not yet measured" instead of "~0m2" / "~nullm2".
+6. Profiles no longer print "undefined" for neighbour direction, missing cluster
+   names, or a 0 ha cluster; the corridor note claims an adjacent park only when
+   `adjacent_park` is true.
+
+7. `promote_designer_submission.py` patches the same template by exact text. Its
+   targets were updated to the new template lines and now fail loudly through
+   `_swap()` if the template drifts (an unasserted partial match would have
+   produced a JavaScript syntax error in every new designer profile). The data
+   path is set by pattern, as in the self-enrolment promoter, and
+   `test_designer_publication.py` now syntax-checks the generated profile.
+
+**Reason:** Visible errors on public records undermine the ledger's credibility;
+the pipeline gaps would have leaked unverified badges onto the first promoted
+self-enrolment. All are mechanical corrections with no product judgement.
+
+**Verification:** all 16 test suites in `scripts/` pass (scoring parity 25/25, opportunities
+parity 26/26); every garden score in `registry.json` equals the engine output;
+stored badges equal `awardBadges()` for all 25 records; all 25 profiles were
+rendered headless against the pre-change tree with identical scores and badge
+counts (The Refuge now renders). New regression test:
+`scripts/test_badge_gate_and_cost.cjs`.
+
+**Files affected:** `gardens/g-*/index.html` (24 profile templates + The Refuge
+data path), `js/badge-engine.js`, `js/reg-opportunities.js`,
+`scripts/promote_submission.py`, `scripts/promote_designer_submission.py`,
+`scripts/test_designer_publication.py`, `scripts/test_badge_gate_and_cost.cjs`,
+`data/smokebush.json`, `data/york.json`, `data/winmallee.json`,
+`data/harrystreet.json`, `enrol/index.html` (Health Check booking mailto now
+hello@ecologicalregistry.org, not hello@lundbech.me), `docs/data-schema.md`,
+`docs/pending-work.md`, `docs/decisions-log.md`.

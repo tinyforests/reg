@@ -32,8 +32,20 @@ class PublicationTest(unittest.TestCase):
         self.assertIn("R.status === 'Provisional' ? {all:[]",result)
         self.assertIn('Baseline not recorded',result)
         self.assertIn(record['garden_id'],result)
-        self.assertIn('/'+entry['data_file'],result)
+        self.assertIn("var _staticJson = '/"+entry['data_file']+"';",result)
+        self.assertNotIn('/data/montAlbert.json',result)
         self.assertNotIn('PRIVATE FIXTURE ADDRESS',result)
+        # Every inline script in the generated profile must still parse: the
+        # promoter patches the template by text, so drift can break the page.
+        import re, subprocess, tempfile, os
+        for code in re.findall(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', result, re.S):
+            if not code.strip(): continue
+            with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as f: f.write(code)
+            try:
+                check = subprocess.run(['node', '--check', f.name], capture_output=True, text=True)
+            finally:
+                os.unlink(f.name)
+            self.assertEqual(check.returncode, 0, check.stderr[-300:])
 
     def test_explicit_verification(self):
         with self.assertRaises(ValueError): prepare(self.submission,'third_party_verified')

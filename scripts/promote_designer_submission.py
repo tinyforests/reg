@@ -91,20 +91,31 @@ def validate_public_text(value):
         for item in value: validate_public_text(item)
 
 
+def _swap(text, old, new):
+    """Template replacement that fails loudly if the template text has drifted."""
+    if old not in text:
+        raise ValueError('Profile template drifted; expected text not found: ' + old[:80])
+    return text.replace(old, new)
+
+
 def render_profile(template, record, entry):
     rendered = re.sub(r'<title>[^<]*</title>', lambda _: '<title>Ecological Registry - '+html.escape(record['garden_name'])+'</title>', template, count=1)
     rendered = re.sub(r"var _GARDEN_ID  = '[^']*';", lambda _: "var _GARDEN_ID  = '"+record['garden_id']+"';", rendered)
-    rendered = rendered.replace('/data/montalbert.json', '/' + entry['data_file'])
+    rendered = re.sub(r"var _staticJson = '[^']*';", lambda _: "var _staticJson = '/" + entry['data_file'] + "';", rendered)
+    rendered = rendered.replace('/data/montAlbert.json', '/' + entry['data_file'])
     rendered = re.sub(r"  txt\('visionText',[^\n]*", "  txt('visionText', R.description || (R.garden_name + ' is a designer-submitted garden. Its ecological record will develop through documented observations and review.'));", rendered)
     rendered = rendered.replace('var badges = awardBadges(R);', "var badges = R.status === 'Provisional' ? {all:[],vb:[],all_badges:[],score_badges:[],verification_badges:[],evidence_badges:[]} : awardBadges(R);")
     rendered = rendered.replace('function dta(cur, base) {', 'function dta(cur, base) {\n  if (cur == null || base == null) return \'<span class="delta-same">Baseline not recorded</span>\';')
     rendered = rendered.replace("+ sw.soil_health_score +", "+ (sw.soil_health_score == null ? '—' : sw.soil_health_score) +")
     rendered = rendered.replace("+ sw.water_function_score +", "+ (sw.water_function_score == null ? '—' : sw.water_function_score) +")
     rendered = rendered.replace("'From ' + b.weed_pressure_baseline", "(b.weed_pressure_baseline == null ? 'Not assessed' : 'From ' + b.weed_pressure_baseline)")
-    rendered = rendered.replace("'Corridor Map - ' + c.cluster_name", "c.cluster_name ? 'Corridor Map - ' + c.cluster_name : 'Garden connectivity'")
-    rendered = rendered.replace("'Part of ' + c.cluster_name + ' cluster.'", "'Cluster not recorded.'")
-    rendered = rendered.replace("txt('curbingNote',   'This garden", "txt('curbingNote', c.cluster_name ? 'This garden")
-    rendered = rendered.replace("'ha of measured ecological function.' : '.'));", "'ha of measured ecological function.' : '.') : 'Connectivity will be documented through Registry review.');")
+    # Connectivity wording for designer records. The template already guards missing
+    # cluster names (22 Nov 2026); these swap in designer-specific copy and must match
+    # the template text exactly, so each is asserted.
+    rendered = _swap(rendered, "c.cluster_name ? 'Corridor Map - ' + c.cluster_name : 'Corridor Map'", "c.cluster_name ? 'Corridor Map - ' + c.cluster_name : 'Garden connectivity'")
+    rendered = _swap(rendered, "'Not yet part of a named cluster.'", "'Cluster not recorded.'")
+    rendered = _swap(rendered, "'Part of ' + c.cluster_name + ' cluster.'", "'Cluster not recorded.'")
+    rendered = _swap(rendered, "txt('curbingNote',   (c.cluster_name ? 'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' : 'This garden is included in the Registry corridor dataset. ') +", "txt('curbingNote',   !c.cluster_name ? 'Connectivity will be documented through Registry review.' : ('This garden is included in the ' + c.cluster_name + ' corridor dataset. ') +")
     rendered = rendered.replace("+ b.weed_pressure_baseline +", "+ (b.weed_pressure_baseline == null ? '—' : b.weed_pressure_baseline) +")
     rendered = rendered.replace('Logs + voids', 'Designer-submitted count')
     rendered = rendered.replace('No coordinates in data', 'Garden location not yet mapped')

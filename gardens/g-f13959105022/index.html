@@ -1149,7 +1149,7 @@ function render() {
   if (typeof attachNeighbourInvite === 'function') attachNeighbourInvite(R);
   if (typeof renderSpatialSections === 'function') renderSpatialSections(R);
 
-  txt('networkMapLabel', 'Corridor Map - ' + c.cluster_name);
+  txt('networkMapLabel', c.cluster_name ? 'Corridor Map - ' + c.cluster_name : 'Corridor Map');
   txt('svgGardenName',   R.garden_name);
   txt('svgAdjacentId',   adj.length ? adj[0].id : '--');
   txt('nodeStatus',      c.corridor_node_confirmed ? 'Active' : 'Pending');
@@ -1158,7 +1158,7 @@ function render() {
 
   var ah = '';
   for (var ai = 0; ai < adj.length; ai++) {
-    ah += '<div class="text-xs font-mono opacity-60 mt-1">' + adj[ai].id + '</div><div class="text-xs opacity-50">' + adj[ai].distance_m + 'm ' + adj[ai].direction + ' - Verified</div>';
+    ah += '<div class="text-xs font-mono opacity-60 mt-1">' + adj[ai].id + '</div><div class="text-xs opacity-50">' + adj[ai].distance_m + 'm' + (adj[ai].direction ? ' ' + adj[ai].direction : '') + (adj[ai].verified ? ' - Verified' : '') + '</div>';
   }
   html('adjacentList', ah);
 
@@ -1169,8 +1169,8 @@ function render() {
   if (cc) { txt('connectivityScore', cc.score + ' / ' + cc.max); wid('connectivityBar', Math.round(cc.score / cc.max * 100)); }
 
   txt('effectiveArea', c.effective_ecological_area_ha != null ? c.effective_ecological_area_ha + 'ha' : '—');
-  txt('clusterNote',   c.cluster_area_ha != null ? 'Part of ' + c.cluster_area_ha + 'ha ' + c.cluster_name + ' cluster.' : 'Part of ' + c.cluster_name + ' cluster.');
-  txt('curbingNote',   'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' + (adj.length + 1) + ' registered gardens and 1 adjacent park' + (c.cluster_area_ha != null ? ' representing ' + c.cluster_area_ha + 'ha of measured ecological function.' : '.'));
+  txt('clusterNote',   !c.cluster_name ? 'Not yet part of a named cluster.' : (c.cluster_area_ha > 0 ? 'Part of ' + c.cluster_area_ha + 'ha ' + c.cluster_name + ' cluster.' : 'Part of ' + c.cluster_name + ' cluster.'));
+  txt('curbingNote',   (c.cluster_name ? 'This garden is included in the ' + c.cluster_name + ' corridor dataset. ' : 'This garden is included in the Registry corridor dataset. ') + (adj.length + 1) + ' registered garden' + (adj.length ? 's' : '') + (c.adjacent_park ? ' and 1 adjacent park' : '') + (c.cluster_area_ha > 0 ? ' representing ' + c.cluster_area_ha + 'ha of measured ecological function.' : '.'));
 
   /* Store score on record for map popup then init map */
   R._score = result.total;
@@ -1187,7 +1187,7 @@ function render() {
   html('gardenFacts',
     '<div class="flex justify-between gap-4"><dt class="opacity-60">EVC</dt><dd class="font-medium text-right">' + R.evc.name + ' (' + R.evc.code + ')</dd></div>' +
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Bioregion</dt><dd class="font-medium text-right">' + R.evc.bioregion + '</dd></div>' +
-    '<div class="flex justify-between gap-4"><dt class="opacity-60">Area</dt><dd class="font-medium text-right">~' + R.area_sqm + 'm2</dd></div>' +
+    '<div class="flex justify-between gap-4"><dt class="opacity-60">Area</dt><dd class="font-medium text-right">' + (R.area_sqm > 0 ? '~' + R.area_sqm + ' m²' : 'Not yet measured') + '</dd></div>' +
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Method</dt><dd class="font-medium text-right">' + h.planting_method + '</dd></div>' +
     '<div class="flex justify-between gap-4"><dt class="opacity-60">Designed by</dt><dd class="font-medium text-right">' + R.designer + '</dd></div>'
   );

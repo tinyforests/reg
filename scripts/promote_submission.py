@@ -195,7 +195,9 @@ def build_profile(slug, garden_id, data_file, check_only):
                   '<title>Ecological Registry - %s</title>' % slug.title(), html, count=1)
     html = re.sub(r"var _GARDEN_ID  = '[^']*';", "var _GARDEN_ID  = '%s';" % garden_id, html)
     html = re.sub(r"var _staticJson = '[^']*';", "var _staticJson = '/%s';" % data_file, html)
-    html = html.replace('/data/montalbert.json', '/' + data_file)
+    html = html.replace('/data/montAlbert.json', '/' + data_file)
+    if '/data/montAlbert.json' in html or "'ER-AU-VIC-CAN-MON-001'" in html:
+        sys.exit('Profile template still references The Refuge after substitution — aborting.')
     with open(dest, 'w') as f:
         f.write(html)
     return dest
@@ -297,7 +299,12 @@ def main():
         'designer': 'Steward self-enrolled', 'designer_id': 'self-enrolled',
         'enroller': 'Steward (self-enrolment)',
         'verifier': 'Gardener & Son' if status == 'verified' else None,
-        'area_sqm': int(area) if area.isdigit() else 0,
+        # Status lives on the canonical record too: profile pages (copied from
+        # PROFILE_TEMPLATE) gate badges and provisional styling on R.status.
+        # Must match reg_entry['status'] below.
+        'status': 'Active / Establishing' if status == 'verified' else 'Provisional',
+        # Unmeasured area is null, never 0 (0 is a value; see data-schema.md).
+        'area_sqm': int(area) if area.isdigit() and int(area) > 0 else None,
         'description': 'A self-enrolled ecological garden in %s, %s via the Registry '
         'ramp.' % (suburb, 'verified by a Gardener & Son site visit'
                    if status == 'verified' else 'self-reported (provisional)'),

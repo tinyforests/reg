@@ -2,6 +2,40 @@
 
 Known unfinished items. Move items out of this file as they complete (and into the decision log if they involve a meaningful decision).
 
+## Health pass 22 Nov 2026 — decisions waiting on Tyson
+
+Found in the end-to-end audit (decisions log, 22 Nov 2026). None changed in code,
+because each needs a judgement or private data:
+
+- **Duplicate fauna badge** (entry below): confirmed still live. 6 real gardens
+  carry both `amphibian_active` and `fauna_record` from the same rule, adding 6 to
+  the public badge total (99 → 93 without it). Rest of the catalogue checked: no
+  other exact duplicates (`species_rich_20/30` and `amphibian_active`/`pollinator_rich`
+  are deliberate tiers). Decide which badge survives, or re-key `fauna_record` to
+  `evidence.has_fauna_record`, then change `badge-engine.js`, `award_badges` in
+  `sync_registry.py`, the 13-badge catalogue count on profiles, and run sync in one commit.
+- **Park pins near the garden**: `park_lat/park_lng` are public. Most are park
+  centroids hundreds of metres away, but Sir Garnet's nature-strip pin was set at
+  the garden (address public by steward choice), and ten others record
+  `park_distance_m` ≤ 50 (that is the distance to the park edge, so most of their
+  pins are still far-off centroids). Check, with `data/private/coords.json`, whether any park
+  pin sits close enough to the real garden to undo the ~250 m display offset.
+- **Wrong park**: Windella (The Home Garden) and Smokebush both name "Gawler Chain",
+  ~8.6 km from their display pins. Likely a mis-assigned park; re-resolve on next sync.
+- **Yield blocks**: 10 records carry `yield.eligible: true` with dollar
+  `estimated_annual` / `potential_annual` values in public JSON. Nothing renders
+  them. The yield-rules doc allows `eligible: true` as "Pending activation"; the
+  honesty-audit entry below says zero them. Pick one rule.
+- **Area values need field measurement**: `v2/audit_areas.py --data data` flags 13
+  blocking records (zero/missing area, round-number estimates, Surrey Hills backlog).
+  Arundel's profile still shows a 2.1 ha Surrey Hills cluster against a measured ~0.08 ha.
+- **Orphan data files**: `data/badge-definitions.json` and `data/gardens.json` have
+  no in-repo readers. Left in place in case another G&S site fetches them from
+  ecologicalregistry.org; delete once fmeg/fmevc/fmnp are checked.
+- **Steward first names** remain in public garden JSON (`stewards`). Profiles hide
+  them by default, but the field is fetchable. Same pattern as the coordinates fix
+  if you want them private.
+
 ## High priority
 
 ### Badge catalogue: duplicate fauna award
@@ -14,10 +48,12 @@ full catalogue for other duplicate conditions before any re-award.
 ### Canonical/index status consistency — audit remains open
 
 The scorecard’s provisional variant depends on the canonical record’s `status`.
-Some existing records still differ from the registry index: The Refuge
-(ER-AU-VIC-CAN-MON-001) has canonical `status: null` while its index is
-`Active / Establishing`, score 76. The earlier description of that record as a
-score-zero Design Proposal is obsolete. Audit and reconcile source ownership
+Checked 22 Nov 2026: **none** of the 25 canonical records carries `status`; it
+lives only in the registry index. The Refuge is not a special case. The designer
+promoter and (since 22 Nov) the self-enrolment promoter write `status` onto new
+canonical records, so new provisional records are gated; existing records rely on
+the index. The earlier description of The Refuge as a score-zero Design Proposal
+is obsolete. Audit and reconcile source ownership
 before changing status propagation; do not infer verification from a missing field.
 New designer records explicitly carry Provisional status by default.
 
@@ -81,9 +117,9 @@ DONE:
 STILL TO DO:
 4. Designer opportunity routing, cost-band presentation and ongoing management remain unbuilt. The invited submission/review/portfolio portal shipped 10 Oct 2026 at designer-dashboard.html; it does not implement this later commercial workflow.
 
-Small follow-up noticed during wiring: the engine's own renderOpportunities(_, 'steward') helper includes cost in its delivery line, which contradicts the no-cost-on-public decision. The wired profiles/assess do NOT use that helper (they render inline, cost-free), so nothing leaks today — but the helper itself should be reconciled (drop cost from steward mode) before anything else consumes it.
+~~renderOpportunities(_, 'steward') included cost~~ RESOLVED 22 Nov 2026 — steward and enrolment modes print delivery labels only; covered by `scripts/test_badge_gate_and_cost.cjs`.
 
-Also from the same Fable 5 review, still pending: Mont Albert score drift (registry.json stores 0, engine computes 11 live) needs reconciling in sync_registry.py — small isolated fix, hasn't been touched yet.
+~~Mont Albert score drift~~ RESOLVED — registry.json and the engine both give The Refuge 76 (checked 22 Nov 2026).
 
 ### Steward opportunity claims — SHIPPED and live end-to-end (22 Jul 2026)
 
@@ -169,9 +205,7 @@ self-reported publication path remains the documented starting point.
 Homepage Register CTAs unified on the self-enrolment form 4 Jul 2026 (commit 589a219). Card 2 (Two ways in) reuses the Formspree modal that was originally built for registration — modal fields, copy, and function names are semantically stale (labelled 'register' but now serving 'new ecological garden' enquiries).
 
 Deferred work:
-1. Sitewide mailto: sweep — 51 occurrences across 20 files remain. Breakdown:
-   - Garden profile pages (12 files, 3 mailto each = 36): same template repeated. Single design decision applied 12 times.
-   - Other pages (15 occurrences across workshops.html, guide.html, tend.html, contact-hub.html, brand.html, index.html): case-by-case decisions needed.
+1. Sitewide mailto: sweep — recounted 22 Nov 2026: 19 occurrences across 11 files (outside `archive/`), mostly hello@gardenerandson.com; profile pages no longer carry the three-per-page template (only Forest Hill has two). The two hello@lundbech.me links on the enrolment Health Check button were changed to hello@ecologicalregistry.org. Remaining: letters/2026-09 (3), Forest Hill profile (2), enrol (2), developers (2), designer-invite (2), and one each on yield, sign, index, index-old, designer-dashboard, brands.
 2. Modal semantic refresh — rename openRegisterModal to openTalkToUsModal, submitRegisterForm to submitTalkToUsForm; update modal title from 'Register your garden' to 'New ecological garden enquiry'; update field labels and copy to match new intent; consider dropping the 'garden_address' field if it's not relevant to new-build enquiries.
 3. Formspree legacy inbox — check the account associated with the endpoint for any pending registration submissions from before tonight's repurpose. Formspree endpoint URL is in the current submitRegisterForm function.
 
@@ -351,6 +385,10 @@ For the Yield layer to activate, three sponsor categories need engagement:
 
 Status: pipeline exists in conceptual form, no active conversations yet.
 
+### ~~Boroondara stale count / full network.{} audit~~ RESOLVED (confirmed 22 Nov 2026)
+
+`registry.json` no longer stores `network`, `statistics` or `leaderboard` blocks — `sync_registry.py` forbids them (`FORBIDDEN_BLOCKS`) and every surface computes from the gardens array. The two entries below are kept for history only. Boroondara is now 14 real gardens, computed.
+
 ### Boroondara council count was stored stale — was 8, real is 9
 
 Discovered 24 Jun 2026 during the registry.html aggregate-stats refactor. The stored `network.councils.Boroondara` field reads 8 but the gardens array contains 9 gardens with `lga: 'Boroondara'`. One garden was missed during a prior manual update of the network block. The live-computed value is now correct on registry.html.
@@ -469,17 +507,20 @@ Both garden coordinates and park coordinates are now auto-resolved:
 
 Remaining gap: the review step of copying park fields from the submission sheet into the new garden's data JSON is still manual. Could be further automated as part of a Phase C review pipeline. Map picker (steward confirms/corrects pin position) still a long-term direction if accuracy matters more than convenience.
 
-### VERIFY DESIGNER BACKFILL
+### ~~VERIFY DESIGNER BACKFILL~~ CHECKED 22 Nov 2026 — not blanket-filled
+
+Values differ per record: Bush Garden `sam-cox-landscape`; Canterbury G02, Forest Hill and Harry Street `null`; the rest `gardener-and-son`. Enrollers vary (Gardener & Son, Gardens for Wildlife, self-enrolment). Lorimer is no longer a separate registry record (Bush Garden carries the Sam Cox attribution). Separation Creek has no canonical record. Original note kept below.
+
 
 The three fields (designer_id, enroller, verifier) were inserted into all 16 files by script and may have been blanket-filled with identical values. Lorimer must be designer "Sam Cox Landscape" / designer_id "sam-cox-landscape" / enroller "Gardener & Son". Canterbury G02 and Separation Creek are not G&S designs — check what they got. Fix any that were blanket-filled.
 
-### area_sqm: 0 IS NOT "UNMEASURED"
+### ~~area_sqm: 0 IS NOT "UNMEASURED"~~ RESOLVED 22 Nov 2026
 
-schema doc (commit 2750f08) now states 0 is permitted for unmeasured area. Zero is a value; absent is null. Anything dividing by area — density, canopy %, cluster.area_ha — breaks or silently produces garbage. Change the schema doc and any 0-valued area fields to null.
+Schema doc now says null = not yet measured. Smokebush, York Street, Winmallee and Harry Street changed 0 → null; `promote_submission.py` writes null; profiles show "Not yet measured". The real measurements are still owed (see the health-pass list at the top).
 
-### PROFILE PAGE BADGE GATE
+### ~~PROFILE PAGE BADGE GATE~~ RESOLVED 22 Nov 2026
 
-gardens/*/index.html call awardBadges() live via badge-engine.js, bypassing NO_BADGE_STATUSES. Currently inert only because profile_url is null on all provisional records. Must be gated before any provisional garden gets a profile page — Lorimer is the most likely next one.
+Profiles already hid badges when `R.status` is Provisional/Design Proposal, but the self-enrolment promoter never wrote `status` onto the canonical record, so the gate could not fire for it. Fixed in the promoter; `awardBadges()` itself now also returns nothing for those statuses.
 
 ## Out of scope (do not work on without explicit instruction)
 
@@ -490,10 +531,10 @@ gardens/*/index.html call awardBadges() live via badge-engine.js, bypassing NO_B
 
 ## Council pilot — opened 14 Aug 2026
 
-- [ ] BLOCKER: Forest Hill (foresthillk) — remove COUNCIL VERIFIED marker; relabel as
-      third-party evidence, Council as source. Must be done before Leonie visits the site.
-- [ ] BLOCKER: precise GPS coordinates still in public JSON — move to private store.
-      Until closed, display privacy is presentational only. Blocks the one-pager.
+- [x] Forest Hill (foresthillk) — no "COUNCIL VERIFIED" marker remains in the profile
+      or data (checked 22 Nov 2026); the record names the G4W guides as verifier.
+- [x] Precise GPS coordinates moved to the git-ignored private store (15 Aug 2026);
+      no raw lat/lng in public JSON (checked 22 Nov 2026). Park pins: see health-pass list.
 - [ ] Steward view (localStorage device mark) has no expiry or revocation path.
       Breaks the ownership-change commitment in COUNCIL-PARTNERSHIP-PRINCIPLES.md §3.
 - [ ] Deploy updated Apps Script as new version.
