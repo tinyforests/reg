@@ -30,18 +30,21 @@ the existing deployment ID with a new version. Do not create a new deployment.
 ## Hortense studio evidence record — 25 Nov 2026
 
 `ER-AU-SA-GLA-CHU-001` is now in the source `FR_GARDENS` allowlist.
-**The existing field-records Apps Script deployment must be updated before the
-record can be imported for this garden.** A repository commit alone does not
-update Apps Script. Pull live Apps Script first, preserve unrelated changes,
+**The existing field-records Apps Script deployment requires these source changes
+before importing for this garden.** Applied live on 25 Nov 2026 as version 49,
+keeping the same deployment ID. A repository commit alone does not update Apps Script. Pull live Apps Script first, preserve unrelated changes,
 apply FieldRecords.gs, create a new version and update the existing deployment ID.
 Do not create a separate deployment or change the public site for this note.
 
 A private local import bundle was created outside the repository at
 `../private-field-records/hortense-photo-verification-2026-11.json` (relative to
 the Hortense worktree). It contains one private studio-authored evidence note,
-no attached assets, no steward identity/contact/address. It is not in the live
-Private Field Records sheet yet. After deploying, import its `entries` using
-the existing authenticated admin field_record import operation. Confirm exactly
+no attached assets, no steward identity/contact/address. It was imported into the live
+Private Field Records sheet on 25 Nov 2026 after the version 49 deployment.
+Authenticated readback matched the title/body exactly, with private visibility,
+empty assets and null source URL. Anonymous and invalid-session requests returned
+no records. Any retry must use the same source ID through the existing
+authenticated admin field_record import operation. Confirm exactly
 one record imported (or skipped on retry), visibility private, empty assets,
 admin/steward readability and absence from anonymous list responses.
 

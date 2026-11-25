@@ -1157,3 +1157,17 @@ public export, publication or media upload occurs. Studio-authored sources use
 Existing Notion imports retain their source links and all publication controls.
 Files: scripts/appsscript/FieldRecords.gs, scripts/test_field_records.cjs,
 docs/private-field-records.md, this log.
+
+
+### 25 Nov 2026 — Hortense private archive deployed and imported
+
+Read the existing live FieldRecords.gs through the Apps Script editor and applied
+only the garden allowlist addition and studio-source handling. Verified the saved
+editor content against those two edits. Updated the existing field-records
+deployment (ending rRC) to version 49; deployment ID and access settings unchanged.
+Imported one asset-free private record through authenticated field_record import.
+Readback matched the approved title/body and garden ID exactly, with no Notion
+source URL. Signed-out and invalid-session list responses returned zero records.
+No actual steward session was available for an end-to-end steward UI test; existing
+garden-scoped access tests cover that permission path. No note body, token,
+attachment or private bundle was committed or pushed.
