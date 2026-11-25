@@ -1,4 +1,4 @@
-var FR_GARDENS = ["ER-AU-VIC-BAL-001", "ER-AU-VIC-BAL-PRD-001", "ER-AU-VIC-BAL-WNM-001", "ER-AU-VIC-BLA-DEW-001", "ER-AU-VIC-BOR-WIN-001", "ER-AU-VIC-BOR-WIN-002", "ER-AU-VIC-CAN-FLI-001", "ER-AU-VIC-CAN-MON-001", "ER-AU-VIC-HW-AUB-0001", "ER-AU-VIC-MAN-EVE-001", "ER-AU-VIC-NIL-BEL-001", "ER-AU-VIC-NTH-RUP-001", "ER-AU-VIC-SH-ARU-0001", "ER-AU-VIC-SH-CAN-0001", "ER-AU-VIC-SH-GTR-0001", "ER-AU-VIC-SH-MID-001", "ER-AU-VIC-SH-SIR-0001", "ER-AU-VIC-SH-WEL-0001", "ER-AU-VIC-SY-NIC-0002", "ER-AU-VIC-THO-HAR-001", "ER-AU-VIC-WHI-KTE-001", "ER-AU-VIC-WHI-LEO-0001", "ER-AU-VIC-WHI-VIC-001", "ER-AU-VIC-WHI-YRK-001", "ER-AU-VIC-WHI-YRK-002"];
+var FR_GARDENS = ["ER-AU-SA-GLA-CHU-001", "ER-AU-VIC-BAL-001", "ER-AU-VIC-BAL-PRD-001", "ER-AU-VIC-BAL-WNM-001", "ER-AU-VIC-BLA-DEW-001", "ER-AU-VIC-BOR-WIN-001", "ER-AU-VIC-BOR-WIN-002", "ER-AU-VIC-CAN-FLI-001", "ER-AU-VIC-CAN-MON-001", "ER-AU-VIC-HW-AUB-0001", "ER-AU-VIC-MAN-EVE-001", "ER-AU-VIC-NIL-BEL-001", "ER-AU-VIC-NTH-RUP-001", "ER-AU-VIC-SH-ARU-0001", "ER-AU-VIC-SH-CAN-0001", "ER-AU-VIC-SH-GTR-0001", "ER-AU-VIC-SH-MID-001", "ER-AU-VIC-SH-SIR-0001", "ER-AU-VIC-SH-WEL-0001", "ER-AU-VIC-SY-NIC-0002", "ER-AU-VIC-THO-HAR-001", "ER-AU-VIC-WHI-KTE-001", "ER-AU-VIC-WHI-LEO-0001", "ER-AU-VIC-WHI-VIC-001", "ER-AU-VIC-WHI-YRK-001", "ER-AU-VIC-WHI-YRK-002"];
 /** Private Notion archive. Nothing enters public exports; publication requires a
  * live session belonging to this garden's steward, including for administrators. */
 var FR_HEADERS = ['source_id', 'record_json'];
@@ -11,7 +11,10 @@ function _frGarden(id) {
 function _frEntry(e) {
   if (!e || !/^[a-f0-9]{32}$/.test(e.source_id)) throw new Error('Invalid source ID');
   if (e.garden_id && !_frGarden(e.garden_id)) throw new Error('Unknown garden');
-  var record = {source_id:e.source_id, public_id:_plToken(), source_url:'https://www.notion.so/' + e.source_id,
+  var sourceType = String(e.source_type || 'notion');
+  if (['notion', 'studio'].indexOf(sourceType) === -1) throw new Error('Invalid source type');
+  var record = {source_id:e.source_id, source_type:sourceType, public_id:_plToken(),
+    source_url:sourceType === 'notion' ? 'https://www.notion.so/' + e.source_id : null,
     title:String(e.title || ''), created_at:String(e.created_at || ''),
     project_ids:e.project_ids || [], garden_id:e.garden_id || '',
     body:String(e.body || ''), assets:e.assets || [], visibility:'private',

@@ -1143,3 +1143,17 @@ on a park, with stored names/distances and unconfirmed type indicators. Existing
 records have no authoritative type field; the audit does not assert eligibility.
 Files: Hortense JSON/profile/index and earlier promotion files,
 scripts/sync_registry.py, docs/park-connectivity-audit.md.
+
+
+## 25 Nov 2026 — Private Hortense photo evidence field record
+
+Added ER-AU-SA-GLA-CHU-001 to the field-records allowlist and created a private,
+asset-free local import bundle outside Git for the November photo review. The
+note includes received evidence, per-photo observations and the 50-point result,
+with canopy/park distance unconfirmed and no steward name, contact or street.
+Actual archive import awaits an updated existing Apps Script deployment; no
+public export, publication or media upload occurs. Studio-authored sources use
+`source_type: studio` and null source_url rather than a fabricated Notion link.
+Existing Notion imports retain their source links and all publication controls.
+Files: scripts/appsscript/FieldRecords.gs, scripts/test_field_records.cjs,
+docs/private-field-records.md, this log.

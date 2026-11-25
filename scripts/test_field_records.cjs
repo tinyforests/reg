@@ -32,5 +32,30 @@ assert.equal(call({op:'list',garden_id:garden,session_token:'owner'}).records.le
 assert.equal(call({op:'list',garden_id:other,session_token:'other'}).records.length,2);
 assert.equal(call({op:'list',garden_id:other}).records.length,0);
 assert.equal(admin({op:'link_project',project_id:'b'.repeat(32),garden_id:'fake'}).ok,false);
-if(process.argv[2]){const bundle=JSON.parse(fs.readFileSync(process.argv[2]));bundle.entries.forEach(e=>ctx._frEntry(e));assert(bundle.projects.every(p=>!p.garden_id||ctx._frGarden(p.garden_id)));console.log('All migration records validated');}
+// Studio-authored records have no fabricated Notion source URL and remain private.
+const hortense='ER-AU-SA-GLA-CHU-001';assert(ctx._frGarden(hortense));
+const studio={source_id:'e'.repeat(32),source_type:'studio',garden_id:hortense,title:'Studio review fixture',body:'Private observations',assets:[],visibility:'public'};
+assert.equal(admin({op:'import',entries:[studio]}).imported,1);
+const studioRecord=admin({op:'list',garden_id:hortense}).records[0];
+assert.equal(studioRecord.visibility,'private');assert.equal(studioRecord.source_url,null);
+assert.equal(studioRecord.source_type,'studio');assert.deepEqual(studioRecord.assets,[]);
+assert.equal(call({op:'list',garden_id:hortense}).records.length,0);
+assert.equal(admin({op:'import',entries:[studio]}).skipped,1);
+assert.equal(ctx._frEntry(entry).source_url,'https://www.notion.so/'+id);
+assert.equal(admin({op:'import',entries:[{...studio,source_id:'f'.repeat(32),source_type:'invalid'}]}).ok,false);
+if(process.argv[2]){
+  const bundle=JSON.parse(fs.readFileSync(process.argv[2]));
+  assert(bundle.projects.every(p=>!p.garden_id||ctx._frGarden(p.garden_id)));
+  bundle.entries.forEach(e=>{
+    ctx._frEntry(e);
+    assert.equal(admin({op:'import',entries:[e]}).imported,1);
+    const saved=admin({op:'list',garden_id:e.garden_id}).records.find(r=>r.source_id===e.source_id);
+    assert.equal(saved.body,e.body);assert.equal(saved.title,e.title);
+    assert.equal(saved.visibility,'private');assert.deepEqual(saved.assets,e.assets||[]);
+    assert.equal(saved.source_url,e.source_type==='studio'?null:'https://www.notion.so/'+e.source_id);
+    assert.equal(call({op:'list',garden_id:e.garden_id}).records.length,0);
+    assert.equal(admin({op:'import',entries:[e]}).skipped,1);
+  });
+  console.log('Private bundle import, readback, idempotency and anonymous exclusion validated');
+}
 console.log('field records: access, publication, revocation, idempotency and validation passed');
