@@ -1082,3 +1082,64 @@ do not silently change awards or imply independent certification.
 **Reason:** The meeting may or may not have a shared screen. A private laptop presentation should remain complete on its own, while a screen-ready copy gives presenters notes without exposing them to the audience. Direct links allow reviewers to inspect genuine, existing Registry records. The central proposition is framed as an emerging measurement gap, not a claim of state acceptance, independent verification or statutory standing.
 
 **Files affected:** `decks/infrastructure-victoria/deck.html`, `decks/infrastructure-victoria/screen.html`, `docs/decisions-log.md`. No scoring, garden data, methodology, dashboard arithmetic or registry status changed.
+
+
+## 25 Nov 2026 — First SA and photo-verified submission promotion
+
+Prepared A House Called Hortense, Glandore, submission SUB-1794868103802-8XMTZ,
+as the first South Australian garden and first remotely photo-verified promotion.
+The guarded scaffold confirmed verified status and record/score consent.
+Gardener & Son remotely reviewed steward photographs and the dated pocket-planting
+list supplied 24 Nov 2026; evidence level is `photo_verified`, method remote,
+review month 2026-11. No fauna record or professional site assessment is claimed.
+No photographs are published while permission remains pending.
+
+The 165 planted individuals are retained as history; 58 named taxa are listed
+after deduplication and exclusion of the unidentified lily. The list supports
+58 distinct indigenous taxa as the current species input,
+without substituting the ramp band; survival remains TO CONFIRM. Five structural
+layers are supported by the list and photos: trees, shrubs, grasses/lilies,
+groundcovers/herbs and climbers. Canopy is estimated at 20 percent from the photos (TO CONFIRM); indigenous
+dominance remains false for the mixed whole garden. The photo review records
+soil health 3/5, water function 3/5, four habitat nodes, logs, a water dish and brick
+refuges; each assessment is logged against filenames in the record. Memorial
+Garden is approximately 200 m away (TO CONFIRM from street-level location).
+The existing engine produces 50/100 (18 plant diversity, 11 soil/water, 12 habitat,
+2 connectivity, 7 evidence), versus provisional self-assessment 48/100. The lower
+score reflects evidence gaps, not a claim of ecological deterioration.
+
+A nullable reference_community records the steward's Grey Box Grassland reference
+without inventing a Victorian EVC. Names, contact/address details and precise
+coordinates stay private; declined-offer correspondence is stored privately.
+Profile uses a neutral route, existing engines and no public images.
+Provisional pillar points were 14 plant diversity, 13 soil/water, 13 habitat,
+2 connectivity and 6 evidence. Attribution regression now exercises every current
+record without assuming a fixed garden count or a pre-existing HEAD version.
+
+Files: data/g-df32c68c9cb2.json, data/registry.json, data/garden-locations.json,
+gardens/g-df32c68c9cb2/index.html, docs/data-schema.md,
+scripts/test_designer_registry.py, scripts/test_hortense_promotion.py, this log.
+
+
+### 25 Nov 2026 — Remote photo features and qualifying green space
+
+At Tyson's direction, a photo-verified review may score any feature clearly visible
+in a steward photograph, with each input's observation logged against its source
+filename and remote-review month. Photo estimates remain TO CONFIRM; photo review
+does not create a professional site assessment or a fauna record. Seven garden
+photos and the planting workbook, received 24 Nov 2026, are logged as privately
+held/unpublished; the email signature is excluded. No photographs are committed.
+
+Sports grounds and ovals do not qualify as parks for connectivity. Qualifying
+site types are parks, reserves, gardens and bushland. This is a review rule;
+the engine's existing distance bands are unchanged. Glandore Oval (~51 m) is
+excluded; Memorial Garden (~200 m) is the reviewed candidate, with distance and
+site location still TO CONFIRM. Its map pin is pending review: sync skips automatic
+nearest-site resolution for `park_lookup_status: manual_review_pending`, avoiding
+a pin for an oval being attached to the garden name. No existing garden changed.
+
+See docs/park-connectivity-audit.md for all existing canonical records that rely
+on a park, with stored names/distances and unconfirmed type indicators. Existing
+records have no authoritative type field; the audit does not assert eligibility.
+Files: Hortense JSON/profile/index and earlier promotion files,
+scripts/sync_registry.py, docs/park-connectivity-audit.md.

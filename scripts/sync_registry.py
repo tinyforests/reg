@@ -650,7 +650,8 @@ def sync(check_only=False, attribution_only=False):
         # Skipped in check_only mode to avoid HTTP calls on every check run.
         if not check_only and gid in coord_index:
             c_block = record.get('connectivity') or {}
-            if c_block.get('adjacent_park') and (
+            if (c_block.get('adjacent_park')
+                    and c_block.get('park_lookup_status') != 'manual_review_pending') and (
                     c_block.get('park_lat') is None or c_block.get('park_lng') is None):
                 glat, glng, _ = coord_index[gid]
                 print("  resolving park for %s…" % gid)

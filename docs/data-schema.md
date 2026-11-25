@@ -443,3 +443,35 @@ Each classification retains `system`, `code`, `name`, `resolution`, `source`,
 `status` and whitelisted `provenance` fields from the jurisdiction schema. It is a
 client lookup record for review, not a verified garden observation. Coordinates
 are excluded from this JSON. Legacy AA/AB EVC fields remain Victorian-only.
+
+
+## Remote-review planting history (25 Nov 2026)
+
+`reference_community` is nullable free text for a steward-supplied reference
+community when no verified jurisdiction classification fits. It is independent
+of `evc` and `ecological_context`, and never enters scoring. SA records must not
+receive a Victorian EVC code.
+
+Optional `planting_history` contains reported `area_sqm`, ISO `dates`,
+`total_planted`, `entries` (`species`, `total_planted`) and `source`. Counts describe
+planting events, not current survival. `biodiversity.species_list_status` qualifies
+the public list. A reviewed list can support `indigenous_species_current` when
+explicitly accepted as evidence; derive the distinct taxon count after deduplication
+and exclusion of unidentified entries, and record survival uncertainty separately.
+Unknown scoring inputs and baselines remain null and earn no points in existing
+engines. Photograph-based approximations are labelled TO CONFIRM in `notes`.
+
+Evidence can include `method`, month-resolution `review_date`, `source_date`,
+and `public_photo_consent`. Privately reviewed photographs support `has_photos`
+without permission to publish the images. Dated planting records support
+`has_field_notes`; remote review alone does not imply professional site assessment.
+Administrative correspondence notes, including declined offers, stay in ignored
+private storage, never in public garden JSON.
+
+
+Remote photo assessments may use `photo_assessment_notes` entries (`input`, `note`)
+and an `evidence_log` of filenames, received date, kind, private holding status and
+`published: false`. This is provenance metadata, not publication of attachments.
+`connectivity.park_lookup_status: "manual_review_pending"` retains a manually
+selected park and distance while its pin/type awaits confirmation; sync must not
+attach an automatically selected nearest recreation site's coordinates to it.

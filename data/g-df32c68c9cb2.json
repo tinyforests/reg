@@ -1,0 +1,558 @@
+{
+  "garden_id": "ER-AU-SA-GLA-CHU-001",
+  "garden_name": "A House Called Hortense",
+  "garden_type": "Ecological Home Garden",
+  "suburb": "Glandore",
+  "state": "SA",
+  "assessment_date": "Nov 2026",
+  "baseline_date": null,
+  "target_score": null,
+  "stewards": null,
+  "designer": null,
+  "designer_id": null,
+  "enroller": "Steward (self-enrolment)",
+  "verifier": "Gardener & Son",
+  "area_sqm": 350,
+  "description": "A mixed home garden in Glandore with six raised vegetable beds, approximately 20 fruit trees, and ornamental and native planting. The steward reports a roughly 30 m2 pocket planting drawn from a local Grey Box Grassland species list. Reviewed remotely from steward photographs and dated planting records.",
+  "biodiversity": {
+    "indigenous_species_current": 58,
+    "indigenous_species_baseline": null,
+    "indigenous_species_target": null,
+    "structural_layers_baseline": null,
+    "canopy_cover_pct_current": 20,
+    "canopy_cover_pct_baseline": null,
+    "canopy_cover_pct_target": null,
+    "weed_pressure": null,
+    "weed_pressure_baseline": null,
+    "indigenous_dominant": false,
+    "structural_layers_current": 5,
+    "species_list": [
+      "Acacia acinacea",
+      "Acacia cupularis",
+      "Acacia myrtifolia",
+      "Acacia pycnantha",
+      "Allocasuarina verticillata",
+      "Aristida behriana",
+      "Arthropodium fimbriatum",
+      "Arthropodium strictum",
+      "Atriplex suberecta",
+      "Austrostipa eremophila",
+      "Austrostipa mollis",
+      "Austrostipa nodosa",
+      "Austrostipa scabra",
+      "Billardiera cymosa",
+      "Bulbine bulbosa",
+      "Bursaria spinosa",
+      "Callitris gracilis",
+      "Calocephalus citreus",
+      "Calostemma purpureum",
+      "Chloris truncata",
+      "Chrysocephalum apiculatum",
+      "Clematis microphylla",
+      "Coronidium scorpioides",
+      "Cynoglossum australe",
+      "Daviesia leptophylla",
+      "Dianella revoluta",
+      "Dichanthium sericeum",
+      "Dodonaea viscosa subsp. angustissima",
+      "Eremophila glabra",
+      "Eucalyptus microcarpa",
+      "Eutaxia microphylla",
+      "Geranium retrosum",
+      "Goodenia amplexans",
+      "Goodenia pinnatifida",
+      "Grevillea ilicifolia",
+      "Grevillea lavandulacea",
+      "Hakea rostrata",
+      "Hardenbergia violacea",
+      "Hibbertia exutiacies",
+      "Linum marginale",
+      "Lotus australis",
+      "Microlaena stipoides",
+      "Olearia ramulosa",
+      "Pittosporum angustifolium",
+      "Rhagodia parabolica",
+      "Rytidosperma caespitosum",
+      "Rytidosperma setaceum",
+      "Solanum laciniatum",
+      "Stackhousia aspericocca",
+      "Themeda triandra",
+      "Viola betonicifolia",
+      "Vittadinia blackii",
+      "Vittadinia cervicularis",
+      "Vittadinia gracilis",
+      "Wahlenbergia luteola",
+      "Wahlenbergia stricta",
+      "Xanthorrhoea quadrangulata",
+      "Xerochrysum bracteatum"
+    ],
+    "species_list_status": "58 distinct indigenous taxa evidenced by steward planting list; current survival not separately surveyed"
+  },
+  "soil_water": {
+    "soil_health_score": 3,
+    "soil_health_baseline": null,
+    "water_function_score": 3,
+    "water_function_baseline": null,
+    "has_rainwater_system": true,
+    "has_moisture_basin": null,
+    "has_swale": null,
+    "mulch_type": "Mulch visible in pocket planting; type and depth unconfirmed"
+  },
+  "habitat": {
+    "habitat_nodes": 4,
+    "habitat_nodes_baseline": null,
+    "has_embedded_logs": true,
+    "has_rock_refuges": true,
+    "has_water_feature": true,
+    "has_nest_boxes": null,
+    "fauna_sightings": [],
+    "planting_method": "Mixed home garden with an indigenous pocket planting, per steward report."
+  },
+  "connectivity": {
+    "adjacent_park": true,
+    "park_distance_m": 200,
+    "park_name": "Memorial Garden",
+    "adjacent_registered_gardens": [],
+    "corridor_node_confirmed": null,
+    "cluster_area_ha": null,
+    "effective_ecological_area_ha": null,
+    "display_lat": -34.9646,
+    "display_lng": 138.5699,
+    "park_lookup_status": "manual_review_pending"
+  },
+  "evidence": {
+    "has_photos": true,
+    "has_field_notes": true,
+    "has_professional_assessment": false,
+    "has_fauna_record": false,
+    "has_species_list": true,
+    "verification_level": "photo_verified",
+    "verification_label": "Photo Verified",
+    "assessor": "Gardener & Son (remote review of steward photographs and planting list)",
+    "method": "remote",
+    "review_date": "2026-11",
+    "source_date": "2026-11-24",
+    "public_photo_consent": false
+  },
+  "milestones": [
+    {
+      "title": "Remote photograph and planting-record review",
+      "date": "Nov 2026",
+      "complete": true
+    }
+  ],
+  "activity_log": [],
+  "notes": "Steward-reported garden area 350 m2 and pocket planting approximately 30 m2: TO CONFIRM. Indigenous species input counts 58 distinct named taxa from the reviewed planting list, not the ramp band; current survival and local provenance TO CONFIRM. Five layers supported by list and photos. Indigenous dominance false for the mixed whole garden. See photo_assessment_notes for input-specific remote assessments supplied by Tyson. Soil health and water function are photo assessments, not measured tests. Canopy 20 percent is a TO CONFIRM photo estimate, including fruit trees and street-side trees. Connectivity: Memorial Garden approximately 200 m, TO CONFIRM from street-level location without house number; Glandore Oval approximately 51 m excluded as a sports ground. Memorial Garden pin unresolved; no automatic nearest-park substitution permitted. Nest boxes and fauna remain unconfirmed. Planting dates support field-notes evidence. No professional site assessment or historical baseline claimed. Images held privately; public photo consent pending.",
+  "typology": "Urban Ecological Retrofit",
+  "registry_role": "Performer",
+  "trajectory": "Emerging",
+  "rating": {
+    "current": "Ecological Garden",
+    "next": "Rich Habitat Garden",
+    "points_to_next": 11
+  },
+  "upgrade_potential": 50,
+  "points_available": 50,
+  "yield": {
+    "eligible": false,
+    "status": "Yield not active for this garden",
+    "estimated_annual": 0,
+    "potential_annual": 0,
+    "currency": "AUD",
+    "formula_note": "Score x area x connectivity x verification. Formula v1.",
+    "upgrades": []
+  },
+  "council": "",
+  "ward": "",
+  "lga": "",
+  "source_submission_id": "SUB-1794868103802-8XMTZ",
+  "reference_community": "Grey Box Grassland (SA) -- Black Forest Conservancy species list for the steward's area",
+  "evc": {
+    "name": null,
+    "code": null,
+    "bioregion": null,
+    "bioregion_code": null
+  },
+  "planting_history": {
+    "area_sqm": 30,
+    "dates": [
+      "2025-06-07",
+      "2026-08-16"
+    ],
+    "total_planted": 165,
+    "entries": [
+      {
+        "species": "Atriplex suberecta",
+        "total_planted": 2
+      },
+      {
+        "species": "Xanthorrhoea quadrangulata",
+        "total_planted": 1
+      },
+      {
+        "species": "Austrostipa eremophila",
+        "total_planted": 3
+      },
+      {
+        "species": "Themeda triandra",
+        "total_planted": 3
+      },
+      {
+        "species": "Microlaena stipoides",
+        "total_planted": 3
+      },
+      {
+        "species": "Dichanthium sericeum",
+        "total_planted": 3
+      },
+      {
+        "species": "Aristida behriana",
+        "total_planted": 3
+      },
+      {
+        "species": "Rytidosperma caespitosum",
+        "total_planted": 3
+      },
+      {
+        "species": "Austrostipa mollis",
+        "total_planted": 3
+      },
+      {
+        "species": "Rhagodia parabolica",
+        "total_planted": 2
+      },
+      {
+        "species": "Solanum laciniatum",
+        "total_planted": 1
+      },
+      {
+        "species": "Rytidosperma setaceum",
+        "total_planted": 3
+      },
+      {
+        "species": "Dianella revoluta",
+        "total_planted": 8
+      },
+      {
+        "species": "Arthropodium fimbriatum",
+        "total_planted": 8
+      },
+      {
+        "species": "Calostemma purpureum",
+        "total_planted": 3
+      },
+      {
+        "species": "Arthropodium strictum",
+        "total_planted": 8
+      },
+      {
+        "species": "unknown lily",
+        "total_planted": 2
+      },
+      {
+        "species": "Grevillea ilicifolia",
+        "total_planted": 2
+      },
+      {
+        "species": "Stackhousia aspericocca",
+        "total_planted": 3
+      },
+      {
+        "species": "Cynoglossum australe",
+        "total_planted": 3
+      },
+      {
+        "species": "Vittadinia blackii",
+        "total_planted": 3
+      },
+      {
+        "species": "Goodenia pinnatifida",
+        "total_planted": 3
+      },
+      {
+        "species": "Vittadinia gracilis",
+        "total_planted": 3
+      },
+      {
+        "species": "Chloris truncata",
+        "total_planted": 2
+      },
+      {
+        "species": "Wahlenbergia luteola + W. stricta",
+        "total_planted": 3
+      },
+      {
+        "species": "Hakea rostrata",
+        "total_planted": 2
+      },
+      {
+        "species": "Eucalyptus microcarpa",
+        "total_planted": 1
+      },
+      {
+        "species": "Olearia ramulosa",
+        "total_planted": 2
+      },
+      {
+        "species": "Vittadinia cervicularis",
+        "total_planted": 3
+      },
+      {
+        "species": "Acacia pycnantha",
+        "total_planted": 1
+      },
+      {
+        "species": "Allocasuarina verticillata",
+        "total_planted": 1
+      },
+      {
+        "species": "Callitris gracilis",
+        "total_planted": 1
+      },
+      {
+        "species": "Acacia myrtifolia",
+        "total_planted": 2
+      },
+      {
+        "species": "Acacia acinacea",
+        "total_planted": 2
+      },
+      {
+        "species": "Linum marginale",
+        "total_planted": 9
+      },
+      {
+        "species": "Hardenbergia violacea",
+        "total_planted": 4
+      },
+      {
+        "species": "Grevillea lavandulacea",
+        "total_planted": 2
+      },
+      {
+        "species": "Xerochrysum bracteatum",
+        "total_planted": 5
+      },
+      {
+        "species": "Bursaria spinosa",
+        "total_planted": 1
+      },
+      {
+        "species": "Pittosporum angustifolium",
+        "total_planted": 1
+      },
+      {
+        "species": "Coronidium scorpioides",
+        "total_planted": 1
+      },
+      {
+        "species": "Geranium retrosum",
+        "total_planted": 2
+      },
+      {
+        "species": "Acacia cupularis",
+        "total_planted": 1
+      },
+      {
+        "species": "Eremophila glabra",
+        "total_planted": 1
+      },
+      {
+        "species": "Eutaxia microphylla",
+        "total_planted": 5
+      },
+      {
+        "species": "Goodenia amplexans",
+        "total_planted": 1
+      },
+      {
+        "species": "Hibbertia exutiacies",
+        "total_planted": 1
+      },
+      {
+        "species": "Viola betonicifolia",
+        "total_planted": 1
+      },
+      {
+        "species": "Daviesia leptophylla",
+        "total_planted": 3
+      },
+      {
+        "species": "Clematis microphylla",
+        "total_planted": 3
+      },
+      {
+        "species": "Billardiera cymosa",
+        "total_planted": 3
+      },
+      {
+        "species": "Dodonaea viscosa subsp. angustissima",
+        "total_planted": 3
+      },
+      {
+        "species": "Lotus australis",
+        "total_planted": 3
+      },
+      {
+        "species": "Austrostipa nodosa",
+        "total_planted": 3
+      },
+      {
+        "species": "Austrostipa scabra",
+        "total_planted": 3
+      },
+      {
+        "species": "Chrysocephalum apiculatum",
+        "total_planted": 3
+      },
+      {
+        "species": "Bulbine bulbosa",
+        "total_planted": 5
+      },
+      {
+        "species": "Calocephalus citreus",
+        "total_planted": 5
+      }
+    ],
+    "source": "Steward pocket-forest planting list supplied 24 Nov 2026; counts are plants planted, not surviving plants."
+  },
+  "ecological_context": {
+    "schema_version": "1.0.0-draft",
+    "resolved_at": "2026-11-25T09:55:44.094Z",
+    "jurisdiction": {
+      "country": "AU",
+      "jurisdiction": "SA",
+      "resolver_method": "boundary_polygon",
+      "resolver_source": "ABS ASGS 2021 State and Territory boundaries"
+    },
+    "original_vegetation": {
+      "system": "NVIS MVS",
+      "code": "9",
+      "name": "Eucalyptus woodlands with a tussock grass understorey",
+      "resolution": "national",
+      "source": "DCCEEW NVIS 7.0 pre-1750 MVS",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "NVIS7_0_AUST_PRE_MVS_ALB",
+        "dataset_version": "7.0",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/NVIS_pre_mvs/MapServer",
+        "lookup_method": "arcgis:identify:raster",
+        "queried_at": "2026-11-25T09:55:43.785Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      }
+    },
+    "bioregion": {
+      "system": "IBRA",
+      "code": "FLB",
+      "name": "Flinders Lofty Block",
+      "resolution": "national",
+      "source": "DCCEEW IBRA 7.1",
+      "status": "ok",
+      "provenance": {
+        "authority": "Australian Government (DCCEEW)",
+        "dataset": "IBRA7_Subregions",
+        "dataset_version": "7.1",
+        "service_url": "https://gis.environment.gov.au/gispubmap/rest/services/ogc_services/IBRA7_Subregions/MapServer",
+        "lookup_method": "arcgis:identify:polygon",
+        "queried_at": "2026-11-25T09:55:44.094Z",
+        "jurisdiction": "AU",
+        "reproducible": true
+      },
+      "extra": {
+        "subregion": "Mount Lofty Ranges",
+        "subregion_code": "FLB01"
+      }
+    }
+  },
+  "photo_assessment_notes": [
+    {
+      "input": "soil_water.soil_health_score",
+      "note": "photo evidence (remote review Nov 2026): Pocket Forest.jpeg, Vege Garden.jpeg, Mixed Beds 1.jpeg \u2014 deep mulch, woodchip paths, compost bins and raised beds"
+    },
+    {
+      "input": "soil_water.water_function_score",
+      "note": "photo evidence (remote review Nov 2026): Pocket Forest.jpeg, Mixed Beds 2.jpeg \u2014 mulched beds and multiple rainwater tanks"
+    },
+    {
+      "input": "habitat.habitat_nodes",
+      "note": "photo evidence (remote review Nov 2026): Pocket Forest.jpeg, Mixed Beds 1.jpeg, Mixed Beds 2.jpeg, Vege Garden.jpeg, Front Garden 1.jpeg, Front Garden 2.jpeg \u2014 four habitat areas: pocket forest, rear mixed beds, vegetable garden with orchard, front beds"
+    },
+    {
+      "input": "habitat.has_water_feature",
+      "note": "photo evidence (remote review Nov 2026): Pocket Forest.jpeg \u2014 water dish on a log round"
+    },
+    {
+      "input": "habitat.has_rock_refuges",
+      "note": "photo evidence (remote review Nov 2026): Pocket Forest.jpeg \u2014 brick pile in the corner"
+    },
+    {
+      "input": "habitat.has_embedded_logs",
+      "note": "photo evidence (remote review Nov 2026): Pocket Forest.jpeg \u2014 three log rounds"
+    },
+    {
+      "input": "biodiversity.canopy_cover_pct_current",
+      "note": "photo evidence (remote review Nov 2026): Vege Garden.jpeg, Front Garden 1.jpeg, Front Garden 2.jpeg \u2014 fruit-tree canopy and street-side trees; TO CONFIRM: 20 percent photo estimate"
+    }
+  ],
+  "evidence_log": [
+    {
+      "filename": "Pocket Forest.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "Vege Garden.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "Side Garden.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "Mixed Beds 1.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "Mixed Beds 2.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "Front Garden 1.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "Front Garden 2.jpeg",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "garden photograph"
+    },
+    {
+      "filename": "PocketForest_14082026.xlsx",
+      "received": "2026-11-24",
+      "held": "private",
+      "published": false,
+      "kind": "planting list"
+    }
+  ],
+  "evidence_log_notes": "Seven garden photographs plus PocketForest_14082026.xlsx received 24 Nov 2026 and held privately, not published. image.png is the email signature and is excluded from the evidence log."
+}

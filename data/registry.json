@@ -2,7 +2,7 @@
   "registry_metadata": {
     "version": "1.0",
     "last_updated": "Aug 2026",
-    "total_gardens": 24,
+    "total_gardens": 25,
     "data_custodian": "Gardener & Son",
     "contact": "hello@gardenerandson.com",
     "schema_version": "2.0",
@@ -1098,6 +1098,40 @@
       "ward": "",
       "lga": "Darebin",
       "designer": "Steward self-enrolled",
+      "designer_id": null,
+      "managed_by": null
+    },
+    {
+      "garden_id": "ER-AU-SA-GLA-CHU-001",
+      "garden_name": "A House Called Hortense",
+      "type": "Ecological Home Garden",
+      "suburb": "Glandore",
+      "state": "SA",
+      "score": 50,
+      "rating": {
+        "current": "Ecological Garden",
+        "next": "Rich Habitat Garden",
+        "points_to_next": 11
+      },
+      "primary_evc": "",
+      "bioregion": "",
+      "status": "Active / Establishing",
+      "verification_level": "photo_verified",
+      "verification_label": "Photo Verified",
+      "last_verified": "Nov 2026",
+      "badge_count": 4,
+      "badges": [
+        "species_rich_20",
+        "species_rich_30",
+        "five_layers",
+        "habitat_builder"
+      ],
+      "profile_url": "/gardens/g-df32c68c9cb2/index.html",
+      "data_file": "data/g-df32c68c9cb2.json",
+      "council": "",
+      "ward": "",
+      "lga": "",
+      "designer": null,
       "designer_id": null,
       "managed_by": null
     }

@@ -142,5 +142,11 @@
     "garden_name": "Harry Street",
     "display_lat": -37.755,
     "display_lng": 145.0173
+  },
+  {
+    "garden_id": "ER-AU-SA-GLA-CHU-001",
+    "garden_name": "A House Called Hortense",
+    "display_lat": -34.9646,
+    "display_lng": 138.5699
   }
 ]
