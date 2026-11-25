@@ -1171,3 +1171,5 @@ source URL. Signed-out and invalid-session list responses returned zero records.
 No actual steward session was available for an end-to-end steward UI test; existing
 garden-scoped access tests cover that permission path. No note body, token,
 attachment or private bundle was committed or pushed.
+
+field-records deployment v49, 25 Nov 2026: Hortense allowlisted, studio source type
