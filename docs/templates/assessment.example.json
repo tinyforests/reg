@@ -1,0 +1,116 @@
+{
+  "_help": "One file per verification. Fill this in while looking at the evidence, then run: python scripts/promote_submission.py --assessment=<this file>. Keep the real file in data/private/verification/ (git-ignored). Input paths use the canonical record fields. See docs/verification-runbook.md.",
+  "submission_id": "SUB-1794868103802-8XMTZ",
+  "method": "photo",
+  "reviewed": "2026-11",
+  "evidence_received": "2026-11-24",
+  "species_list_file": "PocketForest_14082026.xlsx",
+  "inputs": {
+    "biodiversity.structural_layers_current": 5,
+    "biodiversity.indigenous_dominant": false,
+    "biodiversity.canopy_cover_pct_current": 20,
+    "soil_water.soil_health_score": 3,
+    "soil_water.water_function_score": 3,
+    "habitat.habitat_nodes": 4
+  },
+  "park": {
+    "name": "Memorial Garden",
+    "distance_m": 200,
+    "type": "garden"
+  },
+  "photos": [
+    {
+      "file": "Pocket Forest.jpeg",
+      "seen": [
+        "water dish on a log round",
+        "three log rounds",
+        "brick pile",
+        "rainwater tanks",
+        "deep mulch"
+      ],
+      "supports": [
+        "habitat.has_water_feature",
+        "habitat.has_embedded_logs",
+        "habitat.has_rock_refuges",
+        "soil_water.has_rainwater_system",
+        "soil_water.soil_health_score",
+        "habitat.habitat_nodes"
+      ]
+    },
+    {
+      "file": "Mixed Beds 1.jpeg",
+      "seen": [
+        "compost bins",
+        "layered planting",
+        "young eucalypts"
+      ],
+      "supports": [
+        "soil_water.soil_health_score",
+        "habitat.habitat_nodes"
+      ]
+    },
+    {
+      "file": "Mixed Beds 2.jpeg",
+      "seen": [
+        "rainwater tanks",
+        "dense layered planting"
+      ],
+      "supports": [
+        "soil_water.water_function_score",
+        "habitat.habitat_nodes"
+      ]
+    },
+    {
+      "file": "Vege Garden.jpeg",
+      "seen": [
+        "six raised beds",
+        "woodchip paths",
+        "fruit-tree canopy"
+      ],
+      "supports": [
+        "soil_water.soil_health_score",
+        "biodiversity.canopy_cover_pct_current"
+      ]
+    },
+    {
+      "file": "Front Garden 1.jpeg",
+      "seen": [
+        "street-side trees"
+      ],
+      "supports": [
+        "biodiversity.canopy_cover_pct_current"
+      ]
+    },
+    {
+      "file": "Front Garden 2.jpeg",
+      "seen": [
+        "front beds"
+      ],
+      "supports": [
+        "habitat.habitat_nodes"
+      ]
+    },
+    {
+      "file": "Side Garden.jpeg",
+      "seen": [
+        "lawn and mostly exotic planting"
+      ],
+      "supports": []
+    }
+  ],
+  "other_files": [
+    {
+      "file": "PocketForest_14082026.xlsx",
+      "kind": "planting list"
+    }
+  ],
+  "not_seen": [
+    "habitat.has_nest_boxes",
+    "habitat.fauna_sightings"
+  ],
+  "to_confirm": {
+    "biodiversity.canopy_cover_pct_current": "20% is a photo estimate including fruit and street trees",
+    "connectivity.park_distance_m": "about 200 m from street level; needs the house number"
+  },
+  "public_photo_consent": false
+}

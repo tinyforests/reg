@@ -1173,3 +1173,19 @@ garden-scoped access tests cover that permission path. No note body, token,
 attachment or private bundle was committed or pushed.
 
 field-records deployment v49, 25 Nov 2026: Hortense allowlisted, studio source type
+
+## Verification short path — 25 Nov 2026
+
+After Hortense took ~15 steps to verify, the path is now one assessment file
+(`docs/templates/assessment.example.json`) and `promote_submission.py --assessment`.
+Decisions recorded in code:
+- Sports grounds and ovals (`connectivity.park_type` = `sports_ground` | `oval`) are
+  recorded but score no park connectivity, in reg_score.py and js/reg-score.js. No
+  existing record sets park_type, so no published score changes.
+- Photo verification may score any feature clearly visible in a steward photo; each
+  scored input lists the supporting photos in `photo_assessment_notes`.
+- The assessment file is the review decision; a `pending` sheet status no longer blocks.
+- Field records accept any non-demo garden in published registry.json (cached 10 min);
+  FR_GARDENS remains as fallback. Needs one deployment (v50) to take effect.
+- Private coords now record the garden's real state (was hard-coded Victoria).
+Regression: scripts/test_assessment.py rebuilds Hortense's 50 from the template.

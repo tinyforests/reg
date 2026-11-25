@@ -134,7 +134,8 @@ function scoreConnectivity(r) {
   var score = 0;
   var notes = [];
 
-  if (c.adjacent_park) {
+  // Sports grounds and ovals are not habitat for connectivity (method decision, Nov 2026).
+  if (c.adjacent_park && ['sports_ground', 'oval'].indexOf(c.park_type || '') === -1) {
     var dist = (c.park_distance_m != null) ? c.park_distance_m : 999;
     if (dist <= 50)       { score += 6; notes.push("Park within 50m"); }
     else if (dist <= 150) { score += 4; notes.push("Park within 150m"); }

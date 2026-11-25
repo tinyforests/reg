@@ -201,6 +201,235 @@ def build_profile(slug, garden_id, data_file, check_only):
     return dest
 
 
+
+# ---- reviewer assessment (one file drives the whole verification) ------------
+# See docs/verification-runbook.md and docs/templates/assessment.example.json.
+# The assessment replaces ramp-band guesses with what the reviewer actually saw,
+# records which photo supports which input, and generates the private outputs
+# (sheet note, private field note bundle, steward email paragraph) in one pass.
+
+FIELD_RECORDS_URL = ('https://script.google.com/macros/s/'
+                     'AKfycbwGIau58khBRKYgq5SYwu0QjCWPa5h2dKyz4nPoeU9YMKlPN5BRXUz0LmzF7jZrqrRC/exec')
+EXCLUDED_PARK_TYPES = ('sports_ground', 'oval')
+METHODS = {
+    'photo': ('photo_verified', 'Photo Verified',
+              'Gardener & Son (remote review of steward photographs)'),
+    'site_visit': ('gardener_and_son_verified', 'G&S Verified', 'Gardener & Son'),
+}
+STATE_NAMES = {'VIC': 'Victoria', 'NSW': 'New South Wales', 'QLD': 'Queensland',
+               'WA': 'Western Australia', 'SA': 'South Australia', 'TAS': 'Tasmania',
+               'NT': 'Northern Territory', 'ACT': 'Australian Capital Territory'}
+
+
+def read_species_file(path):
+    """Distinct species names from a .csv/.txt (first column or a 'species'
+    column) or .xlsx (first sheet, same rule). Blank and 'unknown' rows skipped."""
+    rows = []
+    if path.lower().endswith('.xlsx'):
+        import openpyxl
+        ws = openpyxl.load_workbook(path, read_only=True, data_only=True).worksheets[0]
+        rows = [[('' if c is None else str(c)) for c in r] for r in ws.iter_rows(values_only=True)]
+    else:
+        import csv
+        with open(path, newline='', encoding='utf-8-sig') as f:
+            rows = list(csv.reader(f))
+    if not rows:
+        return []
+    header = [h.strip().lower() for h in rows[0]]
+    col = next((i for i, h in enumerate(header) if 'species' in h or h in ('name', 'botanical name')), None)
+    body = rows[1:] if col is not None else rows
+    col = col or 0
+    return [r[col].strip() for r in body if len(r) > col and r[col].strip()]
+
+
+def clean_species(names):
+    out, seen = [], set()
+    for n in names:
+        key = ' '.join(n.split()).lower()
+        if not key or key.startswith('unknown') or key in seen:
+            continue
+        seen.add(key)
+        out.append(' '.join(n.split()))
+    return out
+
+
+def set_path(record, dotted, value):
+    node = record
+    parts = dotted.split('.')
+    for k in parts[:-1]:
+        node = node.setdefault(k, {})
+    node[parts[-1]] = value
+
+
+def get_path(record, dotted):
+    node = record
+    for k in dotted.split('.'):
+        if not isinstance(node, dict) or k not in node:
+            return None
+        node = node[k]
+    return node
+
+
+def load_assessment(path):
+    with open(path) as f:
+        a = json.load(f)
+    if a.get('method') not in METHODS:
+        sys.exit('assessment.method must be one of %s' % ', '.join(METHODS))
+    if a.get('species_list_file'):
+        f = a['species_list_file']
+        f = f if os.path.isabs(f) else os.path.join(os.path.dirname(os.path.abspath(path)), f)
+        a['species_list'] = read_species_file(f)
+    a['species_list'] = clean_species(a.get('species_list') or [])
+    for ph in a.get('photos') or []:
+        for key in ph.get('supports') or []:
+            if '.' not in key:
+                sys.exit('photo %s: supports entry %r must be a dotted input path' % (ph.get('file'), key))
+    return a
+
+
+def apply_assessment(record, entry, a):
+    """Overlay the reviewer's assessment on the ramp-derived scaffold. Returns
+    the list of inputs still TO CONFIRM (as human sentences)."""
+    level, label, assessor = METHODS[a['method']]
+    month = a.get('reviewed') or time.strftime('%Y-%m')
+
+    if a['species_list']:
+        set_path(record, 'biodiversity.species_list', a['species_list'])
+        set_path(record, 'biodiversity.indigenous_species_current', len(a['species_list']))
+        record['evidence']['has_species_list'] = True
+
+    for key, value in (a.get('inputs') or {}).items():
+        set_path(record, key, value)
+
+    park = a.get('park')
+    if park:
+        c = record['connectivity']
+        c.update({'adjacent_park': True, 'park_name': park.get('name', ''),
+                  'park_distance_m': park.get('distance_m'), 'park_type': park.get('type', '')})
+        if c['park_type'] in EXCLUDED_PARK_TYPES:
+            c['park_note'] = 'Sports ground / oval: recorded but not scored for connectivity.'
+    elif park is not None:
+        record['connectivity'].update({'adjacent_park': False, 'park_distance_m': None})
+
+    notes, log = {}, []
+    explicit = set((a.get('inputs') or {}).keys())
+    for ph in a.get('photos') or []:
+        log.append({'filename': ph['file'], 'received': a.get('evidence_received', ''),
+                    'held': 'private', 'published': False, 'kind': ph.get('kind', 'garden photograph')})
+        for key in ph.get('supports') or []:
+            if key not in explicit and get_path(record, key) in (None, False, 0):
+                set_path(record, key, True)
+            notes.setdefault(key, []).append(ph)
+    for f in a.get('other_files') or []:
+        log.append({'filename': f['file'], 'received': a.get('evidence_received', ''),
+                    'held': 'private', 'published': False, 'kind': f.get('kind', 'document')})
+    for key in a.get('not_seen') or []:
+        set_path(record, key, [] if key.endswith('fauna_sightings') else None)
+
+    record['photo_assessment_notes'] = [
+        {'input': key, 'note': '%s evidence (%s): %s — %s' % (
+            'photo' if a['method'] == 'photo' else 'site', month,
+            ', '.join(p['file'] for p in phs),
+            '; '.join(dict.fromkeys(s for p in phs for s in p.get('seen') or [])))}
+        for key, phs in notes.items()]
+    record['evidence_log'] = log
+    ev = record['evidence']
+    ev.update({'has_photos': bool(a.get('photos')) or ev.get('has_photos', False),
+               'has_field_notes': True,
+               'has_professional_assessment': a['method'] == 'site_visit',
+               'verification_level': level, 'verification_label': label, 'assessor': assessor,
+               'method': 'remote' if a['method'] == 'photo' else 'site_visit',
+               'review_date': month, 'source_date': a.get('evidence_received', ''),
+               'public_photo_consent': bool(a.get('public_photo_consent'))})
+    record['verifier'] = 'Gardener & Son'
+    if a['method'] == 'photo':
+        record['description'] = record['description'].replace(
+            'verified by a Gardener & Son site visit',
+            'reviewed remotely from steward photographs')
+        record['milestones'] = [m for m in record['milestones']
+                                if 'verification visit' not in m['title']]
+        record['milestones'].insert(1, {'title': 'Remote photograph review', 'date':
+                                        time.strftime('%b %Y'), 'complete': True})
+    entry.update({'verification_level': level, 'verification_label': label})
+
+    to_confirm = ['%s: %s' % (k, why) for k, why in (a.get('to_confirm') or {}).items()]
+    to_confirm += ['%s: not seen in the evidence (steward can add it)' % k
+                   for k in a.get('not_seen') or []]
+    record['notes'] = ('Verified by %s (%s). Inputs set from the reviewer assessment, '
+                       'not ramp bands; see photo_assessment_notes for which evidence '
+                       'supports each input. %s Steward identity and street address held '
+                       'privately.' % (label, month, ('TO CONFIRM — ' + '; '.join(to_confirm) + '.')
+                                       if to_confirm else 'Nothing outstanding.'))
+    return to_confirm
+
+
+def write_private_outputs(gid, sub_id, a, record, result, to_confirm):
+    """Sheet note, private field-note bundle and steward email paragraph — all
+    under data/private/ (git-ignored). Never contains name, email or street."""
+    out = os.path.join(REPO_ROOT, 'data', 'private', 'verification', gid)
+    os.makedirs(out, exist_ok=True)
+    label = METHODS[a['method']][1]
+    files = [p['file'] for p in a.get('photos') or []] + [f['file'] for f in a.get('other_files') or []]
+    lines = ['Evidence received %s: %s.' % (a.get('evidence_received', ''), ', '.join(files) or 'none'),
+             'Files held by the studio; no assets attached.', '']
+    for p in a.get('photos') or []:
+        lines.append('%s: %s.' % (p['file'].rsplit('.', 1)[0], ', '.join(p.get('seen') or ['nothing scored'])))
+    if a.get('park'):
+        pk = a['park']
+        lines.append('Park: %s, about %s m (%s)%s.' % (
+            pk.get('name'), pk.get('distance_m'), pk.get('type') or 'type not recorded',
+            '; not scored (sports ground)' if pk.get('type') in EXCLUDED_PARK_TYPES else ''))
+    lines += ['', 'Result: %s, %s, %s.' % (result['total'], result['rating'], label)]
+    if to_confirm:
+        lines.append('To confirm: ' + '; '.join(to_confirm) + '.')
+    body = '\n'.join(lines)
+    title = '%s evidence — %s' % ('Photo verification' if a['method'] == 'photo' else 'Site visit',
+                                  time.strftime('%b %Y'))
+    source_id = hashlib.sha256(('%s|%s' % (gid, title)).encode()).hexdigest()[:32]
+    bundle = {'format': 'gs-notion-text-v1', 'projects': [], 'entries': [{
+        'source_id': source_id, 'source_type': 'studio', 'garden_id': gid, 'title': title,
+        'created_at': time.strftime('%Y-%m-%d'), 'body': body, 'assets': [],
+        'project_ids': [], 'visibility': 'private'}]}
+    json.dump(bundle, open(os.path.join(out, 'field-note-bundle.json'), 'w'), indent=2, ensure_ascii=False)
+    open(os.path.join(out, 'sheet-review-note.txt'), 'w').write(
+        'review_status: verified\npublished_garden_id: %s\nreview_notes:\n%s %s\n' % (gid, sub_id, body))
+    seen = [s for p in a.get('photos') or [] for s in p.get('seen') or []]
+    open(os.path.join(out, 'email-paragraph.txt'), 'w').write(
+        'Your garden now scores %s and is recorded as %s (%s). From your photos we could see %s, '
+        'and we have counted these in the score. We have kept your photographs%s privately with '
+        'your record, together with a note of what we saw in each; only you and we can see it. '
+        'Nothing is shown publicly unless you choose to share it.\n' % (
+            result['total'], 'an ' + result['rating'] if result['rating'][0] in 'AEIOU' else 'a ' + result['rating'],
+            label, ', '.join(dict.fromkeys(seen)) or 'the garden',
+            ' and planting list' if a.get('species_list') else ''))
+    return out
+
+
+def import_field_note(gid):
+    """Post the private field note once the garden is live in registry.json."""
+    path = os.path.join(REPO_ROOT, 'data', 'private', 'verification', gid, 'field-note-bundle.json')
+    token = os.environ.get('ER_ADMIN_TOKEN', '').strip()
+    if not token:
+        sys.exit('Set ER_ADMIN_TOKEN (source data/private/env.sh) first.')
+    bundle = json.load(open(path))
+    req = urllib.request.Request(FIELD_RECORDS_URL, data=json.dumps({
+        'submission_type': 'field_record', 'op': 'import', 'admin_token': token,
+        'entries': bundle['entries']}).encode(), headers={'Content-Type': 'text/plain'})
+    out = json.loads(urllib.request.urlopen(req, timeout=60).read())
+    if not out.get('ok'):
+        sys.exit('Import failed: %s (is the garden live on the site yet?)' % out.get('error'))
+    req = urllib.request.Request(FIELD_RECORDS_URL, data=json.dumps({
+        'submission_type': 'field_record', 'op': 'list', 'garden_id': gid}).encode(),
+        headers={'Content-Type': 'text/plain'})
+    anon = json.loads(urllib.request.urlopen(req, timeout=60).read())
+    ids = {e['source_id'] for e in bundle['entries']}
+    leaked = [r for r in anon.get('records') or [] if r.get('source_id') in ids or
+              any(r.get('body') == e['body'] for e in bundle['entries'])]
+    print('Field note: imported %s, skipped %s; signed-out visitors see %s of it.' % (
+        out.get('imported'), out.get('skipped'), 'NONE' if not leaked else 'SOME — CHECK NOW'))
+    return 0 if not leaked else 1
+
+
 # ---- main -------------------------------------------------------------------
 
 def main():
@@ -208,7 +437,14 @@ def main():
         self_test()
         return 0
 
+    for a in sys.argv:
+        if a.startswith('--import-note='):
+            return import_field_note(a.split('=', 1)[1])
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    assessment = None
+    for a in sys.argv:
+        if a.startswith('--assessment='):
+            assessment = load_assessment(a.split('=', 1)[1])
     check_only = '--check' in sys.argv
     allow_prov = '--allow-provisional' in sys.argv
     no_public = '--no-public-score' in sys.argv
@@ -219,6 +455,8 @@ def main():
             suburb_override = a.split('=', 1)[1]
         if a.startswith('--garden-id='):
             gid_override = a.split('=', 1)[1]
+    if not args and assessment and assessment.get('submission_id'):
+        args = [assessment['submission_id']]
     if not args:
         sys.exit('usage: promote_submission.py SUB-... [--suburb=X] [--check]')
     sub_id = args[0]
@@ -228,6 +466,8 @@ def main():
         sys.exit('Submission %s not found in the CSV.' % sub_id)
 
     status = cell(row, 'review_status').lower()
+    if assessment and status in ('', 'pending', 'verified'):
+        status = 'verified'  # the assessment file is the review decision
     if status != 'verified' and not allow_prov:
         sys.exit('review_status is %r, not verified. Use --allow-provisional to '
                  'register a self-reported provisional entry.' % (status or '(blank)'))
@@ -360,6 +600,10 @@ def main():
         'council': '', 'ward': '', 'lga': '',
     }
 
+    to_confirm = apply_assessment(record, reg_entry, assessment) if assessment else []
+    if assessment:
+        bio, sw, hab = record['biodiversity'], record['soil_water'], record['habitat']
+
     print('Submission : %s (%s)' % (sub_id, status))
     print('Garden     : %s  ->  %s' % (garden_name, gid))
     print('Location   : %s, %s   (%.6f, %.6f)' % (address or '(no street#)', suburb, lat, lng))
@@ -370,7 +614,17 @@ def main():
               bio['structural_layers_current'], bio['canopy_cover_pct_current'],
               sw['soil_health_score'], sw['water_function_score'], hab['habitat_nodes'],
               [k for k in ('has_embedded_logs', 'has_rock_refuges', 'has_water_feature',
-                           'has_nest_boxes') if hab[k]]))
+                           'has_nest_boxes') if hab.get(k)]))
+    if assessment:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from reg_score import score_ecological_registry
+        from sync_registry import rating_from_score
+        result = score_ecological_registry(record)
+        result['rating'] = rating_from_score(result['total'])
+        print('Score      : %s (%s) — %s' % (result['total'], result['rating'],
+                                             METHODS[assessment['method']][1]))
+        for item in to_confirm:
+            print('  TO CONFIRM  %s' % item)
     print('Files      : %s , gardens/%s/index.html , registry entry , private coords' %
           (data_file, slug))
 
@@ -380,8 +634,8 @@ def main():
 
     coords = json.load(open(COORDS))
     coords[gid] = {'lat': lat, 'lng': lng,
-                   'address': '%s, %s, Victoria' % (address, suburb) if address else
-                   '%s, Victoria' % suburb}
+                   'address': '%s, %s, %s' % (address, suburb, STATE_NAMES[state]) if address else
+                   '%s, %s' % (suburb, STATE_NAMES[state])}
     json.dump(coords, open(COORDS, 'w'), indent=2)
     open(COORDS, 'a').write('\n')
 
@@ -393,6 +647,10 @@ def main():
     open(REGISTRY, 'a').write('\n')
 
     build_profile(slug, gid, data_file, check_only=False)
+
+    if assessment:
+        out = write_private_outputs(gid, sub_id, assessment, record, result, to_confirm)
+        print('Private outputs (sheet note, field note, email paragraph): %s' % out)
 
     print('\nWritten. Now running sync_registry.py …')
     subprocess.run([sys.executable, os.path.join(REPO_ROOT, 'scripts', 'sync_registry.py')],

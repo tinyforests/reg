@@ -94,11 +94,15 @@ def score_habitat(record):
     return min(score, 20)
 
 
+NON_HABITAT_PARK_TYPES = ('sports_ground', 'oval')
+
+
 def score_connectivity(record):
     c = record.get('connectivity') or {}
     score = 0
 
-    if c.get('adjacent_park'):
+    # Sports grounds and ovals are not habitat for connectivity (method decision, Nov 2026).
+    if c.get('adjacent_park') and (c.get('park_type') or '') not in NON_HABITAT_PARK_TYPES:
         dist = c.get('park_distance_m') if c.get('park_distance_m') is not None else 999
         if dist <= 50:      score += 6
         elif dist <= 150:   score += 4

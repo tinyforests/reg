@@ -5,8 +5,29 @@ var FR_HEADERS = ['source_id', 'record_json'];
 function _frRows() {
   return _plRows(_plSheet('Private Field Records', FR_HEADERS), 2);
 }
+/* Any garden published in registry.json is a known garden, so promoting a new
+ * garden no longer needs an Apps Script redeploy. FR_GARDENS stays as a fallback
+ * for when the public registry cannot be fetched. Cached for 10 minutes. */
+function _frPublishedIds() {
+  try {
+    var cache = CacheService.getScriptCache(), key = 'fr_registry_ids_v1', ids = cache.get(key);
+    if (!ids) {
+      var reg = JSON.parse(UrlFetchApp.fetch('https://ecologicalregistry.org/data/registry.json').getContentText());
+      ids = JSON.stringify((reg.gardens || []).filter(function(g) { return !g.demo && g.garden_id; })
+        .map(function(g) { return String(g.garden_id); }));
+      cache.put(key, ids, 600);
+    }
+    return JSON.parse(ids);
+  } catch (e) { return []; }
+}
+function _frKnownGardens() {
+  var seen = {}, out = [];
+  FR_GARDENS.concat(_frPublishedIds()).forEach(function(id) { if (!seen[id]) { seen[id] = true; out.push(id); } });
+  return out.sort();
+}
 function _frGarden(id) {
-  return FR_GARDENS.indexOf(String(id || '')) !== -1;
+  id = String(id || '');
+  return !!id && (FR_GARDENS.indexOf(id) !== -1 || _frPublishedIds().indexOf(id) !== -1);
 }
 function _frEntry(e) {
   if (!e || !/^[a-f0-9]{32}$/.test(e.source_id)) throw new Error('Invalid source ID');
@@ -74,7 +95,7 @@ function handleFieldRecord(p) {
         if (admin || steward) return e;
         return {id:e.public_id,title:e.title,created_at:e.created_at,body:e.body,visibility:'public'};
       });
-      return jsonResp({ok:true,can_publish:!!steward,gardens:admin ? FR_GARDENS : undefined,records:records});
+      return jsonResp({ok:true,can_publish:!!steward,gardens:admin ? _frKnownGardens() : undefined,records:records});
     }
     if (p.op === 'publish') {
       if (!steward) return jsonResp({ok:false,error:'Verified garden steward required'});

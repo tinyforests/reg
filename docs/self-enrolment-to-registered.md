@@ -49,6 +49,9 @@ so it can never discover a new one.
 
 ## Runbook: register a verified self-enrolment
 
+> **Superseded (25 Nov 2026):** use `docs/verification-runbook.md` — one assessment file drives photo or site-visit verification end to end. The steps below are kept for history.
+
+
 1. Do the site visit. In the sheet, use `review_status = verifying` until the
    garden is actually in `registry.json` (so it never disappears mid-flight).
 2. `python scripts/promote_submission.py SUB-... --suburb=<suburb> --check`
