@@ -1,0 +1,69 @@
+/* Shared styles for the studio window screens (/studio/*.html).
+   Built for the 43" Hawthorn studio LED at 1920×1080; every size is in vw so the
+   page scales to whatever frame it is shown in. Matches /studio-live.html. */
+:root{
+  --green:#3d4535; --beige:#fff0dc; --signal:#7C9A52; --brass:#B49A63;
+  --deep:#2c3326; --soft:rgba(255,240,220,.66); --line:rgba(255,240,220,.16);
+  --ink-soft:rgba(61,69,53,.68); --line-ink:rgba(61,69,53,.16);
+}
+*{box-sizing:border-box;border-radius:0 !important;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--green);color:var(--beige);
+  font-family:"IBM Plex Sans",sans-serif;-webkit-font-smoothing:antialiased;cursor:none}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+.screen{display:grid;grid-template-columns:61fr 39fr;height:100vh;width:100vw}
+.visual{position:relative;background:var(--deep);overflow:hidden}
+#map{position:absolute;inset:0;background:var(--deep)}
+.leaflet-tile-pane{filter:sepia(.35) hue-rotate(42deg) saturate(.55) brightness(.92) contrast(.95)}
+.leaflet-control-attribution{background:rgba(44,51,38,.7)!important;color:rgba(255,240,220,.5)!important;font:10px "IBM Plex Mono",monospace}
+.leaflet-control-attribution a{color:rgba(255,240,220,.6)!important}
+.tag{position:absolute;left:2.2vw;top:2.2vw;z-index:500;font:500 .78vw "IBM Plex Mono",monospace;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--beige);background:rgba(44,51,38,.78);padding:.7vw 1vw}
+.tag.bottom{top:auto;bottom:2.2vw}
+.live-dot{display:inline-block;width:.55vw;height:.55vw;background:var(--signal);margin-right:.7vw;vertical-align:middle;animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.rip{position:relative;width:0;height:0}
+.rip i{position:absolute;left:0;top:0;border:2px solid var(--signal);border-radius:50% !important;
+  transform:translate(-50%,-50%) scale(.1);width:9vw;height:9vw;opacity:0;animation:ring 2.6s cubic-bezier(.2,.7,.2,1) forwards}
+.rip i:nth-child(2){animation-delay:.25s}.rip i:nth-child(3){animation-delay:.5s}
+.rip b{position:absolute;left:0;top:0;width:1.1vw;height:1.1vw;background:var(--signal);border:2px solid var(--beige);
+  border-radius:50% !important;transform:translate(-50%,-50%);animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes ring{0%{opacity:.95;transform:translate(-50%,-50%) scale(.08)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(0)}100%{transform:translate(-50%,-50%) scale(1)}}
+
+.panel{display:flex;flex-direction:column;padding:2.6vw 3vw 2.2vw;border-left:1px solid var(--line);position:relative;overflow:hidden}
+.rings{position:absolute;right:-9vw;top:-9vw;width:26vw;height:26vw;opacity:.13;pointer-events:none}
+.rings circle{fill:none;stroke:var(--signal);stroke-width:1}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:1vw;padding-bottom:1vw;border-bottom:1px solid var(--line);margin-bottom:1.3vw}
+.wordmark{font-family:"Abril Fatface",serif;font-weight:400;font-size:2.1vw;line-height:1;letter-spacing:-.005em}
+.eyebrow{font:500 .7vw "IBM Plex Mono",monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--brass)}
+h1{font-family:"Abril Fatface",serif;font-weight:400;font-size:3vw;line-height:.98;letter-spacing:-.01em}
+
+.current{margin-top:1.4vw;padding-top:1.3vw;border-top:1px solid var(--line);flex:1;min-height:0;overflow:hidden}
+.cur-meta{font:500 .9vw "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);display:flex;gap:1.2vw;align-items:center;flex-wrap:wrap}
+.flag{background:var(--signal);color:var(--deep);padding:.25vw .6vw;letter-spacing:.14em}
+.flag.quiet{background:transparent;color:var(--beige);border:1px dashed var(--soft)}
+.cur-name{font-family:"Abril Fatface",serif;font-size:2.5vw;line-height:1.02;margin:.7vw 0 .4vw}
+.cur-code{font:500 1.05vw "IBM Plex Mono",monospace;color:var(--signal);letter-spacing:.06em}
+.cur-line{font-size:1.12vw;line-height:1.4;color:var(--soft);margin-top:.7vw;max-width:36ch}
+.cur-line b{color:var(--beige);font-weight:500}
+.swap{animation:in .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(1vw)}to{opacity:1;transform:none}}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:1.2vw;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:1vw 0 .9vw}
+.stat+.stat{padding-left:1.4vw;border-left:1px solid var(--line)}
+.stat .n{font:500 2.5vw "IBM Plex Mono",monospace;letter-spacing:-.02em;line-height:1}
+.stat .k{font:500 .68vw "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);margin-top:.6vw}
+
+.explain{margin-top:1.1vw;font-size:.98vw;line-height:1.5;color:var(--soft);max-width:44ch}
+.explain b{color:var(--beige);font-weight:500}
+.cta{margin-top:.7vw;font:500 1.05vw "IBM Plex Mono",monospace;color:var(--signal);letter-spacing:.04em}
+
+.state{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1vw;z-index:2000;background:var(--green);text-align:center;padding:4vw}
+.state h2{font-family:"Abril Fatface",serif;font-weight:400;font-size:3vw}
+.state p{font:1vw "IBM Plex Mono",monospace;color:var(--soft);max-width:60ch}
+.state.hide{display:none}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

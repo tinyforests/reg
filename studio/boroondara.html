@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Boroondara · Studio screen · Ecological Registry</title>
+<!--
+  STUDIO SCREEN — Boroondara on the Registry. The municipal boundary, then each registered
+  Boroondara garden appears one at a time with its score; closing card summarises.
+  Every figure is computed at load (registry-figures rules):
+    gardens   /data/registry.json, council contains "Boroondara", demo and test-named records excluded
+    median    of those gardens' scores, provisional excluded, with n and range
+    species   /data/species.json, distinct species whose `gardens` include a Boroondara garden's data file
+    lookups   Find My EVC log, located inside the Boroondara boundary; same filters as /live
+              (test rows, Nov–Dec 2025 calibration, studio clusters excluded). Drawn as /live-style
+              concentric rings at each lookup's recorded location (no address text is shown).
+              Garden pins use the Registry's public display positions (~250 m offset); precise
+              garden coordinates are private and never published.
+  ?d=SECONDS  slide length, used to pace the gardens.
+-->
+<script>
+  const SHEET = {ID:'1Em5FvJhUyCIVLOFYtcmjXUFK--6QZDh452F6NcXDAiQ', RANGE:'A:G', KEY:'AIzaSyCXkw3I7Nu30ah6QReS9PEr_8cerNE2p88'};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="stylesheet" href="screen.css">
+<script src="screen.js"></script>
+<style>
+  h1{font-size:2.8vw}
+  .stats.two{grid-template-columns:repeat(2,1fr);margin-top:0;border-top:none}
+  .stat .sub{font:.72vw "IBM Plex Mono",monospace;color:rgba(255,240,220,.45);margin-top:.3vw;letter-spacing:.04em}
+  .score{font:500 3.4vw "IBM Plex Mono",monospace;color:var(--signal);line-height:1;letter-spacing:-.03em;margin-top:.4vw}
+  .score small{font-size:1vw;color:var(--soft);margin-left:.4vw;letter-spacing:.06em}
+  .closing .cur-name{font-size:2.6vw}
+  .country{font:500 .66vw "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,240,220,.45);margin-top:.9vw}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="visual">
+    <div id="map"></div>
+    <div class="tag"><span class="live-dot"></span>City of Boroondara · Ecological Registry</div>
+    <div class="tag bottom">Filled pins are gardens · rings are EVC lookups</div>
+  </div>
+  <aside class="panel">
+    <svg class="rings" viewBox="0 0 460 460" aria-hidden="true"><circle cx="230" cy="230" r="60"/><circle cx="230" cy="230" r="110"/><circle cx="230" cy="230" r="160"/><circle cx="230" cy="230" r="210"/></svg>
+    <div class="brand"><span class="wordmark">Gardener &amp; Son</span><span class="eyebrow">Hawthorn · Boroondara</span></div>
+    <h1>Boroondara's gardens,<br>on the record.</h1>
+    <div class="current" id="current"></div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="s-g">—</div><div class="k">Registered gardens</div></div>
+      <div class="stat"><div class="n" id="s-m">—</div><div class="k">Median score</div><div class="sub" id="s-m-sub"></div></div>
+      <div class="stat"><div class="n" id="s-s">—</div><div class="k">Species recorded</div></div>
+    </div>
+    <div class="stats two">
+      <div class="stat"><div class="n" id="s-l">—</div><div class="k">EVC lookups from Boroondara addresses</div></div>
+      <div class="stat"><div class="n" id="s-e" style="font-size:1.5vw;line-height:1.15">—</div><div class="k">Most looked-up here</div></div>
+    </div>
+    <p class="explain">Council's <b>Backyard Biodiversity Project</b> sets out to link private gardens to the creek corridors. The Registry keeps the record of the gardens doing it: each one scored out of 100 and re-measured as it grows.</p>
+    <div class="country">On Wurundjeri Woi Wurrung Country</div>
+  </aside>
+</div>
+<div class="state" id="state"><h2>Reading the Registry…</h2><p>Loading Boroondara.</p></div>
+
+<script>
+const {esc, fmt, json, pace, ready, fail, isPublicGarden, isProvisional} = SCREEN;
+const isBoroondara = g => /boroondara/i.test(g.council || g.lga || '');
+const slugOf = g => String(g.data_file || '').split('/').pop().replace(/\.json$/, '');
+const median = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+
+/* ---------- lookups inside the boundary (same filters as /live) ---------- */
+const EXCLUDE_MONTHS = ['2025-11','2025-12'];
+const STUDIO_CLUSTERS = [{lat:-37.8060, lng:145.0830, r:150}, {lat:-37.8229, lng:145.0449, r:150}];
+function hav(a,b,c,d){const R=6371000,t=x=>x*Math.PI/180,dl=t(c-a),dn=t(d-b);const s=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(s));}
+function inRing(x,y,r){let i=false;for(let a=0,b=r.length-1;a<r.length;b=a++){const[xa,ya]=r[a],[xb,yb]=r[b];if((ya>y)!==(yb>y)&&x<(xb-xa)*(y-ya)/(yb-ya)+xa)i=!i;}return i;}
+function parseDate(s){
+  const t=String(s||'').trim();
+  if(/^\d{4}-\d{2}-\d{2}T/.test(t)){const d=new Date(t);return isFinite(d)?d:null;}
+  const m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if(!m)return null;
+  return new Date(Date.UTC(+m[3],+m[1]-1,+m[2],12));     // month precision is all we need here
+}
+const monthKey=d=>d.toISOString().slice(0,7);
+async function lookupsIn(polys){
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET.ID}/values/${encodeURIComponent(SHEET.RANGE)}?key=${SHEET.KEY}`;
+  const rows=((await json(url)).values||[]).slice(1);
+  const inside=(lat,lng)=>polys.some(p=>inRing(lng,lat,p[0])&&!p.slice(1).some(h=>inRing(lng,lat,h)));
+  return rows.map(r=>{const[ts,addr='',lat='',lng='',code='',name='']=r;return{d:parseDate(ts),addr:String(addr).toLowerCase(),lat:parseFloat(lat),lng:parseFloat(lng),code:String(code).trim(),name:String(name).trim()};})
+    .filter(r=>r.d&&r.addr!=='test'&&isFinite(r.lat)&&isFinite(r.lng)&&!EXCLUDE_MONTHS.includes(monthKey(r.d))
+      &&!STUDIO_CLUSTERS.some(c=>hav(r.lat,r.lng,c.lat,c.lng)<=c.r)&&inside(r.lat,r.lng));
+}
+
+(async function boot(){
+  let gardens, locs, species, polys;
+  try {
+    const [reg, loc, sp, lgas] = await Promise.all([json('/data/registry.json'), json('/data/garden-locations.json'),
+      json('/data/species.json'), json('/data/live-victorian-lgas.geojson')]);
+    gardens = (reg.gardens || []).filter(g => isPublicGarden(g) && isBoroondara(g));
+    locs = Object.fromEntries((loc || []).map(l => [l.garden_id, l]));
+    species = sp.species || [];
+    const f = lgas.features.find(x => /boroondara/i.test(x.properties.name));
+    polys = f ? (f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates) : [];
+  } catch (e) { return fail('The Registry ledger is unavailable for a moment.'); }
+  if (!gardens.length) return fail('No Boroondara gardens in the ledger yet.');
+
+  // figures
+  const scored = gardens.filter(g => !isProvisional(g) && Number.isFinite(g.score)).map(g => g.score);
+  const slugs = new Set(gardens.map(slugOf));
+  const spp = species.filter(s => (s.gardens || []).some(x => slugs.has(x)));
+  document.getElementById('s-g').textContent = fmt(gardens.length);
+  if (scored.length) {
+    document.getElementById('s-m').textContent = Math.round(median(scored));
+    document.getElementById('s-m-sub').textContent = `n ${scored.length} · range ${Math.min(...scored)}–${Math.max(...scored)}`;
+  }
+  document.getElementById('s-s').textContent = fmt(spp.length);
+
+  // map: boundary, then gardens one by one
+  const m = SCREEN.map(), layer = L.layerGroup().addTo(m);
+  m.createPane('glow').style.zIndex = 350;     // under the garden pins and boundary
+  const outline = L.geoJSON({type:'Feature', geometry:{type:'MultiPolygon', coordinates:polys}},
+    {style:{color:'#7C9A52', weight:2, opacity:.9, fillColor:'#7C9A52', fillOpacity:.06, dashArray:'6 6'}, interactive:false}).addTo(m);
+  m.fitBounds(outline.getBounds(), {padding:[60,60]});
+  // lookups: filled in when the log answers (the slide runs without them)
+  lookupsIn(polys).then(rows => {
+    document.getElementById('s-l').textContent = fmt(rows.length);
+    // soft glow layer under the gardens, fading in over the first few seconds
+    // concentric rings at each recorded lookup location (repeat lookups at the same spot merge and
+    // grow the rings, as on /live), appearing over the first few seconds
+    const cells = {};
+    rows.forEach(r => { const k = r.lat.toFixed(5) + ',' + r.lng.toFixed(5);
+      (cells[k] = cells[k] || {la:r.lat, ln:r.lng, ct:0}).ct++; });
+    const list = Object.values(cells), max = Math.max(1, ...list.map(c => c.ct));
+    list.forEach((c, i) => setTimeout(() => SCREEN.rings(m, c.la, c.ln, c.ct, max, {pane:'glow'}), Math.min(6000, i * 6000 / list.length)));
+    const t = {}; rows.forEach(r => { if (r.code) (t[r.code] = t[r.code] || {n:0, name:r.name}).n++; if (r.name && t[r.code]) t[r.code].name ||= r.name; });
+    const top = Object.entries(t).sort((a, b) => b[1].n - a[1].n)[0];
+    document.getElementById('s-e').textContent = top ? `${top[1].name || 'EVC ' + top[0]}` : '—';
+  }).catch(() => { document.getElementById('s-l').textContent = '—'; });
+
+  ready();
+
+  const step = pace(gardens.length + 1, {min:4000, max:8000, reserve:1000});
+  for (const g of gardens) {
+    show(g);
+    const l = locs[g.garden_id];
+    if (l && Number.isFinite(l.display_lat) && Number.isFinite(l.display_lng)) {
+      const r = 6 + (g.score || 0) / 100 * 10;
+      SCREEN.ripple(m, layer, l.display_lat, l.display_lng, () =>
+        L.circleMarker([l.display_lat, l.display_lng], {radius:r, weight:1, color:'#fff0dc', opacity:.6, fillColor:'#7C9A52',
+          fillOpacity:isProvisional(g) ? .25 : .85, dashArray:isProvisional(g) ? '3 3' : null, interactive:false}).addTo(layer));
+    }
+    await SCREEN.sleep(step);
+  }
+  closing(gardens, spp);
+})();
+
+function show(g){
+  const prov = isProvisional(g);
+  document.getElementById('current').innerHTML = `<div class="swap">
+    <div class="cur-meta"><span>${esc(g.suburb || 'Boroondara')}</span>${prov ? '<span class="flag quiet">Provisional · not yet verified</span>' : `<span class="flag">${esc(g.verification_label || 'Verified')}</span>`}</div>
+    <div class="cur-name">${esc(g.garden_name)}</div>
+    <div class="score">${Number.isFinite(g.score) ? g.score : '—'}<small>/ 100 · ${esc(g.rating?.current || '')}</small></div>
+    <p class="cur-line">${g.primary_evc ? `Planted toward <b>${esc(g.primary_evc.replace(/\s*\(EVC \d+\)/, ''))}</b>, the vegetation that belongs here.` : ''}</p></div>`;
+}
+function closing(gardens, spp){
+  const suburbs = [...new Set(gardens.map(g => g.suburb).filter(Boolean))];
+  const list = suburbs.length > 1 ? suburbs.slice(0, -1).join(', ') + ' and ' + suburbs.at(-1) : suburbs[0] || 'Boroondara';
+  document.getElementById('current').innerHTML = `<div class="swap closing">
+    <div class="cur-meta"><span>City of Boroondara</span></div>
+    <div class="cur-name">${fmt(gardens.length)} gardens.<br>${fmt(spp.length)} species.</div>
+    <p class="cur-line">Across ${esc(list)}, measured the same way and kept on one public record.</p></div>`;
+}
+</script>
+</body>
+</html>

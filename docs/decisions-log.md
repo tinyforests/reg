@@ -1189,3 +1189,18 @@ Decisions recorded in code:
   FR_GARDENS remains as fallback. Needs one deployment (v50) to take effect.
 - Private coords now record the garden's real state (was hard-coded Victoria).
 Regression: scripts/test_assessment.py rebuilds Hortense's 50 from the template.
+
+
+### 29 Nov 2026 — Live studio window screens
+
+Added the supplied five studio display pages for lookups, Registry gardens,
+Boroondara, seasonal flowering and public garden notes. Figures are read at load
+from the public ledger, plant library, updates feed and existing restricted
+lookup sheet. Demo and test-named gardens are excluded; provisional and
+self-reported gardens remain labelled and outside score aggregates. Garden
+pins use public display coordinates only; lookup address text is not rendered.
+The screens keep the supplied studio display design and duration pacing.
+This connects public studio storytelling to the current ecological record.
+Files: studio/screen.css, studio/screen.js, studio/lookups.html,
+studio/registry.html, studio/boroondara.html, studio/flowering.html,
+studio/signals.html.

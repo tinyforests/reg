@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Gardens on the Registry · Studio screen · Ecological Registry</title>
+<!--
+  STUDIO SCREEN — registered gardens appear on the map one at a time, with score and rating.
+  Reads /data/registry.json (gardens array, demo excluded) and /data/garden-locations.json
+  (display coordinates, already offset ~250 m for privacy). No figure is hardcoded.
+  Provisional / self-reported records are marked and left out of the average.
+  ?d=SECONDS  slide length, used to pace the gardens.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="stylesheet" href="screen.css">
+<script src="screen.js"></script>
+<style>
+  .score-big{font:500 4.6vw "IBM Plex Mono",monospace;line-height:1;color:var(--signal);letter-spacing:-.03em}
+  .score-big small{font-size:1.1vw;color:var(--soft);letter-spacing:.08em;margin-left:.4vw}
+  .rating{font:500 1vw "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;margin-top:.5vw}
+  .bar{height:.5vw;background:rgba(124,154,82,.18);margin-top:1vw;position:relative;max-width:30vw}
+  .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--signal);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+  .provisional .score-big{color:var(--soft)}
+  .provisional .bar i{background:repeating-linear-gradient(90deg,var(--soft) 0 .5vw,transparent .5vw 1vw)}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="visual">
+    <div id="map"></div>
+    <div class="tag"><span class="live-dot"></span>The Ecological Registry · live ledger</div>
+    <div class="tag bottom">Pins sit near each garden, never on the address</div>
+  </div>
+  <aside class="panel">
+    <svg class="rings" viewBox="0 0 460 460" aria-hidden="true"><circle cx="230" cy="230" r="60"/><circle cx="230" cy="230" r="110"/><circle cx="230" cy="230" r="160"/><circle cx="230" cy="230" r="210"/></svg>
+    <div class="brand"><span class="wordmark">Gardener &amp; Son</span><span class="eyebrow">Ecological Registry</span></div>
+    <h1>Gardens on<br>the Registry.</h1>
+    <div class="current" id="current"></div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="s-g">—</div><div class="k">Gardens</div></div>
+      <div class="stat"><div class="n" id="s-c">—</div><div class="k">Councils</div></div>
+      <div class="stat"><div class="n" id="s-a">—</div><div class="k">Average score</div></div>
+    </div>
+    <p class="explain">Every garden is scored out of 100 across five pillars: <b>biodiversity, soil and water, habitat, connectivity and evidence</b>. Scores are re-measured as gardens grow.</p>
+    <div class="cta">Register yours · ecologicalregistry.org</div>
+  </aside>
+</div>
+<div class="state" id="state"><h2>Reading the Registry…</h2><p>Loading the ledger.</p></div>
+
+<script>
+const {esc, fmt, json, pace, ready, fail, isPublicGarden, isProvisional} = SCREEN;
+
+(async function boot(){
+  let gardens, locs;
+  try {
+    const [reg, loc] = await Promise.all([json('/data/registry.json'), json('/data/garden-locations.json')]);
+    gardens = (reg.gardens || []).filter(isPublicGarden);
+    locs = Object.fromEntries((loc || []).map(l => [l.garden_id, l]));
+  } catch (e) { return fail('The Registry ledger is unavailable for a moment.'); }
+
+  // whole-ledger figures (computed, never stored)
+  const verified = gardens.filter(g => !isProvisional(g) && Number.isFinite(g.score));
+  const avg = verified.length ? Math.round(verified.reduce((s, g) => s + g.score, 0) / verified.length) : null;
+  const councils = new Set(gardens.map(g => g.council).filter(Boolean));
+  document.getElementById('s-c').textContent = fmt(councils.size);
+  document.getElementById('s-a').textContent = avg ?? '—';
+
+  const m = SCREEN.map(), layer = L.layerGroup().addTo(m);
+  const pts = gardens.map(g => ({g, ...(locs[g.garden_id] ? {lat:locs[g.garden_id].display_lat, lng:locs[g.garden_id].display_lng} : {})}));
+  SCREEN.frame(m, pts.filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng)).map(p => ({lat:p.lat, lng:p.lng})));
+  ready();
+
+  const step = pace(pts.length, {min:3000, max:7000, reserve:2000});
+  let shown = 0;
+  for (const p of pts) {
+    shown++;
+    document.getElementById('s-g').textContent = `${fmt(shown)}`;
+    show(p.g);
+    if (Number.isFinite(p.lat) && Number.isFinite(p.lng)) {
+      const r = 5 + (p.g.score || 0) / 100 * 9;
+      SCREEN.ripple(m, layer, p.lat, p.lng, () =>
+        L.circleMarker([p.lat, p.lng], {radius:r, weight:1, color:'#fff0dc', opacity:.5,
+          fillColor:'#7C9A52', fillOpacity:isProvisional(p.g) ? .25 : .85, dashArray:isProvisional(p.g) ? '3 3' : null, interactive:false}).addTo(layer));
+    }
+    await SCREEN.sleep(step);
+  }
+})();
+
+function show(g){
+  const prov = isProvisional(g);
+  const score = Number.isFinite(g.score) ? g.score : null;
+  const place = [g.suburb, g.lga].filter(Boolean).join(' · ');
+  document.getElementById('current').innerHTML = `<div class="swap${prov ? ' provisional' : ''}">
+    <div class="cur-meta"><span>${esc(place)}</span>${prov ? '<span class="flag quiet">Provisional · not yet verified</span>' : `<span class="flag">${esc(g.verification_label || 'Verified')}</span>`}</div>
+    <div class="cur-name">${esc(g.garden_name)}</div>
+    <div class="score-big">${score ?? '—'}<small>/ 100</small></div>
+    <div class="rating">${esc(g.rating?.current || g.typology || '')}</div>
+    <div class="bar"><i style="width:0"></i></div>
+    <p class="cur-line">${esc(g.primary_evc ? 'Belongs to ' + g.primary_evc + '.' : '')}</p>
+  </div>`;
+  const bar = document.querySelector('#current .bar i');
+  requestAnimationFrame(() => requestAnimationFrame(() => bar.style.width = (score || 0) + '%'));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>In flower now · Studio screen · Gardener &amp; Son</title>
+<!--
+  STUDIO SCREEN — indigenous plants in flower this month, one at a time with a photo.
+  Reads /data/plant-library.json (generated from tinyforests/plants). A plant qualifies when it
+  belongs to at least one Victorian EVC, its bloom_time covers the current Melbourne month,
+  and it has a licensed photo with a credit (credit is always shown).
+  ?d=SECONDS  slide length, used to pace the plants.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="screen.css">
+<script src="screen.js"></script>
+<style>
+  .photo{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease}
+  .photo.on{opacity:1}
+  .credit{position:absolute;right:1.4vw;bottom:1.2vw;z-index:5;font:.62vw "IBM Plex Mono",monospace;color:rgba(255,240,220,.75);background:rgba(44,51,38,.7);padding:.35vw .6vw;max-width:40vw}
+  .botanical{font:500 1.05vw "IBM Plex Mono",monospace;color:var(--signal);letter-spacing:.02em}
+  .facts{display:grid;grid-template-columns:auto 1fr;gap:.45vw 1.4vw;margin-top:1.2vw;font-size:1vw}
+  .facts dt{font:500 .72vw "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);padding-top:.2vw}
+  .facts dd{color:var(--beige)}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="visual" id="visual">
+    <div class="tag"><span class="live-dot"></span><span id="tag">In flower now · Melbourne</span></div>
+    <div class="credit" id="credit"></div>
+  </div>
+  <aside class="panel">
+    <svg class="rings" viewBox="0 0 460 460" aria-hidden="true"><circle cx="230" cy="230" r="60"/><circle cx="230" cy="230" r="110"/><circle cx="230" cy="230" r="160"/><circle cx="230" cy="230" r="210"/></svg>
+    <div class="brand"><span class="wordmark">Gardener &amp; Son</span><span class="eyebrow">Plant library</span></div>
+    <h1 id="title">In flower<br>this month.</h1>
+    <div class="current" id="current"></div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="s-n">—</div><div class="k">Flowering now</div></div>
+      <div class="stat"><div class="n" id="s-m">—</div><div class="k">Month</div></div>
+      <div class="stat"><div class="n" id="s-l">—</div><div class="k">Indigenous in library</div></div>
+    </div>
+    <p class="explain">Indigenous plants of Victoria in flower this month, from the <b>Gardener &amp; Son plant library</b>. Plant them and the garden feeds the insects and birds already living here.</p>
+    <div class="cta">Find what belongs at yours · findmyevc.com</div>
+  </aside>
+</div>
+<div class="state" id="state"><h2>Checking what's in flower…</h2><p>Loading the plant library.</p></div>
+
+<script>
+const {esc, fmt, json, pace, ready, fail} = SCREEN;
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+// Southern-hemisphere seasons, as month indexes
+const SEASON = {summer:[11,0,1], autumn:[2,3,4], winter:[5,6,7], spring:[8,9,10]};
+const ORDER = ['spring','summer','autumn','winter'];
+
+/* "Spring to Summer", "Autumn - Spring", "July to November", "Late Spring", "All Year" → set of month indexes */
+function monthsOf(text){
+  const t = String(text || '').toLowerCase().trim();
+  if (!t || /evergreen|inconspicuous/.test(t)) return new Set();
+  if (/all year|year round/.test(t)) return new Set([0,1,2,3,4,5,6,7,8,9,10,11]);
+  const parts = t.split(/\s*(?:to|-|–|through)\s*/);
+  const tok = p => {
+    const late = /late/.test(p), early = /early/.test(p);
+    const mi = MONTHS.findIndex(m => p.includes(m.toLowerCase()));
+    if (mi >= 0) return {kind:'m', a:mi, b:mi};
+    const s = ORDER.find(s => p.includes(s));
+    if (!s) return null;
+    const ms = SEASON[s];
+    return {kind:'s', a:early ? ms[0] : late ? ms[2] : ms[0], b:early ? ms[0] : late ? ms[2] : ms[2], late, early};
+  };
+  const a = tok(parts[0]), b = tok(parts[parts.length - 1]);
+  if (!a || !b) return new Set();
+  const out = new Set(); let i = a.a;
+  for (let n = 0; n < 12; n++) { out.add(i); if (i === b.b) break; i = (i + 1) % 12; }
+  return out;
+}
+
+const pick = (arr, n) => arr.map(x => [Math.random(), x]).sort((a, b) => a[0] - b[0]).slice(0, n).map(x => x[1]);
+const sentenceTrim = (s, max = 175) => { s = String(s || ''); if (s.length <= max) return s; const cut = s.slice(0, max); const i = cut.lastIndexOf('. '); return i > 80 ? cut.slice(0, i + 1) : cut.replace(/\s+\S*$/, '') + '…'; };
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+
+(async function boot(){
+  let lib;
+  try { lib = (await json('/data/plant-library.json')).species || []; }
+  catch (e) { return fail('The plant library is unavailable for a moment.'); }
+
+  const month = +new Intl.DateTimeFormat('en-AU', {timeZone:'Australia/Melbourne', month:'numeric'}).format(new Date()) - 1;
+  const season = ORDER.find(s => SEASON[s].includes(month));
+  const indigenous = lib.filter(p => Array.isArray(p.evcs) && p.evcs.length);
+  const flowering = indigenous.filter(p => (p.bloom_time || []).some(b => monthsOf(b).has(month)));
+  const showable = flowering.filter(p => p.image_url && p.image_license && p.image_credit);
+
+  document.getElementById('title').innerHTML = `In flower<br>this ${season}.`;
+  document.getElementById('tag').textContent = `In flower now · ${MONTHS[month]} · Melbourne`;
+  document.getElementById('s-n').textContent = fmt(flowering.length);
+  document.getElementById('s-m').textContent = MONTHS[month].slice(0, 3);
+  document.getElementById('s-l').textContent = fmt(indigenous.length);
+  if (!showable.length) return fail(`Nothing in the library is marked as flowering in ${MONTHS[month]} yet.`);
+
+  const step = pace(Math.min(showable.length, 7), {min:8000, max:14000, reserve:1500});
+  const plants = pick(showable, Math.max(1, Math.floor((SCREEN.duration - 1500) / step)));
+  const vis = document.getElementById('visual');
+  const preload = src => new Promise(res => { const i = new Image(); i.onload = i.onerror = () => res(); i.src = src; setTimeout(res, 6000); });
+
+  await preload(plants[0].image_url);
+  ready();
+  for (let k = 0; k < plants.length; k++) {
+    const p = plants[k];
+    const ph = document.createElement('div'); ph.className = 'photo'; ph.style.backgroundImage = `url("${p.image_url.replace(/"/g, '%22')}")`;
+    vis.prepend(ph);
+    requestAnimationFrame(() => requestAnimationFrame(() => ph.classList.add('on')));
+    [...vis.querySelectorAll('.photo')].slice(1).forEach(o => { o.classList.remove('on'); setTimeout(() => o.remove(), 1600); });
+    document.getElementById('credit').textContent = `Photo ${p.image_credit}${p.image_source_url ? ' · iNaturalist' : ''}`;
+    show(p, month);
+    if (plants[k + 1]) preload(plants[k + 1].image_url);
+    await SCREEN.sleep(step);
+  }
+})();
+
+function show(p){
+  const h = p.mature_height_m ? (p.mature_height_m.min === p.mature_height_m.max ? `${p.mature_height_m.max} m` : `${p.mature_height_m.min}–${p.mature_height_m.max} m`) : null;
+  const facts = [
+    ['Form', cap(p.growth_form || p.display_band)],
+    ['Height', h],
+    ['Flowers', (p.flower_colour || []).map(cap).join(', ')],
+    ['Season', (p.bloom_time || []).join(', ')],
+    ['Belongs to', p.evcs?.length ? `${p.evcs.length} Victorian vegetation class${p.evcs.length > 1 ? 'es' : ''}` : null],
+  ].filter(f => f[1]);
+  document.getElementById('current').innerHTML = `<div class="swap">
+    <div class="cur-name">${esc(p.common_name || p.botanical_name)}</div>
+    <div class="botanical">${esc(p.botanical_name)}</div>
+    <dl class="facts">${facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+    <p class="cur-line">${esc(sentenceTrim(p.description))}</p>
+  </div>`;
+}
+</script>
+</body>
+</html>
